@@ -1,0 +1,13 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+
+# Sitemaps
+Sitemap: https://homeai.ch/sitemap.xml
+Sitemap: https://homeai.ch/sitemap-en.xml
+Sitemap: https://homeai.ch/sitemap-de.xml
+Sitemap: https://homeai.ch/sitemap-fr.xml
+Sitemap: https://homeai.ch/sitemap-it.xml
+
+# Crawl-delay for responsible crawling
+Crawl-delay: 1

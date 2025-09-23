@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SF Pro Display font faces with fallback handling */
+@font-face {
+  font-family: 'SF Pro Display';
+  src:
+    url('./fonts/SFProDisplay-Light.woff2') format('woff2'),
+    url('./fonts/SFProDisplay-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src:
+    url('./fonts/SFProDisplay-Regular.woff2') format('woff2'),
+    url('./fonts/SFProDisplay-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src:
+    url('./fonts/SFProDisplay-Medium.woff2') format('woff2'),
+    url('./fonts/SFProDisplay-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src:
+    url('./fonts/SFProDisplay-Semibold.woff2') format('woff2'),
+    url('./fonts/SFProDisplay-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src:
+    url('./fonts/SFProDisplay-Thin.woff2') format('woff2'),
+    url('./fonts/SFProDisplay-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'SF Pro Display', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+}
+
+div.mobile-links {
+  gap: 40px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+@media only screen and (max-width: 1023px) {
+  div.mobile-links {
+    gap: 0;
+  }
+
+  .mobile-links button {
+    font-size: 14px;
+  }
+}

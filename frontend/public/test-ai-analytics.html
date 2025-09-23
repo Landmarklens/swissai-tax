@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analytics Test Console</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .pending { background: #fff3cd; color: #856404; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .results {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Analytics Test Console</h1>
+        
+        <div class="test-section">
+            <h3>Configuration</h3>
+            <label>Auth Token: <input type="text" id="authToken" placeholder="Paste your auth token here"></label>
+            <br>
+            <label>Property ID: <input type="number" id="propertyId" value="55305"></label>
+            <br>
+            <button onclick="getTokenFromLocalStorage()">Get Token from LocalStorage</button>
+            <button onclick="testAllEndpoints()">🚀 Test All Endpoints</button>
+        </div>
+
+        <div id="testResults"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api.homeai.ch';
+        
+        function getTokenFromLocalStorage() {
+            try {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                const token = user?.access_token || localStorage.getItem('token');
+                if (token) {
+                    document.getElementById('authToken').value = token;
+                    alert('Token loaded from localStorage!');
+                } else {
+                    alert('No token found in localStorage. Please login first.');
+                }
+            } catch (e) {
+                alert('Error loading token: ' + e.message);
+            }
+        }
+
+        async function testEndpoint(name, method, endpoint, data, token) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'test-section pending';
+            resultDiv.innerHTML = `<h3>Testing: ${name}</h3><div class="results">Loading...</div>`;
+            document.getElementById('testResults').appendChild(resultDiv);
+
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                if (method === 'POST' && data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const startTime = Date.now();
+                const response = await fetch(`${API_URL}${endpoint}`, options);
+                const elapsed = Date.now() - startTime;
+
+                if (response.ok) {
+                    const result = await response.json();
+                    resultDiv.className = 'test-section success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ ${name} - SUCCESS (${elapsed}ms)</h3>
+                        <div class="results">${JSON.stringify(result, null, 2)}</div>
+                    `;
+                    return { name, success: true, elapsed, data: result };
+                } else {
+                    const errorText = await response.text();
+                    resultDiv.className = 'test-section error';
+                    resultDiv.innerHTML = `
+                        <h3>❌ ${name} - FAILED (Status ${response.status})</h3>
+                        <div class="results">${errorText}</div>
+                    `;
+                    return { name, success: false, error: errorText, status: response.status };
+                }
+            } catch (error) {
+                resultDiv.className = 'test-section error';
+                resultDiv.innerHTML = `
+                    <h3>❌ ${name} - ERROR</h3>
+                    <div class="results">${error.message}</div>
+                `;
+                return { name, success: false, error: error.message };
+            }
+        }
+
+        async function testAllEndpoints() {
+            const token = document.getElementById('authToken').value;
+            const propertyId = parseInt(document.getElementById('propertyId').value);
+            
+            if (!token) {
+                alert('Please enter an auth token first!');
+                return;
+            }
+
+            document.getElementById('testResults').innerHTML = '';
+
+            const tests = [
+                {
+                    name: 'Health Check',
+                    method: 'GET',
+                    endpoint: '/api/ai-analytics/health',
+                    data: null
+                },
+                {
+                    name: 'What-If Analysis',
+                    method: 'POST',
+                    endpoint: '/api/ai-analytics/what-if-analysis',
+                    data: {
+                        property_id: propertyId,
+                        renovations: ['kitchen', 'bathroom'],
+                        budget: 30000
+                    }
+                },
+                {
+                    name: 'Competitive Analysis',
+                    method: 'POST',
+                    endpoint: '/api/ai-analytics/competitive-analysis',
+                    data: {
+                        property_id: propertyId,
+                        radius_km: 5
+                    }
+                },
+                {
+                    name: 'Market Forecast',
+                    method: 'POST',
+                    endpoint: '/api/ai-analytics/market-forecast',
+                    data: {
+                        canton: 'ZH',
+                        property_type: 'apartment',
+                        forecast_days: 30
+                    }
+                },
+                {
+                    name: 'Property Valuation',
+                    method: 'POST',
+                    endpoint: '/api/ai-analytics/property-valuation',
+                    data: {
+                        property_id: propertyId,
+                        include_renovations: true
+                    }
+                },
+                {
+                    name: 'Comprehensive Insights',
+                    method: 'GET',
+                    endpoint: `/api/ai-analytics/ai-insights/${propertyId}`,
+                    data: null
+                }
+            ];
+
+            const results = [];
+            for (const test of tests) {
+                const result = await testEndpoint(test.name, test.method, test.endpoint, test.data, token);
+                results.push(result);
+            }
+
+            // Summary
+            const summaryDiv = document.createElement('div');
+            const successCount = results.filter(r => r.success).length;
+            const totalCount = results.length;
+            summaryDiv.className = successCount === totalCount ? 'test-section success' : 'test-section error';
+            summaryDiv.innerHTML = `
+                <h2>📊 Test Summary</h2>
+                <h3>${successCount}/${totalCount} tests passed</h3>
+                <ul>
+                    ${results.map(r => `
+                        <li>${r.success ? '✅' : '❌'} ${r.name} ${r.elapsed ? `(${r.elapsed}ms)` : ''}</li>
+                    `).join('')}
+                </ul>
+            `;
+            document.getElementById('testResults').prepend(summaryDiv);
+        }
+
+        // Auto-load token if available
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            if (token) {
+                document.getElementById('authToken').value = token;
+            }
+        };
+    </script>
+</body>
+</html>

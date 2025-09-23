@@ -1,0 +1,255 @@
+import React, { useState, useEffect } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Container
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useTheme, useMediaQuery } from '@mui/material';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import LoginSignupModal from '../login/Login';
+import ImageComponent from '../Image/Image';
+import styles from './Header.module.css';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from '../LanguageSelector/LanguageSelector';
+
+import { PersonalAccountIcon } from '../personalAccountIcon/personalAccountIcon';
+
+import authService from '../../services/authService';
+import { toast } from 'react-toastify';
+
+const Header = ({ handleClickOpen }) => {
+  const { t } = useTranslation();
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const isLoginInQuery = searchParams.has('login');
+
+  const isAuthenticated = authService.isAuthenticated();
+
+  useEffect(() => {
+    setIsLoggedIn(isAuthenticated);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    setLoginOpen(isLoginInQuery);
+  }, [isLoginInQuery]);
+
+
+  const menuOptions = [
+    { to: '/', label: t('Home') },
+    // { to: '/tenants', label: t('For Tenants') },
+    // { to: '/owners', label: t('For Owners') },
+    { to: '/features', label: t('Features') },
+    { to: '/plan', label: t('Pricing') },
+    { to: '/faq', label: t('FAQ') },
+    // { to: "/about-us", label: t("About Us") },
+    { to: '/contact-us', label: t('Contact Us') }
+  ];
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const handleOptionClick = (to) => {
+    setDrawerOpen(false);
+    navigate(to);
+  };
+
+  const getStoredUserData = () => {
+    try {
+      const storedData = localStorage.getItem('persist:root');
+      if (!storedData) return null;
+
+      const userObject = JSON.parse(storedData);
+      if (!userObject?.account) return null;
+
+      const user = JSON.parse(userObject.account);
+      return user;
+    } catch (error) {
+      // Error parsing user data - return null
+      return null;
+    }
+  };
+
+  const user = getStoredUserData();
+
+  const getStartedHandler = () => {
+    if (isAuthenticated) {
+      return navigate('/chat');
+    }
+
+    // toast.error('Please log in');
+    setLoginOpen(true);
+  };
+
+  const drawerContent = (
+    <Box
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+      className={styles.drawerContent}>
+      <List>
+        {menuOptions?.map((option, index) => (
+          <ListItem key={index}>
+            <Link
+              to={option.to}
+              onClick={() => handleOptionClick(option.to)}
+              className={`${styles.drawerLink} ${
+                location.pathname === option.to ? styles.drawerLinkActive : ''
+              }`}>
+              <ListItemText primary={option.label} />
+            </Link>
+          </ListItem>
+        ))}
+
+        <ListItem>
+          <LanguageSelector variant="list" />
+        </ListItem>
+
+        {!isLoggedIn && (
+          <ListItem>
+            <Button
+              variant="outlined"
+              fullWidth
+              className={styles.drawerLoginButton}
+              onClick={handleClickOpen}>
+              {t('Log In')}
+            </Button>
+          </ListItem>
+        )}
+
+        <ListItem>
+          <Button variant="contained" fullWidth onClick={getStartedHandler}>
+            {t('Get Started')}
+          </Button>
+        </ListItem>
+      </List>
+    </Box>
+  );
+
+  const handleLoginClick = () => {
+    setLoginOpen(true);
+    const savedInput = localStorage.getItem('input');
+    localStorage.clear();
+    if (savedInput) {
+      const decodedInput = decodeURIComponent(savedInput);
+      localStorage.setItem('input', decodedInput);
+    }
+  };
+
+  const handleModalClose = () => {
+    setSearchParams({});
+    setLoginOpen(false);
+  };
+
+  return (
+    <>
+      <AppBar position="static" className={styles.appBar}>
+        <Container maxWidth="xl">
+          <Toolbar className={styles.toolbar}>
+            {isMobile ? (
+              <>
+                <Box>
+                  {/* <Typography
+                    onClick={() => navigate("/")}
+                    variant="h6"
+                    className={styles.mobileLogoText}
+                  >
+                    HOME AI
+                  </Typography> */}
+                  <Link to="/" className={styles.logoLink}>
+                    <ImageComponent name="logo" height={30} alt={t('HOME AI Logo')} />
+                  </Link>
+                </Box>
+                <IconButton
+                  sx={{ zIndex: 100 }}
+                  edge="end"
+                  color={theme.palette.border.grey}
+                  aria-label="menu"
+                  onClick={toggleDrawer(true)}>
+                  <MenuIcon />
+                </IconButton>
+                <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+                  {drawerContent}
+                </Drawer>
+              </>
+            ) : (
+              <Box className={styles.desktopNav}>
+                <Box>
+                  <Link to="/" className={styles.logoLink}>
+                    <ImageComponent name="logo" height={30} alt={t('HOME AI Logo')} />
+                  </Link>
+                </Box>
+                <Box className={styles.menuContainer}>
+                  {menuOptions?.map((option, index) => (
+                    <Link
+                      key={index}
+                      to={option.to}
+                      className={`${styles.menuLink} ${
+                        location.pathname === option.to ? styles.menuLinkActive : ''
+                      }`}
+                      style={{
+                        fontSize: '14px',
+                        color:
+                          location.pathname === option.to
+                            ? `${theme.palette.primary.main}`
+                            : '#1A1A1A',
+
+                        borderBottom:
+                          location.pathname === option.to
+                            ? `2px solid ${theme.palette.primary.lightMain}`
+                            : 'none'
+                      }}>
+                      {option.label}
+                    </Link>
+                  ))}
+                </Box>
+                <Box className={styles.actionContainer}>
+                  <LanguageSelector variant="menu" />
+                  {!isLoggedIn && (
+                    <Button
+                      variant="outlined"
+                      className={styles.loginButton}
+                      onClick={handleLoginClick}>
+                      {t('Log In')}
+                    </Button>
+                  )}
+
+                  {/* <Button
+                    variant="contained"
+                    onClick={getStartedHandler}
+                    className={styles.getStartedButton}>
+                    {t('Place an Ad')}
+                  </Button> */}
+
+                  {isLoggedIn && <PersonalAccountIcon />}
+                </Box>
+              </Box>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <LoginSignupModal open={loginOpen} onClose={handleModalClose} />
+    </>
+  );
+};
+
+export default Header;

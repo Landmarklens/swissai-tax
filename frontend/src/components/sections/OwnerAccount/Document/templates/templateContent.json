@@ -1,0 +1,244 @@
+{
+  "templates": {
+    "lease-standard": {
+      "en": {
+        "title": "RESIDENTIAL LEASE AGREEMENT",
+        "sections": {
+          "parties": "PARTIES TO THIS AGREEMENT",
+          "property": "PROPERTY DESCRIPTION",
+          "term": "LEASE TERM",
+          "rent": "RENT AND PAYMENT TERMS",
+          "deposit": "SECURITY DEPOSIT"
+        },
+        "content": "This Lease Agreement is entered into on {{date}} between {{landlord_name}} (Landlord) and {{tenant_name}} (Tenant) for the property at {{property_address}}.\n\nMonthly rent: ${{monthly_rent}}\nLease term: {{lease_term}} months\nSecurity deposit: ${{security_deposit}}"
+      },
+      "de": {
+        "title": "MIETVERTRAG FÜR WOHNRAUM",
+        "sections": {
+          "parties": "VERTRAGSPARTEIEN",
+          "property": "OBJEKTBESCHREIBUNG",
+          "term": "MIETDAUER",
+          "rent": "MIETE UND ZAHLUNGSBEDINGUNGEN",
+          "deposit": "KAUTION"
+        },
+        "content": "Dieser Mietvertrag wird am {{date}} zwischen {{landlord_name}} (Vermieter) und {{tenant_name}} (Mieter) für die Immobilie in {{property_address}} geschlossen.\n\nMonatliche Miete: {{monthly_rent}}€\nMietdauer: {{lease_term}} Monate\nKaution: {{security_deposit}}€"
+      },
+      "fr": {
+        "title": "CONTRAT DE LOCATION RÉSIDENTIELLE",
+        "sections": {
+          "parties": "PARTIES AU CONTRAT",
+          "property": "DESCRIPTION DU BIEN",
+          "term": "DURÉE DU BAIL",
+          "rent": "LOYER ET MODALITÉS DE PAIEMENT",
+          "deposit": "DÉPÔT DE GARANTIE"
+        },
+        "content": "Ce contrat de location est conclu le {{date}} entre {{landlord_name}} (Bailleur) et {{tenant_name}} (Locataire) pour le bien situé au {{property_address}}.\n\nLoyer mensuel: {{monthly_rent}}€\nDurée du bail: {{lease_term}} mois\nDépôt de garantie: {{security_deposit}}€"
+      },
+      "it": {
+        "title": "CONTRATTO DI LOCAZIONE RESIDENZIALE",
+        "sections": {
+          "parties": "PARTI DEL CONTRATTO",
+          "property": "DESCRIZIONE DELL'IMMOBILE",
+          "term": "DURATA DELLA LOCAZIONE",
+          "rent": "CANONE E MODALITÀ DI PAGAMENTO",
+          "deposit": "DEPOSITO CAUZIONALE"
+        },
+        "content": "Il presente contratto di locazione è stipulato in data {{date}} tra {{landlord_name}} (Locatore) e {{tenant_name}} (Conduttore) per l'immobile sito in {{property_address}}.\n\nCanone mensile: {{monthly_rent}}€\nDurata: {{lease_term}} mesi\nDeposito cauzionale: {{security_deposit}}€"
+      }
+    },
+    "lease-commercial": {
+      "en": {
+        "title": "COMMERCIAL LEASE AGREEMENT",
+        "sections": {
+          "parties": "PARTIES",
+          "property": "COMMERCIAL PROPERTY",
+          "term": "LEASE TERM",
+          "rent": "BASE RENT AND ADDITIONAL CHARGES",
+          "use": "PERMITTED USE"
+        },
+        "content": "This Commercial Lease Agreement is entered into on {{date}} between {{landlord_name}} (Landlord) and {{business_name}} (Tenant) for the commercial property at {{property_address}}.\n\nBase rent: ${{monthly_rent}}/month\nCAM charges: ${{cam_charges}}/month\nPermitted use: {{permitted_use}}\nLease term: {{lease_term}} years"
+      },
+      "de": {
+        "title": "GEWERBEMIETVERTRAG",
+        "sections": {
+          "parties": "VERTRAGSPARTEIEN",
+          "property": "GEWERBEOBJEKT",
+          "term": "MIETDAUER",
+          "rent": "GRUNDMIETE UND NEBENKOSTEN",
+          "use": "NUTZUNGSZWECK"
+        },
+        "content": "Dieser Gewerbemietvertrag wird am {{date}} zwischen {{landlord_name}} (Vermieter) und {{business_name}} (Mieter) für das Gewerbeobjekt in {{property_address}} geschlossen.\n\nGrundmiete: {{monthly_rent}}€/Monat\nNebenkosten: {{cam_charges}}€/Monat\nNutzungszweck: {{permitted_use}}\nMietdauer: {{lease_term}} Jahre"
+      },
+      "fr": {
+        "title": "BAIL COMMERCIAL",
+        "sections": {
+          "parties": "PARTIES",
+          "property": "LOCAL COMMERCIAL",
+          "term": "DURÉE DU BAIL",
+          "rent": "LOYER DE BASE ET CHARGES",
+          "use": "USAGE AUTORISÉ"
+        },
+        "content": "Ce bail commercial est conclu le {{date}} entre {{landlord_name}} (Bailleur) et {{business_name}} (Locataire) pour le local commercial situé au {{property_address}}.\n\nLoyer de base: {{monthly_rent}}€/mois\nCharges: {{cam_charges}}€/mois\nUsage autorisé: {{permitted_use}}\nDurée: {{lease_term}} ans"
+      },
+      "it": {
+        "title": "CONTRATTO DI LOCAZIONE COMMERCIALE",
+        "sections": {
+          "parties": "PARTI",
+          "property": "IMMOBILE COMMERCIALE",
+          "term": "DURATA",
+          "rent": "CANONE BASE E SPESE",
+          "use": "USO CONSENTITO"
+        },
+        "content": "Il presente contratto di locazione commerciale è stipulato in data {{date}} tra {{landlord_name}} (Locatore) e {{business_name}} (Conduttore) per l'immobile commerciale sito in {{property_address}}.\n\nCanone base: {{monthly_rent}}€/mese\nSpese condominiali: {{cam_charges}}€/mese\nUso consentito: {{permitted_use}}\nDurata: {{lease_term}} anni"
+      }
+    },
+    "lease-month-to-month": {
+      "en": {
+        "title": "MONTH-TO-MONTH RENTAL AGREEMENT",
+        "sections": {
+          "parties": "PARTIES",
+          "property": "RENTAL PROPERTY",
+          "term": "RENTAL TERM",
+          "rent": "MONTHLY RENT",
+          "notice": "TERMINATION NOTICE"
+        },
+        "content": "This Month-to-Month Rental Agreement begins on {{date}} between {{landlord_name}} (Landlord) and {{tenant_name}} (Tenant) for {{property_address}}.\n\nMonthly rent: ${{monthly_rent}}\nDue date: {{payment_due_day}} of each month\nNotice period: 30 days\nThis agreement continues monthly until terminated by either party with proper notice."
+      },
+      "de": {
+        "title": "MONATLICHER MIETVERTRAG",
+        "sections": {
+          "parties": "PARTEIEN",
+          "property": "MIETOBJEKT",
+          "term": "MIETDAUER",
+          "rent": "MONATSMIETE",
+          "notice": "KÜNDIGUNGSFRIST"
+        },
+        "content": "Dieser monatliche Mietvertrag beginnt am {{date}} zwischen {{landlord_name}} (Vermieter) und {{tenant_name}} (Mieter) für {{property_address}}.\n\nMonatsmiete: {{monthly_rent}}€\nFällig am: {{payment_due_day}}. jeden Monats\nKündigungsfrist: 30 Tage\nDieser Vertrag verlängert sich monatlich bis zur Kündigung."
+      },
+      "fr": {
+        "title": "CONTRAT DE LOCATION AU MOIS",
+        "sections": {
+          "parties": "PARTIES",
+          "property": "BIEN LOUÉ",
+          "term": "DURÉE",
+          "rent": "LOYER MENSUEL",
+          "notice": "PRÉAVIS"
+        },
+        "content": "Ce contrat de location au mois commence le {{date}} entre {{landlord_name}} (Bailleur) et {{tenant_name}} (Locataire) pour {{property_address}}.\n\nLoyer mensuel: {{monthly_rent}}€\nÉchéance: le {{payment_due_day}} de chaque mois\nPréavis: 30 jours\nCe contrat se renouvelle mensuellement jusqu'à résiliation."
+      },
+      "it": {
+        "title": "CONTRATTO DI LOCAZIONE MENSILE",
+        "sections": {
+          "parties": "PARTI",
+          "property": "IMMOBILE",
+          "term": "DURATA",
+          "rent": "CANONE MENSILE",
+          "notice": "PREAVVISO"
+        },
+        "content": "Questo contratto di locazione mensile inizia il {{date}} tra {{landlord_name}} (Locatore) e {{tenant_name}} (Conduttore) per {{property_address}}.\n\nCanone mensile: {{monthly_rent}}€\nScadenza: {{payment_due_day}} di ogni mese\nPreavviso: 30 giorni\nIl contratto si rinnova mensilmente fino a disdetta."
+      }
+    },
+    "notices-pay-or-quit": {
+      "en": {
+        "title": "NOTICE TO PAY RENT OR QUIT",
+        "content": "TO: {{tenant_name}}\nPROPERTY: {{property_address}}\n\nYou are hereby notified that rent in the amount of ${{amount_owed}} is now due and payable for the period of {{rent_period}}.\n\nYou are required to pay this amount within THREE (3) DAYS or vacate the premises.\n\nDated: {{notice_date}}\nLandlord: {{landlord_name}}"
+      },
+      "de": {
+        "title": "ZAHLUNGSAUFFORDERUNG ODER KÜNDIGUNG",
+        "content": "AN: {{tenant_name}}\nOBJEKT: {{property_address}}\n\nHiermit werden Sie darauf hingewiesen, dass Miete in Höhe von {{amount_owed}}€ für den Zeitraum {{rent_period}} fällig ist.\n\nSie müssen diesen Betrag innerhalb von DREI (3) TAGEN zahlen oder die Räumlichkeiten verlassen.\n\nDatum: {{notice_date}}\nVermieter: {{landlord_name}}"
+      },
+      "fr": {
+        "title": "MISE EN DEMEURE DE PAYER OU QUITTER",
+        "content": "À: {{tenant_name}}\nPROPRIÉTÉ: {{property_address}}\n\nVous êtes informé que le loyer de {{amount_owed}}€ est dû pour la période {{rent_period}}.\n\nVous devez payer ce montant dans les TROIS (3) JOURS ou quitter les lieux.\n\nDate: {{notice_date}}\nBailleur: {{landlord_name}}"
+      },
+      "it": {
+        "title": "INTIMAZIONE DI PAGAMENTO O SFRATTO",
+        "content": "A: {{tenant_name}}\nIMMOBILE: {{property_address}}\n\nCon la presente si notifica che l'affitto di {{amount_owed}}€ è dovuto per il periodo {{rent_period}}.\n\nDeve pagare questo importo entro TRE (3) GIORNI o lasciare i locali.\n\nData: {{notice_date}}\nLocatore: {{landlord_name}}"
+      }
+    },
+    "lease-roommate": {
+      "en": {
+        "title": "ROOMMATE AGREEMENT",
+        "sections": {
+          "parties": "PARTIES",
+          "property": "SHARED PROPERTY",
+          "terms": "AGREEMENT TERMS",
+          "rent": "RENT AND EXPENSES",
+          "rules": "HOUSE RULES"
+        },
+        "content": "This Roommate Agreement is entered into on {{date}} between {{lease_holder}} (Primary Tenant) and {{roommate_name}} (Roommate) for the property at {{property_address}}.\n\nMonthly rent share: ${{monthly_rent}}\nSecurity deposit: ${{security_deposit}}\nMove-in date: {{move_in_date}}"
+      },
+      "de": {
+        "title": "MITBEWOHNER-VEREINBARUNG",
+        "sections": {
+          "parties": "PARTEIEN",
+          "property": "GEMEINSAME WOHNUNG",
+          "terms": "VEREINBARUNGSBEDINGUNGEN",
+          "rent": "MIETE UND AUSGABEN",
+          "rules": "HAUSREGELN"
+        },
+        "content": "Diese Mitbewohner-Vereinbarung wird am {{date}} zwischen {{lease_holder}} (Hauptmieter) und {{roommate_name}} (Mitbewohner) für die Immobilie in {{property_address}} geschlossen.\n\nMonatlicher Mietanteil: {{monthly_rent}}€\nKaution: {{security_deposit}}€\nEinzugsdatum: {{move_in_date}}"
+      },
+      "fr": {
+        "title": "ACCORD DE COLOCATION",
+        "sections": {
+          "parties": "PARTIES",
+          "property": "LOGEMENT PARTAGÉ",
+          "terms": "CONDITIONS DE L'ACCORD",
+          "rent": "LOYER ET DÉPENSES",
+          "rules": "RÈGLES DE LA MAISON"
+        },
+        "content": "Cet accord de colocation est conclu le {{date}} entre {{lease_holder}} (Locataire principal) et {{roommate_name}} (Colocataire) pour le logement situé au {{property_address}}.\n\nPart de loyer mensuel: {{monthly_rent}}€\nDépôt de garantie: {{security_deposit}}€\nDate d'emménagement: {{move_in_date}}"
+      },
+      "it": {
+        "title": "ACCORDO DI COINQUILINATO",
+        "sections": {
+          "parties": "PARTI",
+          "property": "PROPRIETÀ CONDIVISA",
+          "terms": "TERMINI DELL'ACCORDO",
+          "rent": "AFFITTO E SPESE",
+          "rules": "REGOLE DELLA CASA"
+        },
+        "content": "Questo accordo di coinquilinato è stipulato in data {{date}} tra {{lease_holder}} (Inquilino principale) e {{roommate_name}} (Coinquilino) per l'immobile sito in {{property_address}}.\n\nQuota mensile di affitto: {{monthly_rent}}€\nDeposito cauzionale: {{security_deposit}}€\nData di trasferimento: {{move_in_date}}"
+      }
+    },
+    "financial-deposit-receipt": {
+      "en": {
+        "title": "SECURITY DEPOSIT RECEIPT",
+        "sections": {
+          "receipt": "RECEIPT DETAILS",
+          "property": "PROPERTY INFORMATION",
+          "payment": "PAYMENT INFORMATION"
+        },
+        "content": "This receipt confirms that {{landlord_name}} has received a security deposit payment from {{tenant_name}} for the property located at {{property_address}}.\n\nDeposit Amount: ${{deposit_amount}}\nPayment Date: {{payment_date}}\nPayment Method: {{payment_method}}\nLease Start Date: {{lease_start_date}}\n\nThis deposit will be held in accordance with local laws and returned at the end of the tenancy, subject to any deductions for damages or unpaid rent as outlined in the lease agreement."
+      },
+      "de": {
+        "title": "KAUTIONSQUITTUNG",
+        "sections": {
+          "receipt": "QUITTUNGSDETAILS",
+          "property": "OBJEKTINFORMATIONEN",
+          "payment": "ZAHLUNGSINFORMATIONEN"
+        },
+        "content": "Diese Quittung bestätigt, dass {{landlord_name}} eine Kaution von {{tenant_name}} für die Immobilie in {{property_address}} erhalten hat.\n\nKautionsbetrag: {{deposit_amount}}€\nZahlungsdatum: {{payment_date}}\nZahlungsmethode: {{payment_method}}\nMietbeginn: {{lease_start_date}}\n\nDiese Kaution wird gemäß den örtlichen Gesetzen verwahrt und am Ende des Mietverhältnisses zurückgegeben, vorbehaltlich etwaiger Abzüge für Schäden oder unbezahlte Miete gemäß Mietvertrag."
+      },
+      "fr": {
+        "title": "REÇU DE DÉPÔT DE GARANTIE",
+        "sections": {
+          "receipt": "DÉTAILS DU REÇU",
+          "property": "INFORMATIONS SUR LA PROPRIÉTÉ",
+          "payment": "INFORMATIONS DE PAIEMENT"
+        },
+        "content": "Ce reçu confirme que {{landlord_name}} a reçu un dépôt de garantie de {{tenant_name}} pour la propriété située au {{property_address}}.\n\nMontant du dépôt: {{deposit_amount}}€\nDate de paiement: {{payment_date}}\nMéthode de paiement: {{payment_method}}\nDébut du bail: {{lease_start_date}}\n\nCe dépôt sera conservé conformément aux lois locales et restitué à la fin de la location, sous réserve de déductions pour dommages ou loyer impayé comme indiqué dans le contrat de location."
+      },
+      "it": {
+        "title": "RICEVUTA DEPOSITO CAUZIONALE",
+        "sections": {
+          "receipt": "DETTAGLI RICEVUTA",
+          "property": "INFORMAZIONI PROPRIETÀ",
+          "payment": "INFORMAZIONI PAGAMENTO"
+        },
+        "content": "Questa ricevuta conferma che {{landlord_name}} ha ricevuto un deposito cauzionale da {{tenant_name}} per la proprietà situata in {{property_address}}.\n\nImporto del deposito: {{deposit_amount}}€\nData di pagamento: {{payment_date}}\nMetodo di pagamento: {{payment_method}}\nInizio locazione: {{lease_start_date}}\n\nQuesto deposito sarà trattenuto in conformità con le leggi locali e restituito al termine della locazione, salvo eventuali deduzioni per danni o affitto non pagato come indicato nel contratto di locazione."
+      }
+    }
+  }
+}

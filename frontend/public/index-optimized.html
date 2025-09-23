@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Stop scrolling through 100+ listings — let AI send the 4 homes that actually fit.">
+
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+  <!-- Critical CSS inline for faster first paint -->
+  <style>
+    /* Critical CSS for above-the-fold content */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    /* Loading state */
+    #root:empty::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Prevent layout shift */
+    img { max-width: 100%; height: auto; aspect-ratio: attr(width) / attr(height); }
+
+    /* Font loading optimization */
+    .fonts-loaded { font-family: 'Poppins', sans-serif; }
+  </style>
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="%PUBLIC_URL%/static/css/main.css" as="style" />
+  <link rel="preload" href="%PUBLIC_URL%/static/js/main.js" as="script" />
+
+  <!-- Icons -->
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.ico" />
+
+  <!-- Fonts with display swap for better performance -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </noscript>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Your AI-Powered Real Estate Agent">
+  <meta property="og:description" content="Stop scrolling through 100+ listings — let AI send the 4 homes that actually fit.">
+  <meta property="og:image" content="%PUBLIC_URL%/favicon.svg">
+  <meta property="og:url" content="https://homeai.ch/">
+  <meta property="og:type" content="website">
+
+  <title>HomeAI - AI-Powered Real Estate Agent</title>
+
+  <!-- Defer non-critical scripts -->
+  <script>
+    // Font loading optimization
+    if ('fonts' in document) {
+      document.fonts.ready.then(function() {
+        document.body.classList.add('fonts-loaded');
+      });
+    }
+
+    // Service Worker registration for offline support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').catch(function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
+
+  <!-- Google Analytics - defer loading -->
+  <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'G-WXVHC057Q7', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <!-- Google Tag Manager - defer -->
+  <script>
+    (function(w,d,s,l,i){
+      w[l]=w[l]||[];
+      w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+      setTimeout(function(){
+        var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      }, 3000); // Delay GTM by 3 seconds
+    })(window,document,'script','dataLayer','GTM-PB44MKCB');
+  </script>
+</head>
+
+<body>
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PB44MKCB" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <div style="padding: 20px; text-align: center;">
+      <h1>JavaScript Required</h1>
+      <p>Please enable JavaScript to use HomeAI.</p>
+    </div>
+  </noscript>
+
+  <div id="root"></div>
+
+  <!-- Progressive Enhancement -->
+  <script>
+    // Check for modern browser features
+    if (!window.IntersectionObserver || !window.Promise || !window.fetch) {
+      var script = document.createElement('script');
+      script.src = 'https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver,Promise,fetch';
+      document.head.appendChild(script);
+    }
+  </script>
+</body>
+
+</html>

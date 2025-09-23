@@ -1,0 +1,141 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: black;
+  color: white;
+  border: 0vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  padding: 12px 24px 12px 24px;
+  flex-basis: content;
+  z-index: 100;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  padding-right: 24px;
+  flex-basis: content;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.form-label {
+  display: flex;
+  flex-direction: column;
+  font-family: Montserrat;
+  font-size: 16px;
+  margin-right: 12px;
+  align-items: centre;
+  justify-content: space-between;
+  padding-top: 10px;
+  color: #b1b1b1;
+}
+
+.form-label-error {
+  display: flex;
+  flex-direction: column;
+  font-family: Montserrat;
+  font-size: 16px;
+  margin-right: 12px;
+  align-items: centre;
+  justify-content: center;
+  padding-top: 6px;
+  color: #b1b1b1;
+}
+.input-container {
+  width: 100%;
+}
+.input-control {
+  background-color: rgba(217, 217, 217, 255);
+  border-radius: 8px;
+  width: 207px;
+  height: 38px;
+  padding-left: 10px;
+}
+.form-control {
+  box-shadow: none !important;
+  border-color: rgba(0, 0, 0, 0.125) !important;
+  border-radius: 8px !important;
+  outline: none;
+  border: none;
+}
+
+.input-control:focus {
+  background-color: white;
+}
+
+.input-control.error {
+  background-color: #fd8080;
+}
+.form-button {
+  width: 91px;
+  background-color: white;
+  border: 2px solid white;
+  color: black;
+  border-radius: 8px;
+  font-weight: bold;
+}
+.form-button:hover {
+  width: 91px;
+  background-color: gray;
+  border: 2px solid gray;
+  color: black;
+  border-radius: 8px;
+}
+.form-button:active {
+  width: 91px;
+  background-color: gray;
+  border: 2px solid gray;
+  color: black;
+  border-radius: 8px;
+}
+.form-button.error {
+  width: 91px;
+  background-color: white;
+  border: 2px solid white;
+  color: black;
+  border-radius: 8px;
+  max-height: 42px;
+}
+.text-danger {
+  color: #fd8080 !important;
+  font-style: italic;
+  font-family: "Montserrat";
+  font-size: 16px;
+  text-align: start;
+  margin-block-end: 0px;
+  vertical-align: baseline;
+  line-height: normal;
+  padding-top: 10px;
+}
+#LogoutIcon {
+  position: fixed;
+  z-index: 10;
+  right: 60px;
+  top: 40px;
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 50%;
+  cursor: default;
+  border: none;
+}
+#LogoutIcon-user {
+  position: fixed;
+  z-index: 10;
+  right: 60px;
+  top: 50px;
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 50%;
+  cursor: default;
+  border: none;
+}

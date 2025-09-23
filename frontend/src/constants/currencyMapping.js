@@ -1,0 +1,41 @@
+export const currencyMapping = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  JPY: '¥',
+  CHF: 'CHF',
+  CAD: 'C$',
+  AUD: 'A$',
+  CNY: '¥',
+  HKD: 'HK$',
+  NZD: 'NZ$',
+  SEK: 'kr',
+  KRW: '₩',
+  SGD: 'S$',
+  NOK: 'kr',
+  MXN: 'Mex$',
+  INR: '₹',
+  RUB: '₽',
+  ZAR: 'R',
+  TRY: '₺',
+  BRL: 'R$',
+  TWD: 'NT$',
+  DKK: 'kr',
+  PLN: 'zł',
+  THB: '฿',
+  IDR: 'Rp',
+  HUF: 'Ft',
+  CZK: 'Kč',
+  ILS: '₪',
+  CLP: 'CLP$',
+  PHP: '₱',
+  AED: 'د.إ',
+  COP: 'COL$',
+  SAR: '﷼',
+  MYR: 'RM',
+  RON: 'lei'
+};
+
+export const getCurrencySymbol = (currencyCode) => {
+  return currencyMapping[currencyCode] || currencyCode;
+};

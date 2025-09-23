@@ -1,0 +1,29 @@
+.unsubscribe-reasons-modal-body {
+  width: 100%;
+  max-width: 640px;
+  background-color: #fff;
+  border-radius: 6px;
+
+  .content {
+    padding: 48px 40px;
+
+    .title {
+      margin-bottom: 24px;
+      text-align: center;
+      font-size: 36px;
+      line-height: 1.2;
+      font-weight: 900;
+    }
+
+    .description {
+      margin-bottom: 24px;
+      text-align: center;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .reasons-list {
+      margin-bottom: 24px;
+    }
+  }
+}

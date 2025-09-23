@@ -1,0 +1,59 @@
+.AI-message-card {
+  display: flex;
+  column-gap: 8px;
+  width: 100%;
+  margin-bottom: 20px;
+
+  .wrapper-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .content {
+    padding-top: 8px;
+    line-height: 1.5;
+    color: #202020;
+
+    .title {
+      font-size: 18px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #202020;
+    }
+    .description {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .fade {
+      transition: opacity 0.5s;
+      opacity: 1;
+    }
+    .fade-out {
+      opacity: 0;
+    }
+    .fade-in {
+      opacity: 1;
+    }
+
+    .shimmer {
+      position: relative;
+      color: #333;
+      background: linear-gradient(90deg, #333 25%, #888 50%, #333 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite linear;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+  }
+}

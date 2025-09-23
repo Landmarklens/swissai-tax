@@ -1,0 +1,299 @@
+import axios from 'axios';
+
+import config from '../config/environments';
+const API_URL = process.env.REACT_APP_API_URL || config.API_BASE_URL || 'https://api.homeai.ch';
+
+class AuthService {
+  constructor() {
+    this.user = null;
+  }
+
+  // Set current user - single source of truth
+  setCurrentUser(user) {
+    this.user = user;
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+    }
+  }
+
+  // Check if token is expired
+  isTokenExpired(token) {
+    if (!token) return true;
+    
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return true;
+      
+      const payload = JSON.parse(atob(parts[1]));
+      if (!payload.exp) return false; // No expiry claim
+      
+      // Check if expired (with 60 second buffer)
+      return payload.exp * 1000 < Date.now() - 60000;
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return true;
+    }
+  }
+}
+
+const authServiceInstance = new AuthService();
+
+const authService = {
+  initiateGoogleLogin: async (userType) => {
+    try {
+      // Get redirect URL - where the backend should redirect after Google OAuth
+      let redirect_url = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
+
+      // If no redirect URL is set, construct one based on current location
+      if (!redirect_url || redirect_url.includes('localhost') && !window.location.href.includes('localhost')) {
+        // Use the actual current domain for production
+        const currentLang = window.location.pathname.split('/')[1] || 'en';
+        const baseUrl = window.location.origin;
+        redirect_url = `${baseUrl}/${currentLang}/google-redirect`;
+      }
+
+      // For local development, ensure we use the correct localhost URL
+      if (window.location.hostname === 'localhost') {
+        const currentLang = window.location.pathname.split('/')[1] || 'en';
+        redirect_url = `http://localhost:3000/${currentLang}/google-redirect`;
+      }
+
+      const fullUrl = `${API_URL}/auth/login/google`;
+      const params = { user_type: userType, redirect_url };
+
+      const response = await axios.get(fullUrl, {
+        params
+      });
+
+      if (!response.data || !response.data.authorization_url) {
+        console.error('[AuthService] Invalid response - missing authorization_url');
+        console.error('[AuthService] Full response:', response);
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error('[AuthService] Error in initiateGoogleLogin:', error);
+      throw error.response?.data || error;
+    }
+  },
+
+  handleGoogleLoginCallback: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/auth/login/google/callback`);
+      if (response.data.access_token) {
+        authServiceInstance.setCurrentUser(response.data);
+      }
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  // Existing Google Sign-In method (you may want to remove or update this)
+  googleSignIn: async (idToken) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/google`, { idToken });
+      if (response.data.access_token) {
+        authServiceInstance.setCurrentUser(response.data);
+      }
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  // Regular email/password login
+  login: async (email, password) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/login`, {
+        email,
+        password
+      });
+      if (response.data.access_token) {
+        authServiceInstance.setCurrentUser(response.data);
+      }
+      return response.data;
+    } catch (error) {
+      // Return error object instead of throwing to maintain existing behavior
+      return { error: error.response?.data?.detail || error.response?.data?.error || 'Login failed' };
+    }
+  },
+
+  // User registration
+  register: async (userData) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/register`, userData);
+      if (response.data) {
+        // Registration successful
+        // authService.login(userData.email, userData.password);
+        return response.data;
+      }
+      return response.data;
+    } catch (error) {
+      // Return error object instead of throwing to maintain existing behavior
+      return { error: error.response?.data?.detail || error.response?.data?.error || 'Registration failed' };
+    }
+  },
+
+  createTrialSubscription: async (userData) => {
+    try {
+      const user = authService.getCurrentUser();
+      // User authenticated
+      const response = await axios.post(`${API_URL}/api/subscriptions/activate-trial`, null, {
+        headers: { Authorization: `Bearer ${user.access_token}` }
+      });
+
+      // Trial subscription created
+
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  // Logout
+  logout: () => {
+    authServiceInstance.setCurrentUser(null);
+    localStorage.clear();
+    // Don't redirect here - let the calling code handle navigation
+  },
+
+  // Get current user - single source of truth
+  getCurrentUser: () => {
+    if (!authServiceInstance.user) {
+      try {
+        const stored = localStorage.getItem('user');
+        authServiceInstance.user = stored ? JSON.parse(stored) : null;
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        authServiceInstance.user = null;
+      }
+    }
+    
+    // Check token expiry
+    if (authServiceInstance.user && authServiceInstance.isTokenExpired(authServiceInstance.user.access_token)) {
+      authService.logout();
+      return null;
+    }
+    
+    return authServiceInstance.user;
+  },
+
+  // Check if user is authenticated
+  isAuthenticated: () => {
+    const user = authService.getCurrentUser();
+    if (!user || !user.access_token) {
+      return false;
+    }
+    
+    // Check if token has expiry and is still valid
+    if (user.expires_at) {
+      const expiryTime = new Date(user.expires_at).getTime();
+      const currentTime = new Date().getTime();
+      if (currentTime >= expiryTime) {
+        // Token expired
+        authService.logout();
+        return false;
+      }
+    }
+    
+    return true;
+  },
+
+  // Get authentication token
+  getToken: () => {
+    const user = authService.getCurrentUser();
+    return user ? user.access_token : null;
+  },
+
+  // Refresh token (if your backend supports it)
+  refreshToken: async () => {
+    try {
+      const user = authService.getCurrentUser();
+      if (user && user.refresh_token) {
+        const response = await axios.post(`${API_URL}/auth/refresh-token`, {
+          refresh_token: user.refresh_token
+        });
+        if (response.data.access_token) {
+          user.access_token = response.data.access_token;
+          authServiceInstance.setCurrentUser(user);
+        }
+        return response.data;
+      }
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  // -------------------------------------------------------------------------//
+  // RESET PASSWORD
+  requestResetPassword: async (email) => {
+    if (!email) {
+      return { error: 'Email is required to request a password reset.' };
+    }
+
+    try {
+      const response = await axios.post(`${API_URL}/auth/reset-password/request`, { email });
+
+      if (response.data) {
+        // Reset password request sent successfully
+        return { ...response.data, status: response.status };
+      }
+      return response.data;
+    } catch (error) {
+      // Return error object instead of throwing to maintain consistent error handling
+      return { error: error.response?.data?.detail || error.response?.data?.error || 'Failed to request password reset' };
+    }
+  },
+
+  verifyResetPassword: async (token) => {
+    if (!token) {
+      return { error: 'Token is required to verify a password reset.' };
+    }
+
+    try {
+      const response = await axios.post(`${API_URL}/auth/reset-password/verify`, { token });
+
+      if (response.data) {
+        // Reset password request sent successfully
+        return { ...response.data, status: response.status };
+      }
+
+      return { ...response.data, status: response.status };
+    } catch (error) {
+      // Return error object instead of throwing to maintain consistent error handling
+      return { error: error.response?.data?.detail || error.response?.data?.error || 'Failed to verify reset token' };
+    }
+  },
+
+  // Reset authServiceInstance (for testing)
+  _resetInstance: () => {
+    authServiceInstance.user = null;
+  },
+
+  confirmResetPassword: async ({ token, new_password }) => {
+    if (!token || !new_password) {
+      return { error: 'Token and new password are required to password reset.' };
+    }
+
+    try {
+      const response = await axios.post(`${API_URL}/auth/reset-password/confirm`, {
+        token,
+        new_password
+      });
+
+      if (response.data) {
+        // Reset password request sent successfully
+        return { ...response.data, status: response.status };
+      }
+      return { ...response.data, status: response.status };
+    } catch (error) {
+      // Return error object instead of throwing to maintain consistent error handling
+      return { error: error.response?.data?.detail || error.response?.data?.error || 'Failed to reset password' };
+    }
+  }
+};
+
+export default authService;

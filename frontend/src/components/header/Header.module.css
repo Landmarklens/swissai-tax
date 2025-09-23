@@ -1,0 +1,103 @@
+.appBar {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  z-index: 1000;
+}
+
+.toolbar {
+  justify-content: space-between;
+  padding: 16px 0 30px !important;
+}
+
+.mobileLogoText {
+  color: #2b49c7;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.desktopNav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  position: relative;
+  z-index: 100;
+}
+
+.logoLink {
+  text-decoration: none;
+}
+
+.menuContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.menuLink {
+  color: #1a1a1a;
+  margin: 0 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent; /* Add transparent border */
+  transition: border-color 0.3s ease;
+}
+
+.menuLinkActive {
+  transition: border-color 0.3s ease;
+}
+
+.menuLink:hover {
+  border-bottom: 2px solid #1a1a1a !important;
+}
+
+.actionContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.languageSelector {
+  color: #1a1a1a;
+  margin-right: 16px;
+}
+
+.loginButton {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  margin-right: 8px;
+  background-color: transparent;
+}
+
+.drawerContent {
+  width: 250px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.drawerLink {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.drawerLinkActive {
+  color: #1a1a1a;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.drawerLoginButton {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  background-color: transparent;
+}
+
+@media (max-width: 1200px) {
+  .menuLink {
+    margin: 0 1px;
+  }
+}

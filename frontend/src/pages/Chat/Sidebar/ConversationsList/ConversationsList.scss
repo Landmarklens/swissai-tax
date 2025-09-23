@@ -1,0 +1,107 @@
+.main-wrapper {
+  margin-bottom: 24px;
+
+  .day {
+    margin: 0 0 8px 0;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .list-item {
+    display: flex;
+    align-items: center;
+    margin: 0 0 2px 0;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+
+    &.active {
+      background-color: #f3f4f6;
+    }
+
+    &:hover {
+      background-color: #f9fafb;
+    }
+
+    .item-button {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #f3f4f6;
+      }
+
+      .chat-icon {
+        color: #6b7280;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .content {
+        flex: 1;
+        min-width: 0;
+
+        .title {
+          font-size: 14px;
+          font-weight: 400;
+          color: #374151;
+          line-height: 1.4;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .delete-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      margin: 0 8px;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #9ca3af;
+      opacity: 0;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #f3f4f6;
+        color: #ef4444;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &:hover .delete-button {
+      opacity: 1;
+    }
+  }
+}

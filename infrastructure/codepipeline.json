@@ -1,0 +1,88 @@
+{
+  "pipeline": {
+    "name": "swisstax-ai-backend-pipeline",
+    "roleArn": "arn:aws:iam::445567083171:role/service-role/AWSCodePipelineServiceRole",
+    "artifactStore": {
+      "type": "S3",
+      "location": "codepipeline-us-east-1-13550764933"
+    },
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "SourceAction",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "ThirdParty",
+              "provider": "GitHub",
+              "version": "1"
+            },
+            "configuration": {
+              "Owner": "LandMarks",
+              "Repo": "swisstax-ai",
+              "Branch": "main",
+              "OAuthToken": "{{resolve:secretsmanager:github-token:SecretString:token}}"
+            },
+            "outputArtifacts": [
+              {
+                "name": "SourceOutput"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Build",
+        "actions": [
+          {
+            "name": "BuildAction",
+            "actionTypeId": {
+              "category": "Build",
+              "owner": "AWS",
+              "provider": "CodeBuild",
+              "version": "1"
+            },
+            "configuration": {
+              "ProjectName": "swisstax-ai-build"
+            },
+            "inputArtifacts": [
+              {
+                "name": "SourceOutput"
+              }
+            ],
+            "outputArtifacts": [
+              {
+                "name": "BuildOutput"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Deploy",
+        "actions": [
+          {
+            "name": "DeployAction",
+            "actionTypeId": {
+              "category": "Deploy",
+              "owner": "AWS",
+              "provider": "ECS",
+              "version": "1"
+            },
+            "configuration": {
+              "ClusterName": "swisstax-cluster",
+              "ServiceName": "swisstax-backend-service",
+              "FileName": "imagedefinitions.json"
+            },
+            "inputArtifacts": [
+              {
+                "name": "BuildOutput"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Web Vitals Test</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; }
+        .metric { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+        .good { background: #d4edda; }
+        .needs-improvement { background: #fff3cd; }
+        .poor { background: #f8d7da; }
+        h1 { color: #333; }
+        .value { font-size: 24px; font-weight: bold; color: #333; }
+        .label { color: #666; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Core Web Vitals Performance Test</h1>
+    <div id="metrics"></div>
+
+    <script type="module">
+        import { getCLS, getFID, getLCP, getFCP, getTTFB } from 'https://unpkg.com/web-vitals@3/dist/web-vitals.js';
+
+        const metrics = {};
+        const metricsDiv = document.getElementById('metrics');
+
+        function getRating(name, value) {
+            const thresholds = {
+                'CLS': { good: 0.1, poor: 0.25 },
+                'FID': { good: 100, poor: 300 },
+                'LCP': { good: 2500, poor: 4000 },
+                'FCP': { good: 1800, poor: 3000 },
+                'TTFB': { good: 800, poor: 1800 }
+            };
+
+            const t = thresholds[name];
+            if (!t) return 'needs-improvement';
+
+            if (value <= t.good) return 'good';
+            if (value >= t.poor) return 'poor';
+            return 'needs-improvement';
+        }
+
+        function displayMetric(name, value, unit = 'ms') {
+            const rating = getRating(name, value);
+            const displayValue = name === 'CLS' ? value.toFixed(3) : Math.round(value);
+
+            const metricDiv = document.createElement('div');
+            metricDiv.className = `metric ${rating}`;
+            metricDiv.innerHTML = `
+                <div class="label">${name} - ${name === 'CLS' ? 'Cumulative Layout Shift' :
+                                       name === 'FID' ? 'First Input Delay' :
+                                       name === 'LCP' ? 'Largest Contentful Paint' :
+                                       name === 'FCP' ? 'First Contentful Paint' :
+                                       'Time to First Byte'}</div>
+                <div class="value">${displayValue}${name === 'CLS' ? '' : unit}</div>
+                <div>Rating: ${rating.replace('-', ' ')}</div>
+            `;
+            metricsDiv.appendChild(metricDiv);
+        }
+
+        // Measure Core Web Vitals
+        getCLS((metric) => displayMetric('CLS', metric.value, ''));
+        getFID((metric) => displayMetric('FID', metric.value));
+        getLCP((metric) => displayMetric('LCP', metric.value));
+        getFCP((metric) => displayMetric('FCP', metric.value));
+        getTTFB((metric) => displayMetric('TTFB', metric.value));
+
+        // Additional performance metrics
+        window.addEventListener('load', () => {
+            const perfData = performance.getEntriesByType('navigation')[0];
+
+            const additionalMetrics = document.createElement('div');
+            additionalMetrics.innerHTML = '<h2>Additional Metrics</h2>';
+
+            const metrics = {
+                'DOM Interactive': perfData.domInteractive,
+                'DOM Complete': perfData.domComplete,
+                'Page Load Time': perfData.loadEventEnd - perfData.fetchStart,
+                'Resources Loaded': performance.getEntriesByType('resource').length
+            };
+
+            for (const [label, value] of Object.entries(metrics)) {
+                const div = document.createElement('div');
+                div.className = 'metric';
+                div.innerHTML = `
+                    <div class="label">${label}</div>
+                    <div class="value">${typeof value === 'number' ? Math.round(value) + 'ms' : value}</div>
+                `;
+                additionalMetrics.appendChild(div);
+            }
+
+            metricsDiv.appendChild(additionalMetrics);
+        });
+    </script>
+</body>
+</html>

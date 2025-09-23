@@ -1,0 +1,9 @@
+.faq-component {
+  @media only screen and (min-width: 0) {
+    section div {
+      p {
+        font-size: 18px;
+      }
+    }
+  }
+}

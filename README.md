@@ -1,13 +1,15 @@
-# SwissTax.ai
+# SwissAI Tax
 
 AI-powered tax filing assistant for Swiss residents.
+Live at: https://swissai.tax
 
 ## Project Structure
 
 ```
-swisstax-ai/
+swissai-tax/
 ├── backend/          # Python backend (Lambda functions)
-├── frontend/         # React frontend application
+├── src/              # React frontend application
+├── public/           # Static assets
 ├── infrastructure/   # AWS infrastructure configs
 └── tests/           # Test suites
 ```

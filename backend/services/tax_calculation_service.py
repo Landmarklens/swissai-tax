@@ -97,13 +97,13 @@ class TaxCalculationService:
             'total_income': 0
         }
 
-        # Employment income (Q03)
-        if answers.get('Q03') == True:
+        # Employment income - based on number of employers (Q04)
+        num_employers = int(answers.get('Q04', 0))
+        if num_employers > 0:
             income['employment'] = Decimal(str(answers.get('income_employment', 0)))
-
-        # Self-employment income (Q04)
-        if answers.get('Q04') == True:
-            income['self_employment'] = Decimal(str(answers.get('income_self_employment', 0)))
+            # Check for self-employment (if marked as self-employed in Q04 loop)
+            if answers.get('self_employed', False):
+                income['self_employment'] = Decimal(str(answers.get('income_self_employment', 0)))
 
         # Capital income (Q05)
         if answers.get('Q05') == True:
@@ -158,9 +158,9 @@ class TaxCalculationService:
         else:
             deductions['insurance_premiums'] = 1750
 
-        # Child deductions (Q02)
-        if answers.get('Q02') == True:
-            num_children = int(answers.get('Q02a', 0))
+        # Child deductions (Q03)
+        if answers.get('Q03') == True:
+            num_children = int(answers.get('Q03a', 0))
             # 6600 CHF per child for federal tax
             deductions['child_deduction'] = num_children * 6600
 

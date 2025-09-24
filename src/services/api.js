@@ -41,7 +41,7 @@ api.interceptors.response.use(
 export const interviewAPI = {
   startSession: (data) => api.post('/api/interview/start', data),
   submitAnswer: (data) => api.post('/api/interview/answer', data),
-  getSession: (sessionId) => api.get(`/api/interview/session?sessionId=${sessionId}`),
+  resumeSession: (sessionId) => api.get(`/api/interview/resume/${sessionId}`),
   getQuestions: (language = 'en') => api.get(`/api/interview/questions?language=${language}`),
 };
 

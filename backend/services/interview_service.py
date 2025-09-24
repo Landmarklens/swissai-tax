@@ -88,7 +88,10 @@ class InterviewService:
             next_question_id = 'Q03a'
         elif question_id == 'Q03a':
             # Store number of children and prepare for child details
-            num_children = int(answer)
+            try:
+                num_children = int(answer)
+            except (ValueError, TypeError):
+                return {'error': 'Invalid number provided. Please enter a valid number.'}
             session['num_children'] = num_children
             session['child_index'] = 0
             next_question_id = 'Q03b' if num_children > 0 else 'Q04'

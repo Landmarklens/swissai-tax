@@ -199,7 +199,7 @@ class DocumentService:
         if not document or not document['ocr_data']:
             return {'error': 'No OCR job found'}
 
-        job_id = document['ocr_data'].get('textract_job_id')
+        job_id = (document.get('ocr_data') or {}).get('textract_job_id')
         if not job_id:
             return {'error': 'No job ID found'}
 

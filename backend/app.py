@@ -21,6 +21,7 @@ sys.path.append(os.path.dirname(__file__))
 from services.interview_service import interview_service
 from services.document_service import DocumentService
 from services.tax_calculation_service import TaxCalculationService
+from utils.validators import validate_session_id, validate_tax_year
 
 # Try to import connection pool for App Runner, fallback to regular connection
 try:
@@ -145,6 +146,9 @@ async def start_interview(request: InterviewStartRequest):
 async def submit_answer(request: InterviewAnswerRequest):
     """Submit an answer and get the next question"""
     try:
+        # Validate session ID
+        if not validate_session_id(request.sessionId):
+            raise HTTPException(status_code=400, detail="Invalid session ID format")
         result = interview_service.submit_answer(
             request.sessionId,
             request.questionId,
@@ -326,7 +330,7 @@ async def estimate_tax(request: TaxEstimateRequest):
             "cantonal_tax": float(cantonal_tax),
             "municipal_tax": float(municipal_tax),
             "total_tax": float(total_tax),
-            "effective_rate": float((total_tax / Decimal(str(request.income))) * 100),
+            "effective_rate": float((total_tax / Decimal(str(max(request.income, 1)))) * 100),
             "monthly_tax": float(total_tax / 12)
         }
     except Exception as e:

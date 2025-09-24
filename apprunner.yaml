@@ -26,7 +26,7 @@ run:
     - name: DATABASE_NAME
       value: "swissai_tax"
     - name: DATABASE_USER
-      value: "postgres"
+      value: "webscrapinguser"
     - name: DATABASE_PASSWORD
       value: "IXq3IC0Uw6StMkBhb4mb"
     - name: S3_BUCKET_NAME

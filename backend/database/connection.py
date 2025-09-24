@@ -31,7 +31,7 @@ def get_db_config() -> Dict[str, Any]:
     if os.getenv('DATABASE_HOST'):
         return {
             'host': os.getenv('DATABASE_HOST'),
-            'port': int(os.getenv('DATABASE_PORT', 5432)),
+            'port': int(os.getenv('DATABASE_PORT', '5432')),
             'database': os.getenv('DATABASE_NAME', 'swissai_tax'),
             'user': os.getenv('DATABASE_USER', 'postgres'),
             'password': os.getenv('DATABASE_PASSWORD', ''),
@@ -41,11 +41,11 @@ def get_db_config() -> Dict[str, Any]:
     # Fall back to Parameter Store
     return {
         'host': get_parameter('/swissai-tax/db/host'),
-        'port': int(get_parameter('/swissai-tax/db/port')),
+        'port': int(get_parameter('/swissai-tax/db/port') or '5432'),
         'database': get_parameter('/swissai-tax/db/database'),
         'user': get_parameter('/swissai-tax/db/username'),
         'password': get_parameter('/swissai-tax/db/password', decrypt=True),
-        'options': f"-csearch_path={get_parameter('/swissai-tax/db/schema')}"
+        'options': f"-csearch_path={get_parameter('/swissai-tax/db/schema') or 'swisstax'}"
     }
 
 @contextmanager

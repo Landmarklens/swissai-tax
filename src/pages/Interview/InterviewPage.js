@@ -62,9 +62,9 @@ const InterviewPage = () => {
         language: 'en'
       });
 
-      setSessionId(response.data.sessionId);
-      setCurrentQuestion(response.data.currentQuestion);
-      setProgress(response.data.progress);
+      setSessionId(response.sessionId);
+      setCurrentQuestion(response.currentQuestion);
+      setProgress(response.progress);
     } catch (err) {
       setError('Failed to start interview. Please try again.');
       console.error('Error starting interview:', err);
@@ -93,23 +93,23 @@ const InterviewPage = () => {
       }));
 
       // Update progress
-      setProgress(response.data.progress);
+      setProgress(response.progress);
 
       // Update stepper based on question ID
-      updateStepperPosition(response.data.nextQuestion?.id);
+      updateStepperPosition(response.nextQuestion?.id);
 
       // Check if interview is complete
-      if (response.data.complete) {
+      if (response.complete) {
         setIsComplete(true);
-        setProfile(response.data.profile);
-        setDocumentRequirements(response.data.documentRequirements);
+        setProfile(response.profile);
+        setDocumentRequirements(response.documentRequirements);
         setCurrentQuestion(null);
       } else {
-        setCurrentQuestion(response.data.nextQuestion);
+        setCurrentQuestion(response.nextQuestion);
       }
     } catch (err) {
       if (err.response?.status === 400) {
-        setError(err.response.data.error || 'Invalid answer. Please check and try again.');
+        setError(err.response?.data?.error || 'Invalid answer. Please check and try again.');
       } else {
         setError('Failed to submit answer. Please try again.');
       }

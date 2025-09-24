@@ -98,7 +98,10 @@ class TaxCalculationService:
         }
 
         # Employment income - based on number of employers (Q04)
-        num_employers = int(answers.get('Q04', 0))
+        try:
+            num_employers = int(answers.get('Q04', 0))
+        except (ValueError, TypeError):
+            num_employers = 0
         if num_employers > 0:
             income['employment'] = Decimal(str(answers.get('income_employment', 0)))
             # Check for self-employment (if marked as self-employed in Q04 loop)
@@ -160,7 +163,10 @@ class TaxCalculationService:
 
         # Child deductions (Q03)
         if answers.get('Q03') == True:
-            num_children = int(answers.get('Q03a', 0))
+            try:
+                num_children = int(answers.get('Q03a', 0))
+            except (ValueError, TypeError):
+                num_children = 0
             # 6600 CHF per child for federal tax
             deductions['child_deduction'] = num_children * 6600
 

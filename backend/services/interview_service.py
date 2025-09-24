@@ -14,10 +14,12 @@ class InterviewService:
     """Service for managing interview sessions and state"""
 
     def __init__(self):
+        import threading
         self.question_loader = QuestionLoader()
         # In production, this would use database storage
         # For now, using in-memory storage
         self.sessions = {}
+        self._lock = threading.Lock()  # Thread safety for concurrent access
 
     def create_session(self, user_id: str, tax_year: int, language: str = 'en') -> Dict[str, Any]:
         """Create a new interview session"""
@@ -154,7 +156,7 @@ class InterviewService:
             total_questions += 1  # Add children count question
 
         completed = len(session['completed_questions'])
-        progress = min(int((completed / total_questions) * 100), 99)
+        progress = min(int((completed / max(total_questions, 1)) * 100), 99)
         session['progress'] = progress
 
         return {

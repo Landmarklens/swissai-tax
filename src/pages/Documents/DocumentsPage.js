@@ -33,8 +33,14 @@ const DocumentsPage = () => {
   const [error, setError] = useState(null);
 
   // Redirect if no session data
+  React.useEffect(() => {
+    if (!sessionId || !documentRequirements) {
+      navigate('/interview');
+    }
+  }, [sessionId, documentRequirements, navigate]);
+
+  // Early return if no data
   if (!sessionId || !documentRequirements) {
-    navigate('/interview');
     return null;
   }
 

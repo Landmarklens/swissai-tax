@@ -196,7 +196,7 @@ class DocumentService:
         """
         document = execute_one(query, (document_id,))
 
-        if not document or not document['ocr_data']:
+        if not document or not document.get('ocr_data'):
             return {'error': 'No OCR job found'}
 
         job_id = (document.get('ocr_data') or {}).get('textract_job_id')

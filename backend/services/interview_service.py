@@ -3,6 +3,7 @@
 from typing import Dict, List, Optional, Any
 from uuid import uuid4
 from datetime import datetime
+import json
 from database.connection import execute_query, execute_one, execute_insert
 
 
@@ -52,6 +53,11 @@ class InterviewService:
 
     def get_question(self, question_id: str, language: str = 'en') -> Optional[Dict[str, Any]]:
         """Get a specific question with its metadata"""
+        # Validate language to prevent SQL injection
+        valid_languages = ['en', 'de', 'fr', 'it']
+        if language not in valid_languages:
+            language = 'en'
+
         text_field = f"question_text_{language}"
         help_field = f"help_text_{language}"
 
@@ -169,6 +175,11 @@ class InterviewService:
 
     def get_all_questions(self, language: str = 'en') -> List[Dict[str, Any]]:
         """Get all active questions in order"""
+        # Validate language to prevent SQL injection
+        valid_languages = ['en', 'de', 'fr', 'it']
+        if language not in valid_languages:
+            language = 'en'
+
         text_field = f"question_text_{language}"
         help_field = f"help_text_{language}"
 

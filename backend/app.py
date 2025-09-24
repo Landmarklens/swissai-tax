@@ -1,0 +1,378 @@
+"""
+FastAPI application for SwissAI Tax Backend
+Designed for AWS App Runner deployment
+"""
+
+from fastapi import FastAPI, Request, HTTPException, Body
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
+import uvicorn
+import os
+import sys
+from typing import Dict, Any, Optional
+from pydantic import BaseModel, Field
+from datetime import datetime
+import logging
+
+# Add current directory to path for imports
+sys.path.append(os.path.dirname(__file__))
+
+from services.interview_service import InterviewService
+from services.document_service import DocumentService
+from services.tax_calculation_service import TaxCalculationService
+
+# Try to import connection pool for App Runner, fallback to regular connection
+try:
+    from database.connection_pool import check_db_health, close_connection_pool
+    using_pool = True
+except ImportError:
+    from database.connection import check_db_health
+    close_connection_pool = lambda: None
+    using_pool = False
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Initialize services
+interview_service = InterviewService()
+document_service = DocumentService()
+tax_service = TaxCalculationService()
+
+# Lifecycle manager for startup/shutdown
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("Starting SwissAI Tax API...")
+
+    # Check database connection
+    if not check_db_health():
+        logger.error("Database connection failed!")
+    else:
+        logger.info("Database connection successful")
+
+    yield
+
+    # Shutdown
+    logger.info("Shutting down SwissAI Tax API...")
+
+# Create FastAPI app
+app = FastAPI(
+    title="SwissAI Tax API",
+    description="Swiss Tax Filing Backend API",
+    version="1.0.0",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    lifespan=lifespan
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://swissai.tax",
+        "https://www.swissai.tax",
+        "http://localhost:3000",  # For local development
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Pydantic models for request/response validation
+class InterviewStartRequest(BaseModel):
+    userId: Optional[str] = Field(None, description="User ID (optional, will be generated if not provided)")
+    taxYear: int = Field(2024, description="Tax year")
+    language: str = Field("en", description="Language preference")
+
+class InterviewAnswerRequest(BaseModel):
+    sessionId: str = Field(..., description="Session ID")
+    questionId: str = Field(..., description="Question ID")
+    answer: Any = Field(..., description="Answer value")
+    language: str = Field("en", description="Language preference")
+
+class DocumentUploadRequest(BaseModel):
+    sessionId: str = Field(..., description="Session ID")
+    documentType: str = Field(..., description="Document type code")
+    fileName: str = Field(..., description="File name")
+
+class TaxCalculateRequest(BaseModel):
+    sessionId: str = Field(..., description="Session ID")
+
+class TaxEstimateRequest(BaseModel):
+    income: float = Field(..., description="Annual income")
+    canton: str = Field("ZH", description="Canton code")
+    maritalStatus: str = Field("single", description="Marital status")
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    db_healthy = check_db_health()
+    return {
+        "status": "healthy" if db_healthy else "degraded",
+        "service": "swissai-tax-api",
+        "database": "connected" if db_healthy else "disconnected",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+# Interview endpoints
+@app.post("/api/interview/start")
+async def start_interview(request: InterviewStartRequest):
+    """Start a new interview session"""
+    try:
+        from uuid import uuid4
+        user_id = request.userId or str(uuid4())
+
+        session = interview_service.create_session(user_id, request.taxYear)
+        first_question = interview_service.get_question('Q01', request.language)
+
+        return {
+            "sessionId": str(session['id']),
+            "status": session['status'],
+            "currentQuestion": first_question,
+            "progress": session['completion_percentage']
+        }
+    except Exception as e:
+        logger.error(f"Error starting interview: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/interview/answer")
+async def submit_answer(request: InterviewAnswerRequest):
+    """Submit an answer and get the next question"""
+    try:
+        # Save answer
+        interview_service.save_answer(
+            request.sessionId,
+            request.questionId,
+            request.answer
+        )
+
+        # Get next question
+        next_q_id = interview_service.get_next_question(
+            request.sessionId,
+            request.questionId
+        )
+
+        if next_q_id:
+            next_question = interview_service.get_question(next_q_id, request.language)
+            status = 'in_progress'
+            required_docs = None
+        else:
+            next_question = None
+            status = 'completed'
+            required_docs = interview_service.calculate_required_documents(request.sessionId)
+
+        # Get updated session
+        session = interview_service.get_session(request.sessionId)
+
+        return {
+            "sessionId": request.sessionId,
+            "status": status,
+            "nextQuestion": next_question,
+            "progress": session['completion_percentage'],
+            "requiredDocuments": required_docs
+        }
+    except Exception as e:
+        logger.error(f"Error submitting answer: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/interview/session")
+async def get_session(sessionId: str):
+    """Get interview session details"""
+    try:
+        session = interview_service.get_session(sessionId)
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+
+        answers = interview_service.get_session_answers(sessionId)
+
+        return {
+            "sessionId": str(session['id']),
+            "status": session['status'],
+            "currentQuestion": session['current_question'],
+            "progress": session['completion_percentage'],
+            "answers": answers
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting session: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/interview/questions")
+async def get_questions(language: str = "en"):
+    """Get all interview questions"""
+    try:
+        questions = interview_service.get_all_questions(language)
+        return {"questions": questions}
+    except Exception as e:
+        logger.error(f"Error getting questions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Document endpoints
+@app.post("/api/documents/upload")
+async def get_upload_url(request: DocumentUploadRequest):
+    """Get presigned URL for document upload"""
+    try:
+        upload_url = document_service.generate_presigned_url(
+            request.sessionId,
+            request.documentType,
+            request.fileName
+        )
+        return upload_url
+    except Exception as e:
+        logger.error(f"Error generating upload URL: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/documents/list")
+async def list_documents(sessionId: str):
+    """List all documents for a session"""
+    try:
+        documents = document_service.list_session_documents(sessionId)
+        return {"documents": documents}
+    except Exception as e:
+        logger.error(f"Error listing documents: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/documents/download")
+async def get_download_url(documentId: str):
+    """Get download URL for a document"""
+    try:
+        download_url = document_service.get_document_url(documentId)
+        if not download_url:
+            raise HTTPException(status_code=404, detail="Document not found")
+        return {"download_url": download_url}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting download URL: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/documents")
+async def delete_document(documentId: str):
+    """Delete a document"""
+    try:
+        success = document_service.delete_document(documentId)
+        return {
+            "success": success,
+            "message": "Document deleted" if success else "Delete failed"
+        }
+    except Exception as e:
+        logger.error(f"Error deleting document: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/documents/process")
+async def process_document(documentId: str = Body(..., embed=True)):
+    """Start OCR processing for a document"""
+    try:
+        result = document_service.process_document_with_textract(documentId)
+        return result
+    except Exception as e:
+        logger.error(f"Error processing document: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/documents/status")
+async def check_processing_status(documentId: str):
+    """Check OCR processing status"""
+    try:
+        status = document_service.check_textract_job(documentId)
+        return status
+    except Exception as e:
+        logger.error(f"Error checking processing status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Tax calculation endpoints
+@app.post("/api/calculation/calculate")
+async def calculate_tax(request: TaxCalculateRequest):
+    """Calculate taxes based on session data"""
+    try:
+        calculation = tax_service.calculate_taxes(request.sessionId)
+        return calculation
+    except Exception as e:
+        logger.error(f"Tax calculation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/calculation/estimate")
+async def estimate_tax(request: TaxEstimateRequest):
+    """Quick tax estimate without full session"""
+    try:
+        from decimal import Decimal
+
+        # Create simplified answers for estimate
+        answers = {
+            'Q01': request.maritalStatus,
+            'Q03': True,
+            'income_employment': request.income,
+            'canton': request.canton,
+            'municipality': request.canton
+        }
+
+        # Use the calculation service with mock data
+        income_data = {'total_income': float(request.income)}
+        deductions_data = {'total_deductions': float(request.income * 0.15)}
+        taxable_income = Decimal(str(max(0, request.income - request.income * 0.15)))
+
+        federal_tax = tax_service._calculate_federal_tax(taxable_income, answers)
+        cantonal_tax = tax_service._calculate_cantonal_tax(taxable_income, request.canton, answers)
+        municipal_tax = tax_service._calculate_municipal_tax(cantonal_tax, request.canton, request.canton)
+
+        total_tax = federal_tax + cantonal_tax + municipal_tax
+
+        return {
+            "type": "estimate",
+            "income": request.income,
+            "estimated_deductions": float(request.income * 0.15),
+            "taxable_income": float(taxable_income),
+            "federal_tax": float(federal_tax),
+            "cantonal_tax": float(cantonal_tax),
+            "municipal_tax": float(municipal_tax),
+            "total_tax": float(total_tax),
+            "effective_rate": float((total_tax / Decimal(str(request.income))) * 100),
+            "monthly_tax": float(total_tax / 12)
+        }
+    except Exception as e:
+        logger.error(f"Tax estimate error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/calculation/summary")
+async def get_tax_summary(sessionId: str):
+    """Get tax calculation summary"""
+    try:
+        summary = tax_service.get_tax_summary(sessionId)
+        if not summary:
+            raise HTTPException(status_code=404, detail="No calculation found")
+        return summary
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting tax summary: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Root endpoint
+@app.get("/")
+async def root():
+    """Root endpoint with API information"""
+    return {
+        "message": "SwissAI Tax API",
+        "version": "1.0.0",
+        "documentation": "/api/docs",
+        "health": "/health",
+        "endpoints": [
+            "/api/interview",
+            "/api/documents",
+            "/api/calculation"
+        ]
+    }
+
+# Run with uvicorn when executed directly
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=port,
+        reload=False,
+        log_level="info"
+    )

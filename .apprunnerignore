@@ -1,0 +1,17 @@
+# Ignore frontend and other non-backend files
+src/
+public/
+node_modules/
+build/
+dist/
+*.md
+.git/
+.github/
+infrastructure/
+tests/
+.env
+.env.local
+*.log
+coverage/
+.vscode/
+.idea/

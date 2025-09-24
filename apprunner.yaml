@@ -7,7 +7,7 @@ build:
       - python3 -m pip install -r backend/requirements-apprunner.txt
 run:
   runtime-version: 3.11
-  command: python backend/app.py
+  command: python3 backend/app.py
   network:
     port: 8000
     env: PORT

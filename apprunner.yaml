@@ -3,11 +3,10 @@ runtime: python311
 build:
   commands:
     build:
-      - cd backend && python3 -m pip install --upgrade pip
-      - cd backend && python3 -m pip install -r requirements-apprunner.txt
+      - echo "Build phase - dependencies will be installed at runtime"
 run:
   runtime-version: 3.11
-  command: python3 backend/app.py
+  command: bash start.sh
   network:
     port: 8000
     env: PORT

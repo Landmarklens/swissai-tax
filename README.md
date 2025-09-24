@@ -45,11 +45,11 @@ Live at: https://swissai.tax
 
 ```
 swissai-tax/
-├── backend/              # Python backend (Lambda functions)
+├── backend/              # Python backend (FastAPI)
 │   ├── alembic/         # Database migrations
 │   ├── database/        # DB connection and schemas
 │   ├── services/        # Business logic services
-│   └── lambda_handler.py # Main Lambda entry point
+│   └── app.py           # Main FastAPI application
 ├── src/                 # React frontend application
 ├── public/              # Static assets
 ├── infrastructure/      # AWS infrastructure configs
@@ -60,7 +60,8 @@ swissai-tax/
 
 ### Backend
 - Python 3.11
-- AWS Lambda
+- FastAPI
+- AWS App Runner
 - PostgreSQL (Aurora)
 - AWS Textract (OCR)
 
@@ -71,8 +72,7 @@ swissai-tax/
 - i18next (Multi-language)
 
 ### Infrastructure
-- AWS CodePipeline (Backend CI/CD)
-- AWS ECR (Docker registry)
+- AWS App Runner (Backend hosting)
 - AWS Amplify (Frontend hosting)
 - AWS S3 (Document storage)
 
@@ -101,12 +101,11 @@ npm start
 
 ## Deployment
 
-### Backend (CodePipeline)
-Push to main branch triggers automatic deployment via CodePipeline:
+### Backend (App Runner)
+Push to main branch triggers automatic deployment via App Runner:
 1. Source from GitHub
-2. Build Docker image
-3. Push to ECR
-4. Deploy to ECS/Lambda
+2. Build from source code
+3. Deploy to App Runner service
 
 ### Frontend (Amplify)
 Push to main branch triggers automatic deployment via AWS Amplify.

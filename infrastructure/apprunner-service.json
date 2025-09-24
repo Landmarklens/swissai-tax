@@ -2,7 +2,7 @@
   "ServiceName": "swissai-tax-api",
   "SourceConfiguration": {
     "CodeRepository": {
-      "RepositoryUrl": "https://github.com/trustorno/swissai-tax",
+      "RepositoryUrl": "https://github.com/Landmarklens/swissai-tax",
       "SourceCodeVersion": {
         "Type": "BRANCH",
         "Value": "main"

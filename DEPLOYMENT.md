@@ -182,9 +182,9 @@ aws ssm put-parameter --name "/swissai-tax/db/password" \
 ### Current Setup
 
 - Frontend: swissai.tax → Amplify
-- API: api.swissai.tax → API Gateway (Lambda)
+- API: Deployed via App Runner (no custom domain yet)
 
-### To Update for App Runner
+### App Runner Domain Setup
 
 ```bash
 # Get App Runner service URL
@@ -192,8 +192,8 @@ SERVICE_URL=$(aws apprunner list-services --region us-east-1 \
     --query "ServiceSummaryList[?ServiceName=='swissai-tax-api'].ServiceUrl" \
     --output text)
 
-# Update Route 53
-# Create CNAME record: api.swissai.tax → $SERVICE_URL
+# The API is accessible at the App Runner URL
+# Custom domain can be configured if needed
 ```
 
 ## 🧪 Testing Deployment

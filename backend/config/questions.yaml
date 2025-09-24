@@ -1,0 +1,559 @@
+# Swiss Tax Interview Questions Configuration
+# Q01-Q14 as per requirements
+
+questions:
+  Q01:
+    id: "Q01"
+    text:
+      en: "What is your civil status on 31 Dec?"
+      de: "Welchen Zivilstand hatten Sie am 31.12.?"
+      fr: "Quel est votre état civil au 31 déc?"
+    type: "single_choice"
+    options:
+      - value: "single"
+        label:
+          en: "Single"
+          de: "Ledig"
+          fr: "Célibataire"
+      - value: "married"
+        label:
+          en: "Married"
+          de: "Verheiratet"
+          fr: "Marié(e)"
+      - value: "divorced"
+        label:
+          en: "Divorced"
+          de: "Geschieden"
+          fr: "Divorcé(e)"
+      - value: "widowed"
+        label:
+          en: "Widowed"
+          de: "Verwitwet"
+          fr: "Veuf/Veuve"
+    branching:
+      married: ["Q01a", "Q01b", "Q01c", "Q01d"]
+      default: "Q02"
+    required: true
+
+  Q01a:
+    id: "Q01a"
+    text:
+      en: "Spouse's first name"
+      de: "Vorname des Ehepartners"
+      fr: "Prénom du conjoint"
+    type: "text"
+    validation:
+      minLength: 2
+      maxLength: 50
+    required: true
+    parent: "Q01"
+
+  Q01b:
+    id: "Q01b"
+    text:
+      en: "Spouse's last name"
+      de: "Nachname des Ehepartners"
+      fr: "Nom du conjoint"
+    type: "text"
+    validation:
+      minLength: 2
+      maxLength: 50
+    required: true
+    parent: "Q01"
+
+  Q01c:
+    id: "Q01c"
+    text:
+      en: "Spouse's date of birth"
+      de: "Geburtsdatum des Ehepartners"
+      fr: "Date de naissance du conjoint"
+    type: "date"
+    validation:
+      minDate: "1920-01-01"
+      maxDate: "2006-12-31"
+    required: true
+    parent: "Q01"
+
+  Q01d:
+    id: "Q01d"
+    text:
+      en: "Is your spouse employed?"
+      de: "Ist Ihr Ehepartner erwerbstätig?"
+      fr: "Votre conjoint est-il employé?"
+    type: "yes_no"
+    required: true
+    parent: "Q01"
+
+  Q02:
+    id: "Q02"
+    text:
+      en: "Canton of residence"
+      de: "Wohnsitzkanton"
+      fr: "Canton de résidence"
+    type: "dropdown"
+    options:
+      - value: "ZH"
+        label:
+          en: "Zurich"
+          de: "Zürich"
+          fr: "Zurich"
+      - value: "BE"
+        label:
+          en: "Bern"
+          de: "Bern"
+          fr: "Berne"
+      - value: "LU"
+        label:
+          en: "Lucerne"
+          de: "Luzern"
+          fr: "Lucerne"
+      - value: "UR"
+        label:
+          en: "Uri"
+          de: "Uri"
+          fr: "Uri"
+      - value: "SZ"
+        label:
+          en: "Schwyz"
+          de: "Schwyz"
+          fr: "Schwyz"
+      - value: "OW"
+        label:
+          en: "Obwalden"
+          de: "Obwalden"
+          fr: "Obwald"
+      - value: "NW"
+        label:
+          en: "Nidwalden"
+          de: "Nidwalden"
+          fr: "Nidwald"
+      - value: "GL"
+        label:
+          en: "Glarus"
+          de: "Glarus"
+          fr: "Glaris"
+      - value: "ZG"
+        label:
+          en: "Zug"
+          de: "Zug"
+          fr: "Zoug"
+    next: "Q02a"
+    required: true
+
+  Q02a:
+    id: "Q02a"
+    text:
+      en: "Municipality"
+      de: "Gemeinde"
+      fr: "Commune"
+    type: "text"
+    validation:
+      minLength: 2
+      maxLength: 100
+    next: "Q03"
+    required: true
+
+  Q03:
+    id: "Q03"
+    text:
+      en: "Do you have children?"
+      de: "Haben Sie Kinder?"
+      fr: "Avez-vous des enfants?"
+    type: "yes_no"
+    branching:
+      yes: "Q03a"
+      no: "Q04"
+    required: true
+
+  Q03a:
+    id: "Q03a"
+    text:
+      en: "Number of children"
+      de: "Anzahl der Kinder"
+      fr: "Nombre d'enfants"
+    type: "number"
+    validation:
+      min: 1
+      max: 20
+    triggers_loop: "Q03b"
+    next: "Q04"
+    required: true
+    parent: "Q03"
+
+  Q03b:
+    id: "Q03b"
+    text:
+      en: "Child information"
+      de: "Kinderinformationen"
+      fr: "Informations sur l'enfant"
+    type: "group"
+    loop: true
+    fields:
+      - id: "child_name"
+        text:
+          en: "Child's name"
+          de: "Name des Kindes"
+          fr: "Nom de l'enfant"
+        type: "text"
+        required: true
+      - id: "child_dob"
+        text:
+          en: "Date of birth"
+          de: "Geburtsdatum"
+          fr: "Date de naissance"
+        type: "date"
+        required: true
+      - id: "child_in_education"
+        text:
+          en: "In education/training?"
+          de: "In Ausbildung?"
+          fr: "En formation?"
+        type: "yes_no"
+        required: true
+    parent: "Q03a"
+
+  Q04:
+    id: "Q04"
+    text:
+      en: "Number of employers (including yourself if self-employed)"
+      de: "Anzahl der Arbeitgeber (inkl. Selbstständigkeit)"
+      fr: "Nombre d'employeurs (y compris indépendant)"
+    type: "number"
+    validation:
+      min: 0
+      max: 10
+    branching:
+      "0": "Q05"
+      default: "Q04a"
+    required: true
+
+  Q04a:
+    id: "Q04a"
+    text:
+      en: "Employer information"
+      de: "Arbeitgeberinformationen"
+      fr: "Informations sur l'employeur"
+    type: "group"
+    loop: true
+    fields:
+      - id: "employer_name"
+        text:
+          en: "Employer name"
+          de: "Name des Arbeitgebers"
+          fr: "Nom de l'employeur"
+        type: "text"
+        required: true
+      - id: "employment_percentage"
+        text:
+          en: "Employment percentage"
+          de: "Beschäftigungsgrad %"
+          fr: "Pourcentage d'emploi"
+        type: "number"
+        validation:
+          min: 1
+          max: 100
+        required: true
+    next: "Q05"
+    parent: "Q04"
+
+  Q05:
+    id: "Q05"
+    text:
+      en: "Did you receive unemployment benefits?"
+      de: "Haben Sie Arbeitslosengeld erhalten?"
+      fr: "Avez-vous perçu des allocations chômage?"
+    type: "yes_no"
+    next: "Q06"
+    required: true
+
+  Q06:
+    id: "Q06"
+    text:
+      en: "Did you receive disability/accident insurance benefits?"
+      de: "Haben Sie IV/Unfallversicherungsleistungen erhalten?"
+      fr: "Avez-vous perçu des prestations AI/accident?"
+    type: "yes_no"
+    next: "Q07"
+    required: true
+
+  Q07:
+    id: "Q07"
+    text:
+      en: "Do you have a pension fund (2nd pillar)?"
+      de: "Haben Sie eine Pensionskasse (2. Säule)?"
+      fr: "Avez-vous une caisse de pension (2e pilier)?"
+    type: "yes_no"
+    next: "Q08"
+    required: true
+
+  Q08:
+    id: "Q08"
+    text:
+      en: "Did you contribute to Pillar 3a?"
+      de: "Haben Sie in die Säule 3a eingezahlt?"
+      fr: "Avez-vous cotisé au pilier 3a?"
+    type: "yes_no"
+    branching:
+      yes: "Q08a"
+      no: "Q09"
+    required: true
+
+  Q08a:
+    id: "Q08a"
+    text:
+      en: "Total Pillar 3a contributions (CHF)"
+      de: "Gesamte Säule 3a Einzahlungen (CHF)"
+      fr: "Total des cotisations pilier 3a (CHF)"
+    type: "currency"
+    validation:
+      min: 0
+      max: 7056  # 2024 limit for employed
+    next: "Q09"
+    required: true
+    parent: "Q08"
+
+  Q09:
+    id: "Q09"
+    text:
+      en: "Do you own real estate?"
+      de: "Besitzen Sie Immobilien?"
+      fr: "Possédez-vous des biens immobiliers?"
+    type: "yes_no"
+    branching:
+      yes: "Q09a"
+      no: "Q10"
+    required: true
+
+  Q09a:
+    id: "Q09a"
+    text:
+      en: "Number of properties"
+      de: "Anzahl der Immobilien"
+      fr: "Nombre de propriétés"
+    type: "number"
+    validation:
+      min: 1
+      max: 20
+    triggers_loop: "Q09b"
+    next: "Q10"
+    required: true
+    parent: "Q09"
+
+  Q09b:
+    id: "Q09b"
+    text:
+      en: "Property details"
+      de: "Immobiliendetails"
+      fr: "Détails de la propriété"
+    type: "group"
+    loop: true
+    fields:
+      - id: "property_type"
+        text:
+          en: "Property type"
+          de: "Immobilientyp"
+          fr: "Type de propriété"
+        type: "single_choice"
+        options:
+          - value: "primary_residence"
+            label:
+              en: "Primary residence"
+              de: "Hauptwohnsitz"
+              fr: "Résidence principale"
+          - value: "secondary_residence"
+            label:
+              en: "Secondary residence"
+              de: "Zweitwohnsitz"
+              fr: "Résidence secondaire"
+          - value: "rental_property"
+            label:
+              en: "Rental property"
+              de: "Mietobjekt"
+              fr: "Propriété locative"
+        required: true
+      - id: "property_value"
+        text:
+          en: "Property value (CHF)"
+          de: "Immobilienwert (CHF)"
+          fr: "Valeur de la propriété (CHF)"
+        type: "currency"
+        required: true
+      - id: "mortgage_amount"
+        text:
+          en: "Mortgage amount (CHF)"
+          de: "Hypothekarbetrag (CHF)"
+          fr: "Montant de l'hypothèque (CHF)"
+        type: "currency"
+        required: false
+    parent: "Q09a"
+
+  Q10:
+    id: "Q10"
+    text:
+      en: "Do you have securities/investments?"
+      de: "Haben Sie Wertschriften/Anlagen?"
+      fr: "Avez-vous des titres/investissements?"
+    type: "yes_no"
+    next: "Q11"
+    required: true
+
+  Q11:
+    id: "Q11"
+    text:
+      en: "Did you make charitable donations over CHF 100?"
+      de: "Haben Sie Spenden über CHF 100 getätigt?"
+      fr: "Avez-vous fait des dons de plus de CHF 100?"
+    type: "yes_no"
+    branching:
+      yes: "Q11a"
+      no: "Q12"
+    required: true
+
+  Q11a:
+    id: "Q11a"
+    text:
+      en: "Total charitable donations (CHF)"
+      de: "Gesamte Spenden (CHF)"
+      fr: "Total des dons (CHF)"
+    type: "currency"
+    validation:
+      min: 100
+    next: "Q12"
+    required: true
+    parent: "Q11"
+
+  Q12:
+    id: "Q12"
+    text:
+      en: "Did you pay alimony?"
+      de: "Haben Sie Unterhalt gezahlt?"
+      fr: "Avez-vous payé une pension alimentaire?"
+    type: "yes_no"
+    branching:
+      yes: "Q12a"
+      no: "Q13"
+    required: true
+
+  Q12a:
+    id: "Q12a"
+    text:
+      en: "Total alimony paid (CHF)"
+      de: "Gesamter gezahlter Unterhalt (CHF)"
+      fr: "Total de la pension alimentaire payée (CHF)"
+    type: "currency"
+    validation:
+      min: 0
+    next: "Q13"
+    required: true
+    parent: "Q12"
+
+  Q13:
+    id: "Q13"
+    text:
+      en: "Did you have medical expenses over CHF 2000?"
+      de: "Hatten Sie Krankheitskosten über CHF 2000?"
+      fr: "Avez-vous eu des frais médicaux de plus de CHF 2000?"
+    type: "yes_no"
+    branching:
+      yes: "Q13a"
+      no: "Q14"
+    required: true
+
+  Q13a:
+    id: "Q13a"
+    text:
+      en: "Total medical expenses (CHF)"
+      de: "Gesamte Krankheitskosten (CHF)"
+      fr: "Total des frais médicaux (CHF)"
+    type: "currency"
+    validation:
+      min: 2000
+    next: "Q14"
+    required: true
+    parent: "Q13"
+
+  Q14:
+    id: "Q14"
+    text:
+      en: "Church tax preference"
+      de: "Kirchensteuer-Präferenz"
+      fr: "Préférence d'impôt ecclésiastique"
+    type: "single_choice"
+    options:
+      - value: "none"
+        label:
+          en: "No church tax"
+          de: "Keine Kirchensteuer"
+          fr: "Pas d'impôt ecclésiastique"
+      - value: "protestant"
+        label:
+          en: "Protestant"
+          de: "Evangelisch"
+          fr: "Protestant"
+      - value: "catholic"
+        label:
+          en: "Catholic"
+          de: "Katholisch"
+          fr: "Catholique"
+    next: "complete"
+    required: true
+
+# Document requirement rules
+document_rules:
+  R1:
+    description: "Lohnausweis for each employer"
+    condition: "Q04 > 0"
+    documents:
+      - type: "lohnausweis"
+        quantity: "per_employer"
+
+  R2:
+    description: "Unemployment statement if benefits received"
+    condition: "Q05 == yes"
+    documents:
+      - type: "unemployment_statement"
+
+  R3:
+    description: "Insurance benefits statement"
+    condition: "Q06 == yes"
+    documents:
+      - type: "insurance_benefits"
+
+  R4:
+    description: "Pension fund certificate"
+    condition: "Q07 == yes"
+    documents:
+      - type: "pension_certificate"
+
+  R5:
+    description: "Pillar 3a certificate"
+    condition: "Q08 == yes"
+    documents:
+      - type: "pillar_3a_certificate"
+
+  R6:
+    description: "Property tax statements"
+    condition: "Q09 == yes"
+    documents:
+      - type: "property_tax_statement"
+        quantity: "per_property"
+      - type: "mortgage_statement"
+        quantity: "per_property"
+
+  R7:
+    description: "Securities account statement"
+    condition: "Q10 == yes"
+    documents:
+      - type: "securities_statement"
+
+  R8:
+    description: "Donation receipts"
+    condition: "Q11 == yes"
+    documents:
+      - type: "donation_receipts"
+
+  R9:
+    description: "Medical expense receipts"
+    condition: "Q13 == yes"
+    documents:
+      - type: "medical_receipts"

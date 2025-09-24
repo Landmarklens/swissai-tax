@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import QuestionCard from '../../components/Interview/QuestionCard';
 import ProfileSummary from '../../components/Interview/ProfileSummary';
 import DocumentChecklist from '../../components/Interview/DocumentChecklist';
-import api from '../../config/api';
+import { interviewAPI } from '../../services/api';
 
 const InterviewPage = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const InterviewPage = () => {
     setError(null);
 
     try {
-      const response = await api.post('/api/interview/start', {
+      const response = await interviewAPI.startSession({
         taxYear: new Date().getFullYear(),
         language: 'en'
       });
@@ -80,7 +80,7 @@ const InterviewPage = () => {
     setError(null);
 
     try {
-      const response = await api.post('/api/interview/answer', {
+      const response = await interviewAPI.submitAnswer({
         sessionId: sessionId,
         questionId: currentQuestion.id,
         answer: answer

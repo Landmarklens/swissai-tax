@@ -31,9 +31,9 @@ const environments = {
     GA_TRACKING_ID: process.env.REACT_APP_GA_TRACKING_ID
   },
   production: {
-    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.homeai.ch',
-    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://api.homeai.ch/ws',
-    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://api.homeai.ch',
+    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax',
+    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://api.swissai.tax/ws',
+    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://api.swissai.tax',
     ENABLE_MOCK_DATA: false,
     ENABLE_DEBUG_LOGGING: false,
     ENABLE_REAL_TIME: true,

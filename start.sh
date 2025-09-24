@@ -11,6 +11,10 @@ if [ ! -d "/root/.local/lib/python3.11/site-packages/fastapi" ]; then
     python3 -m pip install -r requirements-apprunner.txt
 fi
 
-# Start the application
+# Create database if needed
+echo "Checking database..."
 cd /app
+python3 backend/create_database.py
+
+# Start the application
 exec python3 backend/app.py

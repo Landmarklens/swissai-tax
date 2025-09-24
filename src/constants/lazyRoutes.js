@@ -50,6 +50,8 @@ const Chat = withSuspense(lazy(() => import('../pages/Chat/Chat')));
 const TenantSelection = withSuspense(lazy(() => import('../pages/TenantSelection')));
 const DocumentSigningPage = withSuspense(lazy(() => import('../components/pages/DocumentSigningPage')));
 const ComponentShowcase = withSuspense(lazy(() => import('../pages/ComponentShowcase')));
+const InterviewPage = withSuspense(lazy(() => import('../pages/Interview/InterviewPage')));
+const DocumentsPage = withSuspense(lazy(() => import('../pages/Documents/DocumentsPage')));
 
 // Protected Route wrapper remains the same
 const ProtectedRoute = ({ children }) => {
@@ -66,6 +68,8 @@ const ProtectedRoute = ({ children }) => {
 // Export the lazy loaded routes
 export const LAZY_NAVIGATION_ROUTE = [
   { path: '/', element: <Home /> },
+  { path: '/interview', element: <InterviewPage /> },
+  { path: '/documents', element: <DocumentsPage /> },
   { path: '/google-redirect', element: <GoogleCallback /> },
   { path: '/how-it-works', element: <HowItWorks /> },
   {

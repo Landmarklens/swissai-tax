@@ -3,6 +3,7 @@ runtime: python311
 build:
   commands:
     build:
+      - echo "Build timestamp: $(date)"
       - python3 -m pip install --no-cache-dir -r backend/requirements.txt
 run:
   runtime-version: 3.11

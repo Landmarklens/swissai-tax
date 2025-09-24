@@ -3,8 +3,8 @@ runtime: python311
 build:
   commands:
     build:
-      - python3 -m pip install --upgrade pip
-      - python3 -m pip install --user -r backend/requirements-apprunner.txt
+      - cd backend && python3 -m pip install --upgrade pip
+      - cd backend && python3 -m pip install -r requirements-apprunner.txt
 run:
   runtime-version: 3.11
   command: python3 backend/app.py

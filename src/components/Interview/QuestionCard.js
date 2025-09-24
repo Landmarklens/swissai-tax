@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer }) => {
   const [answer, setAnswer] = useState('');
@@ -153,10 +153,10 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer }) =
 
       case 'date':
         return (
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               value={answer || null}
-              onChange={(newValue) => setAnswer(newValue?.toISOString().split('T')[0] || '')}
+              onChange={(newValue) => setAnswer(newValue ? newValue.format('YYYY-MM-DD') : '')}
               slotProps={{
                 textField: {
                   fullWidth: true,
@@ -281,10 +281,10 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer }) =
 
       case 'date':
         return (
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               value={value || null}
-              onChange={(newValue) => handleFieldChange(field.id, newValue?.toISOString().split('T')[0] || '')}
+              onChange={(newValue) => handleFieldChange(field.id, newValue ? newValue.format('YYYY-MM-DD') : '')}
               slotProps={{
                 textField: {
                   fullWidth: true,

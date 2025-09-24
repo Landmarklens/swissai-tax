@@ -10,7 +10,7 @@ def create_database():
     host = os.getenv('DATABASE_HOST', 'webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com')
     port = int(os.getenv('DATABASE_PORT', 5432))
     user = os.getenv('DATABASE_USER', 'postgres')
-    password = os.getenv('DATABASE_PASSWORD', 'IXq3IC0Uw6StMkBhb4mb')
+    password = os.getenv('DATABASE_PASSWORD')
 
     # First connect to the default postgres database
     try:

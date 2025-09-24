@@ -1,22 +1,15 @@
-FROM python:3.11-slim
+FROM public.ecr.aws/lambda/python:3.11
 
-WORKDIR /app
+# Copy requirements file
+COPY requirements-lambda.txt ${LAMBDA_TASK_ROOT}/requirements.txt
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY . .
+COPY lambda_handler.py ${LAMBDA_TASK_ROOT}/
+COPY services/ ${LAMBDA_TASK_ROOT}/services/
+COPY database/ ${LAMBDA_TASK_ROOT}/database/
 
-# Expose port (adjust as needed)
-EXPOSE 8000
-
-# Command to run the application
-CMD ["python", "main.py"]
+# Set the CMD to your handler
+CMD ["lambda_handler.lambda_handler"]

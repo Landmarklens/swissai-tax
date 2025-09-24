@@ -14,6 +14,8 @@ from uuid import uuid4
 sys.path.append(os.path.dirname(__file__))
 
 from services.interview_service import InterviewService
+from services.document_service import DocumentService
+from services.tax_calculation_service import TaxCalculationService
 from database.connection import check_db_health
 
 # Configure logging
@@ -22,6 +24,8 @@ logger.setLevel(logging.INFO)
 
 # Initialize services
 interview_service = InterviewService()
+document_service = DocumentService()
+tax_service = TaxCalculationService()
 
 # CORS headers for API responses
 CORS_HEADERS = {
@@ -181,51 +185,167 @@ def handle_interview(event: Dict[str, Any]) -> Dict[str, Any]:
 def handle_documents(event: Dict[str, Any]) -> Dict[str, Any]:
     """Handle document-related requests"""
     method = event.get('httpMethod')
+    path = event.get('path', '')
+    path_parts = path.split('/')
+
+    # Extract path parameters
+    if len(path_parts) > 3:
+        action = path_parts[3]  # /api/documents/{action}
+    else:
+        action = None
 
     if method == 'POST':
-        # Upload document
-        return {
-            'documentId': 'doc-456',
-            'status': 'uploaded',
-            'message': 'Document uploaded successfully'
-        }
-    elif method == 'GET':
-        # Get document checklist
-        return {
-            'required': [
-                {'type': 'lohnausweis', 'status': 'pending'},
-                {'type': '3a_statement', 'status': 'pending'}
-            ],
-            'uploaded': []
-        }
+        body = json.loads(event.get('body', '{}'))
 
-    return {'message': 'Documents endpoint'}
+        if action == 'upload':
+            # Generate presigned URL for upload
+            session_id = body.get('sessionId')
+            document_type = body.get('documentType')
+            file_name = body.get('fileName')
+
+            if not all([session_id, document_type, file_name]):
+                return {'error': 'Missing required parameters'}
+
+            try:
+                upload_url = document_service.generate_presigned_url(
+                    session_id, document_type, file_name
+                )
+                return upload_url
+            except Exception as e:
+                logger.error(f"Document upload error: {e}")
+                return {'error': str(e)}
+
+        elif action == 'process':
+            # Start OCR processing
+            document_id = body.get('documentId')
+            if not document_id:
+                return {'error': 'Document ID required'}
+
+            try:
+                result = document_service.process_document_with_textract(document_id)
+                return result
+            except Exception as e:
+                logger.error(f"Document processing error: {e}")
+                return {'error': str(e)}
+
+    elif method == 'GET':
+        if action == 'list':
+            # List documents for session
+            session_id = event.get('queryStringParameters', {}).get('sessionId')
+            if not session_id:
+                return {'error': 'Session ID required'}
+
+            documents = document_service.list_session_documents(session_id)
+            return {'documents': documents}
+
+        elif action == 'download':
+            # Get download URL
+            document_id = event.get('queryStringParameters', {}).get('documentId')
+            if not document_id:
+                return {'error': 'Document ID required'}
+
+            download_url = document_service.get_document_url(document_id)
+            return {'download_url': download_url} if download_url else {'error': 'Document not found'}
+
+        elif action == 'status':
+            # Check OCR processing status
+            document_id = event.get('queryStringParameters', {}).get('documentId')
+            if not document_id:
+                return {'error': 'Document ID required'}
+
+            status = document_service.check_textract_job(document_id)
+            return status
+
+    elif method == 'DELETE':
+        # Soft delete document
+        document_id = event.get('queryStringParameters', {}).get('documentId')
+        if not document_id:
+            return {'error': 'Document ID required'}
+
+        success = document_service.delete_document(document_id)
+        return {'success': success, 'message': 'Document deleted' if success else 'Delete failed'}
+
+    return {'message': 'Documents endpoint', 'method': method, 'action': action}
 
 def handle_calculation(event: Dict[str, Any]) -> Dict[str, Any]:
     """Handle tax calculation requests"""
     method = event.get('httpMethod')
+    path = event.get('path', '')
+    path_parts = path.split('/')
+
+    # Extract path parameters
+    if len(path_parts) > 3:
+        action = path_parts[3]  # /api/calculation/{action}
+    else:
+        action = None
 
     if method == 'POST':
-        # Calculate taxes
         body = json.loads(event.get('body', '{}'))
-        income = body.get('income', 100000)
 
-        # Simple calculation for demo
-        federal_tax = income * 0.05
-        cantonal_tax = income * 0.08
-        municipal_tax = income * 0.02
+        if action == 'calculate':
+            # Calculate taxes based on session
+            session_id = body.get('sessionId')
+            if not session_id:
+                return {'error': 'Session ID required'}
 
-        return {
-            'calculationId': 'calc-789',
-            'income': income,
-            'federalTax': federal_tax,
-            'cantonalTax': cantonal_tax,
-            'municipalTax': municipal_tax,
-            'totalTax': federal_tax + cantonal_tax + municipal_tax,
-            'effectiveRate': ((federal_tax + cantonal_tax + municipal_tax) / income) * 100
-        }
+            try:
+                calculation = tax_service.calculate_taxes(session_id)
+                return calculation
+            except Exception as e:
+                logger.error(f"Tax calculation error: {e}")
+                return {'error': str(e)}
 
-    return {'message': 'Calculation endpoint'}
+        elif action == 'estimate':
+            # Quick estimate without full session
+            income = body.get('income', 100000)
+            canton = body.get('canton', 'ZH')
+            marital_status = body.get('maritalStatus', 'single')
+
+            # Create simplified answers for estimate
+            answers = {
+                'Q01': marital_status,
+                'Q03': True,
+                'income_employment': income,
+                'canton': canton,
+                'municipality': canton
+            }
+
+            # Use the calculation service with mock data
+            from decimal import Decimal
+            income_data = {'total_income': float(income)}
+            deductions_data = {'total_deductions': float(income * 0.15)}  # Estimate 15% deductions
+            taxable_income = Decimal(str(max(0, income - income * 0.15)))
+
+            federal_tax = tax_service._calculate_federal_tax(taxable_income, answers)
+            cantonal_tax = tax_service._calculate_cantonal_tax(taxable_income, canton, answers)
+            municipal_tax = tax_service._calculate_municipal_tax(cantonal_tax, canton, canton)
+
+            total_tax = federal_tax + cantonal_tax + municipal_tax
+
+            return {
+                'type': 'estimate',
+                'income': income,
+                'estimated_deductions': float(income * 0.15),
+                'taxable_income': float(taxable_income),
+                'federal_tax': float(federal_tax),
+                'cantonal_tax': float(cantonal_tax),
+                'municipal_tax': float(municipal_tax),
+                'total_tax': float(total_tax),
+                'effective_rate': float((total_tax / Decimal(str(income))) * 100),
+                'monthly_tax': float(total_tax / 12)
+            }
+
+    elif method == 'GET':
+        if action == 'summary':
+            # Get calculation summary
+            session_id = event.get('queryStringParameters', {}).get('sessionId')
+            if not session_id:
+                return {'error': 'Session ID required'}
+
+            summary = tax_service.get_tax_summary(session_id)
+            return summary if summary else {'error': 'No calculation found'}
+
+    return {'message': 'Calculation endpoint', 'method': method, 'action': action}
 
 # For local testing
 if __name__ == "__main__":

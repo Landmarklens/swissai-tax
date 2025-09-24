@@ -18,9 +18,10 @@ import logging
 # Add current directory to path for imports
 sys.path.append(os.path.dirname(__file__))
 
-from services.interview_service import InterviewService
-from services.document_service import DocumentService
-from services.tax_calculation_service import TaxCalculationService
+from services.interview_service import interview_service
+# Document and tax services will be implemented later
+# from services.document_service import DocumentService
+# from services.tax_calculation_service import TaxCalculationService
 
 # Try to import connection pool for App Runner, fallback to regular connection
 try:
@@ -35,10 +36,10 @@ except ImportError:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize services
-interview_service = InterviewService()
-document_service = DocumentService()
-tax_service = TaxCalculationService()
+# Services are initialized in their modules
+# interview_service is imported from services.interview_service
+# document_service = DocumentService()  # To be implemented
+# tax_service = TaxCalculationService()  # To be implemented
 
 # Lifecycle manager for startup/shutdown
 @asynccontextmanager
@@ -125,14 +126,17 @@ async def start_interview(request: InterviewStartRequest):
         from uuid import uuid4
         user_id = request.userId or str(uuid4())
 
-        session = interview_service.create_session(user_id, request.taxYear)
-        first_question = interview_service.get_question('Q01', request.language)
+        result = interview_service.create_session(
+            user_id,
+            request.taxYear,
+            request.language or 'en'
+        )
 
         return {
-            "sessionId": str(session['id']),
-            "status": session['status'],
-            "currentQuestion": first_question,
-            "progress": session['completion_percentage']
+            "sessionId": result['session_id'],
+            "status": "in_progress",
+            "currentQuestion": result['current_question'],
+            "progress": result['progress']
         }
     except Exception as e:
         logger.error(f"Error starting interview: {e}")
@@ -142,59 +146,53 @@ async def start_interview(request: InterviewStartRequest):
 async def submit_answer(request: InterviewAnswerRequest):
     """Submit an answer and get the next question"""
     try:
-        # Save answer
-        interview_service.save_answer(
+        result = interview_service.submit_answer(
             request.sessionId,
             request.questionId,
             request.answer
         )
 
-        # Get next question
-        next_q_id = interview_service.get_next_question(
-            request.sessionId,
-            request.questionId
-        )
-
-        if next_q_id:
-            next_question = interview_service.get_question(next_q_id, request.language)
-            status = 'in_progress'
-            required_docs = None
-        else:
-            next_question = None
-            status = 'completed'
-            required_docs = interview_service.calculate_required_documents(request.sessionId)
-
-        # Get updated session
-        session = interview_service.get_session(request.sessionId)
+        if 'error' in result:
+            return JSONResponse(
+                status_code=400,
+                content={"error": result['error']}
+            )
 
         return {
             "sessionId": request.sessionId,
-            "status": status,
-            "nextQuestion": next_question,
-            "progress": session['completion_percentage'],
-            "requiredDocuments": required_docs
+            "status": "completed" if result.get('complete') else "in_progress",
+            "nextQuestion": result.get('next_question'),
+            "progress": result.get('progress', 0),
+            "complete": result.get('complete', False),
+            "profile": result.get('profile'),
+            "documentRequirements": result.get('document_requirements')
         }
+    except ValueError as e:
+        logger.error(f"Validation error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error submitting answer: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/interview/session")
-async def get_session(sessionId: str):
-    """Get interview session details"""
+@app.get("/api/interview/resume/{sessionId}")
+async def resume_session(sessionId: str):
+    """Resume an existing interview session"""
     try:
-        session = interview_service.get_session(sessionId)
-        if not session:
-            raise HTTPException(status_code=404, detail="Session not found")
-
-        answers = interview_service.get_session_answers(sessionId)
+        result = interview_service.resume_session(sessionId)
 
         return {
-            "sessionId": str(session['id']),
-            "status": session['status'],
-            "currentQuestion": session['current_question'],
-            "progress": session['completion_percentage'],
-            "answers": answers
+            "sessionId": sessionId,
+            "status": "completed" if result.get('complete') else "in_progress",
+            "currentQuestion": result.get('current_question'),
+            "answers": result.get('answers', {}),
+            "progress": result.get('progress', 0),
+            "complete": result.get('complete', False),
+            "profile": result.get('profile'),
+            "documentRequirements": result.get('document_requirements')
         }
+    except ValueError as e:
+        logger.error(f"Session not found: {e}")
+        raise HTTPException(status_code=404, detail=str(e))
     except HTTPException:
         raise
     except Exception as e:

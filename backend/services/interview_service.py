@@ -1,311 +1,280 @@
-"""Interview service for handling Q01-Q14 questionnaire flow"""
+"""Interview service for managing tax interview sessions"""
 
-from typing import Dict, List, Optional, Any
-from uuid import uuid4
-from datetime import datetime
 import json
-from database.connection import execute_query, execute_one, execute_insert
+import logging
+from datetime import datetime
+from typing import Dict, List, Optional, Any
+from uuid import UUID, uuid4
 
+from models.question import QuestionLoader, QuestionType
+
+logger = logging.getLogger(__name__)
 
 class InterviewService:
-    """Service for managing interview sessions and question flow"""
+    """Service for managing interview sessions and state"""
 
     def __init__(self):
-        self.question_order = [
-            'Q01', 'Q02', 'Q02a', 'Q02b', 'Q03', 'Q04', 'Q05', 'Q06', 'Q06a',
-            'Q07', 'Q08', 'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14'
-        ]
+        self.question_loader = QuestionLoader()
+        # In production, this would use database storage
+        # For now, using in-memory storage
+        self.sessions = {}
 
-    def create_session(self, user_id: str, tax_year: int) -> Dict[str, Any]:
-        """Create a new interview session for a user"""
-        query = """
-            INSERT INTO swisstax.interview_sessions (user_id, tax_year, status, current_question)
-            VALUES (%s, %s, 'in_progress', 'Q01')
-            ON CONFLICT (user_id, tax_year)
-            DO UPDATE SET
-                status = 'in_progress',
-                current_question = 'Q01',
-                completion_percentage = 0,
-                started_at = CURRENT_TIMESTAMP
-            RETURNING id, user_id, tax_year, status, current_question, completion_percentage
-        """
-        return execute_insert(query, (user_id, tax_year))
+    def create_session(self, user_id: str, tax_year: int, language: str = 'en') -> Dict[str, Any]:
+        """Create a new interview session"""
+        session_id = str(uuid4())
+
+        # Get first question
+        first_question = self.question_loader.get_first_question()
+
+        session = {
+            'id': session_id,
+            'user_id': user_id,
+            'tax_year': tax_year,
+            'language': language,
+            'status': 'in_progress',
+            'current_question_id': first_question.id,
+            'answers': {},
+            'completed_questions': [],
+            'pending_questions': [first_question.id],
+            'progress': 0,
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        self.sessions[session_id] = session
+        logger.info(f"Created interview session {session_id} for user {user_id}")
+
+        return {
+            'session_id': session_id,
+            'current_question': self._format_question(first_question, language),
+            'progress': 0
+        }
+
+    def submit_answer(self, session_id: str, question_id: str, answer: Any) -> Dict[str, Any]:
+        """Submit an answer and get next question"""
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"Session {session_id} not found")
+
+        if session['status'] != 'in_progress':
+            raise ValueError(f"Session {session_id} is not in progress")
+
+        # Get current question
+        question = self.question_loader.get_question(question_id)
+        if not question:
+            raise ValueError(f"Question {question_id} not found")
+
+        # Validate answer
+        is_valid, error_message = question.validate_answer(answer)
+        if not is_valid:
+            return {
+                'error': error_message,
+                'valid': False
+            }
+
+        # Store answer
+        session['answers'][question_id] = answer
+        session['completed_questions'].append(question_id)
+
+        # Handle sub-questions for married status (Q01a-d)
+        if question_id == 'Q01' and answer == 'married':
+            # Add spouse questions to pending
+            spouse_questions = ['Q01a', 'Q01b', 'Q01c', 'Q01d']
+            session['pending_questions'].extend(spouse_questions)
+            next_question_id = 'Q01a'
+        # Handle sub-questions for children
+        elif question_id == 'Q03' and answer == 'yes':
+            session['pending_questions'].append('Q03a')
+            next_question_id = 'Q03a'
+        elif question_id == 'Q03a':
+            # Store number of children and prepare for child details
+            num_children = int(answer)
+            session['num_children'] = num_children
+            session['child_index'] = 0
+            next_question_id = 'Q03b' if num_children > 0 else 'Q04'
+        elif question_id == 'Q03b':
+            # Handle child loop
+            if 'child_index' not in session:
+                session['child_index'] = 0
+
+            session['child_index'] += 1
+
+            if session['child_index'] < session.get('num_children', 0):
+                # More children to process
+                next_question_id = 'Q03b'
+            else:
+                # Move to next main question
+                next_question_id = 'Q04'
+        else:
+            # Get next question based on answer
+            next_questions = self.question_loader.get_next_questions(question_id, answer)
+            if next_questions:
+                next_question_id = next_questions[0]
+                # Add remaining questions to pending if multiple
+                if len(next_questions) > 1:
+                    session['pending_questions'].extend(next_questions[1:])
+            else:
+                # Check pending questions
+                if session['pending_questions']:
+                    next_question_id = session['pending_questions'].pop(0)
+                else:
+                    next_question_id = None
+
+        # Update session
+        session['updated_at'] = datetime.utcnow().isoformat()
+
+        # Check if interview is complete
+        if next_question_id == 'complete' or next_question_id is None:
+            session['status'] = 'completed'
+            session['current_question_id'] = None
+
+            # Generate profile and document requirements
+            profile = self._generate_profile(session['answers'])
+            document_requirements = self.question_loader.get_document_requirements(session['answers'])
+
+            return {
+                'complete': True,
+                'profile': profile,
+                'document_requirements': document_requirements,
+                'progress': 100
+            }
+
+        # Get next question
+        next_question = self.question_loader.get_question(next_question_id)
+        session['current_question_id'] = next_question_id
+
+        # Calculate progress
+        total_questions = 14  # Base questions
+        if session['answers'].get('Q01') == 'married':
+            total_questions += 4  # Add spouse questions
+        if session['answers'].get('Q03') == 'yes':
+            total_questions += 1  # Add children count question
+
+        completed = len(session['completed_questions'])
+        progress = min(int((completed / total_questions) * 100), 99)
+        session['progress'] = progress
+
+        return {
+            'next_question': self._format_question(next_question, session['language']),
+            'progress': progress,
+            'complete': False
+        }
 
     def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
-        """Get interview session by ID"""
-        query = """
-            SELECT id, user_id, tax_year, status, current_question,
-                   completion_percentage, started_at, completed_at
-            FROM swisstax.interview_sessions
-            WHERE id = %s
-        """
-        return execute_one(query, (session_id,))
+        """Get session details"""
+        return self.sessions.get(session_id)
 
-    def get_user_session(self, user_id: str, tax_year: int) -> Optional[Dict[str, Any]]:
-        """Get interview session for a user and tax year"""
-        query = """
-            SELECT id, user_id, tax_year, status, current_question,
-                   completion_percentage, started_at, completed_at
-            FROM swisstax.interview_sessions
-            WHERE user_id = %s AND tax_year = %s
-        """
-        return execute_one(query, (user_id, tax_year))
+    def resume_session(self, session_id: str) -> Dict[str, Any]:
+        """Resume an existing session"""
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"Session {session_id} not found")
 
-    def get_question(self, question_id: str, language: str = 'en') -> Optional[Dict[str, Any]]:
-        """Get a specific question with its metadata"""
-        # Validate language to prevent SQL injection
-        valid_languages = ['en', 'de', 'fr', 'it']
-        if language not in valid_languages:
-            language = 'en'
+        if session['status'] == 'completed':
+            return {
+                'complete': True,
+                'profile': self._generate_profile(session['answers']),
+                'document_requirements': self.question_loader.get_document_requirements(session['answers'])
+            }
 
-        text_field = f"question_text_{language}"
-        help_field = f"help_text_{language}"
+        current_question = self.question_loader.get_question(session['current_question_id'])
 
-        query = f"""
-            SELECT id, category, {text_field} as question_text,
-                   {help_field} as help_text, question_type, options,
-                   validation_rules, depends_on, depends_on_value, sort_order
-            FROM swisstax.questions
-            WHERE id = %s AND is_active = true
-        """
-        return execute_one(query, (question_id,))
+        return {
+            'session_id': session_id,
+            'current_question': self._format_question(current_question, session['language']),
+            'answers': session['answers'],
+            'progress': session['progress'],
+            'complete': False
+        }
 
-    def get_next_question(self, session_id: str, current_question: str) -> Optional[str]:
-        """Determine the next question based on current question and answers"""
-        # Get all answers for this session
-        answers = self.get_session_answers(session_id)
+    def _format_question(self, question, language: str) -> Dict[str, Any]:
+        """Format question for API response"""
+        formatted = {
+            'id': question.id,
+            'text': question.text.get(language, question.text.get('en')),
+            'type': question.type.value,
+            'required': question.required
+        }
 
-        # Find current question index
-        try:
-            current_index = self.question_order.index(current_question)
-        except ValueError:
-            return None
-
-        # Check each subsequent question for dependencies
-        for i in range(current_index + 1, len(self.question_order)):
-            next_q = self.question_order[i]
-
-            # Check if this question should be shown based on dependencies
-            if self._should_show_question(next_q, answers):
-                return next_q
-
-        return None  # No more questions
-
-    def _should_show_question(self, question_id: str, answers: Dict[str, Any]) -> bool:
-        """Check if a question should be shown based on dependencies"""
-        question = self.get_question(question_id)
-        if not question:
-            return False
-
-        # If no dependency, always show
-        if not question.get('depends_on'):
-            return True
-
-        # Check if dependency is satisfied
-        depends_on = question['depends_on']
-        depends_on_value = question.get('depends_on_value', {})
-
-        if depends_on not in answers:
-            return False  # Parent question not answered yet
-
-        parent_answer = answers[depends_on]
-        expected_value = depends_on_value.get('answer')
-
-        # Check if parent answer matches expected value
-        return parent_answer == expected_value
-
-    def save_answer(self, session_id: str, question_id: str, answer_value: Any) -> Dict[str, Any]:
-        """Save an answer and update session progress"""
-        # Save the answer
-        query = """
-            INSERT INTO swisstax.interview_answers (session_id, question_id, answer_value)
-            VALUES (%s, %s, %s)
-            ON CONFLICT (session_id, question_id)
-            DO UPDATE SET
-                answer_value = %s,
-                answered_at = CURRENT_TIMESTAMP
-            RETURNING id, session_id, question_id, answer_value
-        """
-        answer = execute_insert(query, (session_id, question_id, answer_value, answer_value))
-
-        # Update session progress
-        self._update_session_progress(session_id, question_id)
-
-        return answer
-
-    def _update_session_progress(self, session_id: str, current_question: str):
-        """Update session progress after answering a question"""
-        # Get next question
-        next_question = self.get_next_question(session_id, current_question)
-
-        # Calculate completion percentage
-        answers = self.get_session_answers(session_id)
-        total_questions = len([q for q in self.question_order if self._should_show_question(q, answers)])
-        answered_count = len(answers)
-        completion = int((answered_count / max(total_questions, 1)) * 100)
-
-        if next_question:
-            # Update to next question
-            query = """
-                UPDATE swisstax.interview_sessions
-                SET current_question = %s, completion_percentage = %s
-                WHERE id = %s
-            """
-            execute_query(query, (next_question, completion, session_id), fetch=False)
-        else:
-            # Mark as completed
-            query = """
-                UPDATE swisstax.interview_sessions
-                SET status = 'completed', completion_percentage = 100,
-                    completed_at = CURRENT_TIMESTAMP
-                WHERE id = %s
-            """
-            execute_query(query, (session_id,), fetch=False)
-
-    def get_session_answers(self, session_id: str) -> Dict[str, Any]:
-        """Get all answers for a session"""
-        query = """
-            SELECT question_id, answer_value
-            FROM swisstax.interview_answers
-            WHERE session_id = %s
-            ORDER BY answered_at
-        """
-        results = execute_query(query, (session_id,))
-        return {row['question_id']: row['answer_value'] for row in results}
-
-    def get_all_questions(self, language: str = 'en') -> List[Dict[str, Any]]:
-        """Get all active questions in order"""
-        # Validate language to prevent SQL injection
-        valid_languages = ['en', 'de', 'fr', 'it']
-        if language not in valid_languages:
-            language = 'en'
-
-        text_field = f"question_text_{language}"
-        help_field = f"help_text_{language}"
-
-        query = f"""
-            SELECT id, category, {text_field} as question_text,
-                   {help_field} as help_text, question_type, options,
-                   validation_rules, depends_on, depends_on_value, sort_order
-            FROM swisstax.questions
-            WHERE is_active = true
-            ORDER BY sort_order
-        """
-        return execute_query(query)
-
-    def calculate_required_documents(self, session_id: str) -> List[Dict[str, Any]]:
-        """Calculate required documents based on interview answers"""
-        answers = self.get_session_answers(session_id)
-        required_docs = []
-
-        # Basic documents always required
-        required_docs.append({
-            'code': 'PERSONAL_ID',
-            'reason': 'Basic identification required'
-        })
-
-        # Employment income documents
-        if answers.get('Q03') == True:
-            required_docs.append({
-                'code': 'LOHNAUSWEIS',
-                'reason': 'Employment income declared'
-            })
-
-        # Self-employment documents
-        if answers.get('Q04') == True:
-            required_docs.append({
-                'code': 'BUSINESS_STATEMENTS',
-                'reason': 'Self-employment income declared'
-            })
-
-        # Capital income documents
-        if answers.get('Q05') == True:
-            required_docs.append({
-                'code': 'BANK_STATEMENTS',
-                'reason': 'Capital income declared'
-            })
-            required_docs.append({
-                'code': 'DIVIDEND_STATEMENTS',
-                'reason': 'Capital income declared'
-            })
-
-        # Real estate documents
-        if answers.get('Q06') == True:
-            required_docs.append({
-                'code': 'PROPERTY_OWNERSHIP',
-                'reason': 'Property ownership declared'
-            })
-            property_types = answers.get('Q06a', [])
-            if 'rental_property' in property_types:
-                required_docs.append({
-                    'code': 'RENTAL_INCOME',
-                    'reason': 'Rental property declared'
+        # Add options for choice questions
+        if question.options:
+            formatted['options'] = []
+            for opt in question.options:
+                formatted['options'].append({
+                    'value': opt['value'],
+                    'label': opt['label'].get(language, opt['label'].get('en'))
                 })
 
-        # Pillar 3a documents
-        if answers.get('Q07') == True:
-            required_docs.append({
-                'code': 'PILLAR_3A',
-                'reason': 'Pillar 3a contributions declared'
-            })
+        # Add validation rules
+        if question.validation:
+            formatted['validation'] = question.validation
 
-        # Training expenses
-        if answers.get('Q08') == True:
-            required_docs.append({
-                'code': 'TRAINING_RECEIPTS',
-                'reason': 'Professional training expenses declared'
-            })
+        # Add fields for group questions
+        if question.fields:
+            formatted['fields'] = []
+            for field in question.fields:
+                formatted['fields'].append({
+                    'id': field['id'],
+                    'text': field['text'].get(language, field['text'].get('en')),
+                    'type': field['type'],
+                    'required': field.get('required', True)
+                })
 
-        # Medical expenses
-        if answers.get('Q09') == True:
-            required_docs.append({
-                'code': 'MEDICAL_RECEIPTS',
-                'reason': 'Medical expenses declared'
-            })
+        # Add context for loops
+        if question.id == 'Q03b':
+            session = next((s for s in self.sessions.values()
+                          if s.get('current_question_id') == question.id), None)
+            if session:
+                child_index = session.get('child_index', 0)
+                num_children = session.get('num_children', 0)
+                formatted['context'] = {
+                    'current': child_index + 1,
+                    'total': num_children
+                }
 
-        # Alimony documents
-        if answers.get('Q10') == True:
-            required_docs.append({
-                'code': 'ALIMONY_PROOF',
-                'reason': 'Alimony payments declared'
-            })
+        return formatted
 
-        # Foreign income/assets
-        if answers.get('Q11') == True or answers.get('Q12') == True:
-            required_docs.append({
-                'code': 'FOREIGN_TAX_STATEMENTS',
-                'reason': 'Foreign income/assets declared'
-            })
+    def _generate_profile(self, answers: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate tax profile from answers"""
+        profile = {
+            'civil_status': answers.get('Q01'),
+            'canton': answers.get('Q02'),
+            'municipality': answers.get('Q02a'),
+            'has_children': answers.get('Q03') == 'yes',
+            'num_children': int(answers.get('Q03a', 0)) if answers.get('Q03') == 'yes' else 0,
+            'num_employers': int(answers.get('Q04', 0)),
+            'unemployment_benefits': answers.get('Q05') == 'yes',
+            'disability_benefits': answers.get('Q06') == 'yes',
+            'has_pension_fund': answers.get('Q07') == 'yes',
+            'pillar_3a_contribution': answers.get('Q08') == 'yes',
+            'owns_property': answers.get('Q09') == 'yes',
+            'has_securities': answers.get('Q10') == 'yes',
+            'charitable_donations': answers.get('Q11') == 'yes',
+            'pays_alimony': answers.get('Q12') == 'yes',
+            'medical_expenses': answers.get('Q13') == 'yes',
+            'church_tax': answers.get('Q14', 'none')
+        }
 
-        # Cryptocurrency
-        if answers.get('Q14') == True:
-            required_docs.append({
-                'code': 'CRYPTO_STATEMENTS',
-                'reason': 'Cryptocurrency ownership declared'
-            })
+        # Add spouse info if married
+        if answers.get('Q01') == 'married':
+            profile['spouse'] = {
+                'first_name': answers.get('Q01a'),
+                'last_name': answers.get('Q01b'),
+                'date_of_birth': answers.get('Q01c'),
+                'is_employed': answers.get('Q01d') == 'yes'
+            }
 
-        # Save required documents to database
-        self._save_required_documents(session_id, required_docs)
+        # Add financial details if available
+        if answers.get('Q08a'):
+            profile['pillar_3a_amount'] = float(answers.get('Q08a'))
+        if answers.get('Q11a'):
+            profile['donation_amount'] = float(answers.get('Q11a'))
+        if answers.get('Q12a'):
+            profile['alimony_amount'] = float(answers.get('Q12a'))
+        if answers.get('Q13a'):
+            profile['medical_expense_amount'] = float(answers.get('Q13a'))
 
-        return required_docs
+        return profile
 
-    def _save_required_documents(self, session_id: str, required_docs: List[Dict[str, Any]]):
-        """Save required documents to database"""
-        # First, get document type IDs
-        for doc in required_docs:
-            query = """
-                INSERT INTO swisstax.document_types (code, name_en, category)
-                VALUES (%s, %s, 'required')
-                ON CONFLICT (code) DO UPDATE SET code = EXCLUDED.code
-                RETURNING id
-            """
-            doc_type = execute_insert(query, (doc['code'], doc['code'].replace('_', ' ').title()))
-
-            # Save as required document
-            query = """
-                INSERT INTO swisstax.required_documents (session_id, document_type_id, reason)
-                VALUES (%s, %s, %s)
-                ON CONFLICT (session_id, document_type_id)
-                DO UPDATE SET reason = EXCLUDED.reason
-            """
-            execute_query(query, (session_id, doc_type['id'], doc['reason']), fetch=False)
+# Create singleton instance
+interview_service = InterviewService()

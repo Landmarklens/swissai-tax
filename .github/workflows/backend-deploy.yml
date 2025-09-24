@@ -1,11 +1,13 @@
-name: Deploy Backend to AWS
+name: Deploy Backend to AWS App Runner
 
 on:
   push:
     branches: [main]
     paths:
       - 'backend/**'
+      - 'apprunner.yaml'
       - '.github/workflows/backend-deploy.yml'
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   deploy:
@@ -15,31 +17,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        python-version: '3.11'
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: swissai-tax-backend
-        IMAGE_TAG: ${{ github.sha }}
+    - name: Install dependencies for testing
       run: |
         cd backend
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        pip install -r requirements-apprunner.txt
+        pip install pytest pytest-cov
 
-    - name: Deploy to Lambda (if using Lambda)
+    - name: Run backend tests
       run: |
-        echo "Lambda deployment can be added here"
-        # aws lambda update-function-code --function-name swisstax-backend \
-        #   --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        cd backend
+        # Add tests when available
+        echo "Tests will be added here"
+
+    - name: Deploy notification
+      run: |
+        echo "Deployment to App Runner is handled automatically via GitHub connection"
+        echo "App Runner watches the main branch and auto-deploys on push"
+        echo "Check deployment status at: https://console.aws.amazon.com/apprunner"

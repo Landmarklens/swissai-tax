@@ -1,0 +1,66 @@
+name: Build and Test Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/frontend-build.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm ci --legacy-peer-deps
+
+    - name: Run linting
+      run: |
+        echo "Linting will be added here"
+        # npm run lint
+
+    - name: Run tests
+      run: |
+        echo "Tests will be added here"
+        # npm test -- --coverage --watchAll=false
+
+    - name: Build application
+      run: |
+        npm run build
+
+    - name: Check build output
+      run: |
+        if [ -d "build" ]; then
+          echo "Build successful!"
+          ls -la build/
+        else
+          echo "Build failed - no build directory found"
+          exit 1
+        fi
+
+    - name: Deploy notification
+      run: |
+        echo "Frontend deployment to Amplify is handled automatically"
+        echo "Amplify watches the main branch and auto-deploys on push"
+        echo "Check deployment status at: https://console.aws.amazon.com/amplify"

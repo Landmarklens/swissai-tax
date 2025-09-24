@@ -26,7 +26,19 @@ def get_parameter(name: str, decrypt: bool = False) -> str:
     return _param_cache[name]
 
 def get_db_config() -> Dict[str, Any]:
-    """Get database configuration from Parameter Store"""
+    """Get database configuration from environment variables or Parameter Store"""
+    # Try environment variables first
+    if os.getenv('DATABASE_HOST'):
+        return {
+            'host': os.getenv('DATABASE_HOST'),
+            'port': int(os.getenv('DATABASE_PORT', 5432)),
+            'database': os.getenv('DATABASE_NAME', 'swissai_tax'),
+            'user': os.getenv('DATABASE_USER', 'postgres'),
+            'password': os.getenv('DATABASE_PASSWORD', ''),
+            'options': f"-csearch_path={os.getenv('DATABASE_SCHEMA', 'public')}"
+        }
+
+    # Fall back to Parameter Store
     return {
         'host': get_parameter('/swissai-tax/db/host'),
         'port': int(get_parameter('/swissai-tax/db/port')),

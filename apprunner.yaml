@@ -19,3 +19,13 @@ run:
       value: "us-east-1"
     - name: PYTHONPATH
       value: "/app/backend:/app"
+    - name: DATABASE_HOST
+      value: "webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com"
+    - name: DATABASE_PORT
+      value: "5432"
+    - name: DATABASE_NAME
+      value: "swissai_tax"
+    - name: DATABASE_USER
+      value: "postgres"
+    - name: DATABASE_PASSWORD
+      value: "IXq3IC0Uw6StMkBhb4mb"

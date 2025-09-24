@@ -3,10 +3,10 @@ runtime: python311
 build:
   commands:
     build:
-      - echo "Build phase - dependencies will be installed at runtime"
+      - cd backend && python3 -m pip install --no-cache-dir -r requirements.txt
 run:
   runtime-version: 3.11
-  command: bash start.sh
+  command: cd backend && python3 app.py
   network:
     port: 8000
     env: PORT

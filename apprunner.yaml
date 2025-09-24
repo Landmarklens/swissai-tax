@@ -29,3 +29,5 @@ run:
       value: "postgres"
     - name: DATABASE_PASSWORD
       value: "IXq3IC0Uw6StMkBhb4mb"
+    - name: S3_BUCKET_NAME
+      value: "swissai-tax-documents-1758721021"

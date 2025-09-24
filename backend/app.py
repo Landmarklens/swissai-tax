@@ -19,9 +19,8 @@ import logging
 sys.path.append(os.path.dirname(__file__))
 
 from services.interview_service import interview_service
-# Document and tax services will be implemented later
-# from services.document_service import DocumentService
-# from services.tax_calculation_service import TaxCalculationService
+from services.document_service import DocumentService
+from services.tax_calculation_service import TaxCalculationService
 
 # Try to import connection pool for App Runner, fallback to regular connection
 try:
@@ -38,8 +37,8 @@ logger = logging.getLogger(__name__)
 
 # Services are initialized in their modules
 # interview_service is imported from services.interview_service
-# document_service = DocumentService()  # To be implemented
-# tax_service = TaxCalculationService()  # To be implemented
+document_service = DocumentService()
+tax_service = TaxCalculationService()
 
 # Lifecycle manager for startup/shutdown
 @asynccontextmanager

@@ -45,7 +45,7 @@ def get_db_config() -> Dict[str, Any]:
             'host': os.getenv('DATABASE_HOST'),
             'port': int(os.getenv('DATABASE_PORT', 5432)),
             'database': os.getenv('DATABASE_NAME', 'swissai_tax'),
-            'user': os.getenv('DATABASE_USER', 'postgres'),
+            'user': os.getenv('DATABASE_USER', 'webscrapinguser'),
             'password': os.getenv('DATABASE_PASSWORD', ''),
             'options': f"-csearch_path={os.getenv('DATABASE_SCHEMA', 'public')}"
         }

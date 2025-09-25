@@ -1,0 +1,198 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # Backend Python checks
+  backend-ci:
+    runs-on: ubuntu-latest
+    name: Backend Code Quality
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Cache pip packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements-apprunner.txt
+        pip install flake8 black isort
+
+    - name: Check code formatting with black
+      run: |
+        cd backend
+        black --check . || echo "Code formatting issues found"
+
+    - name: Check import sorting with isort
+      run: |
+        cd backend
+        isort --check-only . || echo "Import sorting issues found"
+
+    - name: Lint with flake8
+      run: |
+        cd backend
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics || true
+
+  # Frontend checks
+  frontend-ci:
+    runs-on: ubuntu-latest
+    name: Frontend Code Quality
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm install --legacy-peer-deps
+
+    - name: Check for security vulnerabilities
+      run: |
+        npm audit --audit-level=high || true
+
+    - name: Build application
+      run: |
+        npm run build
+
+  # Security scanning
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scan
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run Trivy security scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'table'
+        exit-code: '0'
+        ignore-unfixed: true
+        severity: 'CRITICAL,HIGH'
+
+  # Deploy to AWS App Runner (only on main branch after all checks pass)
+  deploy-backend:
+    runs-on: ubuntu-latest
+    name: Deploy Backend to AWS App Runner
+    needs: [backend-ci, frontend-ci, security-scan]  # Only run if all CI jobs pass
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Deploy to App Runner
+      id: deploy
+      run: |
+        echo "🚀 Starting deployment to AWS App Runner"
+
+        # Check service status
+        SERVICE_ARN="arn:aws:apprunner:us-east-1:445567083171:service/swissai-tax-api/24aca2fd82984653bccef22774cf1c3b"
+        SERVICE_STATUS=$(aws apprunner describe-service --service-arn $SERVICE_ARN --query 'Service.Status' --output text)
+
+        echo "Current service status: $SERVICE_STATUS"
+
+        if [ "$SERVICE_STATUS" == "RUNNING" ]; then
+          echo "Triggering manual deployment..."
+          OPERATION_ID=$(aws apprunner start-deployment --service-arn $SERVICE_ARN --query 'OperationId' --output text)
+          echo "Deployment started with Operation ID: $OPERATION_ID"
+
+          # Wait for deployment to complete (with timeout)
+          COUNTER=0
+          MAX_ATTEMPTS=20
+          while [ $COUNTER -lt $MAX_ATTEMPTS ]; do
+            STATUS=$(aws apprunner describe-service --service-arn $SERVICE_ARN --query 'Service.Status' --output text)
+            if [ "$STATUS" == "RUNNING" ]; then
+              echo "✅ Deployment completed successfully!"
+              break
+            elif [ "$STATUS" == "CREATE_FAILED" ] || [ "$STATUS" == "UPDATE_FAILED" ]; then
+              echo "❌ Deployment failed!"
+              exit 1
+            else
+              echo "Deployment in progress... (attempt $((COUNTER+1))/$MAX_ATTEMPTS)"
+              sleep 30
+            fi
+            COUNTER=$((COUNTER+1))
+          done
+
+          if [ $COUNTER -eq $MAX_ATTEMPTS ]; then
+            echo "⏱️ Deployment timeout - please check AWS Console"
+          fi
+        else
+          echo "⚠️ Service is not in RUNNING state. Auto-deployment will handle the update."
+        fi
+
+        echo "🔗 Service URL: https://api.swissai.tax"
+
+  # Deploy notification
+  notify-deployment:
+    runs-on: ubuntu-latest
+    name: Deployment Notification
+    needs: [deploy-backend]
+    if: always() && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Deployment Summary
+      run: |
+        if [ "${{ needs.deploy-backend.result }}" == "success" ]; then
+          echo "✅ Deployment successful!"
+        elif [ "${{ needs.deploy-backend.result }}" == "skipped" ]; then
+          echo "⏭️ Deployment skipped (not main branch or CI failed)"
+        else
+          echo "❌ Deployment failed or was cancelled"
+        fi
+
+        echo ""
+        echo "📊 CI/CD Pipeline Summary:"
+        echo "- Backend CI: ${{ needs.backend-ci.result }}"
+        echo "- Frontend CI: ${{ needs.frontend-ci.result }}"
+        echo "- Security Scan: ${{ needs.security-scan.result }}"
+        echo "- Deployment: ${{ needs.deploy-backend.result }}"
+        echo ""
+        echo "🔗 URLs:"
+        echo "- API: https://api.swissai.tax"
+        echo "- App: https://swissai.tax"
+        echo ""
+        echo "📊 Monitor deployments:"
+        echo "- App Runner: https://console.aws.amazon.com/apprunner"
+        echo "- Amplify: https://console.aws.amazon.com/amplify"

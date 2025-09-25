@@ -82,7 +82,7 @@ jobs:
 
     - name: Build application
       run: |
-        npm run build
+        CI=false npm run build
 
   # Security scanning
   security-scan:

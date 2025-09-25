@@ -20,6 +20,8 @@ const withSuspense = (Component) => {
 };
 
 // Lazy load all route components
+const Homepage = withSuspense(lazy(() => import('../pages/Homepage/Homepage')));
+const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
 const Home = withSuspense(lazy(() => import('../pages/Home/Home')));
 const GoogleCallback = withSuspense(lazy(() => import('../pages/GoogleCallback/GoogleCallback')));
 const HomeDetails = withSuspense(lazy(() => import('../pages/HomeDetails/HomeDetails')));
@@ -67,7 +69,10 @@ const ProtectedRoute = ({ children }) => {
 
 // Export the lazy loaded routes
 export const LAZY_NAVIGATION_ROUTE = [
-  { path: '/', element: <Home /> },
+  { path: '/', element: <Homepage /> },
+  { path: '/dashboard', element: <Dashboard /> },
+  { path: '/register', element: <Home /> },
+  { path: '/login', element: <Home /> },
   { path: '/interview', element: <InterviewPage /> },
   { path: '/documents', element: <DocumentsPage /> },
   { path: '/google-redirect', element: <GoogleCallback /> },

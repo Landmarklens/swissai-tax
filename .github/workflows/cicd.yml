@@ -106,22 +106,26 @@ jobs:
   # Deploy to AWS App Runner (only on main branch after all checks pass)
   deploy-backend:
     runs-on: ubuntu-latest
-    name: Deploy Backend to AWS App Runner
+    name: Deploy Backend to AWS App Runner (Optional)
     needs: [backend-ci, frontend-ci, security-scan]  # Only run if all CI jobs pass
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    continue-on-error: true  # Don't fail the pipeline if deployment fails
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Configure AWS credentials
+      id: aws-creds
       uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+      continue-on-error: true
 
     - name: Deploy to App Runner
+      if: steps.aws-creds.outcome == 'success'
       id: deploy
       run: |
         echo "🚀 Starting deployment to AWS App Runner"

@@ -13,8 +13,9 @@ fi
 
 # Create database if needed
 echo "Checking database..."
+echo "Database user: ${DATABASE_USER}"
 cd /app
-python3 backend/create_database.py
+python3 backend/create_database.py || echo "Database setup failed, continuing anyway..."
 
 # Start the application
 exec python3 backend/app.py

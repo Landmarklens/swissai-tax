@@ -1,15 +1,21 @@
 {
-  "short_name": "HomeAI",
-  "name": "HomeAI Real Estate",
+  "short_name": "SwissAI Tax",
+  "name": "SwissAI Tax - Digitale Steuererklärung",
+  "description": "Die intelligente Lösung für Ihre Schweizer Steuererklärung",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#DC0018",
   "background_color": "#ffffff"
 }

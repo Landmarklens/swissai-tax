@@ -1,29 +1,16 @@
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
-import Footer from '../../components/footer/Footer';
-import LoggedInHeader from '../../components/loggedInHeader/loggedInHeader';
-import LoggedInFooter from '../LoggedInFooter/LoggedInFooter';
 
-const BasicLayout = (props) => {
-  const { children, withPadding } = props;
-
+// Basic layout for SwissAI Tax - no footer needed for logged-in pages
+function BasicLayout({ children }) {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh'
-      }}>
-      <LoggedInHeader></LoggedInHeader>
-      <Box
-        sx={{
-          flex: 1,
-          padding: withPadding && 4
-        }}>
-        {children}
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Box component="main" sx={{ flex: 1 }}>
+        {children || <Outlet />}
       </Box>
-      <Footer />
     </Box>
   );
-};
+}
 
 export default BasicLayout;

@@ -1,45 +1,38 @@
-// authSlice.js
+// authSlice.js - SwissAI Tax Authentication
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-import { postData } from '../../api/apiClient';
-import { removeLocalData, setLocalData } from '../../utils';
+import authService from '../../services/authService';
 
 const initialState = {
-  isAuthenticated: false,
-  user: null,
+  isAuthenticated: authService.isAuthenticated(),
+  user: authService.getCurrentUser(),
   isLoading: false,
   isSuccess: false,
   error: null
 };
 
-export const login = createAsyncThunk('login', async (params, thunkApi) => {
+export const login = createAsyncThunk('auth/login', async (params, thunkApi) => {
   try {
-    const response = await postData('user/login', params);
-
-    // Throw Err
-    if (response?.status && response.status !== 200) {
-      throw response;
-    }
-    // Storing data locally
-    setLocalData('userData', response.data);
+    const response = await authService.login(params.email, params.password);
     return response;
   } catch (err) {
-    return thunkApi.rejectWithValue(err?.error || 'Something went wrong');
+    return thunkApi.rejectWithValue(err?.message || 'Login failed');
   }
 });
 
-export const logout = createAsyncThunk('logout', async (_, thunkApi) => {
+export const logout = createAsyncThunk('auth/logout', async (_, thunkApi) => {
   try {
-    removeLocalData('userData');
+    authService.logout();
     return {};
   } catch (error) {
     return thunkApi.rejectWithValue(error.message || 'Logout failed');
   }
 });
 
-export const signup = createAsyncThunk('signup', async (_, thunkApi) => {
+export const signup = createAsyncThunk('auth/signup', async (params, thunkApi) => {
   try {
+    const response = await authService.register(params);
+    return response;
   } catch (error) {
     return thunkApi.rejectWithValue(error.message || 'Signup failed');
   }
@@ -49,77 +42,63 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    initializeAuthFromStorage: (state) => {
-      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-      if (userData && userData.access_token) {
-        state.isAuthenticated = true;
-        state.user = userData;
-        state.isSuccess = true;
-      }
+    resetAuth: (state) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.error = null;
     },
-    updateUserProfile: (state, action) => {
-      if (state.user) {
-        state.user = { ...state.user, ...action.payload };
-        // Update local storage as well
-        const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
-        const updatedUserData = { ...currentUserData, ...action.payload };
-        setLocalData('userData', updatedUserData);
-      }
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    },
+    clearUser: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
     }
   },
   extraReducers: (builder) => {
-    // Handle login cases
     builder
+      // Login
       .addCase(login.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
         state.isSuccess = true;
         state.isAuthenticated = true;
+        state.user = action.payload.user || action.payload;
         state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
-        state.isAuthenticated = true;
-        state.error = action.payload;
-      });
-
-    // Handle logout cases
-    builder
-      .addCase(logout.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(logout.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isAuthenticated = false;
         state.isSuccess = false;
-        state.user = {};
+        state.error = action.payload;
       })
-      .addCase(logout.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload || action.error?.message || 'Logout failed';
-      });
-
-    //Handle SignUp Cases
-    builder
+      // Logout
+      .addCase(logout.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.user = null;
+        state.isSuccess = false;
+        state.error = null;
+      })
+      // Signup
       .addCase(signup.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
-      .addCase(signup.fulfilled, (state) => {
+      .addCase(signup.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = false;
-        state.user = {};
+        state.isSuccess = true;
+        state.isAuthenticated = true;
+        state.user = action.payload.user || action.payload;
       })
       .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload?.message || action.error?.message || 'Signup failed';
+        state.error = action.payload;
       });
   }
 });
 
-export const { updateUserProfile, initializeAuthFromStorage } = authSlice.actions;
-export const selectAuth = (state) => state.auth;
+export const { resetAuth, setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;

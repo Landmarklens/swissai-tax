@@ -19,14 +19,9 @@ const withSuspense = (Component) => {
   );
 };
 
-// Lazy load all route components
+// Lazy load SwissAI Tax route components
 const Homepage = withSuspense(lazy(() => import('../pages/Homepage/Homepage')));
-const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
-const Home = withSuspense(lazy(() => import('../pages/Home/Home')));
 const GoogleCallback = withSuspense(lazy(() => import('../pages/GoogleCallback/GoogleCallback')));
-const HomeDetails = withSuspense(lazy(() => import('../pages/HomeDetails/HomeDetails')));
-const Payment = withSuspense(lazy(() => import('../pages/Payment/Payment')));
-const Plan = withSuspense(lazy(() => import('../pages/Plan/Plan')));
 const HowItWorks = withSuspense(lazy(() => import('../pages/HowItWork/HowItWork')));
 const FeatureBox = withSuspense(lazy(() => import('../pages/Features/Features')));
 const About = withSuspense(lazy(() => import('../pages/About/About')));
@@ -34,31 +29,17 @@ const Contact = withSuspense(lazy(() => import('../pages/Contact/Contact')));
 const FAQ = withSuspense(lazy(() => import('../pages/FAQ/FAQ')));
 const BlogList = withSuspense(lazy(() => import('../pages/BlogList/BlogList')));
 const BlogItemPage = withSuspense(lazy(() => import('../pages/BlogList/BlogItemPage')));
-const Tenants = withSuspense(lazy(() => import('../pages/Tenants/Tenants')));
-const Owners = withSuspense(lazy(() => import('../pages/Owners/Owners')));
-const PaymentSuccessful = withSuspense(lazy(() => import('../pages/PaymentSuccess/Payment')));
-const Welcome = withSuspense(lazy(() => import('../pages/Welcome/Welcome')));
-const EditProfile = withSuspense(lazy(() => import('../pages/EditProfile/EditProfile')));
-const MyAccount = withSuspense(lazy(() => import('../pages/MyAccount/MyAccount')));
-const OwnerAccount = withSuspense(lazy(() => import('../pages/OwnerAccount/OwnerAccount')));
-const OnboardingArticle = withSuspense(lazy(() => import('../components/sections/OwnerAccount/Onboarding/OnboardingArticle')));
 const ForgotPassword = withSuspense(lazy(() => import('../pages/ForgotPassword/ForgotPassword')));
 const ResetPassword = withSuspense(lazy(() => import('../pages/ResetPassword/ResetPassword')));
-const SearchProperty = withSuspense(lazy(() => import('../pages/SearchProperty/SearchProperty')));
-const Support = withSuspense(lazy(() => import('../pages/Support/Support')));
 const Terms = withSuspense(lazy(() => import('../pages/Terms/Terms')));
 const Policy = withSuspense(lazy(() => import('../pages/Policy/Policy')));
-const Chat = withSuspense(lazy(() => import('../pages/Chat/Chat')));
-const TenantSelection = withSuspense(lazy(() => import('../pages/TenantSelection')));
-const DocumentSigningPage = withSuspense(lazy(() => import('../components/pages/DocumentSigningPage')));
-const ComponentShowcase = withSuspense(lazy(() => import('../pages/ComponentShowcase')));
-const InterviewPage = withSuspense(lazy(() => import('../pages/Interview/InterviewPage')));
-const DocumentsPage = withSuspense(lazy(() => import('../pages/Documents/DocumentsPage')));
+
+// Tax filing pages
 const TaxInterviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/InterviewPage')));
 const DocumentChecklistPage = withSuspense(lazy(() => import('../pages/TaxFiling/DocumentChecklistPage')));
 const TaxResultsPage = withSuspense(lazy(() => import('../pages/TaxFiling/TaxResults')));
 
-// Protected Route wrapper remains the same
+// Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const isAuthenticated = authService.isAuthenticated();
@@ -70,14 +51,12 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Export the lazy loaded routes
+// SwissAI Tax routes only
 export const LAZY_NAVIGATION_ROUTE = [
+  // Homepage
   { path: '/', element: <Homepage /> },
-  { path: '/dashboard', element: <Dashboard /> },
-  { path: '/register', element: <Home /> },
-  { path: '/login', element: <Home /> },
-  { path: '/interview', element: <InterviewPage /> },
-  { path: '/documents', element: <DocumentsPage /> },
+
+  // Tax filing workflow (protected)
   {
     path: '/tax-filing/interview',
     element: (
@@ -102,152 +81,28 @@ export const LAZY_NAVIGATION_ROUTE = [
       </ProtectedRoute>
     )
   },
+
+  // OAuth callback
   { path: '/google-redirect', element: <GoogleCallback /> },
+  { path: '/auth/google/callback', element: <GoogleCallback /> },
+
+  // Information pages
   { path: '/how-it-works', element: <HowItWorks /> },
-  {
-    path: '/tenants',
-    element: (
-      <ProtectedRoute>
-        <Tenants />
-      </ProtectedRoute>
-    )
-  },
   { path: '/features', element: <FeatureBox /> },
   { path: '/about-us', element: <About /> },
   { path: '/contact-us', element: <Contact /> },
   { path: '/faq', element: <FAQ /> },
+
+  // Blog
   { path: '/blog-list', element: <BlogList /> },
   { path: '/blog', element: <BlogItemPage /> },
-  { path: '/plan', element: <Plan /> },
-  {
-    path: '/forgot-password',
-    element: <ForgotPassword />
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPassword />
-  },
-  {
-    path: '/my-account',
-    element: (
-      <ProtectedRoute>
-        <MyAccount />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/chat',
-    element: (
-      <ProtectedRoute>
-        <Chat />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/home-details/:id',
-    element: (
-      <ProtectedRoute>
-        <HomeDetails />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/payment/:id',
-    element: (
-      <ProtectedRoute>
-        <Payment />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/payment-successful',
-    element: (
-      <ProtectedRoute>
-        <PaymentSuccessful />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/welcome',
-    element: (
-      <ProtectedRoute>
-        <Welcome />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/edit-profile',
-    element: (
-      <ProtectedRoute>
-        <EditProfile />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/owner-account',
-    element: (
-      <ProtectedRoute>
-        <OwnerAccount />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/owner-account/:section',
-    element: (
-      <ProtectedRoute>
-        <OwnerAccount />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/document-signing/:id',
-    element: (
-      <ProtectedRoute>
-        <DocumentSigningPage />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/onboarding',
-    element: (
-      <ProtectedRoute>
-        <OwnerAccount />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/onboarding/article/:id',
-    element: (
-      <ProtectedRoute>
-        <OnboardingArticle />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/search-property',
-    element: (
-      <ProtectedRoute>
-        <SearchProperty />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/tenant-selection',
-    element: (
-      <ProtectedRoute>
-        <TenantSelection />
-      </ProtectedRoute>
-    )
-  },
-  { path: '/support', element: <Support /> },
+  { path: '/blog/:id', element: <BlogItemPage /> },
+
+  // Auth routes
+  { path: '/forgot-password', element: <ForgotPassword /> },
+  { path: '/reset-password', element: <ResetPassword /> },
+
+  // Legal
   { path: '/terms', element: <Terms /> },
-  { path: '/privacy-policy', element: <Policy /> },
-  {
-    path: '/showcase',
-    element: (
-      <ProtectedRoute>
-        <ComponentShowcase />
-      </ProtectedRoute>
-    )
-  }
+  { path: '/privacy-policy', element: <Policy /> }
 ];

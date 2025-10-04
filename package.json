@@ -1,6 +1,7 @@
 {
-  "name": "homeai",
-  "version": "0.1.0",
+  "name": "swissai-tax",
+  "version": "1.0.0",
+  "description": "Swiss Tax Filing Application - Intelligent tax preparation for Swiss taxpayers",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.10.4",

@@ -14,11 +14,9 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-// Load system tests in development
+// SwissAI Tax - Development mode
 if (process.env.NODE_ENV === 'development') {
-  import('./utils/systemTest').then(module => {
-    console.log('🧪 System tests available. Run window.runSystemTests() to test all features.');
-  });
+  console.log('🇨🇭 SwissAI Tax - Development Mode');
 }
 
 // Load Google Auth debug tools

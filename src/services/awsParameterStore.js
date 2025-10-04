@@ -9,8 +9,8 @@ class AWSParameterStoreService {
     this.initPromise = null;
     
     // Parameter Store configuration
-    this.PARAMETER_NAMESPACE = '/homeai/';
-    this.API_ENDPOINT = process.env.REACT_APP_PARAMETER_STORE_API || 'https://api.homeai.ch/api/config';
+    this.PARAMETER_NAMESPACE = '/swissai/';
+    this.API_ENDPOINT = process.env.REACT_APP_PARAMETER_STORE_API || 'https://api.swissai.tax/api/config';
     
     // Cache duration (5 minutes)
     this.CACHE_DURATION = 5 * 60 * 1000;
@@ -90,29 +90,29 @@ class AWSParameterStoreService {
       // Store parameters
       this.parameters = {
         // AWS Configuration
-        AWS_REGION: data.aws_region || data['/homeai/aws/region'] || 'us-east-1',
-        AWS_ACCESS_KEY_ID: data.aws_access_key_id || data['/homeai/aws/access_key_id'],
-        AWS_SECRET_ACCESS_KEY: data.aws_secret_access_key || data['/homeai/aws/secret_access_key'],
-        
+        AWS_REGION: data.aws_region || data['/swissai/aws/region'] || 'us-east-1',
+        AWS_ACCESS_KEY_ID: data.aws_access_key_id || data['/swissai/aws/access_key_id'],
+        AWS_SECRET_ACCESS_KEY: data.aws_secret_access_key || data['/swissai/aws/secret_access_key'],
+
         // SES Configuration
-        SES_FROM_EMAIL: data.ses_from_email || data['/homeai/ses/from_email'] || 'noreply@homeai.ch',
-        SES_REGION: data.ses_region || data['/homeai/ses/region'] || 'us-east-1',
-        
+        SES_FROM_EMAIL: data.ses_from_email || data['/swissai/ses/from_email'] || 'noreply@swissai.tax',
+        SES_REGION: data.ses_region || data['/swissai/ses/region'] || 'us-east-1',
+
         // S3 Configuration
-        S3_BUCKET_NAME: data.s3_bucket_name || data['/homeai/s3/bucket_name'] || 'homeai-templates',
-        S3_REGION: data.s3_region || data['/homeai/s3/region'] || 'us-east-1',
-        S3_TEMPLATE_PATH: data.s3_template_path || data['/homeai/s3/template_path'] || 'templates/',
-        
+        S3_BUCKET_NAME: data.s3_bucket_name || data['/swissai/s3/bucket_name'] || 'swissai-tax-documents',
+        S3_REGION: data.s3_region || data['/swissai/s3/region'] || 'us-east-1',
+        S3_TEMPLATE_PATH: data.s3_template_path || data['/swissai/s3/template_path'] || 'templates/',
+
         // API Configuration
-        API_BASE_URL: data.api_base_url || data['/homeai/api/base_url'] || 'https://api.homeai.ch',
-        
+        API_BASE_URL: data.api_base_url || data['/swissai/api/base_url'] || 'https://api.swissai.tax',
+
         // Feature Flags
-        ENABLE_SES: data.enable_ses || data['/homeai/features/enable_ses'] || false,
-        ENABLE_S3: data.enable_s3 || data['/homeai/features/enable_s3'] || false,
-        
+        ENABLE_SES: data.enable_ses || data['/swissai/features/enable_ses'] || false,
+        ENABLE_S3: data.enable_s3 || data['/swissai/features/enable_s3'] || false,
+
         // Security
-        JWT_SECRET: data.jwt_secret || data['/homeai/security/jwt_secret'],
-        ENCRYPTION_KEY: data.encryption_key || data['/homeai/security/encryption_key']
+        JWT_SECRET: data.jwt_secret || data['/swissai/security/jwt_secret'],
+        ENCRYPTION_KEY: data.encryption_key || data['/swissai/security/encryption_key']
       };
 
       console.log('Parameters loaded from Parameter Store');
@@ -142,14 +142,14 @@ class AWSParameterStoreService {
       AWS_ACCESS_KEY_ID: process.env.REACT_APP_AWS_ACCESS_KEY_ID || '',
       AWS_SECRET_ACCESS_KEY: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY || '',
       
-      SES_FROM_EMAIL: process.env.REACT_APP_SES_FROM_EMAIL || 'noreply@homeai.ch',
+      SES_FROM_EMAIL: process.env.REACT_APP_SES_FROM_EMAIL || 'noreply@swissai.tax',
       SES_REGION: process.env.REACT_APP_SES_REGION || 'us-east-1',
-      
-      S3_BUCKET_NAME: process.env.REACT_APP_S3_BUCKET || 'homeai-templates',
+
+      S3_BUCKET_NAME: process.env.REACT_APP_S3_BUCKET || 'swissai-tax-documents',
       S3_REGION: process.env.REACT_APP_S3_REGION || 'us-east-1',
       S3_TEMPLATE_PATH: 'templates/',
-      
-      API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.homeai.ch',
+
+      API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax',
       
       ENABLE_SES: false,
       ENABLE_S3: false,

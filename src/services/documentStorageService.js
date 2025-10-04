@@ -4,7 +4,7 @@ import logger from './loggingService';
 
 class DocumentStorageService {
   constructor() {
-    this.STORAGE_KEY = 'homeai_documents';
+    this.STORAGE_KEY = 'swissai_documents';
     this.STORAGE_VERSION = '1.0';
   }
 

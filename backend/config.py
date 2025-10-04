@@ -39,8 +39,8 @@ class Settings(BaseSettings):
 
     # OTHER
     ENVIRONMENT: str = Field("production")  # Added for CORS debug middleware
-    FRONTEND_URL: str = Field("https://app.homeai.ch")
-    API_URL: str = Field("https://api.homeai.ch")
+    FRONTEND_URL: str = Field("https://swissai.tax")
+    API_URL: str = Field("https://api.swissai.tax")
 
     # SENDGRID
     SENDGRID_API_KEY: str | None = Field(None)
@@ -101,7 +101,7 @@ class Settings(BaseSettings):
             param_mappings = {
                 '/homeai/db/host': 'POSTGRES_HOST',
                 '/homeai/db/port': 'POSTGRES_PORT',
-                '/homeai/db/name': 'POSTGRES_DB',
+                '/swissai/db/name': 'POSTGRES_DB',  # Use swissai_tax_db
                 '/homeai/db/user': 'POSTGRES_USER',
                 '/homeai/db/password': 'POSTGRES_PASSWORD',
                 '/homeai/api/jwt-secret': 'SECRET_KEY',

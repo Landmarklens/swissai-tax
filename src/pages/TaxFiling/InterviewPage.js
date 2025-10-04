@@ -55,12 +55,12 @@ const InterviewPage = () => {
     try {
       setLoading(true);
       const response = await api.post('/api/interview/start', {
-        taxYear: 2024,
+        tax_year: 2024,
         language: 'en'
       });
 
-      setSession(response.data.sessionId);
-      setCurrentQuestion(response.data.currentQuestion);
+      setSession(response.data.session_id);
+      setCurrentQuestion(response.data.current_question);
       setProgress(response.data.progress || 0);
       setError(null);
     } catch (err) {
@@ -76,12 +76,17 @@ const InterviewPage = () => {
 
     try {
       setSubmitting(true);
-      const response = await api.post('/api/interview/answer', {
-        sessionId: session,
-        questionId: currentQuestion.id,
-        answer: answer,
-        language: 'en'
+      const response = await api.post(`/api/interview/${session}/answer`, {
+        question_id: currentQuestion.id,
+        answer: answer
       });
+
+      // Check if answer was invalid
+      if (!response.data.valid) {
+        setError(response.data.error || 'Invalid answer. Please try again.');
+        setSubmitting(false);
+        return;
+      }
 
       // Update local answers
       setAnswers(prev => ({
@@ -89,19 +94,23 @@ const InterviewPage = () => {
         [currentQuestion.id]: answer
       }));
 
-      // Update progress and next question
-      setProgress(response.data.progress);
+      // Update progress
+      setProgress(response.data.progress || 0);
 
-      if (response.data.status === 'completed') {
+      // Check if interview is complete
+      if (response.data.complete) {
         // Interview completed, show results
-        navigate('/tax-filing/results', {
+        navigate('/tax-filing/document-checklist', {
           state: {
-            sessionId: session,
-            requiredDocuments: response.data.requiredDocuments
+            session_id: session,
+            profile: response.data.profile,
+            document_requirements: response.data.document_requirements
           }
         });
       } else {
-        setCurrentQuestion(response.data.nextQuestion);
+        // Set next question
+        setCurrentQuestion(response.data.current_question);
+        setError(null);
       }
     } catch (err) {
       setError('Failed to submit answer. Please try again.');

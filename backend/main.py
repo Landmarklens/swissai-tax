@@ -1,40 +1,32 @@
+#!/usr/bin/env python3
 """
-SwissTax.ai Backend Main Entry Point
+Main entry point for SwissAI Tax backend
+Imports the FastAPI app from app.py and adds auth routers
 """
 
-import os
+from app import app
 import logging
-from typing import Dict, Any
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
-def health_check() -> Dict[str, Any]:
-    """Health check endpoint for monitoring"""
-    return {
-        'status': 'healthy',
-        'service': 'swisstax-ai-backend',
-        'version': '0.1.0'
-    }
+# Import and include all routers
+try:
+    from routers import auth, user, interview, tax_calculation, documents
 
-def main():
-    """Main entry point for local development"""
-    logger.info("Starting SwissTax.ai Backend...")
+    # Authentication routers
+    app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+    app.include_router(user.router, prefix="/api/users", tags=["Users"])
 
-    # TODO: Initialize FastAPI or Flask server for local development
-    # For now, this is a placeholder for Lambda deployment
+    # Tax-specific routers
+    app.include_router(interview.router, prefix="/api/interview", tags=["Interview"])
+    app.include_router(tax_calculation.router, prefix="/api/tax-calculations", tags=["Tax Calculations"])
+    app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
 
-    logger.info("SwissTax.ai Backend is ready")
-
-    # Keep the service running (for Docker)
-    import time
-    while True:
-        time.sleep(60)
-        logger.debug("Service heartbeat")
+    logger.info("All routers loaded successfully")
+except ImportError as e:
+    logger.warning(f"Could not import routers: {e}")
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    logger.info("Starting SwissAI Tax API server...")
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

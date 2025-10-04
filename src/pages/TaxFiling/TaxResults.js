@@ -45,22 +45,34 @@ const TaxResults = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { session, calculation } = useSelector((state) => state.taxFiling);
-  const [loading, setLoading] = useState(true);
+
+  // Get calculation from location state (passed from document checklist)
+  const { session_id, calculation: passedCalculation } = location.state || {};
+
+  const { session, calculation } = useSelector((state) => state.taxFiling || {});
+  const [loading, setLoading] = useState(!passedCalculation);
   const [expanded, setExpanded] = useState('income');
+  const [calculationData, setCalculationData] = useState(passedCalculation || null);
 
   useEffect(() => {
-    if (session.id && !calculation.result) {
+    if (passedCalculation) {
+      // Use passed calculation data
+      setCalculationData(passedCalculation);
+      setLoading(false);
+    } else if (session_id && !calculationData) {
       loadCalculation();
-    } else if (calculation.result) {
+    } else if (calculation?.result) {
+      setCalculationData(calculation.result);
       setLoading(false);
     }
-  }, [session.id, calculation.result]);
+  }, [session_id, passedCalculation, calculation]);
 
   const loadCalculation = async () => {
     try {
       setLoading(true);
-      await dispatch(calculateTax(session.id)).unwrap();
+      if (dispatch && calculateTax) {
+        await dispatch(calculateTax(session_id || session?.id)).unwrap();
+      }
     } catch (error) {
       console.error('Failed to calculate tax:', error);
     } finally {
@@ -76,7 +88,7 @@ const TaxResults = () => {
     );
   }
 
-  const result = calculation.result || {
+  const result = calculationData || {
     tax_year: 2024,
     canton: 'ZH',
     municipality: 'Zurich',

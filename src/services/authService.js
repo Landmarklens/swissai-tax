@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import config from '../config/environments';
-const API_URL = process.env.REACT_APP_API_URL || config.API_BASE_URL || 'https://api.homeai.ch';
+const API_URL = process.env.REACT_APP_API_URL || config.API_BASE_URL || 'https://api.swissai.tax';
 
 class AuthService {
   constructor() {

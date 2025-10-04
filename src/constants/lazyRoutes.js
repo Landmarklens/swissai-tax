@@ -54,6 +54,9 @@ const DocumentSigningPage = withSuspense(lazy(() => import('../components/pages/
 const ComponentShowcase = withSuspense(lazy(() => import('../pages/ComponentShowcase')));
 const InterviewPage = withSuspense(lazy(() => import('../pages/Interview/InterviewPage')));
 const DocumentsPage = withSuspense(lazy(() => import('../pages/Documents/DocumentsPage')));
+const TaxInterviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/InterviewPage')));
+const DocumentChecklistPage = withSuspense(lazy(() => import('../pages/TaxFiling/DocumentChecklistPage')));
+const TaxResultsPage = withSuspense(lazy(() => import('../pages/TaxFiling/TaxResults')));
 
 // Protected Route wrapper remains the same
 const ProtectedRoute = ({ children }) => {
@@ -75,6 +78,30 @@ export const LAZY_NAVIGATION_ROUTE = [
   { path: '/login', element: <Home /> },
   { path: '/interview', element: <InterviewPage /> },
   { path: '/documents', element: <DocumentsPage /> },
+  {
+    path: '/tax-filing/interview',
+    element: (
+      <ProtectedRoute>
+        <TaxInterviewPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/document-checklist',
+    element: (
+      <ProtectedRoute>
+        <DocumentChecklistPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/results',
+    element: (
+      <ProtectedRoute>
+        <TaxResultsPage />
+      </ProtectedRoute>
+    )
+  },
   { path: '/google-redirect', element: <GoogleCallback /> },
   { path: '/how-it-works', element: <HowItWorks /> },
   {

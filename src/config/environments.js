@@ -11,9 +11,9 @@ const environments = {
     GA_TRACKING_ID: process.env.REACT_APP_GA_TRACKING_ID
   },
   test: {
-    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.homeai.ch',
-    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://api.homeai.ch/ws',
-    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://api.homeai.ch',
+    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax',
+    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://api.swissai.tax/ws',
+    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://api.swissai.tax',
     ENABLE_MOCK_DATA: false,
     ENABLE_DEBUG_LOGGING: false,
     ENABLE_REAL_TIME: false,
@@ -21,9 +21,9 @@ const environments = {
     GA_TRACKING_ID: null
   },
   staging: {
-    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://staging-api.homeai.ch',
-    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://staging-api.homeai.ch/ws',
-    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://staging-api.homeai.ch',
+    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://staging-api.swissai.tax',
+    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://staging-api.swissai.tax/ws',
+    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://staging-api.swissai.tax',
     ENABLE_MOCK_DATA: false,
     ENABLE_DEBUG_LOGGING: true,
     ENABLE_REAL_TIME: true,
@@ -70,7 +70,7 @@ export const awsConfig = {
 // Tenant Selection specific configuration
 export const tenantSelectionConfig = {
   emailProcessing: {
-    managedEmailDomain: process.env.REACT_APP_MANAGED_EMAIL_DOMAIN || 'applications.homeai.ch',
+    managedEmailDomain: process.env.REACT_APP_MANAGED_EMAIL_DOMAIN || 'applications.swissai.tax',
     maxAttachmentSize: 10 * 1024 * 1024, // 10MB
     supportedPortals: [
       'homegate',

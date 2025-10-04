@@ -35,7 +35,7 @@ class LoggingService {
   
   // Get log level from environment or localStorage
   getLogLevel() {
-    const stored = localStorage.getItem('homeai_log_level');
+    const stored = localStorage.getItem('swissai_log_level');
     if (stored) return stored;
     
     return process.env.NODE_ENV === 'development' ? 'DEBUG' : 'INFO';
@@ -44,7 +44,7 @@ class LoggingService {
   // Set log level
   setLogLevel(level) {
     this.logLevel = level;
-    localStorage.setItem('homeai_log_level', level);
+    localStorage.setItem('swissai_log_level', level);
     this.info('LOGGING', `Log level changed to ${level}`);
   }
   
@@ -135,7 +135,7 @@ class LoggingService {
     try {
       // Keep only last 100 logs in localStorage
       const recentLogs = this.logs.slice(-100);
-      localStorage.setItem('homeai_logs', JSON.stringify(recentLogs));
+      localStorage.setItem('swissai_logs', JSON.stringify(recentLogs));
     } catch (error) {
       console.error('Failed to save logs to localStorage:', error);
     }
@@ -144,7 +144,7 @@ class LoggingService {
   // Load logs from localStorage
   loadFromLocalStorage() {
     try {
-      const stored = localStorage.getItem('homeai_logs');
+      const stored = localStorage.getItem('swissai_logs');
       if (stored) {
         const logs = JSON.parse(stored);
         this.logs = logs;
@@ -183,7 +183,7 @@ class LoggingService {
   clearLogs() {
     this.logs = [];
     this.categories.clear();
-    localStorage.removeItem('homeai_logs');
+    localStorage.removeItem('swissai_logs');
     this.info('LOGGING', 'Logs cleared');
   }
   
@@ -201,7 +201,7 @@ class LoggingService {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `homeai_logs_${new Date().getTime()}.json`;
+    a.download = `swissai_logs_${new Date().getTime()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     
@@ -278,7 +278,7 @@ class LoggingService {
   
   // Display logs in console (for debugging)
   displayLogs() {
-    console.group('📊 HomeAI Logs Summary');
+    console.group('📊 SwissAI Tax Logs Summary');
     const stats = this.getStatistics();
     console.table(stats.byLevel);
     console.log('Categories:', stats.categories);

@@ -70,7 +70,7 @@ class EmailService {
       });
       // Fallback to development mode
       this.isDevelopment = true;
-      this.FROM_EMAIL = 'noreply@homeai.ch';
+      this.FROM_EMAIL = 'noreply@swissai.tax';
       this.isInitialized = true;
       
       logger.warn('EMAIL', 'Using fallback configuration', {
@@ -165,7 +165,7 @@ class EmailService {
             </p>
             
             <div class="footer">
-              <p>This is an automated message from HomeAI Document Management System.</p>
+              <p>This is an automated message from SwissAI Tax Filing System.</p>
               <p>Please do not reply to this email. If you have questions, contact ${landlordName} directly.</p>
               <p>Document ID: ${documentId}</p>
             </div>
@@ -191,7 +191,7 @@ This link will expire in ${expiresIn}.
 
 Document ID: ${documentId}
 
-This is an automated message from HomeAI Document Management System.
+This is an automated message from SwissAI Tax Filing System.
     `.trim();
 
     return this.sendEmail(recipientEmail, subject, htmlBody, textBody);
@@ -375,15 +375,15 @@ View the signed document: ${documentLink}
   // Log emails to localStorage for demo/testing
   logEmail(emailData) {
     try {
-      const emails = JSON.parse(localStorage.getItem('homeai_email_log') || '[]');
+      const emails = JSON.parse(localStorage.getItem('swissai_email_log') || '[]');
       emails.unshift(emailData); // Add to beginning
-      
+
       // Keep only last 50 emails
       if (emails.length > 50) {
         emails.splice(50);
       }
-      
-      localStorage.setItem('homeai_email_log', JSON.stringify(emails));
+
+      localStorage.setItem('swissai_email_log', JSON.stringify(emails));
     } catch (error) {
       console.error('Error logging email:', error);
     }
@@ -392,7 +392,7 @@ View the signed document: ${documentLink}
   // Get email logs (for testing/demo)
   getEmailLogs() {
     try {
-      return JSON.parse(localStorage.getItem('homeai_email_log') || '[]');
+      return JSON.parse(localStorage.getItem('swissai_email_log') || '[]');
     } catch (error) {
       console.error('Error getting email logs:', error);
       return [];

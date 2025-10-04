@@ -17,6 +17,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
   minWidth: 120,
   backgroundColor: 'transparent',
   borderRadius: '8px',
+  color: '#003DA5',
   '& .MuiSelect-select': {
     display: 'flex',
     alignItems: 'center',
@@ -24,13 +25,16 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     padding: '8px 12px',
   },
   '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: 'rgba(0, 61, 165, 0.3)',
   },
   '&:hover .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.primary.main,
   },
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.primary.main,
+  },
+  '& .MuiSvgIcon-root': {
+    color: '#003DA5',
   },
 }));
 

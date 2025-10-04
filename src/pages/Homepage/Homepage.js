@@ -6,16 +6,16 @@ import {
   Button,
   Grid,
   Card,
-  CardContent,
   Chip,
   List,
   ListItem,
   IconButton,
   Divider,
-  useTheme,
-  useMediaQuery,
   Avatar,
-  Stack
+  Stack,
+  Select,
+  MenuItem,
+  FormControl
 } from '@mui/material';
 import {
   Check as CheckIcon,
@@ -25,52 +25,61 @@ import {
   Send as SendIcon,
   AutoAwesome as AutoAwesomeIcon,
   Language as LanguageIcon,
-  SupportAgent as SupportAgentIcon,
-  Update as UpdateIcon,
-  Devices as DevicesIcon,
   Facebook as FacebookIcon,
   LinkedIn as LinkedInIcon,
   Twitter as TwitterIcon,
-  ArrowForward as ArrowForwardIcon
+  ArrowForward as ArrowForwardIcon,
+  Map as MapIcon,
+  Calculate as CalculateIcon,
+  Timer as TimerIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import VideoCarousel from '../../components/sections/videoSection/VideoCarousel';
+import FAQSection from '../../components/sections/FAQ/FAQSection';
 
 const Homepage = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  const [selectedCanton, setSelectedCanton] = React.useState('');
+
+  const cantons = [
+    'Aargau', 'Appenzell Ausserrhoden', 'Appenzell Innerrhoden', 'Basel-Landschaft',
+    'Basel-Stadt', 'Bern', 'Fribourg', 'Geneva', 'Glarus', 'Graubünden',
+    'Jura', 'Lucerne', 'Neuchâtel', 'Nidwalden', 'Obwalden', 'Schaffhausen',
+    'Schwyz', 'Solothurn', 'St. Gallen', 'Thurgau', 'Ticino', 'Uri',
+    'Valais', 'Vaud', 'Zug', 'Zürich'
+  ];
 
   const features = [
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 40 }} />,
-      title: "KI-gestützte Optimierung",
-      description: "Unsere KI findet automatisch alle möglichen Abzüge"
+      title: "AI-Powered Optimization",
+      description: "Our AI automatically finds all possible deductions for maximum refunds"
+    },
+    {
+      icon: <MapIcon sx={{ fontSize: 40 }} />,
+      title: "All 26 Cantons",
+      description: "Complete support for every Swiss canton's tax requirements"
     },
     {
       icon: <LanguageIcon sx={{ fontSize: 40 }} />,
-      title: "Mehrsprachig",
-      description: "Verfügbar in Deutsch, Französisch, Italienisch und Englisch"
+      title: "4 Languages",
+      description: "Available in German, French, Italian and English"
+    },
+    {
+      icon: <CalculateIcon sx={{ fontSize: 40 }} />,
+      title: "Smart Deductions",
+      description: "Automatic calculation of commute, insurance, and home office deductions"
+    },
+    {
+      icon: <TimerIcon sx={{ fontSize: 40 }} />,
+      title: "20 Minutes",
+      description: "Complete your entire tax return in just 20 minutes"
     },
     {
       icon: <SecurityIcon sx={{ fontSize: 40 }} />,
-      title: "Schweizer Datenschutz",
-      description: "Ihre Daten bleiben in der Schweiz, verschlüsselt und sicher"
-    },
-    {
-      icon: <SupportAgentIcon sx={{ fontSize: 40 }} />,
-      title: "Experten-Support",
-      description: "Steuerexperten beantworten Ihre Fragen im Chat"
-    },
-    {
-      icon: <UpdateIcon sx={{ fontSize: 40 }} />,
-      title: "Immer aktuell",
-      description: "Automatische Updates für alle Gesetzesänderungen"
-    },
-    {
-      icon: <DevicesIcon sx={{ fontSize: 40 }} />,
-      title: "Auf allen Geräten",
-      description: "Arbeiten Sie am Computer, Tablet oder Smartphone"
+      title: "Swiss Security",
+      description: "Your data stays in Switzerland, encrypted and secure"
     }
   ];
 
@@ -96,55 +105,58 @@ const Homepage = () => {
   ];
 
   const stats = [
-    { value: "50,000+", label: "Zufriedene Nutzer" },
-    { value: "4.8/5", label: "Bewertung" },
-    { value: "26", label: "Alle Kantone" },
-    { value: "20 Min", label: "Durchschnittliche Zeit" }
+    { value: "5M+", label: "Tax returns annually" },
+    { value: "CHF 892", label: "Average refund" },
+    { value: "26", label: "All cantons covered" },
+    { value: "20 Min", label: "Completion time" }
   ];
 
   const pricingPlans = [
     {
-      name: "Basic",
-      price: "Kostenlos",
-      description: "Perfekt zum Ausprobieren",
+      name: "Free Trial",
+      price: "CHF 0",
+      description: "Try before you buy",
       features: [
-        { included: true, text: "Interview & Profilerstellung" },
-        { included: true, text: "Dokumenten-Checkliste" },
-        { included: true, text: "Basis-Steuerberechnung" },
-        { included: false, text: "Dokumenten-Upload" },
-        { included: false, text: "Digitale Einreichung" }
+        { included: true, text: "Tax interview & assessment" },
+        { included: true, text: "Document checklist" },
+        { included: true, text: "Basic tax calculation" },
+        { included: true, text: "Deduction suggestions" },
+        { included: false, text: "Document upload & OCR" },
+        { included: false, text: "Official submission" }
       ],
-      buttonText: "Kostenlos starten",
+      buttonText: "Start Free",
       buttonVariant: "outlined",
       featured: false
     },
     {
       name: "Standard",
-      price: "CHF 39",
-      description: "Komplette Steuererklärung",
+      price: "CHF 49",
+      description: "Complete tax filing",
       features: [
-        { included: true, text: "Alles aus Basic" },
-        { included: true, text: "Unbegrenzte Dokumente" },
-        { included: true, text: "OCR-Datenextraktion" },
-        { included: true, text: "Digitale Einreichung" },
-        { included: true, text: "E-Mail Support" }
+        { included: true, text: "Everything in Free Trial" },
+        { included: true, text: "Unlimited document uploads" },
+        { included: true, text: "OCR data extraction" },
+        { included: true, text: "All canton forms" },
+        { included: true, text: "Digital submission" },
+        { included: true, text: "Email support" }
       ],
-      buttonText: "Jetzt kaufen",
+      buttonText: "Get Started",
       buttonVariant: "contained",
       featured: true
     },
     {
-      name: "Premium",
+      name: "Professional",
       price: "CHF 99",
-      description: "Mit Expertenprüfung",
+      description: "Complex returns + review",
       features: [
-        { included: true, text: "Alles aus Standard" },
-        { included: true, text: "Prioritäts-Support" },
-        { included: true, text: "Expertenprüfung" },
-        { included: true, text: "Optimierungsvorschläge" },
-        { included: true, text: "Telefon-Support" }
+        { included: true, text: "Everything in Standard" },
+        { included: true, text: "Securities & investments" },
+        { included: true, text: "Real estate income" },
+        { included: true, text: "Expert review" },
+        { included: true, text: "Priority support" },
+        { included: true, text: "Phone support" }
       ],
-      buttonText: "Jetzt kaufen",
+      buttonText: "Go Professional",
       buttonVariant: "outlined",
       featured: false
     }
@@ -184,7 +196,7 @@ const Homepage = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE5E8 100%)',
+          background: 'linear-gradient(135deg, #003DA5 0%, #0052CC 100%)',
           pt: { xs: 8, md: 12 },
           pb: { xs: 8, md: 12 }
         }}
@@ -203,34 +215,71 @@ const Homepage = () => {
                     fontSize: { xs: '32px', md: '48px' },
                     fontWeight: 700,
                     mb: 3,
-                    color: 'text.primary'
+                    color: '#FFFFFF'
                   }}
                 >
                   Ihre Steuererklärung.
                   <br />
-                  <Box component="span" sx={{ color: 'primary.main' }}>
+                  <Box component="span" sx={{ color: '#FFD700' }}>
                     Einfach. Digital. Sicher.
                   </Box>
                 </Typography>
                 <Typography
                   variant="h5"
-                  color="text.secondary"
                   sx={{
                     mb: 4,
                     fontSize: { xs: '18px', md: '20px' },
-                    lineHeight: 1.6
+                    lineHeight: 1.6,
+                    color: 'rgba(255, 255, 255, 0.9)'
                   }}
                 >
                   Die intelligente Lösung für Ihre Schweizer Steuererklärung.
                   In nur 20 Minuten zur fertigen Steuererklärung.
                 </Typography>
+
+                {/* Canton Selector */}
+                <FormControl sx={{ mb: 3, minWidth: 250 }}>
+                  <Select
+                    value={selectedCanton}
+                    onChange={(e) => setSelectedCanton(e.target.value)}
+                    displayEmpty
+                    sx={{
+                      bgcolor: 'rgba(255, 255, 255, 0.95)',
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'rgba(255, 255, 255, 0.5)'
+                      },
+                      '& .MuiSelect-select': {
+                        py: 1.5,
+                        fontSize: '16px'
+                      }
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Wählen Sie Ihren Kanton...</em>
+                    </MenuItem>
+                    {cantons.map((canton) => (
+                      <MenuItem key={canton} value={canton}>
+                        {canton}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
                   <Button
                     variant="contained"
                     size="large"
                     endIcon={<ArrowForwardIcon />}
                     onClick={() => navigate('/register')}
-                    sx={{ px: 4, py: 1.5 }}
+                    sx={{
+                      px: 4,
+                      py: 1.5,
+                      bgcolor: '#FFD700',
+                      color: '#003DA5',
+                      fontWeight: 600,
+                      '&:hover': {
+                        bgcolor: '#FFC700'
+                      }
+                    }}
                   >
                     Kostenlos starten
                   </Button>
@@ -238,21 +287,53 @@ const Homepage = () => {
                     variant="outlined"
                     size="large"
                     onClick={() => document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' })}
-                    sx={{ px: 4, py: 1.5 }}
+                    sx={{
+                      px: 4,
+                      py: 1.5,
+                      borderColor: 'rgba(255, 255, 255, 0.7)',
+                      color: '#FFFFFF',
+                      '&:hover': {
+                        borderColor: '#FFFFFF',
+                        bgcolor: 'rgba(255, 255, 255, 0.1)'
+                      }
+                    }}
                   >
                     So funktioniert's
                   </Button>
                 </Stack>
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={2} flexWrap="wrap">
                   <Chip
                     icon={<CheckIcon />}
-                    label="Keine Kreditkarte erforderlich"
-                    sx={{ bgcolor: 'background.paper' }}
+                    label="No credit card required"
+                    sx={{
+                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      color: '#FFFFFF',
+                      '& .MuiChip-icon': {
+                        color: '#FFD700'
+                      }
+                    }}
+                  />
+                  <Chip
+                    icon={<MapIcon />}
+                    label="All 26 cantons"
+                    sx={{
+                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      color: '#FFFFFF',
+                      '& .MuiChip-icon': {
+                        color: '#FFD700'
+                      }
+                    }}
                   />
                   <Chip
                     icon={<SecurityIcon />}
-                    label="100% Datenschutz"
-                    sx={{ bgcolor: 'background.paper' }}
+                    label="Swiss data protection"
+                    sx={{
+                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      color: '#FFFFFF',
+                      '& .MuiChip-icon': {
+                        color: '#FFD700'
+                      }
+                    }}
                   />
                 </Stack>
               </motion.div>
@@ -293,6 +374,9 @@ const Homepage = () => {
         </Container>
       </Box>
 
+      {/* Video Carousel Section */}
+      <VideoCarousel />
+
       {/* Trust Indicators */}
       <Box sx={{ py: 6, bgcolor: 'background.paper' }}>
         <Container maxWidth="lg">
@@ -328,7 +412,7 @@ const Homepage = () => {
             gutterBottom
             sx={{ mb: 6, fontSize: { xs: '28px', md: '36px' } }}
           >
-            In 3 einfachen Schritten zur Steuererklärung
+            3 Simple Steps to Complete Your Tax Return
           </Typography>
           <Grid container spacing={4}>
             {steps.map((step, index) => (
@@ -388,7 +472,7 @@ const Homepage = () => {
             gutterBottom
             sx={{ mb: 6, fontSize: { xs: '28px', md: '36px' } }}
           >
-            Alles was Sie brauchen
+            Everything You Need for Tax Filing
           </Typography>
           <Grid container spacing={3}>
             {features.map((feature, index) => (
@@ -432,7 +516,7 @@ const Homepage = () => {
             gutterBottom
             sx={{ mb: 6, fontSize: { xs: '28px', md: '36px' } }}
           >
-            Transparente Preise
+            Simple, Transparent Pricing
           </Typography>
           <Grid container spacing={4} justifyContent="center">
             {pricingPlans.map((plan, index) => (
@@ -516,6 +600,9 @@ const Homepage = () => {
           </Grid>
         </Container>
       </Box>
+
+      {/* FAQ Section */}
+      <FAQSection />
 
       {/* Footer */}
       <Box sx={{ bgcolor: 'primary.footer', color: 'white', py: 6 }}>

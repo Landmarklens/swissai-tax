@@ -1,12 +1,16 @@
 .appBar {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  z-index: 1000;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  z-index: 1300 !important;
+  position: sticky !important;
+  top: 0 !important;
 }
 
 .toolbar {
   justify-content: space-between;
-  padding: 16px 0 30px !important;
+  padding: 16px 0 !important;
+  min-height: 80px !important;
+  background-color: #FFFFFF !important;
 }
 
 .mobileLogoText {
@@ -37,11 +41,11 @@
 }
 
 .menuLink {
-  color: #1a1a1a;
+  color: #003DA5;
   margin: 0 8px;
   cursor: pointer;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   padding: 4px 0;
   border-bottom: 2px solid transparent; /* Add transparent border */
   transition: border-color 0.3s ease;
@@ -52,7 +56,7 @@
 }
 
 .menuLink:hover {
-  border-bottom: 2px solid #1a1a1a !important;
+  border-bottom: 2px solid #003DA5 !important;
 }
 
 .actionContainer {
@@ -67,10 +71,11 @@
 }
 
 .loginButton {
-  border-color: #1a1a1a;
-  color: #1a1a1a;
+  border-color: #003DA5 !important;
+  color: #003DA5 !important;
   margin-right: 8px;
-  background-color: transparent;
+  background-color: transparent !important;
+  font-weight: 600 !important;
 }
 
 .drawerContent {
@@ -94,6 +99,19 @@
   border-color: #1a1a1a;
   color: #1a1a1a;
   background-color: transparent;
+}
+
+.getStartedButton {
+  background-color: #003DA5 !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  padding: 8px 20px !important;
+  margin-left: 8px !important;
+  box-shadow: none !important;
+}
+
+.getStartedButton:hover {
+  background-color: #0052CC !important;
 }
 
 @media (max-width: 1200px) {

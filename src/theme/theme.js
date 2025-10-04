@@ -1,30 +1,38 @@
 import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
-  cssVarPrefix: 'swissai-mui',
+  cssVarPrefix: 'swissai-tax',
   palette: {
     primary: {
-      main: '#DC0018',        // Swiss red
-      light: '#FF3333',       // Light red for hover states
-      lighter: '#FFE5E8',     // Very light red for backgrounds
-      dark: '#A50014',        // Dark red for emphasis
-      lightMain: '#DC001833', // Transparent red overlay
-      footer: '#1f2d5c'       // Keep original footer color
+      main: '#003DA5',        // Swiss federal blue - more professional for tax
+      light: '#0052CC',       // Light blue for hover states
+      lighter: '#E6F0FF',     // Very light blue for backgrounds
+      dark: '#002E7A',        // Dark blue for emphasis
+      lightMain: '#003DA533', // Transparent blue overlay
+      footer: '#1A1A1A',      // Professional dark footer
+      red: '#DC0018',         // Swiss red as accent
+      redLight: '#FFE5E8'     // Light red for alerts/highlights
+    },
+    aiCard: {
+      blue: '#003DA5',        // Blue for AI card buttons
+      lightBlue: '#E6F0FF',   // Light blue for AI card backgrounds
+      darkBlue: '#002E7A'     // Dark blue for AI card elements
     },
     secondary: {
       main: '#FFFFFF',        // Swiss white
       grey: '#F5F5F5',        // Light grey backgrounds
+      darkGrey: '#2C3E50',    // Professional dark grey
     },
     success: {
-      main: '#00A651',        // Success green
-      light: '#00A65120',     // Light green
+      main: '#00A651',        // Success green (refunds, savings)
+      light: '#E8F5E9',       // Light green background
       dark: '#007A3D'
     },
     accent: {
-      green: '#00A651',       // Success/completed green
+      green: '#00A651',       // Success/savings green
       blue: '#003DA5',        // Swiss federal blue
-      gold: '#FFB81C',        // Warning/attention gold
-      purple: '#6B46C1',      // Premium features
+      gold: '#FFB81C',        // Deadlines/attention gold
+      red: '#DC0018',         // Swiss red accent
     },
     text: {
       primary: '#1A1A1A',     // Almost black for main text
@@ -37,14 +45,12 @@ export const theme = createTheme({
     background: {
       default: '#FAFAFA',     // Light grey page background
       paper: '#FFFFFF',       // White card backgrounds
-      gradient: 'linear-gradient(135deg, #DC0018 0%, #A50014 100%)',
-      lightRed: '#FFE5E8',    // Light red tint
+      gradient: 'linear-gradient(135deg, #003DA5 0%, #002E7A 100%)', // Professional blue gradient
+      lightBlue: '#E6F0FF',   // Light blue for sections
       lightGrey: '#F8F8F8',   // Very light grey
-      iconColor: '#1f2d5c',
-      yellow: '#fefbe9',
-      darkYellow: '#ab6400',
-      tenantBlue: '#E0E7FD',
-      tenantLightBlue: '#AEC2FF'
+      iconColor: '#003DA5',   // Federal blue for icons
+      sectionAlt: '#F0F4F8',  // Alternative section background
+      cardHover: '#FAFBFC',   // Card hover state
     },
     error: {
       main: '#D32F2F',        // Error red
@@ -141,39 +147,41 @@ export const theme = createTheme({
         root: {
           textTransform: 'none',
           borderRadius: '8px',
-          padding: '10px 20px',
+          padding: '12px 24px',
           fontSize: '16px',
           fontWeight: 500,
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s ease',
           '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: '0 8px 16px rgba(220, 0, 24, 0.2)'
+            // More conservative hover - no translateY
+            boxShadow: '0 4px 12px rgba(0, 61, 165, 0.15)'
           }
         },
         contained: {
-          backgroundColor: '#DC0018',
+          backgroundColor: '#003DA5',
           color: '#FFFFFF',
           '&:hover': {
-            backgroundColor: '#A50014'
+            backgroundColor: '#002E7A'
           },
           '&:disabled': {
-            backgroundColor: '#FFE5E8',
+            backgroundColor: '#E6F0FF',
             color: '#999999'
           }
         },
         outlined: {
-          borderColor: '#DC0018',
-          color: '#DC0018',
+          borderColor: '#003DA5',
+          color: '#003DA5',
           backgroundColor: 'transparent',
+          borderWidth: '2px',
           '&:hover': {
-            borderColor: '#A50014',
-            backgroundColor: '#FFE5E8'
+            borderColor: '#002E7A',
+            backgroundColor: '#E6F0FF',
+            borderWidth: '2px'
           }
         },
         text: {
-          color: '#DC0018',
+          color: '#003DA5',
           '&:hover': {
-            backgroundColor: '#FFE5E8'
+            backgroundColor: '#E6F0FF'
           }
         }
       }
@@ -197,8 +205,12 @@ export const theme = createTheme({
           fontWeight: 500
         },
         colorPrimary: {
-          backgroundColor: '#FFE5E8',
-          color: '#DC0018'
+          backgroundColor: '#E6F0FF',
+          color: '#003DA5'
+        },
+        colorSuccess: {
+          backgroundColor: '#E8F5E9',
+          color: '#00A651'
         }
       }
     },
@@ -211,7 +223,7 @@ export const theme = createTheme({
         },
         bar: {
           borderRadius: '4px',
-          backgroundColor: '#DC0018'
+          backgroundColor: '#003DA5'
         }
       }
     },

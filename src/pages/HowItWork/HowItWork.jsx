@@ -1,14 +1,14 @@
 import React from 'react';
 import Layout from '../Layout/Layout';
-import HowItWorks from '../../components/sections/workSection/WorkSection';
+import TaxWorkSection from '../../components/sections/workSection/TaxWorkSection';
 import { useTranslation } from 'react-i18next';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
 
 const HowItWork = () => {
   const { t } = useTranslation();
-  const heading = t('How It Works');
+  const heading = t('How SwissAI Tax Works');
   const text = t(
-    'Discover how Home Al transforms your apartment search into a seamless experience.Our intelligent platform leverages advanced algorithms to connect you with the best listings based on your unique preferences.'
+    'Complete your tax return in just 20 minutes with our AI-powered assistant. Available in all 26 Swiss cantons, supporting German, French, Italian and English.'
   );
   return (
     <>
@@ -17,7 +17,7 @@ const HowItWork = () => {
         descriptionKey="meta.howitworks.description"
       />
       <Layout heading={heading} text={text}>
-        <HowItWorks title={t('Explore the Process')} />
+        <TaxWorkSection title={t('Your Tax Filing Journey')} />
       </Layout>
     </>
   );

@@ -162,21 +162,14 @@ const Header = ({ handleClickOpen }) => {
 
   return (
     <>
-      <AppBar position="static" className={styles.appBar}>
+      <AppBar position="sticky" className={styles.appBar} sx={{ backgroundColor: '#FFFFFF', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <Container maxWidth="xl">
           <Toolbar className={styles.toolbar}>
             {isMobile ? (
               <>
                 <Box>
-                  {/* <Typography
-                    onClick={() => navigate("/")}
-                    variant="h6"
-                    className={styles.mobileLogoText}
-                  >
-                    HOME AI
-                  </Typography> */}
                   <Link to="/" className={styles.logoLink}>
-                    <ImageComponent name="logo" height={30} alt={t('HOME AI Logo')} />
+                    <ImageComponent name="logo-swissai" height={45} alt={t('SwissAI Tax Logo')} />
                   </Link>
                 </Box>
                 <IconButton
@@ -193,9 +186,9 @@ const Header = ({ handleClickOpen }) => {
               </>
             ) : (
               <Box className={styles.desktopNav}>
-                <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Link to="/" className={styles.logoLink}>
-                    <ImageComponent name="logo" height={30} alt={t('HOME AI Logo')} />
+                    <ImageComponent name="logo-swissai" height={55} alt={t('SwissAI Tax Logo')} />
                   </Link>
                 </Box>
                 <Box className={styles.menuContainer}>
@@ -223,7 +216,9 @@ const Header = ({ handleClickOpen }) => {
                   ))}
                 </Box>
                 <Box className={styles.actionContainer}>
-                  <LanguageSelector variant="menu" />
+                  <Box sx={{ mr: 2 }}>
+                    <LanguageSelector variant="menu" />
+                  </Box>
                   {!isLoggedIn && (
                     <Button
                       variant="outlined"
@@ -233,12 +228,12 @@ const Header = ({ handleClickOpen }) => {
                     </Button>
                   )}
 
-                  {/* <Button
+                  <Button
                     variant="contained"
                     onClick={getStartedHandler}
                     className={styles.getStartedButton}>
-                    {t('Place an Ad')}
-                  </Button> */}
+                    {t('Get Started')}
+                  </Button>
 
                   {isLoggedIn && <PersonalAccountIcon />}
                 </Box>

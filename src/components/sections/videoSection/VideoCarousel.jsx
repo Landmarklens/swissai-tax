@@ -8,77 +8,110 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+// Tax service video content - Update these URLs when actual videos are available
 const VIDEOS_BY_LANGUAGE = {
   en: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/CaffeAna.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/CaffeAna-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/en/how-it-works.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/en/how-it-works-poster.jpg',
+      title: 'How SwissAI Tax Works',
+      description: 'Complete your tax return in 20 minutes'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/FamTutorial.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/FamTutorial-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/en/document-upload.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/en/document-upload-poster.jpg',
+      title: 'Document Upload Tutorial',
+      description: 'Easy OCR scanning explained'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/interviewMiha.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/interviewMiha-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/en/testimonial-1.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/en/testimonial-1-poster.jpg',
+      title: 'Customer Success Story',
+      description: 'CHF 2,500 refund achieved'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/LeaTuorial.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/LeaTuorial-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/en/deductions-guide.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/en/deductions-guide-poster.jpg',
+      title: 'Maximize Your Deductions',
+      description: 'Top 10 deductions explained'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/street1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/street1-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/en/canton-selection.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/en/canton-selection-poster.jpg',
+      title: 'All 26 Cantons Supported',
+      description: 'File anywhere in Switzerland'
     }
   ],
   de: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/Ch1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/Ch1-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/de/so-funktionierts.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/de/so-funktionierts-poster.jpg',
+      title: 'So funktioniert SwissAI Tax',
+      description: 'Steuererklärung in 20 Minuten'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/ch2.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/ch2-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/de/dokumente-hochladen.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/de/dokumente-hochladen-poster.jpg',
+      title: 'Dokumente hochladen',
+      description: 'Einfache OCR-Erkennung erklärt'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/ch3.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/ch3-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/de/kundenerfahrung-1.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/de/kundenerfahrung-1-poster.jpg',
+      title: 'Kundenerfolgsgeschichte',
+      description: 'CHF 2\'500 Rückerstattung erhalten'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/ch4.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/ch4-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/de/abzuege-guide.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/de/abzuege-guide-poster.jpg',
+      title: 'Maximale Abzüge',
+      description: 'Top 10 Abzüge erklärt'
     }
   ],
   fr: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/Fr1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/Fr1-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/fr/comment-ca-marche.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/fr/comment-ca-marche-poster.jpg',
+      title: 'Comment fonctionne SwissAI Tax',
+      description: 'Déclaration en 20 minutes'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/fr2.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/fr2-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/fr/telecharger-documents.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/fr/telecharger-documents-poster.jpg',
+      title: 'Télécharger vos documents',
+      description: 'OCR simple expliqué'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/fr3.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/fr3-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/fr/temoignage-1.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/fr/temoignage-1-poster.jpg',
+      title: 'Témoignage client',
+      description: 'CHF 2\'500 de remboursement'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/fr4.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/fr4-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/fr/guide-deductions.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/fr/guide-deductions-poster.jpg',
+      title: 'Maximisez vos déductions',
+      description: 'Top 10 déductions expliquées'
     }
   ],
   it: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/it/It1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/It1-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/it/come-funziona.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/it/come-funziona-poster.jpg',
+      title: 'Come funziona SwissAI Tax',
+      description: 'Dichiarazione in 20 minuti'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/it/it2.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/it2-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/it/carica-documenti.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/it/carica-documenti-poster.jpg',
+      title: 'Carica i documenti',
+      description: 'OCR semplice spiegato'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/it/It3.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/It3-poster.jpg'
+      src: 'https://s3.us-east-1.amazonaws.com/swissai-tax/videos/it/testimonianza-1.mp4',
+      poster: 'https://s3.us-east-1.amazonaws.com/swissai-tax/posters/it/testimonianza-1-poster.jpg',
+      title: 'Storia di successo',
+      description: 'CHF 2\'500 di rimborso'
     }
   ]
 };
@@ -109,19 +142,25 @@ const VideoCarousel = () => {
     <Box
       sx={{
         padding: '60px 0 80px',
-        backgroundColor: theme.palette.background.lightBlue,
+        backgroundColor: theme.palette.background.sectionAlt || '#F0F4F8',
         textAlign: 'center'
       }}
     >
-      <Typography 
-        variant="h5" 
-        fontWeight={700} 
-        fontSize={'35px'} 
-        align="center" 
+      <Typography
+        variant="h2"
+        fontWeight={600}
+        align="center"
         gutterBottom
-        sx={{ mb: '40px' }}
+        sx={{ mb: 2, fontSize: { xs: '28px', md: '36px' } }}
       >
-        {t('Video Testimonials')}
+        {t('Learn How SwissAI Tax Works')}
+      </Typography>
+      <Typography
+        variant="body1"
+        align="center"
+        sx={{ mb: 4, color: 'text.secondary', maxWidth: 600, mx: 'auto' }}
+      >
+        {t('Watch our video tutorials and success stories from satisfied customers across Switzerland')}
       </Typography>
       <Swiper
         modules={[Navigation, Pagination]}
@@ -147,46 +186,76 @@ const VideoCarousel = () => {
       >
         {videos.map((video, idx) => (
           <SwiperSlide key={idx} style={{ height: 'auto' }}>
-            <Box sx={{ position: 'relative', width: '100%' }}>
-              <Box
-                component="video"
-                src={video.src}
-                poster={video.poster}
-                ref={(el) => {
-                  videoRefs.current[idx] = el;
-                }}
-                controls
-                preload="none"
-                sx={{ width: '100%', borderRadius: '8px', objectFit: 'cover' }}
-              />
-              {/* Play button overlay */}
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 80,
-                  height: 80,
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  pointerEvents: 'none',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-                  '&::before': {
-                    content: '""',
-                    width: 0,
-                    height: 0,
-                    borderStyle: 'solid',
-                    borderWidth: '20px 0 20px 35px',
-                    borderColor: 'transparent transparent transparent #3f63ec',
-                    marginLeft: '8px'
-                  }
-                }}
-              />
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ position: 'relative', width: '100%', mb: 2 }}>
+                <Box
+                  sx={{
+                    width: '100%',
+                    paddingTop: '56.25%', // 16:9 aspect ratio
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #003DA5 0%, #0052CC 100%)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {/* Video placeholder content */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'rgba(0, 0, 0, 0.3)'
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
+                      {video.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)', px: 2, textAlign: 'center' }}>
+                      {video.description}
+                    </Typography>
+                  </Box>
+                  {/* Play button overlay */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      width: 60,
+                      height: 60,
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+                      '&::before': {
+                        content: '""',
+                        width: 0,
+                        height: 0,
+                        borderStyle: 'solid',
+                        borderWidth: '15px 0 15px 25px',
+                        borderColor: `transparent transparent transparent ${theme.palette.primary.main}`,
+                        marginLeft: '5px'
+                      }
+                    }}
+                  />
+                </Box>
+              </Box>
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 500 }}>
+                {video.title || t('Video Tutorial')}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {video.description || t('Learn more about our service')}
+              </Typography>
             </Box>
           </SwiperSlide>
         ))}

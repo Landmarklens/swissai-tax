@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useParams, Navigate, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Header from '../header/Header';
+import { Box } from '@mui/material';
 
 const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'it'];
 
@@ -22,7 +24,12 @@ const LanguageWrapper = () => {
     return <Navigate to="/en" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <Box sx={{ minHeight: '100vh' }}>
+      <Header />
+      <Outlet />
+    </Box>
+  );
 };
 
 export default LanguageWrapper;

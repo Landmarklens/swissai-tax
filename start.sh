@@ -8,7 +8,7 @@ export PYTHONPATH="/app/backend:$PYTHONPATH"
 if [ ! -d "/root/.local/lib/python3.11/site-packages/fastapi" ]; then
     echo "Installing dependencies..."
     cd /app/backend
-    python3 -m pip install -r requirements-apprunner.txt
+    python3 -m pip install -r requirements.txt
 fi
 
 # Create database if needed

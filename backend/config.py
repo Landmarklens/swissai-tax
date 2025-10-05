@@ -9,33 +9,33 @@ logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
-    # Stripe settings
-    STRIPE_WEBHOOK_SECRET: str
-    STRIPE_SECRET_KEY: str
-    STRIPE_PUBLISHABLE_KEY: str
-    STRIPE_MONTHLY: str
+    # Stripe settings (optional for SwissAI Tax)
+    STRIPE_WEBHOOK_SECRET: str | None = Field(None)
+    STRIPE_SECRET_KEY: str | None = Field(None)
+    STRIPE_PUBLISHABLE_KEY: str | None = Field(None)
+    STRIPE_MONTHLY: str | None = Field(None)
 
     # JWT settings
-    SECRET_KEY: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    SECRET_KEY: str = Field("your-secret-key-change-in-production")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # Database settings
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_HOST: str
-    POSTGRES_PORT: str
-    POSTGRES_DB: str
+    POSTGRES_USER: str = Field("webscrapinguser")
+    POSTGRES_PASSWORD: str = Field("IXq3IC0Uw6StMkBhb4mb")
+    POSTGRES_HOST: str = Field("webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com")
+    POSTGRES_PORT: str = Field("5432")
+    POSTGRES_DB: str = Field("swissai_tax")
 
-    # Google OAuth settings
-    GOOGLE_CLIENT_ID: str
-    GOOGLE_CLIENT_SECRET: str
-    GOOGLE_REDIRECT_URI: str
+    # Google OAuth settings (optional for SwissAI Tax)
+    GOOGLE_CLIENT_ID: str | None = Field(None)
+    GOOGLE_CLIENT_SECRET: str | None = Field(None)
+    GOOGLE_REDIRECT_URI: str | None = Field(None)
 
     # AWS settings
     AWS_ACCESS_KEY_ID: str | None = Field(None)
     AWS_SECRET_ACCESS_KEY: str | None = Field(None)
-    AWS_REGION: str
-    AWS_S3_BUCKET_NAME: str
+    AWS_REGION: str = Field("us-east-1")
+    AWS_S3_BUCKET_NAME: str = Field("swissai-tax-documents-1758721021")
 
     # OTHER
     ENVIRONMENT: str = Field("production")  # Added for CORS debug middleware

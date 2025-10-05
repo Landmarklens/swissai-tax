@@ -3,7 +3,11 @@ runtime: python311
 build:
   commands:
     build:
+      - echo "Installing Python dependencies..."
+      - python3 -m pip install --upgrade pip
       - python3 -m pip install --no-cache-dir -r backend/requirements.txt
+      - echo "Verifying pydantic-settings installation..."
+      - python3 -c "import pydantic_settings; print('pydantic-settings installed successfully')"
 run:
   runtime-version: 3.11
   command: bash start.sh

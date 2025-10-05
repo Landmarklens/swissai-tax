@@ -219,33 +219,6 @@ const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 8 }}>
-      {/* Header */}
-      <Box textAlign="center" mb={6}>
-        <Typography variant="h6" color="text.secondary">
-          {t('Find answers to common questions about HomeAI')}
-        </Typography>
-      </Box>
-
-      {/* User Type Toggle */}
-      <Box display="flex" justifyContent="center" mb={4}>
-        <ToggleButtonGroup
-          value={userType}
-          exclusive
-          onChange={handleUserTypeChange}
-          aria-label="user type"
-          size="large"
-        >
-          <ToggleButton value="tenant" aria-label="tenant">
-            <HomeIcon sx={{ mr: 1 }} />
-            {t("I'm a Tenant")}
-          </ToggleButton>
-          <ToggleButton value="landlord" aria-label="landlord">
-            <BusinessIcon sx={{ mr: 1 }} />
-            {t("I'm a landlord")}
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
-
       {/* Search Bar */}
       <Paper elevation={2} sx={{ p: 2, mb: 4 }}>
         <TextField

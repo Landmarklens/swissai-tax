@@ -168,15 +168,19 @@ const Header = ({ handleClickOpen }) => {
             {isMobile ? (
               <>
                 <Box>
-                  {/* <Typography
-                    onClick={() => navigate("/")}
-                    variant="h6"
-                    className={styles.mobileLogoText}
-                  >
-                    HOME AI
-                  </Typography> */}
-                  <Link to="/" className={styles.logoLink}>
-                    <ImageComponent name="logo" height={30} alt={t('HOME AI Logo')} />
+                  <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: '24px',
+                        color: '#DC0018',
+                        fontFamily: 'SF Pro Display',
+                        letterSpacing: '-0.5px'
+                      }}
+                    >
+                      Swiss<Box component="span" sx={{ color: '#003DA5' }}>Tax</Box>
+                    </Typography>
                   </Link>
                 </Box>
                 <IconButton
@@ -194,8 +198,19 @@ const Header = ({ handleClickOpen }) => {
             ) : (
               <Box className={styles.desktopNav}>
                 <Box>
-                  <Link to="/" className={styles.logoLink}>
-                    <ImageComponent name="logo" height={30} alt={t('HOME AI Logo')} />
+                  <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: '28px',
+                        color: '#DC0018',
+                        fontFamily: 'SF Pro Display',
+                        letterSpacing: '-0.5px'
+                      }}
+                    >
+                      Swiss<Box component="span" sx={{ color: '#003DA5' }}>Tax</Box>
+                    </Typography>
                   </Link>
                 </Box>
                 <Box className={styles.menuContainer}>

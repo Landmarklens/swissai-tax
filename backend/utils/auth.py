@@ -10,10 +10,9 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from config import settings
 from db.session import get_db
-from models import User
-from models.user import UserType
+from models.swisstax import User
 from schemas.auth import UserLoginSchema
-from services.user import get_user_by_email
+from services.user_service import get_user_by_email
 from utils.password import verify_password
 
 ALGORITHM = "HS256"
@@ -35,12 +34,13 @@ def token_response(token: str, token_type: str = "bearer") -> dict[str, str]:
     }
 
 
-def sign_jwt(email: str, user_type: UserType = UserType.TENANT) -> dict[str, str]:
+def sign_jwt(email: str, user_type: Optional[str] = None) -> dict[str, str]:
     payload = {
         "email": email,
-        "user_type": user_type.value,
         "exp": time.time() + (settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)  # Convert minutes to seconds
     }
+    if user_type:
+        payload["user_type"] = user_type
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm=ALGORITHM)
 
     return token_response(token)

@@ -91,11 +91,12 @@ const Layout = ({ children, backgroundColor, heading, text, isTenants, isOwners,
       <WebSiteSchema />
       <BreadcrumbSchema />
 
-      <Box sx={{ backgroundColor: theme.palette.background.lightBlue }}>
+      <Box sx={{ backgroundColor: theme.palette.background.default }}>
         <Header />
         {!isFullScreen && !paths.includes(location.pathname) && (
           <Box
             sx={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE5E8 100%)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -201,8 +202,8 @@ const Layout = ({ children, backgroundColor, heading, text, isTenants, isOwners,
       <Box sx={{ backgroundColor: backgroundColor }}>{children}</Box>
       <Box sx={{ display: paths.includes(location.pathname) && 'none' }}>
         <AICard
-          background={theme.palette.background.lightBlue}
-          buttonColor={theme.palette.aiCard.blue}
+          background={theme.palette.background.default}
+          buttonColor={theme.palette.accent.blue}
           elementColor={'#e9eeff'}
           textColor={'black'}
           space={0}

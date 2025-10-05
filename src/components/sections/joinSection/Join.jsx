@@ -15,7 +15,7 @@ import authService from '../../../services/authService';
 import { counter } from '../../../store/slices/counterSlice';
 import { jsonData } from '../../../db';
 
-const Join = ({ userType = 'tenant' }) => {
+const Join = () => {
   const { t } = useTranslation();
   const [count, setCounter] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,7 +25,6 @@ const Join = ({ userType = 'tenant' }) => {
   const isAuthenticated = authService.isAuthenticated();
 
   const _count = useRandomUserCounter();
-  const _landlordCount = useLandlordCounter();
 
   const dispatch = useDispatch();
   const getCount = async () => {
@@ -49,7 +48,7 @@ const Join = ({ userType = 'tenant' }) => {
       setSearchParams({ login: true });
       return;
     } else {
-      navigate('/plan');
+      navigate('/tax-filing/interview');
     }
   };
 
@@ -71,9 +70,7 @@ const Join = ({ userType = 'tenant' }) => {
         component="h3"
         sx={{ fontWeight: 700, fontSize: '35px', textAlign: 'center' }}
       >
-        {userType === 'landlord'
-          ? t('Trusted by Swiss Owners')
-          : t('Join us')}
+        {t('Trusted by Swiss Taxpayers')}
       </Typography>
 
       <Box>
@@ -92,15 +89,8 @@ const Join = ({ userType = 'tenant' }) => {
             fontWeight: 700
           }}
         >
-          {userType === 'landlord'
-            ? t('Join') + ` ${_landlordCount}+ ` + t('landlords automating with AI')
-            : `${_count ?? 0} ${t('new searches started Today')}`}
+          {`${_count ?? 0} ${t('tax filings started this week')}`}
         </Typography>
-        {/* <Typography
-          sx={{ textAlign: "center", mt: 1, fontSize: "18px", fontWeight: 400 }}
-        >
-          {t("Available Ads")}
-        </Typography> */}
       </Box>
 
       <Button

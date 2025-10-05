@@ -1,6 +1,5 @@
+from typing import Optional
 from pydantic import BaseModel, Field, EmailStr, HttpUrl
-
-from models.user import UserType
 
 
 class GoogleLoginOut(BaseModel):
@@ -10,4 +9,4 @@ class GoogleLoginOut(BaseModel):
 class UserLoginSchema(BaseModel):
     email: EmailStr = Field(...)
     password: str = Field(...)
-    user_type: UserType | None = Field(UserType.TENANT)
+    user_type: Optional[str] = Field(None)  # Optional for SwissAI Tax (no user types)

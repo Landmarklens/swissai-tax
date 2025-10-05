@@ -35,6 +35,9 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Header from '../../components/header/Header';
+import Footer from '../../components/footer/Footer';
+import VideoCarousel from '../../components/sections/videoSection/VideoCarousel';
 
 const Homepage = () => {
   const theme = useTheme();
@@ -150,37 +153,9 @@ const Homepage = () => {
     }
   ];
 
-  const footerLinks = [
-    {
-      title: "Produkt",
-      links: [
-        { text: "Funktionen", href: "/features" },
-        { text: "Preise", href: "/pricing" },
-        { text: "Kantone", href: "/cantons" },
-        { text: "Sicherheit", href: "/security" }
-      ]
-    },
-    {
-      title: "Support",
-      links: [
-        { text: "Hilfe-Center", href: "/help" },
-        { text: "Anleitungen", href: "/guides" },
-        { text: "FAQ", href: "/faq" },
-        { text: "Kontakt", href: "/contact" }
-      ]
-    },
-    {
-      title: "Rechtliches",
-      links: [
-        { text: "Datenschutz", href: "/privacy" },
-        { text: "AGB", href: "/terms" },
-        { text: "Impressum", href: "/impressum" }
-      ]
-    }
-  ];
-
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
+      <Header />
       {/* Hero Section */}
       <Box
         sx={{
@@ -263,12 +238,29 @@ const Homepage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <Box sx={{ position: 'relative' }}>
-                  <img
-                    src="/images/tax-hero-illustration.svg"
-                    alt="Tax filing illustration"
-                    style={{ width: '100%', height: 'auto' }}
-                  />
+                <Box sx={{
+                  position: 'relative',
+                  height: '400px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%)',
+                      borderRadius: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '2px solid rgba(255, 107, 107, 0.1)'
+                    }}
+                  >
+                    <Typography variant="h1" sx={{ fontSize: { xs: '60px', md: '120px' }, opacity: 0.1 }}>
+                      🇨🇭
+                    </Typography>
+                  </Box>
                   <Card
                     sx={{
                       position: 'absolute',
@@ -378,6 +370,9 @@ const Homepage = () => {
           </Grid>
         </Container>
       </Box>
+
+      {/* Video Testimonials */}
+      <VideoCarousel />
 
       {/* Features Grid */}
       <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
@@ -518,62 +513,7 @@ const Homepage = () => {
       </Box>
 
       {/* Footer */}
-      <Box sx={{ bgcolor: 'primary.footer', color: 'white', py: 6 }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={3}>
-              <Typography variant="h6" gutterBottom>
-                SwissAI Tax
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 2 }}>
-                Die intelligente Lösung für Ihre Schweizer Steuererklärung.
-              </Typography>
-              <Stack direction="row" spacing={1}>
-                <IconButton color="inherit" size="small">
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton color="inherit" size="small">
-                  <LinkedInIcon />
-                </IconButton>
-                <IconButton color="inherit" size="small">
-                  <TwitterIcon />
-                </IconButton>
-              </Stack>
-            </Grid>
-            {footerLinks.map((section, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Typography variant="h6" gutterBottom>
-                  {section.title}
-                </Typography>
-                {section.links.map((link, idx) => (
-                  <Box key={idx}>
-                    <Typography
-                      variant="body2"
-                      component="a"
-                      href={link.href}
-                      sx={{
-                        color: 'inherit',
-                        textDecoration: 'none',
-                        display: 'block',
-                        py: 0.5,
-                        '&:hover': {
-                          textDecoration: 'underline'
-                        }
-                      }}
-                    >
-                      {link.text}
-                    </Typography>
-                  </Box>
-                ))}
-              </Grid>
-            ))}
-          </Grid>
-          <Divider sx={{ my: 4, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
-          <Typography variant="body2" align="center">
-            © 2024 SwissAI Tax. Alle Rechte vorbehalten. Made with ❤️ in Switzerland
-          </Typography>
-        </Container>
-      </Box>
+      <Footer />
     </Box>
   );
 };

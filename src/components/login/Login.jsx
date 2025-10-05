@@ -63,7 +63,6 @@ const SocialButton = styled(Button)(({ theme }) => ({
 
 const LoginSignupModal = ({ open, onClose }) => {
   const { t } = useTranslation();
-  const [userType, setUserType] = useState('tenant');
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
   const [hasLoginError, setHasLoginError] = useState(false);
@@ -72,13 +71,7 @@ const LoginSignupModal = ({ open, onClose }) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const savedInput = localStorage.getItem('input');
-      if (savedInput) {
-        const decodedInput = decodeURIComponent(savedInput);
-        sessionStorage.setItem('temp_input', decodedInput);
-      }
-
-      const googleAuthUrl = await authService.initiateGoogleLogin(userType);
+      const googleAuthUrl = await authService.initiateGoogleLogin('tenant'); // Default user type for tax app
 
       if (googleAuthUrl && googleAuthUrl.authorization_url) {
         window.location.href = googleAuthUrl.authorization_url;
@@ -91,65 +84,27 @@ const LoginSignupModal = ({ open, onClose }) => {
       toast.error(t('Failed to initiate Google Sign-In'));
     }
   };
+
   const urlParams = new URLSearchParams(window.location.search);
   const access_token = urlParams.get('access_token');
   const token_type = urlParams.get('token_type');
-  useEffect(() => {
-    const decoded = access_token ? jwtDecode(access_token) : null;
-    const userType = decoded ? decoded?.user_type : null;
 
+  useEffect(() => {
     if (access_token) {
       localStorage.setItem('user', JSON.stringify({ access_token, token_type }));
-
-      if (userType === 'landlord') {
-        navigate('/owner-account?section=dashboard');
-      }
-
-      if (userType === 'tenant') {
-        const plan = localStorage.getItem('plan');
-        if (plan) {
-          localStorage.removeItem('plan');
-          return navigate(`/payment/${plan}`);
-        }
-        
-        // Check for saved search input (from localStorage or sessionStorage)
-        const savedInput = localStorage.getItem('input') || sessionStorage.getItem('temp_input');
-        if (savedInput) {
-          const params = new URLSearchParams({ input: savedInput });
-          navigate(`/chat?${params.toString()}`);
-          localStorage.removeItem('input');
-          sessionStorage.removeItem('temp_input');
-        } else {
-          navigate('/my-account?section=searches');
-        }
-      }
+      // Redirect to tax filing interview after Google OAuth
+      navigate('/tax-filing/interview');
     }
   }, [navigate, access_token]);
-
-  const handleChange = (option) => {
-    setUserType(option);
-  };
 
   const handleMainLogin = () => {
     setShowLoginForm(true);
     setShowSignupForm(false);
-    const savedInput = localStorage.getItem('input');
-    localStorage.clear();
-    if (savedInput) {
-      const decodedInput = decodeURIComponent(savedInput);
-      localStorage.setItem('input', decodedInput);
-    }
   };
 
   const handleSignUp = () => {
     setShowSignupForm(true);
     setShowLoginForm(false);
-    const savedInput = localStorage.getItem('input');
-    localStorage.clear();
-    if (savedInput) {
-      const decodedInput = decodeURIComponent(savedInput);
-      localStorage.setItem('input', decodedInput);
-    }
   };
 
   const handleBackToMain = () => {
@@ -178,33 +133,10 @@ const LoginSignupModal = ({ open, onClose }) => {
       if (login.access_token) {
         const profileAction = await dispatch(fetchUserProfile());
         if (fetchUserProfile.fulfilled.match(profileAction)) {
-          const userProfile = profileAction.payload;
-
           onClose();
-          
-          // Check if there's a saved search input (only for tenants)
-          const savedInput = localStorage.getItem('input');
-          if (savedInput && userProfile.user_type === 'tenant') {
-            // Redirect to chat with the saved input
-            const params = new URLSearchParams({ input: savedInput });
-            navigate(`/chat?${params.toString()}`);
-            // Clear the saved input after use
-            localStorage.removeItem('input');
-          } else if (type) {
-            // After signup, redirect based on user_type from profile
-            if (userProfile.user_type === 'landlord') {
-              navigate('/owner-account?section=dashboard');
-            } else {
-              navigate('/my-account?section=searches');
-            }
-          } else {
-            // Regular login redirect based on user_type
-            if (userProfile.user_type === 'landlord') {
-              navigate('/owner-account?section=dashboard');
-            } else {
-              navigate('/my-account?section=searches');
-            }
-          }
+
+          // Redirect to tax filing interview
+          navigate('/tax-filing/interview');
         } else if (fetchUserProfile.rejected.match(profileAction)) {
           toast.error(profileAction?.error?.message || t('Login failed'));
           setHasLoginError(true);
@@ -398,10 +330,8 @@ const LoginSignupModal = ({ open, onClose }) => {
               {showSignupForm && (
                 <ErrorBoundary>
                   <SignupForm
-                    userType={userType}
                     onBack={handleBackToMain}
                     onSubmit={handleSignupSubmit}
-                    onUserTypeChange={setUserType}
                   />
                 </ErrorBoundary>
               )}

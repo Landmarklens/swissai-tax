@@ -15,7 +15,7 @@ const AppRoutesWithLanguage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     // Update document title - this will be replaced with SEOHelmet later
-    document.title = 'HomeAI';
+    document.title = 'SwissTax';
   }, [location.pathname]);
 
   // Get current language from URL or fallback

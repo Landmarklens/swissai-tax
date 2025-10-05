@@ -22,15 +22,19 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     alignItems: 'center',
     gap: theme.spacing(1),
     padding: '8px 12px',
+    color: '#333',
   },
   '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: 'rgba(0, 0, 0, 0.23)',
   },
   '&:hover .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.primary.main,
   },
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.primary.main,
+  },
+  '& .MuiSvgIcon-root': {
+    color: '#333',
   },
 }));
 

@@ -17,7 +17,7 @@ const EnhancedFAQ = lazy(() =>
 
 const FAQ = () => {
   const { t } = useTranslation();
-  
+
   return (
     <>
       <SEOHelmet
@@ -25,8 +25,12 @@ const FAQ = () => {
         descriptionKey="meta.faq.description"
       />
       <FAQSchema />
-      <Layout backgroundColor={'linear-gradient(to bottom, #d2dbf8, #f7f9ff)'}>
-        <Suspense 
+      <Layout
+        heading={t('Frequently Asked Questions')}
+        text={t('Get answers to common questions about Swiss tax filing, deductions, security, and our AI-powered platform.')}
+        backgroundColor={'linear-gradient(to bottom, #d2dbf8, #f7f9ff)'}
+      >
+        <Suspense
           fallback={
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
               <CircularProgress />

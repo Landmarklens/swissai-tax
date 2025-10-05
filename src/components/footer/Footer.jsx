@@ -85,7 +85,8 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        borderTop: '1px solid #d4d4d4'
+        background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE5E8 100%)',
+        borderTop: '1px solid rgba(255, 107, 107, 0.1)'
       }}>
       <Container maxWidth="xl">
         <Box>
@@ -104,15 +105,19 @@ const Footer = () => {
                   justifyContent: { xs: 'center', md: 'flex-start' },
                   mb: { xs: 2, md: 0 }
                 }}>
-                  <Link
-                    to="/"
-                    style={{
-                      textDecoration: 'none',
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: theme.palette.primary.footer
-                    }}>
-                    <ImageComponent name="logo" height={30} alt="HOME AI Logo" />
+                  <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: '28px',
+                        color: '#DC0018',
+                        fontFamily: 'SF Pro Display',
+                        letterSpacing: '-0.5px'
+                      }}
+                    >
+                      Swiss<Box component="span" sx={{ color: '#003DA5' }}>Tax</Box>
+                    </Typography>
                   </Link>
                 </Box>
               </Grid>
@@ -151,7 +156,7 @@ const Footer = () => {
                         mt: { xs: 2, sm: 0 },
                         textAlign: 'center'
                       }}>
-                      © HomeAI - Made in Switzerland with ❤️
+                      © SwissTax - Made in Switzerland with ❤️
                     </Typography>
                   </Box>
                 </Grid>
@@ -180,7 +185,7 @@ const Footer = () => {
 
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' } }}>
                     <EmailIcon sx={{ ...iconStyle, cursor: 'auto' }} />
-                    <StyledLink to="mailto:contact@homeai.ch">contact@homeai.ch</StyledLink>
+                    <StyledLink to="mailto:contact@swisstax.ch">contact@swisstax.ch</StyledLink>
                   </Box>
 
 

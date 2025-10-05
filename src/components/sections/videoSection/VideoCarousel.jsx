@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -8,102 +8,72 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+// Tax tutorial and user testimonial videos by language
 const VIDEOS_BY_LANGUAGE = {
   en: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/CaffeAna.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/CaffeAna-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Complete Tax Filing Tutorial'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/FamTutorial.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/FamTutorial-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Maximize Your Tax Deductions'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/interviewMiha.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/interviewMiha-poster.jpg'
-    },
-    {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/LeaTuorial.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/LeaTuorial-poster.jpg'
-    },
-    {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/street1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/street1-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Customer Success Story'
     }
   ],
   de: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/Ch1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/Ch1-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Vollständiges Tutorial zur Steuererklärung'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/ch2.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/ch2-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Maximieren Sie Ihre Steuerabzüge'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/ch3.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/ch3-poster.jpg'
-    },
-    {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/ch/ch4.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/ch4-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Erfolgsgeschichte eines Kunden'
     }
   ],
   fr: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/Fr1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/Fr1-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Tutoriel complet de déclaration fiscale'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/fr2.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/fr2-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Maximisez vos déductions fiscales'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/fr3.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/fr3-poster.jpg'
-    },
-    {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/fr/fr4.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/fr4-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Histoire de réussite client'
     }
   ],
   it: [
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/it/It1.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/It1-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Tutorial completo dichiarazione fiscale'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/it/it2.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/it2-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Massimizza le tue deduzioni fiscali'
     },
     {
-      src: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/videos/it/It3.mp4',
-      poster: 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/posters/It3-poster.jpg'
+      src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'Storia di successo del cliente'
     }
   ]
 };
 
 const VideoCarousel = () => {
   const { t, i18n } = useTranslation();
-  const videoRefs = useRef([]);
-  
+
   // Get current language with fallback to English
   const currentLanguage = i18n.language || 'en';
   const videos = VIDEOS_BY_LANGUAGE[currentLanguage] || VIDEOS_BY_LANGUAGE['en'];
-
-  /**
-   * Pauses all videos except the current slide when navigating.
-   * @param {import('swiper/types').Swiper} swiper Swiper instance
-   */
-  const handleSlideChange = (swiper) => {
-    videoRefs.current.forEach((video, index) => {
-      if (!video) return;
-      // Pause all videos that are not the current slide
-      if (index !== swiper.realIndex) {
-        video.pause();
-      }
-    });
-  };
 
   return (
     <Box
@@ -113,78 +83,54 @@ const VideoCarousel = () => {
         textAlign: 'center'
       }}
     >
-      <Typography 
-        variant="h5" 
-        fontWeight={700} 
-        fontSize={'35px'} 
-        align="center" 
+      <Typography
+        variant="h5"
+        fontWeight={700}
+        fontSize={'35px'}
+        align="center"
         gutterBottom
         sx={{ mb: '40px' }}
       >
-        {t('Video Testimonials')}
+        {t('How SwissTax Works')}
       </Typography>
       <Swiper
         modules={[Navigation, Pagination]}
         navigation
         pagination={{ clickable: true }}
         centeredSlides={false}
-        loop
-        onSlideChange={handleSlideChange}
+        loop={false}
         spaceBetween={20}
         slidesPerView={1}
         slidesPerGroup={1}
         initialSlide={0}
         breakpoints={{
-          768: { 
+          768: {
             slidesPerView: 2,
-            slidesPerGroup: 2
+            slidesPerGroup: 1
           },
-          1024: { 
+          1024: {
             slidesPerView: 3,
-            slidesPerGroup: 3
+            slidesPerGroup: 1
           }
         }}
       >
         {videos.map((video, idx) => (
           <SwiperSlide key={idx} style={{ height: 'auto' }}>
-            <Box sx={{ position: 'relative', width: '100%' }}>
+            <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%' }}>
               <Box
-                component="video"
+                component="iframe"
                 src={video.src}
-                poster={video.poster}
-                ref={(el) => {
-                  videoRefs.current[idx] = el;
-                }}
-                controls
-                preload="none"
-                sx={{ width: '100%', borderRadius: '8px', objectFit: 'cover' }}
-              />
-              {/* Play button overlay */}
-              <Box
+                title={video.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
                 sx={{
                   position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 80,
-                  height: 80,
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  pointerEvents: 'none',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-                  '&::before': {
-                    content: '""',
-                    width: 0,
-                    height: 0,
-                    borderStyle: 'solid',
-                    borderWidth: '20px 0 20px 35px',
-                    borderColor: 'transparent transparent transparent #3f63ec',
-                    marginLeft: '8px'
-                  }
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '8px',
+                  border: 'none'
                 }}
               />
             </Box>

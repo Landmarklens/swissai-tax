@@ -34,10 +34,18 @@ const ResetPassword = withSuspense(lazy(() => import('../pages/ResetPassword/Res
 const Terms = withSuspense(lazy(() => import('../pages/Terms/Terms')));
 const Policy = withSuspense(lazy(() => import('../pages/Policy/Policy')));
 
+// Dashboard and account pages
+const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
+const Profile = withSuspense(lazy(() => import('../pages/Profile/Profile')));
+const Settings = withSuspense(lazy(() => import('../pages/Settings/Settings')));
+
 // Tax filing pages
 const TaxInterviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/InterviewPage')));
 const DocumentChecklistPage = withSuspense(lazy(() => import('../pages/TaxFiling/DocumentChecklistPage')));
 const TaxResultsPage = withSuspense(lazy(() => import('../pages/TaxFiling/TaxResults')));
+const ReviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/ReviewPage')));
+const PaymentPage = withSuspense(lazy(() => import('../pages/TaxFiling/PaymentPage')));
+const SubmissionPage = withSuspense(lazy(() => import('../pages/TaxFiling/SubmissionPage')));
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -56,6 +64,32 @@ export const LAZY_NAVIGATION_ROUTE = [
   // Homepage
   { path: '/', element: <Homepage /> },
 
+  // Dashboard and account pages (protected)
+  {
+    path: '/dashboard',
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/profile',
+    element: (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/settings',
+    element: (
+      <ProtectedRoute>
+        <Settings />
+      </ProtectedRoute>
+    )
+  },
+
   // Tax filing workflow (protected)
   {
     path: '/tax-filing/interview',
@@ -70,6 +104,38 @@ export const LAZY_NAVIGATION_ROUTE = [
     element: (
       <ProtectedRoute>
         <DocumentChecklistPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/documents',
+    element: (
+      <ProtectedRoute>
+        <DocumentChecklistPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/review',
+    element: (
+      <ProtectedRoute>
+        <ReviewPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/payment',
+    element: (
+      <ProtectedRoute>
+        <PaymentPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/submit',
+    element: (
+      <ProtectedRoute>
+        <SubmissionPage />
       </ProtectedRoute>
     )
   },

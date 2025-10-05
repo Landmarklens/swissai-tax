@@ -1,6 +1,6 @@
+from typing import Optional
+from uuid import UUID
 from pydantic import BaseModel, EmailStr
-
-from models.user import UserType, UserStatus, UserLanguage, DEFAULT_USER_LANGUAGE
 
 
 class UserLogin(BaseModel):
@@ -13,44 +13,33 @@ class UserCreate(BaseModel):
     password: str
     firstname: str
     lastname: str
-    user_type: UserType
-    status: UserStatus = UserStatus.ACTIVE
-    language: UserLanguage = DEFAULT_USER_LANGUAGE
-
-    class Config:
-        use_enum_values = True
+    language: str = "en"  # de, en, fr, it
 
 
 class UserProfile(BaseModel):
-    id: int
-    email: EmailStr | None = None
-    firstname: str | None = None
-    lastname: str | None = None
-    phone: str | None = None
-    country: str | None = None
-    state: str | None = None
-    city: str | None = None
-    address: str | None = None
-    zip_code: str | None = None
-    avatar_url: str | None = None
-    user_type: UserType
-    status: UserStatus
-    language: UserLanguage
+    id: UUID
+    email: Optional[EmailStr] = None
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
+    phone: Optional[str] = None
+    canton: Optional[str] = None  # SwissAI Tax uses canton instead of country/state
+    municipality: Optional[str] = None  # SwissAI Tax uses municipality instead of city
+    avatar_url: Optional[str] = None
+    preferred_language: str = "en"
+    is_active: bool = True
 
     class Config:
-        use_enum_values = True
+        from_attributes = True
 
 
 class UserProfileUpdate(BaseModel):
-    firstname: str | None = None
-    lastname: str | None = None
-    phone: str | None = None
-    country: str | None = None
-    state: str | None = None
-    city: str | None = None
-    zip_code: str | None = None
-    address: str | None = None
-    language: UserLanguage | None = None
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
+    phone: Optional[str] = None
+    canton: Optional[str] = None
+    city: Optional[str] = None  # Alias for municipality
+    language: Optional[str] = None
+
 
 class AvatarUrl(BaseModel):
     avatar_url: str
@@ -59,6 +48,7 @@ class AvatarUrl(BaseModel):
 class UpdatePassword(BaseModel):
     password: str
     new_password: str
+
 
 class UpdatePasswordOut(BaseModel):
     message: str

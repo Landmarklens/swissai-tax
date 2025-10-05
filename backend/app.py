@@ -23,6 +23,10 @@ from services.document_service import DocumentService
 from services.tax_calculation_service import TaxCalculationService
 from utils.validators import validate_session_id, validate_tax_year
 
+# Import routers
+from routers import auth, user
+from routers.swisstax import dashboard, profile, settings, filing, payment
+
 # Try to import connection pool for App Runner, fallback to regular connection
 try:
     from database.connection_pool import check_db_health, close_connection_pool
@@ -80,6 +84,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(user.router, prefix="/api/user", tags=["user"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
+app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
+app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
+app.include_router(filing.router, prefix="/api/filing", tags=["filing"])
+app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 
 # Pydantic models for request/response validation
 class InterviewStartRequest(BaseModel):

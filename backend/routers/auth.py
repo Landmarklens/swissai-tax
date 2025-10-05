@@ -9,19 +9,20 @@ from fastapi.responses import RedirectResponse
 from googleapiclient.discovery import build
 
 from models.reset_token import ResetToken
-from models.user import AuthProvider, UserType, UserLanguage, DEFAULT_USER_LANGUAGE, UserStatus
+from models.swisstax import User
+from services.auth_service import AuthProvider
 from schemas.auth import UserLoginSchema, GoogleLoginOut
 from schemas.reset_token import ResetPasswordRequest, ResetPasswordVerify, ResetPasswordConfirm, \
     ResetPasswordMessageResponse, ResetPasswordResponse
 from schemas.user import UserCreate, UserProfile
 from db.session import get_db
-from services import auth as authService
-from services import user as userService
-from services.auth import create_social_user
+from services import auth_service as authService
+from services import user_service as userService
+from services.auth_service import create_social_user
 from services.reset_password import ResetPasswordService
 from services.ses_emailjs_replacement import EmailJSService
 from config import settings
-from services.user import get_user_by_email, update_user, update_password
+from services.user_service import get_user_by_email, update_user, update_password
 from utils.auth import check_user, sign_jwt, flow
 from utils.router import Router
 from utils.rate_limiter import limiter
@@ -36,7 +37,7 @@ def should_require_subscription(user, db) -> bool:
 
     Returns True if:
     - ENFORCE_SUBSCRIPTIONS is enabled
-    - User is not admin, grandfathered, or test user
+    - User is not grandfathered or test user
     - User has no active subscription
 
     Args:
@@ -47,10 +48,6 @@ def should_require_subscription(user, db) -> bool:
         bool: True if subscription is required, False otherwise
     """
     if not settings.ENFORCE_SUBSCRIPTIONS:
-        return False
-
-    # Admin bypass
-    if user.user_type == UserType.ADMIN:
         return False
 
     # Grandfathered user bypass
@@ -70,8 +67,8 @@ def should_require_subscription(user, db) -> bool:
 
 
 @router.get("/login/google", response_model=GoogleLoginOut)
-async def login_or_registration_google(user_type: UserType = Query(...),
-                                       language: UserLanguage = Query(DEFAULT_USER_LANGUAGE),
+async def login_or_registration_google(user_type: str = Query("taxpayer"),
+                                       language: str = Query("en"),
                                        redirect_url: str = Query(...)):
     """
     Use this endpoint to login or register with Google.
@@ -145,7 +142,7 @@ async def callback(request: Request, db=Depends(get_db)):
 
     user = get_user_by_email(db, email)
     is_new_user = False
-    if user is None or user.status == UserStatus.INACTIVE:
+    if user is None or not user.is_active:
         # Create user_data safely without direct unpacking
         user_data = {
             "email": email,
@@ -156,7 +153,7 @@ async def callback(request: Request, db=Depends(get_db)):
             "user_type": state_data.get("user_type"),
             "language": state_data.get("language")
         }
-        user = await create_social_user(db, user_data, AuthProvider.GOOGLE)
+        user = await create_social_user(db, user_data, "google")
         is_new_user = True
 
     token = sign_jwt(user_info["email"])
@@ -211,26 +208,14 @@ async def user_login(request: Request, user: UserLoginSchema = Body(...), db=Dep
 @rate_limit("1000/hour")
 async def register(request: Request, user: UserCreate, db=Depends(get_db)):
     """
-    Registration endpoint for users. If the user was registered and then "deleted", the user will be restored with the updated registration data
+    Registration endpoint for SwissAI Tax users
 
-    user_type: UserType
-    - tenant
-    - landlord
-    - admin
-
-    status: UserStatus
-    - active
-
-    language: UserLanguage
-    - de
-    - en
-    - fr
-    - it
+    language: de, en, fr, it
     """
 
     exists_user = userService.get_user_by_email(db, user.email)
 
-    if exists_user and exists_user.status == UserStatus.ACTIVE:
+    if exists_user and exists_user.is_active:
         raise HTTPException(status_code=400, detail="Email already registered")
     if exists_user:
         return update_user(db, exists_user, user)

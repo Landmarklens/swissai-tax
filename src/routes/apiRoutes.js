@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
 export const getCounter = `${BASE_URL}/counter`;
 export const getTestimonilsRoute = `${BASE_URL}/testimonials`;

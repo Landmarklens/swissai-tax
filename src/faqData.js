@@ -1,155 +1,156 @@
 export const faqData = [
   {
-    category: 'General Platform Features',
+    category: 'Getting Started',
     questions: [
       {
-        question: 'What is the purpose of your platform?',
+        question: 'What is SwissAI Tax?',
         answer:
-          'Our platform simplifies and enhances the process of finding a flat using advanced AI technology and data integration to provide personalized property recommendations tailored to your lifestyle and preferences.'
+          'SwissAI Tax is an intelligent Swiss tax filing platform that uses AI to simplify your tax declaration. We support all 26 Swiss cantons with automatic calculation of federal, cantonal, and municipal taxes.'
       },
       {
-        question: 'What makes your platform different from other real estate websites?',
+        question: 'Who can use SwissAI Tax?',
         answer:
-          'We go beyond basic filters by analyzing property data and user preferences comprehensively. The platform provides detailed recommendations, tools for managing your search, and automates scheduling property viewings.'
+          'Anyone living in Switzerland who needs to file taxes can use our platform. Whether you\'re an employee, self-employed, pensioner, or have multiple income sources, SwissAI Tax adapts to your situation.'
       },
       {
-        question: 'How secure is my data?',
+        question: 'Which cantons are supported?',
         answer:
-          'We prioritize your privacy and employ state-of-the-art security measures to protect your information, using it solely to enhance your property search experience.'
+          'All 26 Swiss cantons are fully supported: Zürich, Bern, Luzern, Uri, Schwyz, Obwalden, Nidwalden, Glarus, Zug, Fribourg, Solothurn, Basel-Stadt, Basel-Landschaft, Schaffhausen, Appenzell Ausserrhoden, Appenzell Innerrhoden, St. Gallen, Graubünden, Aargau, Thurgau, Ticino, Vaud, Valais, Neuchâtel, Geneva, and Jura.'
       },
       {
-        question: 'What devices can I use to access the platform?',
+        question: 'What languages are available?',
         answer:
-          'Our platform is accessible on desktops, tablets, and mobile devices for a seamless experience.'
+          'SwissAI Tax is available in all four Swiss national languages: German (Deutsch), French (Français), Italian (Italiano), and English. You can switch languages at any time.'
       }
     ]
   },
   {
-    category: 'AI-Powered Features',
+    category: 'Tax Filing Process',
     questions: [
       {
-        question: 'How does the AI-driven interview work? ',
+        question: 'How does the AI interview work?',
         answer:
-          'The AI conducts a conversational interview to gather your needs, such as budget, location, commute preferences, and hobbies, enabling highly personalized recommendations.'
+          'Our interactive questionnaire (Q01-Q14) guides you through simple questions about your income, family situation, deductions, and expenses. The AI adapts questions based on your answers, asking only what\'s relevant to your situation. No tax knowledge required!'
       },
       {
-        question: 'How does the AI analyze property descriptions and photos?',
+        question: 'What documents do I need to upload?',
         answer:
-          'The AI evaluates qualitative aspects like view quality, noise levels, and interior design, providing a comprehensive understanding of each property through In-Depth Analysis of Text and Photos.'
+          'Common documents include: salary certificates (Lohnausweis), insurance confirmations, donation receipts, mortgage interest statements, childcare expenses, and medical bills. Our AI tells you exactly which documents you need based on your interview answers.'
       },
       {
-        question: 'How does the Advanced Data-Driven Search work?',
+        question: 'How does the document upload work?',
         answer:
-          'This feature uses over 60 data sources to analyze commute times, amenities, taxes, and more. The search evolves in real-time, adjusting criteria to ensure timely, accurate matches as deadlines approach.'
+          'Simply drag and drop your documents (PDF, JPG, PNG). Our AI uses OCR (Optical Character Recognition) powered by AWS Textract to automatically extract relevant data. You can review and edit extracted data before submission.'
       },
       {
-        question: 'What is the Real-Time Market Scan feature?',
+        question: 'How accurate are the tax calculations?',
         answer:
-          'This ensures users are the first to know about new listings, providing instant updates to stay ahead in competitive markets.'
+          'Our calculations use official Swiss tax rates updated for the current tax year. We calculate federal tax, cantonal tax, and municipal tax based on your exact location. All formulas are validated against official tax authority guidelines.'
       },
       {
-        question: 'Can the AI help me apply for a property immediately?  ',
+        question: 'Can I save my progress and continue later?',
         answer:
-          "Yes, the Instant Application Submission feature allows the AI to automatically complete and submit applications, ensuring you're among the first applicants."
+          'Yes! Your data is automatically saved as you progress through the interview. You can log out and return anytime to continue where you left off. All data is securely stored and encrypted.'
       }
     ]
   },
   {
-    category: 'Tenant Tools and Features',
+    category: 'Deductions & Savings',
     questions: [
       {
-        question: 'How do the automated scheduling and reminders work?',
+        question: 'How does the automatic deduction finder work?',
         answer:
-          'Link your calendar to the platform to schedule viewings automatically. Set reminders and take notes for properties, keeping your search organized.'
+          'Our AI analyzes your situation and identifies all applicable deductions: work expenses (commuting, meals, professional development), insurance premiums (health, life, pension), donations, childcare costs, education expenses, and more. We ensure you don\'t miss any savings.'
       },
       {
-        question: 'How does the platform assist tenants in making compromises?',
+        question: 'What are the most common deductions I can claim?',
         answer:
-          'The AI highlights property features that align or deviate from your ideal criteria, helping you prioritize and make informed decisions.'
+          'Common deductions include: mandatory insurance (AHV, IV, ALV, KTG), health insurance premiums, pillar 3a contributions, work-related expenses, childcare costs, donations to charities, education/training costs, and mortgage interest.'
       },
       {
-        question: 'Can I customize how the AI prioritizes certain criteria?',
+        question: 'Can I deduct home office expenses?',
         answer:
-          'Yes, you can provide feedback, and the AI will adjust its search criteria to better match your evolving preferences.'
+          'Yes, if you work from home regularly, you can deduct a portion of rent, utilities, and equipment costs. Our AI calculates the allowable amount based on Swiss tax regulations and your specific canton\'s rules.'
       },
       {
-        question: 'How do I receive property alerts?',
-        answer: 'Depending on your plan, you can receive alerts via email or WhatsApp in real-time.'
+        question: 'How do I maximize my tax refund?',
+        answer:
+          'Upload all relevant documents, answer interview questions thoroughly, and let our AI find every deduction. We provide suggestions for tax-saving strategies and show you the impact of different scenarios before filing.'
       }
     ]
   },
   {
-    category: 'Landlord Features',
+    category: 'Security & Privacy',
     questions: [
       {
-        question: 'How does the platform support landlords in managing their properties?',
+        question: 'Is my data secure?',
         answer:
-          'We offer a Streamlined Property Management tool to centralize listing management, viewing schedules, and tenant tracking, reducing manual workload.'
+          'Absolutely. Your data is encrypted in transit (HTTPS) and at rest. We use AWS S3 for document storage with bank-level encryption. All data stays in Switzerland. We\'re GDPR compliant and never share your information with third parties.'
       },
       {
-        question: 'Can landlords automate property viewings?',
+        question: 'Where is my data stored?',
         answer:
-          'Yes, landlords can use a key box for self-guided tours managed by the AI, eliminating the need for physical presence during viewings.'
+          'All your data is stored on secure Swiss servers (AWS Europe Frankfurt region). Documents are encrypted using AES-256 encryption. Database connections use SSL/TLS. Your privacy is our top priority.'
       },
       {
-        question: 'What kind of insights can landlords get about potential tenants?',
+        question: 'Can I delete my data?',
         answer:
-          'The AI provides Detailed Tenant Insight, offering compatibility ratings based on financial stability, rental history, and lifestyle preferences.'
+          'Yes, you can delete your account and all associated data at any time from your profile settings. We comply with the right to be forgotten under GDPR. Deletion is permanent and irreversible.'
       },
       {
-        question: 'How can landlords choose the best tenant from multiple applicants?',
+        question: 'Do you share my data with tax authorities?',
         answer:
-          'The AI pre-screens applicants through Enhanced Tenant Screening, ensuring only the most suitable candidates are considered.'
+          'No. We never automatically share your data with anyone. You remain in complete control. When you\'re ready, you download your completed tax forms and submit them yourself to your cantonal tax office.'
       }
     ]
   },
   {
-    category: 'Investor and Seller Tools',
+    category: 'Technical Support',
     questions: [
       {
-        question: 'How does your platform help buyers looking for investment properties?',
+        question: 'What if I encounter an error during filing?',
         answer:
-          'We provide AI-Driven Real Estate Investment Analysis, simplifying search, valuation, and risk assessment for high-potential properties.'
+          'Our support team is available via email and live chat. Most common issues are resolved within 24 hours. Check our Help Center for troubleshooting guides and video tutorials.'
       },
       {
-        question: 'Can the AI provide accurate property valuations? ',
+        question: 'Can I use SwissAI Tax on mobile devices?',
         answer:
-          'Yes, the AI analyzes historical prices, market trends, and economic indicators to deliver precise valuations.'
+          'Yes! Our platform is fully responsive and works on smartphones, tablets, and desktop computers. The interface adapts to your screen size for optimal usability.'
       },
       {
-        question: 'How does the platform assess risks for investors?',
+        question: 'What browsers are supported?',
         answer:
-          'Our Comprehensive Risk Assessment evaluates factors like crime rates, environmental hazards, and market volatility for each property.'
+          'We support all modern browsers: Chrome, Firefox, Safari, and Edge. For best experience, use the latest version of your preferred browser.'
       },
       {
-        question: 'Can the platform help with investment strategy and portfolio management?',
+        question: 'What happens if I need help with complex tax situations?',
         answer:
-          'Yes, it offers tailored investment strategies, diversification recommendations, and market alerts for buying or selling opportunities.'
-      },
-      {
-        question: 'How does the platform handle real estate selling?',
-        answer:
-          'For sellers, the AI suggests competitive pricing and optimal listing times, ensuring maximum visibility and faster sales.'
-      },
-      {
-        question: 'Is the platform suitable for first-time investors?',
-        answer:
-          'Absolutely. The AI provides step-by-step guidance, tailored property analysis, and personalized recommendations.'
+          'For complex cases (business income, foreign assets, inheritances), our AI guides you through the basics, and you can optionally connect with certified Swiss tax advisors through our partner network.'
       }
     ]
   },
   {
-    category: 'Transparency and User Experience',
+    category: 'Pricing & Payment',
     questions: [
       {
-        question: 'How does the platform visualize AI analysis for users?',
+        question: 'How much does SwissAI Tax cost?',
         answer:
-          'Interactive visualizations show how data points feed into the search algorithm, explain property recommendations, and display progress during applications.'
+          'We offer transparent pricing: a free version for simple tax returns, and premium plans starting at CHF 49 for advanced features like multi-canton support, unlimited document uploads, and priority support.'
       },
       {
-        question: 'How does the platform maintain transparency during the search process?',
+        question: 'Can I try before I buy?',
         answer:
-          'Detailed explanations accompany each recommendation, showing why a property was suggested and how it fits your criteria.'
+          'Absolutely! Start the tax interview and see your calculations for free. You only pay when you\'re ready to download your completed tax forms. No credit card required to start.'
+      },
+      {
+        question: 'What payment methods do you accept?',
+        answer:
+          'We accept all major credit cards (Visa, Mastercard, American Express), Twint, and bank transfers. All payments are processed securely through Stripe.'
+      },
+      {
+        question: 'Do you offer refunds?',
+        answer:
+          'Yes. If you\'re not satisfied with our service, contact us within 30 days for a full refund. Your satisfaction is our priority.'
       }
     ]
   }

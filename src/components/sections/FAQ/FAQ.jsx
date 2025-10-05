@@ -30,24 +30,34 @@ const FAQSection = () => {
   // Define categories with icons
   const categories = [
     {
-      title: FAQ[0]?.title || 'About HomeAI.CH',
+      title: FAQ[0]?.title || 'Getting Started',
       icon: <SecurityIcon />,
-      color: '#3E63DD'
+      color: '#DC0018'
     },
     {
-      title: FAQ[1]?.title || 'Why the Assistant is Needed',
+      title: FAQ[1]?.title || 'Tax Filing Process',
       icon: <MonetizationOnIcon />,
-      color: '#65BA74'
+      color: '#00A651'
     },
     {
-      title: FAQ[2]?.title || 'Technical Questions',
+      title: FAQ[2]?.title || 'Deductions & Savings',
       icon: <IntegrationInstructionsIcon />,
-      color: '#AA99EC'
+      color: '#003DA5'
     },
     {
-      title: FAQ[3]?.title || 'Pricing & Plans',
+      title: FAQ[3]?.title || 'Security & Privacy',
       icon: <TrendingUpIcon />,
-      color: '#FF9F40'
+      color: '#FFB81C'
+    },
+    {
+      title: FAQ[4]?.title || 'Technical Support',
+      icon: <SecurityIcon />,
+      color: '#6B46C1'
+    },
+    {
+      title: FAQ[5]?.title || 'Pricing & Payment',
+      icon: <MonetizationOnIcon />,
+      color: '#DC0018'
     }
   ];
 
@@ -220,10 +230,7 @@ const FAQSection = () => {
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
-            {t('FAQ')}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            {t('Everything you need to know about finding your perfect home')}
+            {t('Frequently Asked Questions')}
           </Typography>
         </Box>
 

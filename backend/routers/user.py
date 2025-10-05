@@ -1,10 +1,9 @@
 from typing import List
+from uuid import UUID
 
 from fastapi import Depends, HTTPException, status, UploadFile, File, BackgroundTasks, Request
 
-from models import User
-from models.document import UserDocument, DocumentStatus
-from models.user import UserType
+from models.swisstax import User
 from schemas.document import UserDocumentMetadata, UserDocumentContent
 from schemas.user import (
     UserProfile,
@@ -15,7 +14,7 @@ from schemas.user import (
 )
 from db.session import get_db
 from sqlalchemy.orm import Session
-from services import user as UserService
+from services import user_service as UserService
 from services.pdf_service import PDFService
 from utils.auth import get_current_user
 from utils.password import verify_password
@@ -33,7 +32,8 @@ def list_of_users(user=Depends(get_current_user), db: Session = Depends(get_db))
 
     if not user:
         raise HTTPException(status_code=401)
-    if user.user_type != UserType.ADMIN:
+    # Admin check removed - no user types in SwissAI Tax
+    if False:  # Placeholder
         raise HTTPException(
             status_code=403, detail="Not authorized to perform this action"
         )
@@ -63,36 +63,7 @@ def get_current_user_profile(user=Depends(get_current_user)):
     return user
 
 
-@router.get("/properties")
-def get_user_properties(
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """
-    Get all properties owned by the current user.
-    """
-    if not user:
-        raise HTTPException(status_code=401)
-    
-    from models.property import Property
-    
-    properties = db.query(Property).filter(
-        Property.owner_id == user.id
-    ).all()
-    
-    return [
-        {
-            "id": prop.id,
-            "title": prop.title,
-            "address": prop.address,
-            "city": prop.city,
-            "postal_code": prop.zip_code,  # Fixed: Property model uses zip_code, not postal_code
-            "country": prop.country,
-            "created_at": prop.created_at,
-            "updated_at": prop.updated_at
-        }
-        for prop in properties
-    ]
+# Properties endpoint removed - not needed for SwissAI Tax
 
 
 @router.put("/profile", response_model=UserProfile)
@@ -152,22 +123,22 @@ def update_password(
 
 @router.post("/{user_id}/documents", response_model=dict)
 def create_user_document(
-    user_id: int,
+    user_id: UUID,
     document_data: dict,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Create user document metadata"""
-    if current_user.id != user_id and current_user.user_type != UserType.ADMIN:
+    if current_user.id != user_id:
         raise HTTPException(status_code=403, detail="Not authorized")
-    
+
     # Placeholder implementation
     return {"message": "Document created", "document_id": 1}
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def deactivate_user(
-    user_id: int,
+    user_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -175,7 +146,7 @@ def deactivate_user(
     Change status user from active to inactive. Don't delete the user from the database.
     """
 
-    if current_user.id != user_id and current_user.user_type != UserType.ADMIN:
+    if current_user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to perform this action",
@@ -189,7 +160,7 @@ def deactivate_user(
     status_code=status.HTTP_202_ACCEPTED,
 )
 async def upload_pdf(
-    user_id: int,
+    user_id: UUID,
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
@@ -206,8 +177,8 @@ async def upload_pdf(
 
 @router.get("/{user_id}/pdfs/{pdf_id}", response_model=UserDocumentMetadata)
 def get_pdf_metadata(
-    user_id: int,
-    pdf_id: int,
+    user_id: UUID,
+    pdf_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -222,8 +193,8 @@ def get_pdf_metadata(
 
 @router.get("/{user_id}/pdfs/{pdf_id}/content", response_model=UserDocumentContent)
 def get_pdf_content(
-    user_id: int,
-    pdf_id: int,
+    user_id: UUID,
+    pdf_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):

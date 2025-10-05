@@ -3,7 +3,7 @@ Filing Pydantic schemas
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Any
 from datetime import datetime
 
 
@@ -16,7 +16,7 @@ class FilingCreate(BaseModel):
 class FilingUpdateField(BaseModel):
     """Update a single field in review"""
     field_name: str
-    value: any
+    value: Any
 
 
 class FilingResponse(BaseModel):

@@ -81,7 +81,7 @@ const authService = {
 
   handleGoogleLoginCallback: async () => {
     try {
-      const response = await axios.get(`${API_URL}/auth/login/google/callback`);
+      const response = await axios.get(`${API_URL}/api/auth/login/google/callback`);
       if (response.data.access_token) {
         authServiceInstance.setCurrentUser(response.data);
       }
@@ -94,7 +94,7 @@ const authService = {
   // Existing Google Sign-In method (you may want to remove or update this)
   googleSignIn: async (idToken) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/google`, { idToken });
+      const response = await axios.post(`${API_URL}/api/auth/google`, { idToken });
       if (response.data.access_token) {
         authServiceInstance.setCurrentUser(response.data);
       }
@@ -107,7 +107,7 @@ const authService = {
   // Regular email/password login
   login: async (email, password) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password
       });
@@ -124,7 +124,7 @@ const authService = {
   // User registration
   register: async (userData) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/register`, userData);
+      const response = await axios.post(`${API_URL}/api/auth/register`, userData);
       if (response.data) {
         // Registration successful
         // authService.login(userData.email, userData.password);
@@ -213,7 +213,7 @@ const authService = {
     try {
       const user = authService.getCurrentUser();
       if (user && user.refresh_token) {
-        const response = await axios.post(`${API_URL}/auth/refresh-token`, {
+        const response = await axios.post(`${API_URL}/api/auth/refresh-token`, {
           refresh_token: user.refresh_token
         });
         if (response.data.access_token) {
@@ -235,7 +235,7 @@ const authService = {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/auth/reset-password/request`, { email });
+      const response = await axios.post(`${API_URL}/api/auth/reset-password/request`, { email });
 
       if (response.data) {
         // Reset password request sent successfully
@@ -254,7 +254,7 @@ const authService = {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/auth/reset-password/verify`, { token });
+      const response = await axios.post(`${API_URL}/api/auth/reset-password/verify`, { token });
 
       if (response.data) {
         // Reset password request sent successfully
@@ -279,7 +279,7 @@ const authService = {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/auth/reset-password/confirm`, {
+      const response = await axios.post(`${API_URL}/api/auth/reset-password/confirm`, {
         token,
         new_password
       });

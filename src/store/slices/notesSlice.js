@@ -4,7 +4,7 @@ import authService from '../../services/authService';
 import { getLocalStorageUser } from './../../utils/localStorage/getLocalStorageUser';
 
 import config from '../../config/environments';
-const API_URL = process.env.REACT_APP_API_URL || config.API_BASE_URL || 'https://api.homeai.ch';
+const API_URL = process.env.REACT_APP_API_BASE_URL || config.API_BASE_URL || 'https://api.homeai.ch';
 
 const initialState = {
   notes: {

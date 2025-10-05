@@ -47,7 +47,7 @@ jest.mock('react-toastify', () => ({
 }));
 
 // Use the same API URL as the actual slice
-const API_URL = process.env.REACT_APP_API_URL || config.API_BASE_URL || 'https://api.homeai.ch';
+const API_URL = process.env.REACT_APP_API_BASE_URL || config.API_BASE_URL || 'https://api.homeai.ch';
 
 describe('conversationsSlice', () => {
   let store;

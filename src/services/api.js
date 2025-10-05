@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://api.swissai.tax',
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

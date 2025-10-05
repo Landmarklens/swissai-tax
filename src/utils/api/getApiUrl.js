@@ -7,7 +7,7 @@ import config from '../../config/environments';
 export function getApiUrl() {
   // Always use production API URL
   // Override with environment variable if set
-  return process.env.REACT_APP_API_URL || config.API_BASE_URL || 'https://api.swissai.tax';
+  return process.env.REACT_APP_API_BASE_URL || config.API_BASE_URL || 'https://api.swissai.tax';
 }
 
 /**

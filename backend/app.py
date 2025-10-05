@@ -79,6 +79,7 @@ app.add_middleware(
         "https://swissai.tax",
         "https://www.swissai.tax",
         "http://localhost:3000",  # For local development
+        "http://localhost:3001",  # For local development (alternate port)
     ],
     allow_credentials=True,
     allow_methods=["*"],

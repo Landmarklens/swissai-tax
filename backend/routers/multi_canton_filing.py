@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from db.session import get_db
 from services.filing_orchestration_service import FilingOrchestrationService
 from models.tax_filing_session import TaxFilingSession
-from middleware.auth import get_current_user
+from utils.auth import get_current_user
 
 router = APIRouter(prefix="/api/multi-canton", tags=["multi-canton-filing"])
 

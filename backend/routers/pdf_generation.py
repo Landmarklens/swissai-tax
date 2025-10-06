@@ -192,12 +192,13 @@ def download_both_pdfs(
                 zip_file.writestr(trad_filename, pdfs['traditional'].getvalue())
 
             # Add README
+            from datetime import datetime as dt
             readme_content = f"""Swiss Tax Return PDFs
 
 Canton: {filing.canton}
 Tax Year: {filing.tax_year}
 Type: {'Primary Filing' if filing.is_primary else 'Secondary Filing'}
-Generated: {import datetime; datetime.datetime.now().isoformat()}
+Generated: {dt.now().isoformat()}
 
 Files:
 1. tax_return_{filing.canton}_{filing.tax_year}_ech0196.pdf
@@ -300,6 +301,7 @@ def download_all_user_pdfs(
                     zip_file.writestr(filename, pdfs['traditional'].getvalue())
 
             # Add summary README
+            from datetime import datetime as dt
             filings = filing_service.get_all_user_filings(user_id, tax_year)
             readme = f"""Swiss Tax Returns - Tax Year {tax_year}
 
@@ -313,7 +315,7 @@ Filings:
 
             readme += f"""
 
-Generated: {import datetime; datetime.datetime.now().isoformat()}
+Generated: {dt.now().isoformat()}
 
 Note: If you have properties in multiple cantons, you must submit
 separate tax returns to each canton.

@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery, Typography } from '@mui/material';
 import ImageComponent from '../Image/Image';
 import { useTranslation } from 'react-i18next';
 import { PersonalAccountIcon } from '../personalAccountIcon/personalAccountIcon';

@@ -8,7 +8,7 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
-const TaxEstimateSidebar = ({ calculation, loading }) => {
+const TaxEstimateSidebar = ({ calculation, loading = false }) => {
   const { t } = useTranslation();
 
   if (loading) {
@@ -204,10 +204,6 @@ TaxEstimateSidebar.propTypes = {
     refund: PropTypes.number
   }),
   loading: PropTypes.bool
-};
-
-TaxEstimateSidebar.defaultProps = {
-  loading: false
 };
 
 export default TaxEstimateSidebar;

@@ -48,6 +48,8 @@ import {
   Description as DraftIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import Header from '../../components/header/Header';
+import Footer from '../../components/footer/Footer';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -231,15 +233,21 @@ const FilingsListPage = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
-        <CircularProgress />
-        <Typography sx={{ mt: 2 }}>Loading filings...</Typography>
-      </Container>
+      <>
+        <Header />
+        <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
+          <CircularProgress />
+          <Typography sx={{ mt: 2 }}>Loading filings...</Typography>
+        </Container>
+        <Footer />
+      </>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <>
+      <Header />
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Box>
@@ -529,6 +537,8 @@ const FilingsListPage = () => {
         </DialogActions>
       </Dialog>
     </Container>
+    <Footer />
+    </>
   );
 };
 

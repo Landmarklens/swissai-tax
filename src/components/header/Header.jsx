@@ -213,7 +213,7 @@ const Header = ({ handleClickOpen }) => {
                     </Typography>
                   </Link>
                 </Box>
-                <Box className={styles.menuContainer}>
+                <Box className={styles.menuContainer} sx={{ display: 'flex !important' }}>
                   {menuOptions?.map((option, index) => (
                     <Link
                       key={index}
@@ -247,13 +247,6 @@ const Header = ({ handleClickOpen }) => {
                       {t('Log In')}
                     </Button>
                   )}
-
-                  {/* <Button
-                    variant="contained"
-                    onClick={getStartedHandler}
-                    className={styles.getStartedButton}>
-                    {t('Place an Ad')}
-                  </Button> */}
 
                   {isLoggedIn && <PersonalAccountIcon />}
                 </Box>

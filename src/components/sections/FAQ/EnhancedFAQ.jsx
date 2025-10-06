@@ -29,7 +29,7 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import faqService from '../../../services/faqService';
-import { FAQ as StaticFAQ } from '../../../constants/FAQ';
+import { getFAQ } from '../../../constants/FAQ';
 import './faq.scss';
 
 const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
@@ -61,9 +61,10 @@ const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
       console.error('Failed to load FAQs:', err);
       setError('Failed to load FAQs. Using offline data.');
       // Fallback to static FAQ for general questions
+      const staticFAQ = getFAQ(t);
       setFaqData({
-        title: t('Frequently Asked Questions'),
-        categories: StaticFAQ.map(section => ({
+        title: t('faq.heading'),
+        categories: staticFAQ.map(section => ({
           name: section.title,
           questions: section.questions.map((q, idx) => ({
             id: `static-${idx}`,

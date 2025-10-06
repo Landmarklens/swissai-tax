@@ -1,134 +1,138 @@
 // SwissAI Tax FAQ Data
+// This function generates FAQ data using translation keys
 
-export const FAQ = [
+export const getFAQ = (t) => [
   {
-    title: 'Getting Started',
+    title: t('faq.categories.getting_started'),
     questions: [
       {
-        question: 'What is SwissAI Tax?',
-        answer: 'SwissAI Tax is an intelligent Swiss tax filing platform that uses AI to simplify your tax declaration. We support all 26 Swiss cantons with automatic calculation of federal, cantonal, and municipal taxes.',
+        question: t('faq.getting_started.q1.question'),
+        answer: t('faq.getting_started.q1.answer'),
       },
       {
-        question: 'Who can use SwissAI Tax?',
-        answer: 'Anyone living in Switzerland who needs to file taxes can use our platform. Whether you\'re an employee, self-employed, pensioner, or have multiple income sources, SwissAI Tax adapts to your situation.',
+        question: t('faq.getting_started.q2.question'),
+        answer: t('faq.getting_started.q2.answer'),
       },
       {
-        question: 'Which cantons are supported?',
-        answer: 'All 26 Swiss cantons are fully supported: Zürich, Bern, Luzern, Uri, Schwyz, Obwalden, Nidwalden, Glarus, Zug, Fribourg, Solothurn, Basel-Stadt, Basel-Landschaft, Schaffhausen, Appenzell Ausserrhoden, Appenzell Innerrhoden, St. Gallen, Graubünden, Aargau, Thurgau, Ticino, Vaud, Valais, Neuchâtel, Geneva, and Jura.',
+        question: t('faq.getting_started.q3.question'),
+        answer: t('faq.getting_started.q3.answer'),
       },
       {
-        question: 'What languages are available?',
-        answer: 'SwissAI Tax is available in all four Swiss national languages: German (Deutsch), French (Français), Italian (Italiano), and English. You can switch languages at any time.',
+        question: t('faq.getting_started.q4.question'),
+        answer: t('faq.getting_started.q4.answer'),
       }
     ]
   },
   {
-    title: 'Tax Filing Process',
+    title: t('faq.categories.tax_filing'),
     questions: [
       {
-        question: 'How does the AI interview work?',
-        answer: 'Our interactive questionnaire (Q01-Q14) guides you through simple questions about your income, family situation, deductions, and expenses. The AI adapts questions based on your answers, asking only what\'s relevant to your situation. No tax knowledge required!',
+        question: t('faq.tax_filing.q1.question'),
+        answer: t('faq.tax_filing.q1.answer'),
       },
       {
-        question: 'What documents do I need to upload?',
-        answer: 'Common documents include: salary certificates (Lohnausweis), insurance confirmations, donation receipts, mortgage interest statements, childcare expenses, and medical bills. Our AI tells you exactly which documents you need based on your interview answers.',
+        question: t('faq.tax_filing.q2.question'),
+        answer: t('faq.tax_filing.q2.answer'),
       },
       {
-        question: 'How does the document upload work?',
-        answer: 'Simply drag and drop your documents (PDF, JPG, PNG). Our AI uses OCR (Optical Character Recognition) powered by AWS Textract to automatically extract relevant data. You can review and edit extracted data before submission.',
+        question: t('faq.tax_filing.q3.question'),
+        answer: t('faq.tax_filing.q3.answer'),
       },
       {
-        question: 'How accurate are the tax calculations?',
-        answer: 'Our calculations use official Swiss tax rates updated for the current tax year. We calculate federal tax, cantonal tax, and municipal tax based on your exact location. All formulas are validated against official tax authority guidelines.',
+        question: t('faq.tax_filing.q4.question'),
+        answer: t('faq.tax_filing.q4.answer'),
       },
       {
-        question: 'Can I save my progress and continue later?',
-        answer: 'Yes! Your data is automatically saved as you progress through the interview. You can log out and return anytime to continue where you left off. All data is securely stored and encrypted.',
+        question: t('faq.tax_filing.q5.question'),
+        answer: t('faq.tax_filing.q5.answer'),
       }
     ]
   },
   {
-    title: 'Deductions & Savings',
+    title: t('faq.categories.deductions'),
     questions: [
       {
-        question: 'How does the automatic deduction finder work?',
-        answer: 'Our AI analyzes your situation and identifies all applicable deductions: work expenses (commuting, meals, professional development), insurance premiums (health, life, pension), donations, childcare costs, education expenses, and more. We ensure you don\'t miss any savings.',
+        question: t('faq.deductions.q1.question'),
+        answer: t('faq.deductions.q1.answer'),
       },
       {
-        question: 'What are the most common deductions I can claim?',
-        answer: 'Common deductions include: mandatory insurance (AHV, IV, ALV, KTG), health insurance premiums, pillar 3a contributions, work-related expenses, childcare costs, donations to charities, education/training costs, and mortgage interest.',
+        question: t('faq.deductions.q2.question'),
+        answer: t('faq.deductions.q2.answer'),
       },
       {
-        question: 'Can I deduct home office expenses?',
-        answer: 'Yes, if you work from home regularly, you can deduct a portion of rent, utilities, and equipment costs. Our AI calculates the allowable amount based on Swiss tax regulations and your specific canton\'s rules.',
+        question: t('faq.deductions.q3.question'),
+        answer: t('faq.deductions.q3.answer'),
       },
       {
-        question: 'How do I maximize my tax refund?',
-        answer: 'Upload all relevant documents, answer interview questions thoroughly, and let our AI find every deduction. We provide suggestions for tax-saving strategies and show you the impact of different scenarios before filing.',
+        question: t('faq.deductions.q4.question'),
+        answer: t('faq.deductions.q4.answer'),
       }
     ]
   },
   {
-    title: 'Security & Privacy',
+    title: t('faq.categories.security'),
     questions: [
       {
-        question: 'Is my data secure?',
-        answer: 'Absolutely. Your data is encrypted in transit (HTTPS) and at rest. We use AWS S3 for document storage with bank-level encryption. All data stays in Switzerland. We\'re GDPR compliant and never share your information with third parties.',
+        question: t('faq.security.q1.question'),
+        answer: t('faq.security.q1.answer'),
       },
       {
-        question: 'Where is my data stored?',
-        answer: 'All your data is stored on secure Swiss servers (AWS Europe Frankfurt region). Documents are encrypted using AES-256 encryption. Database connections use SSL/TLS. Your privacy is our top priority.',
+        question: t('faq.security.q2.question'),
+        answer: t('faq.security.q2.answer'),
       },
       {
-        question: 'Can I delete my data?',
-        answer: 'Yes, you can delete your account and all associated data at any time from your profile settings. We comply with the right to be forgotten under GDPR. Deletion is permanent and irreversible.',
+        question: t('faq.security.q3.question'),
+        answer: t('faq.security.q3.answer'),
       },
       {
-        question: 'Do you share my data with tax authorities?',
-        answer: 'No. We never automatically share your data with anyone. You remain in complete control. When you\'re ready, you download your completed tax forms and submit them yourself to your cantonal tax office.',
+        question: t('faq.security.q4.question'),
+        answer: t('faq.security.q4.answer'),
       }
     ]
   },
   {
-    title: 'Technical Support',
+    title: t('faq.categories.support'),
     questions: [
       {
-        question: 'What if I encounter an error during filing?',
-        answer: 'Our support team is available via email and live chat. Most common issues are resolved within 24 hours. Check our Help Center for troubleshooting guides and video tutorials.',
+        question: t('faq.support.q1.question'),
+        answer: t('faq.support.q1.answer'),
       },
       {
-        question: 'Can I use SwissAI Tax on mobile devices?',
-        answer: 'Yes! Our platform is fully responsive and works on smartphones, tablets, and desktop computers. The interface adapts to your screen size for optimal usability.',
+        question: t('faq.support.q2.question'),
+        answer: t('faq.support.q2.answer'),
       },
       {
-        question: 'What browsers are supported?',
-        answer: 'We support all modern browsers: Chrome, Firefox, Safari, and Edge. For best experience, use the latest version of your preferred browser.',
+        question: t('faq.support.q3.question'),
+        answer: t('faq.support.q3.answer'),
       },
       {
-        question: 'What happens if I need help with complex tax situations?',
-        answer: 'For complex cases (business income, foreign assets, inheritances), our AI guides you through the basics, and you can optionally connect with certified Swiss tax advisors through our partner network.',
+        question: t('faq.support.q4.question'),
+        answer: t('faq.support.q4.answer'),
       }
     ]
   },
   {
-    title: 'Pricing & Payment',
+    title: t('faq.categories.pricing'),
     questions: [
       {
-        question: 'How much does SwissAI Tax cost?',
-        answer: 'We offer transparent pricing: a free version for simple tax returns, and premium plans starting at CHF 49 for advanced features like multi-canton support, unlimited document uploads, and priority support.',
+        question: t('faq.pricing.q1.question'),
+        answer: t('faq.pricing.q1.answer'),
       },
       {
-        question: 'Can I try before I buy?',
-        answer: 'Absolutely! Start the tax interview and see your calculations for free. You only pay when you\'re ready to download your completed tax forms. No credit card required to start.',
+        question: t('faq.pricing.q2.question'),
+        answer: t('faq.pricing.q2.answer'),
       },
       {
-        question: 'What payment methods do you accept?',
-        answer: 'We accept all major credit cards (Visa, Mastercard, American Express), Twint, and bank transfers. All payments are processed securely through Stripe.',
+        question: t('faq.pricing.q3.question'),
+        answer: t('faq.pricing.q3.answer'),
       },
       {
-        question: 'Do you offer refunds?',
-        answer: 'Yes. If you\'re not satisfied with our service, contact us within 30 days for a full refund. Your satisfaction is our priority.',
+        question: t('faq.pricing.q4.question'),
+        answer: t('faq.pricing.q4.answer'),
       }
     ]
   }
 ];
+
+// Keep original export for backward compatibility
+export const FAQ = getFAQ((key) => key);

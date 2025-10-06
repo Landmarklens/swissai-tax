@@ -35,45 +35,51 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import VideoCarousel from '../../components/sections/videoSection/VideoCarousel';
+import HeroIllustration from '../../components/sections/heroSection/HeroIllustration';
+import { useUserCounter } from '../../hooks/useUserCounter';
 
 const Homepage = () => {
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  const currentLang = i18n.language || 'en';
+  const userCount = useUserCounter();
 
   const features = [
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 40 }} />,
-      title: "KI-gestützte Optimierung",
-      description: "Unsere KI findet automatisch alle möglichen Abzüge"
+      title: t('homepage.features.ai_optimization.title'),
+      description: t('homepage.features.ai_optimization.description')
     },
     {
       icon: <LanguageIcon sx={{ fontSize: 40 }} />,
-      title: "Mehrsprachig",
-      description: "Verfügbar in Deutsch, Französisch, Italienisch und Englisch"
+      title: t('homepage.features.multilingual.title'),
+      description: t('homepage.features.multilingual.description')
     },
     {
       icon: <SecurityIcon sx={{ fontSize: 40 }} />,
-      title: "Schweizer Datenschutz",
-      description: "Ihre Daten bleiben in der Schweiz, verschlüsselt und sicher"
+      title: t('homepage.features.security.title'),
+      description: t('homepage.features.security.description')
     },
     {
       icon: <SupportAgentIcon sx={{ fontSize: 40 }} />,
-      title: "Experten-Support",
-      description: "Steuerexperten beantworten Ihre Fragen im Chat"
+      title: t('homepage.features.support.title'),
+      description: t('homepage.features.support.description')
     },
     {
       icon: <UpdateIcon sx={{ fontSize: 40 }} />,
-      title: "Immer aktuell",
-      description: "Automatische Updates für alle Gesetzesänderungen"
+      title: t('homepage.features.updates.title'),
+      description: t('homepage.features.updates.description')
     },
     {
       icon: <DevicesIcon sx={{ fontSize: 40 }} />,
-      title: "Auf allen Geräten",
-      description: "Arbeiten Sie am Computer, Tablet oder Smartphone"
+      title: t('homepage.features.devices.title'),
+      description: t('homepage.features.devices.description')
     }
   ];
 
@@ -81,77 +87,46 @@ const Homepage = () => {
     {
       number: "1",
       icon: <QuestionAnswerIcon sx={{ fontSize: 48 }} />,
-      title: "Interview",
-      description: "Beantworten Sie einfache Fragen zu Ihrer Situation. Keine Steuerkenntnisse erforderlich."
+      title: t('homepage.howItWorks.step1.title'),
+      description: t('homepage.howItWorks.step1.description')
     },
     {
       number: "2",
       icon: <UploadFileIcon sx={{ fontSize: 48 }} />,
-      title: "Dokumente",
-      description: "Laden Sie Ihre Dokumente hoch. Wir extrahieren automatisch alle relevanten Daten."
+      title: t('homepage.howItWorks.step2.title'),
+      description: t('homepage.howItWorks.step2.description')
     },
     {
       number: "3",
       icon: <SendIcon sx={{ fontSize: 48 }} />,
-      title: "Einreichen",
-      description: "Überprüfen Sie Ihre Steuererklärung und reichen Sie sie digital ein."
+      title: t('homepage.howItWorks.step3.title'),
+      description: t('homepage.howItWorks.step3.description')
     }
   ];
 
   const stats = [
-    { value: "50,000+", label: "Zufriedene Nutzer" },
-    { value: "4.8/5", label: "Bewertung" },
-    { value: "26", label: "Alle Kantone" },
-    { value: "20 Min", label: "Durchschnittliche Zeit" }
+    { value: userCount.toLocaleString(), label: t('homepage.stats.users') },
+    { value: "4.8/5", label: t('homepage.stats.rating') },
+    { value: "26", label: t('homepage.stats.cantons') },
+    { value: "20 Min", label: t('homepage.stats.time') }
   ];
 
-  const pricingPlans = [
-    {
-      name: "Basic",
-      price: "Kostenlos",
-      description: "Perfekt zum Ausprobieren",
-      features: [
-        { included: true, text: "Interview & Profilerstellung" },
-        { included: true, text: "Dokumenten-Checkliste" },
-        { included: true, text: "Basis-Steuerberechnung" },
-        { included: false, text: "Dokumenten-Upload" },
-        { included: false, text: "Digitale Einreichung" }
-      ],
-      buttonText: "Kostenlos starten",
-      buttonVariant: "outlined",
-      featured: false
-    },
-    {
-      name: "Standard",
-      price: "CHF 39",
-      description: "Komplette Steuererklärung",
-      features: [
-        { included: true, text: "Alles aus Basic" },
-        { included: true, text: "Unbegrenzte Dokumente" },
-        { included: true, text: "OCR-Datenextraktion" },
-        { included: true, text: "Digitale Einreichung" },
-        { included: true, text: "E-Mail Support" }
-      ],
-      buttonText: "Jetzt kaufen",
-      buttonVariant: "contained",
-      featured: true
-    },
-    {
-      name: "Premium",
-      price: "CHF 99",
-      description: "Mit Expertenprüfung",
-      features: [
-        { included: true, text: "Alles aus Standard" },
-        { included: true, text: "Prioritäts-Support" },
-        { included: true, text: "Expertenprüfung" },
-        { included: true, text: "Optimierungsvorschläge" },
-        { included: true, text: "Telefon-Support" }
-      ],
-      buttonText: "Jetzt kaufen",
-      buttonVariant: "outlined",
-      featured: false
-    }
-  ];
+  const pricingPlan = {
+    name: t('homepage.pricing.plan.name'),
+    price: "CHF 49.99",
+    description: t('homepage.pricing.plan.description'),
+    features: [
+      { included: true, text: t('homepage.pricing.plan.feature1') },
+      { included: true, text: t('homepage.pricing.plan.feature2') },
+      { included: true, text: t('homepage.pricing.plan.feature3') },
+      { included: true, text: t('homepage.pricing.plan.feature4') },
+      { included: true, text: t('homepage.pricing.plan.feature5') },
+      { included: true, text: t('homepage.pricing.plan.feature6') }
+    ],
+    buttonText: t('homepage.pricing.plan.button'),
+    buttonVariant: "contained",
+    featured: true
+  };
 
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
@@ -181,10 +156,10 @@ const Homepage = () => {
                     color: 'text.primary'
                   }}
                 >
-                  Ihre Steuererklärung.
+                  {t('homepage.hero.title_line1')}
                   <br />
                   <Box component="span" sx={{ color: 'primary.main' }}>
-                    Einfach. Digital. Sicher.
+                    {t('homepage.hero.title_line2')}
                   </Box>
                 </Typography>
                 <Typography
@@ -196,8 +171,7 @@ const Homepage = () => {
                     lineHeight: 1.6
                   }}
                 >
-                  Die intelligente Lösung für Ihre Schweizer Steuererklärung.
-                  In nur 20 Minuten zur fertigen Steuererklärung.
+                  {t('homepage.hero.subtitle')}
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
                   <Button
@@ -207,7 +181,7 @@ const Homepage = () => {
                     onClick={() => navigate('/register')}
                     sx={{ px: 4, py: 1.5 }}
                   >
-                    Kostenlos starten
+                    {t('homepage.hero.cta_start')}
                   </Button>
                   <Button
                     variant="outlined"
@@ -215,24 +189,24 @@ const Homepage = () => {
                     onClick={() => document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' })}
                     sx={{ px: 4, py: 1.5 }}
                   >
-                    So funktioniert's
+                    {t('homepage.hero.cta_learn')}
                   </Button>
                 </Stack>
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
                   <Chip
-                    icon={<CheckIcon />}
-                    label="Keine Kreditkarte erforderlich"
+                    icon={<SecurityIcon />}
+                    label={t('homepage.hero.data_protection')}
                     sx={{ bgcolor: 'background.paper' }}
                   />
                   <Chip
-                    icon={<SecurityIcon />}
-                    label="100% Datenschutz"
+                    icon={<CheckIcon />}
+                    label={t('homepage.hero.money_back_guarantee')}
                     sx={{ bgcolor: 'background.paper' }}
                   />
                 </Stack>
               </motion.div>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'block' } }}>
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -240,44 +214,102 @@ const Homepage = () => {
               >
                 <Box sx={{
                   position: 'relative',
-                  height: '400px',
+                  height: '500px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Box
-                    sx={{
-                      width: '100%',
-                      height: '100%',
-                      background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%)',
-                      borderRadius: '24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '2px solid rgba(255, 107, 107, 0.1)'
-                    }}
-                  >
-                    <Typography variant="h1" sx={{ fontSize: { xs: '60px', md: '120px' }, opacity: 0.1 }}>
-                      🇨🇭
-                    </Typography>
-                  </Box>
-                  <Card
-                    sx={{
+                  <HeroIllustration />
+                </Box>
+              </motion.div>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Swiss Trust Badges */}
+      <Box sx={{ py: 4, bgcolor: 'grey.50', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'grey.200' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={3} justifyContent="center" alignItems="center">
+            <Grid item xs={12} sm={4}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <Box sx={{
+                    width: 60,
+                    height: 60,
+                    bgcolor: '#DC0018',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 12px',
+                    position: 'relative'
+                  }}>
+                    <Box sx={{
+                      width: 20,
+                      height: 20,
+                      bgcolor: 'white',
+                      position: 'absolute'
+                    }} />
+                    <Box sx={{
+                      width: 20,
+                      height: 4,
+                      bgcolor: '#DC0018',
                       position: 'absolute',
-                      top: 20,
-                      right: -20,
-                      p: 2,
-                      boxShadow: 3,
-                      display: { xs: 'none', md: 'block' }
-                    }}
-                  >
-                    <Typography variant="h3" color="primary.main" sx={{ fontWeight: 'bold' }}>
-                      CHF 389
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Durchschnittliche Rückerstattung
-                    </Typography>
-                  </Card>
+                      zIndex: 1
+                    }} />
+                    <Box sx={{
+                      width: 4,
+                      height: 20,
+                      bgcolor: '#DC0018',
+                      position: 'absolute',
+                      zIndex: 1
+                    }} />
+                  </Box>
+                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                    {t('homepage.badges.made_in_switzerland')}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('homepage.badges.swiss_quality')}
+                  </Typography>
+                </Box>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <SecurityIcon sx={{ fontSize: 60, color: 'primary.main', mb: 1.5 }} />
+                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                    {t('homepage.badges.swiss_data_protection')}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('homepage.badges.gdpr_compliant')}
+                  </Typography>
+                </Box>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <Box sx={{ fontSize: 60, color: 'success.main', mb: 1.5 }}>🔐</Box>
+                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                    {t('homepage.badges.bank_level_encryption')}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('homepage.badges.aes_256')}
+                  </Typography>
                 </Box>
               </motion.div>
             </Grid>
@@ -320,7 +352,7 @@ const Homepage = () => {
             gutterBottom
             sx={{ mb: 6, fontSize: { xs: '28px', md: '36px' } }}
           >
-            In 3 einfachen Schritten zur Steuererklärung
+            {t('homepage.howItWorks.title')}
           </Typography>
           <Grid container spacing={4}>
             {steps.map((step, index) => (
@@ -383,7 +415,7 @@ const Homepage = () => {
             gutterBottom
             sx={{ mb: 6, fontSize: { xs: '28px', md: '36px' } }}
           >
-            Alles was Sie brauchen
+            {t('homepage.features.title')}
           </Typography>
           <Grid container spacing={3}>
             {features.map((feature, index) => (
@@ -425,90 +457,91 @@ const Homepage = () => {
             variant="h2"
             align="center"
             gutterBottom
-            sx={{ mb: 6, fontSize: { xs: '28px', md: '36px' } }}
+            sx={{ mb: 2, fontSize: { xs: '28px', md: '36px' } }}
           >
-            Transparente Preise
+            {t('homepage.pricing.title')}
           </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            {pricingPlans.map((plan, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+          <Typography
+            variant="body1"
+            align="center"
+            color="text.secondary"
+            sx={{ mb: 6, maxWidth: '600px', mx: 'auto' }}
+          >
+            {t('homepage.pricing.subtitle')}
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              style={{ maxWidth: '500px', width: '100%' }}
+            >
+              <Card
+                sx={{
+                  p: 4,
+                  position: 'relative',
+                  border: '2px solid',
+                  borderColor: 'primary.main',
+                  boxShadow: 6
+                }}
+              >
+                <Chip
+                  label={t('homepage.pricing.popular')}
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    top: -12,
+                    left: '50%',
+                    transform: 'translateX(-50%)'
+                  }}
+                />
+                <Typography variant="h5" gutterBottom align="center">
+                  {pricingPlan.name}
+                </Typography>
+                <Typography
+                  variant="h2"
+                  color="primary.main"
+                  align="center"
+                  sx={{ my: 2, fontWeight: 'bold' }}
                 >
-                  <Card
-                    sx={{
-                      p: 4,
-                      height: '100%',
-                      position: 'relative',
-                      border: plan.featured ? '2px solid' : '1px solid',
-                      borderColor: plan.featured ? 'primary.main' : 'border.grey',
-                      transform: plan.featured ? 'scale(1.05)' : 'scale(1)'
-                    }}
-                  >
-                    {plan.featured && (
-                      <Chip
-                        label="Beliebteste Wahl"
-                        color="primary"
+                  {pricingPlan.price}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" align="center" paragraph>
+                  {pricingPlan.description}
+                </Typography>
+                <List sx={{ mb: 3 }}>
+                  {pricingPlan.features.map((feature, idx) => (
+                    <ListItem key={idx} sx={{ px: 0 }}>
+                      <CheckIcon
                         sx={{
-                          position: 'absolute',
-                          top: -12,
-                          left: '50%',
-                          transform: 'translateX(-50%)'
+                          mr: 1,
+                          color: 'success.main',
+                          fontSize: 20
                         }}
                       />
-                    )}
-                    <Typography variant="h5" gutterBottom align="center">
-                      {plan.name}
-                    </Typography>
-                    <Typography
-                      variant="h2"
-                      color="primary.main"
-                      align="center"
-                      sx={{ my: 2, fontWeight: 'bold' }}
-                    >
-                      {plan.price}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" align="center" paragraph>
-                      {plan.description}
-                    </Typography>
-                    <List sx={{ mb: 3 }}>
-                      {plan.features.map((feature, idx) => (
-                        <ListItem key={idx} sx={{ px: 0 }}>
-                          <CheckIcon
-                            sx={{
-                              mr: 1,
-                              color: feature.included ? 'success.main' : 'text.muted',
-                              fontSize: 20
-                            }}
-                          />
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: feature.included ? 'text.primary' : 'text.muted',
-                              textDecoration: feature.included ? 'none' : 'line-through'
-                            }}
-                          >
-                            {feature.text}
-                          </Typography>
-                        </ListItem>
-                      ))}
-                    </List>
-                    <Button
-                      variant={plan.buttonVariant}
-                      fullWidth
-                      size="large"
-                      onClick={() => navigate('/register')}
-                    >
-                      {plan.buttonText}
-                    </Button>
-                  </Card>
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
+                      <Typography variant="body2">
+                        {feature.text}
+                      </Typography>
+                    </ListItem>
+                  ))}
+                </List>
+                <Button
+                  variant={pricingPlan.buttonVariant}
+                  fullWidth
+                  size="large"
+                  onClick={() => navigate(`/${currentLang}/plan`)}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{ mb: 2 }}
+                >
+                  {pricingPlan.buttonText}
+                </Button>
+                <Typography variant="caption" color="text.secondary" align="center" display="block">
+                  {t('homepage.pricing.guarantee')}
+                </Typography>
+              </Card>
+            </motion.div>
+          </Box>
         </Container>
       </Box>
 

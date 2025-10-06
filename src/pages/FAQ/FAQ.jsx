@@ -26,8 +26,8 @@ const FAQ = () => {
       />
       <FAQSchema />
       <Layout
-        heading={t('Frequently Asked Questions')}
-        text={t('Get answers to common questions about Swiss tax filing, deductions, security, and our AI-powered platform.')}
+        heading={t('faq.heading')}
+        text={t('faq.text')}
         backgroundColor={'linear-gradient(to bottom, #d2dbf8, #f7f9ff)'}
       >
         <Suspense

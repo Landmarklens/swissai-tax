@@ -6,10 +6,8 @@ import SEOHelmet from '../../components/SEO/SEOHelmet';
 
 const HowItWork = () => {
   const { t } = useTranslation();
-  const heading = t('How It Works');
-  const text = t(
-    'Discover how Home Al transforms your apartment search into a seamless experience.Our intelligent platform leverages advanced algorithms to connect you with the best listings based on your unique preferences.'
-  );
+  const heading = t('howitworks.heading');
+  const text = t('howitworks.text');
   return (
     <>
       <SEOHelmet
@@ -17,7 +15,7 @@ const HowItWork = () => {
         descriptionKey="meta.howitworks.description"
       />
       <Layout heading={heading} text={text}>
-        <HowItWorks title={t('Explore the Process')} />
+        <HowItWorks title={t('howitworks.explore')} />
       </Layout>
     </>
   );

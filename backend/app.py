@@ -24,7 +24,7 @@ from services.tax_calculation_service import TaxCalculationService
 from utils.validators import validate_session_id, validate_tax_year
 
 # Import routers
-from routers import auth, user
+from routers import auth, user, user_counter
 from routers.swisstax import dashboard, profile, settings, filing, payment
 
 # Try to import connection pool for App Runner, fallback to regular connection
@@ -89,6 +89,7 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(user.router, prefix="/api/user", tags=["user"])
+app.include_router(user_counter.router, prefix="/api/user-counter", tags=["user-counter"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])

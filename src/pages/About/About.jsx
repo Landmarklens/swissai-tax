@@ -7,9 +7,8 @@ import SEOHelmet from '../../components/SEO/SEOHelmet';
 
 const About = () => {
   const { t } = useTranslation();
-  const heading = 'About The Home AI';
-  const text =
-    'We offers best solutions with the help of in-depth analysis of artificial intelligence to make life easier for our users.';
+  const heading = t('about.heading');
+  const text = t('about.text');
   return (
     <>
       <SEOHelmet

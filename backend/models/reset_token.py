@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import Session
 
-from db.session import Base
+from db.base import Base
 
 
 class ResetToken(Base):

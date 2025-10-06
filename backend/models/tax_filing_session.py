@@ -1,12 +1,13 @@
 """Tax Filing Session Model - Represents a single tax filing attempt"""
 
 from sqlalchemy import Column, String, Integer, JSON, Boolean, DateTime, Enum as SQLEnum, ForeignKey, Text
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from uuid import uuid4
 import enum
 
-from db.session import Base
+from db.base import Base
 from utils.encrypted_types import EncryptedJSON
 
 
@@ -33,7 +34,7 @@ class TaxFilingSession(Base):
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    user_id = Column(String(36), ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
 
     # Naming & Year
     name = Column(String(255), nullable=True)  # e.g., "2024 Tax Return - Main"

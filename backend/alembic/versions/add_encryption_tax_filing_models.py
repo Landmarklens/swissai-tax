@@ -23,19 +23,31 @@ depends_on = None
 def upgrade():
     """Add tax filing tables with encryption support"""
 
-    # Create FilingStatus enum
+    # Create FilingStatus enum (idempotent)
+    conn = op.get_bind()
+    enum_exists = conn.execute(sa.text(
+        "SELECT 1 FROM pg_type WHERE typname = 'filing_status_enum'"
+    )).scalar()
+
+    if not enum_exists:
+        filing_status_enum = postgresql.ENUM(
+            'draft', 'in_progress', 'completed', 'submitted', 'archived',
+            name='filing_status_enum',
+            create_type=True
+        )
+        filing_status_enum.create(conn, checkfirst=False)
+
     filing_status_enum = postgresql.ENUM(
         'draft', 'in_progress', 'completed', 'submitted', 'archived',
         name='filing_status_enum',
-        create_type=True
+        create_type=False
     )
-    filing_status_enum.create(op.get_bind(), checkfirst=True)
 
     # Create tax_filing_sessions table
     op.create_table(
         'tax_filing_sessions',
         sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('user_id', sa.Integer, sa.ForeignKey('users.id'), nullable=False, index=True),
+        sa.Column('user_id', postgresql.UUID(as_uuid=False), sa.ForeignKey('users.id'), nullable=False, index=True),
         sa.Column('name', sa.String(255), nullable=True),
         sa.Column('tax_year', sa.Integer, nullable=False),
 
@@ -65,10 +77,8 @@ def upgrade():
         sa.Column('updated_at', sa.DateTime, nullable=False, server_default=sa.func.now(), onupdate=sa.func.now()),
     )
 
-    # Create indexes for tax_filing_sessions
-    op.create_index('ix_tax_filing_sessions_user_id', 'tax_filing_sessions', ['user_id'])
-    op.create_index('ix_tax_filing_sessions_status', 'tax_filing_sessions', ['status'])
-    op.create_index('ix_tax_filing_sessions_last_activity', 'tax_filing_sessions', ['last_activity'])
+    # Indexes already created by index=True in column definitions above
+    # (user_id, status, is_pinned, is_archived, last_activity)
 
     # Create tax_answers table
     op.create_table(
@@ -91,9 +101,8 @@ def upgrade():
         sa.Column('updated_at', sa.DateTime, nullable=False, server_default=sa.func.now(), onupdate=sa.func.now()),
     )
 
-    # Create indexes for tax_answers
-    op.create_index('ix_tax_answers_filing_session_id', 'tax_answers', ['filing_session_id'])
-    op.create_index('ix_tax_answers_question_id', 'tax_answers', ['question_id'])
+    # Indexes already created by index=True in column definitions above
+    # (filing_session_id, question_id)
 
     # Create composite index for common query pattern
     op.create_index(

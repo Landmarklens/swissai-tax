@@ -1,0 +1,357 @@
+"""
+Unit tests for Tax Filing Router
+Tests API endpoints for filing management
+"""
+import pytest
+from fastapi.testclient import TestClient
+from unittest.mock import Mock, patch, MagicMock
+from datetime import datetime
+
+from main import app
+from models.tax_filing_session import TaxFilingSession, FilingStatus
+
+
+@pytest.fixture
+def mock_auth():
+    """Mock authentication"""
+    with patch('routers.tax_filing.get_current_user') as mock:
+        mock.return_value = {'id': 'user-456', 'email': 'test@example.com'}
+        yield mock
+
+
+@pytest.fixture
+def mock_db():
+    """Mock database session"""
+    with patch('routers.tax_filing.get_db') as mock:
+        db = MagicMock()
+        mock.return_value = db
+        yield db
+
+
+@pytest.fixture
+def client():
+    """Create test client"""
+    return TestClient(app)
+
+
+class TestTaxFilingRouter:
+    """Test suite for tax filing router endpoints"""
+
+    def test_list_filings_success(self, client, mock_auth, mock_db):
+        """Test GET /api/tax-filing/filings"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.list_user_filings') as mock_list:
+            with patch('routers.tax_filing.TaxFilingService.get_filing_statistics') as mock_stats:
+                mock_list.return_value = {
+                    2024: [{'id': 'f1', 'name': '2024 Tax Return'}]
+                }
+                mock_stats.return_value = {'total_filings': 1}
+
+                # Execute
+                response = client.get(
+                    '/api/tax-filing/filings',
+                    headers={'Authorization': 'Bearer fake-token'}
+                )
+
+                # Assert
+                assert response.status_code == 200
+                data = response.json()
+                assert 'filings' in data
+                assert 'statistics' in data
+                assert data['total_count'] == 1
+
+    def test_list_filings_with_filters(self, client, mock_auth, mock_db):
+        """Test GET /api/tax-filing/filings with filters"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.list_user_filings') as mock_list:
+            with patch('routers.tax_filing.TaxFilingService.get_filing_statistics') as mock_stats:
+                mock_list.return_value = {2024: []}
+                mock_stats.return_value = {}
+
+                # Execute
+                response = client.get(
+                    '/api/tax-filing/filings?year=2024&canton=ZH',
+                    headers={'Authorization': 'Bearer fake-token'}
+                )
+
+                # Assert
+                assert response.status_code == 200
+                mock_list.assert_called_once()
+                call_kwargs = mock_list.call_args.kwargs
+                assert call_kwargs['year'] == 2024
+                assert call_kwargs['canton'] == 'ZH'
+
+    def test_create_filing_success(self, client, mock_auth, mock_db):
+        """Test POST /api/tax-filing/filings"""
+        # Setup
+        mock_filing = TaxFilingSession(
+            id='new-filing',
+            user_id='user-456',
+            tax_year=2024,
+            canton='ZH',
+            status=FilingStatus.DRAFT
+        )
+
+        with patch('routers.tax_filing.TaxFilingService.create_filing') as mock_create:
+            mock_create.return_value = mock_filing
+
+            # Execute
+            response = client.post(
+                '/api/tax-filing/filings',
+                json={
+                    'tax_year': 2024,
+                    'canton': 'ZH',
+                    'language': 'en',
+                    'is_primary': True
+                },
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 201
+            data = response.json()
+            assert data['id'] == 'new-filing'
+
+    def test_create_filing_validation_error(self, client, mock_auth, mock_db):
+        """Test POST /api/tax-filing/filings with invalid data"""
+        # Execute - invalid year
+        response = client.post(
+            '/api/tax-filing/filings',
+            json={
+                'tax_year': 2050,  # Too far in future
+                'canton': 'ZH'
+            },
+            headers={'Authorization': 'Bearer fake-token'}
+        )
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+
+    def test_create_filing_duplicate_error(self, client, mock_auth, mock_db):
+        """Test POST /api/tax-filing/filings with duplicate"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.create_filing') as mock_create:
+            mock_create.side_effect = ValueError("Filing already exists")
+
+            # Execute
+            response = client.post(
+                '/api/tax-filing/filings',
+                json={
+                    'tax_year': 2024,
+                    'canton': 'ZH',
+                    'language': 'en'
+                },
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 400
+            assert 'already exists' in response.json()['detail']
+
+    def test_copy_filing_success(self, client, mock_auth, mock_db):
+        """Test POST /api/tax-filing/filings/copy"""
+        # Setup
+        mock_filing = TaxFilingSession(
+            id='copied-filing',
+            user_id='user-456',
+            tax_year=2025,
+            canton='ZH',
+            source_filing_id='source-filing'
+        )
+
+        with patch('routers.tax_filing.TaxFilingService.copy_from_previous_year') as mock_copy:
+            mock_copy.return_value = mock_filing
+
+            # Execute
+            response = client.post(
+                '/api/tax-filing/filings/copy',
+                json={
+                    'source_filing_id': 'source-filing',
+                    'new_year': 2025
+                },
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 201
+            data = response.json()
+            assert data['id'] == 'copied-filing'
+            assert data['source_filing_id'] == 'source-filing'
+
+    def test_get_filing_success(self, client, mock_auth, mock_db):
+        """Test GET /api/tax-filing/filings/{filing_id}"""
+        # Setup
+        mock_filing = TaxFilingSession(
+            id='filing-123',
+            user_id='user-456',
+            tax_year=2024,
+            canton='ZH'
+        )
+
+        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
+            mock_get.return_value = mock_filing
+
+            # Execute
+            response = client.get(
+                '/api/tax-filing/filings/filing-123',
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 200
+            data = response.json()
+            assert data['id'] == 'filing-123'
+
+    def test_get_filing_not_found(self, client, mock_auth, mock_db):
+        """Test GET /api/tax-filing/filings/{filing_id} not found"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
+            mock_get.side_effect = ValueError("Filing not found")
+
+            # Execute
+            response = client.get(
+                '/api/tax-filing/filings/nonexistent',
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 404
+
+    def test_update_filing_success(self, client, mock_auth, mock_db):
+        """Test PATCH /api/tax-filing/filings/{filing_id}"""
+        # Setup
+        mock_filing = TaxFilingSession(
+            id='filing-123',
+            user_id='user-456',
+            tax_year=2024,
+            canton='ZH',
+            name='Updated Name',
+            completion_percentage=50
+        )
+
+        with patch('routers.tax_filing.TaxFilingService.update_filing') as mock_update:
+            mock_update.return_value = mock_filing
+
+            # Execute
+            response = client.patch(
+                '/api/tax-filing/filings/filing-123',
+                json={
+                    'name': 'Updated Name',
+                    'completion_percentage': 50
+                },
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 200
+            data = response.json()
+            assert data['name'] == 'Updated Name'
+            assert data['completion_percentage'] == 50
+
+    def test_update_filing_no_fields(self, client, mock_auth, mock_db):
+        """Test PATCH with no fields to update"""
+        # Execute
+        response = client.patch(
+            '/api/tax-filing/filings/filing-123',
+            json={},
+            headers={'Authorization': 'Bearer fake-token'}
+        )
+
+        # Assert
+        assert response.status_code == 400
+        assert 'No fields to update' in response.json()['detail']
+
+    def test_delete_filing_soft_delete(self, client, mock_auth, mock_db):
+        """Test DELETE /api/tax-filing/filings/{filing_id} soft delete"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.delete_filing') as mock_delete:
+            mock_delete.return_value = True
+
+            # Execute
+            response = client.delete(
+                '/api/tax-filing/filings/filing-123',
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 204
+            mock_delete.assert_called_once()
+            call_kwargs = mock_delete.call_args.kwargs
+            assert call_kwargs['hard_delete'] is False
+
+    def test_delete_filing_hard_delete(self, client, mock_auth, mock_db):
+        """Test DELETE with hard_delete=true"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.delete_filing') as mock_delete:
+            mock_delete.return_value = True
+
+            # Execute
+            response = client.delete(
+                '/api/tax-filing/filings/filing-123?hard_delete=true',
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 204
+            call_kwargs = mock_delete.call_args.kwargs
+            assert call_kwargs['hard_delete'] is True
+
+    def test_restore_filing_success(self, client, mock_auth, mock_db):
+        """Test POST /api/tax-filing/filings/{filing_id}/restore"""
+        # Setup
+        mock_filing = TaxFilingSession(
+            id='filing-123',
+            user_id='user-456',
+            tax_year=2024,
+            deleted_at=None
+        )
+
+        with patch('routers.tax_filing.TaxFilingService.restore_filing') as mock_restore:
+            mock_restore.return_value = mock_filing
+
+            # Execute
+            response = client.post(
+                '/api/tax-filing/filings/filing-123/restore',
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 200
+            data = response.json()
+            assert data['id'] == 'filing-123'
+            assert data['deleted_at'] is None
+
+    def test_get_statistics(self, client, mock_auth, mock_db):
+        """Test GET /api/tax-filing/statistics"""
+        # Setup
+        with patch('routers.tax_filing.TaxFilingService.get_filing_statistics') as mock_stats:
+            mock_stats.return_value = {
+                'total_filings': 5,
+                'by_year': {2024: 2, 2023: 3},
+                'completed_filings': 3,
+                'in_progress_filings': 2
+            }
+
+            # Execute
+            response = client.get(
+                '/api/tax-filing/statistics',
+                headers={'Authorization': 'Bearer fake-token'}
+            )
+
+            # Assert
+            assert response.status_code == 200
+            data = response.json()
+            assert data['total_filings'] == 5
+            assert data['completed_filings'] == 3
+
+    def test_unauthorized_access(self, client, mock_db):
+        """Test endpoints without authentication"""
+        # Execute - no auth header
+        response = client.get('/api/tax-filing/filings')
+
+        # Assert
+        assert response.status_code in [401, 403]
+
+
+if __name__ == '__main__':
+    pytest.main([__file__, '-v'])

@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from uuid import uuid4
 
-from db.session import Base
+from db.base import Base
 from utils.encrypted_types import EncryptedText
 
 

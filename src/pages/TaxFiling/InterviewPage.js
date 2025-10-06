@@ -28,6 +28,7 @@ const InterviewPage = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
+  const [filingSessionId, setFilingSessionId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [totalQuestions, setTotalQuestions] = useState(14);
@@ -140,9 +141,11 @@ const InterviewPage = () => {
 
       // Handle both camelCase (sessionId) and snake_case (session_id) from API
       const sessionId = response.data.sessionId || response.data.session_id;
+      const filing_session_id = response.data.filingSessionId || response.data.filing_session_id;
       const question = response.data.currentQuestion || response.data.current_question;
 
       console.log('Session ID:', sessionId);
+      console.log('Filing Session ID:', filing_session_id);
       console.log('Current Question:', question);
 
       // Transform API response to match QuestionCard expected format
@@ -162,6 +165,7 @@ const InterviewPage = () => {
       console.log('Transformed Question:', transformedQuestion);
 
       setSession(sessionId);
+      setFilingSessionId(filing_session_id);
       setCurrentQuestion(transformedQuestion);
       setProgress(response.data.progress || 0);
       setError(null);
@@ -175,11 +179,12 @@ const InterviewPage = () => {
   };
 
   const handleAnswer = async (answer) => {
-    if (!session || !currentQuestion) return;
+    if (!session || !currentQuestion || !filingSessionId) return;
 
     try {
       setSubmitting(true);
       const response = await api.post(`/api/interview/${session}/answer`, {
+        filing_session_id: filingSessionId,
         question_id: currentQuestion.id,
         answer: answer
       });
@@ -211,6 +216,7 @@ const InterviewPage = () => {
         navigate('/tax-filing/document-checklist', {
           state: {
             session_id: session,
+            filing_session_id: filingSessionId,
             profile: response.data.profile,
             document_requirements: response.data.documentRequirements || response.data.document_requirements
           }

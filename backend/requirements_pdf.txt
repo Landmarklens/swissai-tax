@@ -1,0 +1,7 @@
+# PDF Generation Dependencies
+reportlab==4.1.0
+pypdf==4.0.0
+pillow==10.2.0
+python-barcode==0.15.1
+qrcode[pil]==7.4.2
+pylibdmtx==0.1.10

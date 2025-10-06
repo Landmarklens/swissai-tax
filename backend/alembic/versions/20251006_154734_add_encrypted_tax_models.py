@@ -1,7 +1,7 @@
 """Add encrypted tax models (TaxAnswer, TaxInsight, TaxCalculation)
 
 Revision ID: add_encrypted_tax_models
-Revises: 9eadbee3622b
+Revises: d8e7f9a1b2c3
 Create Date: 2025-10-06 15:47:34
 
 Implements AES-256 encryption for sensitive PII and financial data
@@ -12,7 +12,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = 'add_encrypted_tax_models'
-down_revision = '9eadbee3622b'
+down_revision = 'd8e7f9a1b2c3'
 branch_labels = None
 depends_on = None
 

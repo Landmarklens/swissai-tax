@@ -133,10 +133,25 @@ async def health_check():
         "timestamp": datetime.utcnow().isoformat()
     }
 
-# Interview endpoints
+# Interview endpoints - DEPRECATED - Now in routers/interview.py
+# These old endpoints are commented out to avoid conflicts with the new router
+# registered in main.py. The new router supports filing sessions and encryption.
+"""
 @app.post("/api/interview/start")
 async def start_interview(request: InterviewStartRequest):
-    """Start a new interview session"""
+    # DEPRECATED - Use routers/interview.py instead
+    pass
+
+@app.post("/api/interview/answer")
+async def submit_answer(request: InterviewAnswerRequest):
+    # DEPRECATED - Use routers/interview.py instead
+    pass
+"""
+
+# Old implementation commented out below for reference:
+"""
+@app.post("/api/interview/start")
+async def start_interview_OLD(request: InterviewStartRequest):
     try:
         from uuid import uuid4
         user_id = request.userId or str(uuid4())
@@ -158,8 +173,7 @@ async def start_interview(request: InterviewStartRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/interview/answer")
-async def submit_answer(request: InterviewAnswerRequest):
-    """Submit an answer and get the next question"""
+async def submit_answer_OLD(request: InterviewAnswerRequest):
     try:
         # Validate session ID
         if not validate_session_id(request.sessionId):
@@ -193,8 +207,8 @@ async def submit_answer(request: InterviewAnswerRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/interview/resume/{sessionId}")
-async def resume_session(sessionId: str):
-    """Resume an existing interview session"""
+async def resume_session_OLD(sessionId: str):
+    # DEPRECATED - Use routers/interview.py instead
     try:
         result = interview_service.resume_session(sessionId)
 
@@ -218,14 +232,15 @@ async def resume_session(sessionId: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/interview/questions")
-async def get_questions(language: str = "en"):
-    """Get all interview questions"""
+async def get_questions_OLD(language: str = "en"):
+    # DEPRECATED - Use routers/interview.py instead
     try:
         questions = interview_service.get_all_questions(language)
         return {"questions": questions}
     except Exception as e:
         logger.error(f"Error getting questions: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+"""
 
 # Document endpoints
 @app.post("/api/documents/upload")

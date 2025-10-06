@@ -8,13 +8,14 @@ from uuid import UUID, uuid4
 
 from models.question import QuestionLoader, QuestionType
 from utils.encryption import get_encryption_service
+from services.filing_orchestration_service import FilingOrchestrationService
 
 logger = logging.getLogger(__name__)
 
 class InterviewService:
     """Service for managing interview sessions and state"""
 
-    def __init__(self):
+    def __init__(self, db=None):
         import threading
         self.question_loader = QuestionLoader()
         # In production, this would use database storage
@@ -22,6 +23,8 @@ class InterviewService:
         self.sessions = {}
         self._lock = threading.Lock()  # Thread safety for concurrent access
         self.encryption_service = get_encryption_service()
+        # Multi-canton filing support
+        self.filing_service = FilingOrchestrationService(db=db)
 
     def create_session(self, user_id: str, tax_year: int, language: str = 'en') -> Dict[str, Any]:
         """Create a new interview session"""
@@ -120,6 +123,59 @@ class InterviewService:
             else:
                 # Move to next main question
                 next_question_id = 'Q04'
+
+        # NEW: Handle property ownership and multi-canton filing
+        elif question_id == 'Q06' and answer == True:
+            # User owns property - ask which cantons
+            session['pending_questions'].append('Q06a')
+            next_question_id = 'Q06a'
+
+        elif question_id == 'Q06a':
+            # Q06a: Property cantons (multi-select)
+            # Answer is list of canton codes, e.g., ['GE', 'VS']
+            property_cantons = answer if isinstance(answer, list) else [answer]
+
+            # Store property cantons in session
+            session['property_cantons'] = property_cantons
+
+            # Auto-create secondary filings for other cantons
+            # Get primary filing ID from session (should be set when creating interview)
+            primary_filing_id = session.get('filing_id')
+
+            if primary_filing_id and len(property_cantons) > 0:
+                try:
+                    # Auto-create secondary filings
+                    secondary_filings = self.filing_service.auto_create_secondary_filings(
+                        primary_filing_id=primary_filing_id,
+                        property_cantons=property_cantons
+                    )
+
+                    # Store secondary filing IDs in session
+                    session['secondary_filing_ids'] = [f.id for f in secondary_filings]
+
+                    logger.info(
+                        f"Auto-created {len(secondary_filings)} secondary filings "
+                        f"for cantons: {[f.canton for f in secondary_filings]}"
+                    )
+
+                    # Store info for response message
+                    session['multi_canton_created'] = {
+                        'count': len(secondary_filings),
+                        'cantons': [f.canton for f in secondary_filings],
+                        'filing_ids': [f.id for f in secondary_filings]
+                    }
+                except Exception as e:
+                    logger.error(f"Failed to create secondary filings: {e}")
+                    # Continue with interview even if secondary filing creation fails
+
+            # Ask property details for each canton
+            next_question_id = 'Q06b'
+
+        elif question_id == 'Q06b':
+            # Property type/details - might loop for each canton
+            # For now, move to next question
+            next_question_id = 'Q07'
+
         else:
             # Get next question based on answer
             next_questions = self.question_loader.get_next_questions(question_id, answer)
@@ -169,11 +225,19 @@ class InterviewService:
         progress = min(int((completed / max(total_questions, 1)) * 100), 99)
         session['progress'] = progress
 
-        return {
+        response = {
             'current_question': self._format_question(next_question, session['language']),
             'progress': progress,
             'complete': False
         }
+
+        # Add multi-canton filing info if secondary filings were created
+        if 'multi_canton_created' in session:
+            response['multi_canton_filings'] = session['multi_canton_created']
+            # Clear the flag so it's only sent once
+            del session['multi_canton_created']
+
+        return response
 
     def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
         """Get session details"""

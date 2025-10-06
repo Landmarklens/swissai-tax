@@ -6,7 +6,7 @@ from datetime import datetime
 from uuid import uuid4
 import enum
 
-from db.session import Base
+from db.base import Base
 
 
 class CalculationType(str, enum.Enum):

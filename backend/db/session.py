@@ -1,7 +1,9 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+
+# Import the shared Base from db.base
+from db.base import Base
 
 # Import settings from config to get database credentials
 try:
@@ -16,8 +18,6 @@ except Exception as e:
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
 
 def get_db():
     db = SessionLocal()

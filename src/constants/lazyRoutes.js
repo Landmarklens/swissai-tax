@@ -41,6 +41,7 @@ const Profile = withSuspense(lazy(() => import('../pages/Profile/Profile')));
 const Settings = withSuspense(lazy(() => import('../pages/Settings/Settings')));
 
 // Tax filing pages
+const FilingsListPage = withSuspense(lazy(() => import('../pages/TaxFiling/FilingsListPage')));
 const TaxInterviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/InterviewPage')));
 const DocumentChecklistPage = withSuspense(lazy(() => import('../pages/TaxFiling/DocumentChecklistPage')));
 const TaxResultsPage = withSuspense(lazy(() => import('../pages/TaxFiling/TaxResults')));
@@ -93,6 +94,22 @@ export const LAZY_NAVIGATION_ROUTE = [
 
   // Tax filing workflow (protected)
   {
+    path: '/tax-filing/filings',
+    element: (
+      <ProtectedRoute>
+        <FilingsListPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/interview/:filingId',
+    element: (
+      <ProtectedRoute>
+        <TaxInterviewPage />
+      </ProtectedRoute>
+    )
+  },
+  {
     path: '/tax-filing/interview',
     element: (
       <ProtectedRoute>
@@ -113,6 +130,14 @@ export const LAZY_NAVIGATION_ROUTE = [
     element: (
       <ProtectedRoute>
         <DocumentChecklistPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/review/:filingId',
+    element: (
+      <ProtectedRoute>
+        <ReviewPage />
       </ProtectedRoute>
     )
   },

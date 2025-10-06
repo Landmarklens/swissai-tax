@@ -144,8 +144,24 @@ const InterviewPage = () => {
       console.log('Session ID:', sessionId);
       console.log('Current Question:', question);
 
+      // Transform API response to match QuestionCard expected format
+      const transformedQuestion = question ? {
+        ...question,
+        question_type: question.type === 'single_choice' ? 'select' :
+                      question.type === 'multiple_choice' ? 'multiselect' :
+                      question.type || question.question_type,
+        question_text: question.text || question.question_text,
+        help_text: question.help_text,
+        validation_rules: question.validation_rules,
+        options: {
+          options: question.options?.map(opt => opt.value) || []
+        }
+      } : null;
+
+      console.log('Transformed Question:', transformedQuestion);
+
       setSession(sessionId);
-      setCurrentQuestion(question);
+      setCurrentQuestion(transformedQuestion);
       setProgress(response.data.progress || 0);
       setError(null);
     } catch (err) {

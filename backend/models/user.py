@@ -119,6 +119,9 @@ class User(Base):
     import_jobs = relationship("PropertyImportJob", back_populates="user")
     whatif_jobs = relationship("WhatIfAnalysisJob", back_populates="user")
 
+    # Tax filing relationships
+    tax_filing_sessions = relationship("TaxFilingSession", back_populates="user")
+
 
 class ConversationProfile(Base):
     __tablename__ = "conversation_profiles"

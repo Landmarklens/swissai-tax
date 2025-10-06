@@ -7,6 +7,7 @@ from typing import Dict, List, Optional, Any
 from uuid import UUID, uuid4
 
 from models.question import QuestionLoader, QuestionType
+from utils.encryption import get_encryption_service
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,7 @@ class InterviewService:
         # For now, using in-memory storage
         self.sessions = {}
         self._lock = threading.Lock()  # Thread safety for concurrent access
+        self.encryption_service = get_encryption_service()
 
     def create_session(self, user_id: str, tax_year: int, language: str = 'en') -> Dict[str, Any]:
         """Create a new interview session"""
@@ -74,8 +76,16 @@ class InterviewService:
                 'valid': False
             }
 
-        # Store answer
-        session['answers'][question_id] = answer
+        # Store answer (encrypted if sensitive)
+        # Encrypt sensitive answers before storing
+        if self._is_question_sensitive(question_id):
+            # Encrypt the answer value
+            encrypted_answer = self.encryption_service.encrypt(str(answer))
+            session['answers'][question_id] = encrypted_answer
+            logger.info(f"Stored encrypted answer for sensitive question {question_id}")
+        else:
+            session['answers'][question_id] = answer
+
         session['completed_questions'].append(question_id)
 
         # Handle sub-questions for married status (Q01a-d)
@@ -239,45 +249,100 @@ class InterviewService:
 
         return formatted
 
-    def _generate_profile(self, answers: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate tax profile from answers"""
-        profile = {
-            'civil_status': answers.get('Q01'),
-            'canton': answers.get('Q02'),
-            'municipality': answers.get('Q02a'),
-            'has_children': answers.get('Q03') == 'yes',
-            'num_children': int(answers.get('Q03a', 0)) if answers.get('Q03') == 'yes' else 0,
-            'num_employers': int(answers.get('Q04', 0)),
-            'unemployment_benefits': answers.get('Q05') == 'yes',
-            'disability_benefits': answers.get('Q06') == 'yes',
-            'has_pension_fund': answers.get('Q07') == 'yes',
-            'pillar_3a_contribution': answers.get('Q08') == 'yes',
-            'owns_property': answers.get('Q09') == 'yes',
-            'has_securities': answers.get('Q10') == 'yes',
-            'charitable_donations': answers.get('Q11') == 'yes',
-            'pays_alimony': answers.get('Q12') == 'yes',
-            'medical_expenses': answers.get('Q13') == 'yes',
-            'church_tax': answers.get('Q14', 'none')
+    def _is_question_sensitive(self, question_id: str) -> bool:
+        """
+        Determine if a question contains sensitive information requiring encryption
+
+        Sensitive questions include:
+        - Personal identifying information (names, dates of birth)
+        - Financial amounts (income, deductions, donations)
+        - Location data (municipality, address)
+
+        Args:
+            question_id: The question identifier
+
+        Returns:
+            True if question contains sensitive data
+        """
+        # Define sensitive question IDs
+        sensitive_questions = {
+            'Q01a',  # Spouse first name
+            'Q01b',  # Spouse last name
+            'Q01c',  # Spouse date of birth
+            'Q02a',  # Municipality (location)
+            'Q03b',  # Child details (name, DOB)
+            'Q08a',  # Pillar 3a contribution amount
+            'Q11a',  # Charitable donation amount
+            'Q12a',  # Alimony payment amount
+            'Q13a',  # Medical expense amount
         }
 
-        # Add spouse info if married
-        if answers.get('Q01') == 'married':
+        return question_id in sensitive_questions
+
+    def _decrypt_answers_for_profile(self, answers: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Decrypt any encrypted answers for profile generation
+
+        Args:
+            answers: Dictionary of answers (may contain encrypted values)
+
+        Returns:
+            Dictionary with decrypted values
+        """
+        decrypted = {}
+        for question_id, answer_value in answers.items():
+            if self._is_question_sensitive(question_id):
+                try:
+                    decrypted[question_id] = self.encryption_service.decrypt(answer_value)
+                except Exception as e:
+                    logger.warning(f"Failed to decrypt answer for {question_id}: {e}")
+                    decrypted[question_id] = answer_value
+            else:
+                decrypted[question_id] = answer_value
+        return decrypted
+
+    def _generate_profile(self, answers: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate tax profile from answers"""
+        # Decrypt sensitive answers before generating profile
+        decrypted_answers = self._decrypt_answers_for_profile(answers)
+
+        profile = {
+            'civil_status': decrypted_answers.get('Q01'),
+            'canton': decrypted_answers.get('Q02'),
+            'municipality': decrypted_answers.get('Q02a'),
+            'has_children': decrypted_answers.get('Q03') == 'yes',
+            'num_children': int(decrypted_answers.get('Q03a', 0)) if decrypted_answers.get('Q03') == 'yes' else 0,
+            'num_employers': int(decrypted_answers.get('Q04', 0)),
+            'unemployment_benefits': decrypted_answers.get('Q05') == 'yes',
+            'disability_benefits': decrypted_answers.get('Q06') == 'yes',
+            'has_pension_fund': decrypted_answers.get('Q07') == 'yes',
+            'pillar_3a_contribution': decrypted_answers.get('Q08') == 'yes',
+            'owns_property': decrypted_answers.get('Q09') == 'yes',
+            'has_securities': decrypted_answers.get('Q10') == 'yes',
+            'charitable_donations': decrypted_answers.get('Q11') == 'yes',
+            'pays_alimony': decrypted_answers.get('Q12') == 'yes',
+            'medical_expenses': decrypted_answers.get('Q13') == 'yes',
+            'church_tax': decrypted_answers.get('Q14', 'none')
+        }
+
+        # Add spouse info if married (decrypted sensitive fields)
+        if decrypted_answers.get('Q01') == 'married':
             profile['spouse'] = {
-                'first_name': answers.get('Q01a'),
-                'last_name': answers.get('Q01b'),
-                'date_of_birth': answers.get('Q01c'),
-                'is_employed': answers.get('Q01d') == 'yes'
+                'first_name': decrypted_answers.get('Q01a'),
+                'last_name': decrypted_answers.get('Q01b'),
+                'date_of_birth': decrypted_answers.get('Q01c'),
+                'is_employed': decrypted_answers.get('Q01d') == 'yes'
             }
 
-        # Add financial details if available
-        if answers.get('Q08a'):
-            profile['pillar_3a_amount'] = float(answers.get('Q08a'))
-        if answers.get('Q11a'):
-            profile['donation_amount'] = float(answers.get('Q11a'))
-        if answers.get('Q12a'):
-            profile['alimony_amount'] = float(answers.get('Q12a'))
-        if answers.get('Q13a'):
-            profile['medical_expense_amount'] = float(answers.get('Q13a'))
+        # Add financial details if available (decrypted sensitive amounts)
+        if decrypted_answers.get('Q08a'):
+            profile['pillar_3a_amount'] = float(decrypted_answers.get('Q08a'))
+        if decrypted_answers.get('Q11a'):
+            profile['donation_amount'] = float(decrypted_answers.get('Q11a'))
+        if decrypted_answers.get('Q12a'):
+            profile['alimony_amount'] = float(decrypted_answers.get('Q12a'))
+        if decrypted_answers.get('Q13a'):
+            profile['medical_expense_amount'] = float(decrypted_answers.get('Q13a'))
 
         return profile
 

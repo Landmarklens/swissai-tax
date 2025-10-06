@@ -157,17 +157,6 @@ const FeatureBox = ({ title, isFeature }) => {
                       style={{ textDecoration: 'none' }}
                     >
                       <Box sx={{ width: '100%' }}>
-                        <Box
-                          component="img"
-                          src={item.logo}
-                          alt={item.title}
-                          sx={{
-                            width: '40px',
-                            height: '40px',
-                            objectFit: 'contain',
-                            mb: 2
-                          }}
-                        />
                         <Typography
                           variant="h6"
                           sx={{

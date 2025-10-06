@@ -51,7 +51,7 @@ import axios from 'axios';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || process.env.REACT_APP_API_URL || 'https://api.swissai.tax';
 
 // Swiss canton codes
 const CANTONS = [

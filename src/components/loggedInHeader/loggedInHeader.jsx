@@ -23,8 +23,10 @@ const LoggedInHeader = ({ hideProfile }) => {
   if (isMobile) {
     return (
       <Box id="LoggedInHeader" sx={containerSx}>
-        <Link to="/" sx={{ textDecoration: 'none' }}>
-          <ImageComponent name="logo-white" height={26} alt={t('SwissAI Tax Logo')} />
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>
+            SwissAI Tax
+          </Typography>
         </Link>
 
         <Box
@@ -42,8 +44,10 @@ const LoggedInHeader = ({ hideProfile }) => {
 
   return (
     <Box id="LoggedInHeader" sx={containerSx}>
-      <Link to="/" sx={{ textDecoration: 'none' }}>
-        <ImageComponent name="logo-white" height={26} alt={t('SwissAI Tax Logo')} />
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>
+          SwissAI Tax
+        </Typography>
       </Link>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

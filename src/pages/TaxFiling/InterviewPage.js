@@ -21,6 +21,7 @@ import ProgressBar from './components/ProgressBar';
 import TaxEstimateSidebar from './components/TaxEstimateSidebar';
 import { api } from '../../services/api';
 import LoggedInHeader from '../../components/loggedInHeader/loggedInHeader';
+import Footer from '../../components/footer/Footer';
 
 const InterviewPage = () => {
   const navigate = useNavigate();
@@ -178,9 +179,11 @@ const InterviewPage = () => {
 
     try {
       setSubmitting(true);
-      const response = await api.post(`/api/interview/${session}/answer`, {
-        question_id: currentQuestion.id,
-        answer: answer
+      const response = await api.post('/api/interview/answer', {
+        sessionId: session,
+        questionId: currentQuestion.id,
+        answer: answer,
+        language: 'en'
       });
 
       // Check if answer was invalid
@@ -206,19 +209,31 @@ const InterviewPage = () => {
 
       // Check if interview is complete
       if (response.data.complete) {
-        // Save before navigating
-        await autoSave();
         // Interview completed, show results
         navigate('/tax-filing/document-checklist', {
           state: {
             session_id: session,
             profile: response.data.profile,
-            document_requirements: response.data.document_requirements
+            document_requirements: response.data.documentRequirements || response.data.document_requirements
           }
         });
       } else {
-        // Set next question
-        setCurrentQuestion(response.data.current_question);
+        // Transform next question format (handle both camelCase and snake_case)
+        const nextQuestion = response.data.nextQuestion || response.data.next_question;
+        const transformedNextQuestion = nextQuestion ? {
+          ...nextQuestion,
+          question_type: nextQuestion.type === 'single_choice' ? 'select' :
+                        nextQuestion.type === 'multiple_choice' ? 'multiselect' :
+                        nextQuestion.type || nextQuestion.question_type,
+          question_text: nextQuestion.text || nextQuestion.question_text,
+          help_text: nextQuestion.help_text,
+          validation_rules: nextQuestion.validation_rules,
+          options: {
+            options: nextQuestion.options?.map(opt => opt.value) || []
+          }
+        } : null;
+
+        setCurrentQuestion(transformedNextQuestion);
         setCurrentQuestionNumber(prev => prev + 1);
         setError(null);
       }
@@ -313,23 +328,6 @@ const InterviewPage = () => {
               />
             </Paper>
           )}
-
-          {/* Navigation Buttons */}
-          <Box display="flex" justifyContent="space-between" mt={3}>
-            <Button
-              variant="outlined"
-              onClick={() => navigate('/dashboard')}
-            >
-              Save & Exit
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => console.log('Skip question')}
-              disabled={submitting}
-            >
-              Skip Question
-            </Button>
-          </Box>
         </Grid>
 
         {/* Sidebar */}
@@ -341,6 +339,7 @@ const InterviewPage = () => {
         </Grid>
       </Grid>
     </Container>
+    <Footer />
     </>
   );
 };

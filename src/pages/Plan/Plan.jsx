@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -21,14 +21,22 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import LoginSignupModal from '../../components/login/Login';
+import authService from '../../services/authService';
 
 const Plan = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const currentLang = i18n.language || 'en';
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   const handleGetStarted = () => {
-    navigate(`/${currentLang}/contact-us`);
+    const isAuthenticated = authService.isAuthenticated();
+    if (isAuthenticated) {
+      navigate(`/${currentLang}/tax-filing/interview`);
+    } else {
+      setLoginModalOpen(true);
+    }
   };
 
   const features = [
@@ -100,21 +108,6 @@ const Plan = () => {
                   borderRadius: 3
                 }}
               >
-                {/* Popular Badge */}
-                <Chip
-                  label={t('plan.popular')}
-                  color="primary"
-                  sx={{
-                    position: 'absolute',
-                    top: -16,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    px: 3
-                  }}
-                />
-
                 {/* Plan Name */}
                 <Typography
                   variant="h3"
@@ -258,6 +251,12 @@ const Plan = () => {
         </Container>
       </Box>
       <Footer />
+
+      {/* Login/Signup Modal */}
+      <LoginSignupModal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
     </>
   );
 };

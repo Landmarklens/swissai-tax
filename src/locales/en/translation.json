@@ -995,5 +995,7 @@
   "homepage.badges.bank_level_encryption": "Bank-Level Encryption",
   "homepage.badges.aes_256": "AES-256 Security",
   "homepage.hero.money_back_guarantee": "30-Day Money Back Guarantee",
-  "homepage.stats.daily_users": "Daily Users"
+  "homepage.stats.daily_users": "Daily Users",
+  "homepage.pricing.key_features": "Key Features",
+  "homepage.pricing.whats_included": "What's Included"
 }

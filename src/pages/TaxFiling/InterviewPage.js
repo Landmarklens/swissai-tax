@@ -20,6 +20,7 @@ import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
 import TaxEstimateSidebar from './components/TaxEstimateSidebar';
 import { api } from '../../services/api';
+import LoggedInHeader from '../../components/loggedInHeader/loggedInHeader';
 
 const InterviewPage = () => {
   const navigate = useNavigate();
@@ -223,9 +224,11 @@ const InterviewPage = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Header */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+    <>
+      <LoggedInHeader />
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        {/* Header */}
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
         <Typography variant="h4" fontWeight={700}>
           Swiss Tax Filing 2024
         </Typography>
@@ -314,6 +317,7 @@ const InterviewPage = () => {
         </Grid>
       </Grid>
     </Container>
+    </>
   );
 };
 

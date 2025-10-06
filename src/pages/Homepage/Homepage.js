@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -41,6 +41,8 @@ import Footer from '../../components/footer/Footer';
 import VideoCarousel from '../../components/sections/videoSection/VideoCarousel';
 import HeroIllustration from '../../components/sections/heroSection/HeroIllustration';
 import { useUserCounter } from '../../hooks/useUserCounter';
+import LoginSignupModal from '../../components/login/Login';
+import authService from '../../services/authService';
 
 const Homepage = () => {
   const { t, i18n } = useTranslation();
@@ -49,6 +51,7 @@ const Homepage = () => {
   const navigate = useNavigate();
   const currentLang = i18n.language || 'en';
   const userCount = useUserCounter();
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   const features = [
     {
@@ -106,26 +109,44 @@ const Homepage = () => {
 
   const stats = [
     { value: userCount.toLocaleString(), label: t('homepage.stats.users') },
-    { value: "4.8/5", label: t('homepage.stats.rating') },
     { value: "26", label: t('homepage.stats.cantons') },
     { value: "20 Min", label: t('homepage.stats.time') }
   ];
 
   const pricingPlan = {
-    name: t('homepage.pricing.plan.name'),
+    name: t('plan.name'),
     price: "CHF 49.99",
-    description: t('homepage.pricing.plan.description'),
+    description: t('plan.price_description'),
     features: [
-      { included: true, text: t('homepage.pricing.plan.feature1') },
-      { included: true, text: t('homepage.pricing.plan.feature2') },
-      { included: true, text: t('homepage.pricing.plan.feature3') },
-      { included: true, text: t('homepage.pricing.plan.feature4') },
-      { included: true, text: t('homepage.pricing.plan.feature5') },
-      { included: true, text: t('homepage.pricing.plan.feature6') }
+      { included: true, text: t('plan.features.feature1') },
+      { included: true, text: t('plan.features.feature2') },
+      { included: true, text: t('plan.features.feature3') },
+      { included: true, text: t('plan.features.feature4') },
+      { included: true, text: t('plan.features.feature5') },
+      { included: true, text: t('plan.features.feature6') },
+      { included: true, text: t('plan.features.feature7') },
+      { included: true, text: t('plan.features.feature8') },
+      { included: true, text: t('plan.features.feature9') },
+      { included: true, text: t('plan.features.feature10') },
+      { included: true, text: t('plan.features.feature11') },
+      { included: true, text: t('plan.features.feature12') },
+      { included: true, text: t('plan.features.feature13') },
+      { included: true, text: t('plan.features.feature14') },
+      { included: true, text: t('plan.features.feature15') },
+      { included: true, text: t('plan.features.feature16') }
     ],
-    buttonText: t('homepage.pricing.plan.button'),
+    buttonText: t('plan.cta_button'),
     buttonVariant: "contained",
     featured: true
+  };
+
+  const handleGetStarted = () => {
+    const isAuthenticated = authService.isAuthenticated();
+    if (isAuthenticated) {
+      navigate(`/${currentLang}/tax-filing/interview`);
+    } else {
+      setLoginModalOpen(true);
+    }
   };
 
   return (
@@ -178,7 +199,7 @@ const Homepage = () => {
                     variant="contained"
                     size="large"
                     endIcon={<ArrowForwardIcon />}
-                    onClick={() => navigate('/register')}
+                    onClick={handleGetStarted}
                     sx={{ px: 4, py: 1.5 }}
                   >
                     {t('homepage.hero.cta_start')}
@@ -469,74 +490,132 @@ const Homepage = () => {
           >
             {t('homepage.pricing.subtitle')}
           </Typography>
+
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              style={{ maxWidth: '500px', width: '100%' }}
+              style={{ width: '100%', maxWidth: '1100px' }}
             >
               <Card
                 sx={{
-                  p: 4,
-                  position: 'relative',
+                  p: 5,
                   border: '2px solid',
-                  borderColor: 'primary.main',
-                  boxShadow: 6
+                  borderColor: '#DC0018',
+                  borderRadius: 3,
+                  bgcolor: 'white',
+                  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)'
                 }}
               >
-                <Chip
-                  label={t('homepage.pricing.popular')}
-                  color="primary"
-                  sx={{
-                    position: 'absolute',
-                    top: -12,
-                    left: '50%',
-                    transform: 'translateX(-50%)'
-                  }}
-                />
-                <Typography variant="h5" gutterBottom align="center">
+                {/* Plan Name */}
+                <Typography
+                  variant="h3"
+                  align="center"
+                  fontWeight={700}
+                  sx={{ mb: 3, fontSize: { xs: '28px', md: '32px' } }}
+                >
                   {pricingPlan.name}
                 </Typography>
+
+                {/* Price */}
                 <Typography
                   variant="h2"
-                  color="primary.main"
                   align="center"
-                  sx={{ my: 2, fontWeight: 'bold' }}
+                  sx={{
+                    fontWeight: 'bold',
+                    fontSize: { xs: '56px', md: '72px' },
+                    color: '#DC0018',
+                    lineHeight: 1.1,
+                    mb: 1
+                  }}
                 >
-                  {pricingPlan.price}
+                  CHF 49.99
                 </Typography>
-                <Typography variant="body2" color="text.secondary" align="center" paragraph>
-                  {pricingPlan.description}
+
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  align="center"
+                  sx={{ mb: 4, fontSize: '14px' }}
+                >
+                  per tax return / one-time payment
                 </Typography>
-                <List sx={{ mb: 3 }}>
+
+                {/* Description */}
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  align="center"
+                  sx={{ mb: 5, fontSize: '16px', maxWidth: '800px', mx: 'auto' }}
+                >
+                  {t('plan.description')}
+                </Typography>
+
+                {/* Features - 2 Columns */}
+                <Box
+                  sx={{
+                    mb: 5,
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                    gap: 2.5,
+                    maxWidth: '900px',
+                    mx: 'auto'
+                  }}
+                >
                   {pricingPlan.features.map((feature, idx) => (
-                    <ListItem key={idx} sx={{ px: 0 }}>
+                    <Box key={idx} sx={{ display: 'flex', alignItems: 'flex-start' }}>
                       <CheckIcon
                         sx={{
-                          mr: 1,
-                          color: 'success.main',
-                          fontSize: 20
+                          color: '#4CAF50',
+                          fontSize: 22,
+                          mr: 1.5,
+                          mt: 0.2,
+                          flexShrink: 0
                         }}
                       />
-                      <Typography variant="body2">
+                      <Typography
+                        variant="body2"
+                        sx={{ fontSize: '15px', lineHeight: 1.7, color: 'text.primary' }}
+                      >
                         {feature.text}
                       </Typography>
-                    </ListItem>
+                    </Box>
                   ))}
-                </List>
+                </Box>
+
+                {/* CTA Button */}
                 <Button
-                  variant={pricingPlan.buttonVariant}
+                  variant="contained"
                   fullWidth
                   size="large"
-                  onClick={() => navigate(`/${currentLang}/plan`)}
+                  onClick={handleGetStarted}
                   endIcon={<ArrowForwardIcon />}
-                  sx={{ mb: 2 }}
+                  sx={{
+                    py: 2.5,
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    bgcolor: '#DC0018',
+                    '&:hover': {
+                      bgcolor: '#B00015'
+                    },
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    maxWidth: '900px',
+                    mx: 'auto'
+                  }}
                 >
                   {pricingPlan.buttonText}
                 </Button>
-                <Typography variant="caption" color="text.secondary" align="center" display="block">
+
+                {/* Money-back guarantee */}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  align="center"
+                  sx={{ mt: 3, fontSize: '14px' }}
+                >
                   {t('homepage.pricing.guarantee')}
                 </Typography>
               </Card>
@@ -547,6 +626,12 @@ const Homepage = () => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Login/Signup Modal */}
+      <LoginSignupModal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
     </Box>
   );
 };

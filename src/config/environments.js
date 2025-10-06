@@ -1,9 +1,9 @@
 // Environment-specific configuration
 const environments = {
   development: {
-    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000',
-    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'ws://localhost:8000/ws',
-    SSE_URL: process.env.REACT_APP_SSE_URL || 'http://localhost:8000',
+    API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax',
+    WEBSOCKET_URL: process.env.REACT_APP_WEBSOCKET_URL || 'wss://api.swissai.tax/ws',
+    SSE_URL: process.env.REACT_APP_SSE_URL || 'https://api.swissai.tax',
     ENABLE_MOCK_DATA: process.env.REACT_APP_ENABLE_MOCK_DATA === 'true',
     ENABLE_DEBUG_LOGGING: true,
     ENABLE_REAL_TIME: process.env.REACT_APP_ENABLE_REAL_TIME !== 'false',

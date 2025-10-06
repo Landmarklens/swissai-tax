@@ -1289,5 +1289,7 @@
   "homepage.badges.bank_level_encryption": "Crittografia Livello Bancario",
   "homepage.badges.aes_256": "Sicurezza AES-256",
   "homepage.hero.money_back_guarantee": "Garanzia Soddisfatti o Rimborsati 30 Giorni",
-  "homepage.stats.daily_users": "Utenti Giornalieri"
+  "homepage.stats.daily_users": "Utenti Giornalieri",
+  "homepage.pricing.key_features": "Caratteristiche Principali",
+  "homepage.pricing.whats_included": "Cosa è incluso"
 }

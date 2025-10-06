@@ -27,6 +27,7 @@ const FeatureBox = withSuspense(lazy(() => import('../pages/Features/Features'))
 const About = withSuspense(lazy(() => import('../pages/About/About')));
 const Contact = withSuspense(lazy(() => import('../pages/Contact/Contact')));
 const FAQ = withSuspense(lazy(() => import('../pages/FAQ/FAQ')));
+const Plan = withSuspense(lazy(() => import('../pages/Plan/Plan')));
 const BlogList = withSuspense(lazy(() => import('../pages/BlogList/BlogList')));
 const BlogItemPage = withSuspense(lazy(() => import('../pages/BlogList/BlogItemPage')));
 const ForgotPassword = withSuspense(lazy(() => import('../pages/ForgotPassword/ForgotPassword')));
@@ -158,6 +159,7 @@ export const LAZY_NAVIGATION_ROUTE = [
   { path: '/about-us', element: <About /> },
   { path: '/contact-us', element: <Contact /> },
   { path: '/faq', element: <FAQ /> },
+  { path: '/plan', element: <Plan /> },
 
   // Blog
   { path: '/blog-list', element: <BlogList /> },

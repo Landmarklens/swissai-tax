@@ -70,6 +70,26 @@ const InterviewPage = () => {
     };
   }, []);
 
+  const autoSave = useCallback(async () => {
+    if (!session) return;
+
+    try {
+      setSaving(true);
+      await api.post(`/api/interview/${session}/save`, {
+        answers: answers,
+        progress: progress
+      });
+      setLastSaved(new Date());
+      setHasUnsavedChanges(false);
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Auto-save failed:', err);
+      }
+    } finally {
+      setSaving(false);
+    }
+  }, [session, answers, progress]);
+
   // Auto-save effect
   useEffect(() => {
     if (hasUnsavedChanges && session) {
@@ -90,26 +110,6 @@ const InterviewPage = () => {
       }
     };
   }, [hasUnsavedChanges, session, autoSave]);
-
-  const autoSave = useCallback(async () => {
-    if (!session) return;
-
-    try {
-      setSaving(true);
-      await api.post(`/api/interview/${session}/save`, {
-        answers: answers,
-        progress: progress
-      });
-      setLastSaved(new Date());
-      setHasUnsavedChanges(false);
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Auto-save failed:', err);
-      }
-    } finally {
-      setSaving(false);
-    }
-  }, [session, answers, progress]);
 
   const updateTaxCalculation = useCallback(async (updatedAnswers) => {
     if (!session) return;

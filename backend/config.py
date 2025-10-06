@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = Field("production")  # Added for CORS debug middleware
     FRONTEND_URL: str = Field("https://swissai.tax")
     API_URL: str = Field("https://api.swissai.tax")
+    ENFORCE_SUBSCRIPTIONS: bool = Field(False)  # Whether to enforce subscription requirements
 
     # SENDGRID
     SENDGRID_API_KEY: str | None = Field(None)

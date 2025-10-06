@@ -6,7 +6,7 @@ It resets daily at midnight and increments throughout the day.
 """
 from sqlalchemy import Column, Integer, DateTime, CheckConstraint
 from sqlalchemy.sql import func
-from db.base import Base
+from db.session import Base
 
 
 class UserCounter(Base):

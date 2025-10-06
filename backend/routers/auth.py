@@ -189,10 +189,11 @@ async def user_login(request: Request, user: UserLoginSchema = Body(...), db=Dep
     '''
 
     if check_user(user, db):
-        # Get the actual user from database to use their real user_type
+        # Get the actual user from database
         db_user = get_user_by_email(db, user.email)
         if db_user:
-            token_response = sign_jwt(user.email, user_type=db_user.user_type)
+            # SwissAI Tax doesn't use user_type, so we don't pass it
+            token_response = sign_jwt(user.email)
 
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)

@@ -13,7 +13,21 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Add auth token if available
-    const token = localStorage.getItem('authToken');
+    // Check both 'authToken' and 'user' (user contains {access_token, token_type})
+    let token = localStorage.getItem('authToken');
+
+    if (!token) {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          token = user.access_token;
+        } catch (e) {
+          console.error('Failed to parse user from localStorage', e);
+        }
+      }
+    }
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -135,16 +135,23 @@ const InterviewPage = () => {
         language: 'en'
       });
 
+      console.log('API Response:', response.data);
+
       // Handle both camelCase (sessionId) and snake_case (session_id) from API
-      setSession(response.data.sessionId || response.data.session_id);
-      setCurrentQuestion(response.data.currentQuestion || response.data.current_question);
+      const sessionId = response.data.sessionId || response.data.session_id;
+      const question = response.data.currentQuestion || response.data.current_question;
+
+      console.log('Session ID:', sessionId);
+      console.log('Current Question:', question);
+
+      setSession(sessionId);
+      setCurrentQuestion(question);
       setProgress(response.data.progress || 0);
       setError(null);
     } catch (err) {
       setError('Failed to start interview. Please try again.');
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Interview start error:', err);
-      }
+      console.error('Interview start error:', err);
+      console.error('Error details:', err.response?.data);
     } finally {
       setLoading(false);
     }

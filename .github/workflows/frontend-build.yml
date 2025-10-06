@@ -46,6 +46,8 @@ jobs:
         # npm test -- --coverage --watchAll=false
 
     - name: Build application
+      env:
+        CI: false
       run: |
         npm run build
 

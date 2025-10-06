@@ -48,6 +48,17 @@ class AnswerResponse(BaseModel):
     progress: int = 0
 
 
+class SaveSessionRequest(BaseModel):
+    answers: dict = Field(default_factory=dict)
+    progress: int = Field(default=0)
+
+
+class SaveSessionResponse(BaseModel):
+    success: bool
+    message: str
+    saved_at: str
+
+
 @router.post("/start", response_model=InterviewSessionResponse, status_code=status.HTTP_201_CREATED)
 async def start_interview(
     request: StartInterviewRequest,
@@ -214,4 +225,46 @@ async def get_current_question(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get current question: {str(e)}"
+        )
+
+
+@router.post("/{session_id}/save", response_model=SaveSessionResponse)
+async def save_session(
+    session_id: str,
+    request: SaveSessionRequest,
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Save the current interview session progress
+
+    - Saves answers and progress for the session
+    - Can be called at any time during the interview
+    """
+    try:
+        result = interview_service.save_session(
+            session_id=session_id,
+            answers=request.answers,
+            progress=request.progress
+        )
+
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Session {session_id} not found"
+            )
+
+        return SaveSessionResponse(
+            success=True,
+            message="Session saved successfully",
+            saved_at=result["saved_at"]
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error saving session: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to save session: {str(e)}"
         )

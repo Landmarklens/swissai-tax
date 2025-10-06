@@ -281,5 +281,42 @@ class InterviewService:
 
         return profile
 
+    def save_session(self, session_id: str, answers: Dict[str, Any], progress: int) -> Optional[Dict[str, Any]]:
+        """
+        Save the current interview session progress
+
+        Args:
+            session_id: The session identifier
+            answers: Dictionary of question answers to save
+            progress: Current progress percentage
+
+        Returns:
+            Dictionary with save confirmation or None if session not found
+        """
+        with self._lock:
+            session = self.sessions.get(session_id)
+            if not session:
+                return None
+
+            # Update session with provided data
+            if answers:
+                session['answers'].update(answers)
+
+            if progress is not None:
+                session['progress'] = progress
+
+            # Update timestamp
+            saved_at = datetime.utcnow().isoformat()
+            session['updated_at'] = saved_at
+
+            logger.info(f"Saved session {session_id} with {len(answers)} answers and {progress}% progress")
+
+            return {
+                'session_id': session_id,
+                'saved_at': saved_at,
+                'answers_count': len(session['answers']),
+                'progress': session['progress']
+            }
+
 # Create singleton instance
 interview_service = InterviewService()

@@ -24,7 +24,7 @@ interview_service = InterviewService()
 # Pydantic models for request/response
 class StartInterviewRequest(BaseModel):
     tax_year: int = Field(..., ge=2020, le=2030)
-    language: str = Field(default="en", regex="^(en|de|fr|it)$")
+    language: str = Field(default="en", pattern="^(en|de|fr|it)$")
 
 
 class SubmitAnswerRequest(BaseModel):

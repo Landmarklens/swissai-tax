@@ -160,7 +160,7 @@ class InterviewService:
         session['progress'] = progress
 
         return {
-            'next_question': self._format_question(next_question, session['language']),
+            'current_question': self._format_question(next_question, session['language']),
             'progress': progress,
             'complete': False
         }

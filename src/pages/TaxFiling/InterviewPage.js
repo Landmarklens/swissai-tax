@@ -179,11 +179,9 @@ const InterviewPage = () => {
 
     try {
       setSubmitting(true);
-      const response = await api.post('/api/interview/answer', {
-        sessionId: session,
-        questionId: currentQuestion.id,
-        answer: answer,
-        language: 'en'
+      const response = await api.post(`/api/interview/${session}/answer`, {
+        question_id: currentQuestion.id,
+        answer: answer
       });
 
       // Check if answer was invalid
@@ -218,20 +216,26 @@ const InterviewPage = () => {
           }
         });
       } else {
-        // Transform next question format (handle both camelCase and snake_case)
-        const nextQuestion = response.data.nextQuestion || response.data.next_question;
+        // Transform next question format
+        const nextQuestion = response.data.current_question;
+        console.log('Next question from API:', nextQuestion);
+
         const transformedNextQuestion = nextQuestion ? {
           ...nextQuestion,
           question_type: nextQuestion.type === 'single_choice' ? 'select' :
                         nextQuestion.type === 'multiple_choice' ? 'multiselect' :
+                        nextQuestion.type === 'yes_no' ? 'boolean' :
+                        nextQuestion.type === 'dropdown' ? 'select' :
                         nextQuestion.type || nextQuestion.question_type,
           question_text: nextQuestion.text || nextQuestion.question_text,
           help_text: nextQuestion.help_text,
-          validation_rules: nextQuestion.validation_rules,
+          validation_rules: nextQuestion.validation || nextQuestion.validation_rules,
           options: {
             options: nextQuestion.options?.map(opt => opt.value) || []
           }
         } : null;
+
+        console.log('Transformed next question:', transformedNextQuestion);
 
         setCurrentQuestion(transformedNextQuestion);
         setCurrentQuestionNumber(prev => prev + 1);
@@ -239,9 +243,8 @@ const InterviewPage = () => {
       }
     } catch (err) {
       setError('Failed to submit answer. Please try again.');
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Answer submission error:', err);
-      }
+      console.error('Answer submission error:', err);
+      console.error('Error response:', err.response?.data);
     } finally {
       setSubmitting(false);
     }

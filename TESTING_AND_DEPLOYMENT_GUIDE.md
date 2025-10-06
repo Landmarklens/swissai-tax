@@ -350,7 +350,7 @@ WHERE user_id = 'USER_ID' AND tax_year = 2024;
 
 - ✅ All endpoints require authentication
 - ✅ User ownership verified in service layer
-- ✅ Sensitive data encrypted at rest (AES-256)
+- ✅ Sensitive data encrypted at rest (AES-128 Fernet)
 - ✅ Input validation via Pydantic models
 - ✅ SQL injection protected (ORM)
 - ✅ Soft delete prevents data loss

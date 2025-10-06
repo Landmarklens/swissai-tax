@@ -253,7 +253,7 @@ Success Criteria: All filings complete, PDFs valid, user satisfied
 - [ ] Test filing ownership verification
 
 #### Data Encryption
-- [ ] Test AES-256 encryption at rest
+- [ ] Test AES-128 encryption at rest (Fernet)
 - [ ] Test TLS 1.3 in transit
 - [ ] Test key rotation
 - [ ] Test encrypted profile fields

@@ -241,34 +241,37 @@ class KeyRotationManager:
         """
         Initiate key rotation process
 
-        This would typically:
-        1. Generate new encryption key
-        2. Store in AWS Secrets Manager with new version
-        3. Re-encrypt all data with new key
-        4. Update key creation timestamp
+        This triggers the key rotation procedure using the rotation script.
+        The actual re-encryption should be done during a maintenance window.
 
         Returns:
-            Dictionary with rotation status
+            Dictionary with rotation status and instructions
         """
-        # This is a placeholder for the actual rotation logic
-        # In production, this would:
-        # - Generate new key in AWS KMS
-        # - Create new secret version in Secrets Manager
-        # - Trigger background job to re-encrypt data
-        # - Update environment configuration
+        from cryptography.fernet import Fernet
 
-        logger.warning("Key rotation initiated - implementation required")
+        logger.warning("Key rotation initiated")
+
+        # Generate new key
+        new_key = Fernet.generate_key().decode()
 
         return {
-            'status': 'initiated',
-            'message': 'Key rotation process started',
+            'status': 'ready_to_rotate',
+            'message': 'New encryption key generated. Follow the steps below to complete rotation.',
+            'new_key_generated': True,
+            'new_key': new_key[:10] + '...' + new_key[-10:],  # Partial key for verification only
             'requires_manual_steps': True,
             'next_steps': [
-                '1. Generate new encryption key',
-                '2. Store in AWS Secrets Manager',
-                '3. Re-encrypt all sensitive data',
-                '4. Update ENCRYPTION_KEY_CREATED_AT environment variable'
-            ]
+                '1. Schedule a maintenance window (no user access)',
+                '2. Create a database backup',
+                '3. Run: python scripts/rotate_encryption_key.py --rotate --old-key <OLD_KEY> --new-key <NEW_KEY>',
+                '4. Update AWS Secrets Manager with new key',
+                '5. Update ENCRYPTION_KEY_CREATED_AT environment variable to: ' + datetime.utcnow().isoformat(),
+                '6. Restart application servers',
+                '7. Verify: python scripts/rotate_encryption_key.py --verify',
+                '8. Monitor logs for any decryption errors'
+            ],
+            'script_location': 'backend/scripts/rotate_encryption_key.py',
+            'documentation': 'See ENCRYPTION_ARCHITECTURE.md for detailed rotation procedures'
         }
 
 

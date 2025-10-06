@@ -27,7 +27,7 @@ These features will transform SwissAI Tax from a single-filing tool to a compreh
 - ✅ `TaxInsight` model (basic structure)
 - ✅ `TaxCalculation` model (financial calculations)
 - ✅ `InterviewService` (encrypts sensitive answers)
-- ✅ AES-256 encryption infrastructure
+- ✅ AES-128 encryption infrastructure (Fernet)
 - ✅ User model with relationships
 
 **Frontend:**

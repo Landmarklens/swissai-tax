@@ -90,7 +90,7 @@ export const faqData = [
       {
         question: 'Where is my data stored?',
         answer:
-          'All your data is stored on secure Swiss servers (AWS Europe Frankfurt region). Documents are encrypted using AES-256 encryption. Database connections use SSL/TLS. Your privacy is our top priority.'
+          'All your data is stored on secure Swiss servers (AWS Europe Frankfurt region). Documents are encrypted using AES-128 encryption with authenticated encryption (same standard used by major banks). Database connections use SSL/TLS. Your privacy is our top priority.'
       },
       {
         question: 'Can I delete my data?',

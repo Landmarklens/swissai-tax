@@ -505,7 +505,7 @@ User Downloads PDFs → Submits to Tax Authority
 - Factory patterns for extensibility
 
 ### Security
-- AES-256 encryption at rest
+- AES-128 encryption at rest (Fernet symmetric encryption)
 - TLS 1.3 in transit
 - JWT authentication
 - Role-based access control

@@ -5,7 +5,7 @@ Business logic for the daily user counter feature.
 Implements smart incremental updates that reset at midnight.
 """
 import random
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, timezone
 from sqlalchemy.orm import Session
 from backend.models.user_counter import UserCounter
 
@@ -37,8 +37,8 @@ class UserCounterService:
                 id=1,
                 user_count=MIN_USERS,
                 target_count=random.randint(MIN_USERS, MAX_USERS),
-                last_reset=datetime.now(),
-                last_updated=datetime.now()
+                last_reset=datetime.now(timezone.utc),
+                last_updated=datetime.now(timezone.utc)
             )
             db.add(counter)
             db.commit()
@@ -58,7 +58,7 @@ class UserCounterService:
         Returns:
             bool: True if counter was reset, False otherwise
         """
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
         last_reset = counter.last_reset
 
         # Check if it's a new day
@@ -91,14 +91,14 @@ class UserCounterService:
         Returns:
             int: Amount to increment (0-5)
         """
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
 
         # If we've already reached the target, don't increment
         if counter.user_count >= counter.target_count:
             return 0
 
         # Calculate seconds until midnight
-        midnight = datetime.combine(now.date() + timedelta(days=1), time.min)
+        midnight = datetime.combine(now.date() + timedelta(days=1), time.min, tzinfo=timezone.utc)
         seconds_until_midnight = (midnight - now).total_seconds()
 
         # Don't increment in the last minute before midnight

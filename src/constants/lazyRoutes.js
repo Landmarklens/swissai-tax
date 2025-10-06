@@ -94,6 +94,14 @@ export const LAZY_NAVIGATION_ROUTE = [
 
   // Tax filing workflow (protected)
   {
+    path: '/filings',
+    element: (
+      <ProtectedRoute>
+        <FilingsListPage />
+      </ProtectedRoute>
+    )
+  },
+  {
     path: '/tax-filing/filings',
     element: (
       <ProtectedRoute>

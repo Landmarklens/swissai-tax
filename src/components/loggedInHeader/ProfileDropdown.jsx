@@ -24,7 +24,7 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
   function handleMenuClick(action) {
     switch(action) {
       case 'tax-filings':
-        navigate('/tax-filing/interview');
+        navigate('/filings');
         break;
       case 'profile':
         navigate('/profile');

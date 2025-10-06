@@ -4,6 +4,7 @@ Allows encrypting only specific sensitive fields within a JSON document
 """
 import json
 import logging
+import copy
 from typing import Dict, List, Any, Set
 from utils.encryption import get_encryption_service
 
@@ -33,7 +34,8 @@ class JSONFieldEncryptor:
         if not data:
             return data
 
-        encrypted_data = data.copy()
+        # FIXED BUG #13: Use deep copy to avoid mutating nested structures
+        encrypted_data = copy.deepcopy(data)
 
         for field in sensitive_fields:
             if field in encrypted_data and encrypted_data[field] is not None:
@@ -64,7 +66,8 @@ class JSONFieldEncryptor:
         if not data:
             return data
 
-        decrypted_data = data.copy()
+        # FIXED BUG #13: Use deep copy
+        decrypted_data = copy.deepcopy(data)
 
         for field in sensitive_fields:
             if field in decrypted_data and decrypted_data[field] is not None:

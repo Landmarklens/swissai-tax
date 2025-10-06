@@ -75,9 +75,9 @@ class EncryptedString(TypeDecorator):
             decrypted = encryption_service.decrypt(value)
             return decrypted
         except Exception as e:
-            logger.error(f"Decryption failed for value: {e}")
-            # Return None instead of raising to handle legacy unencrypted data
-            return None
+            logger.error(f"CRITICAL: Decryption failed for value: {e}")
+            # FIXED BUG #8: Don't silently return None - raise to prevent data loss
+            raise ValueError(f"Failed to decrypt database value. This may indicate key rotation or data corruption: {e}")
 
 
 class EncryptedText(TypeDecorator):
@@ -108,8 +108,9 @@ class EncryptedText(TypeDecorator):
             encryption_service = get_encryption_service()
             return encryption_service.decrypt(value)
         except Exception as e:
-            logger.error(f"Decryption failed for text value: {e}")
-            return None
+            logger.error(f"CRITICAL: Decryption failed for text value: {e}")
+            # FIXED BUG #8: Don't silently return None
+            raise ValueError(f"Failed to decrypt text value: {e}")
 
 
 class EncryptedJSON(TypeDecorator):
@@ -127,7 +128,8 @@ class EncryptedJSON(TypeDecorator):
 
         try:
             import json
-            json_string = json.dumps(value)
+            # FIXED BUG #9: Handle non-JSON-serializable types (datetime, etc.)
+            json_string = json.dumps(value, default=str)
             encryption_service = get_encryption_service()
             return encryption_service.encrypt(json_string)
         except Exception as e:
@@ -144,9 +146,13 @@ class EncryptedJSON(TypeDecorator):
             encryption_service = get_encryption_service()
             decrypted = encryption_service.decrypt(value)
             return json.loads(decrypted)
+        except json.JSONDecodeError as e:
+            # FIXED BUG #10: Handle JSON parse errors separately
+            logger.error(f"JSON parse failed for decrypted value: {e}")
+            return {}  # Return empty dict instead of None
         except Exception as e:
-            logger.error(f"Decryption failed for JSON value: {e}")
-            return None
+            logger.error(f"CRITICAL: Decryption failed for JSON value: {e}")
+            raise ValueError(f"Failed to decrypt JSON value: {e}")
 
 
 class HashedString(TypeDecorator):

@@ -169,12 +169,17 @@ class EncryptionService:
         return f"****{phone[-2:]}"
 
 
-# Singleton instance
+# Singleton instance with thread safety
+import threading
 _encryption_service = None
+_encryption_lock = threading.Lock()
 
 def get_encryption_service() -> EncryptionService:
-    """Get or create encryption service instance"""
+    """Get or create encryption service instance (thread-safe)"""
     global _encryption_service
     if _encryption_service is None:
-        _encryption_service = EncryptionService()
+        with _encryption_lock:
+            # FIXED BUG #4: Double-check locking for thread safety
+            if _encryption_service is None:
+                _encryption_service = EncryptionService()
     return _encryption_service

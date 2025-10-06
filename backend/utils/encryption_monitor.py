@@ -151,7 +151,7 @@ class EncryptionMonitor:
             })
 
         # Check slow operations
-        if summary['slow_operations'] > summary['total_operations'] * 0.1:
+        if summary.get('slow_operations', 0) > summary['total_operations'] * 0.1:
             anomalies.append({
                 'type': 'many_slow_operations',
                 'severity': 'medium',
@@ -160,7 +160,7 @@ class EncryptionMonitor:
             })
 
         # Check average times
-        if summary['avg_encrypt_time_ms'] > 500:
+        if summary.get('avg_encrypt_time_ms', 0) > 500:
             anomalies.append({
                 'type': 'slow_encryption',
                 'severity': 'medium',

@@ -65,9 +65,15 @@ class TaxFilingSession(Base):
     language = Column(String(2), default='en')  # en, de, fr, it
     canton = Column(String(2), nullable=True)  # ZH, BE, GE, etc.
 
+    # Multi-Filing Support (added 2025-10-06)
+    is_primary = Column(Boolean, default=True, nullable=False)  # TRUE for main filing, FALSE for additional cantons
+    parent_filing_id = Column(String(36), ForeignKey('tax_filing_sessions.id'), nullable=True)  # Links to main filing
+    source_filing_id = Column(String(36), ForeignKey('tax_filing_sessions.id'), nullable=True)  # Copied from this filing
+
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    deleted_at = Column(DateTime, nullable=True)  # Soft delete
 
     # Relationships
     user = relationship("User", back_populates="tax_filing_sessions")
@@ -112,8 +118,12 @@ class TaxFilingSession(Base):
             'question_count': self.question_count,
             'language': self.language,
             'canton': self.canton,
+            'is_primary': self.is_primary,
+            'parent_filing_id': self.parent_filing_id,
+            'source_filing_id': self.source_filing_id,
             'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None
         }
 
         if include_relationships:

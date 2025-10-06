@@ -237,7 +237,7 @@ const FilingsListPage = () => {
         <Header />
         <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
           <CircularProgress />
-          <Typography sx={{ mt: 2 }}>Loading filings...</Typography>
+          <Typography sx={{ mt: 2 }}>{t('filings.loadingFilings')}</Typography>
         </Container>
         <Footer />
       </>
@@ -340,7 +340,7 @@ const FilingsListPage = () => {
             <Accordion key={year} defaultExpanded={year === String(new Date().getFullYear())}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h6">
-                  {year} ({filings[year].length} {filings[year].length === 1 ? 'filing' : 'filings'})
+                  {year} ({filings[year].length} {filings[year].length === 1 ? t('filings.filing') : t('filings.filings')})
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
@@ -375,7 +375,7 @@ const FilingsListPage = () => {
                             />
                             {filing.is_primary === false && (
                               <Chip
-                                label="Secondary"
+                                label={t('filings.secondary')}
                                 size="small"
                                 variant="outlined"
                                 sx={{ ml: 1 }}
@@ -384,7 +384,7 @@ const FilingsListPage = () => {
                           </Box>
 
                           <Typography variant="body2" color="text.secondary" gutterBottom>
-                            Progress: {filing.completion_percentage}%
+                            {t('filings.progress')}: {filing.completion_percentage}%
                           </Typography>
 
                           <Box sx={{ width: '100%', height: 4, bgcolor: 'grey.200', borderRadius: 1, mb: 2 }}>
@@ -399,7 +399,7 @@ const FilingsListPage = () => {
                           </Box>
 
                           <Typography variant="caption" color="text.secondary">
-                            Last updated: {new Date(filing.updated_at).toLocaleDateString()}
+                            {t('filings.lastUpdated')}: {new Date(filing.updated_at).toLocaleDateString()}
                           </Typography>
                         </CardContent>
                         <CardActions>
@@ -409,14 +409,14 @@ const FilingsListPage = () => {
                               startIcon={<ContinueIcon />}
                               onClick={() => navigate(`/tax-filing/interview/${filing.id}`)}
                             >
-                              Continue
+                              {t('filings.continue')}
                             </Button>
                           )}
                           <Button
                             size="small"
                             onClick={() => navigate(`/tax-filing/review/${filing.id}`)}
                           >
-                            View Details
+                            {t('filings.viewDetails')}
                           </Button>
                         </CardActions>
                       </Card>
@@ -441,7 +441,7 @@ const FilingsListPage = () => {
           }}
         >
           <EditIcon fontSize="small" sx={{ mr: 1 }} />
-          Edit
+          {t('filings.edit')}
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -454,7 +454,7 @@ const FilingsListPage = () => {
           }}
         >
           <CopyIcon fontSize="small" sx={{ mr: 1 }} />
-          Copy to New Year
+          {t('filings.copyToNewYear')}
         </MenuItem>
         <Divider />
         <MenuItem
@@ -465,7 +465,7 @@ const FilingsListPage = () => {
           sx={{ color: 'error.main' }}
         >
           <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
-          Delete
+          {t('filings.delete')}
         </MenuItem>
       </Menu>
 
@@ -504,9 +504,9 @@ const FilingsListPage = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setCreateDialogOpen(false)}>{t('filings.cancel')}</Button>
           <Button onClick={handleCreateFiling} variant="contained" color="primary">
-            Create & Start Interview
+            {t('filings.createAndStart')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -517,8 +517,7 @@ const FilingsListPage = () => {
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <Alert severity="info">
-              This will copy your personal information and non-financial answers to the new year.
-              You'll need to update amounts and year-specific information.
+              {t('filings.copyInfo')}
             </Alert>
             <TextField
               label={t('filings.newYear', 'New Tax Year')}
@@ -530,9 +529,9 @@ const FilingsListPage = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCopyDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setCopyDialogOpen(false)}>{t('filings.cancel')}</Button>
           <Button onClick={handleCopyFiling} variant="contained" color="primary">
-            Copy Filing
+            {t('filings.copyFiling')}
           </Button>
         </DialogActions>
       </Dialog>

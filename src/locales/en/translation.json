@@ -1028,5 +1028,19 @@
   "insights.applied": "Applied",
   "insights.moreInfo": "More Info",
   "insights.estimatedSavings": "Estimated Tax Savings",
-  "common.close": "Close"
+  "common.close": "Close",
+  "filings.loadingFilings": "Loading filings...",
+  "filings.cancel": "Cancel",
+  "filings.continue": "Continue",
+  "filings.viewDetails": "View Details",
+  "filings.edit": "Edit",
+  "filings.copyToNewYear": "Copy to New Year",
+  "filings.delete": "Delete",
+  "filings.createAndStart": "Create & Start Interview",
+  "filings.copyInfo": "This will copy your personal information and non-financial answers to the new year. You'll need to update amounts and year-specific information.",
+  "filings.progress": "Progress",
+  "filings.lastUpdated": "Last updated",
+  "filings.secondary": "Secondary",
+  "filings.filing": "filing",
+  "filings.filings": "filings"
 }

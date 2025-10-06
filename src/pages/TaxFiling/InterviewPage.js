@@ -135,8 +135,9 @@ const InterviewPage = () => {
         language: 'en'
       });
 
-      setSession(response.data.session_id);
-      setCurrentQuestion(response.data.current_question);
+      // Handle both camelCase (sessionId) and snake_case (session_id) from API
+      setSession(response.data.sessionId || response.data.session_id);
+      setCurrentQuestion(response.data.currentQuestion || response.data.current_question);
       setProgress(response.data.progress || 0);
       setError(null);
     } catch (err) {

@@ -35,3 +35,7 @@ run:
       value: "IXq3IC0Uw6StMkBhb4mb"
     - name: S3_BUCKET_NAME
       value: "swissai-tax-documents-1758721021"
+    - name: ENCRYPTION_KEY_CREATED_AT
+      value: "arn:aws:ssm:us-east-1:445567083171:parameter/swissai-tax/encryption/key-created-at"
+    - name: ENCRYPTION_KEY_ROTATION_DAYS
+      value: "arn:aws:ssm:us-east-1:445567083171:parameter/swissai-tax/encryption/key-rotation-days"

@@ -40,10 +40,11 @@ const SignupForm = ({ onBack, onSubmit }) => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      const { confirmPassword, acceptTerms, firstName, lastName, language, ...rest } = values;
-      // Map firstName/lastName to first_name/last_name for backend compatibility
+      const { confirmPassword, acceptTerms, firstName, lastName, language, email, password } = values;
+      // Only send fields that backend expects
       const dataToSend = {
-        ...rest,
+        email,
+        password,
         first_name: firstName,
         last_name: lastName,
         preferred_language: language

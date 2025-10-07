@@ -55,13 +55,16 @@ const TwoFactorSettings = () => {
 
     try {
       const result = await twoFactorService.getStatus();
+      console.log('[2FA Settings] Status result:', result);
 
       if (result.success) {
+        console.log('[2FA Settings] Status data:', result.data);
         setStatus(result.data);
       } else {
         setError(result.error || 'Failed to load 2FA status');
       }
     } catch (err) {
+      console.error('[2FA Settings] Load status error:', err);
       setError('Failed to load 2FA status');
     } finally {
       setLoading(false);
@@ -149,10 +152,12 @@ const TwoFactorSettings = () => {
   if (showSetup) {
     return (
       <TwoFactorSetup
-        onComplete={() => {
+        onComplete={async () => {
           setShowSetup(false);
           setSuccess('Two-factor authentication enabled successfully!');
-          loadStatus();
+          // Small delay to ensure backend has processed
+          await new Promise(resolve => setTimeout(resolve, 500));
+          await loadStatus();
         }}
         onCancel={() => setShowSetup(false)}
       />
@@ -160,19 +165,7 @@ const TwoFactorSettings = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800 }}>
-      <Box display="flex" alignItems="center" gap={2} mb={3}>
-        <SecurityIcon fontSize="large" color="primary" />
-        <Box>
-          <Typography variant="h5" component="h2">
-            Two-Factor Authentication
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Add an extra layer of security to your account
-          </Typography>
-        </Box>
-      </Box>
-
+    <Box>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError('')}>
           {error}
@@ -185,36 +178,35 @@ const TwoFactorSettings = () => {
         </Alert>
       )}
 
-      <Paper elevation={2} sx={{ p: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Box display="flex" alignItems="center" gap={2}>
-            <Typography variant="h6">
-              Status
+      <Box mb={3}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Box>
+            <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+              <Typography variant="subtitle1" fontWeight={600}>
+                Two-Factor Authentication
+              </Typography>
+              {status?.enabled && (
+                <Chip
+                  icon={<CheckIcon />}
+                  label="Enabled"
+                  color="success"
+                  size="small"
+                />
+              )}
+            </Box>
+            <Typography variant="body2" color="text.secondary">
+              {status?.enabled
+                ? 'Your account is protected with 2FA'
+                : 'Add an extra layer of security to your account'}
             </Typography>
-            {status?.enabled ? (
-              <Chip
-                icon={<CheckIcon />}
-                label="Enabled"
-                color="success"
-                size="small"
-              />
-            ) : (
-              <Chip
-                icon={<WarningIcon />}
-                label="Disabled"
-                color="warning"
-                size="small"
-              />
-            )}
           </Box>
-
           {!status?.enabled ? (
             <Button
-              variant="contained"
               startIcon={<SecurityIcon />}
+              variant="contained"
               onClick={() => setShowSetup(true)}
             >
-              Enable 2FA
+              Enable
             </Button>
           ) : (
             <Button
@@ -222,74 +214,11 @@ const TwoFactorSettings = () => {
               color="error"
               onClick={() => setShowDisableDialog(true)}
             >
-              Disable 2FA
+              Disable
             </Button>
           )}
         </Box>
-
-        <Divider sx={{ my: 2 }} />
-
-        {status?.enabled && (
-          <>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Two-factor authentication is currently enabled for your account.
-            </Typography>
-
-            {status.verified_at && (
-              <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                Enabled on: {new Date(status.verified_at).toLocaleString()}
-              </Typography>
-            )}
-
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Backup Codes
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                You have {status.backup_codes_remaining || 0} backup codes remaining.
-              </Typography>
-
-              {status.backup_codes_remaining < 3 && (
-                <Alert severity="warning" sx={{ mb: 2 }}>
-                  You're running low on backup codes. Consider regenerating new ones.
-                </Alert>
-              )}
-
-              <Button
-                variant="outlined"
-                startIcon={<RefreshIcon />}
-                onClick={() => setShowRegenerateDialog(true)}
-              >
-                Regenerate Backup Codes
-              </Button>
-            </Box>
-          </>
-        )}
-
-        {!status?.enabled && (
-          <>
-            <Typography variant="body2" color="text.secondary" paragraph>
-              Two-factor authentication adds an extra layer of security by requiring a code from
-              your authenticator app in addition to your password when logging in.
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary">
-              We recommend using apps like:
-            </Typography>
-            <List dense>
-              <ListItem>
-                <ListItemText primary="• Google Authenticator" />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="• Microsoft Authenticator" />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="• Authy" />
-              </ListItem>
-            </List>
-          </>
-        )}
-      </Paper>
+      </Box>
 
       {/* Disable 2FA Dialog */}
       <Dialog open={showDisableDialog} onClose={() => !actionLoading && setShowDisableDialog(false)}>

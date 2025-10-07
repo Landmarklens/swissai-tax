@@ -92,19 +92,23 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
     setError('');
 
     try {
+      console.log('[2FA Setup] Calling verifyAndEnable with code:', verificationCode);
       const result = await twoFactorService.verifyAndEnable(
         verificationCode,
         secret,
         backupCodes
       );
+      console.log('[2FA Setup] Verify result:', result);
 
       if (result.success) {
         setSuccess('Two-factor authentication enabled successfully!');
         setActiveStep(2); // Move to backup codes step
       } else {
+        console.error('[2FA Setup] Verification failed:', result.error);
         setError(result.error || 'Invalid code. Please try again.');
       }
     } catch (err) {
+      console.error('[2FA Setup] Verification error:', err);
       setError('Verification failed. Please try again.');
     } finally {
       setLoading(false);

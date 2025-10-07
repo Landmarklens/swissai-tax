@@ -276,6 +276,9 @@ class TwoFactorService:
             encrypted_secret = self.encrypt_secret(secret)
             encrypted_codes = self.encrypt_backup_codes(backup_codes)
 
+            # Refresh user in session to ensure it's attached
+            db.refresh(user)
+
             # Update user record
             user.two_factor_enabled = True
             user.two_factor_secret = encrypted_secret
@@ -283,6 +286,7 @@ class TwoFactorService:
             user.two_factor_verified_at = datetime.utcnow()
 
             db.commit()
+            db.refresh(user)  # Refresh to get updated values
             logger.info(f"2FA enabled for user {user.email}")
             return True
 

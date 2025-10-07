@@ -32,9 +32,13 @@ class SubscriptionResponse(BaseModel):
     id: str
     plan_type: str
     status: str
-    current_period_end: datetime
+    current_period_end: Optional[datetime] = None
+    current_period_start: Optional[datetime] = None
     price_chf: float
     cancel_at_period_end: bool
+    canceled_at: Optional[datetime] = None
+    stripe_customer_id: Optional[str] = None
+    stripe_subscription_id: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -69,3 +73,6 @@ class InvoiceResponse(BaseModel):
     status: str
     created_at: datetime
     pdf_url: Optional[str] = None
+    payment_method: Optional[str] = None
+    card_brand: Optional[str] = None
+    card_last4: Optional[str] = None

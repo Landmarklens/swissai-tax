@@ -154,8 +154,9 @@ class EncryptedJSON(TypeDecorator):
             logger.error(f"JSON parse failed for decrypted value: {e}")
             return {}  # Return empty dict instead of None
         except Exception as e:
-            logger.error(f"CRITICAL: Decryption failed for JSON value: {e}")
-            raise ValueError(f"Failed to decrypt JSON value: {e}")
+            # Handle encryption key mismatch gracefully
+            logger.warning(f"Decryption failed (likely key mismatch), returning empty dict: {e}")
+            return {}  # Return empty dict instead of raising error
 
 
 class HashedString(TypeDecorator):

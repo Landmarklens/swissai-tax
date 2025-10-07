@@ -2,6 +2,6 @@
 SwissAI Tax routers
 """
 
-from . import dashboard, filing, payment, profile, settings
+from . import dashboard, filing, payment, profile, settings, subscription
 
-__all__ = ['dashboard', 'profile', 'settings', 'filing', 'payment']
+__all__ = ['dashboard', 'profile', 'settings', 'filing', 'payment', 'subscription']

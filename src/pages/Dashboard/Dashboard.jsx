@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Typography,
@@ -10,7 +10,8 @@ import {
   LinearProgress,
   Chip,
   Paper,
-  Divider
+  Divider,
+  CircularProgress
 } from '@mui/material';
 import {
   PlayArrow as PlayArrowIcon,
@@ -27,6 +28,7 @@ import Footer from '../../components/footer/Footer';
 import FilingStatusCard from './components/FilingStatusCard';
 import FilingHistoryTable from './components/FilingHistoryTable';
 import QuickStatsPanel from './components/QuickStatsPanel';
+import dashboardService from '../../services/dashboardService';
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -34,40 +36,50 @@ const Dashboard = () => {
   const session = useSelector(state => state.taxFiling?.session);
   const profile = useSelector(state => state.account?.profile);
 
-  // Mock data - will be replaced with real API calls
-  const activeFiling = {
-    taxYear: 2024,
-    status: 'in_progress',
-    progress: 60,
-    lastSaved: '2024-10-04T20:30:00Z',
-    estimatedRefund: 450
-  };
+  // State for dashboard data
+  const [loading, setLoading] = useState(true);
+  const [activeFiling, setActiveFiling] = useState(null);
+  const [pastFilings, setPastFilings] = useState([]);
+  const [stats, setStats] = useState({
+    totalFilings: 0,
+    totalRefunds: 0,
+    averageRefund: 0,
+    daysUntilDeadline: 0
+  });
 
-  const pastFilings = [
-    {
-      id: 'filing_2023',
-      taxYear: 2023,
-      status: 'filed',
-      submittedDate: '2024-04-15',
-      refundAmount: 450,
-      confirmationNumber: 'ZH-2023-123456'
-    },
-    {
-      id: 'filing_2022',
-      taxYear: 2022,
-      status: 'filed',
-      submittedDate: '2023-04-10',
-      refundAmount: 320,
-      confirmationNumber: 'ZH-2022-789012'
-    }
-  ];
+  // Fetch dashboard data on mount
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        const result = await dashboardService.getDashboardData();
 
-  const stats = {
-    totalFilings: 3,
-    totalRefunds: 1050,
-    averageRefund: 350,
-    daysUntilDeadline: 45
-  };
+        if (result.success) {
+          const formatted = dashboardService.formatDashboardData(result.data);
+
+          // Set active filing (first one or null)
+          setActiveFiling(formatted.activeFilings[0] || null);
+
+          // Set past filings
+          setPastFilings(formatted.pastFilings || []);
+
+          // Set stats
+          setStats(formatted.stats || {
+            totalFilings: 0,
+            totalRefunds: 0,
+            averageRefund: 0,
+            daysUntilDeadline: 0
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   const handleContinueFiling = () => {
     navigate('/tax-filing/interview');
@@ -85,26 +97,33 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <Box mb={4}>
           <Typography variant="h3" gutterBottom fontWeight={700}>
-            {t('Welcome back')}, {profile?.personal?.fullName || 'User'}!
+            {t('Welcome back')}, {profile?.first_name || 'User'}!
           </Typography>
           <Typography variant="body1" color="text.secondary">
             {t('Manage your Swiss tax filings and track your progress')}
           </Typography>
         </Box>
 
-        {/* Active Filing & Stats Row */}
-        <Grid container spacing={3} mb={4}>
-          <Grid item xs={12} md={8}>
-            <FilingStatusCard
-              filing={activeFiling}
-              onContinue={handleContinueFiling}
-              onStartNew={handleStartNewFiling}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <QuickStatsPanel stats={stats} />
-          </Grid>
-        </Grid>
+        {/* Loading State */}
+        {loading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {/* Active Filing & Stats Row */}
+            <Grid container spacing={3} mb={4}>
+              <Grid item xs={12} md={8}>
+                <FilingStatusCard
+                  filing={activeFiling}
+                  onContinue={handleContinueFiling}
+                  onStartNew={handleStartNewFiling}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <QuickStatsPanel stats={stats} />
+              </Grid>
+            </Grid>
 
         {/* Past Filings Section */}
         <Box mb={4}>
@@ -147,6 +166,8 @@ const Dashboard = () => {
             </Typography>
           </Box>
         </Paper>
+          </>
+        )}
       </Container>
 
       <Footer />

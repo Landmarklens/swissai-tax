@@ -37,8 +37,9 @@ import FilingCard from './FilingCard';
 import TaxSummaryCard from './TaxSummaryCard';
 import OptimizationPanel from './OptimizationPanel';
 import DocumentUploadPanel from './DocumentUploadPanel';
+import { getApiUrl } from '../../utils/api/getApiUrl';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = getApiUrl();
 
 const MultiCantonDashboard = ({ userId, taxYear }) => {
   const [loading, setLoading] = useState(true);

@@ -34,8 +34,9 @@ import {
   Warning as WarningIcon,
   Info as InfoIcon
 } from '@mui/icons-material';
+import { getApiUrl } from '../../utils/api/getApiUrl';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = getApiUrl();
 
 const PRIORITY_COLORS = {
   'high': 'error',

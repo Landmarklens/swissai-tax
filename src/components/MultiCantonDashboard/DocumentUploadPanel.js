@@ -28,8 +28,9 @@ import {
   Error as ErrorIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
+import { getApiUrl } from '../../utils/api/getApiUrl';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = getApiUrl();
 
 const SUPPORTED_DOCUMENTS = [
   'Salary Certificate (Lohnausweis)',

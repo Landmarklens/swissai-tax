@@ -1,4 +1,6 @@
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+import { getApiUrl } from '../utils/api/getApiUrl';
+
+const BASE_URL = getApiUrl();
 
 export const getCounter = `${BASE_URL}/counter`;
 export const getTestimonilsRoute = `${BASE_URL}/testimonials`;

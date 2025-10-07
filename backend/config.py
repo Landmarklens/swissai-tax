@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # SECURITY: SECRET_KEY must be loaded from Parameter Store (/swissai/api/jwt-secret)
     # No default value to prevent using weak secrets in production
     SECRET_KEY: str | None = Field(default=None)
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(360)  # 6 hours sliding window
 
     # Database settings
     # SECURITY: All database credentials must be loaded from Parameter Store (/swissai/db/*)

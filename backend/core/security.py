@@ -1,6 +1,7 @@
 """
 Security configuration for cookie-based authentication
 """
+import time
 from fastapi import Cookie, HTTPException, Request
 from jose import JWTError, jwt
 
@@ -8,14 +9,35 @@ from config import settings
 
 ALGORITHM = "HS256"
 
-# Cookie settings for production
+# Cookie settings for production - sliding window session
 COOKIE_SETTINGS = {
     "httponly": True,
     "secure": settings.ENVIRONMENT == "production",  # HTTPS only in production
     "samesite": "none" if settings.ENVIRONMENT == "production" else "lax",  # "none" required for cross-domain
-    "max_age": 60 * 60 * 24 * 7,  # 7 days
+    "max_age": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Match JWT expiry (6 hours)
     # Don't set domain - let browser handle it automatically for cross-domain (api.swissai.tax)
 }
+
+
+def create_access_token(email: str, user_type: str = None) -> str:
+    """
+    Create a new JWT access token
+
+    Args:
+        email: User email
+        user_type: Optional user type
+
+    Returns:
+        JWT token string
+    """
+    payload = {
+        "email": email,
+        "exp": time.time() + (settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    }
+    if user_type:
+        payload["user_type"] = user_type
+
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=ALGORITHM)
 
 
 async def get_current_user_from_cookie(

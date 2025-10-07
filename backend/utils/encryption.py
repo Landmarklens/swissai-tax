@@ -22,19 +22,37 @@ class EncryptionService:
     def __init__(self, key: Optional[str] = None):
         """
         Initialize encryption service with key
-        If no key provided, uses environment variable or generates new one
+        If no key provided, tries AWS Secrets Manager, then environment variable
         """
         if key:
             self.key = key.encode() if isinstance(key, str) else key
         else:
-            # Try to get from environment
-            env_key = os.environ.get('ENCRYPTION_KEY')
-            if env_key:
-                self.key = env_key.encode()
-            else:
-                # Generate new key (should be stored securely)
-                self.key = Fernet.generate_key()
-                logger.warning("Generated new encryption key - should be stored securely!")
+            # Try AWS Secrets Manager first (production)
+            try:
+                from utils.aws_secrets import get_encryption_key
+                aws_key = get_encryption_key()
+                if aws_key:
+                    self.key = aws_key.encode()
+                    logger.info("Using encryption key from AWS Secrets Manager")
+                else:
+                    # Fallback: Try environment variable
+                    env_key = os.environ.get('ENCRYPTION_KEY')
+                    if env_key:
+                        self.key = env_key.encode()
+                        logger.info("Using encryption key from environment variable")
+                    else:
+                        # Generate new key (should be stored securely)
+                        self.key = Fernet.generate_key()
+                        logger.warning("Generated new encryption key - should be stored securely!")
+            except ImportError:
+                # If aws_secrets module not available, fall back to env var
+                env_key = os.environ.get('ENCRYPTION_KEY')
+                if env_key:
+                    self.key = env_key.encode()
+                    logger.info("Using encryption key from environment variable")
+                else:
+                    self.key = Fernet.generate_key()
+                    logger.warning("Generated new encryption key - should be stored securely!")
 
         self.cipher = Fernet(self.key)
 

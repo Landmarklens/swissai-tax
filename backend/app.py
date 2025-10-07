@@ -99,6 +99,46 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add sliding window session middleware
+@app.middleware("http")
+async def sliding_session_middleware(request: Request, call_next):
+    """
+    Middleware that refreshes JWT token on each authenticated request
+    This creates a sliding window session - as long as user is active,
+    their session stays alive for 6 hours from last activity
+    """
+    from core.security import COOKIE_SETTINGS, create_access_token
+    from jose import jwt
+
+    response = await call_next(request)
+
+    # Check if user has a valid token
+    access_token = request.cookies.get("access_token")
+    if access_token:
+        try:
+            # Decode token to get user info
+            payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=["HS256"])
+            email = payload.get("email")
+            user_type = payload.get("user_type")
+
+            if email:
+                # Create a new token with refreshed expiry
+                new_token = create_access_token(email, user_type)
+
+                # Set new cookie with refreshed expiry
+                response.set_cookie(
+                    key="access_token",
+                    value=new_token,
+                    **COOKIE_SETTINGS
+                )
+                logger.debug(f"Refreshed session for user: {email}")
+        except Exception as e:
+            # Token invalid or expired - let it expire naturally
+            logger.debug(f"Could not refresh token: {e}")
+            pass
+
+    return response
+
 # Add validation error handler
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):

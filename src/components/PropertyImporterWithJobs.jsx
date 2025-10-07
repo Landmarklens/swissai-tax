@@ -117,7 +117,6 @@ const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = fals
         }
       );
 
-      console.log('[PropertyImporter] Import response:', response.data);
 
       if (response.data.success) {
         // Handle new job-based response format
@@ -126,7 +125,6 @@ const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = fals
         }
         // Handle old immediate import format (backward compatibility)
         else if (response.data.property) {
-          console.log('[PropertyImporter] Received old format - property imported immediately:', response.data.property.id);
           // Call success handler directly for immediate import
           onPropertyImported?.({
             id: response.data.property.id,
@@ -166,7 +164,6 @@ const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = fals
   };
 
   const handleJobComplete = (propertyId) => {
-    console.log('[PropertyImporter] Import completed successfully:', propertyId);
     
     // Show success message with toast
     toast.success('Property imported successfully! Redirecting to your properties...');

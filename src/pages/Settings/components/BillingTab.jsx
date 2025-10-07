@@ -70,7 +70,6 @@ const BillingTab = () => {
 
   const handleCancelPlan = () => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Cancelling plan');
     }
     setCancelDialogOpen(false);
     // TODO: Implement plan cancellation
@@ -78,7 +77,6 @@ const BillingTab = () => {
 
   const handleUpgrade = () => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Upgrading plan');
     }
     setUpgradeDialogOpen(false);
     // TODO: Implement plan upgrade
@@ -86,14 +84,12 @@ const BillingTab = () => {
 
   const handleUpdatePaymentMethod = () => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Updating payment method');
     }
     // TODO: Implement payment method update
   };
 
   const handleDownloadInvoice = (invoiceId) => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Downloading invoice:', invoiceId);
     }
     // TODO: Implement invoice download
   };

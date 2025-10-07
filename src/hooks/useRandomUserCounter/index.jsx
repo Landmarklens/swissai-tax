@@ -56,7 +56,6 @@ export const useRandomUserCounter = () => {
           }
         }
       } catch (error) {
-        console.log('Error fetching user count, using fallback:', error.message);
         // If API fails, simulate a counter
         if (!hasInitialized.current && isMounted) {
           hasInitialized.current = true;

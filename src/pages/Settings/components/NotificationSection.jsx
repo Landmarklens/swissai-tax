@@ -35,7 +35,6 @@ const NotificationSection = () => {
   };
 
   const handleSave = () => {
-    console.log('Saving notification settings:', settings);
     // TODO: Save to backend/Redux
     setHasChanges(false);
   };

@@ -111,7 +111,6 @@ const ROICalculator = ({ onGetStarted }) => {
   const [yearlyBenefit, setYearlyBenefit] = useState(0);
 
   useEffect(() => {
-    console.log('[DEBUG] ROI Calculator - Properties:', properties, 'Avg Rent:', avgRent, 'Vacancy Days:', vacancyDays);
 
     // Time saved calculation (hours per month)
     const hoursPerProperty = 5; // Average hours saved per property per month (more conservative)
@@ -137,7 +136,6 @@ const ROICalculator = ({ onGetStarted }) => {
     const monthlyBenefit = calculatedMoneySaved - monthlyPlatformCost;
     setYearlyBenefit(monthlyBenefit * 12);
 
-    console.log('[DEBUG] ROI Calculator Results:', {
       timeSaved: calculatedTimeSaved,
       vacancyReduction: calculatedVacancyReduction,
       moneySaved: calculatedMoneySaved,

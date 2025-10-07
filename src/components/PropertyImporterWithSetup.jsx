@@ -214,7 +214,6 @@ RESPONSE GUIDELINES:
         }
       );
 
-      console.log('[PropertyImporter] Import response:', response.data);
 
       if (response.data.success) {
         if (response.data.import_job) {
@@ -243,8 +242,6 @@ RESPONSE GUIDELINES:
   };
 
   const handleJobComplete = async (propertyId, jobData) => {
-    console.log('[PropertyImporter] Import completed successfully:', propertyId);
-    console.log('[PropertyImporter] JobData received:', jobData);
     setImportedPropertyId(propertyId);
 
     // Add a small delay to ensure the property is saved in the backend
@@ -258,25 +255,20 @@ RESPONSE GUIDELINES:
     while (!importedProperty && retryCount < maxRetries) {
       try {
         // Fetch all properties to get the newly imported one
-        console.log(`[PropertyImporter] Fetching all properties... (attempt ${retryCount + 1})`);
         const propertiesResult = await dispatch(fetchProperties(true)).unwrap();
-        console.log('[PropertyImporter] Fetched properties count:', propertiesResult?.length);
 
         // Log first few properties to see structure
         if (propertiesResult?.length > 0) {
-          console.log('[PropertyImporter] Sample property structure:', JSON.stringify(propertiesResult[0], null, 2));
         }
 
         // Find the imported property by ID
         importedProperty = propertiesResult?.find(p => {
           const pId = String(p.id);
           const targetId = String(propertyId);
-          console.log(`[PropertyImporter] Comparing ${pId} with ${targetId}`);
           return pId === targetId;
         });
 
         if (!importedProperty && retryCount < maxRetries - 1) {
-          console.log('[PropertyImporter] Property not found, waiting before retry...');
           await new Promise(resolve => setTimeout(resolve, 2000));
         }
       } catch (error) {
@@ -287,7 +279,6 @@ RESPONSE GUIDELINES:
 
     try {
       if (importedProperty) {
-        console.log('[PropertyImporter] Found imported property:', JSON.stringify(importedProperty, null, 2));
 
         // Map the property data to our expected format
         const mappedDetails = {
@@ -322,20 +313,17 @@ RESPONSE GUIDELINES:
           zip_code: importedProperty.zip_code
         };
 
-        console.log('[PropertyImporter] Setting property details:', JSON.stringify(mappedDetails, null, 2));
         setPropertyDetails(mappedDetails);
       } else {
         // Try tenant selection config as fallback
         try {
           const configResponse = await tenantSelectionAPI.getConfig(propertyId);
           if (configResponse.data && configResponse.data.property) {
-            console.log('[PropertyImporter] Got property details from config:', configResponse.data.property);
             setPropertyDetails(configResponse.data.property);
           } else {
             throw new Error('No property data in config');
           }
         } catch (configError) {
-          console.log('[PropertyImporter] Config fetch failed, using minimal data');
           setPropertyDetails({
             id: propertyId,
             title: jobData?.title || 'Imported Property',

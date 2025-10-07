@@ -47,7 +47,6 @@ const TaxPreferencesSection = () => {
   };
 
   const handleSave = () => {
-    console.log('Saving tax preferences:', preferences);
     // TODO: Save to backend/Redux
     setHasChanges(false);
   };

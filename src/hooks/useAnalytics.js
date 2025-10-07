@@ -11,13 +11,11 @@ export const useComprehensiveAnalytics = (filters = {}) => {
   const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
-    console.log('[useComprehensiveAnalytics] Fetching data with filters:', filters);
     setLoading(true);
     setError(null);
     
     try {
       const result = await analyticsAPI.getComprehensiveAnalytics(filters);
-      console.log('[useComprehensiveAnalytics] Data received:', result);
       setData(result);
     } catch (err) {
       console.error('[useComprehensiveAnalytics] Error fetching comprehensive analytics:', err);
@@ -28,7 +26,6 @@ export const useComprehensiveAnalytics = (filters = {}) => {
   }, [JSON.stringify(filters)]); // Use JSON.stringify to properly compare filter objects
 
   useEffect(() => {
-    console.log('[useComprehensiveAnalytics] Effect triggered, calling fetchData');
     fetchData();
   }, [fetchData]);
 

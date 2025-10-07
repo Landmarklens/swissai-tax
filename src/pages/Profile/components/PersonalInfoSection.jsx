@@ -50,7 +50,6 @@ const PersonalInfoSection = () => {
   };
 
   const handleSave = () => {
-    console.log('Saving personal info:', formData);
     // TODO: Dispatch Redux action to update profile
     setIsEditing(false);
   };

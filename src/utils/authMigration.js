@@ -63,7 +63,6 @@ export const migrateToCookieAuth = async () => {
         localStorage.setItem('user', JSON.stringify(userData));
       }
 
-      console.log('[Migration] Successfully migrated to cookie auth');
       return {
         success: true,
         migrated: true,
@@ -122,11 +121,9 @@ export const needsMigration = () => {
  */
 export const autoMigrate = async () => {
   if (needsMigration()) {
-    console.log('[Migration] Starting auto-migration...');
     const result = await migrateToCookieAuth();
 
     if (result.migrated) {
-      console.log('[Migration] Auto-migration successful');
     } else if (result.message === 'Token expired, please login again') {
       // Redirect to login
       window.location.href = '/login';

@@ -19,7 +19,6 @@ export const features = {
 // Helper to check if a feature is enabled
 export const isFeatureEnabled = (featureName) => {
   const isEnabled = features[featureName] === true;
-  console.log(`[FEATURE_FLAG] 🚩 Checking feature "${featureName}":`, {
     exists: featureName in features,
     value: features[featureName],
     type: typeof features[featureName],

@@ -35,7 +35,6 @@ const GalleryCard = ({ data, onCardClick, onDetailsClick }) => {
   const activeConversationId = useSelector((state) => state.conversations.activeConversationId);
 
   // Log the data to understand what's being received
-  console.log('[GalleryCard] Received data:', {
     fullData: data,
     dataKeys: data ? Object.keys(data) : [],
     hasPrice: data?.price !== undefined,
@@ -132,7 +131,6 @@ const GalleryCard = ({ data, onCardClick, onDetailsClick }) => {
   const extractedAddress = extractAddressFromTitle(title);
   const extractedSource = extractSourceFromTitle(title);
   
-  console.log('[GalleryCard] Extraction results:', {
     title,
     extractedPrice: extractedData.price,
     extractedCurrency: extractedData.currency,

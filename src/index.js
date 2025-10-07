@@ -16,7 +16,6 @@ import 'swiper/css/navigation';
 
 // SwissAI Tax - Development mode
 if (process.env.NODE_ENV === 'development') {
-  console.log('🇨🇭 SwissAI Tax - Development Mode');
 }
 
 // Load Google Auth debug tools

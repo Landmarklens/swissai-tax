@@ -38,9 +38,6 @@ const QuestionCard = ({
   const [showHelp, setShowHelp] = useState(false);
 
   // Debug logging
-  console.log('QuestionCard - question:', question);
-  console.log('QuestionCard - answer:', answer);
-  console.log('QuestionCard - isValid:', answer !== '');
 
   useEffect(() => {
     // Reset answer when question changes
@@ -52,7 +49,6 @@ const QuestionCard = ({
   }, [question, previousAnswer]);
 
   const handleSubmit = () => {
-    console.log('handleSubmit called - type:', question.question_type, 'answer:', answer);
     if (question.question_type === 'multiselect') {
       onAnswer(multiSelectAnswers);
     } else if (question.question_type === 'boolean') {

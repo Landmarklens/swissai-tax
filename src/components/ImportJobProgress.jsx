@@ -53,7 +53,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
   useEffect(() => {
     if (!jobId) return;
 
-    console.log(`[ImportJob] Starting progress tracking for job ${jobId}`);
 
     // Polling function for job status updates
     const pollJobStatus = async () => {
@@ -67,7 +66,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(`[ImportJob] Polling update:`, data);
 
           // Stop simulated progress when we get a real update
           if (simulatedProgressRef.current) {
@@ -161,7 +159,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
         return;
       }
 
-      console.log(`[ImportJob] Attempting SSE connection for job ${jobId}`);
       
       const eventSource = new EventSource(
         `${getApiUrl()}/api/tenant-selection/import-jobs/${jobId}/stream?token=${encodeURIComponent(token)}`
@@ -170,7 +167,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
       eventSourceRef.current = eventSource;
 
       eventSource.onopen = () => {
-        console.log(`[ImportJob] SSE connected for job ${jobId}`);
         setIsConnected(true);
         setUsePolling(false);
         setSseFailures(0);
@@ -182,7 +178,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
       eventSource.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log(`[ImportJob] SSE update:`, data);
 
           // Stop simulated progress when we get a real update
           if (simulatedProgressRef.current) {
@@ -275,7 +270,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
         
         // Fall back to polling after 3 SSE failures
         if (newFailureCount >= 3 && !usePolling) {
-          console.log(`[ImportJob] SSE failed ${newFailureCount} times, falling back to polling...`);
           setUsePolling(true);
           if (eventSourceRef.current) {
             eventSourceRef.current.close();
@@ -288,7 +282,6 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
           // Try to reconnect after a delay for the first few failures
           setTimeout(() => {
             if (['pending', 'processing', 'downloading', 'parsing', 'saving'].includes(jobStatus.status)) {
-              console.log(`[ImportJob] Attempting SSE reconnection (attempt ${newFailureCount + 1})`);
               connectToSSE();
             }
           }, 2000 * newFailureCount); // Exponential backoff

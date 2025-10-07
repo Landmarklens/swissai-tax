@@ -34,7 +34,6 @@ const Join = () => {
         setCounter(data?.payload?.data);
       }
     } catch (error) {
-      console.log('Error', error);
       errorHandler(error);
     }
   };

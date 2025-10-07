@@ -67,9 +67,6 @@ const CompetitiveIntelligence = ({ property, insights }) => {
   const [radiusKm, setRadiusKm] = useState(5);
 
   const fetchCompetitiveAnalysis = async () => {
-    console.log('[CompetitiveIntelligence] Starting fetchCompetitiveAnalysis');
-    console.log('[CompetitiveIntelligence] Property:', property);
-    console.log('[CompetitiveIntelligence] Radius:', radiusKm);
     
     if (!property) {
       console.warn('[CompetitiveIntelligence] No property provided');
@@ -81,8 +78,6 @@ const CompetitiveIntelligence = ({ property, insights }) => {
 
     const apiUrl = getApiUrl();
     const endpoint = `${apiUrl}/api/ai-analytics/competitive-analysis`;
-    console.log('[CompetitiveIntelligence] API Endpoint:', endpoint);
-    console.log('[CompetitiveIntelligence] Request payload:', {
       property_id: property.id,
       radius_km: radiusKm,
     });
@@ -101,7 +96,6 @@ const CompetitiveIntelligence = ({ property, insights }) => {
           },
         }
       );
-      console.log('[CompetitiveIntelligence] Response received:', response.data);
       setCompetitiveData(response.data);
     } catch (err) {
       console.error('[CompetitiveIntelligence] Error fetching competitive analysis:', err);

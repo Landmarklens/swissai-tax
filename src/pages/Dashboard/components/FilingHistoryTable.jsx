@@ -24,12 +24,10 @@ const FilingHistoryTable = ({ filings }) => {
   const { t } = useTranslation();
 
   const handleView = (filing) => {
-    console.log('View filing:', filing.id);
     // Navigate to filing details or open modal
   };
 
   const handleDownload = (filing) => {
-    console.log('Download filing:', filing.id);
     // Download PDF
   };
 

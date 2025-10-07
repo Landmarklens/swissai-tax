@@ -77,23 +77,19 @@ const SocialProof = ({ userType = 'tenant' }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('[DEBUG] SocialProof userType:', userType);
     if (userType === 'landlord') {
       fetchLandlordStats();
     }
   }, [userType]);
 
   const fetchLandlordStats = async () => {
-    console.log('[DEBUG] Starting to fetch landlord stats...');
     try {
       const data = await getLandlordStats();
-      console.log('[DEBUG] Landlord stats received in SocialProof:', data);
       setStats(data);
     } catch (error) {
       console.error('[DEBUG] Failed to fetch landlord stats in SocialProof:', error);
     } finally {
       setLoading(false);
-      console.log('[DEBUG] Loading state set to false');
     }
   };
 

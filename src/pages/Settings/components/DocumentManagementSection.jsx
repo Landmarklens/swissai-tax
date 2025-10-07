@@ -22,12 +22,10 @@ const DocumentManagementSection = () => {
   const [storageLimit] = useState(500); // MB
 
   const handleDownloadAll = () => {
-    console.log('Downloading all documents');
     // TODO: Implement download all logic
   };
 
   const handleDeleteOld = () => {
-    console.log('Deleting old documents');
     // TODO: Implement delete old documents logic
   };
 

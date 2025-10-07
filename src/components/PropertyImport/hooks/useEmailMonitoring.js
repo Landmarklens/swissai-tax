@@ -24,7 +24,6 @@ export const useEmailMonitoring = (propertyId) => {
     const ws = new WebSocket(`${WEBSOCKET_URL}/properties/${config.propertyId}/email-monitor`);
     
     ws.onopen = () => {
-      console.log('WebSocket connected for email monitoring');
       
       // Send monitoring configuration
       ws.send(JSON.stringify({
@@ -44,7 +43,6 @@ export const useEmailMonitoring = (propertyId) => {
           break;
         
         case 'monitoring_status':
-          console.log('Monitoring status:', data.status);
           break;
         
         case 'error':
@@ -52,7 +50,6 @@ export const useEmailMonitoring = (propertyId) => {
           break;
         
         default:
-          console.log('Unknown WebSocket message:', data);
       }
     };
 
@@ -63,7 +60,6 @@ export const useEmailMonitoring = (propertyId) => {
     };
 
     ws.onclose = () => {
-      console.log('WebSocket connection closed');
     };
 
     wsRef.current = ws;

@@ -60,14 +60,10 @@ import {
 const localizer = momentLocalizer(moment);
 
 const ViewingSlotManager = ({ propertyId, onComplete }) => {
-  console.log('[ViewingSlotManager] Component mounted/updated');
-  console.log('[ViewingSlotManager] propertyId prop:', propertyId);
 
   const dispatch = useDispatch();
   const { viewingSlots, loading } = useSelector((state) => state.tenantSelection);
 
-  console.log('[ViewingSlotManager] viewingSlots:', viewingSlots);
-  console.log('[ViewingSlotManager] loading:', loading);
 
   const [view, setView] = useState('calendar'); // 'calendar' or 'list'
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -109,9 +105,6 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
   })) || [];
 
   const handleCreateSlot = async () => {
-    console.log('[ViewingSlotManager] handleCreateSlot called');
-    console.log('[ViewingSlotManager] slotForm:', slotForm);
-    console.log('[ViewingSlotManager] propertyId:', propertyId);
 
     // Format data according to backend expectations
     const slotData = {
@@ -123,22 +116,18 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
       notes: slotForm.notes
     };
 
-    console.log('[ViewingSlotManager] Formatted slotData:', slotData);
 
     try {
-      console.log('[ViewingSlotManager] Dispatching createViewingSlots action...');
       const result = await dispatch(createViewingSlots({
         propertyId,
         slots: [slotData]
       }));
 
-      console.log('[ViewingSlotManager] createViewingSlots result:', result);
 
       if (result.error) {
         console.error('[ViewingSlotManager] Error creating slot:', result.error);
         alert('Failed to create viewing slot: ' + (result.error.message || 'Unknown error'));
       } else {
-        console.log('[ViewingSlotManager] Slot created successfully');
         setShowSlotDialog(false);
         resetSlotForm();
       }
@@ -149,8 +138,6 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
   };
 
   const handleBulkCreate = async () => {
-    console.log('[ViewingSlotManager] handleBulkCreate called');
-    console.log('[ViewingSlotManager] bulkForm:', bulkForm);
 
     const slots = [];
     const startDate = moment(bulkForm.startDate);
@@ -174,19 +161,15 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
       }
     }
 
-    console.log('[ViewingSlotManager] Generated slots:', slots);
 
     try {
-      console.log('[ViewingSlotManager] Dispatching bulkCreateSlots action...');
       const result = await dispatch(bulkCreateSlots({ propertyId, slots }));
 
-      console.log('[ViewingSlotManager] bulkCreateSlots result:', result);
 
       if (result.error) {
         console.error('[ViewingSlotManager] Error creating slots:', result.error);
         alert('Failed to create viewing slots: ' + (result.error.message || 'Unknown error'));
       } else {
-        console.log('[ViewingSlotManager] Slots created successfully');
         setShowBulkDialog(false);
       }
     } catch (error) {
@@ -295,8 +278,6 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => {
-                console.log('[ViewingSlotManager] Add Slot button clicked');
-                console.log('[ViewingSlotManager] Setting showSlotDialog to true');
                 setShowSlotDialog(true);
               }}
             >
@@ -410,7 +391,6 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
       )}
 
       {/* Create/Edit Slot Dialog */}
-      {console.log('[ViewingSlotManager] Rendering Dialog, showSlotDialog:', showSlotDialog)}
       <Dialog open={showSlotDialog} onClose={() => setShowSlotDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>
           {editingSlot ? 'Edit Viewing Slot' : 'Create Viewing Slot'}

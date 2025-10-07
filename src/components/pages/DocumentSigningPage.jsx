@@ -94,7 +94,6 @@ const DocumentSigningPage = () => {
         setDocumentHtml(doc.html_content || doc.document_html || '');
         
       } catch (apiError) {
-        console.log('Backend not available, falling back to localStorage');
         
         // Fallback to localStorage if backend is not available
         const doc = documentStorageService.getDocument(documentId);
@@ -164,7 +163,6 @@ const DocumentSigningPage = () => {
         documentStorageService.updateDocument(documentId, updatedDocument);
         
       } catch (apiError) {
-        console.log('Backend not available, saving to localStorage');
         
         // Fallback to localStorage if backend is not available
         const updatedFieldValues = {

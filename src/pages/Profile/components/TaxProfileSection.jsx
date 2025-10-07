@@ -48,7 +48,6 @@ const TaxProfileSection = () => {
   };
 
   const handleSave = () => {
-    console.log('Saving tax profile:', formData);
     // TODO: Dispatch Redux action to update tax profile
     setIsEditing(false);
   };

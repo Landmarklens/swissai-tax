@@ -38,13 +38,11 @@ const SecuritySection = () => {
   };
 
   const handleSavePassword = () => {
-    console.log('Changing password');
     // TODO: Implement password change logic
     setPasswordDialogOpen(false);
   };
 
   const handleToggle2FA = () => {
-    console.log('Toggling 2FA');
     // TODO: Implement 2FA toggle logic
     setTwoFactorEnabled(!twoFactorEnabled);
   };
@@ -58,7 +56,6 @@ const SecuritySection = () => {
   };
 
   const handleConfirmDelete = () => {
-    console.log('Deleting account');
     // TODO: Implement account deletion logic
     setDeleteDialogOpen(false);
   };

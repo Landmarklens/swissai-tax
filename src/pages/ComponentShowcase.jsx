@@ -25,7 +25,6 @@ const ComponentShowcase = () => {
             Features: Collapsible sections, progress tracking, interactive amenities, gradient header
           </Typography>
           <QuickFormCard
-            onSubmit={(data) => console.log('Form submitted:', data)}
             isSubmitting={false}
           />
         </Box>

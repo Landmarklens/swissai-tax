@@ -22,7 +22,6 @@ export const useUserType = () => {
 
   const handleUserTypeChange = (newType) => {
     if (newType && newType !== userType) {
-      console.log('[useUserType] Changing user type from', userType, 'to', newType);
       setUserType(newType);
 
       // Dispatch custom event for other components to listen to

@@ -193,7 +193,6 @@ export const updateDocument = createAsyncThunk(
         return response.data;
       } catch (apiError) {
         // If API fails, update in localStorage only
-        console.log('API unavailable, updating in localStorage');
         const updatedDocument = documentStorageService.updateDocument(documentId, body);
         return updatedDocument;
       }
@@ -224,7 +223,6 @@ export const deleteDocument = createAsyncThunk(
         return { id: documentId, ...response.data };
       } catch (apiError) {
         // If API fails, delete from localStorage only
-        console.log('API unavailable, deleting from localStorage');
         documentStorageService.deleteDocument(documentId);
         return { id: documentId, success: true };
       }

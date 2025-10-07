@@ -56,7 +56,6 @@ export const useLandlordCounter = () => {
           }
         }
       } catch (error) {
-        console.log('Error fetching landlord stats, using fallback:', error.message);
         // If API fails, use a default value
         if (!hasInitialized.current && isMounted) {
           hasInitialized.current = true;

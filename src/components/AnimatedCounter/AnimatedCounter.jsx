@@ -78,7 +78,6 @@ const AnimatedCounter = ({
 
   useEffect(() => {
     if (inView && !hasAnimated) {
-      console.log('[DEBUG] AnimatedCounter starting animation for value:', value, 'label:', label);
       setHasAnimated(true);
       const startTime = Date.now();
       const endValue = parseFloat(value);

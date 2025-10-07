@@ -64,8 +64,6 @@ const EnhancedFeatures = ({ userType = 'landlord', handleOpenAuthModal }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
-    console.log('[DEBUG] EnhancedFeatures - userType:', userType);
-    console.log('[DEBUG] EnhancedFeatures - handleOpenAuthModal exists:', !!handleOpenAuthModal);
   }, [userType, handleOpenAuthModal]);
 
   const painPoints = [

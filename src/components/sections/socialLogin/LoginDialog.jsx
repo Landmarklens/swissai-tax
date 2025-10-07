@@ -14,18 +14,15 @@ const LoginDialog = ({ open, handleClose }) => {
   const { t } = useTranslation();
 
   const handleGoogleLogin = (response) => {
-    console.log('Google login response:', response);
     handleClose();
     localStorage.clear()
   };
 
   const handleMicrosoftLogin = (response) => {
-    console.log('Microsoft login response:', response);
     handleClose();
   };
 
   const handleAppleLogin = (response) => {
-    console.log('Apple login response:', response);
     handleClose();
   };
 

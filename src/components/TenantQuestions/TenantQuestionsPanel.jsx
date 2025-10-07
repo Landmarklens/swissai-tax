@@ -50,11 +50,6 @@ const TenantQuestionsPanel = ({ propertyId = null }) => {
   // Add debug logging only in development
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('[TenantQuestionsPanel] Component mounted/updated');
-      console.log('[TenantQuestionsPanel] PropertyId:', propertyId);
-      console.log('[TenantQuestionsPanel] Questions count:', memoizedQuestions.length);
-      console.log('[TenantQuestionsPanel] Loading:', isLoading);
-      console.log('[TenantQuestionsPanel] Error:', error);
     }
   }, [propertyId, memoizedQuestions.length, isLoading, error]);
 
@@ -65,7 +60,6 @@ const TenantQuestionsPanel = ({ propertyId = null }) => {
     const fetchData = async () => {
       if (!isLoading && isMounted) {
         if (process.env.NODE_ENV === 'development') {
-          console.log('[TenantQuestionsPanel] Fetching questions...');
         }
         
         try {

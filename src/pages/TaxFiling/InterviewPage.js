@@ -137,16 +137,12 @@ const InterviewPage = () => {
         language: 'en'
       });
 
-      console.log('API Response:', response.data);
 
       // Handle both camelCase (sessionId) and snake_case (session_id) from API
       const sessionId = response.data.sessionId || response.data.session_id;
       const filing_session_id = response.data.filingSessionId || response.data.filing_session_id;
       const question = response.data.currentQuestion || response.data.current_question;
 
-      console.log('Session ID:', sessionId);
-      console.log('Filing Session ID:', filing_session_id);
-      console.log('Current Question:', question);
 
       // Transform API response to match QuestionCard expected format
       const transformedQuestion = question ? {
@@ -162,7 +158,6 @@ const InterviewPage = () => {
         }
       } : null;
 
-      console.log('Transformed Question:', transformedQuestion);
 
       setSession(sessionId);
       setFilingSessionId(filing_session_id);
@@ -224,7 +219,6 @@ const InterviewPage = () => {
       } else {
         // Transform next question format
         const nextQuestion = response.data.current_question;
-        console.log('Next question from API:', nextQuestion);
 
         const transformedNextQuestion = nextQuestion ? {
           ...nextQuestion,
@@ -241,7 +235,6 @@ const InterviewPage = () => {
           }
         } : null;
 
-        console.log('Transformed next question:', transformedNextQuestion);
 
         setCurrentQuestion(transformedNextQuestion);
         setCurrentQuestionNumber(prev => prev + 1);
@@ -259,7 +252,6 @@ const InterviewPage = () => {
   const handleBack = () => {
     // TODO: Implement going back to previous question
     if (process.env.NODE_ENV === 'development') {
-      console.log('Go back to previous question');
     }
   };
 

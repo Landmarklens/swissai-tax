@@ -110,18 +110,38 @@ async def get_current_user(request: Request):
     Main authentication method that tries both cookie and header.
     This allows gradual migration from header-based to cookie-based auth.
     """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"[AUTH DEBUG] get_current_user called for path: {request.url.path}")
+    logger.info(f"[AUTH DEBUG] Request cookies: {list(request.cookies.keys())}")
+    logger.info(f"[AUTH DEBUG] Request headers: {dict(request.headers)}")
+
     # Try cookie first (new method)
     access_token = request.cookies.get("access_token")
+    logger.info(f"[AUTH DEBUG] Cookie access_token present: {bool(access_token)}")
+
     if access_token:
+        logger.info(f"[AUTH DEBUG] Trying cookie-based auth, token length: {len(access_token)}")
         try:
-            return await get_current_user_from_cookie(request, access_token)
-        except HTTPException:
+            user = await get_current_user_from_cookie(request, access_token)
+            logger.info(f"[AUTH DEBUG] Cookie auth SUCCESS - User: {user.email}")
+            return user
+        except HTTPException as e:
+            logger.error(f"[AUTH DEBUG] Cookie auth FAILED: {e.status_code} - {e.detail}")
             pass  # Fall through to header auth
 
     # Fall back to header auth (legacy method)
+    auth_header = request.headers.get("authorization")
+    logger.info(f"[AUTH DEBUG] Authorization header present: {bool(auth_header)}")
+
     try:
-        return await get_current_user_from_header(request)
-    except HTTPException:
+        user = await get_current_user_from_header(request)
+        logger.info(f"[AUTH DEBUG] Header auth SUCCESS - User: {user.email}")
+        return user
+    except HTTPException as e:
+        logger.error(f"[AUTH DEBUG] Header auth FAILED: {e.status_code} - {e.detail}")
+        logger.error(f"[AUTH DEBUG] AUTHENTICATION FAILED - No valid cookie or header")
         raise HTTPException(
             status_code=401,
             detail="Not authenticated"

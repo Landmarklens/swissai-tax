@@ -211,11 +211,19 @@ async def user_login(
 
             # Set httpOnly cookie (new secure method)
             if use_cookie:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.info(f"[LOGIN DEBUG] Setting cookie for user: {db_user.email}")
+                logger.info(f"[LOGIN DEBUG] Cookie settings: {COOKIE_SETTINGS}")
+                logger.info(f"[LOGIN DEBUG] Token length: {len(access_token)}")
+
                 response.set_cookie(
                     key="access_token",
                     value=f"Bearer {access_token}",
                     **COOKIE_SETTINGS
                 )
+
+                logger.info(f"[LOGIN DEBUG] Cookie set successfully")
 
                 # Return user data without token (cookie handles auth)
                 return {

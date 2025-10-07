@@ -8,7 +8,7 @@ and relationships can be resolved properly.
 from db.base import Base
 
 # Import all models to register them with SQLAlchemy
-from .user import User
+from .swisstax.user import User
 from .tax_filing_session import TaxFilingSession, FilingStatus
 from .tax_answer import TaxAnswer
 from .tax_insight import TaxInsight, InsightType

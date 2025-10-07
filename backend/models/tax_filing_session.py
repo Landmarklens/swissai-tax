@@ -51,7 +51,7 @@ class TaxFilingSession(Base):
 
     # Status & Progress
     status = Column(
-        SQLEnum(FilingStatus),
+        SQLEnum(FilingStatus, name='filing_status_enum', schema='swisstax', create_constraint=True, native_enum=True),
         default=FilingStatus.DRAFT,
         nullable=False,
         index=True

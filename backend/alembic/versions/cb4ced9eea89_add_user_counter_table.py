@@ -28,10 +28,11 @@ def upgrade() -> None:
         sa.Column('last_reset', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
         sa.Column('last_updated', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
         sa.PrimaryKeyConstraint('id'),
-        sa.CheckConstraint('id = 1', name='single_row_check')
+        sa.CheckConstraint('id = 1', name='single_row_check'),
+        schema='swisstax'
     )
 
 
 def downgrade() -> None:
     """Downgrade schema."""
-    op.drop_table('user_counter')
+    op.drop_table('user_counter', schema='swisstax')

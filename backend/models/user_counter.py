@@ -6,7 +6,7 @@ It resets daily at midnight and increments throughout the day.
 """
 from sqlalchemy import Column, Integer, DateTime, CheckConstraint
 from sqlalchemy.sql import func
-from db.base import Base
+from models.swisstax.base import Base
 
 
 class UserCounter(Base):
@@ -25,9 +25,10 @@ class UserCounter(Base):
     last_reset = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     last_updated = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
 
-    # Ensure only one row exists
+    # Ensure only one row exists - will be in swisstax schema via Base
     __table_args__ = (
         CheckConstraint('id = 1', name='single_row_check'),
+        {'schema': 'swisstax'}  # Explicit schema declaration
     )
 
     def __repr__(self):

@@ -47,7 +47,7 @@ def upgrade():
     op.create_table(
         'tax_filing_sessions',
         sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('user_id', postgresql.UUID(as_uuid=False), sa.ForeignKey('users.id'), nullable=False, index=True),
+        sa.Column('user_id', postgresql.UUID(as_uuid=False), sa.ForeignKey('swisstax.users.id'), nullable=False, index=True),
         sa.Column('name', sa.String(255), nullable=True),
         sa.Column('tax_year', sa.Integer, nullable=False),
 
@@ -75,6 +75,7 @@ def upgrade():
         # Timestamps
         sa.Column('created_at', sa.DateTime, nullable=False, server_default=sa.func.now()),
         sa.Column('updated_at', sa.DateTime, nullable=False, server_default=sa.func.now(), onupdate=sa.func.now()),
+        schema='swisstax'
     )
 
     # Indexes already created by index=True in column definitions above
@@ -84,7 +85,7 @@ def upgrade():
     op.create_table(
         'tax_answers',
         sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('filing_session_id', sa.String(36), sa.ForeignKey('tax_filing_sessions.id'), nullable=False, index=True),
+        sa.Column('filing_session_id', sa.String(36), sa.ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True),
         sa.Column('question_id', sa.String(50), nullable=False, index=True),
 
         # Encrypted answer value (stores sensitive personal/financial data)
@@ -99,6 +100,7 @@ def upgrade():
         # Timestamps
         sa.Column('created_at', sa.DateTime, nullable=False, server_default=sa.func.now()),
         sa.Column('updated_at', sa.DateTime, nullable=False, server_default=sa.func.now(), onupdate=sa.func.now()),
+        schema='swisstax'
     )
 
     # Indexes already created by index=True in column definitions above
@@ -109,7 +111,8 @@ def upgrade():
         'ix_tax_answers_session_question',
         'tax_answers',
         ['filing_session_id', 'question_id'],
-        unique=True
+        unique=True,
+        schema='swisstax'
     )
 
     print("✓ Created tax_filing_sessions table with encrypted profile column")
@@ -122,17 +125,17 @@ def downgrade():
     """Remove tax filing tables"""
 
     # Drop indexes
-    op.drop_index('ix_tax_answers_session_question', table_name='tax_answers')
-    op.drop_index('ix_tax_answers_question_id', table_name='tax_answers')
-    op.drop_index('ix_tax_answers_filing_session_id', table_name='tax_answers')
+    op.drop_index('ix_tax_answers_session_question', table_name='tax_answers', schema='swisstax')
+    op.drop_index('ix_tax_answers_question_id', table_name='tax_answers', schema='swisstax')
+    op.drop_index('ix_tax_answers_filing_session_id', table_name='tax_answers', schema='swisstax')
 
-    op.drop_index('ix_tax_filing_sessions_last_activity', table_name='tax_filing_sessions')
-    op.drop_index('ix_tax_filing_sessions_status', table_name='tax_filing_sessions')
-    op.drop_index('ix_tax_filing_sessions_user_id', table_name='tax_filing_sessions')
+    op.drop_index('ix_tax_filing_sessions_last_activity', table_name='tax_filing_sessions', schema='swisstax')
+    op.drop_index('ix_tax_filing_sessions_status', table_name='tax_filing_sessions', schema='swisstax')
+    op.drop_index('ix_tax_filing_sessions_user_id', table_name='tax_filing_sessions', schema='swisstax')
 
     # Drop tables
-    op.drop_table('tax_answers')
-    op.drop_table('tax_filing_sessions')
+    op.drop_table('tax_answers', schema='swisstax')
+    op.drop_table('tax_filing_sessions', schema='swisstax')
 
     # Drop enum
     filing_status_enum = postgresql.ENUM(

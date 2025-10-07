@@ -7,7 +7,7 @@ from datetime import datetime
 from uuid import uuid4
 import enum
 
-from db.base import Base
+from models.swisstax.base import Base
 from utils.encrypted_types import EncryptedJSON
 
 
@@ -34,7 +34,7 @@ class TaxFilingSession(Base):
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('swisstax.users.id'), nullable=False, index=True)
 
     # Naming & Year
     name = Column(String(255), nullable=True)  # e.g., "2024 Tax Return - Main"

@@ -6,7 +6,7 @@ from datetime import datetime
 from uuid import uuid4
 import enum
 
-from db.base import Base
+from models.swisstax.base import Base
 
 
 class CalculationType(str, enum.Enum):
@@ -28,7 +28,7 @@ class TaxCalculation(Base):
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    filing_session_id = Column(String(36), ForeignKey('tax_filing_sessions.id'), nullable=False, index=True)
+    filing_session_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
 
     # Calculation Type & Version
     calculation_type = Column(

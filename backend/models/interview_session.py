@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from db.base import Base
+from models.swisstax.base import Base
 
 
 class InterviewSession(Base):

@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from db.base import Base
+from models.swisstax.base import Base
 
 
 class Document(Base):
@@ -18,8 +18,8 @@ class Document(Base):
     __tablename__ = "documents"
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
-    session_id = Column(UUID(as_uuid=True), ForeignKey('interview_sessions.id'), nullable=True, index=True)
-    user_id = Column(String(255), ForeignKey('users.id'), nullable=False, index=True)
+    session_id = Column(UUID(as_uuid=True), ForeignKey('swisstax.interview_sessions.id'), nullable=True, index=True)
+    user_id = Column(String(255), ForeignKey('swisstax.users.id'), nullable=False, index=True)
 
     # Document metadata
     document_type = Column(String(100), nullable=False)  # lohnausweis, pillar_3a, etc.

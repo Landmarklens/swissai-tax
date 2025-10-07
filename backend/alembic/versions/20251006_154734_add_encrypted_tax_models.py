@@ -32,10 +32,11 @@ def upgrade():
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['filing_session_id'], ['tax_filing_sessions.id'], ),
+        sa.ForeignKeyConstraint(['filing_session_id'], ['swisstax.tax_filing_sessions.id'], ),
+        schema='swisstax'
     )
-    op.create_index(op.f('ix_tax_answers_filing_session_id'), 'tax_answers', ['filing_session_id'], unique=False)
-    op.create_index(op.f('ix_tax_answers_question_id'), 'tax_answers', ['question_id'], unique=False)
+    op.create_index(op.f('ix_tax_answers_filing_session_id'), 'tax_answers', ['filing_session_id'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_answers_question_id'), 'tax_answers', ['question_id'], unique=False, schema='swisstax')
 
     # Create tax_insights table
     op.create_table('tax_insights',
@@ -55,11 +56,12 @@ def upgrade():
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('acknowledged_at', sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['filing_session_id'], ['tax_filing_sessions.id'], ),
+        sa.ForeignKeyConstraint(['filing_session_id'], ['swisstax.tax_filing_sessions.id'], ),
+        schema='swisstax'
     )
-    op.create_index(op.f('ix_tax_insights_filing_session_id'), 'tax_insights', ['filing_session_id'], unique=False)
-    op.create_index(op.f('ix_tax_insights_insight_type'), 'tax_insights', ['insight_type'], unique=False)
-    op.create_index(op.f('ix_tax_insights_priority'), 'tax_insights', ['priority'], unique=False)
+    op.create_index(op.f('ix_tax_insights_filing_session_id'), 'tax_insights', ['filing_session_id'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_insights_insight_type'), 'tax_insights', ['insight_type'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_insights_priority'), 'tax_insights', ['priority'], unique=False, schema='swisstax')
 
     # Create tax_calculations table
     op.create_table('tax_calculations',
@@ -123,22 +125,23 @@ def upgrade():
         sa.Column('updated_at', sa.DateTime(), nullable=True),
 
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['filing_session_id'], ['tax_filing_sessions.id'], ),
+        sa.ForeignKeyConstraint(['filing_session_id'], ['swisstax.tax_filing_sessions.id'], ),
+        schema='swisstax'
     )
-    op.create_index(op.f('ix_tax_calculations_filing_session_id'), 'tax_calculations', ['filing_session_id'], unique=False)
-    op.create_index(op.f('ix_tax_calculations_calculation_type'), 'tax_calculations', ['calculation_type'], unique=False)
-    op.create_index(op.f('ix_tax_calculations_tax_year'), 'tax_calculations', ['tax_year'], unique=False)
-    op.create_index(op.f('ix_tax_calculations_canton'), 'tax_calculations', ['canton'], unique=False)
-    op.create_index(op.f('ix_tax_calculations_calculated_at'), 'tax_calculations', ['calculated_at'], unique=False)
+    op.create_index(op.f('ix_tax_calculations_filing_session_id'), 'tax_calculations', ['filing_session_id'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_calculations_calculation_type'), 'tax_calculations', ['calculation_type'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_calculations_tax_year'), 'tax_calculations', ['tax_year'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_calculations_canton'), 'tax_calculations', ['canton'], unique=False, schema='swisstax')
+    op.create_index(op.f('ix_tax_calculations_calculated_at'), 'tax_calculations', ['calculated_at'], unique=False, schema='swisstax')
 
 
 def downgrade():
     """Remove encrypted tax models"""
 
     # Drop tables
-    op.drop_table('tax_calculations')
-    op.drop_table('tax_insights')
-    op.drop_table('tax_answers')
+    op.drop_table('tax_calculations', schema='swisstax')
+    op.drop_table('tax_insights', schema='swisstax')
+    op.drop_table('tax_answers', schema='swisstax')
 
     # Drop enums (PostgreSQL)
     op.execute('DROP TYPE IF EXISTS calculationtype')

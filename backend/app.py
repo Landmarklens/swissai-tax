@@ -73,14 +73,25 @@ app = FastAPI(
 )
 
 # Configure CORS
+# Allow localhost origins in all environments for development/testing
+allowed_origins = [
+    "https://swissai.tax",
+    "https://www.swissai.tax",
+    "http://localhost:3000",  # For local development
+    "http://localhost:3001",  # For local development (alternate port)
+]
+
+# Add development origins if not in production
+import os
+if os.getenv("ENVIRONMENT", "development") == "development":
+    allowed_origins.extend([
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001",
+    ])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://swissai.tax",
-        "https://www.swissai.tax",
-        "http://localhost:3000",  # For local development
-        "http://localhost:3001",  # For local development (alternate port)
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

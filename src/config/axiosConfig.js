@@ -14,6 +14,12 @@ axios.interceptors.request.use(
     // This ensures httpOnly cookies are sent with requests
     config.withCredentials = true;
 
+    // DEBUG: Log request details
+    console.log(`[AXIOS DEBUG] ${config.method?.toUpperCase()} ${config.url}`);
+    console.log('[AXIOS DEBUG] withCredentials:', config.withCredentials);
+    console.log('[AXIOS DEBUG] Cookies available:', document.cookie || 'none');
+    console.log('[AXIOS DEBUG] Request headers:', config.headers);
+
     // Note: We use cookie-based authentication, so we don't need
     // to add Authorization headers. The JWT is in an httpOnly cookie.
     // Legacy token-based auth (if any) would need Authorization header,
@@ -29,6 +35,10 @@ axios.interceptors.request.use(
 // Response interceptor
 axios.interceptors.response.use(
   (response) => {
+    // DEBUG: Log response
+    console.log(`[AXIOS DEBUG] Response from ${response.config.url}:`, response.status);
+    console.log('[AXIOS DEBUG] Response headers:', response.headers);
+    console.log('[AXIOS DEBUG] Set-Cookie in response:', response.headers['set-cookie'] || 'none');
     return response;
   },
   (error) => {

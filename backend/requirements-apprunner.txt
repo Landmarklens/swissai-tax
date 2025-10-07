@@ -106,6 +106,7 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
+pyotp==2.9.0
 pycparser==2.22
 pydantic==2.9.2
 pydantic-extra-types==2.10.4
@@ -117,6 +118,7 @@ pyparsing==3.2.3
 pypdf==5.1.0
 PyPDF2==3.0.1
 PyPika==0.48.9
+pillow==11.1.0
 pyproject_hooks==1.2.0
 pytest==8.3.3
 pytest-asyncio==0.24.0
@@ -128,6 +130,7 @@ python-http-client==3.3.7
 python-jose==3.3.0
 python-multipart==0.0.20
 PyYAML==6.0.2
+qrcode==8.0
 referencing==0.36.2
 regex==2024.11.6
 reportlab==4.0.7

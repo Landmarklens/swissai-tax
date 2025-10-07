@@ -25,8 +25,9 @@ import PersonalInfoSection from './components/PersonalInfoSection';
 import TaxProfileSection from './components/TaxProfileSection';
 import SecuritySection from './components/SecuritySection';
 import InsightsSection from './components/InsightsSection';
+import { getApiUrl } from '../../utils/api/getApiUrl';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = getApiUrl();
 
 const Profile = () => {
   const { t } = useTranslation();

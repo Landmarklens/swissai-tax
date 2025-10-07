@@ -17,6 +17,11 @@ echo "Database user: ${DATABASE_USER}"
 cd /app
 python3 backend/create_database.py || echo "Database setup failed, continuing anyway..."
 
+# Run Alembic migrations to create swisstax schema and tables
+echo "Running database migrations..."
+cd /app/backend
+alembic upgrade head || echo "Migration failed, continuing anyway..."
+
 # Start the application
 # Use uvicorn with proper import string for production
 cd /app/backend

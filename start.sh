@@ -18,5 +18,6 @@ cd /app
 python3 backend/create_database.py || echo "Database setup failed, continuing anyway..."
 
 # Start the application
-# Use main.py which includes all router registrations
-exec python3 backend/main.py
+# Use uvicorn with proper import string for production
+cd /app/backend
+exec uvicorn main:app --host 0.0.0.0 --port 8000

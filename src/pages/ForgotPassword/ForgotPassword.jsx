@@ -72,8 +72,8 @@ export const ForgotPassword = () => {
   return (
     <>
       <SEOHelmet
-        title="Reset Password - HomeAI"
-        description="Reset your HomeAI account password"
+        title="Reset Password - SwissAI Tax"
+        description="Reset your SwissAI Tax account password"
       />
       <Box
         sx={{

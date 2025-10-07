@@ -88,8 +88,8 @@ export const ResetPassword = () => {
   return (
     <>
       <SEOHelmet
-        title="Reset Password - HomeAI"
-        description="Create a new password for your HomeAI account"
+        title="Reset Password - SwissAI Tax"
+        description="Create a new password for your SwissAI Tax account"
       />
       <Box
         sx={{

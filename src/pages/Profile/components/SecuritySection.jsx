@@ -12,24 +12,21 @@ import {
   DialogContentText,
   DialogActions,
   TextField,
-  Alert,
-  Chip
+  Alert
 } from '@mui/material';
 import {
   Lock as LockIcon,
-  Security as SecurityIcon,
-  Delete as DeleteIcon,
-  Check as CheckIcon
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { createPasswordChangeSchema } from '../../../utils/validation/schemaFactory';
+import { TwoFactorSettings } from '../../../components/TwoFactor';
 
 const SecuritySection = () => {
   const { t } = useTranslation();
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
   // Create validation schema with current translations
   const validationSchema = useMemo(() => createPasswordChangeSchema(t), [t]);
@@ -60,11 +57,6 @@ const SecuritySection = () => {
 
   const handleSavePassword = () => {
     passwordFormik.handleSubmit();
-  };
-
-  const handleToggle2FA = () => {
-    // TODO: Implement 2FA toggle logic
-    setTwoFactorEnabled(!twoFactorEnabled);
   };
 
   const handleDeleteAccount = () => {
@@ -112,38 +104,7 @@ const SecuritySection = () => {
           <Divider sx={{ my: 3 }} />
 
           {/* Two-Factor Authentication Section */}
-          <Box mb={3}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-              <Box>
-                <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-                  <Typography variant="subtitle1" fontWeight={600}>
-                    {t('Two-Factor Authentication')}
-                  </Typography>
-                  {twoFactorEnabled && (
-                    <Chip
-                      icon={<CheckIcon />}
-                      label={t('Enabled')}
-                      color="success"
-                      size="small"
-                    />
-                  )}
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  {twoFactorEnabled
-                    ? t('Your account is protected with 2FA')
-                    : t('Add an extra layer of security to your account')}
-                </Typography>
-              </Box>
-              <Button
-                startIcon={<SecurityIcon />}
-                variant={twoFactorEnabled ? 'outlined' : 'contained'}
-                color={twoFactorEnabled ? 'error' : 'primary'}
-                onClick={handleToggle2FA}
-              >
-                {twoFactorEnabled ? t('Disable') : t('Enable')}
-              </Button>
-            </Box>
-          </Box>
+          <TwoFactorSettings />
 
           <Divider sx={{ my: 3 }} />
 

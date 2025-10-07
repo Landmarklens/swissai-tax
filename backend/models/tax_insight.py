@@ -37,11 +37,11 @@ class TaxInsight(Base):
     Non-sensitive metadata, but may reference encrypted profile data.
     """
     __tablename__ = "tax_insights"
-    __table_args__ = {'schema': 'public'}
+    __table_args__ = {'schema': 'swisstax'}
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    filing_session_id = Column(String(36), ForeignKey('public.tax_filing_sessions.id'), nullable=False, index=True)
+    filing_session_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
 
     # Insight Details
     insight_type = Column(

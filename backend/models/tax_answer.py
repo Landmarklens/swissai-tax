@@ -22,7 +22,7 @@ class TaxAnswer(Base):
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    filing_session_id = Column(String(36), ForeignKey('public.tax_filing_sessions.id'), nullable=False, index=True)
+    filing_session_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
     question_id = Column(String(50), nullable=False, index=True)
 
     # Answer Data - ENCRYPTED for sensitive information

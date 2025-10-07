@@ -34,7 +34,7 @@ class TaxFilingSession(Base):
     corrections, or different tax scenarios).
     """
     __tablename__ = "tax_filing_sessions"
-    __table_args__ = {'schema': 'public'}
+    __table_args__ = {'schema': 'swisstax'}
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))

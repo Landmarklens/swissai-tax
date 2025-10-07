@@ -10,11 +10,15 @@ axios.defaults.baseURL = getApiUrl();
 // Request interceptor
 axios.interceptors.request.use(
   (config) => {
-    // Add auth token to requests
-    const token = authService.getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Cookie-based auth: Include credentials for all requests
+    // This ensures httpOnly cookies are sent with requests
+    config.withCredentials = true;
+
+    // Note: We use cookie-based authentication, so we don't need
+    // to add Authorization headers. The JWT is in an httpOnly cookie.
+    // Legacy token-based auth (if any) would need Authorization header,
+    // but for cookie-based auth this would conflict.
+
     return config;
   },
   (error) => {

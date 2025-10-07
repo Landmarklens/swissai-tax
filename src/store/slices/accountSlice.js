@@ -17,10 +17,8 @@ export const fetchUserProfile = createAsyncThunk(
   'account/fetchUserProfile',
   async (_, thunkAPI) => {
     try {
-      // Use cookie-based authentication instead of header-based
-      const response = await axios.get(`${API_URL}/api/user/profile`, {
-        withCredentials: true  // Send httpOnly cookie
-      });
+      // Cookie-based authentication - withCredentials set globally in axiosConfig
+      const response = await axios.get(`${API_URL}/api/user/profile`);
       // const userLanguage = response.data.language;
       // if (userLanguage) {
       //   i18next.changeLanguage(userLanguage);
@@ -37,10 +35,8 @@ export const editUserProfile = createAsyncThunk(
   'account/editUserProfile',
   async (userData, thunkAPI) => {
     try {
-      // Use cookie-based authentication instead of header-based
-      const response = await axios.put(`${API_URL}/api/user/profile`, userData, {
-        withCredentials: true  // Send httpOnly cookie
-      });
+      // Cookie-based authentication - withCredentials set globally in axiosConfig
+      const response = await axios.put(`${API_URL}/api/user/profile`, userData);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -55,12 +51,11 @@ export const updateProfileAvatar = createAsyncThunk(
       const formData = new FormData();
       formData.append('file', file);
 
-      // Use cookie-based authentication instead of header-based
+      // Cookie-based authentication - withCredentials set globally in axiosConfig
       const response = await axios.put(`${API_URL}/api/user/profile/avatar`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true  // Send httpOnly cookie
+        }
       });
       return response.data;
     } catch (error) {

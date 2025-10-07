@@ -2,14 +2,15 @@
 Unit tests for TaxFilingService
 Tests CRUD operations, copy functionality, and statistics
 """
-import pytest
-from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 from sqlalchemy.orm import Session
 
-from services.tax_filing_service import TaxFilingService
-from models.tax_filing_session import TaxFilingSession, FilingStatus
 from models.tax_answer import TaxAnswer
+from models.tax_filing_session import FilingStatus, TaxFilingSession
+from services.tax_filing_service import TaxFilingService
 
 
 class TestTaxFilingService:

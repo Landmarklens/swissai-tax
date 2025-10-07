@@ -4,7 +4,8 @@ Maps to swisstax.users table
 """
 
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, Boolean, text
+
+from sqlalchemy import Boolean, Column, DateTime, String, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func

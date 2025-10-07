@@ -4,8 +4,9 @@ User Counter Model
 This model tracks the number of tax returns filed today.
 It resets daily at midnight and increments throughout the day.
 """
-from sqlalchemy import Column, Integer, DateTime, CheckConstraint
+from sqlalchemy import CheckConstraint, Column, DateTime, Integer
 from sqlalchemy.sql import func
+
 from models.swisstax.base import Base
 
 

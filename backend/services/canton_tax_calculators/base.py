@@ -5,10 +5,10 @@ Abstract base class for canton-specific tax calculation engines.
 Each canton inherits from this and implements canton-specific logic.
 """
 
+import logging
 from abc import ABC, abstractmethod
 from decimal import Decimal
-from typing import Dict, List, Any, Optional
-import logging
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 

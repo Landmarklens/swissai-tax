@@ -1,12 +1,11 @@
 import time
 from typing import Optional
 
+from fastapi import Depends, HTTPException, Request
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from google_auth_oauthlib.flow import Flow
 from jose import JWTError, jwt
-from fastapi import Depends
 from sqlalchemy.orm import Session
-from fastapi import Request, HTTPException
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from config import settings
 from db.session import get_db

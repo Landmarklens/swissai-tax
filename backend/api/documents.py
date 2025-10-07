@@ -1,10 +1,12 @@
 """Document API endpoints"""
 
-from fastapi import APIRouter, HTTPException, Depends, Query, UploadFile, File
-from pydantic import BaseModel
-from typing import Dict, Any, Optional, List
-from services.document_service import DocumentService
 import os
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from pydantic import BaseModel
+
+from services.document_service import DocumentService
 
 router = APIRouter()
 document_service = DocumentService()

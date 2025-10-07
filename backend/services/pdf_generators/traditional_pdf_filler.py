@@ -11,26 +11,21 @@ This is the second PDF generation method (alongside eCH-0196). Users receive:
 Both PDFs contain the same data but in different formats.
 """
 
-import logging
 import io
-from pathlib import Path
-from typing import Dict, Any, Optional
+import logging
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 try:
     from pypdf import PdfReader, PdfWriter
 except ImportError:
     raise ImportError("pypdf not installed. Run: pip install pypdf")
 
-from data.canton_form_mappings import (
-    get_canton_mapping,
-    map_filing_data_to_canton_form,
-    get_field_type,
-    FormFieldType
-)
-from data.canton_form_metadata import (
-    get_canton_form_metadata
-)
+from data.canton_form_mappings import (FormFieldType, get_canton_mapping,
+                                       get_field_type,
+                                       map_filing_data_to_canton_form)
+from data.canton_form_metadata import get_canton_form_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -92,8 +87,10 @@ class TraditionalPDFFiller:
             FieldMappingError: If field mapping fails
         """
         # Import here to avoid circular imports
-        from services.filing_orchestration_service import FilingOrchestrationService
-        from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
+        from services.enhanced_tax_calculation_service import \
+            EnhancedTaxCalculationService
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
 
         filing_service = FilingOrchestrationService(db=db)
         tax_service = EnhancedTaxCalculationService(db=db)
@@ -356,7 +353,8 @@ class TraditionalPDFFiller:
         Returns:
             Dict mapping filing_id to PDF buffer
         """
-        from services.filing_orchestration_service import FilingOrchestrationService
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
 
         filing_service = FilingOrchestrationService(db=db)
 
@@ -509,7 +507,8 @@ def main():
 
     if args.validate:
         # Get filing to determine canton
-        from services.filing_orchestration_service import FilingOrchestrationService
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
         filing_service = FilingOrchestrationService()
         filing = filing_service.get_filing(args.filing_id)
 

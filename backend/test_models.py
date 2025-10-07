@@ -11,17 +11,9 @@ os.environ['AWS_ACCESS_KEY_ID'] = ''
 os.environ['AWS_SECRET_ACCESS_KEY'] = ''
 
 # Import all models
-from models import (
-    User,
-    Document,
-    InterviewSession,
-    TaxFilingSession,
-    TaxAnswer,
-    TaxInsight,
-    TaxCalculation,
-    UserCounter,
-    ResetToken
-)
+from models import (Document, InterviewSession, ResetToken, TaxAnswer,
+                    TaxCalculation, TaxFilingSession, TaxInsight, User,
+                    UserCounter)
 
 print("✓ All models imported successfully\n")
 

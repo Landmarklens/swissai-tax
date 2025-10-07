@@ -6,9 +6,10 @@ Implements smart incremental updates that reset at midnight.
 """
 import random
 from datetime import datetime, time, timedelta, timezone
-from sqlalchemy.orm import Session
-from models.user_counter import UserCounter
 
+from sqlalchemy.orm import Session
+
+from models.user_counter import UserCounter
 
 # Constants for user count range (daily users, not total)
 MIN_USERS = 15

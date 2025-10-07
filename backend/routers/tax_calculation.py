@@ -3,11 +3,12 @@ Tax Calculation API Router
 Handles Swiss tax calculation endpoints
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from typing import Optional
-from pydantic import BaseModel, Field
 import logging
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.tax_calculation_service import TaxCalculationService

@@ -3,20 +3,19 @@ Dashboard Router
 API endpoints for dashboard data
 """
 
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
 
 from db.session import get_db
 from models.swisstax import User
-from utils.auth import get_current_user
+from schemas.swisstax.dashboard import (ActiveFilingResponse,
+                                        DashboardResponse,
+                                        DashboardStatsResponse,
+                                        PastFilingResponse)
 from services.swisstax.dashboard_service import dashboard_service
-from schemas.swisstax.dashboard import (
-    DashboardResponse,
-    ActiveFilingResponse,
-    PastFilingResponse,
-    DashboardStatsResponse
-)
+from utils.auth import get_current_user
 
 router = APIRouter()
 

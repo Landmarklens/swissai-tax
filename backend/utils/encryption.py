@@ -1,16 +1,17 @@
 """
 Encryption utilities for sensitive data
 """
-import os
 import base64
 import hashlib
+import logging
+import os
 import secrets
 from typing import Optional
+
 from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.backends import default_backend
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -171,6 +172,7 @@ class EncryptionService:
 
 # Singleton instance with thread safety
 import threading
+
 _encryption_service = None
 _encryption_lock = threading.Lock()
 

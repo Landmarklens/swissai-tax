@@ -1,12 +1,13 @@
 """Database connection module using AWS Parameter Store for credentials"""
 
-import os
 import json
+import os
+from contextlib import contextmanager
+from typing import Any, Dict, Optional
+
 import boto3
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from typing import Optional, Dict, Any
-from contextlib import contextmanager
 
 # Initialize SSM client
 ssm = boto3.client('ssm', region_name='us-east-1')

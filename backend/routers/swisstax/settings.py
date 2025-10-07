@@ -1,10 +1,12 @@
 """Settings Router - condensed version"""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from db.session import get_db
 from models.swisstax import User, UserSettings
+from schemas.swisstax.settings import (NotificationsUpdate, PreferencesUpdate,
+                                       SettingsResponse)
 from utils.auth import get_current_user
-from schemas.swisstax.settings import PreferencesUpdate, NotificationsUpdate, SettingsResponse
 
 router = APIRouter()
 

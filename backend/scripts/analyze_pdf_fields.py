@@ -17,15 +17,13 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from data.canton_form_metadata import (
-    get_canton_form_metadata,
-    list_all_cantons
-)
+from data.canton_form_metadata import (get_canton_form_metadata,
+                                       list_all_cantons)
 
 try:
     from pypdf import PdfReader

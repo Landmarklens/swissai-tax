@@ -1,11 +1,12 @@
 """
 AWS Secrets Manager integration for encryption key management
 """
-import os
 import json
 import logging
+import os
 from datetime import datetime
 from typing import Optional
+
 import boto3
 from botocore.exceptions import ClientError
 

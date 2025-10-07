@@ -3,18 +3,19 @@ Interview API Router
 Handles tax interview questionnaire endpoints
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from typing import Optional, Any
-from pydantic import BaseModel, Field
-import logging
 import json
+import logging
+from typing import Any, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 
 from db.session import get_db
+from models.tax_answer import TaxAnswer
+from models.tax_filing_session import FilingStatus, TaxFilingSession
 from services.interview_service import InterviewService
 from services.tax_insight_service import TaxInsightService
-from models.tax_answer import TaxAnswer
-from models.tax_filing_session import TaxFilingSession, FilingStatus
 from utils.auth import get_current_user
 
 logger = logging.getLogger(__name__)

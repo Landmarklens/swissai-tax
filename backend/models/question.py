@@ -1,9 +1,11 @@
 """Question model and loader for interview system"""
 
-from typing import Dict, List, Optional, Any
-from enum import Enum
-import yaml
 import os
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import yaml
+
 
 class QuestionType(Enum):
     TEXT = "text"

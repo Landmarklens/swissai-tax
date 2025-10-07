@@ -8,8 +8,8 @@ automatic PDF form filling for all 26 Swiss cantons.
 Official forms are typically updated annually. This mapping is for tax year 2024.
 """
 
-from typing import Dict, Any, List, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class FormFieldType(Enum):

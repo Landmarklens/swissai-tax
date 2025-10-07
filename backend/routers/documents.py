@@ -3,11 +3,12 @@ Documents API Router
 Handles tax document upload and processing endpoints
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
-from sqlalchemy.orm import Session
-from typing import Optional, List
-from pydantic import BaseModel, Field
 import logging
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.document_service import DocumentService

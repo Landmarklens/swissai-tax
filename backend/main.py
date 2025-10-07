@@ -4,8 +4,9 @@ Main entry point for SwissAI Tax backend
 Imports the FastAPI app from app.py and adds auth routers
 """
 
-from app import app
 import logging
+
+from app import app
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +14,8 @@ logger = logging.getLogger(__name__)
 # NOTE: app.py already includes: auth, user, user_counter, dashboard, profile, settings, filing, payment
 # We only add the NEW routers here to avoid duplicates
 try:
-    from routers import interview, tax_calculation, documents, tax_filing, insights, multi_canton_filing, pdf_generation
+    from routers import (documents, insights, interview, multi_canton_filing,
+                         pdf_generation, tax_calculation, tax_filing)
 
     # Tax-specific routers (not in app.py)
     app.include_router(interview.router, prefix="/api/interview", tags=["Interview"])

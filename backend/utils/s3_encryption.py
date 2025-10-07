@@ -2,9 +2,10 @@
 S3 document storage with encryption (SSE-S3 and SSE-KMS)
 Handles secure document upload/download with server-side encryption
 """
-import os
 import logging
-from typing import Optional, Dict, Any, BinaryIO
+import os
+from typing import Any, BinaryIO, Dict, Optional
+
 import boto3
 from botocore.exceptions import ClientError
 

@@ -5,19 +5,18 @@ REST API for AI-powered document analysis and data extraction.
 Supports Swiss tax documents like Lohnausweis, AHV statements, etc.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
-from sqlalchemy.orm import Session
-from typing import Optional, List
-from pydantic import BaseModel
 import logging
 import os
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.ai_document_intelligence_service import (
-    AIDocumentIntelligenceService,
-    DocumentIntelligenceError,
-    UnsupportedDocumentError
-)
+    AIDocumentIntelligenceService, DocumentIntelligenceError,
+    UnsupportedDocumentError)
 
 logger = logging.getLogger(__name__)
 
@@ -345,7 +344,8 @@ async def update_profile_from_document(
             raise HTTPException(status_code=400, detail="File too large (max 10MB)")
 
         # Initialize services
-        from services.filing_orchestration_service import FilingOrchestrationService
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
 
         doc_service = AIDocumentIntelligenceService(
             ai_provider=ai_provider,

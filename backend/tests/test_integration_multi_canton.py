@@ -8,17 +8,18 @@ Tests the complete flow of:
 4. Generating PDFs for all filings
 """
 
-import unittest
-from unittest.mock import Mock, patch, MagicMock
-from decimal import Decimal
 import io
-
 import sys
+import unittest
+from decimal import Decimal
 from pathlib import Path
+from unittest.mock import MagicMock, Mock, patch
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from services.enhanced_tax_calculation_service import \
+    EnhancedTaxCalculationService
 from services.filing_orchestration_service import FilingOrchestrationService
-from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
 from services.pdf_generators.unified_pdf_generator import UnifiedPDFGenerator
 
 

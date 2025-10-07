@@ -15,11 +15,11 @@ Optimization strategies include:
 - Charitable donation planning
 """
 
-import logging
 import json
-from typing import Dict, Any, List, Optional
-from decimal import Decimal
+import logging
 from datetime import datetime
+from decimal import Decimal
+from typing import Any, Dict, List, Optional
 
 try:
     import anthropic
@@ -579,8 +579,10 @@ def main():
         return
 
     # Get filing and calculation data
-    from services.filing_orchestration_service import FilingOrchestrationService
-    from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
+    from services.enhanced_tax_calculation_service import \
+        EnhancedTaxCalculationService
+    from services.filing_orchestration_service import \
+        FilingOrchestrationService
 
     filing_service = FilingOrchestrationService()
     tax_service = EnhancedTaxCalculationService()

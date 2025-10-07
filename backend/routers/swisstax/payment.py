@@ -1,12 +1,14 @@
 """Payment Router - condensed version with Stripe"""
-from fastapi import APIRouter, Depends, HTTPException, Request
-from sqlalchemy.orm import Session
-from db.session import get_db
-from models.swisstax import User, Payment, Subscription
-from utils.auth import get_current_user
-from schemas.swisstax.payment import PaymentIntentCreate, PaymentIntentResponse
 from datetime import datetime
 from decimal import Decimal
+
+from fastapi import APIRouter, Depends, HTTPException, Request
+from sqlalchemy.orm import Session
+
+from db.session import get_db
+from models.swisstax import Payment, Subscription, User
+from schemas.swisstax.payment import PaymentIntentCreate, PaymentIntentResponse
+from utils.auth import get_current_user
 
 router = APIRouter()
 

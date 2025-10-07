@@ -3,8 +3,10 @@ SQLAlchemy custom types for automatic encryption/decryption
 """
 import logging
 from typing import Optional
-from sqlalchemy import TypeDecorator, Text, String
+
+from sqlalchemy import String, Text, TypeDecorator
 from sqlalchemy.types import TypeEngine
+
 from utils.encryption import get_encryption_service
 
 logger = logging.getLogger(__name__)
@@ -128,6 +130,7 @@ class EncryptedJSON(TypeDecorator):
 
         try:
             import json
+
             # FIXED BUG #9: Handle non-JSON-serializable types (datetime, etc.)
             json_string = json.dumps(value, default=str)
             encryption_service = get_encryption_service()

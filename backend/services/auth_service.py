@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 
-from schemas.user import UserCreate
 from models.swisstax import User
+from schemas.user import UserCreate
 from utils.password import get_password_hash
 from utils.sanitizer import sanitize_user_profile
+
 
 # Define constants (removed from old User model)
 class AuthProvider:

@@ -2,15 +2,16 @@
 Tax Insight Generation Service
 Generates personalized tax insights and recommendations based on user answers
 """
-import logging
 import json
-from typing import List, Dict, Any, Optional
-from sqlalchemy.orm import Session
+import logging
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from models.tax_insight import TaxInsight, InsightType, InsightPriority
+from sqlalchemy.orm import Session
+
 from models.tax_answer import TaxAnswer
 from models.tax_filing_session import TaxFilingSession
+from models.tax_insight import InsightPriority, InsightType, TaxInsight
 
 logger = logging.getLogger(__name__)
 

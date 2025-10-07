@@ -3,6 +3,7 @@ Security configuration for cookie-based authentication
 """
 from fastapi import Cookie, HTTPException, Request
 from jose import JWTError, jwt
+
 from config import settings
 
 ALGORITHM = "HS256"
@@ -74,7 +75,8 @@ async def get_current_user_from_header(
     Kept for backward compatibility during migration.
     Will be deprecated after migration is complete.
     """
-    from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+    from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
     from utils.auth import JWTHandler
 
     security = HTTPBearer()

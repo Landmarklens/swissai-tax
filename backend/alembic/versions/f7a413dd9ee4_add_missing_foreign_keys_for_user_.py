@@ -10,9 +10,9 @@ We're leaving this migration empty and will fix models to match DB instead.
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = 'f7a413dd9ee4'

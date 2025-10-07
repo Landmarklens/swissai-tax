@@ -2,10 +2,11 @@
 Utilities for field-level encryption within JSON columns
 Allows encrypting only specific sensitive fields within a JSON document
 """
+import copy
 import json
 import logging
-import copy
-from typing import Dict, List, Any, Set
+from typing import Any, Dict, List, Set
+
 from utils.encryption import get_encryption_service
 
 logger = logging.getLogger(__name__)

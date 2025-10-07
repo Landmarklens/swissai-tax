@@ -4,20 +4,20 @@ Tax Optimization API Endpoints
 REST API for AI-powered tax optimization recommendations.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
-from typing import Optional, List
-from pydantic import BaseModel
 import logging
 import os
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 from db.session import get_db
-from services.ai_tax_optimization_service import (
-    AITaxOptimizationService,
-    TaxOptimizationError
-)
+from services.ai_tax_optimization_service import (AITaxOptimizationService,
+                                                  TaxOptimizationError)
+from services.enhanced_tax_calculation_service import \
+    EnhancedTaxCalculationService
 from services.filing_orchestration_service import FilingOrchestrationService
-from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
 
 logger = logging.getLogger(__name__)
 

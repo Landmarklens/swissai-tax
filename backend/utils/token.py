@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta, timezone
+
 import jwt
 from config.env import env
-from datetime import datetime, timedelta, timezone
 
 secret_key = env["SECRET_KEY"]
 token_lifetime = env["ACCESS_TOKEN_EXPIRE_MINUTES"]

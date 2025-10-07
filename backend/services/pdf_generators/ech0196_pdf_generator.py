@@ -7,21 +7,22 @@ Creates professional, multi-language tax return PDFs accepted by all Swiss canto
 
 import io
 import logging
-from typing import Dict, Any, Optional
 from datetime import datetime
 from decimal import Decimal
+from typing import Any, Dict, Optional
 
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import mm
+from PIL import Image as PILImage
 from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet
-from PIL import Image as PILImage
 
 from services.ech0196_service import ECH0196Service
+from services.enhanced_tax_calculation_service import \
+    EnhancedTaxCalculationService
 from services.filing_orchestration_service import FilingOrchestrationService
-from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
 
 logger = logging.getLogger(__name__)
 

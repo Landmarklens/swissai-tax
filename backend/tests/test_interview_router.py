@@ -2,11 +2,12 @@
 Unit tests for Interview Router
 Tests API endpoints for interview management
 """
-import pytest
-from unittest.mock import Mock, patch, MagicMock, AsyncMock
 from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
-from models.tax_filing_session import TaxFilingSession, FilingStatus
+import pytest
+
+from models.tax_filing_session import FilingStatus, TaxFilingSession
 
 
 @pytest.fixture
@@ -368,8 +369,8 @@ class TestSaveAnswerToDB:
 
     def test_save_new_answer(self, mock_db):
         """Test saving a new answer to database"""
-        from routers.interview import save_answer_to_db
         from models.tax_answer import TaxAnswer
+        from routers.interview import save_answer_to_db
 
         # Setup
         mock_db.query.return_value.filter.return_value.first.return_value = None

@@ -2,10 +2,11 @@
 Document schemas for PDF upload and processing
 """
 
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
+
 from pydantic import BaseModel
-from datetime import datetime
 
 
 class UserDocumentMetadata(BaseModel):

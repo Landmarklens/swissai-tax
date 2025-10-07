@@ -1,9 +1,11 @@
 """
 Tests for encryption key rotation functionality
 """
-import pytest
 from datetime import datetime, timedelta
+
+import pytest
 from cryptography.fernet import Fernet
+
 from scripts.rotate_encryption_key import KeyRotationManager
 from utils.encryption import EncryptionService
 
@@ -137,7 +139,8 @@ class TestKeyRotationMonitor:
 
     def test_initiate_key_rotation_returns_instructions(self):
         """Test that initiate_key_rotation provides proper instructions"""
-        from utils.encryption_monitor import KeyRotationManager as MonitorManager
+        from utils.encryption_monitor import \
+            KeyRotationManager as MonitorManager
 
         manager = MonitorManager()
         result = manager.initiate_key_rotation()
@@ -151,8 +154,10 @@ class TestKeyRotationMonitor:
 
     def test_check_key_age_without_creation_date(self):
         """Test key age check when creation date is not set"""
-        from utils.encryption_monitor import KeyRotationManager as MonitorManager
         import os
+
+        from utils.encryption_monitor import \
+            KeyRotationManager as MonitorManager
 
         # Ensure ENCRYPTION_KEY_CREATED_AT is not set
         old_value = os.environ.pop('ENCRYPTION_KEY_CREATED_AT', None)
@@ -171,8 +176,10 @@ class TestKeyRotationMonitor:
 
     def test_check_key_age_with_creation_date(self, monkeypatch):
         """Test key age check when creation date is set"""
-        from utils.encryption_monitor import KeyRotationManager as MonitorManager
         from datetime import timedelta
+
+        from utils.encryption_monitor import \
+            KeyRotationManager as MonitorManager
 
         # Set creation date to 45 days ago
         creation_date = (datetime.utcnow() - timedelta(days=45)).isoformat()
@@ -190,8 +197,10 @@ class TestKeyRotationMonitor:
 
     def test_check_key_age_rotation_required(self, monkeypatch):
         """Test key age check when rotation is required"""
-        from utils.encryption_monitor import KeyRotationManager as MonitorManager
         from datetime import timedelta
+
+        from utils.encryption_monitor import \
+            KeyRotationManager as MonitorManager
 
         # Set creation date to 100 days ago (past 90 day policy)
         creation_date = (datetime.utcnow() - timedelta(days=100)).isoformat()

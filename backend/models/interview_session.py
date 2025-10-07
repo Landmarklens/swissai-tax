@@ -2,10 +2,11 @@
 Interview Session Model - Legacy tax interview sessions
 """
 
-from sqlalchemy import Column, String, Integer, DateTime, text, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, JSONB
-from sqlalchemy.orm import relationship
 from datetime import datetime
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, text
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.orm import relationship
 
 from models.swisstax.base import Base
 

@@ -4,6 +4,7 @@ IMPORTANT: All swisstax models inherit from SwissTaxBase which automatically set
 """
 
 from sqlalchemy.ext.declarative import declared_attr
+
 from db.base import Base as OriginalBase
 
 

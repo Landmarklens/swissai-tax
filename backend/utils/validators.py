@@ -6,7 +6,9 @@ Provides server-side validation for all inputs to ensure data integrity
 import re
 import uuid
 from typing import Any, Optional, Tuple
+
 from fastapi import HTTPException
+
 
 def validate_uuid(value: str) -> bool:
     """Validate if a string is a valid UUID"""

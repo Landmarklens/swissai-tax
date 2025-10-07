@@ -1,10 +1,13 @@
 """Tax Insight Model - Stores AI-generated tax insights and recommendations"""
 
-from sqlalchemy import Column, String, Integer, Text, DateTime, ForeignKey, Enum as SQLEnum
-from sqlalchemy.orm import relationship
+import enum
 from datetime import datetime
 from uuid import uuid4
-import enum
+
+from sqlalchemy import Column, DateTime
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
 
 from models.swisstax.base import Base
 

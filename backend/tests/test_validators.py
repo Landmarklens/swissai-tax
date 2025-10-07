@@ -1,18 +1,15 @@
 """Tests for input validators"""
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils.validators import (
-    validate_uuid,
-    validate_session_id,
-    sanitize_string,
-    validate_numeric,
-    validate_tax_year,
-    validate_canton_code,
-    validate_email
-)
+from utils.validators import (sanitize_string, validate_canton_code,
+                              validate_email, validate_numeric,
+                              validate_session_id, validate_tax_year,
+                              validate_uuid)
+
 
 def test_validate_uuid():
     """Test UUID validation"""

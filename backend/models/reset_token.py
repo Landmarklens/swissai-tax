@@ -3,7 +3,8 @@ Reset Token model for password reset functionality
 """
 
 from datetime import datetime, timedelta
-from sqlalchemy import Column, String, DateTime
+
+from sqlalchemy import Column, DateTime, String
 from sqlalchemy.orm import Session
 
 from models.swisstax.base import Base

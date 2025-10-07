@@ -1,33 +1,35 @@
 import base64
-import json
-import hmac
 import hashlib
+import hmac
+import json
 from urllib.parse import urlencode
 
-from fastapi import Depends, HTTPException, Body, Request, Query, Response
+from fastapi import Body, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import RedirectResponse
 from googleapiclient.discovery import build
 
+from config import settings
+from core.security import COOKIE_SETTINGS, get_current_user
+from db.session import get_db
 from models.reset_token import ResetToken
 from models.swisstax import User
-from services.auth_service import AuthProvider
-from schemas.auth import UserLoginSchema, GoogleLoginOut
-from schemas.reset_token import ResetPasswordRequest, ResetPasswordVerify, ResetPasswordConfirm, \
-    ResetPasswordMessageResponse, ResetPasswordResponse
+from schemas.auth import GoogleLoginOut, UserLoginSchema
+from schemas.reset_token import (ResetPasswordConfirm,
+                                 ResetPasswordMessageResponse,
+                                 ResetPasswordRequest, ResetPasswordResponse,
+                                 ResetPasswordVerify)
 from schemas.user import UserCreate, UserProfile
-from db.session import get_db
 from services import auth_service as authService
 from services import user_service as userService
-from services.auth_service import create_social_user
+from services.auth_service import AuthProvider, create_social_user
 from services.reset_password import ResetPasswordService
 from services.ses_emailjs_replacement import EmailJSService
-from config import settings
-from services.user_service import get_user_by_email, update_user, update_password
-from utils.auth import check_user, sign_jwt, flow
-from utils.router import Router
-from utils.rate_limiter import limiter
+from services.user_service import (get_user_by_email, update_password,
+                                   update_user)
+from utils.auth import check_user, flow, sign_jwt
 from utils.fastapi_rate_limiter import rate_limit
-from core.security import COOKIE_SETTINGS, get_current_user
+from utils.rate_limiter import limiter
+from utils.router import Router
 
 router = Router()
 

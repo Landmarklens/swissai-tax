@@ -2,7 +2,9 @@
 Unit tests for JSON field-level encryption
 """
 import pytest
-from utils.json_encryption import JSONFieldEncryptor, TaxProfileEncryptor, get_tax_profile_encryptor
+
+from utils.json_encryption import (JSONFieldEncryptor, TaxProfileEncryptor,
+                                   get_tax_profile_encryptor)
 
 
 class TestJSONFieldEncryptor:

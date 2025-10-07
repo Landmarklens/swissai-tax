@@ -1,12 +1,12 @@
+import os
+import sys
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+import boto3
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
-import boto3
-import sys
-import os
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from database.connection import get_db_config
 

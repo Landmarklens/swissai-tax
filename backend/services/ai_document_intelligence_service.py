@@ -12,14 +12,14 @@ This service uses AI (GPT-4 Vision/Claude) to extract data from tax-related docu
 The service uses OCR and structured extraction to auto-fill tax forms.
 """
 
-import logging
 import base64
 import io
 import json
-from typing import Dict, Any, List, Optional, Union
-from pathlib import Path
-from decimal import Decimal
+import logging
 from datetime import datetime
+from decimal import Decimal
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 try:
     from PIL import Image

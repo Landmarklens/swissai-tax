@@ -1,9 +1,11 @@
 """Tax Answer Model - Stores encrypted question responses"""
 
-from sqlalchemy import Column, String, Integer, Text, DateTime, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
 from datetime import datetime
 from uuid import uuid4
+
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
+                        Text)
+from sqlalchemy.orm import relationship
 
 from models.swisstax.base import Base
 from utils.encrypted_types import EncryptedText

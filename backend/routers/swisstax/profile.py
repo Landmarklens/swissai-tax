@@ -1,10 +1,12 @@
 """Profile Router - condensed version"""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from db.session import get_db
 from models.swisstax import User, UserSettings
+from schemas.swisstax.profile import (PersonalInfoUpdate, ProfileResponse,
+                                      TaxProfileUpdate)
 from utils.auth import get_current_user
-from schemas.swisstax.profile import PersonalInfoUpdate, TaxProfileUpdate, ProfileResponse
 
 router = APIRouter()
 

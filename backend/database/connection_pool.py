@@ -3,16 +3,17 @@ Database connection pool module for App Runner
 Uses connection pooling for persistent connections
 """
 
-import os
-import boto3
 import logging
-from typing import Optional, Dict, Any
+import os
 from contextlib import contextmanager
-from sqlalchemy import create_engine, pool
-from sqlalchemy.orm import sessionmaker
+from typing import Any, Dict, Optional
+
+import boto3
 import psycopg2
 from psycopg2 import pool as pg_pool
 from psycopg2.extras import RealDictCursor
+from sqlalchemy import create_engine, pool
+from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
 

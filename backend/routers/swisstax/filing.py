@@ -1,13 +1,15 @@
 """Filing Router - condensed version"""
+import secrets
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
+
 from db.session import get_db
-from models.swisstax import User, Filing
 from models import InterviewSession
-from utils.auth import get_current_user
+from models.swisstax import Filing, User
 from schemas.swisstax.filing import FilingCreate, FilingResponse
-import secrets
+from utils.auth import get_current_user
 
 router = APIRouter()
 

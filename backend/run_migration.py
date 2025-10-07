@@ -3,8 +3,9 @@
 
 import os
 import sys
-from alembic.config import Config
+
 from alembic import command
+from alembic.config import Config
 
 # Set up direct database URL for local execution
 os.environ['DATABASE_URL'] = 'postgresql://webscrapinguser:IXq3IC0Uw6StMkBhb4mb@localhost:15433/swissai_tax_db'

@@ -5,13 +5,16 @@ Tests end-to-end encryption workflow
 """
 import os
 import sys
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from utils.encryption import get_encryption_service
-from utils.json_encryption import get_tax_profile_encryptor
-from utils.aws_secrets import get_encryption_key
-from utils.encryption_monitor import get_encryption_health_check
 import json
+
+from utils.aws_secrets import get_encryption_key
+from utils.encryption import get_encryption_service
+from utils.encryption_monitor import get_encryption_health_check
+from utils.json_encryption import get_tax_profile_encryptor
+
 
 def test_basic_encryption():
     """Test basic encryption/decryption"""

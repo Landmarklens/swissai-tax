@@ -8,10 +8,10 @@ This service provides a unified interface for generating both types of tax PDFs:
 Users can download both PDFs or choose their preferred format.
 """
 
-import logging
 import io
-from typing import Dict, Any, List, Optional
+import logging
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from .ech0196_pdf_generator import ECH0196PDFGenerator
 from .traditional_pdf_filler import TraditionalPDFFiller
@@ -162,7 +162,8 @@ class UnifiedPDFGenerator:
                 ...
             }
         """
-        from services.filing_orchestration_service import FilingOrchestrationService
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
 
         filing_service = FilingOrchestrationService(db=db)
 
@@ -227,7 +228,8 @@ class UnifiedPDFGenerator:
         Returns:
             Dict mapping PDF type to file path
         """
-        from services.filing_orchestration_service import FilingOrchestrationService
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
 
         filing_service = FilingOrchestrationService(db=db)
         filing = filing_service.get_filing(filing_id)
@@ -292,8 +294,9 @@ class UnifiedPDFGenerator:
         Returns:
             Dict with PDF generation info
         """
-        from services.filing_orchestration_service import FilingOrchestrationService
         from data.canton_form_metadata import get_canton_form_metadata
+        from services.filing_orchestration_service import \
+            FilingOrchestrationService
 
         filing_service = FilingOrchestrationService(db=db)
         filing = filing_service.get_filing(filing_id)

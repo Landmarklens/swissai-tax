@@ -2,11 +2,12 @@
 Tax Insights Router
 Handles AI-generated tax insights and recommendations
 """
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.orm import Session
-from typing import List
-from pydantic import BaseModel
 import logging
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.tax_insight_service import TaxInsightService

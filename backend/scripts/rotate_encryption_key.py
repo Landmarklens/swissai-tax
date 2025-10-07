@@ -11,21 +11,22 @@ Usage:
 """
 
 import argparse
+import logging
 import os
 import sys
-import logging
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 from cryptography.fernet import Fernet
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils.encryption import EncryptionService
-from utils.aws_secrets import get_secrets_manager, create_encryption_key_secret
 from db.session import SessionLocal
-from models.tax_filing_session import TaxFilingSession
 from models.tax_answer import TaxAnswer
+from models.tax_filing_session import TaxFilingSession
+from utils.aws_secrets import create_encryption_key_secret, get_secrets_manager
+from utils.encryption import EncryptionService
 
 logging.basicConfig(
     level=logging.INFO,

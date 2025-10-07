@@ -1,6 +1,7 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import os
 
 # Import the shared Base from db.base
 from db.base import Base
@@ -10,6 +11,7 @@ from db.base import Base
 # Fallback to DATABASE_URL environment variable for local development
 try:
     from config import settings
+
     # Try to build DATABASE_URL from Parameter Store settings
     if all([settings.POSTGRES_USER, settings.POSTGRES_PASSWORD, settings.POSTGRES_HOST]):
         DATABASE_URL = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"

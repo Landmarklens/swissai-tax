@@ -3,8 +3,10 @@ Tax calculation models for SwissAI Tax
 Maps to swisstax.tax_calculations, tax_rates, standard_deductions, and tax_years tables
 """
 
-from datetime import datetime, date
-from sqlalchemy import Column, String, Integer, Date, DateTime, Boolean, ForeignKey, Numeric, JSON, text, UniqueConstraint
+from datetime import date, datetime
+
+from sqlalchemy import (JSON, Boolean, Column, Date, DateTime, ForeignKey,
+                        Integer, Numeric, String, UniqueConstraint, text)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func

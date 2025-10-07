@@ -1,19 +1,15 @@
 from typing import List
 from uuid import UUID
 
-from fastapi import Depends, HTTPException, status, UploadFile, File, BackgroundTasks, Request
-
-from models.swisstax import User
-from schemas.document import UserDocumentMetadata, UserDocumentContent
-from schemas.user import (
-    UserProfile,
-    UserProfileUpdate,
-    AvatarUrl,
-    UpdatePassword,
-    UpdatePasswordOut,
-)
-from db.session import get_db
+from fastapi import (BackgroundTasks, Depends, File, HTTPException, Request,
+                     UploadFile, status)
 from sqlalchemy.orm import Session
+
+from db.session import get_db
+from models.swisstax import User
+from schemas.document import UserDocumentContent, UserDocumentMetadata
+from schemas.user import (AvatarUrl, UpdatePassword, UpdatePasswordOut,
+                          UserProfile, UserProfileUpdate)
 from services import user_service as UserService
 from services.pdf_service import PDFService
 from utils.auth import get_current_user

@@ -4,12 +4,14 @@ Migration runner with idempotent checks
 Runs migrations only if they haven't been applied yet
 """
 
-import sys
-from database.connection import get_db_config
-from sqlalchemy import create_engine, text, inspect
-from alembic.config import Config
-from alembic import command
 import os
+import sys
+
+from sqlalchemy import create_engine, inspect, text
+
+from alembic import command
+from alembic.config import Config
+from database.connection import get_db_config
 
 # Get database configuration
 db_config = get_db_config()

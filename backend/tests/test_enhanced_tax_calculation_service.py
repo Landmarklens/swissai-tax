@@ -8,18 +8,19 @@ Tests multi-canton tax calculations including:
 - Canton-specific tax rates
 """
 
+import sys
 import unittest
 from decimal import Decimal
-from unittest.mock import Mock, patch, MagicMock
-
-import sys
 from pathlib import Path
+from unittest.mock import MagicMock, Mock, patch
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import models package first to ensure all models are registered
 import models
-from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
 from models import TaxFilingSession
+from services.enhanced_tax_calculation_service import \
+    EnhancedTaxCalculationService
 
 
 class TestEnhancedTaxCalculationService(unittest.TestCase):

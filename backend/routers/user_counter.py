@@ -3,15 +3,15 @@ User Counter Router
 
 API endpoint for retrieving the daily user counter.
 """
-from fastapi import Depends, Request
-from sqlalchemy.orm import Session
 from datetime import datetime
+
+from fastapi import Depends, Request
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.user_counter_service import UserCounterService
 from utils.router import Router
-
 
 router = Router()
 

@@ -2,9 +2,11 @@
 Unit tests for encryption utilities
 Tests encryption, decryption, hashing, and anonymization
 """
-import pytest
 import os
+
+import pytest
 from cryptography.fernet import Fernet
+
 from utils.encryption import EncryptionService, get_encryption_service
 
 

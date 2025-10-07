@@ -6,11 +6,11 @@ Each canton has its own progressive tax rate system and deduction rules.
 """
 
 from .base import CantonTaxCalculator
-from .zurich import ZurichTaxCalculator
+from .basel_stadt import BaselStadtTaxCalculator
 from .bern import BernTaxCalculator
 from .geneva import GenevaTaxCalculator
-from .basel_stadt import BaselStadtTaxCalculator
 from .vaud import VaudTaxCalculator
+from .zurich import ZurichTaxCalculator
 
 # Map canton codes to calculator classes
 CANTON_CALCULATORS = {

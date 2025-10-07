@@ -4,13 +4,14 @@ All models for the swisstax schema
 """
 
 from .base import Base
-from .user import User
-from .interview import InterviewAnswer, Question
 from .document import DocumentType, RequiredDocument
-from .tax import TaxRate, StandardDeduction, TaxYear
 from .filing import Filing
-from .subscription import Subscription, Payment
+from .interview import InterviewAnswer, Question
 from .settings import UserSettings
+from .subscription import Payment, Subscription
+from .tax import StandardDeduction, TaxRate, TaxYear
+from .user import User
+
 # Note: InterviewSession and Document now imported from parent models/ directory
 
 __all__ = [

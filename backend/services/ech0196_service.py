@@ -7,13 +7,14 @@ Data Matrix barcodes. The standard is accepted by all 26 Swiss cantons.
 Reference: https://www.ech.ch/de/ech/ech-0196
 """
 
-import xml.etree.ElementTree as ET
-from xml.dom import minidom
-import logging
-from typing import Dict, Any, Optional
-from decimal import Decimal
-from datetime import datetime
 import io
+import logging
+import xml.etree.ElementTree as ET
+from datetime import datetime
+from decimal import Decimal
+from typing import Any, Dict, Optional
+from xml.dom import minidom
+
 from PIL import Image
 
 logger = logging.getLogger(__name__)

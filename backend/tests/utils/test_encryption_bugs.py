@@ -2,13 +2,15 @@
 Bug-specific tests for encryption system
 Tests for all 30 bugs found in code review
 """
-import pytest
 import threading
 import time
 from datetime import datetime
+
+import pytest
 from cryptography.fernet import Fernet
+
+from utils.encrypted_types import EncryptedJSON, EncryptedString, EncryptedText
 from utils.encryption import EncryptionService, get_encryption_service
-from utils.encrypted_types import EncryptedString, EncryptedJSON, EncryptedText
 from utils.json_encryption import JSONFieldEncryptor, TaxProfileEncryptor
 
 
@@ -101,7 +103,7 @@ class TestBug8SilentDecryptionFailure:
     def test_encrypted_string_raises_on_decrypt_failure(self):
         """EncryptedString should raise on decryption failure, not return None"""
         from sqlalchemy import Column, String, create_engine
-        from sqlalchemy.orm import declarative_base, Session
+        from sqlalchemy.orm import Session, declarative_base
 
         # This test would require database setup
         # For now, test the process_result_value directly
@@ -224,11 +226,11 @@ class TestBug22AWSRetryLogic:
 
     def test_encryption_key_retrieval_should_retry(self):
         """get_encryption_key should retry on transient AWS failures"""
-        from utils.aws_secrets import get_encryption_key
-
         # This would require mocking AWS to simulate transient failures
         # For now, test that function exists and handles env var fallback
         import os
+
+        from utils.aws_secrets import get_encryption_key
         os.environ['ENCRYPTION_KEY'] = 'test_key'
 
         key = get_encryption_key()

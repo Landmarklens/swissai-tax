@@ -2,6 +2,7 @@
 """Check current database state"""
 
 import os
+
 os.environ['DATABASE_HOST'] = 'localhost'
 os.environ['DATABASE_PORT'] = '5433'
 os.environ['DATABASE_NAME'] = 'homeai_db'
@@ -9,7 +10,7 @@ os.environ['DATABASE_USER'] = 'webscrapinguser'
 os.environ['DATABASE_PASSWORD'] = 'IXq3IC0Uw6StMkBhb4mb'
 os.environ['DATABASE_SCHEMA'] = 'swisstax'
 
-from database.connection import execute_query, execute_one
+from database.connection import execute_one, execute_query
 
 print("=" * 60)
 print("Database State Check")

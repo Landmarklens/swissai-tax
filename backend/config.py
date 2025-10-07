@@ -1,8 +1,9 @@
+import logging
+from functools import lru_cache
+
+import boto3
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-import boto3
-from functools import lru_cache
-import logging
 
 logger = logging.getLogger(__name__)
 

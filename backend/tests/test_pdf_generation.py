@@ -4,19 +4,19 @@ Unit Tests for PDF Generation Services
 Tests both eCH-0196 and traditional PDF generation
 """
 
-import unittest
 import io
-from unittest.mock import Mock, patch, MagicMock
-from decimal import Decimal
-
 import sys
+import unittest
+from decimal import Decimal
 from pathlib import Path
+from unittest.mock import MagicMock, Mock, patch
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from services.ech0196_service import ECH0196Service
 from services.pdf_generators.ech0196_pdf_generator import ECH0196PDFGenerator
 from services.pdf_generators.traditional_pdf_filler import TraditionalPDFFiller
 from services.pdf_generators.unified_pdf_generator import UnifiedPDFGenerator
-from services.ech0196_service import ECH0196Service
 
 
 class TestECH0196Service(unittest.TestCase):
@@ -252,14 +252,16 @@ class TestTraditionalPDFFiller(unittest.TestCase):
         """Test field type inference for currency fields"""
         field_type = self.filler._get_field_type_from_name('employment_income')
 
-        from services.pdf_generators.traditional_pdf_filler import FormFieldType
+        from services.pdf_generators.traditional_pdf_filler import \
+            FormFieldType
         self.assertEqual(field_type, FormFieldType.CURRENCY)
 
     def test_field_type_inference_date(self):
         """Test field type inference for date fields"""
         field_type = self.filler._get_field_type_from_name('birthdate')
 
-        from services.pdf_generators.traditional_pdf_filler import FormFieldType
+        from services.pdf_generators.traditional_pdf_filler import \
+            FormFieldType
         self.assertEqual(field_type, FormFieldType.DATE)
 
 

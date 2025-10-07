@@ -1,9 +1,10 @@
 """Unit tests for encryption utilities."""
 
-import pytest
-import os
 import base64
-from unittest.mock import patch, MagicMock
+import os
+from unittest.mock import MagicMock, patch
+
+import pytest
 from cryptography.fernet import Fernet, InvalidToken
 
 from utils.encryption import EncryptionService, get_encryption_service

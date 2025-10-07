@@ -3,29 +3,29 @@ FastAPI application for SwissAI Tax Backend
 Designed for AWS App Runner deployment
 """
 
-from fastapi import FastAPI, Request, HTTPException, Body
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from contextlib import asynccontextmanager
-import uvicorn
+import logging
 import os
 import sys
-from typing import Dict, Any, Optional
-from pydantic import BaseModel, Field
+from contextlib import asynccontextmanager
 from datetime import datetime
-import logging
+from typing import Any, Dict, Optional
+
+import uvicorn
+from fastapi import Body, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
 
 # Add current directory to path for imports
 sys.path.append(os.path.dirname(__file__))
 
-from services.interview_service import interview_service
-from services.document_service import DocumentService
-from services.tax_calculation_service import TaxCalculationService
-from utils.validators import validate_session_id, validate_tax_year
-
 # Import routers
 from routers import auth, user, user_counter
-from routers.swisstax import dashboard, profile, settings, filing, payment
+from routers.swisstax import dashboard, filing, payment, profile, settings
+from services.document_service import DocumentService
+from services.interview_service import interview_service
+from services.tax_calculation_service import TaxCalculationService
+from utils.validators import validate_session_id, validate_tax_year
 
 # Try to import connection pool for App Runner, fallback to regular connection
 try:
@@ -83,6 +83,7 @@ allowed_origins = [
 
 # Add development origins if not in production
 import os
+
 if os.getenv("ENVIRONMENT", "development") == "development":
     allowed_origins.extend([
         "http://127.0.0.1:3000",

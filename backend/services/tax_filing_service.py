@@ -4,15 +4,17 @@ Handles CRUD operations for multiple tax filings per user
 Supports multi-year and multi-canton filing scenarios
 """
 import logging
-from typing import List, Dict, Any, Optional
-from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, desc
-from models.tax_filing_session import TaxFilingSession, FilingStatus
-from models.tax_answer import TaxAnswer
-from models.tax_insight import TaxInsight
-from models.tax_calculation import TaxCalculation
-from uuid import uuid4
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+from uuid import uuid4
+
+from sqlalchemy import and_, desc, or_
+from sqlalchemy.orm import Session
+
+from models.tax_answer import TaxAnswer
+from models.tax_calculation import TaxCalculation
+from models.tax_filing_session import FilingStatus, TaxFilingSession
+from models.tax_insight import TaxInsight
 
 logger = logging.getLogger(__name__)
 

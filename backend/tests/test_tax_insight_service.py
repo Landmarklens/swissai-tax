@@ -2,15 +2,16 @@
 Unit tests for TaxInsightService
 Tests insight generation rules and tracking
 """
-import pytest
-from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 from sqlalchemy.orm import Session
 
-from services.tax_insight_service import TaxInsightService
-from models.tax_insight import TaxInsight, InsightType, InsightPriority
 from models.tax_answer import TaxAnswer
-from models.tax_filing_session import TaxFilingSession, FilingStatus
+from models.tax_filing_session import FilingStatus, TaxFilingSession
+from models.tax_insight import InsightPriority, InsightType, TaxInsight
+from services.tax_insight_service import TaxInsightService
 
 
 class TestTaxInsightService:

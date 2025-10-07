@@ -1,5 +1,6 @@
+from typing import List, Optional
+
 from sqlalchemy.orm import Session
-from typing import Optional, List
 
 from models.swisstax import User
 from schemas.user import UserCreate, UserProfileUpdate

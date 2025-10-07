@@ -1,12 +1,14 @@
 """Document service for handling file uploads and S3 operations"""
 
-import boto3
 import json
 import uuid
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
+import boto3
 from botocore.exceptions import ClientError
-from database.connection import execute_insert, execute_query, execute_one
+
+from database.connection import execute_insert, execute_one, execute_query
 
 # Initialize AWS clients
 s3_client = boto3.client('s3', region_name='us-east-1')

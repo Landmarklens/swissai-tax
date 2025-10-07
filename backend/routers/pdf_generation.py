@@ -6,17 +6,18 @@ Provides REST API for generating tax return PDFs in both formats:
 - Traditional canton forms (official pre-filled forms)
 """
 
+import io
+import logging
+from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
-from sqlalchemy.orm import Session
-from typing import Optional, List
 from pydantic import BaseModel
-import logging
-import io
+from sqlalchemy.orm import Session
 
 from db.session import get_db
-from services.pdf_generators.unified_pdf_generator import UnifiedPDFGenerator
 from services.filing_orchestration_service import FilingOrchestrationService
+from services.pdf_generators.unified_pdf_generator import UnifiedPDFGenerator
 
 logger = logging.getLogger(__name__)
 

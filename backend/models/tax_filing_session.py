@@ -1,11 +1,14 @@
 """Tax Filing Session Model - Represents a single tax filing attempt"""
 
-from sqlalchemy import Column, String, Integer, JSON, Boolean, DateTime, Enum as SQLEnum, ForeignKey, Text
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+import enum
 from datetime import datetime
 from uuid import uuid4
-import enum
+
+from sqlalchemy import JSON, Boolean, Column, DateTime
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, Integer, String, Text
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from models.swisstax.base import Base
 from utils.encrypted_types import EncryptedJSON

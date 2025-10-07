@@ -9,9 +9,10 @@ This migration adds:
 2. TaxAnswer model with encrypted answer_value column
 3. Relationships to User model
 """
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = 'd8e7f9a1b2c3'

@@ -2,8 +2,9 @@
 Profile Pydantic schemas
 """
 
+from typing import Dict, List, Optional
+
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, List, Dict
 
 
 class PersonalInfoUpdate(BaseModel):

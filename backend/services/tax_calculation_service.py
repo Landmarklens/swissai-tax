@@ -1,9 +1,10 @@
 """Tax calculation service for Swiss federal, cantonal, and municipal taxes"""
 
-from typing import Dict, Any, List, Optional
-from decimal import Decimal
 from datetime import datetime
-from database.connection import execute_query, execute_one, execute_insert
+from decimal import Decimal
+from typing import Any, Dict, List, Optional
+
+from database.connection import execute_insert, execute_one, execute_query
 
 
 class TaxCalculationService:

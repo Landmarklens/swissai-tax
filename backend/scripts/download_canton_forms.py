@@ -17,17 +17,16 @@ import os
 import sys
 from pathlib import Path
 from typing import List, Optional
+
 import requests
 from tqdm import tqdm
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from data.canton_form_metadata import (
-    CANTON_FORMS_2024,
-    get_canton_form_metadata,
-    list_all_cantons
-)
+from data.canton_form_metadata import (CANTON_FORMS_2024,
+                                       get_canton_form_metadata,
+                                       list_all_cantons)
 
 logging.basicConfig(
     level=logging.INFO,

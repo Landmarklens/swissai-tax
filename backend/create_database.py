@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Create the SwissAI Tax database if it doesn't exist"""
 
+import os
+
 import psycopg2
 from psycopg2 import sql
-import os
+
 
 def create_database():
     # Connection parameters

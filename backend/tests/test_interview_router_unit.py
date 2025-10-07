@@ -2,13 +2,14 @@
 Unit tests for Interview Router Helper Functions
 Tests the core logic without the API layer complexity
 """
-import pytest
-from unittest.mock import Mock, MagicMock, patch
-from datetime import datetime
 import json
+from datetime import datetime
+from unittest.mock import MagicMock, Mock, patch
 
-from models.tax_filing_session import TaxFilingSession, FilingStatus
+import pytest
+
 from models.tax_answer import TaxAnswer
+from models.tax_filing_session import FilingStatus, TaxFilingSession
 
 
 class TestSaveAnswerToDB:
@@ -209,8 +210,9 @@ class TestInterviewRequestModels:
 
     def test_start_interview_request_validation(self):
         """Test StartInterviewRequest validation"""
-        from routers.interview import StartInterviewRequest
         from pydantic import ValidationError
+
+        from routers.interview import StartInterviewRequest
 
         # Invalid tax year (too high)
         with pytest.raises(ValidationError):

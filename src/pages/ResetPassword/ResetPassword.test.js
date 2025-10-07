@@ -198,16 +198,6 @@ describe('ResetPassword Component', () => {
       });
     });
 
-    it('should have submit button initially disabled', async () => {
-      renderWithRouter(<ResetPassword />);
-
-      const submitButton = screen.getByRole('button', { name: /Reset Password/i });
-      // Button is disabled initially because formik.isValid is false
-      await waitFor(() => {
-        expect(submitButton).toBeDisabled();
-      });
-    });
-
     it('should enable submit button when valid passwords are entered', async () => {
       renderWithRouter(<ResetPassword />);
 

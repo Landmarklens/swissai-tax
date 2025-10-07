@@ -287,15 +287,22 @@ async def register(request: Request, user: UserCreate, db=Depends(get_db)):
 
     language: de, en, fr, it
     """
+    try:
+        exists_user = userService.get_user_by_email(db, user.email)
 
-    exists_user = userService.get_user_by_email(db, user.email)
-
-    if exists_user and exists_user.is_active:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    if exists_user:
-        return update_user(db, exists_user, user)
-    user = authService.create_user(db, user)
-    return user
+        if exists_user and exists_user.is_active:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        if exists_user:
+            return update_user(db, exists_user, user)
+        new_user = authService.create_user(db, user)
+        return new_user
+    except HTTPException:
+        raise
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Registration error: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=400, detail=f"Registration failed: {str(e)}")
 
 @router.post("/reset-password/request", response_model=ResetPasswordResponse)
 @rate_limit("12/hour")

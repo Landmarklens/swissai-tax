@@ -20,10 +20,15 @@ python3 backend/create_database.py || echo "Database setup failed, continuing an
 # Run Alembic migrations to create swisstax schema and tables
 echo "Running database migrations..."
 cd /app/backend
-alembic upgrade head || {
+echo "Current database state:"
+alembic current || echo "No migrations applied yet"
+echo "Upgrading to head..."
+alembic upgrade head -v || {
     echo "FATAL: Database migration failed. Cannot start application."
     exit 1
 }
+echo "Final database state:"
+alembic current
 
 # Start the application
 # Use uvicorn with proper import string for production

@@ -73,8 +73,8 @@ class TaxFilingSession(Base):
 
     # Multi-Filing Support (added 2025-10-06)
     is_primary = Column(Boolean, default=True, nullable=False)  # TRUE for main filing, FALSE for additional cantons
-    parent_filing_id = Column(String(36), ForeignKey('tax_filing_sessions.id'), nullable=True)  # Links to main filing
-    source_filing_id = Column(String(36), ForeignKey('tax_filing_sessions.id'), nullable=True)  # Copied from this filing
+    parent_filing_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=True)  # Links to main filing
+    source_filing_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=True)  # Copied from this filing
 
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

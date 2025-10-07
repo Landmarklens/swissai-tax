@@ -101,24 +101,25 @@ class Settings(BaseSettings):
     def _load_from_parameter_store(self):
         """Try to load values from AWS Parameter Store"""
         try:
+            logger.info("Attempting to load configuration from Parameter Store...")
             ssm = boto3.client('ssm', region_name='us-east-1')
 
             # Map of Parameter Store paths to attribute names
-            # Using /swissai/ paths for SwissAI Tax specific credentials
+            # Using /swissai-tax/ paths for SwissAI Tax specific credentials
             param_mappings = {
-                '/swissai/db/host': 'POSTGRES_HOST',
-                '/swissai/db/port': 'POSTGRES_PORT',
-                '/swissai/db/name': 'POSTGRES_DB',
-                '/swissai/db/user': 'POSTGRES_USER',
-                '/swissai/db/password': 'POSTGRES_PASSWORD',
-                '/swissai/api/jwt-secret': 'SECRET_KEY',
-                '/swissai/aws/region': 'AWS_REGION',
-                '/swissai/aws/s3-bucket': 'AWS_S3_BUCKET_NAME',
-                '/swissai/aws/access-key-id': 'AWS_ACCESS_KEY_ID',
-                '/swissai/aws/secret-access-key': 'AWS_SECRET_ACCESS_KEY',
-                '/swissai/openai/api-key': 'OPENAI_API_KEY',
-                '/swissai/sendgrid/api-key': 'SENDGRID_API_KEY',
-                '/swissai/google/maps-api-key': 'GOOGLE_MAPS_API_KEY',
+                '/swissai-tax/db/host': 'POSTGRES_HOST',
+                '/swissai-tax/db/port': 'POSTGRES_PORT',
+                '/swissai-tax/db/database': 'POSTGRES_DB',
+                '/swissai-tax/db/username': 'POSTGRES_USER',
+                '/swissai-tax/db/password': 'POSTGRES_PASSWORD',
+                '/swissai-tax/api/jwt-secret': 'SECRET_KEY',
+                '/swissai-tax/s3/documents-bucket': 'AWS_S3_BUCKET_NAME',
+                '/homeai/prod/AWS_REGION': 'AWS_REGION',
+                '/homeai/prod/AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
+                '/homeai/prod/AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
+                '/homeai/prod/OPENAI_API_KEY': 'OPENAI_API_KEY',
+                '/homeai/prod/SENDGRID_API_KEY': 'SENDGRID_API_KEY',
+                '/homeai/prod/GOOGLE_MAPS_API_KEY': 'GOOGLE_MAPS_API_KEY',
             }
 
 
@@ -133,15 +134,23 @@ class Settings(BaseSettings):
                 response = ssm.get_parameters(Names=batch, WithDecryption=True)
                 all_parameters.extend(response.get('Parameters', []))
 
+                invalid_params = response.get('InvalidParameters', [])
+                if invalid_params:
+                    logger.warning(f"Invalid parameters in batch: {invalid_params}")
+
             # Update settings with Parameter Store values
+            loaded_params = []
             for param in all_parameters:
                 attr_name = param_mappings.get(param['Name'])
                 if attr_name:
                     setattr(self, attr_name, param['Value'])
+                    loaded_params.append(f"{attr_name} <- {param['Name']}")
 
-            logger.info(f"Loaded {len(all_parameters)} parameters from Parameter Store")
+            logger.info(f"Successfully loaded {len(all_parameters)} parameters from Parameter Store")
+            logger.info(f"Loaded parameters: {', '.join(loaded_params)}")
         except Exception as e:
-            logger.info(f"Using environment variables (Parameter Store not available: {e})")
+            logger.error(f"Failed to load from Parameter Store: {e}", exc_info=True)
+            logger.info("Falling back to environment variables")
 
     def _validate_critical_secrets(self):
         """Validate that critical secrets are present and secure"""

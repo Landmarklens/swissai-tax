@@ -92,7 +92,8 @@ class InterviewAnswer(Base):
     )
 
     # Relationships
-    session = relationship("InterviewSession", back_populates="answers")
+    # Note: InterviewSession.answers is a JSON column, so we don't use back_populates
+    session = relationship("InterviewSession")
     question = relationship("Question", back_populates="answers")
 
     def __repr__(self):

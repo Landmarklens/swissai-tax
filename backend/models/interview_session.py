@@ -2,7 +2,7 @@
 Interview Session Model - Legacy tax interview sessions
 """
 
-from sqlalchemy import Column, String, Integer, DateTime, text
+from sqlalchemy import Column, String, Integer, DateTime, text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -20,7 +20,7 @@ class InterviewSession(Base):
     __tablename__ = "interview_sessions"
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
-    user_id = Column(String(255), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('swisstax.users.id'), nullable=False, index=True)
     tax_year = Column(Integer, nullable=False)
     status = Column(String(50), default='in_progress')
     current_question_id = Column(String(50), nullable=True)
@@ -30,6 +30,7 @@ class InterviewSession(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
+    user = relationship("User", back_populates="sessions")
     documents = relationship("Document", back_populates="session")
 
     def __repr__(self):

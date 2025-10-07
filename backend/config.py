@@ -96,6 +96,7 @@ class Settings(BaseSettings):
         """Initialize settings, try Parameter Store first, fall back to env vars"""
         super().__init__(**kwargs)
         self._load_from_parameter_store()
+        self._validate_critical_secrets()
     
     def _load_from_parameter_store(self):
         """Try to load values from AWS Parameter Store"""
@@ -141,6 +142,17 @@ class Settings(BaseSettings):
             logger.info(f"Loaded {len(all_parameters)} parameters from Parameter Store")
         except Exception as e:
             logger.info(f"Using environment variables (Parameter Store not available: {e})")
+
+    def _validate_critical_secrets(self):
+        """Validate that critical secrets are present and secure"""
+        if not self.SECRET_KEY:
+            raise ValueError(
+                "SECRET_KEY is required but not set. Configure Parameter Store:\n"
+                "  - /swissai/api/jwt-secret\n"
+                "Or set SECRET_KEY environment variable"
+            )
+        if len(self.SECRET_KEY) < 32:
+            raise ValueError("SECRET_KEY must be at least 32 characters for security")
 
     @property
     def STRIPE_PRODUCT_IDS(self) -> dict[str, str]:

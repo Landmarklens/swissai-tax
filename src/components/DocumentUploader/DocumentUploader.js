@@ -254,9 +254,7 @@ const DocumentUploader = ({
                       secondary={`${formatFileSize(file.size)} • ${new Date(file.uploadedAt).toLocaleString('de-CH')}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton size="small" onClick={() => {}}>
-                        <VisibilityIcon />
-                      </IconButton>
+                      {/* View functionality not yet implemented */}
                       <IconButton
                         size="small"
                         onClick={() => removeFile(file.id)}

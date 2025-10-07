@@ -11,14 +11,10 @@ ALGORITHM = "HS256"
 COOKIE_SETTINGS = {
     "httponly": True,
     "secure": settings.ENVIRONMENT == "production",  # HTTPS only in production
-    "samesite": "lax",
+    "samesite": "none" if settings.ENVIRONMENT == "production" else "lax",  # "none" required for cross-domain
     "max_age": 60 * 60 * 24 * 7,  # 7 days
-    "domain": None  # Will be set based on environment
+    # Don't set domain - let browser handle it automatically for cross-domain (api.swissai.tax)
 }
-
-# Set domain for production
-if settings.ENVIRONMENT == "production":
-    COOKIE_SETTINGS["domain"] = ".swissai.tax"
 
 
 async def get_current_user_from_cookie(

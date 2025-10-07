@@ -16,13 +16,17 @@ class Settings(BaseSettings):
     STRIPE_MONTHLY: str | None = Field(None)
 
     # JWT settings
-    SECRET_KEY: str = Field("your-secret-key-change-in-production")
+    # SECURITY: SECRET_KEY must be loaded from Parameter Store (/swissai/api/jwt-secret)
+    # No default value to prevent using weak secrets in production
+    SECRET_KEY: str = Field(default=None)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # Database settings
-    POSTGRES_USER: str = Field("webscrapinguser")
-    POSTGRES_PASSWORD: str = Field("IXq3IC0Uw6StMkBhb4mb")
-    POSTGRES_HOST: str = Field("webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com")
+    # SECURITY: All database credentials must be loaded from Parameter Store (/swissai/db/*)
+    # No default values to prevent using exposed credentials
+    POSTGRES_USER: str = Field(default=None)
+    POSTGRES_PASSWORD: str = Field(default=None)
+    POSTGRES_HOST: str = Field(default=None)
     POSTGRES_PORT: str = Field("5432")
     POSTGRES_DB: str = Field("swissai_tax")
 
@@ -99,31 +103,23 @@ class Settings(BaseSettings):
             ssm = boto3.client('ssm', region_name='us-east-1')
 
             # Map of Parameter Store paths to attribute names
+            # Using /swissai/ paths for SwissAI Tax specific credentials
             param_mappings = {
-                '/homeai/db/host': 'POSTGRES_HOST',
-                '/homeai/db/port': 'POSTGRES_PORT',
-                '/swissai/db/name': 'POSTGRES_DB',  # Use swissai_tax_db
-                '/homeai/db/user': 'POSTGRES_USER',
-                '/homeai/db/password': 'POSTGRES_PASSWORD',
-                '/homeai/api/jwt-secret': 'SECRET_KEY',
-                '/homeai/aws/region': 'AWS_REGION',
-                '/homeai/aws/s3-bucket': 'AWS_S3_BUCKET_NAME',
-                '/homeai/aws/access-key-id': 'AWS_ACCESS_KEY_ID',
-                '/homeai/aws/secret-access-key': 'AWS_SECRET_ACCESS_KEY',
-                '/homeai/prod/OPENAI_API_KEY': 'OPENAI_API_KEY',
-                '/homeai/sendgrid/api-key': 'SENDGRID_API_KEY',
-                '/homeai/prod/GOOGLE_MAPS_API_KEY': 'GOOGLE_MAPS_API_KEY',
+                '/swissai/db/host': 'POSTGRES_HOST',
+                '/swissai/db/port': 'POSTGRES_PORT',
+                '/swissai/db/name': 'POSTGRES_DB',
+                '/swissai/db/user': 'POSTGRES_USER',
+                '/swissai/db/password': 'POSTGRES_PASSWORD',
+                '/swissai/api/jwt-secret': 'SECRET_KEY',
+                '/swissai/aws/region': 'AWS_REGION',
+                '/swissai/aws/s3-bucket': 'AWS_S3_BUCKET_NAME',
+                '/swissai/aws/access-key-id': 'AWS_ACCESS_KEY_ID',
+                '/swissai/aws/secret-access-key': 'AWS_SECRET_ACCESS_KEY',
+                '/swissai/openai/api-key': 'OPENAI_API_KEY',
+                '/swissai/sendgrid/api-key': 'SENDGRID_API_KEY',
+                '/swissai/google/maps-api-key': 'GOOGLE_MAPS_API_KEY',
             }
 
-            # Since /homeai/db/ parameters point to the RDS database (webscraping-database),
-            # we also map them to AWS_RDS_* settings for the property_messages endpoint
-            rds_mappings = {
-                '/homeai/db/host': 'AWS_RDS_HOST',
-                '/homeai/db/port': 'AWS_RDS_PORT',
-                '/homeai/db/name': 'AWS_RDS_DATABASE',
-                '/homeai/db/user': 'AWS_RDS_USER',
-                '/homeai/db/password': 'AWS_RDS_PASSWORD',
-            }
 
             # AWS SSM GetParameters has a limit of 10 parameters per request
             # Split into batches of 10
@@ -141,11 +137,6 @@ class Settings(BaseSettings):
                 attr_name = param_mappings.get(param['Name'])
                 if attr_name:
                     setattr(self, attr_name, param['Value'])
-
-                # Also set RDS parameters
-                rds_attr_name = rds_mappings.get(param['Name'])
-                if rds_attr_name:
-                    setattr(self, rds_attr_name, param['Value'])
 
             logger.info(f"Loaded {len(all_parameters)} parameters from Parameter Store")
         except Exception as e:

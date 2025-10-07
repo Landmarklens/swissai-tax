@@ -158,10 +158,13 @@ const LoginSignupModal = ({ open, onClose }) => {
       const register = await authService.register(userData);
       if (register.error) {
         toast.error(register.error || t('Registration failed'));
+        return;
       }
       if (register.id) {
-        // Pass false to ensure proper redirect based on user_type
-        handleLoginSubmit(userData, false);
+        // Show success message
+        toast.success(t('Registration successful! Logging you in...'));
+        // Auto-login with the credentials just used for registration
+        await handleLoginSubmit(userData, false);
       }
     } catch (error) {
       // Extract error message from response

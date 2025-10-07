@@ -188,7 +188,7 @@ const SignupForm = ({ onBack, onSubmit }) => {
         variant="contained"
         sx={{ mt: 3, mb: 2, float: 'right', width: 'auto' }}
         disabled={!formik.isValid || formik.isSubmitting}>
-        {t('Sign Up')}
+        {formik.isSubmitting ? t('Creating account...') : t('Sign Up')}
       </Button>
     </Box>
   );

@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import * as Yup from 'yup';
-
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-
 import authService from './../../services/authService';
-
 import { Box, Button, Card, CardContent, FormLabel, Typography } from '@mui/material';
-
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { theme } from '../../theme/theme';
 import { PasswordField } from '../../components/passwordField';
@@ -15,8 +10,7 @@ import { useTokenFromQuery } from './../../hooks/useTokenFromQuery';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
-
-const emptySpaceValidation = Yup.string().trim('Empty space is not valid').strict(true); // Enforce the trim validation strictly
+import { passwordResetConfirmSchema } from '../../utils/validation/schemas';
 
 const initialValues = {
   password: '',
@@ -33,16 +27,7 @@ export const ResetPassword = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: Yup.object({
-      password: emptySpaceValidation
-        .min(8, t('Must be at least 8 characters'))
-        .required(t('Required')),
-      confirmPassword: emptySpaceValidation
-        .min(8, t('Must be at least 8 characters'))
-        .oneOf([Yup.ref('password'), null], t('Passwords must match'))
-        .required(t('Required'))
-    }),
-
+    validationSchema: passwordResetConfirmSchema,
     onSubmit: async (values) => {
       const { password } = values;
 

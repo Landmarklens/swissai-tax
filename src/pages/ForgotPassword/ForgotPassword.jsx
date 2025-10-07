@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
-
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-
 import authService from './../../services/authService';
-
 import { Box, Button, Card, CardContent, FormLabel, Typography, TextField } from '@mui/material';
-
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { theme } from '../../theme/theme';
 import styled from '@emotion/styled';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
 import { toast, ToastContainer } from 'react-toastify';
+import { passwordResetRequestSchema } from '../../utils/validation/schemas';
 
 const InputField = styled(TextField)({
   '.MuiFormHelperText-root': {
@@ -30,16 +26,7 @@ export const ForgotPassword = () => {
     initialValues: {
       email: ''
     },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email(t('Invalid email address'))
-        .test(
-          'has-tld',
-          t('Invalid email address'),
-          (value) => !!value && /\.[a-zA-Z]{2,}$/.test(value)
-        )
-        .required(t('Required'))
-    }),
+    validationSchema: passwordResetRequestSchema,
     onSubmit: async (values) => {
       const { email } = values;
       email && handleResetPasswordClick(email);

@@ -17,16 +17,19 @@ echo "========================================="
 export PYTHONPATH="/app/backend:$PYTHONPATH"
 echo "PYTHONPATH set to: $PYTHONPATH"
 
-# Install runtime dependencies if not already installed
-# App Runner build phase doesn't persist packages to runtime container
-if ! python3 -c "import alembic" 2>/dev/null; then
-    echo "Installing runtime dependencies..."
-    cd /app/backend
-    python3 -m pip install --quiet --no-cache-dir -r requirements-apprunner.txt
-    echo "Dependencies installed successfully"
-else
-    echo "Dependencies already installed, skipping..."
-fi
+# Debug: Check Python package locations
+echo "Python site-packages locations:"
+python3 -c "import site; print('\n'.join(site.getsitepackages()))"
+echo "Checking for key packages:"
+python3 -m pip list | grep -E "(alembic|psycopg2|fastapi)" || echo "No packages found via pip list"
+echo "Attempting alembic import:"
+python3 -c "import alembic; print(f'alembic found at: {alembic.__file__}')" 2>&1 || echo "alembic import failed"
+
+# Install runtime dependencies - App Runner build doesn't persist to runtime
+echo "Installing runtime dependencies (required for App Runner)..."
+cd /app/backend
+python3 -m pip install --quiet --no-cache-dir -r requirements-apprunner.txt
+echo "Dependencies installed successfully"
 
 # Create database if needed
 echo "========================================="

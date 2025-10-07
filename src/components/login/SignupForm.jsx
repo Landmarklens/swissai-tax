@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/system';
 import { Box, TextField, Button, FormLabel, Typography } from '@mui/material';
 import { PasswordField } from '../passwordField';
 import { LanguageSelect } from '../LanguageSelect/LanguageSelect';
-import { registrationSchema } from '../../utils/validation/schemas';
+import { createRegistrationSchema } from '../../utils/validation/schemaFactory';
 import { theme } from '../../theme/theme';
 
 const InputField = styled(TextField)({
@@ -23,6 +23,9 @@ const SignupForm = ({ onBack, onSubmit }) => {
     localStorage.setItem('i18nextLng', language);
   };
 
+  // Create validation schema with current translations
+  const validationSchema = useMemo(() => createRegistrationSchema(t), [t]);
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -35,7 +38,7 @@ const SignupForm = ({ onBack, onSubmit }) => {
       status: 'active',
       language: 'en'
     },
-    validationSchema: registrationSchema,
+    validationSchema,
     onSubmit: async (values) => {
       const { confirmPassword, acceptTerms, firstName, lastName, ...rest } = values;
       // Map firstName/lastName to firstname/lastname for backend compatibility

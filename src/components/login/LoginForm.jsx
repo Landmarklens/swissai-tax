@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Box, TextField, Button, FormLabel, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { styled } from '@mui/system';
-import { loginSchema } from '../../utils/validation/schemas';
+import { createLoginSchema } from '../../utils/validation/schemaFactory';
 
 const theme = {
   palette: {
@@ -31,6 +31,9 @@ const LoginForm = ({ onSubmit, hasLoginError, setHasLoginError }) => {
     setFormInteracted(false);
   }, [location.pathname]);
 
+  // Create validation schema with current translations
+  const validationSchema = useMemo(() => createLoginSchema(t), [t]);
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -39,7 +42,7 @@ const LoginForm = ({ onSubmit, hasLoginError, setHasLoginError }) => {
     validateOnMount: false,
     validateOnChange: formInteracted,
     validateOnBlur: formInteracted,
-    validationSchema: loginSchema,
+    validationSchema,
     onSubmit: async (values) => {
       onSubmit(values);
     }

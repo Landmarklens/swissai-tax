@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import authService from './../../services/authService';
@@ -10,7 +10,7 @@ import { useTokenFromQuery } from './../../hooks/useTokenFromQuery';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
-import { passwordResetConfirmSchema } from '../../utils/validation/schemas';
+import { createPasswordResetConfirmSchema } from '../../utils/validation/schemaFactory';
 
 const initialValues = {
   password: '',
@@ -25,9 +25,12 @@ export const ResetPassword = () => {
 
   const token = useTokenFromQuery();
 
+  // Create validation schema with current translations
+  const validationSchema = useMemo(() => createPasswordResetConfirmSchema(t), [t]);
+
   const formik = useFormik({
     initialValues,
-    validationSchema: passwordResetConfirmSchema,
+    validationSchema,
     onSubmit: async (values) => {
       const { password } = values;
 

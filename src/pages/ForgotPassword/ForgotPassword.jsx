@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import authService from './../../services/authService';
@@ -8,7 +8,7 @@ import { theme } from '../../theme/theme';
 import styled from '@emotion/styled';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
 import { toast, ToastContainer } from 'react-toastify';
-import { passwordResetRequestSchema } from '../../utils/validation/schemas';
+import { createPasswordResetRequestSchema } from '../../utils/validation/schemaFactory';
 
 const InputField = styled(TextField)({
   '.MuiFormHelperText-root': {
@@ -22,11 +22,14 @@ export const ForgotPassword = () => {
   const [isDone, setIsDone] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  // Create validation schema with current translations
+  const validationSchema = useMemo(() => createPasswordResetRequestSchema(t), [t]);
+
   const formik = useFormik({
     initialValues: {
       email: ''
     },
-    validationSchema: passwordResetRequestSchema,
+    validationSchema,
     onSubmit: async (values) => {
       const { email } = values;
       email && handleResetPasswordClick(email);

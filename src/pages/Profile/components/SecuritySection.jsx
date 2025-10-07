@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -23,7 +23,7 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import { passwordChangeSchema } from '../../../utils/validation/schemas';
+import { createPasswordChangeSchema } from '../../../utils/validation/schemaFactory';
 
 const SecuritySection = () => {
   const { t } = useTranslation();
@@ -31,13 +31,16 @@ const SecuritySection = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
+  // Create validation schema with current translations
+  const validationSchema = useMemo(() => createPasswordChangeSchema(t), [t]);
+
   const passwordFormik = useFormik({
     initialValues: {
       currentPassword: '',
       newPassword: '',
       confirmPassword: ''
     },
-    validationSchema: passwordChangeSchema,
+    validationSchema,
     onSubmit: async (values) => {
       // TODO: Implement password change logic with API call
       console.log('Password change:', values);

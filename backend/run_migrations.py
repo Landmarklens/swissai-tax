@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Migration runner with idempotent checks
 Runs migrations only if they haven't been applied yet

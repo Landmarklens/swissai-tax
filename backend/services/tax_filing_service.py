@@ -132,7 +132,6 @@ class TaxFilingService:
             user_id=user_id,
             tax_year=tax_year,
             canton=canton,
-            municipality=municipality,
             name=name,
             language=language,
             status=FilingStatus.DRAFT,

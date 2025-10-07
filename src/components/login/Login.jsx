@@ -128,9 +128,12 @@ const LoginSignupModal = ({ open, onClose }) => {
           toast.error(login.error || t('Login failed'));
         }
         setHasLoginError(true);
+        return;
       }
 
-      if (login.access_token) {
+      // Cookie-based auth returns {success: true, user: {...}}
+      // Legacy token-based auth returns {access_token: "..."}
+      if (login.success || login.access_token) {
         const profileAction = await dispatch(fetchUserProfile());
         if (fetchUserProfile.fulfilled.match(profileAction)) {
           onClose();

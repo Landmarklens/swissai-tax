@@ -22,6 +22,8 @@ import {
   Check as CheckIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import { passwordChangeSchema } from '../../../utils/validation/schemas';
 
 const SecuritySection = () => {
   const { t } = useTranslation();
@@ -29,17 +31,32 @@ const SecuritySection = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
+  const passwordFormik = useFormik({
+    initialValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    },
+    validationSchema: passwordChangeSchema,
+    onSubmit: async (values) => {
+      // TODO: Implement password change logic with API call
+      console.log('Password change:', values);
+      setPasswordDialogOpen(false);
+      passwordFormik.resetForm();
+    }
+  });
+
   const handleChangePassword = () => {
     setPasswordDialogOpen(true);
   };
 
   const handleClosePasswordDialog = () => {
     setPasswordDialogOpen(false);
+    passwordFormik.resetForm();
   };
 
   const handleSavePassword = () => {
-    // TODO: Implement password change logic
-    setPasswordDialogOpen(false);
+    passwordFormik.handleSubmit();
   };
 
   const handleToggle2FA = () => {
@@ -155,30 +172,43 @@ const SecuritySection = () => {
       <Dialog open={passwordDialogOpen} onClose={handleClosePasswordDialog} maxWidth="sm" fullWidth>
         <DialogTitle>{t('Change Password')}</DialogTitle>
         <DialogContent>
-          <Box display="flex" flexDirection="column" gap={2} mt={1}>
+          <Box component="form" onSubmit={passwordFormik.handleSubmit} display="flex" flexDirection="column" gap={2} mt={1}>
             <TextField
               fullWidth
               label={t('Current Password')}
               type="password"
               variant="outlined"
+              {...passwordFormik.getFieldProps('currentPassword')}
+              error={passwordFormik.touched.currentPassword && Boolean(passwordFormik.errors.currentPassword)}
+              helperText={passwordFormik.touched.currentPassword && passwordFormik.errors.currentPassword}
             />
             <TextField
               fullWidth
               label={t('New Password')}
               type="password"
               variant="outlined"
+              {...passwordFormik.getFieldProps('newPassword')}
+              error={passwordFormik.touched.newPassword && Boolean(passwordFormik.errors.newPassword)}
+              helperText={passwordFormik.touched.newPassword && passwordFormik.errors.newPassword}
             />
             <TextField
               fullWidth
               label={t('Confirm New Password')}
               type="password"
               variant="outlined"
+              {...passwordFormik.getFieldProps('confirmPassword')}
+              error={passwordFormik.touched.confirmPassword && Boolean(passwordFormik.errors.confirmPassword)}
+              helperText={passwordFormik.touched.confirmPassword && passwordFormik.errors.confirmPassword}
             />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePasswordDialog}>{t('Cancel')}</Button>
-          <Button onClick={handleSavePassword} variant="contained">
+          <Button
+            onClick={handleSavePassword}
+            variant="contained"
+            disabled={!passwordFormik.isValid || passwordFormik.isSubmitting}
+          >
             {t('Save')}
           </Button>
         </DialogActions>

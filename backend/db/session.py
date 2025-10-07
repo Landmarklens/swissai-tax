@@ -7,24 +7,27 @@ from db.base import Base
 
 # Import settings from config to get database credentials
 # SECURITY: Database credentials are loaded from AWS Parameter Store in config.py
-# No hardcoded fallback to prevent using exposed credentials
+# Fallback to DATABASE_URL environment variable for local development
 try:
     from config import settings
-    # Validate that all required credentials are present
-    if not all([settings.POSTGRES_USER, settings.POSTGRES_PASSWORD, settings.POSTGRES_HOST]):
-        raise ValueError(
-            "Missing required database credentials. Ensure Parameter Store is configured with:\n"
-            "  - /swissai/db/host\n"
-            "  - /swissai/db/user\n"
-            "  - /swissai/db/password"
-        )
-    DATABASE_URL = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
-except ImportError as e:
-    # Only allow DATABASE_URL from environment (no hardcoded fallback)
+    # Try to build DATABASE_URL from Parameter Store settings
+    if all([settings.POSTGRES_USER, settings.POSTGRES_PASSWORD, settings.POSTGRES_HOST]):
+        DATABASE_URL = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+    else:
+        # Fallback to DATABASE_URL environment variable
+        DATABASE_URL = os.getenv("DATABASE_URL")
+        if not DATABASE_URL:
+            raise ValueError(
+                "Missing required database credentials. Either:\n"
+                "  1. Configure Parameter Store with /swissai/db/* parameters, OR\n"
+                "  2. Set DATABASE_URL environment variable"
+            )
+except ImportError:
+    # Config import failed, use DATABASE_URL from environment
     DATABASE_URL = os.getenv("DATABASE_URL")
     if not DATABASE_URL:
         raise ValueError(
-            "DATABASE_URL not found. Please set DATABASE_URL environment variable or configure Parameter Store"
+            "DATABASE_URL environment variable is required when config module is not available"
         )
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)

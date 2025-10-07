@@ -50,15 +50,18 @@ async def get_current_user_from_cookie(
         from services.user_service import get_user_by_email
 
         db = next(get_db())
-        user = get_user_by_email(db, email)
+        try:
+            user = get_user_by_email(db, email)
 
-        if user is None:
-            raise HTTPException(status_code=401, detail="User not found")
+            if user is None:
+                raise HTTPException(status_code=401, detail="User not found")
 
-        if not user.is_active:
-            raise HTTPException(status_code=401, detail="Inactive user")
+            if not user.is_active:
+                raise HTTPException(status_code=401, detail="Inactive user")
 
-        return user
+            return user
+        finally:
+            db.close()
 
     except JWTError:
         raise HTTPException(
@@ -91,10 +94,13 @@ async def get_current_user_from_header(
                 from services.user_service import get_user_by_email
 
                 db = next(get_db())
-                user = get_user_by_email(db, email)
+                try:
+                    user = get_user_by_email(db, email)
 
-                if user and user.is_active:
-                    return user
+                    if user and user.is_active:
+                        return user
+                finally:
+                    db.close()
 
         raise HTTPException(status_code=401, detail="Invalid authentication")
     except Exception:

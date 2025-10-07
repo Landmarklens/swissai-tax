@@ -48,7 +48,7 @@ class FilingResponse(BaseModel):
 @router.post("/filings/primary", response_model=FilingResponse)
 def create_primary_filing(
     request: CreatePrimaryFilingRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -60,7 +60,7 @@ def create_primary_filing(
 
     # Check if primary filing already exists for this user and year
     existing = filing_service.get_primary_filing(
-        user_id=current_user['id'],
+        user_id=current_user.id,
         tax_year=request.tax_year
     )
 
@@ -71,7 +71,7 @@ def create_primary_filing(
         )
 
     filing = filing_service.create_primary_filing(
-        user_id=current_user['id'],
+        user_id=current_user.id,
         tax_year=request.tax_year,
         canton=request.canton,
         language=request.language,
@@ -84,7 +84,7 @@ def create_primary_filing(
 @router.post("/filings/secondary", response_model=List[FilingResponse])
 def create_secondary_filings(
     request: CreateSecondaryFilingsRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -103,7 +103,7 @@ def create_secondary_filings(
             detail="Primary filing not found"
         )
 
-    if primary.user_id != current_user['id']:
+    if primary.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to access this filing"
@@ -122,7 +122,7 @@ def create_secondary_filings(
 def get_all_filings(
     tax_year: int,
     include_archived: bool = False,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -133,7 +133,7 @@ def get_all_filings(
     filing_service = FilingOrchestrationService(db=db)
 
     filings = filing_service.get_all_user_filings(
-        user_id=current_user['id'],
+        user_id=current_user.id,
         tax_year=tax_year,
         include_archived=include_archived
     )
@@ -144,7 +144,7 @@ def get_all_filings(
 @router.get("/filings/{tax_year}/primary", response_model=FilingResponse)
 def get_primary_filing(
     tax_year: int,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -153,7 +153,7 @@ def get_primary_filing(
     filing_service = FilingOrchestrationService(db=db)
 
     filing = filing_service.get_primary_filing(
-        user_id=current_user['id'],
+        user_id=current_user.id,
         tax_year=tax_year
     )
 
@@ -169,7 +169,7 @@ def get_primary_filing(
 @router.get("/filings/{filing_id}/secondaries", response_model=List[FilingResponse])
 def get_secondary_filings(
     filing_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -185,7 +185,7 @@ def get_secondary_filings(
             detail="Filing not found"
         )
 
-    if primary.user_id != current_user['id']:
+    if primary.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to access this filing"
@@ -199,7 +199,7 @@ def get_secondary_filings(
 @router.delete("/filings/{filing_id}")
 def delete_secondary_filing(
     filing_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -217,7 +217,7 @@ def delete_secondary_filing(
             detail="Filing not found"
         )
 
-    if filing.user_id != current_user['id']:
+    if filing.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to delete this filing"
@@ -243,7 +243,7 @@ def delete_secondary_filing(
 @router.post("/filings/{primary_filing_id}/sync-personal-data")
 def sync_personal_data(
     primary_filing_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -262,7 +262,7 @@ def sync_personal_data(
             detail="Primary filing not found"
         )
 
-    if primary.user_id != current_user['id']:
+    if primary.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to access this filing"

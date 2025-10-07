@@ -45,7 +45,7 @@ class ProcessDocumentRequest(BaseModel):
 @router.post("/presigned-url", response_model=dict)
 async def get_upload_url(
     request: GetPresignedUrlRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -75,7 +75,7 @@ async def get_upload_url(
 @router.post("/metadata", response_model=dict)
 async def save_document(
     request: SaveDocumentRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -106,7 +106,7 @@ async def save_document(
 @router.get("/{session_id}", response_model=List[dict])
 async def list_documents(
     session_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -131,7 +131,7 @@ async def list_documents(
 async def get_document_url(
     document_id: str,
     expires_in: int = 3600,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -167,7 +167,7 @@ async def get_document_url(
 @router.post("/{document_id}/extract", response_model=dict)
 async def extract_document_data(
     document_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -191,7 +191,7 @@ async def extract_document_data(
 @router.get("/{document_id}/extraction-status", response_model=dict)
 async def check_extraction_status(
     document_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -214,7 +214,7 @@ async def check_extraction_status(
 @router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_document(
     document_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """

@@ -136,7 +136,7 @@ def generate_insights_for_filing(db: Session, filing_session_id: str):
 @router.post("/start", response_model=InterviewSessionResponse, status_code=status.HTTP_201_CREATED)
 async def start_interview(
     request: StartInterviewRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -156,19 +156,19 @@ async def start_interview(
 
             filing_session = TaxFilingService.create_filing(
                 db=db,
-                user_id=current_user["id"],
+                user_id=current_user.id,
                 tax_year=request.tax_year,
                 canton=request.canton,
                 language=request.language,
                 is_primary=True
             )
             filing_session_id = filing_session.id
-            logger.info(f"Auto-created filing session {filing_session_id} for user {current_user['id']}")
+            logger.info(f"Auto-created filing session {filing_session_id} for user {current_user.id}")
         else:
             # Verify filing session exists and belongs to user
             filing_session = db.query(TaxFilingSession).filter(
                 TaxFilingSession.id == filing_session_id,
-                TaxFilingSession.user_id == current_user["id"]
+                TaxFilingSession.user_id == current_user.id
             ).first()
 
             if not filing_session:
@@ -178,7 +178,7 @@ async def start_interview(
                 )
 
         result = interview_service.create_session(
-            user_id=current_user["id"],
+            user_id=current_user.id,
             tax_year=request.tax_year,
             language=request.language
         )
@@ -213,7 +213,7 @@ async def start_interview(
 async def submit_answer(
     session_id: str,
     request: SubmitAnswerRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -228,7 +228,7 @@ async def submit_answer(
         # Verify filing session belongs to user
         filing_session = db.query(TaxFilingSession).filter(
             TaxFilingSession.id == request.filing_session_id,
-            TaxFilingSession.user_id == current_user["id"]
+            TaxFilingSession.user_id == current_user.id
         ).first()
 
         if not filing_session:
@@ -313,7 +313,7 @@ async def submit_answer(
 @router.get("/{session_id}", response_model=dict)
 async def get_session(
     session_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -345,7 +345,7 @@ async def get_session(
 @router.get("/{session_id}/questions", response_model=dict)
 async def get_current_question(
     session_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -393,7 +393,7 @@ async def get_current_question(
 async def save_session(
     session_id: str,
     request: SaveSessionRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """

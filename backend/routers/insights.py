@@ -52,7 +52,7 @@ class AcknowledgeInsightRequest(BaseModel):
 async def generate_insights(
     filing_id: str,
     request: GenerateInsightsRequest = GenerateInsightsRequest(),
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -89,7 +89,7 @@ async def generate_insights(
 @router.get("/filing/{filing_id}", response_model=List[dict])
 async def get_filing_insights(
     filing_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -103,7 +103,7 @@ async def get_filing_insights(
         insights = TaxInsightService.get_filing_insights(
             db=db,
             filing_session_id=filing_id,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
         return insights
@@ -125,7 +125,7 @@ async def get_filing_insights(
 @router.post("/{insight_id}/acknowledge", response_model=dict)
 async def acknowledge_insight(
     insight_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -139,10 +139,10 @@ async def acknowledge_insight(
         insight = TaxInsightService.acknowledge_insight(
             db=db,
             insight_id=insight_id,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
-        logger.info(f"User {current_user['id']} acknowledged insight {insight_id}")
+        logger.info(f"User {current_user.id} acknowledged insight {insight_id}")
         return insight.to_dict()
 
     except ValueError as e:
@@ -162,7 +162,7 @@ async def acknowledge_insight(
 @router.post("/{insight_id}/apply", response_model=dict)
 async def mark_insight_applied(
     insight_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -176,10 +176,10 @@ async def mark_insight_applied(
         insight = TaxInsightService.mark_insight_applied(
             db=db,
             insight_id=insight_id,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
-        logger.info(f"User {current_user['id']} marked insight {insight_id} as applied")
+        logger.info(f"User {current_user.id} marked insight {insight_id} as applied")
         return insight.to_dict()
 
     except ValueError as e:
@@ -199,7 +199,7 @@ async def mark_insight_applied(
 @router.get("/statistics/{filing_id}", response_model=dict)
 async def get_insights_statistics(
     filing_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -216,7 +216,7 @@ async def get_insights_statistics(
         insights = TaxInsightService.get_filing_insights(
             db=db,
             filing_session_id=filing_id,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
         # Calculate statistics

@@ -47,7 +47,7 @@ class TaxCalculationResponse(BaseModel):
 @router.post("/calculate", response_model=TaxCalculationResponse)
 async def calculate_taxes(
     request: CalculateRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -77,7 +77,7 @@ async def calculate_taxes(
 @router.get("/{session_id}", response_model=dict)
 async def get_calculation(
     session_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -110,7 +110,7 @@ async def get_calculation(
 @router.get("/{session_id}/breakdown", response_model=dict)
 async def get_tax_breakdown(
     session_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """

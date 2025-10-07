@@ -77,7 +77,7 @@ async def list_filings(
     year: Optional[int] = Query(None, ge=2020, le=2030, description="Filter by tax year"),
     canton: Optional[str] = Query(None, min_length=2, max_length=2, description="Filter by canton"),
     include_deleted: bool = Query(False, description="Include soft-deleted filings"),
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -88,7 +88,7 @@ async def list_filings(
     try:
         filings = TaxFilingService.list_user_filings(
             db=db,
-            user_id=current_user["id"],
+            user_id=current_user.id,
             year=year,
             canton=canton,
             include_deleted=include_deleted
@@ -96,7 +96,7 @@ async def list_filings(
 
         stats = TaxFilingService.get_filing_statistics(
             db=db,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
         # Calculate total count
@@ -118,7 +118,7 @@ async def list_filings(
 @router.post("/filings", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_filing(
     request: CreateFilingRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -131,7 +131,7 @@ async def create_filing(
     try:
         filing = TaxFilingService.create_filing(
             db=db,
-            user_id=current_user["id"],
+            user_id=current_user.id,
             tax_year=request.tax_year,
             canton=request.canton,
             municipality=request.municipality,
@@ -141,7 +141,7 @@ async def create_filing(
             name=request.name
         )
 
-        logger.info(f"User {current_user['id']} created filing {filing.id}")
+        logger.info(f"User {current_user.id} created filing {filing.id}")
         return filing.to_dict()
 
     except ValueError as e:
@@ -161,7 +161,7 @@ async def create_filing(
 @router.post("/filings/copy", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def copy_filing(
     request: CopyFilingRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -176,10 +176,10 @@ async def copy_filing(
             db=db,
             source_filing_id=request.source_filing_id,
             new_year=request.new_year,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
-        logger.info(f"User {current_user['id']} copied filing {request.source_filing_id} to year {request.new_year}")
+        logger.info(f"User {current_user.id} copied filing {request.source_filing_id} to year {request.new_year}")
         return filing.to_dict()
 
     except ValueError as e:
@@ -200,7 +200,7 @@ async def copy_filing(
 async def get_filing(
     filing_id: str,
     include_relationships: bool = Query(True, description="Include answers, insights, calculations"),
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -213,7 +213,7 @@ async def get_filing(
         filing = TaxFilingService.get_filing(
             db=db,
             filing_id=filing_id,
-            user_id=current_user["id"],
+            user_id=current_user.id,
             include_relationships=include_relationships
         )
 
@@ -237,7 +237,7 @@ async def get_filing(
 async def update_filing(
     filing_id: str,
     request: UpdateFilingRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -259,11 +259,11 @@ async def update_filing(
         filing = TaxFilingService.update_filing(
             db=db,
             filing_id=filing_id,
-            user_id=current_user["id"],
+            user_id=current_user.id,
             **updates
         )
 
-        logger.info(f"User {current_user['id']} updated filing {filing_id}")
+        logger.info(f"User {current_user.id} updated filing {filing_id}")
         return filing.to_dict()
 
     except ValueError as e:
@@ -284,7 +284,7 @@ async def update_filing(
 async def delete_filing(
     filing_id: str,
     hard_delete: bool = Query(False, description="Permanently delete (USE WITH CAUTION)"),
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -298,11 +298,11 @@ async def delete_filing(
         TaxFilingService.delete_filing(
             db=db,
             filing_id=filing_id,
-            user_id=current_user["id"],
+            user_id=current_user.id,
             hard_delete=hard_delete
         )
 
-        logger.info(f"User {current_user['id']} {'hard' if hard_delete else 'soft'} deleted filing {filing_id}")
+        logger.info(f"User {current_user.id} {'hard' if hard_delete else 'soft'} deleted filing {filing_id}")
         return
 
     except ValueError as e:
@@ -322,7 +322,7 @@ async def delete_filing(
 @router.post("/filings/{filing_id}/restore", response_model=dict)
 async def restore_filing(
     filing_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -335,10 +335,10 @@ async def restore_filing(
         filing = TaxFilingService.restore_filing(
             db=db,
             filing_id=filing_id,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
-        logger.info(f"User {current_user['id']} restored filing {filing_id}")
+        logger.info(f"User {current_user.id} restored filing {filing_id}")
         return filing.to_dict()
 
     except ValueError as e:
@@ -357,7 +357,7 @@ async def restore_filing(
 
 @router.get("/filings/statistics", response_model=dict)
 async def get_statistics(
-    current_user: dict = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -374,7 +374,7 @@ async def get_statistics(
     try:
         stats = TaxFilingService.get_filing_statistics(
             db=db,
-            user_id=current_user["id"]
+            user_id=current_user.id
         )
 
         return stats

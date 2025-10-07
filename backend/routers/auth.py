@@ -26,7 +26,7 @@ from services.reset_password import ResetPasswordService
 from services.ses_emailjs_replacement import EmailJSService
 from services.user_service import (get_user_by_email, update_password,
                                    update_user)
-from utils.auth import check_user, flow, sign_jwt
+from utils.auth import check_user, flow, sign_jwt, sign_temp_2fa_jwt, verify_temp_2fa_jwt
 from utils.fastapi_rate_limiter import rate_limit
 from utils.rate_limiter import limiter
 from utils.router import Router
@@ -202,6 +202,24 @@ async def user_login(
         # Get the actual user from database
         db_user = get_user_by_email(db, user.email)
         if db_user:
+            # Check if 2FA is enabled for this user
+            if db_user.two_factor_enabled:
+                # Generate temporary token for 2FA verification
+                temp_token_response = sign_temp_2fa_jwt(db_user.email, str(db_user.id))
+
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.info(f"[LOGIN] 2FA required for user: {db_user.email}")
+
+                # Return 2FA challenge (no session token yet)
+                return {
+                    "success": True,
+                    "requires_2fa": True,
+                    "temp_token": temp_token_response["temp_token"],
+                    "message": "Please enter your 2FA code to complete login"
+                }
+
+            # No 2FA - proceed with normal login
             # Generate JWT token
             token_response = sign_jwt(user.email)
             access_token = token_response["access_token"]
@@ -244,6 +262,136 @@ async def user_login(
                 return token_response
 
     raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+@router.post("/login/verify-2fa")
+@rate_limit("5/15 minutes")  # Strict rate limit for security
+async def verify_two_factor_login(
+    request: Request,
+    response: Response,
+    temp_token: str = Body(...),
+    code: str = Body(...),
+    use_cookie: bool = Query(True, description="Set to true to use cookie-based auth"),
+    db=Depends(get_db)
+):
+    """
+    Verify 2FA code and complete login.
+    Exchanges temporary token + 2FA code for full session token.
+
+    Args:
+        temp_token: Temporary token from initial login
+        code: 6-digit TOTP code or 8-character backup code
+        use_cookie: Whether to use cookie-based auth
+
+    Returns:
+        Full authentication response with user data
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    try:
+        # Verify the temporary token
+        payload = verify_temp_2fa_jwt(temp_token)
+        if not payload:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid or expired temporary token. Please login again."
+            )
+
+        # Get user from database
+        user_email = payload.get("email")
+        db_user = get_user_by_email(db, user_email)
+
+        if not db_user or not db_user.two_factor_enabled:
+            raise HTTPException(
+                status_code=400,
+                detail="Two-factor authentication is not enabled for this account"
+            )
+
+        # Import 2FA service
+        from services.two_factor_service import two_factor_service
+
+        # Verify TOTP code or backup code
+        is_valid = False
+        used_backup_code = False
+
+        # Try TOTP first (6 digits)
+        if len(code.replace('-', '').replace(' ', '')) == 6:
+            # Decrypt the secret
+            secret = two_factor_service.decrypt_secret(db_user.two_factor_secret)
+            is_valid = two_factor_service.verify_totp(secret, code)
+            logger.info(f"[2FA] TOTP verification for {db_user.email}: {'success' if is_valid else 'failed'}")
+
+        # Try backup code if TOTP failed or code looks like backup code
+        if not is_valid:
+            is_valid = two_factor_service.verify_backup_code(db_user, code, db)
+            if is_valid:
+                used_backup_code = True
+                logger.info(f"[2FA] Backup code used for {db_user.email}")
+
+        if not is_valid:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid verification code"
+            )
+
+        # 2FA verification successful - generate full session token
+        token_response = sign_jwt(db_user.email)
+        access_token = token_response["access_token"]
+
+        # Check if user requires subscription
+        requires_subscription = should_require_subscription(db_user, db)
+
+        # Update last login
+        from datetime import datetime
+        db_user.last_login = datetime.utcnow()
+        db.commit()
+
+        logger.info(f"[2FA] Login successful for user: {db_user.email}")
+
+        # Set httpOnly cookie if requested
+        if use_cookie:
+            response.set_cookie(
+                key="access_token",
+                value=f"Bearer {access_token}",
+                **COOKIE_SETTINGS
+            )
+
+            # Return user data without token (cookie handles auth)
+            result = {
+                "success": True,
+                "user": {
+                    "id": str(db_user.id),
+                    "email": db_user.email,
+                    "first_name": db_user.first_name,
+                    "last_name": db_user.last_name,
+                    "preferred_language": db_user.preferred_language,
+                    "avatar_url": db_user.avatar_url
+                },
+                "requires_subscription": requires_subscription
+            }
+
+            # Warn if backup code was used and running low
+            if used_backup_code:
+                remaining = two_factor_service.get_remaining_backup_codes_count(db_user)
+                if remaining < 3:
+                    result["warning"] = f"You have only {remaining} backup codes remaining. Consider regenerating them."
+
+            return result
+        else:
+            # Legacy response with token in body
+            token_response["requires_subscription"] = requires_subscription
+            if used_backup_code:
+                remaining = two_factor_service.get_remaining_backup_codes_count(db_user)
+                if remaining < 3:
+                    token_response["warning"] = f"You have only {remaining} backup codes remaining."
+            return token_response
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"[2FA] Verification error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to verify 2FA code")
 
 
 @router.post("/logout")

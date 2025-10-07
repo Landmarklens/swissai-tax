@@ -65,6 +65,12 @@ class User(SwissTaxBase, Base):
     is_grandfathered = Column(Boolean, server_default='false', nullable=False)  # Bypass subscription
     is_test_user = Column(Boolean, server_default='false', nullable=False)  # Test account
 
+    # Two-Factor Authentication Fields
+    two_factor_enabled = Column(Boolean, server_default='false', nullable=False)
+    two_factor_secret = Column(String(255), nullable=True)  # Encrypted TOTP secret
+    two_factor_backup_codes = Column(String(1000), nullable=True)  # Encrypted JSON array of backup codes
+    two_factor_verified_at = Column(DateTime(timezone=True), nullable=True)  # When 2FA was enabled
+
     # Relationships temporarily disabled to fix SQLAlchemy mapper configuration issues
     # These relationships are not currently used in the application code
     # Database has ON DELETE CASCADE constraints for data integrity

@@ -45,6 +45,54 @@ def sign_jwt(email: str, user_type: Optional[str] = None) -> dict[str, str]:
     return token_response(token)
 
 
+def sign_temp_2fa_jwt(email: str, user_id: str) -> dict[str, str]:
+    """
+    Create a temporary JWT token for 2FA verification
+    This token is only valid for 5 minutes and requires_2fa verification
+
+    Args:
+        email: User's email
+        user_id: User's ID
+
+    Returns:
+        dict with temp_token and token_type
+    """
+    payload = {
+        "email": email,
+        "user_id": user_id,
+        "requires_2fa": True,
+        "exp": time.time() + (5 * 60)  # 5 minutes expiry
+    }
+    token = jwt.encode(payload, settings.SECRET_KEY, algorithm=ALGORITHM)
+
+    return {
+        "temp_token": token,
+        "token_type": "bearer"
+    }
+
+
+def verify_temp_2fa_jwt(token: str) -> Optional[dict]:
+    """
+    Verify a temporary 2FA token
+
+    Args:
+        token: The temporary JWT token
+
+    Returns:
+        Payload dict if valid, None otherwise
+    """
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+
+        # Verify it's a 2FA temp token
+        if not payload.get("requires_2fa"):
+            return None
+
+        return payload
+    except JWTError:
+        return None
+
+
 def get_google_flow() -> Flow:
     client_config = {
         "web": {

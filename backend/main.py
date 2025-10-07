@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # We only add the NEW routers here to avoid duplicates
 try:
     from routers import (documents, insights, interview, multi_canton_filing,
-                         pdf_generation, tax_calculation, tax_filing)
+                         pdf_generation, tax_calculation, tax_filing, two_factor)
 
     # Tax-specific routers (not in app.py)
     app.include_router(interview.router, prefix="/api/interview", tags=["Interview"])
@@ -27,6 +27,9 @@ try:
     # Multi-canton and PDF generation routers (NEW - not in app.py)
     app.include_router(multi_canton_filing.router, tags=["Multi-Canton Filing"])
     app.include_router(pdf_generation.router, tags=["PDF Generation"])
+
+    # Two-factor authentication router
+    app.include_router(two_factor.router, tags=["Two-Factor Authentication"])
 
     logger.info("All routers loaded successfully")
 except ImportError as e:

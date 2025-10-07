@@ -53,13 +53,16 @@ class Settings(BaseSettings):
     SENDER_EMAIL: str | None = Field(None)
     SENDGRID_TEMPLATE_ID: str | None = Field(None)
 
-    # EMAILJS
+    # EMAILJS (deprecated - keeping for backward compatibility)
     EMAILJS_SERVICE_ID: str | None = Field(None)
     EMAILJS_PUBLIC_KEY: str | None = Field(None)
     EMAILJS_TEMPLATE_ID: str | None = Field(None)
     EMAILJS_RESET_TEMPLATE_ID: str | None = Field(None)
     EMAILJS_PRIVATE_KEY: str | None = Field(None)
-    
+
+    # AWS SES settings for email
+    SES_SENDER_EMAIL: str | None = Field(None, description="Verified sender email address for SES")
+
     # Redis settings (optional - will work without Redis)
     REDIS_URL: str | None = Field(None, description="Redis URL for caching enrichments")
 
@@ -115,6 +118,7 @@ class Settings(BaseSettings):
                 '/swissai-tax/db/password': 'POSTGRES_PASSWORD',
                 '/swissai-tax/api/jwt-secret': 'SECRET_KEY',
                 '/swissai-tax/s3/documents-bucket': 'AWS_S3_BUCKET_NAME',
+                '/swissai-tax/email/sender': 'SES_SENDER_EMAIL',
                 '/homeai/prod/AWS_REGION': 'AWS_REGION',
                 '/homeai/prod/AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
                 '/homeai/prod/AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',

@@ -17,6 +17,7 @@ import { fetchUserProfile } from '../../store/slices/accountSlice';
 import { useTranslation } from 'react-i18next';
 import { jwtDecode } from 'jwt-decode';
 import ErrorBoundary from '../ErrorBoundary';
+import { TwoFactorVerifyModal } from '../TwoFactor';
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +67,8 @@ const LoginSignupModal = ({ open, onClose }) => {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
   const [hasLoginError, setHasLoginError] = useState(false);
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [temp2FAToken, setTemp2FAToken] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -131,6 +134,13 @@ const LoginSignupModal = ({ open, onClose }) => {
         return;
       }
 
+      // Check if 2FA is required
+      if (login.requires_2fa && login.temp_token) {
+        setTemp2FAToken(login.temp_token);
+        setShow2FAModal(true);
+        return;
+      }
+
       // Cookie-based auth returns {success: true, user: {...}}
       // Legacy token-based auth returns {access_token: "..."}
       if (login.success || login.access_token) {
@@ -153,6 +163,26 @@ const LoginSignupModal = ({ open, onClose }) => {
     }
   };
 
+  const handle2FASuccess = async (data) => {
+    try {
+      // Close 2FA modal
+      setShow2FAModal(false);
+      setTemp2FAToken('');
+
+      // Fetch user profile
+      const profileAction = await dispatch(fetchUserProfile());
+      if (fetchUserProfile.fulfilled.match(profileAction)) {
+        toast.success(t('Login successful!'));
+        onClose();
+        navigate('/filings');
+      } else {
+        toast.error(t('Failed to load profile'));
+      }
+    } catch (error) {
+      toast.error(t('Login failed'));
+    }
+  };
+
   const handleSignupSubmit = async (userData) => {
     try {
       const register = await authService.register(userData);
@@ -168,12 +198,12 @@ const LoginSignupModal = ({ open, onClose }) => {
       }
     } catch (error) {
       // Extract error message from response
-      const errorMessage = error.response?.data?.error || 
-                          error.response?.data?.detail || 
+      const errorMessage = error.response?.data?.error ||
+                          error.response?.data?.detail ||
                           error.response?.data?.message ||
-                          error.error || 
+                          error.error ||
                           error.message;
-      
+
       // Check if it's a rate limit error (429 or 400 with rate limit message)
       if (error.response?.status === 429) {
         toast.error(t('Too many registration attempts. Please wait a few minutes and try again.'));
@@ -345,6 +375,17 @@ const LoginSignupModal = ({ open, onClose }) => {
           </Box>
         </ModalContent>
       </StyledModal>
+
+      {/* Two-Factor Authentication Modal */}
+      <TwoFactorVerifyModal
+        open={show2FAModal}
+        onClose={() => {
+          setShow2FAModal(false);
+          setTemp2FAToken('');
+        }}
+        tempToken={temp2FAToken}
+        onSuccess={handle2FASuccess}
+      />
     </>
   );
 };

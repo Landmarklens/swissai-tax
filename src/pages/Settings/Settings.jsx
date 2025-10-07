@@ -17,7 +17,8 @@ import {
   Settings as SettingsIcon,
   Notifications as NotificationsIcon,
   Folder as FolderIcon,
-  Receipt as ReceiptIcon
+  Receipt as ReceiptIcon,
+  Security as SecurityIcon
 } from '@mui/icons-material';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -26,6 +27,7 @@ import NotificationSection from './components/NotificationSection';
 import TaxPreferencesSection from './components/TaxPreferencesSection';
 import DocumentManagementSection from './components/DocumentManagementSection';
 import BillingTab from './components/BillingTab';
+import { TwoFactorSettings } from '../../components/TwoFactor';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -80,6 +82,11 @@ const Settings = () => {
               icon={<NotificationsIcon />}
               iconPosition="start"
               label={t('Notifications')}
+            />
+            <Tab
+              icon={<SecurityIcon />}
+              iconPosition="start"
+              label={t('Security')}
             />
             <Tab
               icon={<FolderIcon />}

@@ -1,7 +1,7 @@
 """Add multi-filing support for multiple years and cantons
 
 Revision ID: 20251006_160955_multi_filing_support
-Revises: 20251006_154734_add_encrypted_tax_models
+Revises: d8e7f9a1b2c3
 Create Date: 2025-10-06 16:09:55
 
 Adds support for:
@@ -15,8 +15,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '20251006_160955_multi_filing_support'
-down_revision = 'add_encrypted_tax_models'
+revision = 'multi_filing_support'
+down_revision = 'd8e7f9a1b2c3'
 branch_labels = None
 depends_on = None
 

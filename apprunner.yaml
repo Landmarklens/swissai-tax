@@ -33,6 +33,8 @@ run:
       value: "webscrapinguser"
     - name: DATABASE_PASSWORD
       value: "IXq3IC0Uw6StMkBhb4mb"
+    - name: DATABASE_SCHEMA
+      value: "swisstax"
     - name: S3_BUCKET_NAME
       value: "swissai-tax-documents-1758721021"
     - name: ENCRYPTION_KEY_CREATED_AT

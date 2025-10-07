@@ -2,6 +2,7 @@ import base64
 import hashlib
 import hmac
 import json
+from datetime import datetime
 from urllib.parse import urlencode
 
 from fastapi import Body, Depends, HTTPException, Query, Request, Response
@@ -343,7 +344,6 @@ async def verify_two_factor_login(
         requires_subscription = should_require_subscription(db_user, db)
 
         # Update last login
-        from datetime import datetime
         db_user.last_login = datetime.utcnow()
         db.commit()
 

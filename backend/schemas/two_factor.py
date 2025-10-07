@@ -11,7 +11,7 @@ class TwoFactorSetupInitResponse(BaseModel):
     """Response for 2FA setup initialization"""
     secret: str = Field(..., description="TOTP secret for manual entry")
     qr_code: str = Field(..., description="Base64-encoded QR code image")
-    backup_codes: List[str] = Field(..., description="List of backup recovery codes")
+    backup_codes: List[str] = Field(..., min_length=10, max_length=10, description="List of 10 backup recovery codes")
 
 
 class TwoFactorSetupVerifyRequest(BaseModel):

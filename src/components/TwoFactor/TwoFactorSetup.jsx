@@ -48,29 +48,39 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
   const [backupCodesSaved, setBackupCodesSaved] = useState(false);
 
   useEffect(() => {
-    initializeSetup();
-  }, []);
+    let cancelled = false;
 
-  const initializeSetup = async () => {
-    setLoading(true);
-    setError('');
+    const initializeSetup = async () => {
+      setLoading(true);
+      setError('');
 
-    try {
-      const result = await twoFactorService.initializeSetup();
+      try {
+        const result = await twoFactorService.initializeSetup();
 
-      if (result.success) {
-        setSecret(result.data.secret);
-        setQrCode(result.data.qr_code);
-        setBackupCodes(result.data.backup_codes);
-      } else {
-        setError(result.error || 'Failed to initialize 2FA setup');
+        if (!cancelled && result.success) {
+          setSecret(result.data.secret);
+          setQrCode(result.data.qr_code);
+          setBackupCodes(result.data.backup_codes);
+        } else if (!cancelled) {
+          setError(result.error || 'Failed to initialize 2FA setup');
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError('Failed to initialize 2FA setup. Please try again.');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
-    } catch (err) {
-      setError('Failed to initialize 2FA setup. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    initializeSetup();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleVerify = async () => {
     if (!verificationCode || verificationCode.length !== 6) {
@@ -105,7 +115,9 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
     try {
       await navigator.clipboard.writeText(secret);
       setSuccess('Secret key copied to clipboard!');
-      setTimeout(() => setSuccess(''), 3000);
+      const timer = setTimeout(() => setSuccess(''), 3000);
+      // Cleanup timeout on unmount (stored in a ref if needed)
+      return () => clearTimeout(timer);
     } catch (err) {
       setError('Failed to copy to clipboard');
     }
@@ -120,8 +132,10 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
     const copied = await twoFactorService.copyBackupCodes(backupCodes);
     if (copied) {
       setSuccess('Backup codes copied to clipboard!');
-      setTimeout(() => setSuccess(''), 3000);
+      const timer = setTimeout(() => setSuccess(''), 3000);
       setBackupCodesSaved(true);
+      // Cleanup timeout on unmount (stored in a ref if needed)
+      return () => clearTimeout(timer);
     } else {
       setError('Failed to copy backup codes');
     }

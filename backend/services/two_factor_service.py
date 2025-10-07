@@ -150,6 +150,9 @@ class TwoFactorService:
             bool: True if code is valid and consumed, False otherwise
         """
         try:
+            # Lock the user row for update to prevent race conditions
+            db.refresh(user, with_for_update=True)
+
             if not user.two_factor_backup_codes:
                 return False
 
@@ -161,6 +164,11 @@ class TwoFactorService:
             # Normalize the input code
             code = code.strip().upper().replace(' ', '').replace('-', '')
 
+            # Validate length (should be 8 characters without dash)
+            if len(code) != 8:
+                logger.warning(f"Invalid backup code length: {len(code)} characters")
+                return False
+
             # Check if code exists in backup codes
             for stored_code in backup_codes:
                 normalized_stored = stored_code.replace('-', '')
@@ -168,9 +176,15 @@ class TwoFactorService:
                     # Code is valid - remove it from the list
                     backup_codes.remove(stored_code)
 
-                    # Save updated backup codes
-                    updated_json = json.dumps(backup_codes)
-                    user.two_factor_backup_codes = self.encryption.encrypt(updated_json)
+                    # If no codes left, set to None or empty array
+                    if len(backup_codes) == 0:
+                        user.two_factor_backup_codes = None
+                        logger.warning(f"All backup codes consumed for user {user.email}. User should regenerate.")
+                    else:
+                        # Save updated backup codes
+                        updated_json = json.dumps(backup_codes)
+                        user.two_factor_backup_codes = self.encryption.encrypt(updated_json)
+
                     db.commit()
 
                     logger.info(f"Backup code consumed for user {user.email}. {len(backup_codes)} codes remaining.")

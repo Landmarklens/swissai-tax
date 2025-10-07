@@ -5,7 +5,7 @@ Handles 2FA setup, verification, and management endpoints
 import logging
 from typing import Optional
 
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from core.security import get_current_user
@@ -81,8 +81,8 @@ async def initialize_two_factor_setup(
 async def verify_and_enable_two_factor(
     request: Request,
     verify_request: TwoFactorSetupVerifyRequest,
-    secret: str,  # Must be passed from frontend (from init response)
-    backup_codes: str,  # JSON string of backup codes from frontend
+    secret: str = Query(..., description="TOTP secret from init response"),
+    backup_codes: str = Query(..., description="JSON string of backup codes from init"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

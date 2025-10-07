@@ -124,12 +124,20 @@ const Settings = () => {
         {activeTab === 2 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <DocumentManagementSection />
+              <TwoFactorSettings />
             </Grid>
           </Grid>
         )}
 
         {activeTab === 3 && (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <DocumentManagementSection />
+            </Grid>
+          </Grid>
+        )}
+
+        {activeTab === 4 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <BillingTab />

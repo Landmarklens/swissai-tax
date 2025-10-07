@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/system';
-import { Box, TextField, Button, FormLabel, Typography } from '@mui/material';
+import { Box, TextField, Button, FormLabel, Typography, FormControlLabel, Checkbox, Link } from '@mui/material';
 import { PasswordField } from '../passwordField';
 import { LanguageSelect } from '../LanguageSelect/LanguageSelect';
 import { createRegistrationSchema } from '../../utils/validation/schemaFactory';
@@ -155,6 +155,31 @@ const SignupForm = ({ onBack, onSubmit }) => {
       </FormControl> */}
 
       <LanguageSelect formik={formik} />
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            name="acceptTerms"
+            checked={formik.values.acceptTerms}
+            onChange={formik.handleChange}
+            color="primary"
+          />
+        }
+        label={
+          <Typography variant="body2">
+            {t('I accept the')}{' '}
+            <Link href="/terms" target="_blank" underline="always">
+              {t('Terms and Conditions')}
+            </Link>
+          </Typography>
+        }
+        sx={{ mt: 2, mb: 1 }}
+      />
+      {formik.touched.acceptTerms && formik.errors.acceptTerms && (
+        <Typography variant="caption" color="error" sx={{ display: 'block', ml: 4, mb: 1 }}>
+          {formik.errors.acceptTerms}
+        </Typography>
+      )}
 
       <Button
         type="submit"

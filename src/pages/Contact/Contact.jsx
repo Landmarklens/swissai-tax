@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 
 import * as Yup from 'yup';
 
@@ -137,6 +137,32 @@ const Contact = () => {
     message: ''
   });
 
+  // Create validation schema with current translations (will update when language changes)
+  const validationSchema = useMemo(() => Yup.object({
+    email: Yup.string()
+      .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, t('Invalid email address'))
+      .required(t('Required')),
+    firstName: Yup.string()
+      .min(2, t('First name must be at least 2 characters'))
+      .max(50, t('First name must be at most 50 characters'))
+      .required(t('Required')),
+    lastName: Yup.string()
+      .min(2, t('Last name must be at least 2 characters'))
+      .max(50, t('Last name must be at most 50 characters'))
+      .required(t('Required')),
+    subject: Yup.string()
+      .min(3, t('Subject must be at least 3 characters'))
+      .max(100, t('Subject must be at most 100 characters'))
+      .required(t('Please select a subject')),
+    message: Yup.string()
+      .min(10, t('Message must be at least 10 characters'))
+      .max(2000, t('Message must be at most 2000 characters'))
+      .required(t('Required')),
+    phoneNumber: Yup.string()
+      .matches(/^[0-9+\-\s]*$/, t('Phone number must contain only digits, spaces, +, or -'))
+      .min(7, t('Phone number is too short'))
+      .max(20, t('Phone number is too long'))
+  }), [t]);
 
   const formik = useFormik({
     initialValues: {
@@ -147,32 +173,7 @@ const Contact = () => {
       subject: 'Contact Us',
       message: ''
     },
-
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, t('Invalid email address'))
-        .required(t('Required')),
-      firstName: Yup.string()
-        .min(2, t('First name must be at least 2 characters'))
-        .max(50, t('First name must be at most 50 characters'))
-        .required(t('Required')),
-      lastName: Yup.string()
-        .min(2, t('Last name must be at least 2 characters'))
-        .max(50, t('Last name must be at most 50 characters'))
-        .required(t('Required')),
-      subject: Yup.string()
-        .min(3, t('Subject must be at least 3 characters'))
-        .max(100, t('Subject must be at most 100 characters'))
-        .required(t('Please select a subject')),
-      message: Yup.string()
-        .min(10, t('Message must be at least 10 characters'))
-        .max(2000, t('Message must be at most 2000 characters'))
-        .required(t('Required')),
-      phoneNumber: Yup.string()
-        .matches(/^[0-9+\-\s]*$/, t('Phone number must contain only digits, spaces, +, or -'))
-        .min(7, t('Phone number is too short'))
-        .max(20, t('Phone number is too long'))
-    }),
+    validationSchema,
     onSubmit: async (values, formikHelpers) => {
       try {
         // Get API URL from parameter store and ensure no trailing slash

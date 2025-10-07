@@ -12,6 +12,7 @@ export const useWebVitals = (onReport, logToConsole = true) => {
       // Log to console if enabled
       if (logToConsole) {
         const rating = metric.rating || (metric.value < metric.entries[0]?.target ? 'good' : 'needs-improvement');
+        console.log({
           metric: metric.name,
           value: metric.value,
           rating,

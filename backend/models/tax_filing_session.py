@@ -69,6 +69,7 @@ class TaxFilingSession(Base):
     # Localization & Context
     language = Column(String(2), default='en')  # en, de, fr, it
     canton = Column(String(2), nullable=True)  # ZH, BE, GE, etc.
+    municipality = Column(String(255), nullable=True)  # Municipality name
 
     # Multi-Filing Support (added 2025-10-06)
     is_primary = Column(Boolean, default=True, nullable=False)  # TRUE for main filing, FALSE for additional cantons

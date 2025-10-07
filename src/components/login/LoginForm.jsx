@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Box, TextField, Button, FormLabel, Typography } from '@mui/material';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { styled } from '@mui/system';
+import { loginSchema } from '../../utils/validation/schemas';
 
 const theme = {
   palette: {
@@ -39,17 +39,7 @@ const LoginForm = ({ onSubmit, hasLoginError, setHasLoginError }) => {
     validateOnMount: false,
     validateOnChange: formInteracted,
     validateOnBlur: formInteracted,
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email(t('Invalid email address'))
-        .test(
-          'has-tld',
-          t('Invalid email address'),
-          (value) => !!value && /\.[a-zA-Z]{2,}$/.test(value)
-        )
-        .required(t('Required')),
-      password: Yup.string().required(t('Required'))
-    }),
+    validationSchema: loginSchema,
     onSubmit: async (values) => {
       onSubmit(values);
     }

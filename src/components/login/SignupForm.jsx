@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import * as Yup from 'yup';
-
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-
-import { theme } from '../../theme/theme';
-
 import { styled } from '@mui/system';
-
 import { Box, TextField, Button, FormLabel, Typography } from '@mui/material';
 import { PasswordField } from '../passwordField';
 import { LanguageSelect } from '../LanguageSelect/LanguageSelect';
+import { registrationSchema } from '../../utils/validation/schemas';
+import { theme } from '../../theme/theme';
 
 const InputField = styled(TextField)({
   marginBottom: '20px',
@@ -27,51 +23,27 @@ const SignupForm = ({ onBack, onSubmit }) => {
     localStorage.setItem('i18nextLng', language);
   };
 
-  const emptySpaceValidation = Yup.string().trim('Empty space is not valid').strict(true);
-
-  const nameValidation = emptySpaceValidation
-    .min(2, 'Name must be at least 2 characters long')
-    .max(30, 'Name cannot be more than 30 characters')
-    .matches(
-      /^[a-zA-Z\s'-]*$/,
-      'Name can only contain letters, spaces, hyphens, and apostrophes'
-    )
-    .required(t('Required'));
-
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
       confirmPassword: '',
-      firstname: '',
-      lastname: '',
+      firstName: '',
+      lastName: '',
+      acceptTerms: false,
       user_type: 'tenant', // Default for tax app
       status: 'active',
       language: 'en'
     },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email(t('Invalid email address'))
-        .test(
-          'has-tld',
-          t('Invalid email address'),
-          (value) => !!value && /\.[a-zA-Z]{2,}$/.test(value)
-        )
-        .required(t('Required')),
-
-      password: emptySpaceValidation
-        .min(8, t('Must be at least 8 characters'))
-        .required(t('Required')),
-      confirmPassword: emptySpaceValidation
-        .min(8, t('Must be at least 8 characters'))
-        .oneOf([Yup.ref('password'), null], t('Passwords must match'))
-        .required(t('Required')),
-      firstname: nameValidation,
-      lastname: nameValidation,
-      language: Yup.string().oneOf(['de', 'en', 'fr', 'it']).required(t('Required'))
-    }),
+    validationSchema: registrationSchema,
     onSubmit: async (values) => {
-      const { confirmPassword, ...dataToSend } = values;
+      const { confirmPassword, acceptTerms, firstName, lastName, ...rest } = values;
+      // Map firstName/lastName to firstname/lastname for backend compatibility
+      const dataToSend = {
+        ...rest,
+        firstname: firstName,
+        lastname: lastName
+      };
       onSubmit(dataToSend);
       changeLocalLanguage(dataToSend.language);
     }
@@ -125,11 +97,11 @@ const SignupForm = ({ onBack, onSubmit }) => {
       <InputField
         size="small"
         fullWidth
-        name="firstname"
+        name="firstName"
         placeholder={t('Enter your First Name')}
-        {...formik.getFieldProps('firstname')}
-        error={formik.touched.firstname && Boolean(formik.errors.firstname)}
-        helperText={formik.touched.firstname && formik.errors.firstname}
+        {...formik.getFieldProps('firstName')}
+        error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+        helperText={formik.touched.firstName && formik.errors.firstName}
         variant="outlined"
       />
 
@@ -139,11 +111,11 @@ const SignupForm = ({ onBack, onSubmit }) => {
       <InputField
         size="small"
         fullWidth
-        name="lastname"
+        name="lastName"
         placeholder={t('Enter your Last Name')}
-        {...formik.getFieldProps('lastname')}
-        error={formik.touched.lastname && Boolean(formik.errors.lastname)}
-        helperText={formik.touched.lastname && formik.errors.lastname}
+        {...formik.getFieldProps('lastName')}
+        error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+        helperText={formik.touched.lastName && formik.errors.lastName}
         variant="outlined"
       />
 

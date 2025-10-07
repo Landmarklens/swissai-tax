@@ -63,7 +63,7 @@ export const getDocuments = createAsyncThunk('documents/get-documents', async (_
     
     // Try backend API first
     try {
-      const response = await axios.get(`${API_URL}/api/users/${userId}/documents`, {
+      const response = await axios.get(`${API_URL}/api/user/${userId}/documents`, {
         headers: {
           Authorization: `Bearer ${user.access_token}`
         }

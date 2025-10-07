@@ -45,7 +45,7 @@ export const getUserDocuments = createAsyncThunk(
   async (userId, thunkAPI) => {
     try {
       const user = authService.getCurrentUser();
-      const response = await axios.get(`${API_URL}/api/users/${userId}/documents`, {
+      const response = await axios.get(`${API_URL}/api/user/${userId}/documents`, {
         headers: {
           Authorization: `Bearer ${user.access_token}`
         }

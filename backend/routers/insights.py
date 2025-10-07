@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.tax_insight_service import TaxInsightService
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

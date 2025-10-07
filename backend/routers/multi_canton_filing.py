@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from db.session import get_db
 from models.tax_filing_session import TaxFilingSession
 from services.filing_orchestration_service import FilingOrchestrationService
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 router = APIRouter(prefix="/api/multi-canton", tags=["multi-canton-filing"])
 

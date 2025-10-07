@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from db.session import get_db
 from models.swisstax import Payment, Subscription, User
 from schemas.swisstax.payment import PaymentIntentCreate, PaymentIntentResponse
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 router = APIRouter()
 

@@ -16,7 +16,7 @@ from models.tax_answer import TaxAnswer
 from models.tax_filing_session import FilingStatus, TaxFilingSession
 from services.interview_service import InterviewService
 from services.tax_insight_service import TaxInsightService
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 

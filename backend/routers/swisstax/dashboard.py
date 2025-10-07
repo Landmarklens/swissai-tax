@@ -15,7 +15,7 @@ from schemas.swisstax.dashboard import (ActiveFilingResponse,
                                         DashboardStatsResponse,
                                         PastFilingResponse)
 from services.swisstax.dashboard_service import dashboard_service
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 router = APIRouter()
 

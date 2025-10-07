@@ -9,7 +9,7 @@ from db.session import get_db
 from models import InterviewSession
 from models.swisstax import Filing, User
 from schemas.swisstax.filing import FilingCreate, FilingResponse
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 router = APIRouter()
 

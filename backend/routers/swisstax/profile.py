@@ -6,7 +6,7 @@ from db.session import get_db
 from models.swisstax import User, UserSettings
 from schemas.swisstax.profile import (PersonalInfoUpdate, ProfileResponse,
                                       TaxProfileUpdate)
-from utils.auth import get_current_user
+from core.security import get_current_user
 
 router = APIRouter()
 

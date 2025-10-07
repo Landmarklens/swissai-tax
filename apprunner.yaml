@@ -3,7 +3,7 @@ runtime: python311
 build:
   commands:
     build:
-      - echo "Installing Python dependencies... [Cache bust 2025-10-07]"
+      - echo "Installing Python dependencies... [Cache bust 2025-10-07-v2-shebang-fix]"
       - python3 -m pip install --upgrade pip
       - python3 -m pip install --no-cache-dir -r backend/requirements-apprunner.txt
       - echo "Verifying pydantic-settings installation..."

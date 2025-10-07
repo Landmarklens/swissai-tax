@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class UserSettings(Base):
+class UserSettings(SwissTaxBase, Base):
     """
     User preferences and application settings
     One-to-one relationship with User
@@ -71,7 +71,8 @@ class UserSettings(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     # Relationships
-    user = relationship("User", back_populates="settings")
+    # Note: User doesn't have settings relationship to avoid circular dependencies
+    user = relationship("User")
 
     def __repr__(self):
         return f"<UserSettings(user_id={self.user_id}, language={self.language})>"

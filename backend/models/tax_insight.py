@@ -34,10 +34,11 @@ class TaxInsight(Base):
     Non-sensitive metadata, but may reference encrypted profile data.
     """
     __tablename__ = "tax_insights"
+    __table_args__ = {'schema': 'public'}
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    filing_session_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
+    filing_session_id = Column(String(36), ForeignKey('public.tax_filing_sessions.id'), nullable=False, index=True)
 
     # Insight Details
     insight_type = Column(
@@ -73,8 +74,8 @@ class TaxInsight(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     acknowledged_at = Column(DateTime, nullable=True)
 
-    # Relationships
-    filing_session = relationship("TaxFilingSession", back_populates="insights")
+    # Relationships - temporarily disabled
+    # filing_session = relationship("TaxFilingSession", back_populates="insights")
 
     def __repr__(self):
         return f"<TaxInsight(id='{self.id}', type='{self.insight_type}', priority='{self.priority}')>"

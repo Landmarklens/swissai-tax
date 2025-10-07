@@ -16,6 +16,7 @@ class Document(Base):
     Stores file metadata, S3 location, and OCR results
     """
     __tablename__ = "documents"
+    __table_args__ = {'schema': 'swisstax'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
     session_id = Column(UUID(as_uuid=True), ForeignKey('swisstax.interview_sessions.id'), nullable=True, index=True)
@@ -36,8 +37,9 @@ class Document(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
-    user = relationship("User", back_populates="documents")
-    session = relationship("InterviewSession", back_populates="documents")
+    # Note: Not using back_populates to avoid circular dependency issues
+    user = relationship("User", foreign_keys=[user_id], overlaps="documents")
+    session = relationship("InterviewSession", foreign_keys=[session_id], overlaps="documents")
 
     def __repr__(self):
         return f"<Document(id={self.id}, file_name={self.file_name}, type={self.document_type})>"

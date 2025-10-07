@@ -1,19 +1,32 @@
 """
 Base model for SwissAI Tax schema
-All models inherit from this base to automatically use the swisstax schema
+IMPORTANT: All swisstax models inherit from SwissTaxBase which automatically sets schema='swisstax'
 """
 
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.declarative import declared_attr
+from db.base import Base as OriginalBase
 
 
 class SwissTaxBase:
     """
-    Base class that automatically sets schema to 'swisstax' for all models
+    Mixin that automatically sets schema to 'swisstax' for all models
     """
 
     @declared_attr
     def __table_args__(cls):
-        return {'schema': 'swisstax'}
+        # Get existing __table_args__ from subclass if any
+        args = getattr(cls, '_SwissTaxBase__table_args__', None)
+        if args is None:
+            return {'schema': 'swisstax'}
+        elif isinstance(args, dict):
+            return {**args, 'schema': 'swisstax'}
+        else:
+            # args is a tuple
+            return (*args, {'schema': 'swisstax'})
 
 
-Base = declarative_base(cls=SwissTaxBase)
+# Export a Base class that includes the mixin
+# All swisstax models should inherit from this
+Base = OriginalBase
+
+__all__ = ['Base', 'SwissTaxBase']

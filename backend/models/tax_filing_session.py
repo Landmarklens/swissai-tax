@@ -31,6 +31,7 @@ class TaxFilingSession(Base):
     corrections, or different tax scenarios).
     """
     __tablename__ = "tax_filing_sessions"
+    __table_args__ = {'schema': 'public'}
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
@@ -76,26 +77,28 @@ class TaxFilingSession(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     deleted_at = Column(DateTime, nullable=True)  # Soft delete
 
-    # Relationships
-    user = relationship("User", back_populates="tax_filing_sessions")
-    insights = relationship(
-        "TaxInsight",
-        back_populates="filing_session",
-        cascade="all, delete-orphan",
-        lazy="selectin"
-    )
-    answers = relationship(
-        "TaxAnswer",
-        back_populates="filing_session",
-        cascade="all, delete-orphan",
-        lazy="selectin"
-    )
-    calculations = relationship(
-        "TaxCalculation",
-        back_populates="filing_session",
-        cascade="all, delete-orphan",
-        lazy="selectin"
-    )
+    # Relationships - temporarily disabled due to cross-schema FK resolution issues
+    # Note: User doesn't have tax_filing_sessions relationship to avoid circular dependencies
+    # TODO: Re-enable these relationships with proper primaryjoin expressions
+    # user = relationship("User", foreign_keys="[TaxFilingSession.user_id]")
+    # insights = relationship(
+    #     "TaxInsight",
+    #     back_populates="filing_session",
+    #     cascade="all, delete-orphan",
+    #     lazy="selectin"
+    # )
+    # answers = relationship(
+    #     "TaxAnswer",
+    #     back_populates="filing_session",
+    #     cascade="all, delete-orphan",
+    #     lazy="selectin"
+    # )
+    # calculations = relationship(
+    #     "TaxCalculation",
+    #     back_populates="filing_session",
+    #     cascade="all, delete-orphan",
+    #     lazy="selectin"
+    # )
 
     def __repr__(self):
         return f"<TaxFilingSession(id='{self.id}', user_id='{self.user_id}', tax_year={self.tax_year}, status='{self.status}')>"

@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class Subscription(Base):
+class Subscription(SwissTaxBase, Base):
     """
     User subscription to SwissAI Tax plans
     Integrates with Stripe for payment processing
@@ -57,7 +57,8 @@ class Subscription(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     # Relationships
-    user = relationship("User", back_populates="subscriptions")
+    # Note: User doesn't have subscriptions relationship to avoid circular dependencies
+    user = relationship("User")
 
     def __repr__(self):
         return f"<Subscription(id={self.id}, user_id={self.user_id}, plan={self.plan_type}, status={self.status})>"
@@ -73,7 +74,7 @@ class Subscription(Base):
         return self.status == 'canceled' or self.cancel_at_period_end
 
 
-class Payment(Base):
+class Payment(SwissTaxBase, Base):
     """
     Payment records for subscriptions and one-time purchases
     Tracks Stripe payment intents and transactions
@@ -124,7 +125,8 @@ class Payment(Base):
     paid_at = Column(DateTime(timezone=True))
 
     # Relationships
-    user = relationship("User", back_populates="payments")
+    # Note: User doesn't have payments relationship to avoid circular dependencies
+    user = relationship("User")
     filing = relationship("Filing", back_populates="payments")
 
     def __repr__(self):

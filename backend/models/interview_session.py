@@ -18,9 +18,10 @@ class InterviewSession(Base):
     Kept for backward compatibility with existing data.
     """
     __tablename__ = "interview_sessions"
+    __table_args__ = {'schema': 'swisstax'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('swisstax.users.id'), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('swisstax.users.id', ondelete='CASCADE'), nullable=False, index=True)
     tax_year = Column(Integer, nullable=False)
     status = Column(String(50), default='in_progress')
     current_question_id = Column(String(50), nullable=True)
@@ -30,8 +31,8 @@ class InterviewSession(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    user = relationship("User", back_populates="sessions")
-    documents = relationship("Document", back_populates="session")
+    # Note: Not using back_populates to avoid circular dependency issues
+    documents = relationship("Document", foreign_keys="[Document.session_id]")
 
     def __repr__(self):
         return f"<InterviewSession(id={self.id}, user_id={self.user_id}, tax_year={self.tax_year})>"

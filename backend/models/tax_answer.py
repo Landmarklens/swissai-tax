@@ -16,10 +16,11 @@ class TaxAnswer(Base):
     Sensitive personal and financial data is automatically encrypted at rest.
     """
     __tablename__ = "tax_answers"
+    __table_args__ = {'schema': 'swisstax'}
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    filing_session_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
+    filing_session_id = Column(String(36), ForeignKey('public.tax_filing_sessions.id'), nullable=False, index=True)
     question_id = Column(String(50), nullable=False, index=True)
 
     # Answer Data - ENCRYPTED for sensitive information
@@ -35,8 +36,8 @@ class TaxAnswer(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    # Relationships
-    filing_session = relationship("TaxFilingSession", back_populates="answers")
+    # Relationships - temporarily disabled
+    # filing_session = relationship("TaxFilingSession", back_populates="answers")
 
     def __repr__(self):
         return f"<TaxAnswer(id='{self.id}', question_id='{self.question_id}', session='{self.filing_session_id}')>"

@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class Question(Base):
+class Question(SwissTaxBase, Base):
     """
     Tax interview questions
     Multi-language support for DE, FR, IT, EN
@@ -56,7 +56,7 @@ class Question(Base):
         return f"<Question(id={self.id}, category={self.category})>"
 
 
-class InterviewAnswer(Base):
+class InterviewAnswer(SwissTaxBase, Base):
     """
     User's answers to interview questions
     Stores the answer value in JSON format for flexibility

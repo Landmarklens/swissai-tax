@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class User(Base):
+class User(SwissTaxBase, Base):
     """
     User model for SwissAI Tax application
     Stores user account information and authentication details
@@ -64,33 +64,10 @@ class User(Base):
     is_grandfathered = Column(Boolean, server_default='false', nullable=False)  # Bypass subscription
     is_test_user = Column(Boolean, server_default='false', nullable=False)  # Test account
 
-    # Relationships
-    sessions = relationship(
-        "InterviewSession",
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
-    filings = relationship(
-        "Filing",
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
-    subscriptions = relationship(
-        "Subscription",
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
-    settings = relationship(
-        "UserSettings",
-        back_populates="user",
-        uselist=False,
-        cascade="all, delete-orphan"
-    )
-    payments = relationship(
-        "Payment",
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
+    # Relationships temporarily disabled to fix SQLAlchemy mapper configuration issues
+    # These relationships are not currently used in the application code
+    # Database has ON DELETE CASCADE constraints for data integrity
+    # TODO: Re-enable when needed or when relationship issues are fully resolved
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>"

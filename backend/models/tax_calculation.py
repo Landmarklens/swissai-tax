@@ -25,10 +25,11 @@ class TaxCalculation(Base):
     Links to the filing session and provides audit trail.
     """
     __tablename__ = "tax_calculations"
+    __table_args__ = {'schema': 'swisstax'}
 
     # Core Identification
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    filing_session_id = Column(String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
+    filing_session_id = Column(String(36), ForeignKey('public.tax_filing_sessions.id'), nullable=False, index=True)
 
     # Calculation Type & Version
     calculation_type = Column(
@@ -111,8 +112,8 @@ class TaxCalculation(Base):
     calculated_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Relationships
-    filing_session = relationship("TaxFilingSession", back_populates="calculations")
+    # Relationships - temporarily disabled
+    # filing_session = relationship("TaxFilingSession", back_populates="calculations")
 
     def __repr__(self):
         return f"<TaxCalculation(id='{self.id}', type='{self.calculation_type}', total={self.total_tax/100:.2f} CHF)>"

@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class Filing(Base):
+class Filing(SwissTaxBase, Base):
     """
     Tax filing submission record
     Tracks submitted tax returns and their status
@@ -62,8 +62,9 @@ class Filing(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     # Relationships
-    user = relationship("User", back_populates="filings")
-    session = relationship("InterviewSession", back_populates="filings")
+    user = relationship("User", foreign_keys="[Filing.user_id]", overlaps="filings")
+    # Note: InterviewSession doesn't have filings relationship to avoid circular dependencies
+    session = relationship("InterviewSession", foreign_keys="[Filing.session_id]")
     payments = relationship("Payment", back_populates="filing")
 
     def __repr__(self):

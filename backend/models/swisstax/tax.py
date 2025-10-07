@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class TaxYear(Base):
+class TaxYear(SwissTaxBase, Base):
     """
     Tax year configuration
     Tracks filing deadlines and current year
@@ -30,7 +30,7 @@ class TaxYear(Base):
         return f"<TaxYear(year={self.year}, current={self.is_current})>"
 
 
-class TaxRate(Base):
+class TaxRate(SwissTaxBase, Base):
     """
     Tax rates for different cantons and municipalities
     Supports progressive tax brackets
@@ -67,7 +67,7 @@ class TaxRate(Base):
         return f"<TaxRate(canton={self.canton}, type={self.rate_type}, year={self.tax_year})>"
 
 
-class StandardDeduction(Base):
+class StandardDeduction(SwissTaxBase, Base):
     """
     Standard deduction limits and rules
     Canton-specific deduction configurations

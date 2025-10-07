@@ -9,10 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from .base import Base, SwissTaxBase
 
 
-class DocumentType(Base):
+class DocumentType(SwissTaxBase, Base):
     """
     Types of tax documents
     Multi-language support for names and descriptions
@@ -42,14 +42,14 @@ class DocumentType(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
-    documents = relationship("Document", back_populates="document_type")
+    # Note: Document.document_type is a string column, not a FK, so no back_populates
     required_for_sessions = relationship("RequiredDocument", back_populates="document_type")
 
     def __repr__(self):
         return f"<DocumentType(code={self.code})>"
 
 
-class RequiredDocument(Base):
+class RequiredDocument(SwissTaxBase, Base):
     """
     Documents required for a specific session based on user's answers
     """
@@ -86,7 +86,8 @@ class RequiredDocument(Base):
     )
 
     # Relationships
-    session = relationship("InterviewSession", back_populates="required_documents")
+    # Note: InterviewSession doesn't have required_documents relationship to avoid circular dependencies
+    session = relationship("InterviewSession")
     document_type = relationship("DocumentType", back_populates="required_for_sessions")
 
     def __repr__(self):

@@ -23,7 +23,7 @@ cd /app/backend
 echo "Current database state:"
 alembic current || echo "No migrations applied yet"
 echo "Upgrading to head..."
-alembic upgrade head -v || {
+alembic upgrade head || {
     echo "FATAL: Database migration failed. Cannot start application."
     exit 1
 }

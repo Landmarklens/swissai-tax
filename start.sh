@@ -17,12 +17,8 @@ echo "========================================="
 export PYTHONPATH="/app/backend:$PYTHONPATH"
 echo "PYTHONPATH set to: $PYTHONPATH"
 
-# Install dependencies at runtime if needed
-if [ ! -d "/root/.local/lib/python3.11/site-packages/fastapi" ]; then
-    echo "Installing dependencies..."
-    cd /app/backend
-    python3 -m pip install -r requirements.txt
-fi
+# Skip runtime dependency installation - already installed during build phase
+echo "Dependencies already installed during build phase, skipping..."
 
 # Create database if needed
 echo "========================================="

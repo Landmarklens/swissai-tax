@@ -20,6 +20,16 @@ depends_on = None
 def upgrade():
     """Add encrypted tax models"""
 
+    # Check if tables already exist (idempotent)
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    existing_tables = inspector.get_table_names(schema='swisstax')
+
+    # Skip if tax_answers already exists (created by earlier migration)
+    if 'tax_answers' in existing_tables:
+        print("✓ tax_answers table already exists, skipping creation")
+        return
+
     # Create tax_answers table with encrypted answer_value
     op.create_table('tax_answers',
         sa.Column('id', sa.String(length=36), nullable=False),

@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.tax_filing_service import TaxFilingService
+from services.postal_code_service import get_postal_code_service
 from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -384,4 +385,55 @@ async def get_statistics(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get statistics: {str(e)}"
+        )
+
+
+@router.get("/postal-code/{postal_code}", response_model=dict)
+async def lookup_postal_code(
+    postal_code: str,
+    current_user = Depends(get_current_user)
+):
+    """
+    Look up municipality and canton from Swiss postal code
+
+    Args:
+        postal_code: 4-digit Swiss postal code
+
+    Returns:
+        Dict with:
+            - postal_code: The postal code
+            - municipality: Municipality name
+            - canton: Canton code (2 letters)
+            - canton_name: Full canton name
+            - formatted_address: Full formatted address
+    """
+    try:
+        postal_service = get_postal_code_service()
+
+        # Validate postal code
+        is_valid, error = postal_service.validate_postal_code(postal_code)
+        if not is_valid:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=error
+            )
+
+        # Look up postal code
+        result = postal_service.lookup_postal_code(postal_code)
+
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Postal code {postal_code} not found in Switzerland"
+            )
+
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error looking up postal code {postal_code}: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to lookup postal code: {str(e)}"
         )

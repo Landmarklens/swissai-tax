@@ -103,8 +103,16 @@ const FilingsListPage = () => {
     tax_year: new Date().getFullYear(),
     canton: 'ZH',
     municipality: '',
+    postal_code: '',
     language: i18n.language || 'en',
     is_primary: true
+  });
+
+  // Postal code lookup state
+  const [postalCodeLookup, setPostalCodeLookup] = useState({
+    loading: false,
+    error: null,
+    result: null
   });
 
   // Copy filing form
@@ -139,6 +147,43 @@ const FilingsListPage = () => {
       setError(err.response?.data?.detail || 'Failed to load filings');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePostalCodeLookup = async (postalCode) => {
+    if (!postalCode || postalCode.length !== 4) {
+      setPostalCodeLookup({ loading: false, error: null, result: null });
+      return;
+    }
+
+    setPostalCodeLookup({ loading: true, error: null, result: null });
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_BASE_URL}/api/tax-filing/postal-code/${postalCode}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setPostalCodeLookup({
+        loading: false,
+        error: null,
+        result: response.data
+      });
+
+      // Auto-fill municipality and canton
+      setNewFiling(prev => ({
+        ...prev,
+        municipality: response.data.municipality,
+        canton: response.data.canton
+      }));
+    } catch (err) {
+      console.error('Error looking up postal code:', err);
+      setPostalCodeLookup({
+        loading: false,
+        error: err.response?.data?.detail || 'Postal code not found',
+        result: null
+      });
     }
   };
 
@@ -473,27 +518,63 @@ const FilingsListPage = () => {
               onChange={(e) => setNewFiling({ ...newFiling, tax_year: parseInt(e.target.value) })}
               fullWidth
             />
-            <FormControl fullWidth>
-              <InputLabel>{t('filings.canton', 'Canton')}</InputLabel>
-              <Select
-                value={newFiling.canton}
-                onChange={(e) => setNewFiling({ ...newFiling, canton: e.target.value })}
-                label={t('filings.canton', 'Canton')}
-              >
-                {CANTONS.map((canton) => (
-                  <MenuItem key={canton.code} value={canton.code}>
-                    {canton.name} ({canton.code})
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+
             <TextField
-              label={t('filings.municipality', 'Municipality')}
-              value={newFiling.municipality}
-              onChange={(e) => setNewFiling({ ...newFiling, municipality: e.target.value })}
+              label={t('filings.postalCode', 'Postal Code (ZIP)')}
+              value={newFiling.postal_code}
+              onChange={(e) => {
+                const value = e.target.value;
+                setNewFiling({ ...newFiling, postal_code: value });
+                // Trigger lookup when 4 digits entered
+                if (value.length === 4) {
+                  handlePostalCodeLookup(value);
+                }
+              }}
+              placeholder="e.g. 8001"
               required
               fullWidth
+              helperText={
+                postalCodeLookup.loading
+                  ? t('filings.lookingUpPostalCode', 'Looking up postal code...')
+                  : postalCodeLookup.error
+                  ? postalCodeLookup.error
+                  : postalCodeLookup.result
+                  ? `${postalCodeLookup.result.municipality}, ${postalCodeLookup.result.canton_name}`
+                  : t('filings.enterPostalCode', 'Enter your 4-digit postal code')
+              }
+              error={!!postalCodeLookup.error}
+              InputProps={{
+                endAdornment: postalCodeLookup.loading && <CircularProgress size={20} />
+              }}
             />
+
+            {postalCodeLookup.result && (
+              <>
+                <TextField
+                  label={t('filings.municipality', 'Municipality')}
+                  value={newFiling.municipality}
+                  onChange={(e) => setNewFiling({ ...newFiling, municipality: e.target.value })}
+                  required
+                  fullWidth
+                  disabled
+                  helperText={t('filings.autoFilledFromPostalCode', 'Auto-filled from postal code')}
+                />
+
+                <FormControl fullWidth disabled>
+                  <InputLabel>{t('filings.canton', 'Canton')}</InputLabel>
+                  <Select
+                    value={newFiling.canton}
+                    label={t('filings.canton', 'Canton')}
+                  >
+                    {CANTONS.map((canton) => (
+                      <MenuItem key={canton.code} value={canton.code}>
+                        {canton.name} ({canton.code})
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </>
+            )}
           </Box>
         </DialogContent>
         <DialogActions>

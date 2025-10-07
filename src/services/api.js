@@ -125,6 +125,7 @@ export const filingAPI = {
   submitFiling: (data) => api.post('/api/filing/submit', data),
   getFiling: (filingId) => api.get(`/api/filing/${filingId}`),
   reviewFiling: (filingId) => api.get(`/api/filing/${filingId}/review`),
+  lookupPostalCode: (postalCode) => api.get(`/api/tax-filing/postal-code/${postalCode}`),
 };
 
 // Payment API endpoints

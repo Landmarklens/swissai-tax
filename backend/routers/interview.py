@@ -429,3 +429,60 @@ async def save_session(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to save session: {str(e)}"
         )
+
+
+@router.post("/{session_id}/calculate")
+async def calculate_taxes_for_session(
+    session_id: str,
+    request: dict,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Calculate taxes for the current interview session
+
+    - Uses answers from the session to calculate taxes
+    - Returns calculation results
+    """
+    try:
+        # Import tax calculation service
+        from services.tax_calculation_service import TaxCalculationService
+
+        tax_service = TaxCalculationService()
+
+        # Get session to retrieve filing_session_id
+        from services.interview_service import interview_service
+        session_data = interview_service.get_session(session_id)
+
+        if not session_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Session {session_id} not found"
+            )
+
+        filing_session_id = session_data.get("filing_session_id")
+        if not filing_session_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No filing session associated with this interview"
+            )
+
+        # Calculate taxes
+        calculation = tax_service.calculate_tax(
+            db=db,
+            filing_session_id=filing_session_id
+        )
+
+        return {
+            "success": True,
+            "calculation": calculation.to_dict() if hasattr(calculation, 'to_dict') else calculation
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error calculating taxes: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to calculate taxes: {str(e)}"
+        )

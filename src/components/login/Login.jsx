@@ -92,8 +92,8 @@ const LoginSignupModal = ({ open, onClose }) => {
   useEffect(() => {
     if (access_token) {
       localStorage.setItem('user', JSON.stringify({ access_token, token_type }));
-      // Redirect to tax filing interview after Google OAuth
-      navigate('/tax-filing/interview');
+      // Redirect to filings page after Google OAuth
+      navigate('/filings');
     }
   }, [navigate, access_token]);
 
@@ -138,8 +138,8 @@ const LoginSignupModal = ({ open, onClose }) => {
         if (fetchUserProfile.fulfilled.match(profileAction)) {
           onClose();
 
-          // Redirect to tax filing interview
-          navigate('/tax-filing/interview');
+          // Redirect to filings page
+          navigate('/filings');
         } else if (fetchUserProfile.rejected.match(profileAction)) {
           toast.error(profileAction?.error?.message || t('Login failed'));
           setHasLoginError(true);

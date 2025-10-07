@@ -133,6 +133,13 @@ export const paymentAPI = {
   handleWebhook: (data) => api.post('/api/payment/webhook', data),
 };
 
+// Subscription API endpoints
+export const subscriptionAPI = {
+  getCurrentSubscription: () => api.get('/api/subscription/current'),
+  cancelSubscription: (data) => api.post('/api/subscription/cancel', data),
+  getInvoices: () => api.get('/api/subscription/invoices'),
+};
+
 // Auth API endpoints (complementary to authService)
 export const authAPI = {
   register: (data) => api.post('/api/auth/register', data),

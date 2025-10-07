@@ -22,7 +22,7 @@ sys.path.append(os.path.dirname(__file__))
 
 # Import routers
 from routers import auth, user, user_counter
-from routers.swisstax import dashboard, filing, payment, profile, settings
+from routers.swisstax import dashboard, filing, payment, profile, settings, subscription
 from services.document_service import DocumentService
 from services.interview_service import interview_service
 from services.tax_calculation_service import TaxCalculationService
@@ -124,6 +124,7 @@ app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 app.include_router(filing.router, prefix="/api/filing", tags=["filing"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
+app.include_router(subscription.router, prefix="/api/subscription", tags=["subscription"])
 
 # Pydantic models for request/response validation
 class InterviewStartRequest(BaseModel):

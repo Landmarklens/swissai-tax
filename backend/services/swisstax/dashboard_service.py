@@ -5,7 +5,8 @@ Business logic for dashboard data retrieval
 
 from datetime import date, datetime
 from sqlalchemy.orm import Session
-from models.swisstax import Filing, InterviewSession, TaxCalculation
+from models.swisstax import Filing
+from models import InterviewSession, TaxCalculation
 
 
 class DashboardService:

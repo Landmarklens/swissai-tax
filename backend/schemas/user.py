@@ -12,16 +12,16 @@ class UserLogin(BaseModel):
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
-    firstname: str
-    lastname: str
-    language: str = "en"  # de, en, fr, it
+    first_name: str
+    last_name: str
+    preferred_language: str = "en"  # de, en, fr, it
 
 
 class UserProfile(BaseModel):
     id: UUID
     email: Optional[EmailStr] = None
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     phone: Optional[str] = None
     canton: Optional[str] = None  # SwissAI Tax uses canton instead of country/state
     municipality: Optional[str] = None  # SwissAI Tax uses municipality instead of city
@@ -34,12 +34,12 @@ class UserProfile(BaseModel):
 
 
 class UserProfileUpdate(BaseModel):
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     phone: Optional[str] = None
     canton: Optional[str] = None
     city: Optional[str] = None  # Alias for municipality
-    language: Optional[str] = None
+    preferred_language: Optional[str] = None
 
 
 class AvatarUrl(BaseModel):

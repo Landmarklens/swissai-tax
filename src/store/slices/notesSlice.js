@@ -93,7 +93,7 @@ const notesSlice = createSlice({
 
         const res = {
           ...action.payload,
-          user_name: `${user.data.firstname} ${user.data.lastname}`,
+          user_name: `${user.data.first_name} ${user.data.last_name}`,
           avatar_url: user.data.avatar_url
         };
         // Add the new note to the notes.data array

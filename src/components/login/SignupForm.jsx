@@ -40,15 +40,16 @@ const SignupForm = ({ onBack, onSubmit }) => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      const { confirmPassword, acceptTerms, firstName, lastName, ...rest } = values;
-      // Map firstName/lastName to firstname/lastname for backend compatibility
+      const { confirmPassword, acceptTerms, firstName, lastName, language, ...rest } = values;
+      // Map firstName/lastName to first_name/last_name for backend compatibility
       const dataToSend = {
         ...rest,
-        firstname: firstName,
-        lastname: lastName
+        first_name: firstName,
+        last_name: lastName,
+        preferred_language: language
       };
       onSubmit(dataToSend);
-      changeLocalLanguage(dataToSend.language);
+      changeLocalLanguage(language);
     }
   });
 

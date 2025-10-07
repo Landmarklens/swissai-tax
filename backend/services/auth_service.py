@@ -22,9 +22,9 @@ def create_user(db: Session, user: UserCreate):
     user_obj = User(
         email=user_data.get('email'),
         password=hashed_password,
-        first_name=user_data.get('firstname'),
-        last_name=user_data.get('lastname'),
-        preferred_language=user.language if hasattr(user, 'language') else 'en',
+        first_name=user_data.get('first_name'),
+        last_name=user_data.get('last_name'),
+        preferred_language=user.preferred_language if hasattr(user, 'preferred_language') else 'en',
         provider='local',
         is_active=True
     )
@@ -43,7 +43,7 @@ async def create_social_user(db: Session, user_info: dict, provider: str):
     if existing_user:
         existing_user.provider = provider
         existing_user.provider_id = user_info.get("provider_id")
-        existing_user.preferred_language = user_info.get("language", "en")
+        existing_user.preferred_language = user_info.get("preferred_language", "en")
         existing_user.avatar_url = user_info.get("avatar_url")
         existing_user.is_active = True
         db.commit()
@@ -54,10 +54,10 @@ async def create_social_user(db: Session, user_info: dict, provider: str):
         email=user_info.get("email"),
         provider=provider,
         provider_id=user_info.get("provider_id"),
-        first_name=user_info.get("firstname"),
-        last_name=user_info.get("lastname"),
+        first_name=user_info.get("first_name"),
+        last_name=user_info.get("last_name"),
         avatar_url=user_info.get("avatar_url"),
-        preferred_language=user_info.get("language", "en"),
+        preferred_language=user_info.get("preferred_language", "en"),
         is_active=True
     )
 

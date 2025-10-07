@@ -24,16 +24,18 @@ def get_list_of_users(db: Session) -> List[User]:
 
 def update_user(db: Session, user: User, profile_data: UserProfileUpdate):
     """Update user profile"""
-    if profile_data.firstname:
-        user.first_name = profile_data.firstname
-    if profile_data.lastname:
-        user.last_name = profile_data.lastname
+    if profile_data.first_name:
+        user.first_name = profile_data.first_name
+    if profile_data.last_name:
+        user.last_name = profile_data.last_name
     if profile_data.phone:
         user.phone = profile_data.phone
     if profile_data.canton:
         user.canton = profile_data.canton
     if profile_data.city:
         user.municipality = profile_data.city
+    if profile_data.preferred_language:
+        user.preferred_language = profile_data.preferred_language
 
     db.commit()
     db.refresh(user)

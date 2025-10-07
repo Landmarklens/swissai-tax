@@ -19,7 +19,7 @@ export const PersonalAccountIcon = () => {
   };
 
   const userInitials = useMemo(() => {
-    return getInitials(userData?.firstname, userData?.lastname);
+    return getInitials(userData?.first_name, userData?.last_name);
   }, [userData]);
 
   const handleMouseEnter = (event) => {

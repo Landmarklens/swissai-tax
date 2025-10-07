@@ -140,8 +140,8 @@ async def callback(request: Request, db=Depends(get_db)):
     email = user_info['email']
     user_info['provider_id'] = user_info.pop('id')
     user_info['avatar_url'] = user_info.pop('picture')
-    user_info['firstname'] = user_info.pop('given_name')
-    user_info['lastname'] = user_info.pop('family_name')
+    user_info['first_name'] = user_info.pop('given_name')
+    user_info['last_name'] = user_info.pop('family_name')
 
     user = get_user_by_email(db, email)
     is_new_user = False
@@ -151,10 +151,9 @@ async def callback(request: Request, db=Depends(get_db)):
             "email": email,
             "provider_id": user_info.get("provider_id"),
             "avatar_url": user_info.get("avatar_url"),
-            "firstname": user_info.get("firstname"),
-            "lastname": user_info.get("lastname"),
-            "user_type": state_data.get("user_type"),
-            "language": state_data.get("language")
+            "first_name": user_info.get("first_name"),
+            "last_name": user_info.get("last_name"),
+            "preferred_language": state_data.get("language", "en")
         }
         user = await create_social_user(db, user_data, "google")
         is_new_user = True
@@ -222,12 +221,11 @@ async def user_login(
                 return {
                     "success": True,
                     "user": {
-                        "id": db_user.id,
+                        "id": str(db_user.id),
                         "email": db_user.email,
-                        "firstname": db_user.firstname,
-                        "lastname": db_user.lastname,
-                        "user_type": db_user.user_type,
-                        "language": db_user.language,
+                        "first_name": db_user.first_name,
+                        "last_name": db_user.last_name,
+                        "preferred_language": db_user.preferred_language,
                         "avatar_url": db_user.avatar_url
                     },
                     "requires_subscription": requires_subscription
@@ -273,10 +271,10 @@ async def migrate_to_cookie(
         "success": True,
         "message": "Successfully migrated to cookie-based authentication",
         "user": {
-            "id": current_user.id,
+            "id": str(current_user.id),
             "email": current_user.email,
-            "firstname": current_user.firstname,
-            "lastname": current_user.lastname
+            "first_name": current_user.first_name,
+            "last_name": current_user.last_name
         }
     }
 

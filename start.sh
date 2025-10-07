@@ -18,4 +18,5 @@ cd /app
 python3 backend/create_database.py || echo "Database setup failed, continuing anyway..."
 
 # Start the application
-exec python3 backend/app.py
+# Use main.py which includes all router registrations
+exec python3 backend/main.py

@@ -303,6 +303,14 @@ const FilingsListPage = () => {
             {t('filings.subtitle', 'Manage your tax returns across multiple years and cantons')}
           </Typography>
         </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={() => setCreateDialogOpen(true)}
+        >
+          {t('filings.newFiling', 'New Filing')}
+        </Button>
       </Box>
 
       {/* Error Alert */}

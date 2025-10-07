@@ -162,7 +162,8 @@ const InterviewPage = () => {
         help_text: question.help_text,
         validation_rules: question.validation_rules,
         options: {
-          options: question.options?.map(opt => opt.value) || []
+          // Handle both array of strings and array of objects
+          options: question.options?.map(opt => typeof opt === 'string' ? opt : opt.value) || []
         }
       } : null;
 
@@ -239,7 +240,8 @@ const InterviewPage = () => {
           help_text: nextQuestion.help_text,
           validation_rules: nextQuestion.validation || nextQuestion.validation_rules,
           options: {
-            options: nextQuestion.options?.map(opt => opt.value) || []
+            // Handle both array of strings and array of objects
+            options: nextQuestion.options?.map(opt => typeof opt === 'string' ? opt : opt.value) || []
           }
         } : null;
 

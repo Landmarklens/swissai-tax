@@ -4,7 +4,7 @@ import hmac
 import hashlib
 from urllib.parse import urlencode
 
-from fastapi import Depends, HTTPException, Body, Request, Query
+from fastapi import Depends, HTTPException, Body, Request, Query, Response
 from fastapi.responses import RedirectResponse
 from googleapiclient.discovery import build
 
@@ -27,6 +27,7 @@ from utils.auth import check_user, sign_jwt, flow
 from utils.router import Router
 from utils.rate_limiter import limiter
 from utils.fastapi_rate_limiter import rate_limit
+from core.security import COOKIE_SETTINGS, get_current_user
 
 router = Router()
 
@@ -178,31 +179,104 @@ async def callback(request: Request, db=Depends(get_db)):
 
 @router.post("/login")
 @rate_limit("1000/minute")
-async def user_login(request: Request, user: UserLoginSchema = Body(...), db=Depends(get_db)):
+async def user_login(
+    request: Request,
+    response: Response,
+    user: UserLoginSchema = Body(...),
+    db=Depends(get_db),
+    use_cookie: bool = Query(True, description="Set to true to use cookie-based auth (recommended)")
+):
     '''
     email and password is required for login. user_type is optional
 
     Returns:
-        access_token: JWT token
-        token_type: "bearer"
+        user: User profile data (without sensitive token)
         requires_subscription: bool - True if user needs to subscribe
+
+    Note: Authentication token is now set as httpOnly cookie for security.
+    Set use_cookie=false for legacy header-based authentication.
     '''
 
     if check_user(user, db):
         # Get the actual user from database
         db_user = get_user_by_email(db, user.email)
         if db_user:
-            # SwissAI Tax doesn't use user_type, so we don't pass it
+            # Generate JWT token
             token_response = sign_jwt(user.email)
+            access_token = token_response["access_token"]
 
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)
 
-            # Add subscription requirement flag to response
-            token_response["requires_subscription"] = requires_subscription
+            # Set httpOnly cookie (new secure method)
+            if use_cookie:
+                response.set_cookie(
+                    key="access_token",
+                    value=f"Bearer {access_token}",
+                    **COOKIE_SETTINGS
+                )
 
-            return token_response
+                # Return user data without token (cookie handles auth)
+                return {
+                    "success": True,
+                    "user": {
+                        "id": db_user.id,
+                        "email": db_user.email,
+                        "firstname": db_user.firstname,
+                        "lastname": db_user.lastname,
+                        "user_type": db_user.user_type,
+                        "language": db_user.language,
+                        "avatar_url": db_user.avatar_url
+                    },
+                    "requires_subscription": requires_subscription
+                }
+            else:
+                # Legacy response with token in body (for backward compatibility)
+                token_response["requires_subscription"] = requires_subscription
+                return token_response
+
     raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+@router.post("/logout")
+async def logout(response: Response):
+    """
+    Logout endpoint - clears the authentication cookie
+    """
+    response.delete_cookie(key="access_token")
+    return {"success": True, "message": "Logged out successfully"}
+
+
+@router.post("/migrate-to-cookie")
+async def migrate_to_cookie(
+    response: Response,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Migration endpoint: Converts existing header-based auth to cookie-based auth.
+    This endpoint accepts a request with Authorization header and sets a cookie.
+    """
+    # User is already authenticated via header (get_current_user checks both)
+    # Now set the cookie for future requests
+    token_response = sign_jwt(current_user.email)
+    access_token = token_response["access_token"]
+
+    response.set_cookie(
+        key="access_token",
+        value=f"Bearer {access_token}",
+        **COOKIE_SETTINGS
+    )
+
+    return {
+        "success": True,
+        "message": "Successfully migrated to cookie-based authentication",
+        "user": {
+            "id": current_user.id,
+            "email": current_user.email,
+            "firstname": current_user.firstname,
+            "lastname": current_user.lastname
+        }
+    }
 
 
 @router.post("/register", response_model=UserProfile)

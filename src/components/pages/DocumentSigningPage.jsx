@@ -337,13 +337,13 @@ const DocumentSigningPage = () => {
         <Box sx={{ p: 4, maxHeight: '600px', overflow: 'auto' }}>
           <Card variant="outlined">
             <CardContent>
-              <Box 
-                dangerouslySetInnerHTML={{ 
+              <Box
+                dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(documentHtml, {
-                    ALLOWED_TAGS: ['div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
-                                  'section', 'br', 'strong', 'em', 'u', 'img', 'table', 
+                    ALLOWED_TAGS: ['div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                                  'section', 'br', 'strong', 'em', 'u', 'table',
                                   'tr', 'td', 'th', 'tbody', 'thead'],
-                    ALLOWED_ATTR: ['style', 'class', 'id', 'src', 'alt', 'width', 'height']
+                    ALLOWED_ATTR: ['class', 'id']
                   })
                 }}
                 sx={{

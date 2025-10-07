@@ -242,77 +242,8 @@ async def get_questions_OLD(language: str = "en"):
         raise HTTPException(status_code=500, detail=str(e))
 """
 
-# Document endpoints
-@app.post("/api/documents/upload")
-async def get_upload_url(request: DocumentUploadRequest):
-    """Get presigned URL for document upload"""
-    try:
-        upload_url = document_service.generate_presigned_url(
-            request.sessionId,
-            request.documentType,
-            request.fileName
-        )
-        return upload_url
-    except Exception as e:
-        logger.error(f"Error generating upload URL: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/documents/list")
-async def list_documents(sessionId: str):
-    """List all documents for a session"""
-    try:
-        documents = document_service.list_session_documents(sessionId)
-        return {"documents": documents}
-    except Exception as e:
-        logger.error(f"Error listing documents: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/documents/download")
-async def get_download_url(documentId: str):
-    """Get download URL for a document"""
-    try:
-        download_url = document_service.get_document_url(documentId)
-        if not download_url:
-            raise HTTPException(status_code=404, detail="Document not found")
-        return {"download_url": download_url}
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error getting download URL: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.delete("/api/documents")
-async def delete_document(documentId: str):
-    """Delete a document"""
-    try:
-        success = document_service.delete_document(documentId)
-        return {
-            "success": success,
-            "message": "Document deleted" if success else "Delete failed"
-        }
-    except Exception as e:
-        logger.error(f"Error deleting document: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/api/documents/process")
-async def process_document(documentId: str = Body(..., embed=True)):
-    """Start OCR processing for a document"""
-    try:
-        result = document_service.process_document_with_textract(documentId)
-        return result
-    except Exception as e:
-        logger.error(f"Error processing document: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/documents/status")
-async def check_processing_status(documentId: str):
-    """Check OCR processing status"""
-    try:
-        status = document_service.check_textract_job(documentId)
-        return status
-    except Exception as e:
-        logger.error(f"Error checking processing status: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+# SECURITY: Document endpoints removed - use authenticated endpoints in routers/documents.py
+# All document operations require authentication via /api/documents/* router
 
 # Tax calculation endpoints
 @app.post("/api/calculation/calculate")

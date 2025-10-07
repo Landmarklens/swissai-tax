@@ -4,33 +4,33 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax',
   timeout: 30000,
+  withCredentials: true, // CRITICAL: Send cookies with all requests
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor - now simplified since cookies are sent automatically
 api.interceptors.request.use(
   (config) => {
-    // Add auth token if available
-    // Check both 'authToken' and 'user' (user contains {access_token, token_type})
-    let token = localStorage.getItem('authToken');
+    // Cookies are automatically sent by the browser
+    // No need to manually add Authorization header
 
-    if (!token) {
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        try {
-          const user = JSON.parse(userStr);
-          token = user.access_token;
-        } catch (e) {
-          console.error('Failed to parse user from localStorage', e);
+    // For backward compatibility during migration, check if user has old token
+    // This code can be removed after full migration
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        // If user object has token (old format), add it to header for legacy support
+        if (user.access_token && !document.cookie.includes('access_token')) {
+          config.headers.Authorization = `Bearer ${user.access_token}`;
         }
+      } catch (e) {
+        console.error('Failed to parse user from localStorage', e);
       }
     }
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
   },
   (error) => {
@@ -43,9 +43,14 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Redirect to login on unauthorized
+      // Clear user data and redirect to login
       localStorage.removeItem('authToken');
-      window.location.href = '/login';
+      localStorage.removeItem('user');
+
+      // Only redirect if not already on login page
+      if (!window.location.pathname.includes('/login')) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

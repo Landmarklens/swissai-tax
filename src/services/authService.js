@@ -8,27 +8,29 @@ class AuthService {
     this.user = null;
   }
 
-  // Set current user - single source of truth
+  // Set current user - only store non-sensitive data
   setCurrentUser(user) {
     this.user = user;
     if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
+      // Remove sensitive token data before storing
+      const { access_token, token_type, ...userData } = user;
+      localStorage.setItem('user', JSON.stringify(userData));
     } else {
       localStorage.removeItem('user');
     }
   }
 
-  // Check if token is expired
+  // Check if token is expired (legacy - tokens now in httpOnly cookies)
   isTokenExpired(token) {
     if (!token) return true;
-    
+
     try {
       const parts = token.split('.');
       if (parts.length !== 3) return true;
-      
+
       const payload = JSON.parse(atob(parts[1]));
       if (!payload.exp) return false; // No expiry claim
-      
+
       // Check if expired (with 60 second buffer)
       return payload.exp * 1000 < Date.now() - 60000;
     } catch (error) {
@@ -104,15 +106,20 @@ const authService = {
     }
   },
 
-  // Regular email/password login
+  // Regular email/password login (now uses cookies)
   login: async (email, password) => {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      // use_cookie=true tells backend to set httpOnly cookie
+      const response = await axios.post(`${API_URL}/api/auth/login?use_cookie=true`, {
         email,
         password
+      }, {
+        withCredentials: true // Ensure cookies are sent/received
       });
-      if (response.data.access_token) {
-        authServiceInstance.setCurrentUser(response.data);
+
+      // Backend now returns user data without token
+      if (response.data.success && response.data.user) {
+        authServiceInstance.setCurrentUser(response.data.user);
       }
       return response.data;
     } catch (error) {
@@ -153,14 +160,25 @@ const authService = {
     }
   },
 
-  // Logout
-  logout: () => {
-    authServiceInstance.setCurrentUser(null);
-    localStorage.clear();
-    // Don't redirect here - let the calling code handle navigation
+  // Logout (now clears cookie on server)
+  logout: async () => {
+    try {
+      // Call backend to clear cookie
+      await axios.post(`${API_URL}/api/auth/logout`, {}, {
+        withCredentials: true
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Continue with local cleanup even if server request fails
+    } finally {
+      // Clear local state
+      authServiceInstance.setCurrentUser(null);
+      localStorage.clear();
+      // Don't redirect here - let the calling code handle navigation
+    }
   },
 
-  // Get current user - single source of truth
+  // Get current user - from localStorage (non-sensitive data only)
   getCurrentUser: () => {
     if (!authServiceInstance.user) {
       try {
@@ -171,35 +189,33 @@ const authService = {
         authServiceInstance.user = null;
       }
     }
-    
-    // Check token expiry
-    if (authServiceInstance.user && authServiceInstance.isTokenExpired(authServiceInstance.user.access_token)) {
-      authService.logout();
-      return null;
-    }
-    
+
     return authServiceInstance.user;
   },
 
-  // Check if user is authenticated
+  // Check if user is authenticated (cookie-based)
   isAuthenticated: () => {
     const user = authService.getCurrentUser();
-    if (!user || !user.access_token) {
+    // User data exists in localStorage = authenticated
+    // Cookie is checked by backend on each request
+    return !!user && !!user.email;
+  },
+
+  // Verify authentication status with backend
+  checkAuth: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/user/me`, {
+        withCredentials: true
+      });
+      if (response.data) {
+        authServiceInstance.setCurrentUser(response.data);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      authServiceInstance.setCurrentUser(null);
       return false;
     }
-    
-    // Check if token has expiry and is still valid
-    if (user.expires_at) {
-      const expiryTime = new Date(user.expires_at).getTime();
-      const currentTime = new Date().getTime();
-      if (currentTime >= expiryTime) {
-        // Token expired
-        authService.logout();
-        return false;
-      }
-    }
-    
-    return true;
   },
 
   // Get authentication token

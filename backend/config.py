@@ -18,15 +18,15 @@ class Settings(BaseSettings):
     # JWT settings
     # SECURITY: SECRET_KEY must be loaded from Parameter Store (/swissai/api/jwt-secret)
     # No default value to prevent using weak secrets in production
-    SECRET_KEY: str = Field(default=None)
+    SECRET_KEY: str | None = Field(default=None)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # Database settings
     # SECURITY: All database credentials must be loaded from Parameter Store (/swissai/db/*)
     # No default values to prevent using exposed credentials
-    POSTGRES_USER: str = Field(default=None)
-    POSTGRES_PASSWORD: str = Field(default=None)
-    POSTGRES_HOST: str = Field(default=None)
+    POSTGRES_USER: str | None = Field(default=None)
+    POSTGRES_PASSWORD: str | None = Field(default=None)
+    POSTGRES_HOST: str | None = Field(default=None)
     POSTGRES_PORT: str = Field("5432")
     POSTGRES_DB: str = Field("swissai_tax")
 

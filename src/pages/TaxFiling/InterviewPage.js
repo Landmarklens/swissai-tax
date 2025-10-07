@@ -14,7 +14,7 @@ import {
   Save as SaveIcon,
   CheckCircle as CheckCircleIcon
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
@@ -26,9 +26,10 @@ import Footer from '../../components/footer/Footer';
 const InterviewPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { filingId } = useParams();
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
-  const [filingSessionId, setFilingSessionId] = useState(null);
+  const [filingSessionId, setFilingSessionId] = useState(filingId || null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [totalQuestions, setTotalQuestions] = useState(14);
@@ -71,7 +72,7 @@ const InterviewPage = () => {
         clearTimeout(autoSaveTimer.current);
       }
     };
-  }, []);
+  }, [filingId]); // Re-run when filingId changes
 
   const autoSave = useCallback(async () => {
     if (!session) return;
@@ -132,10 +133,17 @@ const InterviewPage = () => {
   const startInterview = async () => {
     try {
       setLoading(true);
-      const response = await api.post('/api/interview/start', {
+      const requestData = {
         tax_year: 2024,
         language: 'en'
-      });
+      };
+
+      // If filingId is provided in URL, use it to resume existing filing
+      if (filingId) {
+        requestData.filing_session_id = filingId;
+      }
+
+      const response = await api.post('/api/interview/start', requestData);
 
 
       // Handle both camelCase (sessionId) and snake_case (session_id) from API

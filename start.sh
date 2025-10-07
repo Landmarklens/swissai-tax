@@ -17,8 +17,16 @@ echo "========================================="
 export PYTHONPATH="/app/backend:$PYTHONPATH"
 echo "PYTHONPATH set to: $PYTHONPATH"
 
-# Skip runtime dependency installation - already installed during build phase
-echo "Dependencies already installed during build phase, skipping..."
+# Install runtime dependencies if not already installed
+# App Runner build phase doesn't persist packages to runtime container
+if ! python3 -c "import alembic" 2>/dev/null; then
+    echo "Installing runtime dependencies..."
+    cd /app/backend
+    python3 -m pip install --quiet --no-cache-dir -r requirements-apprunner.txt
+    echo "Dependencies installed successfully"
+else
+    echo "Dependencies already installed, skipping..."
+fi
 
 # Create database if needed
 echo "========================================="

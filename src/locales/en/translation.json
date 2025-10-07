@@ -1007,7 +1007,7 @@
   "filings.confirmDelete": "Are you sure you want to delete this filing?",
   "filings.taxYear": "Tax Year",
   "filings.canton": "Canton",
-  "filings.municipality": "Municipality (Optional)",
+  "filings.municipality": "Municipality",
   "filings.copyFiling": "Copy Filing to New Year",
   "filings.newYear": "New Tax Year",
   "filings.stats.total": "Total Filings",

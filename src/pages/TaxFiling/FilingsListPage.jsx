@@ -258,14 +258,6 @@ const FilingsListPage = () => {
             {t('filings.subtitle', 'Manage your tax returns across multiple years and cantons')}
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={() => setCreateDialogOpen(true)}
-        >
-          {t('filings.createNew', 'New Filing')}
-        </Button>
       </Box>
 
       {/* Error Alert */}
@@ -330,7 +322,7 @@ const FilingsListPage = () => {
             startIcon={<AddIcon />}
             onClick={() => setCreateDialogOpen(true)}
           >
-            {t('filings.createFirst', 'Create First Filing')}
+            {t('filings.startTaxFiling', 'Start Tax Filing')}
           </Button>
         </Paper>
       ) : (
@@ -496,16 +488,22 @@ const FilingsListPage = () => {
               </Select>
             </FormControl>
             <TextField
-              label={t('filings.municipality', 'Municipality (Optional)')}
+              label={t('filings.municipality', 'Municipality')}
               value={newFiling.municipality}
               onChange={(e) => setNewFiling({ ...newFiling, municipality: e.target.value })}
+              required
               fullWidth
             />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCreateDialogOpen(false)}>{t('filings.cancel')}</Button>
-          <Button onClick={handleCreateFiling} variant="contained" color="primary">
+          <Button
+            onClick={handleCreateFiling}
+            variant="contained"
+            color="primary"
+            disabled={!newFiling.municipality.trim()}
+          >
             {t('filings.createAndStart')}
           </Button>
         </DialogActions>

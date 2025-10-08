@@ -51,6 +51,9 @@ const Header = ({ handleClickOpen }) => {
   }, [isLoginInQuery]);
 
 
+  // Check if user is in the tax filing interview process
+  const isInFilingProcess = location.pathname.includes('/tax-filing/interview/');
+
   const menuOptions = [
     { to: '/', label: t('Home') },
     // { to: '/tenants', label: t('For Tenants') },
@@ -61,6 +64,9 @@ const Header = ({ handleClickOpen }) => {
     // { to: "/about-us", label: t("About Us") },
     { to: '/contact-us', label: t('Contact Us') }
   ];
+
+  // Filter menu options when user is in filing process
+  const visibleMenuOptions = isInFilingProcess ? [] : menuOptions;
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -107,7 +113,7 @@ const Header = ({ handleClickOpen }) => {
       onKeyDown={toggleDrawer(false)}
       className={styles.drawerContent}>
       <List>
-        {menuOptions?.map((option, index) => (
+        {visibleMenuOptions?.map((option, index) => (
           <ListItem key={index}>
             <Link
               to={option.to}
@@ -214,7 +220,7 @@ const Header = ({ handleClickOpen }) => {
                   </Link>
                 </Box>
                 <Box className={styles.menuContainer} sx={{ display: 'flex !important' }}>
-                  {menuOptions?.map((option, index) => (
+                  {visibleMenuOptions?.map((option, index) => (
                     <Link
                       key={index}
                       to={option.to}

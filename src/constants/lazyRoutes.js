@@ -39,6 +39,8 @@ const Policy = withSuspense(lazy(() => import('../pages/Policy/Policy')));
 const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
 const Profile = withSuspense(lazy(() => import('../pages/Profile/Profile')));
 const Settings = withSuspense(lazy(() => import('../pages/Settings/Settings')));
+const Documents = withSuspense(lazy(() => import('../pages/Documents/Documents')));
+const Billing = withSuspense(lazy(() => import('../pages/Billing/Billing')));
 
 // Tax filing pages
 const FilingsListPage = withSuspense(lazy(() => import('../pages/TaxFiling/FilingsListPage')));
@@ -93,6 +95,22 @@ export const LAZY_NAVIGATION_ROUTE = [
     element: (
       <ProtectedRoute>
         <Settings />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/documents',
+    element: (
+      <ProtectedRoute>
+        <Documents />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/billing',
+    element: (
+      <ProtectedRoute>
+        <Billing />
       </ProtectedRoute>
     )
   },

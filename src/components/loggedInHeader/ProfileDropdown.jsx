@@ -5,6 +5,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
+import FolderIcon from '@mui/icons-material/Folder';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
 import { selectAccount } from '../../store/slices/accountSlice';
@@ -28,6 +30,12 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
         break;
       case 'profile':
         navigate('/profile');
+        break;
+      case 'documents':
+        navigate('/documents');
+        break;
+      case 'billing':
+        navigate('/billing');
         break;
       case 'settings':
         navigate('/settings');
@@ -84,6 +92,20 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
           <PersonIcon sx={{ fontSize: 20 }} />
         </ListItemIcon>
         <ListItemText>{t('Profile')}</ListItemText>
+      </MenuItem>
+
+      <MenuItem onClick={() => handleMenuClick('documents')}>
+        <ListItemIcon sx={{ minWidth: '28px!important' }}>
+          <FolderIcon sx={{ fontSize: 20 }} />
+        </ListItemIcon>
+        <ListItemText>{t('Documents')}</ListItemText>
+      </MenuItem>
+
+      <MenuItem onClick={() => handleMenuClick('billing')}>
+        <ListItemIcon sx={{ minWidth: '28px!important' }}>
+          <ReceiptIcon sx={{ fontSize: 20 }} />
+        </ListItemIcon>
+        <ListItemText>{t('Billing')}</ListItemText>
       </MenuItem>
 
       <MenuItem onClick={() => handleMenuClick('settings')}>

@@ -15,8 +15,7 @@ import {
   Alert
 } from '@mui/material';
 import {
-  Lock as LockIcon,
-  Delete as DeleteIcon
+  Lock as LockIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -26,7 +25,6 @@ import { TwoFactorSettings } from '../../../components/TwoFactor';
 const SecuritySection = () => {
   const { t } = useTranslation();
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Create validation schema with current translations
   const validationSchema = useMemo(() => createPasswordChangeSchema(t), [t]);
@@ -57,19 +55,6 @@ const SecuritySection = () => {
 
   const handleSavePassword = () => {
     passwordFormik.handleSubmit();
-  };
-
-  const handleDeleteAccount = () => {
-    setDeleteDialogOpen(true);
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setDeleteDialogOpen(false);
-  };
-
-  const handleConfirmDelete = () => {
-    // TODO: Implement account deletion logic
-    setDeleteDialogOpen(false);
   };
 
   return (
@@ -105,30 +90,6 @@ const SecuritySection = () => {
 
           {/* Two-Factor Authentication Section */}
           <TwoFactorSettings />
-
-          <Divider sx={{ my: 3 }} />
-
-          {/* Delete Account Section */}
-          <Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-              <Box>
-                <Typography variant="subtitle1" fontWeight={600} color="error">
-                  {t('Delete Account')}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {t('Permanently delete your account and all data')}
-                </Typography>
-              </Box>
-              <Button
-                startIcon={<DeleteIcon />}
-                variant="outlined"
-                color="error"
-                onClick={handleDeleteAccount}
-              >
-                {t('Delete Account')}
-              </Button>
-            </Box>
-          </Box>
         </CardContent>
       </Card>
 
@@ -174,31 +135,6 @@ const SecuritySection = () => {
             disabled={!passwordFormik.isValid || passwordFormik.isSubmitting}
           >
             {t('Save')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Delete Account Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={handleCloseDeleteDialog} maxWidth="sm" fullWidth>
-        <DialogTitle color="error">{t('Delete Account')}</DialogTitle>
-        <DialogContent>
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {t('This action cannot be undone')}
-          </Alert>
-          <DialogContentText>
-            {t('Are you sure you want to delete your account? All your tax filings, documents, and personal data will be permanently deleted.')}
-          </DialogContentText>
-          <TextField
-            fullWidth
-            label={t('Type DELETE to confirm')}
-            variant="outlined"
-            sx={{ mt: 2 }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>{t('Cancel')}</Button>
-          <Button onClick={handleConfirmDelete} variant="contained" color="error">
-            {t('Delete My Account')}
           </Button>
         </DialogActions>
       </Dialog>

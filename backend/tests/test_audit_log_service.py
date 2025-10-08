@@ -365,6 +365,7 @@ class TestAuditLogService:
             user_id=test_user_id,
             filing_id=123,
             tax_year=2024,
+            canton="ZH",
             ip="192.168.1.1",
             user_agent="Mozilla/5.0",
         )

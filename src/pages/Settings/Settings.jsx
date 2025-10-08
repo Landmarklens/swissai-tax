@@ -15,9 +15,6 @@ import {
   Home as HomeIcon,
   NavigateNext as NavigateNextIcon,
   Settings as SettingsIcon,
-  Notifications as NotificationsIcon,
-  Folder as FolderIcon,
-  Receipt as ReceiptIcon,
   Security as SecurityIcon,
   History as HistoryIcon,
   PrivacyTip as PrivacyIcon
@@ -25,8 +22,6 @@ import {
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import PreferencesTab from './components/PreferencesTab';
-import DocumentManagementSection from './components/DocumentManagementSection';
-import BillingTab from './components/BillingTab';
 import { TwoFactorSettings } from '../../components/TwoFactor';
 import AuditLogsTab from './components/AuditLogsTab';
 import AccountDeletionSection from './components/AccountDeletionSection';
@@ -87,16 +82,6 @@ const Settings = () => {
               label={t('Security')}
             />
             <Tab
-              icon={<FolderIcon />}
-              iconPosition="start"
-              label={t('Documents')}
-            />
-            <Tab
-              icon={<ReceiptIcon />}
-              iconPosition="start"
-              label={t('Billing')}
-            />
-            <Tab
               icon={<HistoryIcon />}
               iconPosition="start"
               label={t('Activity Log')}
@@ -123,28 +108,12 @@ const Settings = () => {
         {activeTab === 2 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <DocumentManagementSection />
-            </Grid>
-          </Grid>
-        )}
-
-        {activeTab === 3 && (
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <BillingTab />
-            </Grid>
-          </Grid>
-        )}
-
-        {activeTab === 4 && (
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
               <AuditLogsTab />
             </Grid>
           </Grid>
         )}
 
-        {activeTab === 5 && (
+        {activeTab === 3 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <DataExportSection />

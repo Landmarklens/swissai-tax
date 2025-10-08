@@ -254,6 +254,7 @@ const DataExportSection = () => {
                         )}
                       </Box>
                     }
+                    primaryTypographyProps={{ component: 'div' }}
                     secondary={
                       <Box mt={0.5}>
                         <Typography variant="caption" color="text.secondary" display="block">
@@ -269,6 +270,7 @@ const DataExportSection = () => {
                         )}
                       </Box>
                     }
+                    secondaryTypographyProps={{ component: 'div' }}
                   />
 
                   {exportItem.status === 'completed' && exportItem.file_url && (

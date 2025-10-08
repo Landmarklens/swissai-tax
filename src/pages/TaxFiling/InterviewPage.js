@@ -20,7 +20,7 @@ import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
 import TaxEstimateSidebar from './components/TaxEstimateSidebar';
 import { api } from '../../services/api';
-import LoggedInHeader from '../../components/loggedInHeader/loggedInHeader';
+import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 const InterviewPage = () => {
@@ -275,7 +275,7 @@ const InterviewPage = () => {
 
   return (
     <>
-      <LoggedInHeader />
+      <Header />
       <Container maxWidth="xl" sx={{ py: 4 }}>
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>

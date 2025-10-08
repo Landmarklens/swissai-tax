@@ -194,7 +194,7 @@ const AccountDeletionSection = () => {
 
           <Divider sx={{ my: 3 }} />
 
-          {!deletionStatus || deletionStatus.status === 'cancelled' ? (
+          {!deletionStatus || !deletionStatus.has_pending_deletion || deletionStatus.status === 'cancelled' ? (
             <Button
               variant="contained"
               color="error"

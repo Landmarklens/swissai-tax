@@ -1,34 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Container,
   Typography,
   Box,
   Breadcrumbs,
   Link as MuiLink,
-  Tabs,
-  Tab,
-  Paper
+  Grid
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Home as HomeIcon,
-  NavigateNext as NavigateNextIcon,
-  Person as PersonIcon
+  NavigateNext as NavigateNextIcon
 } from '@mui/icons-material';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
-import PersonalInfoSection from './components/PersonalInfoSection';
-import SecuritySection from './components/SecuritySection';
+import BillingTab from '../../pages/Settings/components/BillingTab';
 
-const Profile = () => {
+const Billing = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState(0);
-
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -50,35 +40,25 @@ const Profile = () => {
             <HomeIcon fontSize="small" />
             {t('Dashboard')}
           </MuiLink>
-          <Typography color="text.primary">{t('Profile')}</Typography>
+          <Typography color="text.primary">{t('Billing')}</Typography>
         </Breadcrumbs>
 
         {/* Page Header */}
         <Box mb={4}>
           <Typography variant="h3" gutterBottom fontWeight={700}>
-            {t('My Profile')}
+            {t('Billing')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {t('Manage your personal information and security settings')}
+            {t('Manage your subscription and billing information')}
           </Typography>
         </Box>
 
-        {/* Tabs */}
-        <Paper sx={{ mb: 3 }}>
-          <Tabs value={activeTab} onChange={handleTabChange} variant="fullWidth">
-            <Tab icon={<PersonIcon />} label={t('Personal Info')} iconPosition="start" />
-          </Tabs>
-        </Paper>
-
-        {/* Tab Content */}
-        <Box>
-          {activeTab === 0 && (
-            <Box display="flex" flexDirection="column" gap={3}>
-              <PersonalInfoSection />
-              <SecuritySection />
-            </Box>
-          )}
-        </Box>
+        {/* Billing Section */}
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <BillingTab />
+          </Grid>
+        </Grid>
       </Container>
 
       <Footer />
@@ -86,4 +66,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Billing;

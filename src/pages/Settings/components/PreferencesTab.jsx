@@ -207,7 +207,11 @@ const PreferencesTab = () => {
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       {error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
-      {success && <Alert severity="success">{t('Settings saved automatically')}</Alert>}
+      {success && (
+        <Alert severity="success" sx={{ '& .MuiAlert-message': { color: '#000' } }}>
+          {t('Settings saved automatically')}
+        </Alert>
+      )}
       {saving && (
         <Alert severity="info" icon={<CircularProgress size={20} />}>
           {t('Saving...')}

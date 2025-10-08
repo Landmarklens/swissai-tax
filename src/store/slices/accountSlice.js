@@ -78,6 +78,8 @@ const accountSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.data = action.payload;
+        // Save user to localStorage so isAuthenticated() can check it
+        authService.setCurrentUser(action.payload);
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.isLoading = false;

@@ -231,7 +231,7 @@ const VideoCarousel = () => {
                         height: 0,
                         borderStyle: 'solid',
                         borderWidth: '20px 0 20px 35px',
-                        borderColor: 'transparent transparent transparent #3f63ec',
+                        borderColor: 'transparent transparent transparent #DC0018',
                         marginLeft: '8px'
                       }
                     }}

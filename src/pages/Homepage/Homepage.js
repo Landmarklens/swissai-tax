@@ -378,16 +378,18 @@ const Homepage = () => {
           </Typography>
           <Grid container spacing={4}>
             {steps.map((step, index) => (
-              <Grid item xs={12} md={4} key={index}>
+              <Grid item xs={12} md={4} key={index} sx={{ display: 'flex' }}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
+                  style={{ width: '100%', display: 'flex' }}
                 >
                   <Card
                     sx={{
                       p: 4,
                       height: '100%',
+                      width: '100%',
                       textAlign: 'center',
                       position: 'relative',
                       '&:hover': {

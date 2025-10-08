@@ -116,17 +116,17 @@ class AuditLogService:
         elif 'opera' in user_agent_lower or 'opr' in user_agent_lower:
             device_info["browser"] = "Opera"
 
-        # Detect OS
-        if 'windows' in user_agent_lower:
+        # Detect OS (check more specific patterns first)
+        if 'android' in user_agent_lower:
+            device_info["os"] = "Android"
+        elif 'iphone' in user_agent_lower or 'ipad' in user_agent_lower:
+            device_info["os"] = "iOS"
+        elif 'windows' in user_agent_lower:
             device_info["os"] = "Windows"
         elif 'mac os' in user_agent_lower or 'macos' in user_agent_lower:
             device_info["os"] = "macOS"
         elif 'linux' in user_agent_lower:
             device_info["os"] = "Linux"
-        elif 'android' in user_agent_lower:
-            device_info["os"] = "Android"
-        elif 'ios' in user_agent_lower or 'iphone' in user_agent_lower or 'ipad' in user_agent_lower:
-            device_info["os"] = "iOS"
 
         return device_info
 

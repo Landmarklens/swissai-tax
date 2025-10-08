@@ -31,6 +31,10 @@ class Question:
         self.triggers_loop = data.get('triggers_loop')
         self.loop = data.get('loop', False)
         self.fields = data.get('fields', [])
+        # New attributes for enhanced functionality
+        self.format = data.get('format')  # e.g., 'postal_code', 'count'
+        self.auto_lookup = data.get('auto_lookup', False)  # For postal code auto-detection
+        self.help_text = data.get('help_text', {})
 
     def get_next_question(self, answer: Any) -> Optional[str]:
         """Determine next question based on answer"""

@@ -194,23 +194,23 @@ const AccountDeletionSection = () => {
 
           <Divider sx={{ my: 3 }} />
 
-          {!deletionStatus || !deletionStatus.has_pending_deletion || deletionStatus.status === 'cancelled' ? (
-            <Button
-              variant="contained"
-              color="error"
-              startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <DeleteIcon />}
-              onClick={handleRequestDeletion}
-              disabled={loading}
-              fullWidth
-            >
-              {loading ? t('Processing...') : t('Delete My Account')}
-            </Button>
-          ) : deletionStatus.status === 'pending' ? (
-            <Alert severity="info">
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <DeleteIcon />}
+            onClick={handleRequestDeletion}
+            disabled={loading || (deletionStatus && deletionStatus.has_pending_deletion && deletionStatus.status !== 'cancelled')}
+            fullWidth
+          >
+            {loading ? t('Processing...') : t('Delete My Account')}
+          </Button>
+
+          {deletionStatus && deletionStatus.status === 'pending' && (
+            <Alert severity="info" sx={{ mt: 2 }}>
               <AlertTitle>Verification Pending</AlertTitle>
               Please check your email for the verification code. The code expires in 15 minutes.
             </Alert>
-          ) : null}
+          )}
         </CardContent>
       </Card>
 

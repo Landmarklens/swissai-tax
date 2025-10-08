@@ -116,10 +116,11 @@ const InterviewPage = () => {
   }, [hasUnsavedChanges, session, autoSave]);
 
   const updateTaxCalculation = useCallback(async (updatedAnswers) => {
-    if (!session) return;
+    if (!session || !filingSessionId) return;
 
     try {
       const response = await api.post(`/api/interview/${session}/calculate`, {
+        filing_session_id: filingSessionId,
         answers: updatedAnswers
       });
       setTaxCalculation(response.data.calculation);
@@ -128,7 +129,7 @@ const InterviewPage = () => {
         console.error('Tax calculation failed:', err);
       }
     }
-  }, [session]);
+  }, [session, filingSessionId]);
 
   const startInterview = async () => {
     try {
@@ -277,38 +278,38 @@ const InterviewPage = () => {
     <>
       <Header />
       <Container maxWidth="xl" sx={{ py: 4 }}>
-        {/* Header */}
+        {/* Page Title and Save Status */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4" fontWeight={700}>
-          Swiss Tax Filing 2024
-        </Typography>
-        <Box display="flex" gap={2} alignItems="center">
-          {saving && (
-            <Chip
-              icon={<SaveIcon />}
-              label="Saving..."
-              size="small"
-              color="warning"
-            />
-          )}
-          {lastSaved && !saving && (
-            <Chip
-              icon={<CheckCircleIcon />}
-              label={`Saved ${Math.floor((new Date() - lastSaved) / 60000)}m ago`}
-              size="small"
-              color="success"
-            />
-          )}
-          <Button
-            variant="outlined"
-            startIcon={<SaveIcon />}
-            onClick={autoSave}
-            disabled={saving || !hasUnsavedChanges}
-          >
-            Save Draft
-          </Button>
+          <Typography variant="h4" fontWeight={700}>
+            Swiss Tax Filing 2024
+          </Typography>
+          <Box display="flex" gap={2} alignItems="center">
+            {saving && (
+              <Chip
+                icon={<SaveIcon />}
+                label="Saving..."
+                size="small"
+                color="warning"
+              />
+            )}
+            {lastSaved && !saving && (
+              <Chip
+                icon={<CheckCircleIcon />}
+                label={`Saved ${Math.floor((new Date() - lastSaved) / 60000)}m ago`}
+                size="small"
+                color="success"
+              />
+            )}
+            <Button
+              variant="outlined"
+              startIcon={<SaveIcon />}
+              onClick={autoSave}
+              disabled={saving || !hasUnsavedChanges}
+            >
+              Save Draft
+            </Button>
+          </Box>
         </Box>
-      </Box>
 
       <Grid container spacing={4}>
         {/* Main Content */}

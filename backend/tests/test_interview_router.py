@@ -6,8 +6,47 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
+from fastapi.testclient import TestClient
 
+from main import app
 from models.tax_filing_session import FilingStatus, TaxFilingSession
+
+
+@pytest.fixture
+def mock_user():
+    """Mock user for authentication"""
+    user = MagicMock()
+    user.id = 'user-123'
+    user.email = 'test@example.com'
+    return user
+
+
+@pytest.fixture
+def mock_db_session():
+    """Mock database session"""
+    return MagicMock()
+
+
+@pytest.fixture
+def client(mock_user, mock_db_session):
+    """Create test client with mocked dependencies"""
+    from core.security import get_current_user
+    from db.session import get_db
+
+    def override_get_current_user():
+        return mock_user
+
+    def override_get_db():
+        yield mock_db_session
+
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    app.dependency_overrides[get_db] = override_get_db
+
+    test_client = TestClient(app)
+    yield test_client
+
+    # Clean up overrides
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture
@@ -34,12 +73,12 @@ def mock_interview_service():
 class TestInterviewRouter:
     """Test suite for interview router endpoints"""
 
-    def test_start_interview_without_filing_session_id(self, client, mock_auth, mock_db, mock_interview_service, mock_filing_session):
+    def test_start_interview_without_filing_session_id(self, client, mock_db_session, mock_interview_service, mock_filing_session):
         """Test POST /api/interview/start - auto-creates filing session"""
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_filing_session
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
 
-        with patch('routers.interview.TaxFilingService.create_filing') as mock_create:
+        with patch('services.tax_filing_service.TaxFilingService.create_filing') as mock_create:
             mock_create.return_value = mock_filing_session
 
             mock_interview_service.create_session.return_value = {
@@ -84,10 +123,10 @@ class TestInterviewRouter:
             assert call_kwargs['canton'] == 'ZH'
             assert call_kwargs['is_primary'] is True
 
-    def test_start_interview_with_existing_filing_session_id(self, client, mock_auth, mock_db, mock_interview_service, mock_filing_session):
+    def test_start_interview_with_existing_filing_session_id(self, client, mock_db_session, mock_interview_service, mock_filing_session):
         """Test POST /api/interview/start - with existing filing session"""
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_filing_session
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
 
         mock_interview_service.create_session.return_value = {
             'session_id': 'interview-session-789',
@@ -119,12 +158,12 @@ class TestInterviewRouter:
         assert data['filing_session_id'] == 'filing-session-123'
 
         # Verify filing session was NOT created (used existing)
-        mock_db.query.assert_called()
+        mock_db_session.query.assert_called()
 
-    def test_start_interview_filing_session_not_found(self, client, mock_auth, mock_db, mock_interview_service):
+    def test_start_interview_filing_session_not_found(self, client, mock_db_session, mock_interview_service):
         """Test POST /api/interview/start - filing session not found"""
         # Setup - filing session doesn't exist
-        mock_db.query.return_value.filter.return_value.first.return_value = None
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None
 
         # Execute
         response = client.post(
@@ -141,10 +180,10 @@ class TestInterviewRouter:
         assert response.status_code == 404
         assert 'Filing session not found' in response.json()['detail']
 
-    def test_submit_answer_success(self, client, mock_auth, mock_db, mock_interview_service, mock_filing_session):
+    def test_submit_answer_success(self, client, mock_db_session, mock_interview_service, mock_filing_session):
         """Test POST /api/interview/{session_id}/answer - successful submission"""
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_filing_session
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
 
         mock_interview_service.submit_answer.return_value = {
             'valid': True,
@@ -183,10 +222,10 @@ class TestInterviewRouter:
             answer='married'
         )
 
-    def test_submit_answer_invalid(self, client, mock_auth, mock_db, mock_interview_service, mock_filing_session):
+    def test_submit_answer_invalid(self, client, mock_db_session, mock_interview_service, mock_filing_session):
         """Test POST /api/interview/{session_id}/answer - invalid answer"""
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_filing_session
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
 
         mock_interview_service.submit_answer.return_value = {
             'valid': False,
@@ -210,10 +249,10 @@ class TestInterviewRouter:
         assert data['valid'] is False
         assert data['error'] == 'Invalid answer format'
 
-    def test_submit_answer_complete_interview(self, client, mock_auth, mock_db, mock_interview_service, mock_filing_session):
+    def test_submit_answer_complete_interview(self, client, mock_db_session, mock_interview_service, mock_filing_session):
         """Test POST /api/interview/{session_id}/answer - interview completion"""
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_filing_session
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
 
         with patch('routers.interview.generate_insights_for_filing') as mock_insights:
             mock_insights.return_value = []
@@ -250,10 +289,10 @@ class TestInterviewRouter:
             assert mock_filing_session.status == FilingStatus.COMPLETED
             assert mock_filing_session.completion_percentage == 100
 
-    def test_submit_answer_filing_session_not_found(self, client, mock_auth, mock_db, mock_interview_service):
+    def test_submit_answer_filing_session_not_found(self, client, mock_db_session, mock_interview_service):
         """Test POST /api/interview/{session_id}/answer - filing session not found"""
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = None
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None
 
         # Execute
         response = client.post(
@@ -270,7 +309,7 @@ class TestInterviewRouter:
         assert response.status_code == 404
         assert 'Filing session not found' in response.json()['detail']
 
-    def test_get_session_success(self, client, mock_auth, mock_db, mock_interview_service):
+    def test_get_session_success(self, client, mock_db_session, mock_interview_service):
         """Test GET /api/interview/{session_id}"""
         # Setup
         mock_interview_service.get_session.return_value = {
@@ -293,7 +332,7 @@ class TestInterviewRouter:
         assert data['status'] == 'in_progress'
         assert data['progress'] == 35
 
-    def test_get_session_not_found(self, client, mock_auth, mock_db, mock_interview_service):
+    def test_get_session_not_found(self, client, mock_db_session, mock_interview_service):
         """Test GET /api/interview/{session_id} - session not found"""
         # Setup
         mock_interview_service.get_session.return_value = None
@@ -309,7 +348,7 @@ class TestInterviewRouter:
         assert 'Session' in response.json()['detail']
         assert 'not found' in response.json()['detail']
 
-    def test_save_session_success(self, client, mock_auth, mock_db, mock_interview_service):
+    def test_save_session_success(self, client, mock_db_session, mock_interview_service):
         """Test POST /api/interview/{session_id}/save"""
         # Setup
         mock_interview_service.save_session.return_value = {
@@ -333,7 +372,7 @@ class TestInterviewRouter:
         assert data['success'] is True
         assert 'saved_at' in data
 
-    def test_start_interview_invalid_tax_year(self, client, mock_auth, mock_db):
+    def test_start_interview_invalid_tax_year(self, client, mock_db_session):
         """Test POST /api/interview/start - invalid tax year"""
         # Execute
         response = client.post(
@@ -348,7 +387,7 @@ class TestInterviewRouter:
         # Assert
         assert response.status_code == 422  # Validation error
 
-    def test_start_interview_invalid_language(self, client, mock_auth, mock_db):
+    def test_start_interview_invalid_language(self, client, mock_db_session):
         """Test POST /api/interview/start - invalid language"""
         # Execute
         response = client.post(
@@ -367,17 +406,17 @@ class TestInterviewRouter:
 class TestSaveAnswerToDB:
     """Test suite for save_answer_to_db helper function"""
 
-    def test_save_new_answer(self, mock_db):
+    def test_save_new_answer(self, mock_db_session):
         """Test saving a new answer to database"""
         from models.tax_answer import TaxAnswer
         from routers.interview import save_answer_to_db
 
         # Setup
-        mock_db.query.return_value.filter.return_value.first.return_value = None
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None
 
         # Execute
         save_answer_to_db(
-            db=mock_db,
+            db=mock_db_session,
             filing_session_id='filing-123',
             question_id='Q01',
             answer_value='married',
@@ -386,20 +425,20 @@ class TestSaveAnswerToDB:
         )
 
         # Assert
-        mock_db.add.assert_called_once()
-        mock_db.commit.assert_called_once()
+        mock_db_session.add.assert_called_once()
+        mock_db_session.commit.assert_called_once()
 
-    def test_update_existing_answer(self, mock_db):
+    def test_update_existing_answer(self, mock_db_session):
         """Test updating an existing answer in database"""
         from routers.interview import save_answer_to_db
 
         # Setup - existing answer
         existing_answer = MagicMock()
-        mock_db.query.return_value.filter.return_value.first.return_value = existing_answer
+        mock_db_session.query.return_value.filter.return_value.first.return_value = existing_answer
 
         # Execute
         save_answer_to_db(
-            db=mock_db,
+            db=mock_db_session,
             filing_session_id='filing-123',
             question_id='Q01',
             answer_value='single',
@@ -409,5 +448,5 @@ class TestSaveAnswerToDB:
 
         # Assert
         assert existing_answer.answer_value == 'single'
-        mock_db.commit.assert_called_once()
-        mock_db.add.assert_not_called()  # Should update, not add new
+        mock_db_session.commit.assert_called_once()
+        mock_db_session.add.assert_not_called()  # Should update, not add new

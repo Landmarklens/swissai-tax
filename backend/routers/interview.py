@@ -431,9 +431,15 @@ async def save_session(
         )
 
 
+class CalculateTaxRequest(BaseModel):
+    filing_session_id: Optional[str] = Field(None, description="ID of the TaxFilingSession to calculate taxes for")
+    answers: Optional[dict] = Field(None, description="Current answers (optional)")
+
+
 @router.post("/{session_id}/calculate")
 async def calculate_taxes_for_session(
     session_id: str,
+    request: CalculateTaxRequest,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -449,21 +455,38 @@ async def calculate_taxes_for_session(
 
         tax_service = TaxCalculationService()
 
-        # Get session to retrieve filing_session_id
-        from services.interview_service import interview_service
-        session_data = interview_service.get_session(session_id)
+        # Get filing_session_id from request body first, then fall back to session data
+        filing_session_id = request.filing_session_id
 
-        if not session_data:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Session {session_id} not found"
-            )
+        if not filing_session_id:
+            # Try to get from session data as fallback
+            from services.interview_service import interview_service
+            session_data = interview_service.get_session(session_id)
 
-        filing_session_id = session_data.get("filing_session_id")
+            if not session_data:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Session {session_id} not found"
+                )
+
+            filing_session_id = session_data.get("filing_session_id")
+
         if not filing_session_id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No filing session associated with this interview"
+                detail="No filing session ID provided or associated with this interview"
+            )
+
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_session_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
             )
 
         # Calculate taxes

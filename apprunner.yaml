@@ -35,6 +35,8 @@ run:
       value: "IXq3IC0Uw6StMkBhb4mb"
     - name: DATABASE_SCHEMA
       value: "swisstax"
+    - name: DATABASE_URL
+      value: "postgresql://webscrapinguser:IXq3IC0Uw6StMkBhb4mb@webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com:5432/swissai_tax"
     - name: S3_BUCKET_NAME
       value: "swissai-tax-documents-1758721021"
     - name: ENCRYPTION_KEY_CREATED_AT

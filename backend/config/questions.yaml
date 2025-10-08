@@ -87,71 +87,59 @@ questions:
   Q02:
     id: "Q02"
     text:
-      en: "Canton of residence"
-      de: "Wohnsitzkanton"
-      fr: "Canton de résidence"
-    type: "dropdown"
-    options:
-      - value: "ZH"
-        label:
-          en: "Zurich"
-          de: "Zürich"
-          fr: "Zurich"
-      - value: "BE"
-        label:
-          en: "Bern"
-          de: "Bern"
-          fr: "Berne"
-      - value: "LU"
-        label:
-          en: "Lucerne"
-          de: "Luzern"
-          fr: "Lucerne"
-      - value: "UR"
-        label:
-          en: "Uri"
-          de: "Uri"
-          fr: "Uri"
-      - value: "SZ"
-        label:
-          en: "Schwyz"
-          de: "Schwyz"
-          fr: "Schwyz"
-      - value: "OW"
-        label:
-          en: "Obwalden"
-          de: "Obwalden"
-          fr: "Obwald"
-      - value: "NW"
-        label:
-          en: "Nidwalden"
-          de: "Nidwalden"
-          fr: "Nidwald"
-      - value: "GL"
-        label:
-          en: "Glarus"
-          de: "Glarus"
-          fr: "Glaris"
-      - value: "ZG"
-        label:
-          en: "Zug"
-          de: "Zug"
-          fr: "Zoug"
+      en: "What was your postal code of residence on 31 Dec 2024?"
+      de: "Was war Ihre Postleitzahl des Wohnsitzes am 31.12.2024?"
+      fr: "Quel était votre code postal de résidence au 31 déc 2024?"
+    type: "text"
+    format: "postal_code"
+    validation:
+      pattern: "^\\d{4}$"
+      min: 1000
+      max: 9999
+    help_text:
+      en: "Enter your 4-digit Swiss postal code where you lived at the end of 2024"
+      de: "Geben Sie Ihre 4-stellige Schweizer Postleitzahl ein, wo Sie Ende 2024 wohnten"
+      fr: "Entrez votre code postal suisse à 4 chiffres où vous viviez fin 2024"
     next: "Q02a"
     required: true
+    auto_lookup: true
 
   Q02a:
     id: "Q02a"
     text:
-      en: "Municipality"
-      de: "Gemeinde"
-      fr: "Commune"
+      en: "Did you have income or assets in a canton other than your residence?"
+      de: "Hatten Sie Einkommen oder Vermögen in einem anderen Kanton als Ihrem Wohnsitzkanton?"
+      fr: "Avez-vous eu des revenus ou des actifs dans un canton autre que votre résidence?"
+    type: "yes_no"
+    help_text:
+      en: "Select yes if you worked in a different canton or owned property outside your residence canton"
+      de: "Wählen Sie Ja, wenn Sie in einem anderen Kanton gearbeitet oder Eigentum außerhalb Ihres Wohnsitzkantons besessen haben"
+      fr: "Sélectionnez oui si vous avez travaillé dans un autre canton ou possédé des biens en dehors de votre canton de résidence"
+    branching:
+      yes: "Q02b"
+      no: "Q03"
+    required: true
+
+  Q02b:
+    id: "Q02b"
+    text:
+      en: "Postal code of the other canton"
+      de: "Postleitzahl des anderen Kantons"
+      fr: "Code postal de l'autre canton"
     type: "text"
+    format: "postal_code"
     validation:
-      minLength: 2
-      maxLength: 100
+      pattern: "^\\d{4}$"
+      min: 1000
+      max: 9999
+    help_text:
+      en: "Enter the postal code where you worked or had assets"
+      de: "Geben Sie die Postleitzahl ein, wo Sie gearbeitet oder Vermögen hatten"
+      fr: "Entrez le code postal où vous avez travaillé ou eu des actifs"
     next: "Q03"
     required: true
+    auto_lookup: true
+    parent: "Q02a"
 
   Q03:
     id: "Q03"
@@ -177,7 +165,7 @@ questions:
       min: 1
       max: 20
     triggers_loop: "Q03b"
-    next: "Q04"
+    next: "Q03c"
     required: true
     parent: "Q03"
 
@@ -211,6 +199,24 @@ questions:
           fr: "En formation?"
         type: "yes_no"
         required: true
+    parent: "Q03a"
+
+  Q03c:
+    id: "Q03c"
+    text:
+      en: "Annual childcare costs (daycare, nanny, etc.)"
+      de: "Jährliche Kinderbetreuungskosten (Kita, Tagesmutter, etc.)"
+      fr: "Frais de garde d'enfants annuels (crèche, nourrice, etc.)"
+    type: "currency"
+    validation:
+      min: 0
+      max: 25500  # 2024 federal limit
+    help_text:
+      en: "Third-party childcare costs up to CHF 25,500 are deductible (2024 limit: CHF 25,800 from 2025)"
+      de: "Fremdbetreuungskosten bis CHF 25'500 sind abzugsfähig (2024 Grenze; ab 2025: CHF 25'800)"
+      fr: "Les frais de garde par des tiers jusqu'à CHF 25'500 sont déductibles (limite 2024; dès 2025: CHF 25'800)"
+    next: "Q04"
+    required: false
     parent: "Q03a"
 
   Q04:
@@ -254,7 +260,42 @@ questions:
           min: 1
           max: 100
         required: true
+    next: "Q04b"
+    parent: "Q04"
+
+  Q04b:
+    id: "Q04b"
+    text:
+      en: "Annual commuting expenses (public transport passes/tickets)"
+      de: "Jährliche Pendlerkosten (ÖV-Abonnemente/Billette)"
+      fr: "Frais de déplacement annuels (abonnements/billets TP)"
+    type: "currency"
+    validation:
+      min: 0
+      max: 3200  # 2024 federal limit
+    help_text:
+      en: "Public transport costs for commuting to work up to CHF 3,200 are deductible"
+      de: "Kosten für öffentliche Verkehrsmittel zur Arbeit bis CHF 3'200 sind abzugsfähig"
+      fr: "Les frais de transport public pour le trajet domicile-travail jusqu'à CHF 3'200 sont déductibles"
+    next: "Q04c"
+    required: false
+    parent: "Q04"
+
+  Q04c:
+    id: "Q04c"
+    text:
+      en: "Professional expenses (tools, training, work materials, etc.)"
+      de: "Berufskosten (Werkzeuge, Ausbildung, Arbeitsmaterialien, etc.)"
+      fr: "Frais professionnels (outils, formation, matériel de travail, etc.)"
+    type: "currency"
+    validation:
+      min: 0
+    help_text:
+      en: "Work-related expenses such as professional tools, continuing education, work clothing, etc."
+      de: "Berufsbedingte Ausgaben wie Berufswerkzeuge, Weiterbildung, Berufskleidung, etc."
+      fr: "Dépenses liées au travail telles qu'outils professionnels, formation continue, vêtements de travail, etc."
     next: "Q05"
+    required: false
     parent: "Q04"
 
   Q05:
@@ -386,6 +427,19 @@ questions:
           fr: "Montant de l'hypothèque (CHF)"
         type: "currency"
         required: false
+      - id: "mortgage_interest"
+        text:
+          en: "Annual mortgage interest paid (CHF)"
+          de: "Jährlich gezahlte Hypothekarzinsen (CHF)"
+          fr: "Intérêts hypothécaires annuels payés (CHF)"
+        type: "currency"
+        validation:
+          min: 0
+        help_text:
+          en: "Mortgage interest payments are fully deductible from taxable income"
+          de: "Hypothekarzinszahlungen sind vollständig vom steuerbaren Einkommen abzugsfähig"
+          fr: "Les paiements d'intérêts hypothécaires sont entièrement déductibles du revenu imposable"
+        required: false
     parent: "Q09a"
 
   Q10:
@@ -457,7 +511,7 @@ questions:
     type: "yes_no"
     branching:
       yes: "Q13a"
-      no: "Q14"
+      no: "Q13b"
     required: true
 
   Q13a:
@@ -469,9 +523,25 @@ questions:
     type: "currency"
     validation:
       min: 2000
-    next: "Q14"
+    next: "Q13b"
     required: true
     parent: "Q13"
+
+  Q13b:
+    id: "Q13b"
+    text:
+      en: "Total annual health insurance premiums paid"
+      de: "Total gezahlte Krankenkassenprämien pro Jahr"
+      fr: "Total des primes d'assurance maladie payées par an"
+    type: "currency"
+    validation:
+      min: 0
+    help_text:
+      en: "Health insurance premiums (basic and supplementary) are fully deductible. This is mandatory in Switzerland."
+      de: "Krankenkassenprämien (Grund- und Zusatzversicherung) sind vollständig abzugsfähig. Dies ist in der Schweiz obligatorisch."
+      fr: "Les primes d'assurance maladie (base et complémentaire) sont entièrement déductibles. Ceci est obligatoire en Suisse."
+    next: "Q14"
+    required: true
 
   Q14:
     id: "Q14"

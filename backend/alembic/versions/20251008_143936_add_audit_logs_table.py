@@ -21,13 +21,13 @@ def upgrade():
     # Check if table already exists
     conn = op.get_bind()
     inspector = sa.inspect(conn)
-    
-    if 'audit_logs' not in inspector.get_table_names():
+
+    if 'audit_logs' not in inspector.get_table_names(schema='swisstax'):
         # Create audit_logs table
         op.create_table(
             'audit_logs',
             sa.Column('id', sa.Integer(), nullable=False),
-            sa.Column('user_id', sa.Integer(), nullable=False),
+            sa.Column('user_id', UUID(as_uuid=True), nullable=False),
             sa.Column('event_type', sa.String(50), nullable=False),
             sa.Column('event_category', sa.String(50), nullable=False),
             sa.Column('description', sa.Text(), nullable=False),
@@ -38,15 +38,16 @@ def upgrade():
             sa.Column('status', sa.String(20), nullable=False, server_default='success'),
             sa.Column('created_at', sa.DateTime(), nullable=False, server_default=sa.text('CURRENT_TIMESTAMP')),
             sa.PrimaryKeyConstraint('id'),
-            sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE')
+            sa.ForeignKeyConstraint(['user_id'], ['swisstax.users.id'], ondelete='CASCADE'),
+            schema='swisstax'
         )
         
         # Create indexes
-        op.create_index('idx_audit_user_created', 'audit_logs', ['user_id', 'created_at'], postgresql_using='btree')
-        op.create_index('idx_audit_event_type', 'audit_logs', ['event_type'])
-        op.create_index('idx_audit_created_at', 'audit_logs', ['created_at'])
-        
-        print("✓ Created audit_logs table and indexes")
+        op.create_index('idx_audit_user_created', 'audit_logs', ['user_id', 'created_at'], schema='swisstax', postgresql_using='btree')
+        op.create_index('idx_audit_event_type', 'audit_logs', ['event_type'], schema='swisstax')
+        op.create_index('idx_audit_created_at', 'audit_logs', ['created_at'], schema='swisstax')
+
+        print("✓ Created audit_logs table and indexes in swisstax schema")
     else:
         print("⊙ Table audit_logs already exists, skipping creation")
 
@@ -55,12 +56,12 @@ def downgrade():
     # Check if table exists before dropping
     conn = op.get_bind()
     inspector = sa.inspect(conn)
-    
-    if 'audit_logs' in inspector.get_table_names():
-        op.drop_index('idx_audit_created_at', table_name='audit_logs')
-        op.drop_index('idx_audit_event_type', table_name='audit_logs')
-        op.drop_index('idx_audit_user_created', table_name='audit_logs')
-        op.drop_table('audit_logs')
-        print("✓ Dropped audit_logs table and indexes")
+
+    if 'audit_logs' in inspector.get_table_names(schema='swisstax'):
+        op.drop_index('idx_audit_created_at', table_name='audit_logs', schema='swisstax')
+        op.drop_index('idx_audit_event_type', table_name='audit_logs', schema='swisstax')
+        op.drop_index('idx_audit_user_created', table_name='audit_logs', schema='swisstax')
+        op.drop_table('audit_logs', schema='swisstax')
+        print("✓ Dropped audit_logs table and indexes from swisstax schema")
     else:
-        print("⊙ Table audit_logs does not exist, skipping drop")
+        print("⊙ Table audit_logs does not exist in swisstax schema, skipping drop")

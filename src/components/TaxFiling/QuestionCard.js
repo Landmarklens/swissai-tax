@@ -143,14 +143,23 @@ const QuestionCard = ({
         );
 
       case 'text':
+        // Handle postal code format with special validation
+        const isPostalCode = question.format === 'postal_code';
         return (
           <TextField
             fullWidth
-            multiline={question.id === 'Q02b'}
-            rows={question.id === 'Q02b' ? 2 : 1}
+            multiline={question.id === 'Q02b' && !isPostalCode}
+            rows={question.id === 'Q02b' && !isPostalCode ? 2 : 1}
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            placeholder={question.question_text}
+            placeholder={isPostalCode ? "Enter 4-digit postal code" : question.question_text}
+            inputProps={isPostalCode ? {
+              pattern: "\\d{4}",
+              maxLength: 4,
+              inputMode: "numeric"
+            } : {}}
+            helperText={isPostalCode && answer.length > 0 && answer.length !== 4 ? "Postal code must be exactly 4 digits" : ""}
+            error={isPostalCode && answer.length > 0 && answer.length !== 4}
           />
         );
 

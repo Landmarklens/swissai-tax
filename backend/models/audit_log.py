@@ -14,9 +14,13 @@ class AuditLog(Base):
     Audit log for tracking user activities and security events
     """
     __tablename__ = "audit_logs"
+    __table_args__ = (
+        Index('idx_audit_user_created', 'user_id', 'created_at'),
+        {'schema': 'swisstax'}
+    )
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("swisstax.users.id", ondelete="CASCADE"), nullable=False)
     event_type = Column(String(50), nullable=False, index=True)
     event_category = Column(String(50), nullable=False)
     description = Column(Text, nullable=False)
@@ -29,10 +33,6 @@ class AuditLog(Base):
 
     # Relationship to User (commented out - relationships temporarily disabled in User model)
     # user = relationship("User", back_populates="audit_logs")
-
-    __table_args__ = (
-        Index('idx_audit_user_created', 'user_id', 'created_at'),
-    )
 
     def __repr__(self):
         return f"<AuditLog(id={self.id}, user_id={self.user_id}, event={self.event_type}, status={self.status})>"

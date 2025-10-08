@@ -4,6 +4,8 @@ All models for the swisstax schema
 """
 
 from .base import Base
+from .data_export import DataExport
+from .deletion_request import DeletionRequest
 from .document import DocumentType, RequiredDocument
 from .filing import Filing
 from .interview import InterviewAnswer, Question
@@ -28,4 +30,6 @@ __all__ = [
     'Subscription',
     'Payment',
     'UserSettings',
+    'DeletionRequest',
+    'DataExport',
 ]

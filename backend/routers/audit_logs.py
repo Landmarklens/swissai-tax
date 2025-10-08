@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from datetime import datetime
+import logging
 
 from db.session import get_db
 from core.security import get_current_user
@@ -14,6 +15,7 @@ from schemas.audit_log import AuditLogListResponse, AuditLogResponse, EventCateg
 from services.audit_log_service import AuditLogService
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/", response_model=AuditLogListResponse)
@@ -59,7 +61,8 @@ async def get_my_audit_logs(
             has_more=total > (page * page_size)
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to retrieve audit logs: {str(e)}")
+        logger.error(f"Failed to retrieve audit logs for user {current_user.id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve audit logs")
 
 
 @router.get("/categories", response_model=List[EventCategoryResponse])
@@ -116,9 +119,10 @@ async def get_audit_log_stats(
         ).scalar()
 
         return {
-            "total_logs": total_logs,
-            "recent_activity_30_days": recent_count,
+            "total_logs": total_logs or 0,
+            "recent_activity_30_days": recent_count or 0,
             "by_category": {cat: count for cat, count in category_counts}
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
+        logger.error(f"Failed to get audit log stats for user {current_user.id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve audit log statistics")

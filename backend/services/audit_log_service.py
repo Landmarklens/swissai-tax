@@ -4,8 +4,9 @@ Handles creation and retrieval of audit logs for user activities
 """
 from sqlalchemy.orm import Session
 from models.audit_log import AuditLog
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any, List, Tuple, Union
 from datetime import datetime, timedelta
+from uuid import UUID
 import logging
 
 logger = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ class AuditLogService:
     @staticmethod
     def log_event(
         db: Session,
-        user_id: int,
+        user_id: Union[UUID, str],
         event_type: str,
         event_category: str,
         description: str,
@@ -132,7 +133,7 @@ class AuditLogService:
     @staticmethod
     def get_user_logs(
         db: Session,
-        user_id: int,
+        user_id: Union[UUID, str],
         limit: int = 50,
         offset: int = 0,
         event_category: Optional[str] = None,
@@ -187,7 +188,7 @@ class AuditLogService:
 
 
 # Convenience functions for common events
-def log_login_success(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_login_success(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log successful login"""
     return AuditLogService.log_event(
         db, user_id, "login_success", "authentication",
@@ -203,7 +204,7 @@ def log_login_failed(db: Session, email: str, ip: str, user_agent: str, reason: 
     return None  # Will implement this differently
 
 
-def log_logout(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_logout(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log user logout"""
     return AuditLogService.log_event(
         db, user_id, "logout", "authentication",
@@ -212,7 +213,7 @@ def log_logout(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[
     )
 
 
-def log_password_changed(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_password_changed(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log password change"""
     return AuditLogService.log_event(
         db, user_id, "password_changed", "security",
@@ -221,7 +222,7 @@ def log_password_changed(db: Session, user_id: int, ip: str, user_agent: str) ->
     )
 
 
-def log_2fa_enabled(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_2fa_enabled(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log 2FA enabled"""
     return AuditLogService.log_event(
         db, user_id, "2fa_enabled", "security",
@@ -230,7 +231,7 @@ def log_2fa_enabled(db: Session, user_id: int, ip: str, user_agent: str) -> Opti
     )
 
 
-def log_2fa_disabled(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_2fa_disabled(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log 2FA disabled"""
     return AuditLogService.log_event(
         db, user_id, "2fa_disabled", "security",
@@ -239,7 +240,7 @@ def log_2fa_disabled(db: Session, user_id: int, ip: str, user_agent: str) -> Opt
     )
 
 
-def log_tax_filing_submitted(db: Session, user_id: int, filing_id: int, tax_year: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_tax_filing_submitted(db: Session, user_id: Union[UUID, str], filing_id: int, tax_year: int, ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log tax filing submission"""
     return AuditLogService.log_event(
         db, user_id, "tax_filing_submitted", "data_modification",
@@ -248,7 +249,7 @@ def log_tax_filing_submitted(db: Session, user_id: int, filing_id: int, tax_year
     )
 
 
-def log_document_uploaded(db: Session, user_id: int, document_name: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_document_uploaded(db: Session, user_id: Union[UUID, str], document_name: str, ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log document upload"""
     return AuditLogService.log_event(
         db, user_id, "document_uploaded", "data_modification",
@@ -257,7 +258,7 @@ def log_document_uploaded(db: Session, user_id: int, document_name: str, ip: str
     )
 
 
-def log_document_downloaded(db: Session, user_id: int, document_name: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_document_downloaded(db: Session, user_id: Union[UUID, str], document_name: str, ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log document download"""
     return AuditLogService.log_event(
         db, user_id, "document_downloaded", "data_access",
@@ -266,7 +267,7 @@ def log_document_downloaded(db: Session, user_id: int, document_name: str, ip: s
     )
 
 
-def log_data_exported(db: Session, user_id: int, export_type: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_data_exported(db: Session, user_id: Union[UUID, str], export_type: str, ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log data export"""
     return AuditLogService.log_event(
         db, user_id, "data_exported", "data_access",
@@ -275,7 +276,7 @@ def log_data_exported(db: Session, user_id: int, export_type: str, ip: str, user
     )
 
 
-def log_profile_updated(db: Session, user_id: int, ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_profile_updated(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log profile update"""
     return AuditLogService.log_event(
         db, user_id, "profile_updated", "data_modification",

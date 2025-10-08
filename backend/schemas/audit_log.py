@@ -17,7 +17,7 @@ class AuditLogBase(BaseModel):
 class AuditLogResponse(AuditLogBase):
     """Schema for audit log response"""
     id: int
-    user_id: int
+    user_id: str  # UUID serialized as string
     ip_address: Optional[str] = None
     user_agent: Optional[str] = None
     device_info: Optional[Dict[str, Any]] = None

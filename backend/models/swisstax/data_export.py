@@ -4,7 +4,7 @@ Maps to swisstax.data_exports table
 Handles GDPR-compliant data portability
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, String, Text, text
 from sqlalchemy.dialects.postgresql import UUID
@@ -81,7 +81,7 @@ class DataExport(SwissTaxBase, Base):
         """Check if download link has expired"""
         if not self.expires_at:
             return True
-        return datetime.utcnow() > self.expires_at
+        return datetime.now(timezone.utc) > self.expires_at
 
     @property
     def is_available(self):
@@ -93,7 +93,7 @@ class DataExport(SwissTaxBase, Base):
         """Calculate hours remaining until expiration"""
         if not self.expires_at or self.is_expired:
             return 0
-        delta = self.expires_at - datetime.utcnow()
+        delta = self.expires_at - datetime.now(timezone.utc)
         return max(0, delta.total_seconds() / 3600)
 
     @property

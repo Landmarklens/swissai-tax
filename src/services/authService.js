@@ -212,6 +212,11 @@ const authService = {
     return isAuth;
   },
 
+  // Set current user (exposed for external use)
+  setCurrentUser: (user) => {
+    return authServiceInstance.setCurrentUser(user);
+  },
+
   // Verify authentication status with backend
   checkAuth: async () => {
     try {

@@ -176,6 +176,7 @@ async def create_filing(
 @router.post("/filings/copy", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def copy_filing(
     request: CopyFilingRequest,
+    http_request: Request,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -187,6 +188,14 @@ async def copy_filing(
     - Links new filing to source via source_filing_id
     """
     try:
+        # Get source filing details for audit log
+        source_filing = TaxFilingService.get_filing(
+            db=db,
+            filing_id=request.source_filing_id,
+            user_id=current_user.id,
+            include_relationships=False
+        )
+
         filing = TaxFilingService.copy_from_previous_year(
             db=db,
             source_filing_id=request.source_filing_id,
@@ -195,6 +204,20 @@ async def copy_filing(
         )
 
         logger.info(f"User {current_user.id} copied filing {request.source_filing_id} to year {request.new_year}")
+
+        # Log audit event
+        AuditLogService.log_tax_filing_copied(
+            db=db,
+            user_id=current_user.id,
+            source_filing_id=request.source_filing_id,
+            new_filing_id=str(filing.id),
+            source_year=source_filing.tax_year,
+            new_year=request.new_year,
+            canton=filing.canton,
+            ip=http_request.client.host if http_request.client else None,
+            user_agent=http_request.headers.get("user-agent", "")
+        )
+
         return filing.to_dict()
 
     except ValueError as e:
@@ -272,6 +295,15 @@ async def update_filing(
                 detail="No fields to update"
             )
 
+        # Get current status before update to detect submission transitions
+        old_filing = TaxFilingService.get_filing(
+            db=db,
+            filing_id=filing_id,
+            user_id=current_user.id,
+            include_relationships=False
+        )
+        old_status = old_filing.status
+
         filing = TaxFilingService.update_filing(
             db=db,
             filing_id=filing_id,
@@ -281,8 +313,9 @@ async def update_filing(
 
         logger.info(f"User {current_user.id} updated filing {filing_id}")
 
-        # Log audit event - check if this was a submission
-        if request.status == "submitted":
+        # Log audit event - check if status changed to "submitted"
+        if request.status == "submitted" and old_status != "submitted":
+            # This is a new submission (status transition)
             AuditLogService.log_tax_filing_submitted(
                 db=db,
                 user_id=current_user.id,
@@ -293,6 +326,7 @@ async def update_filing(
                 user_agent=http_request.headers.get("user-agent", "")
             )
         else:
+            # Regular update (not a new submission)
             AuditLogService.log_tax_filing_updated(
                 db=db,
                 user_id=current_user.id,
@@ -377,6 +411,7 @@ async def delete_filing(
 @router.post("/filings/{filing_id}/restore", response_model=dict)
 async def restore_filing(
     filing_id: str,
+    http_request: Request,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -394,6 +429,18 @@ async def restore_filing(
         )
 
         logger.info(f"User {current_user.id} restored filing {filing_id}")
+
+        # Log audit event
+        AuditLogService.log_tax_filing_restored(
+            db=db,
+            user_id=current_user.id,
+            filing_id=filing_id,
+            tax_year=filing.tax_year,
+            canton=filing.canton,
+            ip=http_request.client.host if http_request.client else None,
+            user_agent=http_request.headers.get("user-agent", "")
+        )
+
         return filing.to_dict()
 
     except ValueError as e:

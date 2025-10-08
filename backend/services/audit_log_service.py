@@ -316,3 +316,29 @@ def log_tax_filing_deleted(db: Session, user_id: Union[UUID, str], filing_id: st
         ip, user_agent,
         metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
     )
+
+
+def log_tax_filing_copied(db: Session, user_id: Union[UUID, str], source_filing_id: str, new_filing_id: str, source_year: int, new_year: int, canton: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+    """Log tax filing copied from previous year"""
+    return AuditLogService.log_event(
+        db, user_id, "tax_filing_copied", "data_modification",
+        f"Copied tax filing from {source_year} to {new_year} - {canton}",
+        ip, user_agent,
+        metadata={
+            "source_filing_id": source_filing_id,
+            "new_filing_id": new_filing_id,
+            "source_year": source_year,
+            "new_year": new_year,
+            "canton": canton
+        }
+    )
+
+
+def log_tax_filing_restored(db: Session, user_id: Union[UUID, str], filing_id: str, tax_year: int, canton: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+    """Log tax filing restored from soft delete"""
+    return AuditLogService.log_event(
+        db, user_id, "tax_filing_restored", "data_modification",
+        f"Restored tax filing for {tax_year} - {canton}",
+        ip, user_agent,
+        metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
+    )

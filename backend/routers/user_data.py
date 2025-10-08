@@ -215,18 +215,23 @@ async def request_data_export(
         #     export_id=export.id
         # )
 
+        # Store export details before session potentially expires
+        export_id = export.id
+        export_status = export.status
+
         # For now, generate synchronously (in production, this should be async)
         try:
-            service.generate_export(export.id)
+            service.generate_export(export_id)
+            export_status = "completed"
         except Exception as e:
             # Log error but don't fail the request
             print(f"Export generation failed: {e}")
 
         return DataExportCreatedResponse(
-            export_id=export.id,
+            export_id=export_id,
             message="Export request created successfully",
             estimated_completion_minutes=5,
-            status=export.status
+            status=export_status
         )
 
     except ValueError as e:

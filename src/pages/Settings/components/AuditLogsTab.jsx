@@ -44,7 +44,8 @@ const AuditLogsTab = () => {
         .split('; ')
         .find(row => row.startsWith('access_token='))
         ?.split('=')[1]
-        ?.replace('Bearer ', '');
+        ?.replace(/^["']|["']$/g, '')  // Remove quotes
+        ?.replace('Bearer ', '');       // Remove Bearer prefix
 
       if (!token) return null;
 

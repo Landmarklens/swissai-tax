@@ -22,6 +22,7 @@ from models.swisstax import (
     UserSettings
 )
 from services.audit_log_service import AuditLogService
+from services.s3_storage_service import S3StorageService, get_storage_service
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +32,9 @@ class DataExportService:
 
     EXPORT_EXPIRY_HOURS = 48
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session, s3_service: Optional[S3StorageService] = None):
         self.db = db
+        self.s3 = s3_service or get_storage_service()
 
     def request_export(
         self,
@@ -357,12 +359,29 @@ class DataExportService:
             # Calculate file size
             file_size = len(content.encode('utf-8'))
 
-            # In production, upload to S3 here
-            # For now, we'll just store a placeholder URL
-            file_url = f"/api/user/download-export/{export.id}"
+            # Upload to S3
+            object_key = self.s3.upload_export_data(
+                user_id=export.user_id,
+                export_id=export.id,
+                data=data,
+                format=export.format
+            )
+
+            if not object_key:
+                raise Exception("Failed to upload export to S3")
+
+            # Generate presigned download URL
+            file_url = self.s3.generate_download_url(
+                object_key=object_key,
+                expiry_hours=self.EXPORT_EXPIRY_HOURS
+            )
+
+            if not file_url:
+                raise Exception("Failed to generate download URL")
 
             # Update export record
             export.file_url = file_url
+            export.s3_key = object_key  # Store S3 key for later cleanup
             export.file_size_bytes = file_size
             export.status = 'completed'
             export.completed_at = datetime.utcnow()
@@ -426,6 +445,7 @@ class DataExportService:
     def cleanup_expired_exports(self) -> int:
         """
         Delete expired exports (run as scheduled job)
+        Deletes both S3 files and database records
 
         Returns:
             Number of exports deleted
@@ -437,12 +457,23 @@ class DataExportService:
             DataExport.status == 'completed'
         ).all()
 
-        count = len(expired)
+        count = 0
 
         for export in expired:
-            # In production, delete S3 file here
+            # Delete from S3 if S3 key exists
+            if hasattr(export, 's3_key') and export.s3_key:
+                if self.s3.delete_export(export.s3_key):
+                    logger.info(f"Deleted expired export from S3: {export.s3_key}")
+                else:
+                    logger.warning(f"Failed to delete expired export from S3: {export.s3_key}")
+
+            # Delete database record
             self.db.delete(export)
+            count += 1
 
         self.db.commit()
+
+        if count > 0:
+            logger.info(f"Cleaned up {count} expired exports")
 
         return count

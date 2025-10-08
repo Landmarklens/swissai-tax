@@ -276,8 +276,8 @@ class TwoFactorService:
             encrypted_secret = self.encrypt_secret(secret)
             encrypted_codes = self.encrypt_backup_codes(backup_codes)
 
-            # Refresh user in session to ensure it's attached
-            db.refresh(user)
+            # Merge user into current session if detached
+            user = db.merge(user)
 
             # Update user record
             user.two_factor_enabled = True
@@ -307,6 +307,9 @@ class TwoFactorService:
             bool: True if successfully disabled
         """
         try:
+            # Merge user into current session if detached
+            user = db.merge(user)
+
             user.two_factor_enabled = False
             user.two_factor_secret = None
             user.two_factor_backup_codes = None
@@ -336,6 +339,9 @@ class TwoFactorService:
             if not user.two_factor_enabled:
                 logger.warning(f"Cannot regenerate codes - 2FA not enabled for {user.email}")
                 return None
+
+            # Merge user into current session if detached
+            user = db.merge(user)
 
             # Generate new backup codes
             new_codes = self.generate_backup_codes()

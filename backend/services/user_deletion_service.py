@@ -13,6 +13,8 @@ from sqlalchemy.orm import Session
 
 from models.swisstax import DeletionRequest, Filing, Payment, Subscription, User
 from services.audit_log_service import AuditLogService
+from services.s3_storage_service import S3StorageService, get_storage_service
+from services.stripe_mock_service import StripeMockService, get_stripe_service
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +26,15 @@ class UserDeletionService:
     VERIFICATION_CODE_EXPIRY_MINUTES = 15
     VERIFICATION_CODE_LENGTH = 6
 
-    def __init__(self, db: Session):
+    def __init__(
+        self,
+        db: Session,
+        s3_service: Optional[S3StorageService] = None,
+        stripe_service: Optional[StripeMockService] = None
+    ):
         self.db = db
+        self.s3 = s3_service or get_storage_service()
+        self.stripe = stripe_service or get_stripe_service()
 
     def generate_verification_code(self) -> str:
         """Generate a 6-digit verification code"""

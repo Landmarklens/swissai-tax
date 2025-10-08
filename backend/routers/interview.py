@@ -7,7 +7,7 @@ import json
 import logging
 from typing import Any, Optional
 
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -434,7 +434,6 @@ async def save_session(
 @router.post("/{session_id}/calculate")
 async def calculate_taxes_for_session(
     session_id: str,
-    request: dict = Body(...),
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

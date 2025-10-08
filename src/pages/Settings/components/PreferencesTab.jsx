@@ -7,19 +7,17 @@ import {
   Switch,
   FormControlLabel,
   Divider,
-  Button,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Grid,
-  Alert
+  Alert,
+  CircularProgress
 } from '@mui/material';
 import {
   Language as LanguageIcon,
   Notifications as NotificationsIcon,
-  Assignment as AssignmentIcon,
-  Save as SaveIcon
+  Assignment as AssignmentIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -33,7 +31,6 @@ const PreferencesTab = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
 
   const [preferences, setPreferences] = useState({
     // Language & Region
@@ -74,7 +71,7 @@ const PreferencesTab = () => {
       const data = response.data;
 
       setPreferences({
-        language: i18n.language || data.preferences?.language || 'en', // Use current i18n language (from header)
+        language: i18n.language || data.preferences?.language || 'en',
         autoSave: data.preferences?.auto_save_enabled ?? true,
         autoCalculate: data.preferences?.auto_calculate_enabled ?? true,
         showTaxTips: data.preferences?.show_tax_tips ?? true,
@@ -94,98 +91,128 @@ const PreferencesTab = () => {
     }
   };
 
-  const handleToggle = (setting) => (event) => {
-    setPreferences({
-      ...preferences,
-      [setting]: event.target.checked
-    });
-    setHasChanges(true);
-    setSuccess(false);
-  };
-
-  const handleSelectChange = (field) => (event) => {
-    setPreferences({
-      ...preferences,
-      [field]: event.target.value
-    });
-    setHasChanges(true);
-    setSuccess(false);
-  };
-
-  const handleLanguageChange = (event) => {
-    setPreferences({
-      ...preferences,
-      language: event.target.value
-    });
-    setHasChanges(true);
-    setSuccess(false);
-  };
-
-  const handleSave = async () => {
+  const savePreferences = async (updatedPrefs) => {
     try {
       setSaving(true);
       setError(null);
 
-      // Update preferences
       await settingsAPI.updatePreferences({
-        language: preferences.language,
-        auto_save_enabled: preferences.autoSave,
-        auto_calculate_enabled: preferences.autoCalculate,
-        show_tax_tips: preferences.showTaxTips,
-        default_tax_year: preferences.defaultTaxYear,
-        rounding_method: preferences.roundingMethod
+        language: updatedPrefs.language,
+        auto_save_enabled: updatedPrefs.autoSave,
+        auto_calculate_enabled: updatedPrefs.autoCalculate,
+        show_tax_tips: updatedPrefs.showTaxTips,
+        default_tax_year: updatedPrefs.defaultTaxYear,
+        rounding_method: updatedPrefs.roundingMethod
       });
 
-      // Update notifications
-      await settingsAPI.updateNotifications({
-        email_deadline_reminders: preferences.filingReminders,
-        email_document_processing: preferences.documentUpdates,
-        email_tax_calculation: preferences.taxNewsletters,
-        email_marketing: preferences.promotionalEmails
-      });
-
-      // Update language in i18n and route (sync with header)
-      const oldLanguage = i18n.language;
-      if (preferences.language !== oldLanguage) {
-        // Get current path without language prefix
-        const pathSegments = location.pathname.split('/').filter(Boolean);
-        const currentLangInPath = ['en', 'de', 'fr', 'it'].includes(pathSegments[0]) ? pathSegments[0] : null;
-
-        let pathWithoutLang = location.pathname;
-        if (currentLangInPath) {
-          pathWithoutLang = '/' + pathSegments.slice(1).join('/');
-        }
-
-        // Update i18n and localStorage
-        i18n.changeLanguage(preferences.language);
-        localStorage.setItem('i18nextLng', preferences.language);
-
-        // Navigate to new language path
-        const newPath = `/${preferences.language}${pathWithoutLang}${location.search}${location.hash}`;
-        navigate(newPath);
-      }
-
-      setHasChanges(false);
-      setSuccess(true);
       setSaving(false);
-
-      // Hide success message after 3 seconds
-      setTimeout(() => setSuccess(false), 3000);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
     } catch (err) {
-      console.error('Error saving settings:', err);
-      setError('Failed to save settings');
+      console.error('Error saving preferences:', err);
+      setError('Failed to save preferences');
       setSaving(false);
     }
   };
 
+  const saveNotifications = async (updatedPrefs) => {
+    try {
+      setSaving(true);
+      setError(null);
+
+      await settingsAPI.updateNotifications({
+        email_deadline_reminders: updatedPrefs.filingReminders,
+        email_document_processing: updatedPrefs.documentUpdates,
+        email_tax_calculation: updatedPrefs.taxNewsletters,
+        email_marketing: updatedPrefs.promotionalEmails
+      });
+
+      setSaving(false);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+    } catch (err) {
+      console.error('Error saving notifications:', err);
+      setError('Failed to save notifications');
+      setSaving(false);
+    }
+  };
+
+  const handleToggle = (setting) => async (event) => {
+    const newValue = event.target.checked;
+    const updatedPrefs = {
+      ...preferences,
+      [setting]: newValue
+    };
+    setPreferences(updatedPrefs);
+
+    // Determine which API to call based on setting type
+    if (['filingReminders', 'documentUpdates', 'taxNewsletters', 'promotionalEmails'].includes(setting)) {
+      await saveNotifications(updatedPrefs);
+    } else {
+      await savePreferences(updatedPrefs);
+    }
+  };
+
+  const handleSelectChange = (field) => async (event) => {
+    const newValue = event.target.value;
+    const updatedPrefs = {
+      ...preferences,
+      [field]: newValue
+    };
+    setPreferences(updatedPrefs);
+    await savePreferences(updatedPrefs);
+  };
+
+  const handleLanguageChange = async (event) => {
+    const newLanguage = event.target.value;
+    const updatedPrefs = {
+      ...preferences,
+      language: newLanguage
+    };
+    setPreferences(updatedPrefs);
+
+    // Save to backend
+    await savePreferences(updatedPrefs);
+
+    // Update language in i18n and route (sync with header)
+    const oldLanguage = i18n.language;
+    if (newLanguage !== oldLanguage) {
+      // Get current path without language prefix
+      const pathSegments = location.pathname.split('/').filter(Boolean);
+      const currentLangInPath = ['en', 'de', 'fr', 'it'].includes(pathSegments[0]) ? pathSegments[0] : null;
+
+      let pathWithoutLang = location.pathname;
+      if (currentLangInPath) {
+        pathWithoutLang = '/' + pathSegments.slice(1).join('/');
+      }
+
+      // Update i18n and localStorage
+      i18n.changeLanguage(newLanguage);
+      localStorage.setItem('i18nextLng', newLanguage);
+
+      // Navigate to new language path
+      const newPath = `/${newLanguage}${pathWithoutLang}${location.search}${location.hash}`;
+      navigate(newPath);
+    }
+  };
+
   if (loading) {
-    return <Typography>Loading settings...</Typography>;
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
-      {error && <Alert severity="error">{error}</Alert>}
-      {success && <Alert severity="success">{t('Settings saved successfully')}</Alert>}
+      {error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
+      {success && <Alert severity="success">{t('Settings saved automatically')}</Alert>}
+      {saving && (
+        <Alert severity="info" icon={<CircularProgress size={20} />}>
+          {t('Saving...')}
+        </Alert>
+      )}
 
       {/* Language & Region */}
       <Card>
@@ -203,6 +230,7 @@ const PreferencesTab = () => {
               value={preferences.language}
               onChange={handleLanguageChange}
               label={t('Application Language')}
+              disabled={saving}
             >
               <MenuItem value="en">English</MenuItem>
               <MenuItem value="de">Deutsch</MenuItem>
@@ -230,6 +258,7 @@ const PreferencesTab = () => {
                   checked={preferences.autoSave}
                   onChange={handleToggle('autoSave')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -252,6 +281,7 @@ const PreferencesTab = () => {
                   checked={preferences.autoCalculate}
                   onChange={handleToggle('autoCalculate')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -274,6 +304,7 @@ const PreferencesTab = () => {
                   checked={preferences.showTaxTips}
                   onChange={handleToggle('showTaxTips')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -300,6 +331,7 @@ const PreferencesTab = () => {
                   value={preferences.defaultTaxYear}
                   onChange={handleSelectChange('defaultTaxYear')}
                   label={t('Tax Year')}
+                  disabled={saving}
                 >
                   <MenuItem value={2025}>2025</MenuItem>
                   <MenuItem value={2024}>2024</MenuItem>
@@ -321,6 +353,7 @@ const PreferencesTab = () => {
                   value={preferences.roundingMethod}
                   onChange={handleSelectChange('roundingMethod')}
                   label={t('Method')}
+                  disabled={saving}
                 >
                   <MenuItem value="standard">{t('Standard (0.05 CHF)')}</MenuItem>
                   <MenuItem value="up">{t('Round Up')}</MenuItem>
@@ -349,6 +382,7 @@ const PreferencesTab = () => {
                   checked={preferences.filingReminders}
                   onChange={handleToggle('filingReminders')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -371,6 +405,7 @@ const PreferencesTab = () => {
                   checked={preferences.documentUpdates}
                   onChange={handleToggle('documentUpdates')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -393,6 +428,7 @@ const PreferencesTab = () => {
                   checked={preferences.taxNewsletters}
                   onChange={handleToggle('taxNewsletters')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -415,6 +451,7 @@ const PreferencesTab = () => {
                   checked={preferences.promotionalEmails}
                   onChange={handleToggle('promotionalEmails')}
                   color="primary"
+                  disabled={saving}
                 />
               }
               label={
@@ -431,20 +468,6 @@ const PreferencesTab = () => {
           </Box>
         </CardContent>
       </Card>
-
-      {/* Save Button */}
-      {hasChanges && (
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-          onClick={handleSave}
-          disabled={saving}
-          fullWidth
-          size="large"
-        >
-          {saving ? t('Saving...') : t('Save All Changes')}
-        </Button>
-      )}
     </Box>
   );
 };

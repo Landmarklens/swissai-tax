@@ -356,8 +356,8 @@ async def update_filing(
 @router.delete("/filings/{filing_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_filing(
     filing_id: str,
-    hard_delete: bool = Query(False, description="Permanently delete (USE WITH CAUTION)"),
     http_request: Request,
+    hard_delete: bool = Query(False, description="Permanently delete (USE WITH CAUTION)"),
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

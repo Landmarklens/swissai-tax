@@ -25,7 +25,8 @@ class AuditLogService:
         ip_address: Optional[str] = None,
         user_agent: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
-        status: str = "success"
+        status: str = "success",
+        session_id: Optional[str] = None
     ) -> Optional[AuditLog]:
         """
         Create an audit log entry
@@ -52,6 +53,7 @@ class AuditLogService:
 
             audit_log = AuditLog(
                 user_id=user_id,
+                session_id=session_id,
                 event_type=event_type,
                 event_category=event_category,
                 description=description,
@@ -188,12 +190,12 @@ class AuditLogService:
 
 
 # Convenience functions for common events
-def log_login_success(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_login_success(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str, session_id: Optional[str] = None) -> Optional[AuditLog]:
     """Log successful login"""
     return AuditLogService.log_event(
         db, user_id, "login_success", "authentication",
         "User logged in successfully",
-        ip, user_agent
+        ip, user_agent, session_id=session_id
     )
 
 

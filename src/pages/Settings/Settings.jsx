@@ -19,7 +19,8 @@ import {
   Folder as FolderIcon,
   Receipt as ReceiptIcon,
   Security as SecurityIcon,
-  History as HistoryIcon
+  History as HistoryIcon,
+  PrivacyTip as PrivacyIcon
 } from '@mui/icons-material';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -30,6 +31,8 @@ import DocumentManagementSection from './components/DocumentManagementSection';
 import BillingTab from './components/BillingTab';
 import { TwoFactorSettings } from '../../components/TwoFactor';
 import AuditLogsTab from './components/AuditLogsTab';
+import AccountDeletionSection from './components/AccountDeletionSection';
+import DataExportSection from './components/DataExportSection';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -105,6 +108,11 @@ const Settings = () => {
               iconPosition="start"
               label={t('Activity Log')}
             />
+            <Tab
+              icon={<PrivacyIcon />}
+              iconPosition="start"
+              label={t('Data Privacy')}
+            />
           </Tabs>
         </Box>
 
@@ -156,6 +164,17 @@ const Settings = () => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <AuditLogsTab />
+            </Grid>
+          </Grid>
+        )}
+
+        {activeTab === 6 && (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <DataExportSection />
+            </Grid>
+            <Grid item xs={12}>
+              <AccountDeletionSection />
             </Grid>
           </Grid>
         )}

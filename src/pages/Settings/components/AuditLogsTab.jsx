@@ -10,10 +10,6 @@ import {
   TableRow,
   Paper,
   Chip,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   CircularProgress,
   Pagination,
   Alert,
@@ -25,10 +21,12 @@ import {
   Logout as LogoutIcon,
   Upload as UploadIcon,
   Download as DownloadIcon,
-  Edit as EditIcon
+  Edit as EditIcon,
+  CheckCircle as CheckCircleIcon
 } from '@mui/icons-material';
 import axios from 'axios';
 import { format } from 'date-fns';
+import {jwtDecode} from 'jwt-decode';
 
 const AuditLogsTab = () => {
   const [logs, setLogs] = useState([]);
@@ -36,13 +34,39 @@ const AuditLogsTab = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [category, setCategory] = useState('');
-  
+
   const pageSize = 20;
+
+  // Get current session ID from JWT token
+  const getCurrentSessionId = () => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('access_token='))
+        ?.split('=')[1]
+        ?.replace('Bearer ', '');
+
+      if (!token) return null;
+
+      const decoded = jwtDecode(token);
+      return decoded.session_id;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+
+  // Check if a log entry is from the current session
+  const isCurrentSession = (log) => {
+    const currentSessionId = getCurrentSessionId();
+    return log.event_type === 'login_success' &&
+           log.session_id &&
+           log.session_id === currentSessionId;
+  };
 
   useEffect(() => {
     fetchLogs();
-  }, [page, category]);
+  }, [page]);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -50,8 +74,7 @@ const AuditLogsTab = () => {
     try {
       const params = {
         page,
-        page_size: pageSize,
-        ...(category && { event_category: category })
+        page_size: pageSize
       };
 
       const response = await axios.get('/api/audit-logs/', { params });
@@ -90,28 +113,6 @@ const AuditLogsTab = () => {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         View your account activity and security events. Logs are kept for 90 days.
       </Typography>
-
-      {/* Filters */}
-      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-        <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel>Category</InputLabel>
-          <Select
-            value={category}
-            label="Category"
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setPage(1);
-            }}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value="authentication">Authentication</MenuItem>
-            <MenuItem value="security">Security</MenuItem>
-            <MenuItem value="data_access">Data Access</MenuItem>
-            <MenuItem value="data_modification">Data Modification</MenuItem>
-            <MenuItem value="account">Account</MenuItem>
-          </Select>
-        </FormControl>
-      </Stack>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -153,6 +154,14 @@ const AuditLogsTab = () => {
                         <Typography variant="body2" fontWeight={500}>
                           {formatEventType(log.event_type)}
                         </Typography>
+                        {isCurrentSession(log) && (
+                          <Chip
+                            icon={<CheckCircleIcon />}
+                            label="Current Session"
+                            color="primary"
+                            size="small"
+                          />
+                        )}
                       </Stack>
                     </TableCell>
                     <TableCell>{log.description}</TableCell>

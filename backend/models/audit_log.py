@@ -21,6 +21,7 @@ class AuditLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("swisstax.users.id", ondelete="CASCADE"), nullable=False)
+    session_id = Column(String(255), nullable=True, index=True)
     event_type = Column(String(50), nullable=False, index=True)
     event_category = Column(String(50), nullable=False)
     description = Column(Text, nullable=False)

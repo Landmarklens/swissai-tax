@@ -33,10 +33,12 @@ def token_response(token: str, token_type: str = "bearer") -> dict[str, str]:
     }
 
 
-def sign_jwt(email: str, user_type: Optional[str] = None) -> dict[str, str]:
+def sign_jwt(email: str, user_type: Optional[str] = None, session_id: Optional[str] = None) -> dict[str, str]:
+    import uuid
     payload = {
         "email": email,
-        "exp": time.time() + (settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)  # Convert minutes to seconds
+        "exp": time.time() + (settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60),  # Convert minutes to seconds
+        "session_id": session_id or str(uuid.uuid4())
     }
     if user_type:
         payload["user_type"] = user_type

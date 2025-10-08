@@ -155,4 +155,18 @@ export const authAPI = {
     api.post('/api/auth/reset-password/confirm', { token, new_password: newPassword }),
 };
 
+// User Data API endpoints (GDPR - Account Deletion & Data Export)
+export const userDataAPI = {
+  // Account Deletion
+  requestDeletion: () => api.post('/api/user/deletion/request'),
+  verifyDeletion: (code) => api.post('/api/user/deletion/verify', { code }),
+  cancelDeletion: (token) => api.post('/api/user/deletion/cancel', { token }),
+  getDeletionStatus: () => api.get('/api/user/deletion/status'),
+
+  // Data Export
+  requestExport: (format) => api.post('/api/user/export/request', { format }),
+  listExports: () => api.get('/api/user/export/list'),
+  getExport: (exportId) => api.get(`/api/user/export/${exportId}`),
+};
+
 export { api };

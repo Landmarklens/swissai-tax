@@ -222,20 +222,25 @@ async def user_login(
                 }
 
             # No 2FA - proceed with normal login
-            # Generate JWT token
-            token_response = sign_jwt(user.email)
+            # Generate session ID for tracking
+            import uuid
+            session_id = str(uuid.uuid4())
+
+            # Generate JWT token with session ID
+            token_response = sign_jwt(user.email, session_id=session_id)
             access_token = token_response["access_token"]
 
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)
 
-            # Log successful login
+            # Log successful login with session ID
             try:
                 log_login_success(
                     db,
                     db_user.id,
                     request.client.host if request.client else "unknown",
-                    request.headers.get("user-agent", "")
+                    request.headers.get("user-agent", ""),
+                    session_id=session_id
                 )
             except Exception as e:
                 import logging
@@ -349,8 +354,11 @@ async def verify_two_factor_login(
                 detail="Invalid verification code"
             )
 
-        # 2FA verification successful - generate full session token
-        token_response = sign_jwt(db_user.email)
+        # 2FA verification successful - generate session ID and full session token
+        import uuid
+        session_id = str(uuid.uuid4())
+
+        token_response = sign_jwt(db_user.email, session_id=session_id)
         access_token = token_response["access_token"]
 
         # Check if user requires subscription
@@ -362,13 +370,14 @@ async def verify_two_factor_login(
 
         logger.info(f"[2FA] Login successful for user: {db_user.email}")
 
-        # Log successful 2FA login
+        # Log successful 2FA login with session ID
         try:
             log_login_success(
                 db,
                 db_user.id,
                 request.client.host if request.client else "unknown",
-                request.headers.get("user-agent", "")
+                request.headers.get("user-agent", ""),
+                session_id=session_id
             )
         except Exception as e:
             logger.warning(f"Failed to log audit event: {e}")

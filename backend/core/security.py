@@ -19,20 +19,23 @@ COOKIE_SETTINGS = {
 }
 
 
-def create_access_token(email: str, user_type: str = None) -> str:
+def create_access_token(email: str, user_type: str = None, session_id: str = None) -> str:
     """
     Create a new JWT access token
 
     Args:
         email: User email
         user_type: Optional user type
+        session_id: Optional session ID for tracking
 
     Returns:
         JWT token string
     """
+    import uuid
     payload = {
         "email": email,
-        "exp": time.time() + (settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+        "exp": time.time() + (settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60),
+        "session_id": session_id or str(uuid.uuid4())
     }
     if user_type:
         payload["user_type"] = user_type

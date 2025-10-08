@@ -125,12 +125,13 @@ const userService = {
       const response = await userDataAPI.listExports();
       return {
         success: true,
-        data: response.data
+        data: response.data.exports || []  // Extract exports array from response
       };
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.detail || 'Failed to list data exports'
+        error: error.response?.data?.detail || 'Failed to list data exports',
+        data: []  // Return empty array on error
       };
     }
   },

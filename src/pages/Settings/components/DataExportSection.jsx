@@ -52,7 +52,10 @@ const DataExportSection = () => {
     setRefreshing(false);
 
     if (result.success) {
-      setExports(result.data || []);
+      setExports(Array.isArray(result.data) ? result.data : []);
+    } else {
+      // On error, reset to empty array
+      setExports([]);
     }
   };
 

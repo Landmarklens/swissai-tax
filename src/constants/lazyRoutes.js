@@ -54,10 +54,15 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const isAuthenticated = authService.isAuthenticated();
 
+  console.log('[PROTECTED ROUTE] Path:', location.pathname);
+  console.log('[PROTECTED ROUTE] isAuthenticated:', isAuthenticated);
+
   if (!isAuthenticated) {
+    console.log('[PROTECTED ROUTE] Redirecting to / because not authenticated');
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
+  console.log('[PROTECTED ROUTE] Allowing access');
   return children;
 };
 

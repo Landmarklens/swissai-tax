@@ -8,6 +8,7 @@ from uuid import UUID, uuid4
 
 from models.question import QuestionLoader, QuestionType
 from services.filing_orchestration_service import FilingOrchestrationService
+from services.postal_code_service import get_postal_code_service
 from utils.encryption import get_encryption_service
 
 logger = logging.getLogger(__name__)
@@ -88,6 +89,32 @@ class InterviewService:
             logger.info(f"Stored encrypted answer for sensitive question {question_id}")
         else:
             session['answers'][question_id] = answer
+
+        # Handle postal code auto-lookup
+        if hasattr(question, 'auto_lookup') and question.auto_lookup:
+            postal_code_service = get_postal_code_service()
+            location_data = postal_code_service.lookup_postal_code(str(answer))
+
+            if location_data:
+                # Store location data in session
+                location_key = f"{question_id}_location"
+                session[location_key] = location_data
+
+                # For primary residence (Q02), store as primary location
+                if question_id == 'Q02':
+                    session['primary_canton'] = location_data['canton']
+                    session['primary_municipality'] = location_data['municipality']
+                    session['primary_postal_code'] = location_data['postal_code']
+                    logger.info(f"Auto-detected primary residence: {location_data['canton']}, {location_data['municipality']}")
+
+                # For secondary location (Q02b), store as secondary location
+                elif question_id == 'Q02b':
+                    session['secondary_canton'] = location_data['canton']
+                    session['secondary_municipality'] = location_data['municipality']
+                    session['secondary_postal_code'] = location_data['postal_code']
+                    logger.info(f"Auto-detected secondary location: {location_data['canton']}, {location_data['municipality']}")
+            else:
+                logger.warning(f"Could not auto-lookup location for postal code: {answer}")
 
         session['completed_questions'].append(question_id)
 

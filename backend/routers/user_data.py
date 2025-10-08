@@ -261,7 +261,7 @@ async def list_data_exports(
                 ))
             except Exception as e:
                 # Log error but continue processing other exports
-                logger.error(f"Error processing export {exp.id}: {e}")
+                logger.error(f"Error processing export {exp.id}: {e}", exc_info=True)
                 # Add export with safe defaults
                 export_responses.append(DataExportResponse(
                     id=exp.id,

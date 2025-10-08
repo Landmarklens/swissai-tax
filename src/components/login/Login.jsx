@@ -144,16 +144,27 @@ const LoginSignupModal = ({ open, onClose }) => {
       // Cookie-based auth returns {success: true, user: {...}}
       // Legacy token-based auth returns {access_token: "..."}
       if (login.success || login.access_token) {
+        console.log('[LOGIN DEBUG] Login successful, fetching user profile...');
         const profileAction = await dispatch(fetchUserProfile());
+        console.log('[LOGIN DEBUG] Profile action:', profileAction);
+        console.log('[LOGIN DEBUG] Is fulfilled?', fetchUserProfile.fulfilled.match(profileAction));
+        console.log('[LOGIN DEBUG] Is rejected?', fetchUserProfile.rejected.match(profileAction));
+
         if (fetchUserProfile.fulfilled.match(profileAction)) {
+          console.log('[LOGIN DEBUG] Profile fetched successfully, closing modal and navigating...');
           onClose();
 
           // Redirect to filings page
+          console.log('[LOGIN DEBUG] Navigating to /filings');
           navigate('/filings');
+          console.log('[LOGIN DEBUG] Navigate called');
         } else if (fetchUserProfile.rejected.match(profileAction)) {
+          console.log('[LOGIN DEBUG] Profile fetch rejected:', profileAction?.error);
           toast.error(profileAction?.error?.message || t('Login failed'));
           setHasLoginError(true);
         }
+      } else {
+        console.log('[LOGIN DEBUG] Login response does not have success or access_token:', login);
       }
     } catch (error) {
       if (!hasLoginError) {

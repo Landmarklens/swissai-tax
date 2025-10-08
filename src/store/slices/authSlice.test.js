@@ -68,7 +68,7 @@ describe('authSlice', () => {
 
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
-      expect(state.isAuthenticated).toBe(true); // Note: This seems like a bug in the original code
+      expect(state.isAuthenticated).toBe(false);
       expect(state.error).toBe('Invalid credentials');
     });
 

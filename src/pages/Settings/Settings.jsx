@@ -79,7 +79,7 @@ const Settings = () => {
             <Tab
               icon={<SettingsIcon />}
               iconPosition="start"
-              label={t('Preferences & Notifications')}
+              label={t('Preferences')}
             />
             <Tab
               icon={<SecurityIcon />}

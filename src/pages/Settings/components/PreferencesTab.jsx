@@ -22,10 +22,13 @@ import {
   Save as SaveIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { settingsAPI } from '../../../services/api';
 
 const PreferencesTab = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -34,7 +37,7 @@ const PreferencesTab = () => {
 
   const [preferences, setPreferences] = useState({
     // Language & Region
-    language: 'en',
+    language: i18n.language || 'en',
 
     // Tax Preferences
     autoSave: true,
@@ -54,6 +57,16 @@ const PreferencesTab = () => {
     loadSettings();
   }, []);
 
+  // Watch for language changes from header and update preferences state
+  useEffect(() => {
+    if (i18n.language && i18n.language !== preferences.language) {
+      setPreferences(prev => ({
+        ...prev,
+        language: i18n.language
+      }));
+    }
+  }, [i18n.language]);
+
   const loadSettings = async () => {
     try {
       setLoading(true);
@@ -61,7 +74,7 @@ const PreferencesTab = () => {
       const data = response.data;
 
       setPreferences({
-        language: data.preferences?.language || 'en',
+        language: i18n.language || data.preferences?.language || 'en', // Use current i18n language (from header)
         autoSave: data.preferences?.auto_save_enabled ?? true,
         autoCalculate: data.preferences?.auto_calculate_enabled ?? true,
         showTaxTips: data.preferences?.show_tax_tips ?? true,
@@ -131,8 +144,26 @@ const PreferencesTab = () => {
         email_marketing: preferences.promotionalEmails
       });
 
-      // Update language in i18n
-      i18n.changeLanguage(preferences.language);
+      // Update language in i18n and route (sync with header)
+      const oldLanguage = i18n.language;
+      if (preferences.language !== oldLanguage) {
+        // Get current path without language prefix
+        const pathSegments = location.pathname.split('/').filter(Boolean);
+        const currentLangInPath = ['en', 'de', 'fr', 'it'].includes(pathSegments[0]) ? pathSegments[0] : null;
+
+        let pathWithoutLang = location.pathname;
+        if (currentLangInPath) {
+          pathWithoutLang = '/' + pathSegments.slice(1).join('/');
+        }
+
+        // Update i18n and localStorage
+        i18n.changeLanguage(preferences.language);
+        localStorage.setItem('i18nextLng', preferences.language);
+
+        // Navigate to new language path
+        const newPath = `/${preferences.language}${pathWithoutLang}${location.search}${location.hash}`;
+        navigate(newPath);
+      }
 
       setHasChanges(false);
       setSuccess(true);

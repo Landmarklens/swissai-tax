@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontolöschung Geplant</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #ffc107; color: #333; padding: 20px; text-align: center; }
+        .content { background-color: #f8f9fa; padding: 30px; }
+        .info-box { background-color: #fff; border: 2px solid #ffc107; padding: 20px; margin: 20px 0; }
+        .date { font-size: 24px; font-weight: bold; color: #dc3545; }
+        .cancel-btn { display: inline-block; background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .footer { background-color: #343a40; color: #fff; padding: 20px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✅ Löschungsantrag Verifiziert</h1>
+    </div>
+
+    <div class="content">
+        <p>Hallo {{user_first_name}},</p>
+
+        <p>Ihr Antrag auf Kontolöschung wurde verifiziert und geplant.</p>
+
+        <div class="info-box">
+            <h3>Löschungsdatum:</h3>
+            <div class="date">{{scheduled_deletion_date}}</div>
+            <p style="color: #666; margin-top: 10px;">(in {{days_until_deletion}} Tagen)</p>
+        </div>
+
+        <p><strong>Sie haben noch Zeit, Ihre Meinung zu ändern!</strong></p>
+
+        <p>Wenn Sie diese Löschung abbrechen und Ihr Konto behalten möchten, klicken Sie auf die Schaltfläche unten:</p>
+
+        <a href="{{cancellation_link}}" class="cancel-btn">Kontolöschung Abbrechen</a>
+
+        <p style="color: #666; font-size: 14px;">Oder kopieren Sie diesen Link: {{cancellation_link}}</p>
+
+        <h3>Was passiert als nächstes:</h3>
+        <ul>
+            <li>Ihr Konto bleibt bis {{scheduled_deletion_date}} aktiv</li>
+            <li>Sie können weiterhin auf alle Ihre Daten zugreifen</li>
+            <li>Sie können die Löschung jederzeit vor dem geplanten Datum abbrechen</li>
+            <li>Am {{scheduled_deletion_date}} werden Ihr Konto und alle Daten dauerhaft gelöscht</li>
+        </ul>
+
+        <p>Bei Fragen kontaktieren Sie uns bitte unter <a href="mailto:support@swissai.tax">support@swissai.tax</a></p>
+
+        <p>Freundliche Grüsse,<br>
+        Das SwissAI Tax Team</p>
+    </div>
+
+    <div class="footer">
+        <p>SwissAI Tax | Zürich, Schweiz</p>
+        <p>Dies ist eine automatische E-Mail. Bitte antworten Sie nicht auf diese Nachricht.</p>
+    </div>
+</body>
+</html>

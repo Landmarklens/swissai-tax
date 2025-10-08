@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from models.swisstax import DeletionRequest, Filing, Payment, Subscription, User
 from services.audit_log_service import AuditLogService
+from services.gdpr_email_service import GDPREmailService, get_gdpr_email_service
 from services.s3_storage_service import S3StorageService, get_storage_service
 from services.stripe_mock_service import StripeMockService, get_stripe_service
 
@@ -30,11 +31,13 @@ class UserDeletionService:
         self,
         db: Session,
         s3_service: Optional[S3StorageService] = None,
-        stripe_service: Optional[StripeMockService] = None
+        stripe_service: Optional[StripeMockService] = None,
+        email_service: Optional[GDPREmailService] = None
     ):
         self.db = db
         self.s3 = s3_service or get_storage_service()
         self.stripe = stripe_service or get_stripe_service()
+        self.email = email_service or get_gdpr_email_service()
 
     def generate_verification_code(self) -> str:
         """Generate a 6-digit verification code"""
@@ -115,6 +118,21 @@ class UserDeletionService:
             metadata={'deletion_request_id': str(request.id)}
         )
 
+        # Send verification email
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if user:
+            try:
+                email_result = self.email.send_deletion_verification_email(
+                    to_email=user.email,
+                    user_first_name=user.first_name or 'User',
+                    verification_code=verification_code,
+                    language=user.preferred_language or 'en'
+                )
+                if email_result['status'] != 'success':
+                    logger.warning(f"Failed to send verification email to {user.email}: {email_result.get('message')}")
+            except Exception as e:
+                logger.error(f"Error sending verification email to {user.email}: {str(e)}")
+
         return request, verification_code
 
     def verify_and_schedule_deletion(
@@ -177,6 +195,30 @@ class UserDeletionService:
             metadata={'deletion_request_id': str(request.id)}
         )
 
+        # Send scheduled confirmation email
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if user:
+            try:
+                # Format deletion date
+                scheduled_date = request.scheduled_deletion_at.strftime('%B %d, %Y at %H:%M UTC')
+                days_until = (request.scheduled_deletion_at - datetime.utcnow()).days
+
+                # Generate cancellation link (frontend will handle token verification)
+                cancellation_link = f"https://swissai.tax/settings?cancel_deletion={request.verification_token}"
+
+                email_result = self.email.send_deletion_scheduled_email(
+                    to_email=user.email,
+                    user_first_name=user.first_name or 'User',
+                    scheduled_deletion_date=scheduled_date,
+                    days_until_deletion=days_until,
+                    cancellation_link=cancellation_link,
+                    language=user.preferred_language or 'en'
+                )
+                if email_result['status'] != 'success':
+                    logger.warning(f"Failed to send scheduled email to {user.email}: {email_result.get('message')}")
+            except Exception as e:
+                logger.error(f"Error sending scheduled email to {user.email}: {str(e)}")
+
         return request
 
     def cancel_deletion(
@@ -230,6 +272,21 @@ class UserDeletionService:
             ip_address, user_agent,
             metadata={'deletion_request_id': str(request.id)}
         )
+
+        # Send cancellation confirmation email
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if user:
+            try:
+                email_result = self.email.send_deletion_cancelled_email(
+                    to_email=user.email,
+                    user_first_name=user.first_name or 'User',
+                    user_email=user.email,
+                    language=user.preferred_language or 'en'
+                )
+                if email_result['status'] != 'success':
+                    logger.warning(f"Failed to send cancellation email to {user.email}: {email_result.get('message')}")
+            except Exception as e:
+                logger.error(f"Error sending cancellation email to {user.email}: {str(e)}")
 
         return True
 
@@ -315,9 +372,14 @@ class UserDeletionService:
             self.db.commit()
             return {'status': 'already_deleted', 'user_id': str(user_id)}
 
+        # Store user details for final email before deletion
+        user_email = user.email
+        user_first_name = user.first_name or 'User'
+        user_language = user.preferred_language or 'en'
+
         results = {
             'user_id': str(user_id),
-            'user_email': user.email,
+            'user_email': user_email,
             'deletion_request_id': str(request.id),
             'started_at': datetime.utcnow().isoformat()
         }
@@ -373,9 +435,22 @@ class UserDeletionService:
             # Step 6: Commit all changes
             self.db.commit()
 
-            # Step 7: Log deletion
+            # Step 7: Send deletion completed email
+            try:
+                email_result = self.email.send_deletion_completed_email(
+                    to_email=user_email,
+                    user_first_name=user_first_name,
+                    user_email=user_email,
+                    language=user_language
+                )
+                if email_result['status'] != 'success':
+                    logger.warning(f"Failed to send completion email to {user_email}: {email_result.get('message')}")
+            except Exception as e:
+                logger.error(f"Error sending completion email to {user_email}: {str(e)}")
+
+            # Step 8: Log deletion
             logger.info(
-                f"Account deleted: user_id={user_id}, email={user.email}, "
+                f"Account deleted: user_id={user_id}, email={user_email}, "
                 f"request_id={request.id}, s3_files_deleted={results['s3_documents_deleted'] + results['s3_exports_deleted']}"
             )
 

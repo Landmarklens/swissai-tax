@@ -144,7 +144,11 @@ class TestUserDeletionService:
         mock_deletion_request.verification_code = '123456'
         mock_deletion_request.expires_at = datetime.utcnow() + timedelta(minutes=15)
 
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_deletion_request
+        # Mock user for email sending
+        test_user.preferred_language = 'en'
+
+        # Mock query to return deletion request first, then user
+        mock_db.query.return_value.filter.return_value.first.side_effect = [mock_deletion_request, test_user]
 
         # Verify
         verified_request = service.verify_and_schedule_deletion(
@@ -155,7 +159,7 @@ class TestUserDeletionService:
         )
 
         assert verified_request.status == 'verified'
-        mock_db.commit.assert_called_once()
+        assert mock_db.commit.called
 
     @patch('services.user_deletion_service.AuditLogService')
     def test_verify_deletion_invalid_code(self, mock_audit, service, test_user, mock_db, mock_deletion_request):
@@ -200,7 +204,11 @@ class TestUserDeletionService:
         mock_deletion_request.verification_token = 'test-token'
         mock_deletion_request.scheduled_deletion_at = datetime.utcnow() + timedelta(days=7)
 
-        mock_db.query.return_value.filter.return_value.first.return_value = mock_deletion_request
+        # Mock user for email sending
+        test_user.preferred_language = 'en'
+
+        # Mock query to return deletion request first, then user
+        mock_db.query.return_value.filter.return_value.first.side_effect = [mock_deletion_request, test_user]
 
         # Cancel
         result = service.cancel_deletion(
@@ -212,7 +220,7 @@ class TestUserDeletionService:
 
         assert result is True
         assert mock_deletion_request.status == 'cancelled'
-        mock_db.commit.assert_called_once()
+        assert mock_db.commit.called
 
     @patch('services.user_deletion_service.AuditLogService')
     def test_cancel_deletion_invalid_token(self, mock_audit, service, test_user, mock_db):

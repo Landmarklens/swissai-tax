@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérifier la Suppression du Compte</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #dc3545; color: white; padding: 20px; text-align: center; }
+        .content { background-color: #f8f9fa; padding: 30px; }
+        .code-box { background-color: #fff; border: 2px dashed #dc3545; padding: 20px; text-align: center; margin: 20px 0; }
+        .code { font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #dc3545; }
+        .warning { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+        .footer { background-color: #343a40; color: #fff; padding: 20px; text-align: center; font-size: 12px; }
+        a { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚠️ Demande de Suppression de Compte</h1>
+    </div>
+
+    <div class="content">
+        <p>Bonjour {{user_first_name}},</p>
+
+        <p>Nous avons reçu une demande pour supprimer définitivement votre compte SwissAI Tax (<strong>{{user_email}}</strong>).</p>
+
+        <p>Pour confirmer cette suppression, veuillez saisir le code de vérification suivant :</p>
+
+        <div class="code-box">
+            <div class="code">{{verification_code}}</div>
+            <p style="margin: 10px 0 0 0; color: #666; font-size: 14px;">Ce code expire dans 15 minutes</p>
+        </div>
+
+        <div class="warning">
+            <h3 style="margin-top: 0;">⚠️ Important - Cette Action est Permanente</h3>
+            <p><strong>Une fois vérifié, votre compte sera programmé pour suppression dans 7 jours.</strong></p>
+            <p>Cela supprimera définitivement :</p>
+            <ul>
+                <li>Toutes vos déclarations fiscales et documents</li>
+                <li>Votre profil et paramètres</li>
+                <li>Votre abonnement (si actif)</li>
+                <li>Toutes vos données (ne peuvent pas être récupérées)</li>
+            </ul>
+        </div>
+
+        <p><strong>Vous n'avez pas demandé cela?</strong> Si vous n'avez pas demandé la suppression du compte, veuillez ignorer cet e-mail et envisager de changer votre mot de passe immédiatement.</p>
+
+        <p>Pour toute question, veuillez contacter notre équipe d'assistance à <a href="mailto:support@swissai.tax">support@swissai.tax</a></p>
+
+        <p>Cordialement,<br>
+        L'équipe SwissAI Tax</p>
+    </div>
+
+    <div class="footer">
+        <p>SwissAI Tax | Zurich, Suisse</p>
+        <p>Ceci est un e-mail automatique. Veuillez ne pas répondre à ce message.</p>
+    </div>
+</body>
+</html>

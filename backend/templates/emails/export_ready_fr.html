@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Export de Données est Prêt</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #007bff; color: white; padding: 20px; text-align: center; }
+        .content { background-color: #f8f9fa; padding: 30px; }
+        .download-box { background-color: #fff; border: 2px solid #007bff; padding: 20px; margin: 20px 0; text-align: center; }
+        .download-btn { display: inline-block; background-color: #007bff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 18px; margin: 10px 0; }
+        .warning { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+        .footer { background-color: #343a40; color: #fff; padding: 20px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📦 Votre Export de Données est Prêt !</h1>
+    </div>
+
+    <div class="content">
+        <p>Bonjour {{user_first_name}},</p>
+
+        <p>Excellente nouvelle ! Votre export de données a été généré avec succès et est prêt à télécharger.</p>
+
+        <div class="download-box">
+            <h3>Détails de l'Export :</h3>
+            <p><strong>Format :</strong> {{export_format}}</p>
+            <p><strong>Taille du Fichier :</strong> {{file_size_mb}} MB</p>
+            <p><strong>Généré :</strong> {{generated_date}}</p>
+
+            <a href="{{download_link}}" class="download-btn">Télécharger Vos Données</a>
+
+            <p style="color: #666; font-size: 14px; margin-top: 15px;">Ou copiez ce lien : {{download_link}}</p>
+        </div>
+
+        <div class="warning">
+            <h3 style="margin-top: 0;">⏰ Important - Le Lien Expire Bientôt</h3>
+            <p><strong>Ce lien de téléchargement expirera dans {{hours_until_expiry}} heures.</strong></p>
+            <p>Veuillez télécharger vos données avant le {{expiry_date}}.</p>
+        </div>
+
+        <h3>Contenu de votre export :</h3>
+        <ul>
+            <li>Votre profil et informations de compte</li>
+            <li>Toutes les déclarations fiscales et calculs</li>
+            <li>Historique d'abonnement</li>
+            <li>Enregistrements de paiement</li>
+            <li>Paramètres et préférences</li>
+        </ul>
+
+        <p><strong>Note de Confidentialité :</strong> Cet export contient des informations personnelles. Veuillez le conserver en sécurité et le supprimer après utilisation.</p>
+
+        <p>Si vous avez des questions ou besoin d'un nouvel export, vous pouvez en demander un à tout moment depuis les paramètres de votre compte.</p>
+
+        <p>Cordialement,<br>
+        L'équipe SwissAI Tax</p>
+    </div>
+
+    <div class="footer">
+        <p>SwissAI Tax | Zurich, Suisse</p>
+        <p>Ceci est un e-mail automatique. Veuillez ne pas répondre à ce message.</p>
+    </div>
+</body>
+</html>

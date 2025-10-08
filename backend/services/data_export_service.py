@@ -22,6 +22,7 @@ from models.swisstax import (
     UserSettings
 )
 from services.audit_log_service import AuditLogService
+from services.gdpr_email_service import GDPREmailService, get_gdpr_email_service
 from services.s3_storage_service import S3StorageService, get_storage_service
 
 logger = logging.getLogger(__name__)
@@ -32,9 +33,15 @@ class DataExportService:
 
     EXPORT_EXPIRY_HOURS = 48
 
-    def __init__(self, db: Session, s3_service: Optional[S3StorageService] = None):
+    def __init__(
+        self,
+        db: Session,
+        s3_service: Optional[S3StorageService] = None,
+        email_service: Optional[GDPREmailService] = None
+    ):
         self.db = db
         self.s3 = s3_service or get_storage_service()
+        self.email = email_service or get_gdpr_email_service()
 
     def request_export(
         self,
@@ -399,6 +406,31 @@ class DataExportService:
                 f"Data export completed ({export.format}, {export.file_size_mb} MB)",
                 metadata={'export_id': str(export.id), 'format': export.format}
             )
+
+            # Send email notification
+            user = self.db.query(User).filter(User.id == export.user_id).first()
+            if user:
+                try:
+                    # Format dates for email
+                    generated_date = export.completed_at.strftime('%B %d, %Y at %H:%M UTC')
+                    expiry_date = export.expires_at.strftime('%B %d, %Y at %H:%M UTC')
+                    hours_until_expiry = int((export.expires_at - datetime.utcnow()).total_seconds() / 3600)
+
+                    email_result = self.email.send_export_ready_email(
+                        to_email=user.email,
+                        user_first_name=user.first_name or 'User',
+                        export_format=export.format.upper(),
+                        file_size_mb=export.file_size_mb,
+                        generated_date=generated_date,
+                        download_link=file_url,
+                        hours_until_expiry=hours_until_expiry,
+                        expiry_date=expiry_date,
+                        language=user.preferred_language or 'en'
+                    )
+                    if email_result['status'] != 'success':
+                        logger.warning(f"Failed to send export ready email to {user.email}: {email_result.get('message')}")
+                except Exception as e:
+                    logger.error(f"Error sending export ready email to {user.email}: {str(e)}")
 
             return export
 

@@ -50,9 +50,21 @@ const twoFactorService = {
       return { success: true, data: response.data };
     } catch (error) {
       console.error('[2FA] Verification failed:', error);
+
+      // Handle validation errors (array) vs string errors
+      let errorMessage = 'Failed to verify 2FA code';
+      if (error.response?.data?.detail) {
+        if (Array.isArray(error.response.data.detail)) {
+          // Extract first validation error message
+          errorMessage = error.response.data.detail[0]?.msg || errorMessage;
+        } else if (typeof error.response.data.detail === 'string') {
+          errorMessage = error.response.data.detail;
+        }
+      }
+
       return {
         success: false,
-        error: error.response?.data?.detail || 'Failed to verify 2FA code'
+        error: errorMessage
       };
     }
   },

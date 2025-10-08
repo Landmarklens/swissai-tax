@@ -96,6 +96,18 @@ def verify_temp_2fa_jwt(token: str) -> Optional[dict]:
 
 
 def get_google_flow() -> Flow:
+    """
+    Get Google OAuth flow instance.
+
+    Raises:
+        ValueError: If Google OAuth credentials are not configured
+    """
+    if not settings.GOOGLE_CLIENT_ID or not settings.GOOGLE_CLIENT_SECRET or not settings.GOOGLE_REDIRECT_URI:
+        raise ValueError(
+            "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID, "
+            "GOOGLE_CLIENT_SECRET, and GOOGLE_REDIRECT_URI in environment or Parameter Store."
+        )
+
     client_config = {
         "web": {
             "client_id": settings.GOOGLE_CLIENT_ID,
@@ -118,7 +130,22 @@ def get_google_flow() -> Flow:
     )
 
 
-flow = get_google_flow()
+# Initialize flow lazily - only when needed
+_flow = None
+
+def get_flow():
+    """Get or create the Google OAuth flow instance (lazy initialization)"""
+    global _flow
+    if _flow is None:
+        _flow = get_google_flow()
+    return _flow
+
+# For backward compatibility, create a property-like accessor
+class FlowAccessor:
+    def __getattr__(self, name):
+        return getattr(get_flow(), name)
+
+flow = FlowAccessor()
 
 
 class JWTHandler(HTTPBearer):

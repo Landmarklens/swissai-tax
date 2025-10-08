@@ -66,7 +66,7 @@ const authService = {
         redirect_url = `http://localhost:3000/${currentLang}/google-redirect`;
       }
 
-      const fullUrl = `${API_URL}/auth/login/google`;
+      const fullUrl = `${API_URL}/api/auth/login/google`;
       const params = { user_type: userType, redirect_url };
 
       const response = await axios.get(fullUrl, {

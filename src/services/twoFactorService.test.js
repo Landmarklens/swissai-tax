@@ -82,14 +82,12 @@ describe('twoFactorService', () => {
 
       expect(axios.post).toHaveBeenCalledWith(
         `${API_URL}/api/2fa/setup/verify`,
-        { code },
         {
-          params: {
-            secret,
-            backup_codes: JSON.stringify(backupCodes)
-          },
-          withCredentials: true
-        }
+          code,
+          secret,
+          backup_codes: backupCodes
+        },
+        { withCredentials: true }
       );
       expect(result).toEqual({
         success: true,

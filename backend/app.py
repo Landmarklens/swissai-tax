@@ -20,8 +20,11 @@ from pydantic import BaseModel, Field
 # Add current directory to path for imports
 sys.path.append(os.path.dirname(__file__))
 
+# Import config
+from config import settings as app_settings
+
 # Import routers
-from routers import auth, user, user_counter
+from routers import auth, user, user_counter, audit_logs
 from routers.swisstax import dashboard, filing, payment, profile, settings, subscription
 from services.document_service import DocumentService
 from services.interview_service import interview_service
@@ -99,6 +102,46 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add security headers middleware
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    """
+    Middleware that adds security headers to all responses
+    Implements best practices for security including CSP, HSTS, and frame protection
+    """
+    response = await call_next(request)
+
+    # Strict-Transport-Security: Force HTTPS for 1 year
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+    # X-Content-Type-Options: Prevent MIME-sniffing
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # X-Frame-Options: Prevent clickjacking
+    response.headers["X-Frame-Options"] = "DENY"
+
+    # X-XSS-Protection: Enable XSS filter (legacy browsers)
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+
+    # Referrer-Policy: Control referrer information
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    # Content-Security-Policy: Restrict resource loading
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data: https:; "
+        "font-src 'self' data:; "
+        "connect-src 'self' https://swissai.tax https://www.swissai.tax; "
+        "frame-ancestors 'none';"
+    )
+
+    # Permissions-Policy: Control browser features
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+
+    return response
+
 # Add sliding window session middleware
 @app.middleware("http")
 async def sliding_session_middleware(request: Request, call_next):
@@ -117,7 +160,7 @@ async def sliding_session_middleware(request: Request, call_next):
     if access_token:
         try:
             # Decode token to get user info
-            payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(access_token, app_settings.SECRET_KEY, algorithms=["HS256"])
             email = payload.get("email")
             user_type = payload.get("user_type")
 
@@ -159,6 +202,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(user.router, prefix="/api/user", tags=["user"])
 app.include_router(user_counter.router, prefix="/api/user-counter", tags=["user-counter"])
+app.include_router(audit_logs.router, prefix="/api/audit-logs", tags=["audit-logs"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])

@@ -81,8 +81,6 @@ async def initialize_two_factor_setup(
 async def verify_and_enable_two_factor(
     request: Request,
     verify_request: TwoFactorSetupVerifyRequest,
-    secret: str = Query(..., description="TOTP secret from init response"),
-    backup_codes: str = Query(..., description="JSON string of backup codes from init"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -102,24 +100,17 @@ async def verify_and_enable_two_factor(
             )
 
         # Verify the TOTP code
-        if not two_factor_service.verify_totp(secret, verify_request.code):
+        if not two_factor_service.verify_totp(verify_request.secret, verify_request.code):
             raise HTTPException(
                 status_code=400,
                 detail="Invalid verification code. Please try again."
             )
 
-        # Parse backup codes
-        import json
-        try:
-            backup_codes_list = json.loads(backup_codes)
-        except json.JSONDecodeError:
-            raise HTTPException(status_code=400, detail="Invalid backup codes format")
-
         # Enable 2FA
         success = two_factor_service.enable_two_factor(
             user=current_user,
-            secret=secret,
-            backup_codes=backup_codes_list,
+            secret=verify_request.secret,
+            backup_codes=verify_request.backup_codes,
             db=db
         )
 

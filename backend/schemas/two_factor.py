@@ -17,6 +17,8 @@ class TwoFactorSetupInitResponse(BaseModel):
 class TwoFactorSetupVerifyRequest(BaseModel):
     """Request to verify and enable 2FA"""
     code: str = Field(..., min_length=6, max_length=6, description="6-digit TOTP code")
+    secret: str = Field(..., description="TOTP secret from initialization")
+    backup_codes: List[str] = Field(..., min_length=10, max_length=10, description="Backup codes from initialization")
 
 
 class TwoFactorVerifyRequest(BaseModel):

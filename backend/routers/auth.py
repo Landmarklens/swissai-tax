@@ -31,6 +31,7 @@ from utils.auth import check_user, flow, sign_jwt, sign_temp_2fa_jwt, verify_tem
 from utils.fastapi_rate_limiter import rate_limit
 from utils.rate_limiter import limiter
 from utils.router import Router
+from services.audit_log_service import log_login_success, log_logout
 
 router = Router()
 
@@ -228,6 +229,18 @@ async def user_login(
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)
 
+            # Log successful login
+            try:
+                log_login_success(
+                    db,
+                    db_user.id,
+                    request.client.host if request.client else "unknown",
+                    request.headers.get("user-agent", "")
+                )
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Failed to log audit event: {e}")
+
             # Set httpOnly cookie (new secure method)
             if use_cookie:
                 import logging
@@ -348,6 +361,17 @@ async def verify_two_factor_login(
         db.commit()
 
         logger.info(f"[2FA] Login successful for user: {db_user.email}")
+
+        # Log successful 2FA login
+        try:
+            log_login_success(
+                db,
+                db_user.id,
+                request.client.host if request.client else "unknown",
+                request.headers.get("user-agent", "")
+            )
+        except Exception as e:
+            logger.warning(f"Failed to log audit event: {e}")
 
         # Set httpOnly cookie if requested
         if use_cookie:

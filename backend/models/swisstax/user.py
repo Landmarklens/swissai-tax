@@ -75,6 +75,7 @@ class User(SwissTaxBase, Base):
     # These relationships are not currently used in the application code
     # Database has ON DELETE CASCADE constraints for data integrity
     # TODO: Re-enable when needed or when relationship issues are fully resolved
+    # audit_logs = relationship("AuditLog", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>"

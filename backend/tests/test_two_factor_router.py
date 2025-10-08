@@ -96,8 +96,8 @@ class TestTwoFactorRouter:
         mock_service.enable_two_factor.return_value = True
 
         response = client.post(
-            f"/api/2fa/setup/verify?secret={secret}&backup_codes={json.dumps(backup_codes)}",
-            json={"code": valid_code}
+            "/api/2fa/setup/verify",
+            json={"code": valid_code, "secret": secret, "backup_codes": backup_codes}
         )
 
         assert response.status_code == 200
@@ -116,8 +116,8 @@ class TestTwoFactorRouter:
         mock_service.verify_totp.return_value = False
 
         response = client.post(
-            f"/api/2fa/setup/verify?secret={secret}&backup_codes={json.dumps(backup_codes)}",
-            json={"code": "000000"}
+            "/api/2fa/setup/verify",
+            json={"code": "000000", "secret": secret, "backup_codes": backup_codes}
         )
 
         assert response.status_code == 400
@@ -131,8 +131,8 @@ class TestTwoFactorRouter:
         backup_codes = ["ABCD-1234"]
 
         response = client.post(
-            f"/api/2fa/setup/verify?secret={secret}&backup_codes={json.dumps(backup_codes)}",
-            json={"code": "123456"}
+            "/api/2fa/setup/verify",
+            json={"code": "123456", "secret": secret, "backup_codes": backup_codes}
         )
 
         assert response.status_code == 400

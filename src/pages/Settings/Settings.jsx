@@ -18,7 +18,8 @@ import {
   Notifications as NotificationsIcon,
   Folder as FolderIcon,
   Receipt as ReceiptIcon,
-  Security as SecurityIcon
+  Security as SecurityIcon,
+  History as HistoryIcon
 } from '@mui/icons-material';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -28,6 +29,7 @@ import TaxPreferencesSection from './components/TaxPreferencesSection';
 import DocumentManagementSection from './components/DocumentManagementSection';
 import BillingTab from './components/BillingTab';
 import { TwoFactorSettings } from '../../components/TwoFactor';
+import AuditLogsTab from './components/AuditLogsTab';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -98,6 +100,11 @@ const Settings = () => {
               iconPosition="start"
               label={t('Billing')}
             />
+            <Tab
+              icon={<HistoryIcon />}
+              iconPosition="start"
+              label={t('Activity Log')}
+            />
           </Tabs>
         </Box>
 
@@ -141,6 +148,14 @@ const Settings = () => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <BillingTab />
+            </Grid>
+          </Grid>
+        )}
+
+        {activeTab === 5 && (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <AuditLogsTab />
             </Grid>
           </Grid>
         )}

@@ -11,8 +11,8 @@ const Terms = () => {
   return (
     <>
       <SEOHelmet
-        title="Terms of Service - HomeAI"
-        description="HomeAI terms of service and usage agreement"
+        title="Terms of Service - SwissTax"
+        description="SwissTax terms of service and usage agreement for Swiss tax filing"
       />
       <BasicLayout>
         <Box
@@ -47,12 +47,12 @@ const Terms = () => {
                 <Box display="flex" flexDirection="column" gap={1}>
                   <Typography sx={{ pl: 0.5 }}>
                     {t(
-                      'Welcome to HomeAI.CH! These Terms and Conditions govern your use of our website, mobile applications, and services. By accessing or using HomeAI.CH, you agree to be bound by these Terms and Conditions, as well as our Privacy Policy. If you do not agree to these terms, please do not use our services.'
+                      'Welcome to SwissTax! These Terms and Conditions govern your use of our Swiss tax filing website, mobile applications, and services. By accessing or using SwissTax, you agree to be bound by these Terms and Conditions, as well as our Privacy Policy. If you do not agree to these terms, please do not use our services.'
                     )}
                   </Typography>
                   <Typography sx={{ pl: 0.5, mt: 1 }}>
                     {t(
-                      'HomeAI.CH reserves the right to update or modify these Terms and Conditions at any time. We will notify you of significant changes via email or a notice on our website. Your continued use of our services after such changes constitutes your acceptance of the updated terms.'
+                      'SwissTax reserves the right to update or modify these Terms and Conditions at any time to reflect changes in Swiss tax laws or our services. We will notify you of significant changes via email or a notice on our website. Your continued use of our services after such changes constitutes your acceptance of the updated terms.'
                     )}
                   </Typography>
                 </Box>
@@ -78,11 +78,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('Who can use HomeAI.CH?')}
+                      {t('Who can use SwissTax?')}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'HomeAI.CH services are available to individuals who are at least 18 years old and capable of entering into legally binding contracts. By using our services, you represent that you meet these eligibility requirements.'
+                        'SwissTax services are available to individuals who are at least 18 years old, residents or taxpayers in Switzerland, and capable of entering into legally binding contracts. By using our services, you represent that you have a Swiss tax obligation and meet these eligibility requirements.'
                       )}
                     </Typography>
                   </Box>
@@ -98,13 +98,20 @@ const Terms = () => {
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'You agree to use HomeAI.CH services only for lawful purposes and in accordance with these Terms and Conditions. You are prohibited from:'
+                        'You agree to use SwissTax services only for lawful purposes and in accordance with these Terms and Conditions and Swiss tax regulations. You are prohibited from:'
                       )}
                     </Typography>
                     <Box sx={{ pl: 2, pt: 0.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
                       <Box component="li">
                         <Typography component="span">
-                          {t('Using the service to engage in any illegal or fraudulent activity.')}
+                          {t('Using the service to engage in tax fraud, evasion, or any illegal activity.')}
+                        </Typography>
+                      </Box>
+                      <Box component="li">
+                        <Typography component="span">
+                          {t(
+                            'Providing false or misleading tax information, income data, or deductions to the service.'
+                          )}
                         </Typography>
                       </Box>
                       <Box component="li">
@@ -124,7 +131,7 @@ const Terms = () => {
                       <Box component="li">
                         <Typography component="span">
                           {t(
-                            'Misrepresenting your identity or providing false information during the interview process or account creation.'
+                            'Sharing your account credentials or allowing unauthorized access to your tax information.'
                           )}
                         </Typography>
                       </Box>
@@ -138,11 +145,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('Can HomeAI.CH terminate my access to the service?')}
+                      {t('Can SwissTax terminate my access to the service?')}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'We reserve the right to suspend or terminate your access to HomeAI.CH at our discretion, with or without notice, if we believe you have violated these Terms and Conditions, engaged in unlawful activity, or used the service in a manner that harms HomeAI.CH or its users.'
+                        'We reserve the right to suspend or terminate your access to SwissTax at our discretion, with or without notice, if we believe you have violated these Terms and Conditions, provided false tax information, engaged in unlawful activity, or used the service in a manner that harms SwissTax or its users. In the event of termination, you remain responsible for the accuracy of any tax filings submitted through our service.'
                       )}
                     </Typography>
                   </Box>
@@ -169,11 +176,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('What is the cost of using HomeAI.CH?')}
+                      {t('What is the cost of using SwissTax?')}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'You can try HomeAI.CH free for 1 day. After the trial, unlimited access costs CHF 29.99 per month. You may cancel anytime, with no long-term commitment.'
+                        'SwissTax offers flexible pricing plans for Swiss tax filing services. Pricing varies based on the complexity of your tax situation and canton. Please visit our pricing page for current rates. You may cancel anytime, with no long-term commitment.'
                       )}
                     </Typography>
                   </Box>
@@ -237,7 +244,7 @@ const Terms = () => {
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'We offer a 1-day money-back guarantee after the trial period. If you\'re not satisfied with our services, you can request a refund within 1 day of your first paid subscription by contacting our support team at support@homeai.ch. Refunds will be processed within 5-10 business days.'
+                        'We offer a satisfaction guarantee before you submit your tax filing. If you\'re not satisfied with our service before submission, you can request a refund by contacting our support team at contact@swisstax.ch. Once a tax filing has been submitted to Swiss tax authorities, refunds are not available as the service has been completed. Refunds will be processed within 5-10 business days.'
                       )}
                     </Typography>
                   </Box>
@@ -264,11 +271,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('Who owns the content on HomeAI.CH?')}
+                      {t('Who owns the content on SwissTax?')}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'All content on HomeAI.CH, including text, graphics, logos, images, and software, is the property of HomeAI.CH or its licensors and is protected by copyright, trademark, and other intellectual property laws. You may not reproduce, distribute, modify, or create derivative works of any content without our prior written consent.'
+                        'All content on SwissTax, including text, graphics, logos, images, tax calculation algorithms, and software, is the property of SwissTax or its licensors and is protected by copyright, trademark, and other intellectual property laws. You may not reproduce, distribute, modify, or create derivative works of any content without our prior written consent.'
                       )}
                     </Typography>
                   </Box>
@@ -280,11 +287,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('Can I use property recommendations for commercial purposes?')}
+                      {t('Who owns my tax data?')}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'Property recommendations provided by HomeAI.CH are for personal use only. You may not use our recommendations, data, or any other content for commercial purposes, such as reselling or distributing, without our explicit permission.'
+                        'You retain full ownership of all tax information and documents you provide to SwissTax. We do not claim any ownership rights to your personal tax data. You grant us a limited license to use your data solely for providing tax filing services to you, and this license terminates when you delete your account or request data deletion.'
                       )}
                     </Typography>
                   </Box>
@@ -358,11 +365,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('Is HomeAI.CH liable for inaccuracies in property recommendations?')}
+                      {t('Is SwissTax liable for tax calculation errors?')}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'While we strive to provide accurate and up-to-date property recommendations, HomeAI.CH is not liable for any inaccuracies, errors, or omissions in the information provided. Property listings are sourced from third parties, and we recommend verifying details directly with property owners or agents before making decisions.'
+                        'While we strive to provide accurate tax calculations based on current Swiss federal and cantonal tax laws, you are ultimately responsible for the accuracy and completeness of your tax filing. We strongly recommend reviewing all calculations and information before submission. SwissTax is not liable for any penalties, interest, or additional taxes resulting from inaccuracies in information you provide. However, if an error is caused by our software, we will work with you to file an amended return.'
                       )}
                     </Typography>
                   </Box>
@@ -374,11 +381,11 @@ const Terms = () => {
                         fontSize: '18px',
                         fontWeight: 700
                       }}>
-                      {t('What is the extent of HomeAI.CH’s liability?')}
+                      {t("What is the extent of SwissTax's liability?")}
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'To the fullest extent permitted by law, HomeAI.CH and its affiliates will not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of our services, including but not limited to loss of profits, data, or goodwill.'
+                        'To the fullest extent permitted by Swiss law, SwissTax and its affiliates will not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of our services, including but not limited to loss of profits, data, tax penalties, or goodwill. Our total liability is limited to the amount you paid for our services in the past 12 months.'
                       )}
                     </Typography>
                   </Box>

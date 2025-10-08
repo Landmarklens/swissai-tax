@@ -249,20 +249,12 @@ const Footer = () => {
                 columnGap: 2,
                 flexWrap: 'wrap'
               }}>
-              {/*
-              <StyledLink to="/search-property" style={{ fontSize: '12px' }}>
-                {t('Search Property')}
-              </StyledLink>
               <StyledLink to="/privacy-policy" style={{ fontSize: '12px' }}>
                 {t('Privacy Policy')}
               </StyledLink>
               <StyledLink to="/terms-and-conditions" style={{ fontSize: '12px' }}>
                 {t('Terms and Conditions')}
               </StyledLink>
-              <StyledLink to="/support" style={{ fontSize: '12px' }}>
-                {t('Support')}
-              </StyledLink>
-              */}
             </Box>
           </Box>
         </Container>

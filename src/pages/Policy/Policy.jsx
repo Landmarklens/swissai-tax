@@ -11,8 +11,8 @@ const Policy = () => {
   return (
     <>
       <SEOHelmet
-        title="Privacy Policy - HomeAI"
-        description="HomeAI privacy policy and data protection information"
+        title="Privacy Policy - SwissTax"
+        description="SwissTax privacy policy and data protection information for Swiss tax filing"
       />
       <BasicLayout>
         <Box
@@ -47,12 +47,12 @@ const Policy = () => {
                 <Box display="flex" flexDirection="column" gap={1}>
                   <Typography sx={{ pl: 0.5 }}>
                     {t(
-                      'At HomeAI.CH, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, disclose, and safeguard your data when you use our services. By accessing or using HomeAI.CH, you agree to the terms of this Privacy Policy. If you do not agree, please do not use our services.'
+                      'At SwissTax, we are committed to protecting your privacy and ensuring the security of your sensitive tax and financial information. This Privacy Policy outlines how we collect, use, disclose, and safeguard your data when you use our Swiss tax filing services. By accessing or using SwissTax, you agree to the terms of this Privacy Policy. If you do not agree, please do not use our services.'
                     )}
                   </Typography>
                   <Typography sx={{ pl: 0.5, mt: 1 }}>
                     {t(
-                      'This policy applies to all users, including those who access our services via our website, mobile applications, or any other platform provided by HomeAI.CH. We encourage you to read this policy carefully to understand our practices regarding your data.'
+                      'Given the highly sensitive nature of tax and financial data, we implement enterprise-grade security measures including 256-bit encryption, two-factor authentication (2FA), and secure cloud infrastructure. This policy applies to all users accessing our services via our website or mobile applications.'
                     )}
                   </Typography>
                 </Box>
@@ -92,17 +92,17 @@ const Policy = () => {
                         </Typography>{' '}
                         <Typography component="span">
                           {t(
-                            'This includes your name, email address, phone number, and billing information when you create an account or subscribe to our services.'
+                            'This includes your name, email address, phone number, billing information, and Swiss tax identification numbers when you create an account or subscribe to our services.'
                           )}
                         </Typography>
                       </Box>
                       <Box component="li">
                         <Typography component="span" sx={{ fontWeight: 700, color: '#000' }}>
-                          {t('Preference Data:')}
+                          {t('Tax and Financial Data:')}
                         </Typography>{' '}
                         <Typography component="span">
                           {t(
-                            'We collect information about your property search preferences, such as desired location, budget, property type, and lifestyle needs (e.g., pet-friendly accommodations, commute preferences).'
+                            'We collect tax-related information including income, deductions, canton of residence, employment details, investment income, property information, and other data necessary for accurate Swiss tax calculations and filing.'
                           )}
                         </Typography>
                       </Box>
@@ -112,7 +112,17 @@ const Policy = () => {
                         </Typography>{' '}
                         <Typography component="span">
                           {t(
-                            'We collect data about how you interact with our services, including search history, feedback on recommendations, and pages visited.'
+                            'We collect data about how you interact with our services, including tax calculation history, document uploads, filing progress, and pages visited.'
+                          )}
+                        </Typography>
+                      </Box>
+                      <Box component="li">
+                        <Typography component="span" sx={{ fontWeight: 700, color: '#000' }}>
+                          {t('Document Data:')}
+                        </Typography>{' '}
+                        <Typography component="span">
+                          {t(
+                            'Tax-related documents you upload (such as salary certificates, bank statements, and deduction receipts) are encrypted and stored securely using 256-bit AES encryption.'
                           )}
                         </Typography>
                       </Box>
@@ -195,31 +205,36 @@ const Policy = () => {
                       <Box component="li">
                         <Typography component="span">
                           {t(
-                            'Provide personalized property recommendations based on your preferences and lifestyle needs.'
+                            'Calculate and prepare your Swiss tax returns accurately based on federal and cantonal regulations.'
                           )}
                         </Typography>
                       </Box>
                       <Box component="li">
                         <Typography component="span">
                           {t(
-                            'Send you notifications about new properties that match your criteria.'
+                            'Generate and submit tax filing documents to Swiss tax authorities on your behalf.'
                           )}
                         </Typography>
                       </Box>
                       <Box component="li">
                         <Typography component="span">
-                          {t('Process your subscription payments and manage your account.')}
+                          {t('Process your subscription payments and manage your account securely.')}
                         </Typography>
                       </Box>
                       <Box component="li">
                         <Typography component="span">
-                          {t('Improve our services by analyzing usage patterns and feedback.')}
+                          {t('Provide tax optimization insights and identify potential deductions.')}
+                        </Typography>
+                      </Box>
+                      <Box component="li">
+                        <Typography component="span">
+                          {t('Improve our tax calculation algorithms and services by analyzing anonymized usage patterns.')}
                         </Typography>
                       </Box>
                       <Box component="li">
                         <Typography component="span">
                           {t(
-                            'Communicate with you regarding updates, promotions, or support inquiries (you can opt out of promotional emails at any time).'
+                            'Communicate with you regarding tax deadlines, updates to Swiss tax laws, or support inquiries (you can opt out of promotional emails at any time).'
                           )}
                         </Typography>
                       </Box>
@@ -252,12 +267,12 @@ const Policy = () => {
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'Your data and preferences are stored securely, kept strictly confidential, and never shared or sold. You can easily update or delete your information via account settings.'
+                        'Your tax and financial data is protected with bank-level security measures. All sensitive data is encrypted at rest using 256-bit AES encryption and in transit using TLS 1.3. We store data securely in AWS cloud infrastructure with redundant backups.'
                       )}
                     </Typography>
                     <Typography sx={{ pl: 0.5, mt: 1 }}>
                       {t(
-                        'We implement industry-standard security measures, including encryption, secure servers, and access controls, to protect your data from unauthorized access, disclosure, alteration, or destruction.'
+                        'Your account is protected by two-factor authentication (2FA), requiring both your password and a verification code to access your tax information. We implement strict access controls, regular security audits, and continuous monitoring to protect your data from unauthorized access, disclosure, alteration, or destruction.'
                       )}
                     </Typography>
                   </Box>
@@ -304,21 +319,28 @@ const Policy = () => {
                     </Typography>
                     <Typography sx={{ pl: 0.5 }}>
                       {t(
-                        'We do not share, sell, or disclose your personal data to third parties for marketing purposes. However, we may share your data with:'
+                        'We do not share, sell, or disclose your tax or financial data to third parties for marketing purposes. Your tax information remains strictly confidential. However, we may share your data with:'
                       )}
                     </Typography>
                     <Box sx={{ pl: 2, pt: 0.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
                       <Box component="li">
                         <Typography component="span">
                           {t(
-                            'Service providers who assist us in operating our services, such as payment processors and cloud hosting providers, under strict confidentiality agreements.'
+                            'Swiss tax authorities when you authorize us to file your tax returns on your behalf.'
                           )}
                         </Typography>
                       </Box>
                       <Box component="li">
                         <Typography component="span">
                           {t(
-                            'Legal authorities if required by law or to protect the rights, safety, or property of HomeAI.CH and its users.'
+                            'Service providers who assist us in operating our services, such as payment processors (Stripe) and secure cloud hosting providers (AWS), under strict confidentiality and data processing agreements.'
+                          )}
+                        </Typography>
+                      </Box>
+                      <Box component="li">
+                        <Typography component="span">
+                          {t(
+                            'Legal authorities if required by Swiss law or to comply with legal obligations, protect the rights and safety of SwissTax and its users, or respond to lawful requests.'
                           )}
                         </Typography>
                       </Box>

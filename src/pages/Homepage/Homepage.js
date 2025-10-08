@@ -43,6 +43,7 @@ import HeroIllustration from '../../components/sections/heroSection/HeroIllustra
 import { useUserCounter } from '../../hooks/useUserCounter';
 import LoginSignupModal from '../../components/login/Login';
 import authService from '../../services/authService';
+import TrustBadges from '../../components/TrustBadges/TrustBadges';
 
 const Homepage = () => {
   const { t, i18n } = useTranslation();

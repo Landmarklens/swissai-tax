@@ -80,8 +80,8 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
     """
 
     state_data = {
-        "user_type": user_type.value,
-        "language": language.value,
+        "user_type": user_type,
+        "language": language,
         "redirect_url": redirect_url,
     }
     

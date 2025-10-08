@@ -106,7 +106,7 @@ class DataExport(SwissTaxBase, Base):
         """Calculate hours remaining until expiration"""
         try:
             if not self.expires_at:
-                return 0
+                return 0.0
             # Ensure both datetimes are timezone-aware
             now = datetime.now(timezone.utc)
             expires = self.expires_at
@@ -114,15 +114,15 @@ class DataExport(SwissTaxBase, Base):
             if expires.tzinfo is None:
                 expires = expires.replace(tzinfo=timezone.utc)
             if now >= expires:
-                return 0
+                return 0.0
             delta = expires - now
-            return max(0, delta.total_seconds() / 3600)
+            return max(0.0, delta.total_seconds() / 3600)
         except Exception:
-            return 0
+            return 0.0
 
     @property
     def file_size_mb(self):
         """Get file size in MB"""
         if not self.file_size_bytes:
-            return 0
+            return 0.0
         return round(self.file_size_bytes / (1024 * 1024), 2)

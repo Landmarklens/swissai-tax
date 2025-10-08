@@ -6,13 +6,14 @@ Supports multi-year and multi-canton filing scenarios
 import logging
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.tax_filing_service import TaxFilingService
 from services.postal_code_service import get_postal_code_service
+from services.audit_log_service import AuditLogService
 from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -119,6 +120,7 @@ async def list_filings(
 @router.post("/filings", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_filing(
     request: CreateFilingRequest,
+    http_request: Request,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -143,6 +145,18 @@ async def create_filing(
         )
 
         logger.info(f"User {current_user.id} created filing {filing.id}")
+
+        # Log audit event
+        AuditLogService.log_tax_filing_created(
+            db=db,
+            user_id=current_user.id,
+            filing_id=str(filing.id),
+            tax_year=request.tax_year,
+            canton=request.canton,
+            ip=http_request.client.host if http_request.client else None,
+            user_agent=http_request.headers.get("user-agent", "")
+        )
+
         return filing.to_dict()
 
     except ValueError as e:
@@ -238,6 +252,7 @@ async def get_filing(
 async def update_filing(
     filing_id: str,
     request: UpdateFilingRequest,
+    http_request: Request,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -265,6 +280,29 @@ async def update_filing(
         )
 
         logger.info(f"User {current_user.id} updated filing {filing_id}")
+
+        # Log audit event - check if this was a submission
+        if request.status == "submitted":
+            AuditLogService.log_tax_filing_submitted(
+                db=db,
+                user_id=current_user.id,
+                filing_id=str(filing.id),
+                tax_year=filing.tax_year,
+                canton=filing.canton,
+                ip=http_request.client.host if http_request.client else None,
+                user_agent=http_request.headers.get("user-agent", "")
+            )
+        else:
+            AuditLogService.log_tax_filing_updated(
+                db=db,
+                user_id=current_user.id,
+                filing_id=str(filing.id),
+                tax_year=filing.tax_year,
+                canton=filing.canton,
+                ip=http_request.client.host if http_request.client else None,
+                user_agent=http_request.headers.get("user-agent", "")
+            )
+
         return filing.to_dict()
 
     except ValueError as e:
@@ -285,6 +323,7 @@ async def update_filing(
 async def delete_filing(
     filing_id: str,
     hard_delete: bool = Query(False, description="Permanently delete (USE WITH CAUTION)"),
+    http_request: Request,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -296,6 +335,9 @@ async def delete_filing(
     - Cannot delete submitted filings
     """
     try:
+        # Get filing details before deletion for audit log
+        filing = TaxFilingService.get_filing(db, filing_id, current_user.id)
+
         TaxFilingService.delete_filing(
             db=db,
             filing_id=filing_id,
@@ -304,6 +346,18 @@ async def delete_filing(
         )
 
         logger.info(f"User {current_user.id} {'hard' if hard_delete else 'soft'} deleted filing {filing_id}")
+
+        # Log audit event
+        AuditLogService.log_tax_filing_deleted(
+            db=db,
+            user_id=current_user.id,
+            filing_id=filing_id,
+            tax_year=filing.tax_year,
+            canton=filing.canton,
+            ip=http_request.client.host if http_request.client else None,
+            user_agent=http_request.headers.get("user-agent", "")
+        )
+
         return
 
     except ValueError as e:

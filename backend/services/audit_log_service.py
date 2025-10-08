@@ -242,15 +242,6 @@ def log_2fa_disabled(db: Session, user_id: Union[UUID, str], ip: str, user_agent
     )
 
 
-def log_tax_filing_submitted(db: Session, user_id: Union[UUID, str], filing_id: int, tax_year: int, ip: str, user_agent: str) -> Optional[AuditLog]:
-    """Log tax filing submission"""
-    return AuditLogService.log_event(
-        db, user_id, "tax_filing_submitted", "data_modification",
-        f"Tax filing submitted for year {tax_year}",
-        ip, user_agent, metadata={"filing_id": filing_id, "tax_year": tax_year}
-    )
-
-
 def log_document_uploaded(db: Session, user_id: Union[UUID, str], document_name: str, ip: str, user_agent: str) -> Optional[AuditLog]:
     """Log document upload"""
     return AuditLogService.log_event(
@@ -284,4 +275,44 @@ def log_profile_updated(db: Session, user_id: Union[UUID, str], ip: str, user_ag
         db, user_id, "profile_updated", "data_modification",
         "Profile information updated",
         ip, user_agent
+    )
+
+
+def log_tax_filing_created(db: Session, user_id: Union[UUID, str], filing_id: str, tax_year: int, canton: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+    """Log tax filing creation"""
+    return AuditLogService.log_event(
+        db, user_id, "tax_filing_created", "data_modification",
+        f"Created tax filing for {tax_year} - {canton}",
+        ip, user_agent,
+        metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
+    )
+
+
+def log_tax_filing_submitted(db: Session, user_id: Union[UUID, str], filing_id: str, tax_year: int, canton: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+    """Log tax filing submission"""
+    return AuditLogService.log_event(
+        db, user_id, "tax_filing_submitted", "data_modification",
+        f"Submitted tax filing for {tax_year} - {canton}",
+        ip, user_agent,
+        metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
+    )
+
+
+def log_tax_filing_updated(db: Session, user_id: Union[UUID, str], filing_id: str, tax_year: int, canton: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+    """Log tax filing update"""
+    return AuditLogService.log_event(
+        db, user_id, "tax_filing_updated", "data_modification",
+        f"Updated tax filing for {tax_year} - {canton}",
+        ip, user_agent,
+        metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
+    )
+
+
+def log_tax_filing_deleted(db: Session, user_id: Union[UUID, str], filing_id: str, tax_year: int, canton: str, ip: str, user_agent: str) -> Optional[AuditLog]:
+    """Log tax filing deletion"""
+    return AuditLogService.log_event(
+        db, user_id, "tax_filing_deleted", "data_modification",
+        f"Deleted tax filing for {tax_year} - {canton}",
+        ip, user_agent,
+        metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
     )

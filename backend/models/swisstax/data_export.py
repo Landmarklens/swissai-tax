@@ -41,7 +41,7 @@ class DataExport(SwissTaxBase, Base):
     format = Column(String(10), nullable=False)
 
     # Export file details
-    file_url = Column(String(500))  # Presigned S3 URL
+    file_url = Column(String(2000))  # Presigned S3 URL (can be very long with query params)
     s3_key = Column(String(500))  # S3 object key for cleanup
     file_size_bytes = Column(BigInteger())
 

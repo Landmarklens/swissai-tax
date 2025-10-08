@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Select,
   MenuItem,
@@ -50,6 +50,13 @@ const LanguageSelector = ({ variant = 'outlined' }) => {
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
     { code: 'it', name: 'Italiano', flag: '🇮🇹' },
   ];
+
+  // Sync with i18n language changes (from other components like PreferencesTab)
+  useEffect(() => {
+    if (i18n.language && i18n.language !== currentLanguage) {
+      setCurrentLanguage(i18n.language);
+    }
+  }, [i18n.language, currentLanguage]);
 
   const changeLanguageWithRouting = (newLanguage) => {
     // Get current path without language prefix

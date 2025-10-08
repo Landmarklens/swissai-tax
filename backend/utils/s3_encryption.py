@@ -324,8 +324,12 @@ _s3_storage = None
 
 
 def get_s3_storage() -> S3EncryptedStorage:
-    """Get or create S3 encrypted storage instance"""
+    """Get or create S3 encrypted storage instance using config settings"""
     global _s3_storage
     if _s3_storage is None:
-        _s3_storage = S3EncryptedStorage()
+        from config import settings
+        _s3_storage = S3EncryptedStorage(
+            bucket_name=settings.AWS_S3_BUCKET_NAME,
+            region_name=settings.AWS_REGION
+        )
     return _s3_storage

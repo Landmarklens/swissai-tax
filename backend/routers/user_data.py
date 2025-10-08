@@ -209,29 +209,14 @@ async def request_data_export(
             user_agent=user_agent
         )
 
-        # TODO: Queue background job to generate export
-        # background_jobs.enqueue(
-        #     service.generate_export,
-        #     export_id=export.id
-        # )
-
-        # Store export details before session potentially expires
-        export_id = export.id
-        export_status = export.status
-
-        # For now, generate synchronously (in production, this should be async)
-        try:
-            service.generate_export(export_id)
-            export_status = "completed"
-        except Exception as e:
-            # Log error but don't fail the request
-            print(f"Export generation failed: {e}")
+        # Background job will process this export within 5 minutes
+        # See services/background_jobs.py - process_pending_exports runs every 5 minutes
 
         return DataExportCreatedResponse(
-            export_id=export_id,
-            message="Export request created successfully",
+            export_id=export.id,
+            message="Export request created successfully. Processing will begin shortly.",
             estimated_completion_minutes=5,
-            status=export_status
+            status=export.status
         )
 
     except ValueError as e:
@@ -248,34 +233,63 @@ async def list_data_exports(
     List all data exports for current user
     Optionally include expired exports
     """
-    service = DataExportService(db)
-    exports = service.get_user_exports(
-        user_id=current_user.id,
-        include_expired=include_expired
-    )
-
-    export_responses = [
-        DataExportResponse(
-            id=exp.id,
-            status=exp.status,
-            format=exp.format,
-            file_url=exp.file_url,
-            file_size_mb=exp.file_size_mb,
-            created_at=exp.created_at,
-            completed_at=exp.completed_at,
-            expires_at=exp.expires_at,
-            hours_until_expiry=exp.hours_until_expiry,
-            is_available=exp.is_available,
-            is_expired=exp.is_expired,
-            error_message=exp.error_message
+    try:
+        service = DataExportService(db)
+        exports = service.get_user_exports(
+            user_id=current_user.id,
+            include_expired=include_expired
         )
-        for exp in exports
-    ]
 
-    return DataExportListResponse(
-        exports=export_responses,
-        total_count=len(export_responses)
-    )
+        export_responses = []
+        for exp in exports:
+            try:
+                export_responses.append(DataExportResponse(
+                    id=exp.id,
+                    status=exp.status,
+                    format=exp.format,
+                    file_url=exp.file_url,
+                    file_size_mb=exp.file_size_mb,
+                    created_at=exp.created_at,
+                    completed_at=exp.completed_at,
+                    expires_at=exp.expires_at,
+                    hours_until_expiry=exp.hours_until_expiry,
+                    is_available=exp.is_available,
+                    is_expired=exp.is_expired,
+                    error_message=exp.error_message
+                ))
+            except Exception as e:
+                # Log error but continue processing other exports
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Error processing export {exp.id}: {e}")
+                # Add export with safe defaults
+                export_responses.append(DataExportResponse(
+                    id=exp.id,
+                    status=exp.status,
+                    format=exp.format,
+                    file_url=None,
+                    file_size_mb=0,
+                    created_at=exp.created_at,
+                    completed_at=exp.completed_at,
+                    expires_at=exp.expires_at,
+                    hours_until_expiry=0,
+                    is_available=False,
+                    is_expired=True,
+                    error_message=exp.error_message or "Error processing export data"
+                ))
+
+        return DataExportListResponse(
+            exports=export_responses,
+            total_count=len(export_responses)
+        )
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error listing data exports: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to list data exports: {str(e)}"
+        )
 
 
 @router.get("/export/{export_id}", response_model=DataExportResponse)

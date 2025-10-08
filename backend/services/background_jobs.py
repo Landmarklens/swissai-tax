@@ -85,6 +85,54 @@ class BackgroundJobScheduler:
         except Exception as e:
             logger.error(f"Error in pending deletions job: {e}", exc_info=True)
 
+    def process_pending_exports(self):
+        """
+        Process pending data export requests
+        Runs every 5 minutes
+        """
+        try:
+            logger.info("Starting pending exports processing job")
+            db = SessionLocal()
+
+            try:
+                from models.swisstax import DataExport
+                service = DataExportService(db)
+
+                # Get pending/processing exports
+                pending_exports = db.query(DataExport).filter(
+                    DataExport.status.in_(['pending', 'processing'])
+                ).limit(10).all()  # Process up to 10 at a time
+
+                if not pending_exports:
+                    logger.info("No pending exports to process")
+                    return
+
+                logger.info(f"Found {len(pending_exports)} pending exports to process")
+
+                success_count = 0
+                failure_count = 0
+
+                for export in pending_exports:
+                    try:
+                        logger.info(f"Processing export: {export.id} for user {export.user_id}")
+                        service.generate_export(export.id)
+                        success_count += 1
+                        logger.info(f"Successfully generated export {export.id}")
+                    except Exception as e:
+                        failure_count += 1
+                        logger.error(f"Failed to generate export {export.id}: {e}", exc_info=True)
+
+                logger.info(
+                    f"Pending exports processing completed: "
+                    f"{success_count} successful, {failure_count} failed"
+                )
+
+            finally:
+                db.close()
+
+        except Exception as e:
+            logger.error(f"Error in pending exports processing job: {e}", exc_info=True)
+
     def cleanup_expired_exports(self):
         """
         Clean up expired data exports
@@ -148,7 +196,19 @@ class BackgroundJobScheduler:
             )
             logger.info("Scheduled job: Process pending deletions (every hour)")
 
-            # Job 2: Clean up expired exports daily at 2 AM
+            # Job 2: Process pending data exports every 5 minutes
+            self.scheduler.add_job(
+                func=self.process_pending_exports,
+                trigger=IntervalTrigger(minutes=5),
+                id='process_pending_exports',
+                name='Process Pending Data Exports',
+                replace_existing=True,
+                max_instances=1,  # Prevent concurrent runs
+                misfire_grace_time=60  # 1 minute grace period
+            )
+            logger.info("Scheduled job: Process pending exports (every 5 minutes)")
+
+            # Job 3: Clean up expired exports daily at 2 AM
             self.scheduler.add_job(
                 func=self.cleanup_expired_exports,
                 trigger=CronTrigger(hour=2, minute=0),
@@ -160,7 +220,7 @@ class BackgroundJobScheduler:
             )
             logger.info("Scheduled job: Clean up expired exports (daily at 2 AM)")
 
-            # Job 3: Clean up old audit logs weekly on Sunday at 3 AM
+            # Job 4: Clean up old audit logs weekly on Sunday at 3 AM
             self.scheduler.add_job(
                 func=self.cleanup_old_audit_logs,
                 trigger=CronTrigger(day_of_week='sun', hour=3, minute=0),

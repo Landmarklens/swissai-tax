@@ -79,22 +79,46 @@ class DataExport(SwissTaxBase, Base):
     @property
     def is_expired(self):
         """Check if download link has expired"""
-        if not self.expires_at:
+        try:
+            if not self.expires_at:
+                return True
+            # Ensure both datetimes are timezone-aware for comparison
+            now = datetime.now(timezone.utc)
+            expires = self.expires_at
+            # If expires_at is naive, assume UTC
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=timezone.utc)
+            return now > expires
+        except Exception:
+            # If comparison fails, consider expired for safety
             return True
-        return datetime.now(timezone.utc) > self.expires_at
 
     @property
     def is_available(self):
         """Check if export is ready to download"""
-        return self.is_completed and not self.is_expired and self.file_url
+        try:
+            return self.is_completed and not self.is_expired and self.file_url
+        except Exception:
+            return False
 
     @property
     def hours_until_expiry(self):
         """Calculate hours remaining until expiration"""
-        if not self.expires_at or self.is_expired:
+        try:
+            if not self.expires_at:
+                return 0
+            # Ensure both datetimes are timezone-aware
+            now = datetime.now(timezone.utc)
+            expires = self.expires_at
+            # If expires_at is naive, assume UTC
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=timezone.utc)
+            if now >= expires:
+                return 0
+            delta = expires - now
+            return max(0, delta.total_seconds() / 3600)
+        except Exception:
             return 0
-        delta = self.expires_at - datetime.now(timezone.utc)
-        return max(0, delta.total_seconds() / 3600)
 
     @property
     def file_size_mb(self):

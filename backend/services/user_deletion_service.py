@@ -323,14 +323,35 @@ class UserDeletionService:
         }
 
         try:
-            # Step 1: Cancel active subscriptions (will be handled externally via Stripe)
+            # Step 1: Cancel active Stripe subscriptions
             active_subs = self.db.query(Subscription).filter(
                 Subscription.user_id == user_id,
                 Subscription.status == 'active'
             ).all()
-            results['subscriptions_to_cancel'] = len(active_subs)
 
-            # Step 2: Mark user for deletion (actual cascade happens via DB constraints)
+            stripe_results = []
+            for sub in active_subs:
+                if hasattr(sub, 'stripe_subscription_id') and sub.stripe_subscription_id:
+                    stripe_result = self.stripe.cancel_subscription(
+                        subscription_id=sub.stripe_subscription_id,
+                        reason="account_deletion"
+                    )
+                    stripe_results.append(stripe_result)
+
+            results['subscriptions_cancelled'] = len(stripe_results)
+            results['stripe_mock'] = True  # Indicator that mock service was used
+
+            # Step 2: Delete user documents from S3
+            s3_docs_result = self.s3.delete_user_documents(user_id)
+            results['s3_documents_deleted'] = s3_docs_result['deleted']
+            results['s3_documents_failed'] = s3_docs_result['failed']
+
+            # Step 3: Delete user data exports from S3
+            s3_exports_result = self.s3.delete_user_exports(user_id)
+            results['s3_exports_deleted'] = s3_exports_result['deleted']
+            results['s3_exports_failed'] = s3_exports_result['failed']
+
+            # Step 4: Delete user from database (triggers CASCADE for related records)
             # The CASCADE delete constraints will automatically delete:
             # - user_settings
             # - subscriptions
@@ -338,23 +359,25 @@ class UserDeletionService:
             # - filings
             # - interview_sessions
             # - interview_answers
-            # - documents
+            # - documents (DB records)
             # - required_documents
-
-            # Step 3: Delete user (triggers cascades)
+            # - deletion_requests
+            # - data_exports
+            # - audit_logs
             self.db.delete(user)
 
-            # Step 4: Mark request as completed
+            # Step 5: Mark request as completed
             request.status = 'completed'
             request.updated_at = datetime.utcnow()
 
-            # Step 5: Log deletion
+            # Step 6: Commit all changes
+            self.db.commit()
+
+            # Step 7: Log deletion
             logger.info(
                 f"Account deleted: user_id={user_id}, email={user.email}, "
-                f"request_id={request.id}"
+                f"request_id={request.id}, s3_files_deleted={results['s3_documents_deleted'] + results['s3_exports_deleted']}"
             )
-
-            self.db.commit()
 
             results['status'] = 'success'
             results['completed_at'] = datetime.utcnow().isoformat()

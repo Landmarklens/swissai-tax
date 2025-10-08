@@ -29,6 +29,7 @@ from routers.swisstax import dashboard, filing, payment, profile, settings, subs
 from services.document_service import DocumentService
 from services.interview_service import interview_service
 from services.tax_calculation_service import TaxCalculationService
+from services.background_jobs import start_background_jobs, stop_background_jobs
 from utils.validators import validate_session_id, validate_tax_year
 
 # Try to import connection pool for App Runner, fallback to regular connection
@@ -61,10 +62,24 @@ async def lifespan(app: FastAPI):
     else:
         logger.info("Database connection successful")
 
+    # Start background jobs for account deletions and exports cleanup
+    try:
+        start_background_jobs()
+        logger.info("Background jobs started successfully")
+    except Exception as e:
+        logger.error(f"Failed to start background jobs: {e}", exc_info=True)
+
     yield
 
     # Shutdown
     logger.info("Shutting down SwissAI Tax API...")
+
+    # Stop background jobs
+    try:
+        stop_background_jobs()
+        logger.info("Background jobs stopped successfully")
+    except Exception as e:
+        logger.error(f"Error stopping background jobs: {e}", exc_info=True)
 
 # Create FastAPI app
 app = FastAPI(

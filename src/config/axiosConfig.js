@@ -65,19 +65,19 @@ axios.interceptors.response.use(
           break;
           
         case 401:
-          // Unauthorized - redirect to login
+          // Unauthorized - redirect to homepage where user can login
           authService.logout();
-          window.location.href = '/login';
+          window.location.href = '/';
           toast.error('Session expired. Please login again.');
           break;
-          
+
         case 403:
           // Forbidden - Check for inactive user
           if (data.detail === "User account is inactive") {
             // Clear stored authentication
             authService.logout();
-            // Redirect to login
-            window.location.href = '/login';
+            // Redirect to homepage where user can login
+            window.location.href = '/';
             // Show message
             toast.error("Your account has been deactivated. Please contact support.");
           } else {

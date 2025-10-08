@@ -64,11 +64,7 @@ const InsightsSection = ({ filingId }) => {
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `${API_BASE_URL}/api/insights/filing/${filingId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/insights/filing/${filingId}`);
 
       setInsights(response.data || []);
     } catch (err) {
@@ -81,11 +77,7 @@ const InsightsSection = ({ filingId }) => {
 
   const loadStatistics = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `${API_BASE_URL}/api/insights/statistics/${filingId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/insights/statistics/${filingId}`);
 
       setStatistics(response.data || {});
     } catch (err) {
@@ -95,12 +87,7 @@ const InsightsSection = ({ filingId }) => {
 
   const handleAcknowledge = async (insightId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `${API_BASE_URL}/api/insights/${insightId}/acknowledge`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${API_BASE_URL}/api/insights/${insightId}/acknowledge`, {});
 
       // Update local state
       setInsights(insights.map(ins =>
@@ -113,12 +100,7 @@ const InsightsSection = ({ filingId }) => {
 
   const handleMarkApplied = async (insightId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `${API_BASE_URL}/api/insights/${insightId}/apply`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${API_BASE_URL}/api/insights/${insightId}/apply`, {});
 
       // Update local state
       setInsights(insights.map(ins =>
@@ -132,11 +114,9 @@ const InsightsSection = ({ filingId }) => {
   const handleGenerateInsights = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
       await axios.post(
         `${API_BASE_URL}/api/insights/generate/${filingId}`,
-        { force_regenerate: true },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { force_regenerate: true }
       );
 
       // Reload insights

@@ -42,10 +42,7 @@ const Profile = () => {
 
   const loadCurrentFiling = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/tax-filing/filings`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(`${API_BASE_URL}/api/tax-filing/filings`);
 
       // Get the most recent filing
       const filings = response.data.filings || {};

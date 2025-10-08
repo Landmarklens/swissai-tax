@@ -135,10 +135,8 @@ const FilingsListPage = () => {
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/tax-filing/filings`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // Use cookie-based authentication (configured in axiosConfig)
+      const response = await axios.get(`${API_BASE_URL}/api/tax-filing/filings`);
 
       setFilings(response.data.filings || {});
       setStatistics(response.data.statistics || {});
@@ -159,10 +157,8 @@ const FilingsListPage = () => {
     setPostalCodeLookup({ loading: true, error: null, result: null });
 
     try {
-      const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${API_BASE_URL}/api/tax-filing/postal-code/${postalCode}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${API_BASE_URL}/api/tax-filing/postal-code/${postalCode}`
       );
 
       setPostalCodeLookup({
@@ -189,11 +185,9 @@ const FilingsListPage = () => {
 
   const handleCreateFiling = async () => {
     try {
-      const token = localStorage.getItem('token');
       const response = await axios.post(
         `${API_BASE_URL}/api/tax-filing/filings`,
-        newFiling,
-        { headers: { Authorization: `Bearer ${token}` } }
+        newFiling
       );
 
       setCreateDialogOpen(false);
@@ -209,11 +203,9 @@ const FilingsListPage = () => {
 
   const handleCopyFiling = async () => {
     try {
-      const token = localStorage.getItem('token');
       await axios.post(
         `${API_BASE_URL}/api/tax-filing/filings/copy`,
-        copyForm,
-        { headers: { Authorization: `Bearer ${token}` } }
+        copyForm
       );
 
       setCopyDialogOpen(false);
@@ -228,10 +220,7 @@ const FilingsListPage = () => {
     if (!window.confirm(t('filings.confirmDelete'))) return;
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_BASE_URL}/api/tax-filing/filings/${filingId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.delete(`${API_BASE_URL}/api/tax-filing/filings/${filingId}`);
 
       loadFilings();
     } catch (err) {

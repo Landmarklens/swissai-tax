@@ -123,16 +123,18 @@ const QuestionCard = ({
         );
 
       case 'number':
+        // Only show CHF for currency fields (not for counts like number of children)
+        const isCurrencyField = question.format !== 'count';
         return (
           <TextField
             type="number"
             fullWidth
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            placeholder="Enter amount"
-            InputProps={{
+            placeholder={isCurrencyField ? "Enter amount" : "Enter number"}
+            InputProps={isCurrencyField ? {
               startAdornment: <InputAdornment position="start">CHF</InputAdornment>,
-            }}
+            } : {}}
             inputProps={{
               min: question.validation_rules?.min || 0,
               max: question.validation_rules?.max

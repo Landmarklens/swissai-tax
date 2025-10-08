@@ -2,6 +2,7 @@
 User Data Management Router
 Handles account deletion and data export (GDPR compliance)
 """
+import logging
 from datetime import datetime
 from typing import List
 
@@ -29,6 +30,7 @@ from services.data_export_service import DataExportService
 from services.user_deletion_service import UserDeletionService
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 def get_client_info(request: Request) -> tuple:
@@ -259,8 +261,6 @@ async def list_data_exports(
                 ))
             except Exception as e:
                 # Log error but continue processing other exports
-                import logging
-                logger = logging.getLogger(__name__)
                 logger.error(f"Error processing export {exp.id}: {e}")
                 # Add export with safe defaults
                 export_responses.append(DataExportResponse(
@@ -283,8 +283,6 @@ async def list_data_exports(
             total_count=len(export_responses)
         )
     except Exception as e:
-        import logging
-        logger = logging.getLogger(__name__)
         logger.error(f"Error listing data exports: {e}", exc_info=True)
         raise HTTPException(
             status_code=500,

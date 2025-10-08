@@ -23,6 +23,8 @@ class UserProfile(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     phone: Optional[str] = None
+    address: Optional[str] = None
+    postal_code: Optional[str] = None
     canton: Optional[str] = None  # SwissAI Tax uses canton instead of country/state
     municipality: Optional[str] = None  # SwissAI Tax uses municipality instead of city
     avatar_url: Optional[str] = None
@@ -37,8 +39,10 @@ class UserProfileUpdate(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     phone: Optional[str] = None
+    address: Optional[str] = None
+    postal_code: Optional[str] = None
     canton: Optional[str] = None
-    city: Optional[str] = None  # Alias for municipality
+    municipality: Optional[str] = None
     preferred_language: Optional[str] = None
 
 

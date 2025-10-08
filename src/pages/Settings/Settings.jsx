@@ -24,9 +24,7 @@ import {
 } from '@mui/icons-material';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
-import LanguageSection from './components/LanguageSection';
-import NotificationSection from './components/NotificationSection';
-import TaxPreferencesSection from './components/TaxPreferencesSection';
+import PreferencesTab from './components/PreferencesTab';
 import DocumentManagementSection from './components/DocumentManagementSection';
 import BillingTab from './components/BillingTab';
 import { TwoFactorSettings } from '../../components/TwoFactor';
@@ -81,12 +79,7 @@ const Settings = () => {
             <Tab
               icon={<SettingsIcon />}
               iconPosition="start"
-              label={t('Preferences')}
-            />
-            <Tab
-              icon={<NotificationsIcon />}
-              iconPosition="start"
-              label={t('Notifications')}
+              label={t('Preferences & Notifications')}
             />
             <Tab
               icon={<SecurityIcon />}
@@ -117,26 +110,9 @@ const Settings = () => {
         </Box>
 
         {/* Tab Panels */}
-        {activeTab === 0 && (
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <LanguageSection />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TaxPreferencesSection />
-            </Grid>
-          </Grid>
-        )}
+        {activeTab === 0 && <PreferencesTab />}
 
         {activeTab === 1 && (
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <NotificationSection />
-            </Grid>
-          </Grid>
-        )}
-
-        {activeTab === 2 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TwoFactorSettings />
@@ -144,7 +120,7 @@ const Settings = () => {
           </Grid>
         )}
 
-        {activeTab === 3 && (
+        {activeTab === 2 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <DocumentManagementSection />
@@ -152,7 +128,7 @@ const Settings = () => {
           </Grid>
         )}
 
-        {activeTab === 4 && (
+        {activeTab === 3 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <BillingTab />
@@ -160,7 +136,7 @@ const Settings = () => {
           </Grid>
         )}
 
-        {activeTab === 5 && (
+        {activeTab === 4 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <AuditLogsTab />
@@ -168,7 +144,7 @@ const Settings = () => {
           </Grid>
         )}
 
-        {activeTab === 6 && (
+        {activeTab === 5 && (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <DataExportSection />

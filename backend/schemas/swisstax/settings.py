@@ -13,6 +13,10 @@ class PreferencesUpdate(BaseModel):
     theme: Optional[str] = Field(None, pattern="^(light|dark|auto)$")
     auto_save_enabled: Optional[bool] = None
     auto_save_interval: Optional[int] = Field(None, ge=10, le=300)
+    auto_calculate_enabled: Optional[bool] = None
+    show_tax_tips: Optional[bool] = None
+    default_tax_year: Optional[int] = Field(None, ge=2020, le=2030)
+    rounding_method: Optional[str] = Field(None, pattern="^(standard|up|down)$")
     default_canton: Optional[str] = Field(None, min_length=2, max_length=2)
 
 

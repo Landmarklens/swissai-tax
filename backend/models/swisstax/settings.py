@@ -47,8 +47,11 @@ class UserSettings(SwissTaxBase, Base):
     # Filing Preferences
     auto_save_enabled = Column(Boolean, server_default='true')
     auto_save_interval = Column(Integer, server_default='30')  # seconds
+    auto_calculate_enabled = Column(Boolean, server_default='true')
     show_tax_tips = Column(Boolean, server_default='true')
     enable_ocr = Column(Boolean, server_default='true')
+    default_tax_year = Column(Integer)  # User's preferred default tax year
+    rounding_method = Column(String(20), server_default='standard')  # standard, up, down
 
     # Email Notifications
     email_deadline_reminders = Column(Boolean, server_default='true')
@@ -105,5 +108,9 @@ class UserSettings(SwissTaxBase, Base):
             'theme': self.theme,
             'auto_save_enabled': self.auto_save_enabled,
             'auto_save_interval': self.auto_save_interval,
-            'show_tax_tips': self.show_tax_tips
+            'auto_calculate_enabled': self.auto_calculate_enabled,
+            'show_tax_tips': self.show_tax_tips,
+            'default_tax_year': self.default_tax_year,
+            'rounding_method': self.rounding_method,
+            'default_canton': self.default_canton
         }

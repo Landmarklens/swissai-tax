@@ -10,7 +10,8 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   error: null,
-  data: null
+  data: null,
+  profile: null  // Backward compatibility
 };
 
 export const fetchUserProfile = createAsyncThunk(
@@ -78,7 +79,9 @@ const accountSlice = createSlice({
         console.log('[ACCOUNT SLICE] fetchUserProfile.fulfilled - payload:', action.payload);
         state.isLoading = false;
         state.isSuccess = true;
+        // Store data directly - frontend will access via state.account.data
         state.data = action.payload;
+        state.profile = action.payload;  // Also set profile for backward compatibility
         // Save user to localStorage so isAuthenticated() can check it
         console.log('[ACCOUNT SLICE] Calling authService.setCurrentUser');
         authService.setCurrentUser(action.payload);

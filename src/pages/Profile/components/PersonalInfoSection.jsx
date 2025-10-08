@@ -19,16 +19,16 @@ import { useSelector } from 'react-redux';
 
 const PersonalInfoSection = () => {
   const { t } = useTranslation();
-  const { profile } = useSelector(state => state.account);
+  const { data: profile } = useSelector(state => state.account);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: profile?.personal?.fullName || '',
-    email: profile?.personal?.email || '',
-    phone: profile?.personal?.phone || '',
-    address: profile?.personal?.address || '',
-    city: profile?.personal?.city || '',
-    postalCode: profile?.personal?.postalCode || '',
-    canton: profile?.personal?.canton || ''
+    firstName: profile?.first_name || '',
+    lastName: profile?.last_name || '',
+    phone: profile?.phone || '',
+    address: profile?.address || '',
+    municipality: profile?.municipality || '',
+    postalCode: profile?.postal_code || '',
+    canton: profile?.canton || ''
   });
 
   const handleEdit = () => {
@@ -39,13 +39,13 @@ const PersonalInfoSection = () => {
     setIsEditing(false);
     // Reset form data to original profile data
     setFormData({
-      fullName: profile?.personal?.fullName || '',
-      email: profile?.personal?.email || '',
-      phone: profile?.personal?.phone || '',
-      address: profile?.personal?.address || '',
-      city: profile?.personal?.city || '',
-      postalCode: profile?.personal?.postalCode || '',
-      canton: profile?.personal?.canton || ''
+      firstName: profile?.first_name || '',
+      lastName: profile?.last_name || '',
+      phone: profile?.phone || '',
+      address: profile?.address || '',
+      municipality: profile?.municipality || '',
+      postalCode: profile?.postal_code || '',
+      canton: profile?.canton || ''
     });
   };
 
@@ -103,9 +103,19 @@ const PersonalInfoSection = () => {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label={t('Full Name')}
-              value={formData.fullName}
-              onChange={handleChange('fullName')}
+              label={t('First Name')}
+              value={formData.firstName}
+              onChange={handleChange('firstName')}
+              disabled={!isEditing}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label={t('Last Name')}
+              value={formData.lastName}
+              onChange={handleChange('lastName')}
               disabled={!isEditing}
               variant="outlined"
             />
@@ -115,10 +125,10 @@ const PersonalInfoSection = () => {
               fullWidth
               label={t('Email')}
               type="email"
-              value={formData.email}
-              onChange={handleChange('email')}
-              disabled={!isEditing}
+              value={profile?.email || ''}
+              disabled={true}
               variant="outlined"
+              helperText={t('Email cannot be changed')}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -131,7 +141,7 @@ const PersonalInfoSection = () => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label={t('Address')}
@@ -144,9 +154,9 @@ const PersonalInfoSection = () => {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label={t('City')}
-              value={formData.city}
-              onChange={handleChange('city')}
+              label={t('Municipality')}
+              value={formData.municipality}
+              onChange={handleChange('municipality')}
               disabled={!isEditing}
               variant="outlined"
             />

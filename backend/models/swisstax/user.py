@@ -37,6 +37,8 @@ class User(SwissTaxBase, Base):
     preferred_language = Column(String(2), server_default='DE')  # DE, FR, IT, EN
 
     # Address Information (for tax purposes)
+    address = Column(String(255))
+    postal_code = Column(String(20))
     canton = Column(String(2))  # ZH, BE, GE, etc.
     municipality = Column(String(100))
 

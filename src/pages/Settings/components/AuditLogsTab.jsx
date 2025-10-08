@@ -26,7 +26,6 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 import { format } from 'date-fns';
-import {jwtDecode} from 'jwt-decode';
 
 const AuditLogsTab = () => {
   const [logs, setLogs] = useState([]);
@@ -34,32 +33,26 @@ const AuditLogsTab = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
 
   const pageSize = 20;
 
-  // Get current session ID from JWT token
-  const getCurrentSessionId = () => {
-    try {
-      const token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('access_token='))
-        ?.split('=')[1]
-        ?.replace(/^["']|["']$/g, '')  // Remove quotes
-        ?.replace('Bearer ', '');       // Remove Bearer prefix
-
-      if (!token) return null;
-
-      const decoded = jwtDecode(token);
-      return decoded.session_id;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
-  };
+  // Fetch current session ID from API on component mount
+  useEffect(() => {
+    const fetchSessionId = async () => {
+      try {
+        const response = await axios.get('/api/user/session-id');
+        console.log('[DEBUG] Session ID from API:', response.data.session_id);
+        setCurrentSessionId(response.data.session_id);
+      } catch (error) {
+        console.error('[DEBUG] Error fetching session ID:', error);
+      }
+    };
+    fetchSessionId();
+  }, []);
 
   // Check if a log entry is from the current session
   const isCurrentSession = (log) => {
-    const currentSessionId = getCurrentSessionId();
     return log.event_type === 'login_success' &&
            log.session_id &&
            log.session_id === currentSessionId;

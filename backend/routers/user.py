@@ -49,6 +49,29 @@ def view_profile(user=Depends(get_current_user)):
     return user
 
 
+@router.get("/session-id")
+def get_session_id(request: Request):
+    """
+    Get current session ID from JWT token.
+    Used by frontend to identify the current session in audit logs.
+    """
+    from jose import jwt
+    from config import settings
+
+    # Try to get token from cookie
+    access_token = request.cookies.get("access_token")
+    if access_token:
+        # Remove quotes and Bearer prefix
+        token = access_token.replace('"', '').replace('Bearer ', '')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            return {"session_id": payload.get("session_id")}
+        except Exception:
+            pass
+
+    raise HTTPException(status_code=401, detail="No valid session found")
+
+
 @router.get("/me", response_model=UserProfile)
 def get_current_user_profile(user=Depends(get_current_user)):
     """

@@ -130,22 +130,10 @@ def get_google_flow() -> Flow:
     )
 
 
-# Initialize flow lazily - only when needed
-_flow = None
-
+# Create flow getter function - call this instead of using flow directly
 def get_flow():
-    """Get or create the Google OAuth flow instance (lazy initialization)"""
-    global _flow
-    if _flow is None:
-        _flow = get_google_flow()
-    return _flow
-
-# For backward compatibility, create a property-like accessor
-class FlowAccessor:
-    def __getattr__(self, name):
-        return getattr(get_flow(), name)
-
-flow = FlowAccessor()
+    """Get the Google OAuth flow instance (creates on each call to avoid stale credentials)"""
+    return get_google_flow()
 
 
 class JWTHandler(HTTPBearer):

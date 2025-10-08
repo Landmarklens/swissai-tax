@@ -27,7 +27,7 @@ from services.reset_password import ResetPasswordService
 from services.ses_emailjs_replacement import EmailJSService
 from services.user_service import (get_user_by_email, update_password,
                                    update_user)
-from utils.auth import check_user, flow, sign_jwt, sign_temp_2fa_jwt, verify_temp_2fa_jwt
+from utils.auth import check_user, get_flow, sign_jwt, sign_temp_2fa_jwt, verify_temp_2fa_jwt
 from utils.fastapi_rate_limiter import rate_limit
 from utils.rate_limiter import limiter
 from utils.router import Router
@@ -100,7 +100,9 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
     
     encoded_state = base64.urlsafe_b64encode(json.dumps(signed_state).encode()).decode()
 
-    authorization_url, _ = flow.authorization_url(
+    # Get fresh flow instance
+    oauth_flow = get_flow()
+    authorization_url, _ = oauth_flow.authorization_url(
         access_type='offline',
         include_granted_scopes='true',
         state=encoded_state,
@@ -111,8 +113,10 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
 
 @router.get("/login/google/callback", include_in_schema=False)
 async def callback(request: Request, db=Depends(get_db)):
-    flow.fetch_token(code=request.query_params["code"])
-    credentials = flow.credentials
+    # Get fresh flow instance
+    oauth_flow = get_flow()
+    oauth_flow.fetch_token(code=request.query_params["code"])
+    credentials = oauth_flow.credentials
 
     user_info_service = build('oauth2', 'v2', credentials=credentials)
     user_info = user_info_service.userinfo().get().execute()

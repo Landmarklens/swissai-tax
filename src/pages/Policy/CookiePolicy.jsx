@@ -148,6 +148,73 @@ const CookiePolicy = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+
+                {/* Detailed Cookie List */}
+                <Box sx={{ mt: 3 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      mb: 2,
+                    }}
+                  >
+                    Detailed Cookie List
+                  </Typography>
+
+                  <Typography variant="subtitle1" fontWeight={600} sx={{ mt: 2, mb: 1 }}>
+                    Essential Cookies:
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 3 }}>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>swissai_cookie_consent</strong> - Stores your cookie consent preferences (Duration: 1 year)
+                    </Typography>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>connect.sid</strong> - Session identifier for authentication (Duration: Session)
+                    </Typography>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>csrf_token</strong> - Security token to prevent CSRF attacks (Duration: Session)
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="subtitle1" fontWeight={600} sx={{ mt: 2, mb: 1 }}>
+                    Analytics Cookies (Google Analytics):
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 3 }}>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>_ga</strong> - Distinguishes unique users (Duration: 2 years)
+                    </Typography>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>_gid</strong> - Distinguishes unique users (Duration: 24 hours)
+                    </Typography>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>_gat</strong> - Used to throttle request rate (Duration: 1 minute)
+                    </Typography>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>_gat_gtag_UA_*</strong> - Used to throttle request rate for specific GA property (Duration: 1 minute)
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="subtitle1" fontWeight={600} sx={{ mt: 2, mb: 1 }}>
+                    Google Tag Manager Cookies:
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 3 }}>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>_dc_gtm_UA-*</strong> - Used by Google Tag Manager to control loading of scripts (Duration: 1 minute)
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="subtitle1" fontWeight={600} sx={{ mt: 2, mb: 1 }}>
+                    Preference Cookies:
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 3 }}>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>i18nextLng</strong> - Stores your language preference (Duration: 1 year)
+                    </Typography>
+                    <Typography component="li" sx={{ mb: 0.5 }}>
+                      <strong>theme</strong> - Stores your theme preference (Duration: 1 year)
+                    </Typography>
+                  </Box>
+                </Box>
               </Box>
 
               {/* Your Choices */}

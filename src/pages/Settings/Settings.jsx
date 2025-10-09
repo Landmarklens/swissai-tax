@@ -26,6 +26,7 @@ import { TwoFactorSettings } from '../../components/TwoFactor';
 import AuditLogsTab from './components/AuditLogsTab';
 import AccountDeletionSection from './components/AccountDeletionSection';
 import DataExportSection from './components/DataExportSection';
+import CookiePreferencesSettings from '../../components/CookieConsent/CookiePreferencesSettings';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -115,6 +116,9 @@ const Settings = () => {
 
         {activeTab === 3 && (
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <CookiePreferencesSettings />
+            </Grid>
             <Grid item xs={12}>
               <DataExportSection />
             </Grid>

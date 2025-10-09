@@ -145,6 +145,7 @@ class TestTwoFactorService:
         backup_codes = ["ABCD-1234", "EFGH-5678"]
         encrypted_codes = service.encrypt_backup_codes(backup_codes)
         mock_user.two_factor_backup_codes = encrypted_codes
+        mock_db.merge.return_value = mock_user
 
         # Test
         result = service.verify_backup_code(mock_user, "ABCD-1234", mock_db)
@@ -158,6 +159,7 @@ class TestTwoFactorService:
         backup_codes = ["ABCD-1234"]
         encrypted_codes = service.encrypt_backup_codes(backup_codes)
         mock_user.two_factor_backup_codes = encrypted_codes
+        mock_db.merge.return_value = mock_user
 
         result = service.verify_backup_code(mock_user, "abcd-1234", mock_db)
 
@@ -168,6 +170,7 @@ class TestTwoFactorService:
         backup_codes = ["ABCD-1234"]
         encrypted_codes = service.encrypt_backup_codes(backup_codes)
         mock_user.two_factor_backup_codes = encrypted_codes
+        mock_db.merge.return_value = mock_user
 
         result = service.verify_backup_code(mock_user, "ABCD1234", mock_db)
 
@@ -257,6 +260,7 @@ class TestTwoFactorService:
         """Test enabling two-factor authentication."""
         secret = pyotp.random_base32()
         backup_codes = ["ABCD-1234", "EFGH-5678"]
+        mock_db.merge.return_value = mock_user
 
         result = service.enable_two_factor(mock_user, secret, backup_codes, mock_db)
 
@@ -285,6 +289,7 @@ class TestTwoFactorService:
         mock_user.two_factor_secret = "encrypted_secret"
         mock_user.two_factor_backup_codes = "encrypted_codes"
         mock_user.two_factor_verified_at = datetime.utcnow()
+        mock_db.merge.return_value = mock_user
 
         result = service.disable_two_factor(mock_user, mock_db)
 
@@ -308,6 +313,7 @@ class TestTwoFactorService:
     def test_regenerate_backup_codes(self, service, mock_user, mock_db):
         """Test regenerating backup codes."""
         mock_user.two_factor_enabled = True
+        mock_db.merge.return_value = mock_user
 
         new_codes = service.regenerate_backup_codes(mock_user, mock_db)
 

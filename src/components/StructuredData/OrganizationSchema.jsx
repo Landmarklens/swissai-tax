@@ -1,7 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 
 const OrganizationSchema = () => {
+  const { t } = useTranslation();
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",

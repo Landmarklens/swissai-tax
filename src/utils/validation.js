@@ -1,6 +1,7 @@
 // Field validation utilities
 
 export const validateEmail = (email) => {
+  const { t } = useTranslation();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };

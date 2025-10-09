@@ -37,5 +37,6 @@ export const currencyMapping = {
 };
 
 export const getCurrencySymbol = (currencyCode) => {
+  const { t } = useTranslation();
   return currencyMapping[currencyCode] || currencyCode;
 };

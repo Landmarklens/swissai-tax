@@ -1,0 +1,66 @@
+{
+  "summary": {
+    "files_processed": 6,
+    "files_modified": 5,
+    "total_strings": 76
+  },
+  "details": [
+    {
+      "file": "src/components/paymentForm/PaymentForm.jsx",
+      "had_i18n": true,
+      "had_hook": true,
+      "strings_found": 0,
+      "changes_made": []
+    },
+    {
+      "file": "src/pages/TaxFiling/DocumentUpload.js",
+      "had_i18n": false,
+      "had_hook": false,
+      "strings_found": 16,
+      "changes_made": [
+        "Added i18n import",
+        "Added useTranslation hook"
+      ]
+    },
+    {
+      "file": "src/components/TenantSelection/ApplicationDetailModal.jsx",
+      "had_i18n": false,
+      "had_hook": false,
+      "strings_found": 31,
+      "changes_made": [
+        "Added i18n import",
+        "Added useTranslation hook"
+      ]
+    },
+    {
+      "file": "src/components/TenantSelection/ViewingSlotManager.jsx",
+      "had_i18n": false,
+      "had_hook": false,
+      "strings_found": 29,
+      "changes_made": [
+        "Added i18n import",
+        "Added useTranslation hook"
+      ]
+    },
+    {
+      "file": "src/store/slices/documentsSlice.js",
+      "had_i18n": false,
+      "had_hook": false,
+      "strings_found": 0,
+      "changes_made": [
+        "Added i18n import",
+        "Added useTranslation hook"
+      ]
+    },
+    {
+      "file": "src/utils/validation/schemaFactory.js",
+      "had_i18n": false,
+      "had_hook": false,
+      "strings_found": 0,
+      "changes_made": [
+        "Added i18n import",
+        "Added useTranslation hook"
+      ]
+    }
+  ]
+}

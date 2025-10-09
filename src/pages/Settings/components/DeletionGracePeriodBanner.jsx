@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   AlertTitle,
@@ -15,6 +16,7 @@ import {
 } from '@mui/icons-material';
 
 const DeletionGracePeriodBanner = ({ deletionStatus, onCancel, loading }) => {
+  const { t } = useTranslation();
   const [timeRemaining, setTimeRemaining] = useState(null);
 
   useEffect(() => {

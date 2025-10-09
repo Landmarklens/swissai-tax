@@ -26,8 +26,10 @@ import {
   Check as CheckIcon
 } from '@mui/icons-material';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
+  const { t } = useTranslation();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editData, setEditData] = useState(propertyData);
 
@@ -100,7 +102,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
             <Grid item xs={12} md={6}>
               <PropertyDetail
                 icon={<LocationIcon fontSize="small" />}
-                label="Address"
+                label={t("filing.address")}
                 value={propertyData.address}
               />
             </Grid>
@@ -108,7 +110,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
             <Grid item xs={12} md={6}>
               <PropertyDetail
                 icon={<MoneyIcon fontSize="small" />}
-                label="Monthly Rent"
+                label={t("filing.monthly_rent")}
                 value={propertyData.price_chf ? `CHF ${propertyData.price_chf.toLocaleString()}` : null}
               />
             </Grid>
@@ -116,7 +118,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
             <Grid item xs={12} md={6}>
               <PropertyDetail
                 icon={<HomeIcon fontSize="small" />}
-                label="Rooms"
+                label={t("filing.rooms")}
                 value={propertyData.bedrooms ? `${propertyData.bedrooms} rooms` : null}
               />
             </Grid>
@@ -124,7 +126,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
             <Grid item xs={12} md={6}>
               <PropertyDetail
                 icon={<SquareIcon fontSize="small" />}
-                label="Size"
+                label={t("filing.size")}
                 value={propertyData.square_meters ? `${propertyData.square_meters} m²` : null}
               />
             </Grid>
@@ -132,7 +134,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
             <Grid item xs={12} md={6}>
               <PropertyDetail
                 icon={<CalendarIcon fontSize="small" />}
-                label="Available From"
+                label={t("filing.available_from")}
                 value={formatDate(propertyData.available_from)}
               />
             </Grid>
@@ -204,13 +206,13 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Edit Property Details</DialogTitle>
+        <DialogTitle>{t('filing.edit_property_details')}</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Property Title"
+                label={t("filing.property_title")}
                 value={editData.title || ''}
                 onChange={(e) => setEditData({ ...editData, title: e.target.value })}
               />
@@ -218,7 +220,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Address"
+                label={t("filing.address")}
                 value={editData.address || ''}
                 onChange={(e) => setEditData({ ...editData, address: e.target.value })}
               />
@@ -227,7 +229,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
               <TextField
                 fullWidth
                 type="number"
-                label="Monthly Rent (CHF)"
+                label={t("filing.monthly_rent_chf")}
                 value={editData.price_chf || ''}
                 onChange={(e) => setEditData({ ...editData, price_chf: parseInt(e.target.value) })}
               />
@@ -236,7 +238,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
               <TextField
                 fullWidth
                 type="number"
-                label="Number of Rooms"
+                label={t("filing.number_of_rooms")}
                 value={editData.bedrooms || ''}
                 onChange={(e) => setEditData({ ...editData, bedrooms: parseFloat(e.target.value) })}
                 inputProps={{ step: 0.5 }}
@@ -246,7 +248,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
               <TextField
                 fullWidth
                 type="number"
-                label="Size (m²)"
+                label={t("filing.size_m")}
                 value={editData.square_meters || ''}
                 onChange={(e) => setEditData({ ...editData, square_meters: parseInt(e.target.value) })}
               />
@@ -256,7 +258,7 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
                 fullWidth
                 multiline
                 rows={3}
-                label="Description"
+                label={t("filing.description")}
                 value={editData.description || ''}
                 onChange={(e) => setEditData({ ...editData, description: e.target.value })}
               />
@@ -264,8 +266,8 @@ const PropertyPreviewStep = ({ propertyData, onEdit, importMethod }) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleEditSave} variant="contained">Save Changes</Button>
+          <Button onClick={() => setEditDialogOpen(false)}>{t('filing.cancel')}</Button>
+          <Button onClick={handleEditSave} variant="contained">{t('filing.save_changes')}</Button>
         </DialogActions>
       </Dialog>
     </Box>

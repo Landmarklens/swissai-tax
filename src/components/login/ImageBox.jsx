@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
 import gptChatIcon from '../../assets/login/gpt-chat.svg';
 import dotBg from '../../assets/login/dot-bg.svg';
+import { useTranslation } from 'react-i18next';
 
 const ImageBox = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -20,7 +22,7 @@ const ImageBox = () => {
         sx={{ position: 'relative', mt: '20px', zIndex: 2 }}
         component="img"
         src={gptChatIcon}
-        alt="gptChatIcon"
+        alt={t("filing.gptchaticon")}
       />
       <Box
         sx={{
@@ -30,7 +32,7 @@ const ImageBox = () => {
         }}
         component="img"
         src={dotBg}
-        alt="dotBg"
+        alt={t("filing.dotbg")}
       />
       <Box
         sx={{

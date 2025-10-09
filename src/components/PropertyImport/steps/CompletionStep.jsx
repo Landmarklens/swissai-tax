@@ -31,6 +31,7 @@ import {
   ArrowForward as ArrowIcon
 } from '@mui/icons-material';
 import Confetti from 'react-confetti';
+import { useTranslation } from 'react-i18next';
 
 const PORTAL_LIST = [
   { 
@@ -66,6 +67,7 @@ const PORTAL_LIST = [
 ];
 
 const CompletionStep = ({ propertyData, emailConfig, onComplete }) => {
+  const { t } = useTranslation();
   const [checkedPortals, setCheckedPortals] = useState({});
   const [otherPortal, setOtherPortal] = useState('');
   const [emailSent, setEmailSent] = useState(false);
@@ -281,7 +283,7 @@ const CompletionStep = ({ propertyData, emailConfig, onComplete }) => {
               <IconButton
                 size="small"
                 onClick={() => window.open(portal.helpUrl, '_blank')}
-                title="Get help"
+                title={t("filing.get_help")}
               >
                 <OpenIcon fontSize="small" />
               </IconButton>
@@ -300,7 +302,7 @@ const CompletionStep = ({ propertyData, emailConfig, onComplete }) => {
             <TextField
               fullWidth
               size="small"
-              placeholder="Other portal (specify)"
+              placeholder={t("filing.other_portal_specify")}
               value={otherPortal}
               onChange={(e) => setOtherPortal(e.target.value)}
             />
@@ -309,7 +311,7 @@ const CompletionStep = ({ propertyData, emailConfig, onComplete }) => {
 
         <Alert severity="info" sx={{ mt: 3 }}>
           <Typography variant="body2">
-            <strong>Remember:</strong> Applications will only be received from portals where you've 
+            <strong>{t('filing.remember')}</strong> Applications will only be received from portals where you've 
             updated the contact email to {emailConfig.managedEmail}
           </Typography>
         </Alert>
@@ -351,7 +353,7 @@ const CompletionStep = ({ propertyData, emailConfig, onComplete }) => {
       {emailConfig.testStatus !== 'success' && (
         <Alert severity="warning" sx={{ mt: 3 }}>
           <Typography variant="body2">
-            <strong>Note:</strong> Email forwarding was not tested. You can test it anytime from the 
+            <strong>{t('filing.note')}</strong> Email forwarding was not tested. You can test it anytime from the 
             Messages section to ensure everything is working correctly.
           </Typography>
         </Alert>

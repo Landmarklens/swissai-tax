@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import authService from '../../services/authService';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -71,6 +72,7 @@ const SocialButton = styled(Button)(({ theme }) => ({
 }));
 
 const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode); // 'choice', 'login', 'signup'
   const [showPassword, setShowPassword] = useState(false);
@@ -95,51 +97,51 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'E-Mail ist erforderlich';
+      newErrors.email = t('auth.validation.email_required');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Ungültige E-Mail-Adresse';
+      newErrors.email = t('auth.validation.email_invalid');
     }
-    
+
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Passwort ist erforderlich';
+      newErrors.password = t('auth.validation.password_required');
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Passwort muss mindestens 6 Zeichen lang sein';
+      newErrors.password = t('auth.validation.password_min_length');
     }
-    
+
     // Additional validations for signup
     if (mode === 'signup') {
       if (!formData.firstName) {
-        newErrors.firstName = 'Vorname ist erforderlich';
+        newErrors.firstName = t('auth.validation.first_name_required');
       }
       if (!formData.lastName) {
-        newErrors.lastName = 'Nachname ist erforderlich';
+        newErrors.lastName = t('auth.validation.last_name_required');
       }
       if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwörter stimmen nicht überein';
+        newErrors.confirmPassword = t('auth.validation.passwords_mismatch');
       }
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleLogin = async () => {
     if (!validateForm()) return;
-    
+
     setLoading(true);
     try {
       const response = await authService.login(formData.email, formData.password);
       if (response.access_token) {
-        toast.success('Erfolgreich angemeldet!');
+        toast.success(t('auth.login_success'));
         onClose();
         navigate('/dashboard');
       }
     } catch (error) {
-      toast.error(error.message || 'Anmeldung fehlgeschlagen');
+      toast.error(error.message || t('auth.login_failed'));
     } finally {
       setLoading(false);
     }
@@ -147,7 +149,7 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
 
   const handleSignup = async () => {
     if (!validateForm()) return;
-    
+
     setLoading(true);
     try {
       const userData = {
@@ -157,15 +159,15 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         last_name: formData.lastName,
         user_type: 'taxpayer'
       };
-      
+
       const response = await authService.register(userData);
       if (response.id) {
-        toast.success('Konto erfolgreich erstellt!');
+        toast.success(t('auth.signup_success'));
         // Auto-login after signup
         await handleLogin();
       }
     } catch (error) {
-      toast.error(error.message || 'Registrierung fehlgeschlagen');
+      toast.error(error.message || t('auth.signup_failed'));
     } finally {
       setLoading(false);
     }
@@ -178,19 +180,19 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         window.location.href = googleAuthUrl.authorization_url;
       }
     } catch (error) {
-      toast.error('Google-Anmeldung fehlgeschlagen');
+      toast.error(t('auth.google_signin_failed'));
     }
   };
 
   const renderChoiceMode = () => (
     <>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-        Willkommen bei SwissAI Tax
+        {t('modal.login.welcome_title')}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-        Melden Sie sich an oder erstellen Sie ein Konto, um Ihre Steuererklärung zu starten
+        {t('modal.login.welcome_subtitle')}
       </Typography>
-      
+
       <Button
         variant="contained"
         fullWidth
@@ -198,9 +200,9 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         onClick={() => setMode('login')}
         sx={{ mb: 2 }}
       >
-        Anmelden
+        {t('auth.login')}
       </Button>
-      
+
       <Button
         variant="outlined"
         fullWidth
@@ -208,20 +210,20 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         onClick={() => setMode('signup')}
         sx={{ mb: 3 }}
       >
-        Konto erstellen
+        {t('modal.login.create_account')}
       </Button>
-      
+
       <Divider sx={{ my: 3 }}>
         <Typography variant="body2" color="text.secondary">
-          ODER
+          {t('modal.login.or')}
         </Typography>
       </Divider>
-      
+
       <SocialButton
         startIcon={<GoogleIcon />}
         onClick={handleGoogleSignIn}
       >
-        Mit Google fortfahren
+        {t('modal.login.continue_google')}
       </SocialButton>
     </>
   );
@@ -229,12 +231,12 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
   const renderLoginMode = () => (
     <>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-        Anmelden
+        {t('auth.login')}
       </Typography>
-      
+
       <TextField
         fullWidth
-        label="E-Mail"
+        label={t('auth.email')}
         type="email"
         value={formData.email}
         onChange={handleChange('email')}
@@ -249,10 +251,10 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
           ),
         }}
       />
-      
+
       <TextField
         fullWidth
-        label="Passwort"
+        label={t('auth.password')}
         type={showPassword ? 'text' : 'password'}
         value={formData.password}
         onChange={handleChange('password')}
@@ -278,7 +280,7 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
           ),
         }}
       />
-      
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Link
           component="button"
@@ -286,10 +288,10 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
           onClick={() => navigate('/forgot-password')}
           sx={{ textDecoration: 'none' }}
         >
-          Passwort vergessen?
+          {t('auth.forgot_password')}
         </Link>
       </Box>
-      
+
       <Button
         variant="contained"
         fullWidth
@@ -298,17 +300,17 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         disabled={loading}
         sx={{ mb: 2 }}
       >
-        {loading ? 'Anmeldung...' : 'Anmelden'}
+        {loading ? t('modal.login.logging_in') : t('auth.login')}
       </Button>
-      
+
       <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-        Noch kein Konto?{' '}
+        {t('modal.login.no_account')}{' '}
         <Link
           component="button"
           onClick={() => setMode('signup')}
           sx={{ textDecoration: 'none', fontWeight: 500 }}
         >
-          Jetzt registrieren
+          {t('modal.login.register_now')}
         </Link>
       </Typography>
     </>
@@ -317,13 +319,13 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
   const renderSignupMode = () => (
     <>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-        Konto erstellen
+        {t('modal.login.create_account')}
       </Typography>
-      
+
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
           fullWidth
-          label="Vorname"
+          label={t('auth.first_name')}
           value={formData.firstName}
           onChange={handleChange('firstName')}
           error={!!errors.firstName}
@@ -331,17 +333,17 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         />
         <TextField
           fullWidth
-          label="Nachname"
+          label={t('auth.last_name')}
           value={formData.lastName}
           onChange={handleChange('lastName')}
           error={!!errors.lastName}
           helperText={errors.lastName}
         />
       </Box>
-      
+
       <TextField
         fullWidth
-        label="E-Mail"
+        label={t('auth.email')}
         type="email"
         value={formData.email}
         onChange={handleChange('email')}
@@ -356,10 +358,10 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
           ),
         }}
       />
-      
+
       <TextField
         fullWidth
-        label="Passwort"
+        label={t('auth.password')}
         type={showPassword ? 'text' : 'password'}
         value={formData.password}
         onChange={handleChange('password')}
@@ -374,10 +376,10 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
           ),
         }}
       />
-      
+
       <TextField
         fullWidth
-        label="Passwort bestätigen"
+        label={t('auth.confirm_password')}
         type={showPassword ? 'text' : 'password'}
         value={formData.confirmPassword}
         onChange={handleChange('confirmPassword')}
@@ -403,11 +405,11 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
           ),
         }}
       />
-      
+
       <Alert severity="info" sx={{ mb: 3 }}>
-        Ihre Daten sind bei uns sicher und werden verschlüsselt übertragen.
+        {t('modal.login.security_notice')}
       </Alert>
-      
+
       <Button
         variant="contained"
         fullWidth
@@ -416,17 +418,17 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
         disabled={loading}
         sx={{ mb: 2 }}
       >
-        {loading ? 'Konto wird erstellt...' : 'Konto erstellen'}
+        {loading ? t('modal.login.creating_account') : t('modal.login.create_account')}
       </Button>
-      
+
       <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-        Bereits registriert?{' '}
+        {t('modal.login.already_registered')}{' '}
         <Link
           component="button"
           onClick={() => setMode('login')}
           sx={{ textDecoration: 'none', fontWeight: 500 }}
         >
-          Jetzt anmelden
+          {t('modal.login.login_now')}
         </Link>
       </Typography>
     </>
@@ -456,10 +458,10 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
             </IconButton>
           </Box>
           <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
-            SwissAI Tax
+            {t('modal.login.brand_name')}
           </Typography>
           <Typography variant="body2">
-            Ihre digitale Steuererklärung - einfach und sicher
+            {t('modal.login.brand_tagline')}
           </Typography>
         </ImageSection>
         

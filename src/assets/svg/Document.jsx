@@ -1,7 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { useTranslation } from 'react-i18next';
 
 const Document = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{

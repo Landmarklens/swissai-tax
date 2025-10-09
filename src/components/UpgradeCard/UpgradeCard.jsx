@@ -2,6 +2,7 @@ import { Box, Typography, Button } from '@mui/material';
 import React from 'react';
 import { theme } from '../../theme/theme';
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
+import { useTranslation } from 'react-i18next';
 const UpgradeCard = ({
   backgroundColor,
   title,
@@ -11,6 +12,7 @@ const UpgradeCard = ({
   borderColor,
   textColor
 }) => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{

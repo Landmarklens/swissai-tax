@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Create a context
 const HiddenItemsContext = createContext();
 
 // Provider component
 export const HiddenItemsProvider = ({ children }) => {
+  const { t } = useTranslation();
   const [hiddenItems, setHiddenItems] = useState([]);
 
   const hideItem = (id) => {

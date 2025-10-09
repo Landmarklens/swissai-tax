@@ -1,6 +1,7 @@
 // Local storage service for document persistence
 // This provides temporary persistence until backend is ready
 import logger from './loggingService';
+import { useTranslation } from 'react-i18next';
 
 class DocumentStorageService {
   constructor() {

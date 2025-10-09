@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Card,
@@ -30,6 +31,7 @@ import {
 } from 'recharts';
 
 const MarketForecast = ({ forecastData }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const getSentimentColor = (sentiment) => {
@@ -140,7 +142,7 @@ const MarketForecast = ({ forecastData }) => {
                   y={forecastData?.forecast_data?.[0]?.predicted_price} 
                   stroke={theme.palette.divider}
                   strokeDasharray="3 3"
-                  label="Current"
+                  label={t("filing.current")}
                 />
                 <Area
                   type="monotone"

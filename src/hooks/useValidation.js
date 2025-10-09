@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * useValidation Hook
@@ -11,6 +12,7 @@ import { useState, useCallback } from 'react';
  * @returns {Object} Validation utilities and state
  */
 export const useValidation = (schema) => {
+  const { t } = useTranslation();
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isValidating, setIsValidating] = useState(false);

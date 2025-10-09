@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { Grid, TextField, Button, Typography, MenuItem } from '@mui/material';
-
-const countries = [
-  { value: 'US', label: 'United States' },
-  { value: 'IN', label: 'India' },
-  { value: 'CH', label: 'China' },
-  { value: 'UK', label: 'United Kingdom' }
-];
-
-const states = [
-  { value: 'NY', label: 'New York' },
-  { value: 'CA', label: 'California' },
-  { value: 'TX', label: 'Texas' }
-];
+import { useTranslation } from 'react-i18next';
 
 const PaymentForm = () => {
+  const { t } = useTranslation();
   const [country, setCountry] = useState('');
   const [state, setState] = useState('');
+
+  const countries = [
+    { value: 'US', label: t('payment.country.united_states') },
+    { value: 'IN', label: t('payment.country.india') },
+    { value: 'CH', label: t('payment.country.switzerland') },
+    { value: 'UK', label: t('payment.country.united_kingdom') }
+  ];
+
+  const states = [
+    { value: 'NY', label: t('payment.state.new_york') },
+    { value: 'CA', label: t('payment.state.california') },
+    { value: 'TX', label: t('payment.state.texas') }
+  ];
 
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
@@ -29,38 +31,62 @@ const PaymentForm = () => {
   return (
     <form>
       <Typography variant="h5" gutterBottom>
-        Payment information
+        {t('payment.title')}
       </Typography>
 
       <Grid container spacing={2}>
         {/* Cardholder Name */}
         <Grid item xs={12}>
-          <TextField fullWidth label="Cardholder Name" placeholder="Enter Cardholder Name" />
+          <TextField
+            fullWidth
+            label={t('payment.cardholder_name')}
+            placeholder={t('payment.cardholder_name_placeholder')}
+          />
         </Grid>
 
         {/* Credit Card Details */}
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="Credit Card Number" placeholder="XXXX XXXX XXXX XXXX" />
+          <TextField
+            fullWidth
+            label={t('payment.card_number')}
+            placeholder={t('payment.card_number_placeholder')}
+          />
         </Grid>
         <Grid item xs={6} md={3}>
-          <TextField fullWidth label="Expiration Date" placeholder="MM/YY" />
+          <TextField
+            fullWidth
+            label={t('payment.expiration_date')}
+            placeholder={t('payment.expiration_date_placeholder')}
+          />
         </Grid>
         <Grid item xs={6} md={3}>
-          <TextField fullWidth label="CVV/CVC" placeholder="***" />
+          <TextField
+            fullWidth
+            label={t('payment.cvv')}
+            placeholder={t('payment.cvv_placeholder')}
+          />
         </Grid>
 
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
-            Billing information
+            {t('payment.billing_information')}
           </Typography>
         </Grid>
 
         {/* First and Last Name */}
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="First name" placeholder="Enter First name" />
+          <TextField
+            fullWidth
+            label={t('First name')}
+            placeholder={t('Enter First name')}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="Last name" placeholder="Enter Last name" />
+          <TextField
+            fullWidth
+            label={t('Last name')}
+            placeholder={t('Enter Last name')}
+          />
         </Grid>
 
         {/* Country and City */}
@@ -68,10 +94,10 @@ const PaymentForm = () => {
           <TextField
             fullWidth
             select
-            label="Country"
+            label={t('Country')}
             value={country}
             onChange={handleCountryChange}
-            placeholder="Select Country"
+            placeholder={t('payment.select_country')}
           >
             {countries.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -81,7 +107,11 @@ const PaymentForm = () => {
           </TextField>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="City" placeholder="Enter City" />
+          <TextField
+            fullWidth
+            label={t('City')}
+            placeholder={t('Enter City')}
+          />
         </Grid>
 
         {/* State and ZIP */}
@@ -89,10 +119,10 @@ const PaymentForm = () => {
           <TextField
             fullWidth
             select
-            label="State"
+            label={t('State')}
             value={state}
             onChange={handleStateChange}
-            placeholder="Select State"
+            placeholder={t('Select State')}
           >
             {states.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -102,20 +132,28 @@ const PaymentForm = () => {
           </TextField>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="ZIP" placeholder="Enter ZIP" />
+          <TextField
+            fullWidth
+            label={t('ZIP')}
+            placeholder={t('Enter ZIP')}
+          />
         </Grid>
 
         {/* Address */}
         <Grid item xs={12}>
-          <TextField fullWidth label="Address" placeholder="Enter Address" />
+          <TextField
+            fullWidth
+            label={t('Address')}
+            placeholder={t('Enter Address')}
+          />
         </Grid>
 
         {/* Buttons */}
         <Grid item xs={12} mt={2}>
           <Button variant="contained" color="primary" style={{ marginRight: 8 }}>
-            Save
+            {t('Save')}
           </Button>
-          <Button variant="text">Cancel</Button>
+          <Button variant="text">{t('Cancel')}</Button>
         </Grid>
       </Grid>
     </form>

@@ -7,8 +7,10 @@ import { useSteps } from '../../../../hooks/useSteps';
 import { SpecialDiscountOffer } from './ui/SpecialDiscountOffer/SpecialDiscountOffer';
 import { FinalConfirmationNotice } from './ui/FinalConfirmationNotice\t/FinalConfirmationNotice';
 import { CancellationSuccess } from './ui/CancellationSuccess/CancellationSuccess';
+import { useTranslation } from 'react-i18next';
 
 const CancelSubscriptionFlowModal = ({ isOpen, handleCloseModal }) => {
+  const { t } = useTranslation();
   const { incrementStep, decrementStep, steps, resetSteps } = useSteps({ totalSteps: 5 });
 
   const { isStep1, isStep2, isStep3, isStep4, isStep5 } = steps;

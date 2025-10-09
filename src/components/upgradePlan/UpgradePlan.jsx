@@ -3,8 +3,10 @@ import React from 'react';
 import AIAvatarColored from '../../assets/svg/AIAvatarColored';
 import { useNavigate } from 'react-router-dom';
 import { Upgrade, UpgradeRounded } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const UpgradePlan = ({ title, text, color, dark, isMobile }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   if (isMobile) {

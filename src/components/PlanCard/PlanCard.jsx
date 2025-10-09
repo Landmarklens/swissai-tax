@@ -166,7 +166,7 @@ const PlanCard = ({ title, price, keyFeatures }) => {
         )}
         {subscription.isTrialActive && (
           <div className="wrapper-trial-info">
-            <p>Trial period: 1 day</p>
+            <p>{t('filing.trial_period_1_day')}</p>
             <p>The trial period will last until: {trialPeriodEndDate}</p>
           </div>
         )}

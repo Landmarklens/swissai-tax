@@ -35,6 +35,7 @@ import { toast } from 'react-toastify';
  * 3. Only shows the property after it's fully imported
  */
 const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = false, onFormStateChange }) => {
+  const { t } = useTranslation();
   const [url, setUrl] = useState('');
   const [isValidUrl, setIsValidUrl] = useState(false);
   const [currentJob, setCurrentJob] = useState(null);
@@ -145,6 +146,7 @@ const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = fals
       }
     } catch (error) {
       console.error('[PropertyImporter] Error creating import job:', error);
+import { useTranslation } from 'react-i18next';
       let errorMessage = 'Failed to start import';
       
       if (error.response?.status === 400) {
@@ -282,8 +284,8 @@ const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = fals
           {/* URL Input */}
           <TextField
             fullWidth
-            label="Property Listing URL"
-            placeholder="https://www.homegate.ch/mieten/123456"
+            label={t("filing.property_listing_url")}
+            placeholder={t("filing.httpswwwhomegatechmieten123456")}
             value={url}
             onChange={handleUrlChange}
             error={!!(url && !isValidUrl)}
@@ -323,7 +325,7 @@ const PropertyImporterWithJobs = ({ onPropertyImported, onClose, embedded = fals
           {/* Import Process Info */}
           <Alert severity="info" sx={{ mb: 2 }}>
             <Typography variant="body2">
-              <strong>Import Process:</strong>
+              <strong>{t('filing.import_process')}</strong>
             </Typography>
             <Typography variant="body2" component="div">
               • Property data will be downloaded and processed (2-3 minutes)

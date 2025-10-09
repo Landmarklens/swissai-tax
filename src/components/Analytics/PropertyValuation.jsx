@@ -44,8 +44,10 @@ import {
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 import { getApiUrl } from '../../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const PropertyValuation = ({ property, insights }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const { token } = useAuth();
   const [valuationData, setValuationData] = useState(null);
@@ -143,7 +145,7 @@ const PropertyValuation = ({ property, insights }) => {
                     color="primary"
                   />
                 }
-                label="Include Renovation Potential"
+                label={t("filing.include_renovation_potential")}
               />
             </Stack>
           </CardContent>
@@ -178,7 +180,7 @@ const PropertyValuation = ({ property, insights }) => {
 
               <Stack spacing={1}>
                 <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="body2">Confidence Score</Typography>
+                  <Typography variant="body2">{t('filing.confidence_score')}</Typography>
                   <Typography variant="body2" fontWeight="bold">
                     {((data?.valuation?.confidence_score || 0) * 100).toFixed(0)}%
                   </Typography>
@@ -314,7 +316,7 @@ const PropertyValuation = ({ property, insights }) => {
 
               <Box>
                 <Stack direction="row" justifyContent="space-between" mb={1}>
-                  <Typography variant="body2">Percentile Rank</Typography>
+                  <Typography variant="body2">{t('filing.percentile_rank')}</Typography>
                   <Typography variant="body2" fontWeight="bold">
                     {data?.market_comparison?.percentile_rank?.toFixed(0)}%
                   </Typography>
@@ -329,7 +331,7 @@ const PropertyValuation = ({ property, insights }) => {
               <Divider />
 
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2">Market Position</Typography>
+                <Typography variant="body2">{t('filing.market_position')}</Typography>
                 <Chip
                   label={data?.market_comparison?.market_position?.toUpperCase() || 'MID-RANGE'}
                   size="small"

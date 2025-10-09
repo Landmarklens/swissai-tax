@@ -39,6 +39,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
 }));
 
 const LanguageSelector = ({ variant = 'outlined' }) => {
+  const { t } = useTranslation();
   const { i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();

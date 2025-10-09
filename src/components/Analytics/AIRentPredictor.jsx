@@ -25,8 +25,10 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const AIRentPredictor = ({ propertyId }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [prediction, setPrediction] = useState(null);
   const [error, setError] = useState(null);
@@ -85,7 +87,7 @@ const AIRentPredictor = ({ propertyId }) => {
         <CardContent>
           <Box display="flex" alignItems="center" justifyContent="center" py={4}>
             <CircularProgress />
-            <Typography ml={2}>Analyzing property with AI...</Typography>
+            <Typography ml={2}>{t('filing.analyzing_property_with_ai')}</Typography>
           </Box>
         </CardContent>
       </Card>
@@ -319,12 +321,12 @@ const AIRentPredictor = ({ propertyId }) => {
           <Stack direction="row" spacing={1} alignItems="center">
             <AnalyticsIcon fontSize="small" color="action" />
             <Typography variant="caption" color="textSecondary">
-              <strong>Methodology:</strong> {prediction.methodology}
+              <strong>{t('filing.methodology')}</strong> {prediction.methodology}
             </Typography>
           </Stack>
           {prediction.adjustment_reason && (
             <Typography variant="caption" color="textSecondary" sx={{ mt: 0.5, display: 'block' }}>
-              <strong>Adjustment:</strong> {prediction.adjustment_reason}
+              <strong>{t('filing.adjustment')}</strong> {prediction.adjustment_reason}
             </Typography>
           )}
         </Box>

@@ -31,8 +31,10 @@ import {
   Info as InfoIcon
 } from '@mui/icons-material';
 import { useEmailMonitoring } from '../hooks/useEmailMonitoring';
+import { useTranslation } from 'react-i18next';
 
 const EmailStatusWidget = ({ property, emailConfig }) => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
   const [statistics, setStatistics] = useState(null);

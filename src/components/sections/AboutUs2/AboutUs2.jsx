@@ -86,7 +86,7 @@ const AboutUs2 = () => {
               <Box
                 component="img"
                 src={image}
-                alt="HomeAI"
+                alt={t("filing.homeai")}
                 sx={{
                   width: '100%',
                   height: '80%',

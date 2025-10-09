@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const CardsWrapper = styled(Box)({
   display: 'grid',

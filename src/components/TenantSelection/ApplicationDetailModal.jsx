@@ -57,6 +57,7 @@ import {
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import DocumentViewer from './DocumentViewer';
+import { useTranslation } from 'react-i18next';
 import { 
   selectTenant,
   rejectApplicant,
@@ -73,6 +74,7 @@ const TabPanel = ({ children, value, index, ...other }) => (
 );
 
 const ApplicationDetailModal = ({ open, onClose, application }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState(0);
   const [showIdentity, setShowIdentity] = useState(false);
@@ -99,10 +101,10 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
         propertyId: application.property_id,
         leadId: application.id
       })).unwrap();
-      setActionMessage('Tenant selected successfully! Notification emails have been sent.');
+      setActionMessage(t('modal.application_detail.tenant_selected_success'));
       setTimeout(onClose, 3000);
     } catch (error) {
-      setActionMessage(`Error: ${error.message}`);
+      setActionMessage(`${t('modal.application_detail.error')}: ${error.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -115,10 +117,10 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
         leadId: application.id,
         reason: 'Does not meet criteria'
       })).unwrap();
-      setActionMessage('Applicant rejected. Notification sent.');
+      setActionMessage(t('modal.application_detail.applicant_rejected'));
       setTimeout(onClose, 2000);
     } catch (error) {
-      setActionMessage(`Error: ${error.message}`);
+      setActionMessage(`${t('modal.application_detail.error')}: ${error.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -128,9 +130,9 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
     setIsProcessing(true);
     try {
       await dispatch(generateAICard(application.id)).unwrap();
-      setActionMessage('AI card generated successfully with GPT-5!');
+      setActionMessage(t('modal.application_detail.ai_card_generated'));
     } catch (error) {
-      setActionMessage(`Error: ${error.message}`);
+      setActionMessage(`${t('modal.application_detail.error')}: ${error.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -138,13 +140,13 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
 
   const getApplicationSteps = () => {
     const steps = [
-      { label: 'Application Received', completed: true },
-      { label: 'Viewing Scheduled', completed: !!application?.viewing_slot_id },
-      { label: 'Viewing Attended', completed: application?.lead_status === 'viewing_attended' || application?.lead_status === 'dossier_submitted' },
-      { label: 'Documents Submitted', completed: application?.lead_status === 'dossier_submitted' },
-      { label: 'Decision Made', completed: ['selected', 'rejected'].includes(application?.lead_status) }
+      { label: t('modal.application_detail.application_received'), completed: true },
+      { label: t('modal.application_detail.viewing_scheduled'), completed: !!application?.viewing_slot_id },
+      { label: t('modal.application_detail.viewing_attended'), completed: application?.lead_status === 'viewing_attended' || application?.lead_status === 'dossier_submitted' },
+      { label: t('modal.application_detail.documents_submitted'), completed: application?.lead_status === 'dossier_submitted' },
+      { label: t('modal.application_detail.decision_made'), completed: ['selected', 'rejected'].includes(application?.lead_status) }
     ];
-    
+
     const activeStep = steps.findIndex(step => !step.completed);
     return { steps, activeStep: activeStep === -1 ? steps.length : activeStep };
   };
@@ -188,7 +190,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Tooltip title={showIdentity ? "Hide Identity" : "Reveal Identity"}>
+            <Tooltip title={showIdentity ? t('modal.application_detail.hide_identity') : t('modal.application_detail.reveal_identity')}>
               <IconButton onClick={() => setShowIdentity(!showIdentity)}>
                 <VisibilityIcon />
               </IconButton>
@@ -202,7 +204,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
 
       <DialogContent>
         {actionMessage && (
-          <Alert severity={actionMessage.includes('Error') ? 'error' : 'success'} sx={{ mb: 2 }}>
+          <Alert severity={actionMessage.includes(t('modal.application_detail.error')) ? 'error' : 'success'} sx={{ mb: 2 }}>
             {actionMessage}
           </Alert>
         )}
@@ -218,11 +220,11 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
         </Box>
 
         <Tabs value={tabValue} onChange={handleTabChange} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Overview" />
-          <Tab label="AI Analysis" icon={<Badge badgeContent="GPT-5" color="primary"><PsychologyIcon /></Badge>} />
-          <Tab label="Documents" icon={<Badge badgeContent={application.document_count || 0} color="primary"><AttachFileIcon /></Badge>} />
-          <Tab label="Communication" />
-          <Tab label="Viewing" />
+          <Tab label={t("filing.overview")} />
+          <Tab label={t("filing.ai_analysis")} icon={<Badge badgeContent="GPT-5" color="primary"><PsychologyIcon /></Badge>} />
+          <Tab label={t("filing.documents")} icon={<Badge badgeContent={application.document_count || 0} color="primary"><AttachFileIcon /></Badge>} />
+          <Tab label={t("filing.communication")} />
+          <Tab label={t("filing.viewing")} />
         </Tabs>
 
         <TabPanel value={tabValue} index={0}>
@@ -230,26 +232,26 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                  Contact Information
+                  {t('modal.application_detail.contact_information')}
                 </Typography>
                 {showIdentity ? (
                   <List dense>
                     <ListItem>
                       <ListItemIcon><PersonIcon /></ListItemIcon>
-                      <ListItemText primary="Name" secondary={application.name || 'Not provided'} />
+                      <ListItemText primary={t('modal.application_detail.name')} secondary={application.name || t('modal.application_detail.not_provided')} />
                     </ListItem>
                     <ListItem>
                       <ListItemIcon><EmailIcon /></ListItemIcon>
-                      <ListItemText primary="Email" secondary={application.email} />
+                      <ListItemText primary={t('modal.application_detail.email')} secondary={application.email} />
                     </ListItem>
                     <ListItem>
                       <ListItemIcon><PhoneIcon /></ListItemIcon>
-                      <ListItemText primary="Phone" secondary={application.phone || 'Not provided'} />
+                      <ListItemText primary={t('modal.application_detail.phone')} secondary={application.phone || t('modal.application_detail.not_provided')} />
                     </ListItem>
                   </List>
                 ) : (
                   <Alert severity="info">
-                    Identity information is hidden. Click the eye icon to reveal.
+                    {t('modal.application_detail.identity_hidden')}
                   </Alert>
                 )}
               </Paper>
@@ -258,25 +260,25 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                  Application Details
+                  {t('modal.application_detail.application_details')}
                 </Typography>
                 <List dense>
                   <ListItem>
-                    <ListItemText 
-                      primary="Applied" 
-                      secondary={format(new Date(application.created_at), 'PPpp')} 
+                    <ListItemText
+                      primary={t('modal.application_detail.applied')}
+                      secondary={format(new Date(application.created_at), 'PPpp')}
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemText 
-                      primary="Source Portal" 
-                      secondary={application.source_portal || 'Direct'} 
+                    <ListItemText
+                      primary={t('modal.application_detail.source_portal')}
+                      secondary={application.source_portal || t('modal.application_detail.direct')}
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemText 
-                      primary="Auto Allocated" 
-                      secondary={application.auto_allocated ? 'Yes (AI)' : 'No'} 
+                    <ListItemText
+                      primary={t('modal.application_detail.auto_allocated')}
+                      secondary={application.auto_allocated ? t('modal.application_detail.yes_ai') : t('modal.application_detail.no')}
                     />
                   </ListItem>
                 </List>
@@ -287,7 +289,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
               <Grid item xs={12}>
                 <Paper sx={{ p: 2 }}>
                   <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                    Submitted Information
+                    {t('modal.application_detail.submitted_information')}
                   </Typography>
                   <Grid container spacing={2} sx={{ mt: 1 }}>
                     {Object.entries(application.dossier_data).map(([key, value]) => (
@@ -296,7 +298,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                           {key.replace('_', ' ').toUpperCase()}
                         </Typography>
                         <Typography variant="body1">
-                          {typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}
+                          {typeof value === 'boolean' ? (value ? t('modal.application_detail.yes') : t('modal.application_detail.no')) : value}
                         </Typography>
                       </Grid>
                     ))}
@@ -315,10 +317,10 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                   <CardContent>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                       <Typography variant="h6">
-                        AI Analysis (GPT-5)
+                        {t('modal.application_detail.ai_analysis_gpt5')}
                       </Typography>
-                      <Chip 
-                        label={`Generated ${format(new Date(application.card_generated_at), 'PP')}`}
+                      <Chip
+                        label={`${t('modal.application_detail.generated')} ${format(new Date(application.card_generated_at), 'PP')}`}
                         size="small"
                       />
                     </Box>
@@ -326,22 +328,22 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                     <Grid container spacing={3}>
                       <Grid item xs={12} md={6}>
                         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                          Scoring Results
+                          {t('modal.application_detail.scoring_results')}
                         </Typography>
                         <Stack spacing={2}>
                           <Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                              <Typography variant="body2">Hard Criteria</Typography>
+                              <Typography variant="body2">{t('filing.hard_criteria')}</Typography>
                               {application.ai_card_data.scores.hard_filter_passed ? (
-                                <Chip icon={<CheckCircleIcon />} label="Passed" size="small" color="success" />
+                                <Chip icon={<CheckCircleIcon />} label={t("filing.passed")} size="small" color="success" />
                               ) : (
-                                <Chip icon={<WarningIcon />} label="Failed" size="small" color="error" />
+                                <Chip icon={<WarningIcon />} label={t("filing.failed")} size="small" color="error" />
                               )}
                             </Box>
                           </Box>
                           <Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                              <Typography variant="body2">Soft Score</Typography>
+                              <Typography variant="body2">{t('filing.soft_score')}</Typography>
                               <Typography variant="body2" fontWeight="bold">
                                 {application.ai_card_data.scores.soft_score}%
                               </Typography>
@@ -358,7 +360,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
 
                       <Grid item xs={12} md={6}>
                         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                          Key Insights
+                          {t('modal.application_detail.key_insights')}
                         </Typography>
                         {application.ai_card_data.insights && (
                           <List dense>
@@ -378,7 +380,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                         <Grid item xs={12}>
                           <Paper sx={{ p: 2, bgcolor: 'grey.50' }}>
                             <Typography variant="subtitle2" gutterBottom>
-                              AI Summary
+                              {t('modal.application_detail.ai_summary')}
                             </Typography>
                             <Typography variant="body2">
                               {application.ai_card_data.summary}
@@ -390,7 +392,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                       {application.ai_card_data.recommendations && (
                         <Grid item xs={12}>
                           <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                            AI Recommendations
+                            {t('modal.application_detail.ai_recommendations')}
                           </Typography>
                           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                             {application.ai_card_data.recommendations.map((rec, index) => (
@@ -408,10 +410,10 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <PsychologyIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" gutterBottom>
-                No AI Analysis Available
+                {t('modal.application_detail.no_ai_analysis')}
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
-                Generate an AI card to get GPT-5 powered insights about this applicant.
+                {t('modal.application_detail.generate_ai_card_description')}
               </Typography>
               <Button
                 variant="contained"
@@ -419,7 +421,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                 disabled={isProcessing}
                 startIcon={isProcessing ? <CircularProgress size={20} /> : <PsychologyIcon />}
               >
-                {isProcessing ? 'Generating...' : 'Generate AI Card with GPT-5'}
+                {isProcessing ? t('modal.application_detail.generating') : t('modal.application_detail.generate_ai_card')}
               </Button>
             </Box>
           )}
@@ -437,10 +439,10 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <AttachFileIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" gutterBottom>
-                No Documents Submitted
+                {t('modal.application_detail.no_documents_submitted')}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Documents will appear here once the applicant submits them.
+                {t('modal.application_detail.documents_description')}
               </Typography>
             </Box>
           )}
@@ -449,10 +451,10 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
         <TabPanel value={tabValue} index={3}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Communication History
+              {t('modal.application_detail.communication_history')}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Email communications and messages will be displayed here.
+              {t('modal.application_detail.communication_description')}
             </Typography>
             {/* TODO: Implement communication history */}
           </Paper>
@@ -462,21 +464,21 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
           {application.viewing_slot_id ? (
             <Paper sx={{ p: 2 }}>
               <Typography variant="h6" gutterBottom>
-                Viewing Information
+                {t('modal.application_detail.viewing_information')}
               </Typography>
               <List>
                 <ListItem>
                   <ListItemIcon><CalendarIcon /></ListItemIcon>
-                  <ListItemText 
-                    primary="Scheduled Date" 
-                    secondary={application.viewing_datetime ? format(new Date(application.viewing_datetime), 'PPpp') : 'Not specified'}
+                  <ListItemText
+                    primary={t('modal.application_detail.scheduled_date')}
+                    secondary={application.viewing_datetime ? format(new Date(application.viewing_datetime), 'PPpp') : t('modal.application_detail.not_specified')}
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon><ScheduleIcon /></ListItemIcon>
-                  <ListItemText 
-                    primary="Status" 
-                    secondary={application.viewing_attended ? 'Attended' : 'Scheduled'}
+                  <ListItemText
+                    primary={t('modal.application_detail.status')}
+                    secondary={application.viewing_attended ? t('modal.application_detail.attended') : t('modal.application_detail.scheduled')}
                   />
                 </ListItem>
               </List>
@@ -485,13 +487,13 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <CalendarIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" gutterBottom>
-                No Viewing Scheduled
+                {t('modal.application_detail.no_viewing_scheduled')}
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
-                This applicant hasn't been scheduled for a viewing yet.
+                {t('modal.application_detail.no_viewing_description')}
               </Typography>
               <Button variant="contained" onClick={() => {/* TODO: Implement viewing scheduling */}}>
-                Schedule Viewing
+                {t('modal.application_detail.schedule_viewing')}
               </Button>
             </Box>
           )}
@@ -510,7 +512,7 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                   disabled={isProcessing}
                   startIcon={<ThumbDownIcon />}
                 >
-                  Reject
+                  {t('modal.application_detail.reject')}
                 </Button>
                 <Button
                   variant="contained"
@@ -519,12 +521,12 @@ const ApplicationDetailModal = ({ open, onClose, application }) => {
                   disabled={isProcessing}
                   startIcon={<ThumbUpIcon />}
                 >
-                  Select as Tenant
+                  {t('modal.application_detail.select_as_tenant')}
                 </Button>
               </>
             )}
           </Box>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{t('filing.close')}</Button>
         </Box>
       </DialogActions>
     </Dialog>

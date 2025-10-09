@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardContent,
@@ -23,6 +24,7 @@ import {
 } from '@mui/icons-material';
 
 const ProfileSummary = ({ profile, answers }) => {
+  const { t } = useTranslation();
   if (!profile) return null;
 
   const formatCurrency = (amount) => {

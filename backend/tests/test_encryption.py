@@ -34,7 +34,8 @@ class TestEncryptionService:
 
     @patch.dict('os.environ', {}, clear=True)
     @patch('utils.encryption.logger')
-    def test_init_generates_new_key(self, mock_logger):
+    @patch('utils.aws_secrets.get_encryption_key', return_value=None)
+    def test_init_generates_new_key(self, mock_aws, mock_logger):
         """Test initialization generates new key when none provided."""
         service = EncryptionService()
         assert len(service.key) == 44  # Fernet key length
@@ -107,8 +108,11 @@ class TestEncryptionService:
 
     def test_decrypt_with_wrong_key(self):
         """Test decryption with wrong key."""
-        service1 = EncryptionService()
-        service2 = EncryptionService()
+        # Create two services with different keys
+        key1 = Fernet.generate_key()
+        key2 = Fernet.generate_key()
+        service1 = EncryptionService(key=key1)
+        service2 = EncryptionService(key=key2)
 
         plaintext = "Secret message"
         encrypted = service1.encrypt(plaintext)

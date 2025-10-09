@@ -1,7 +1,9 @@
 import React from 'react';
 import { CircularProgress, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const Loading = () => {
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"

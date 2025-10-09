@@ -44,16 +44,16 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
-      
+
       // Skip showing error toast for certain endpoints that handle their own errors
       const skipToastUrls = [
         '/auth/register',
         '/auth/login',
         '/auth/reset-password'
       ];
-      
+
       const shouldSkipToast = skipToastUrls.some(url => error.config?.url?.includes(url));
-      
+
       // Handle different status codes
       switch (status) {
         case 400:
@@ -63,7 +63,7 @@ axios.interceptors.response.use(
             toast.error(errorMessage);
           }
           break;
-          
+
         case 401:
           // Unauthorized - redirect to homepage where user can login
           authService.logout();
@@ -84,12 +84,12 @@ axios.interceptors.response.use(
             toast.error("You don't have permission to access this resource");
           }
           break;
-          
+
         case 404:
           // Not found
           toast.error('The requested resource was not found');
           break;
-          
+
         case 422:
           // Validation error
           if (data.error) {
@@ -105,12 +105,12 @@ axios.interceptors.response.use(
             }
           }
           break;
-          
+
         case 429:
           // Rate limit exceeded - Check the endpoint
           const url = error.config?.url || '';
           let rateLimitMessage = 'Too many requests. Please slow down.';
-          
+
           // Customize message based on endpoint
           if (url.includes('/auth/login')) {
             rateLimitMessage = 'Too many login attempts. Please wait 1 minute and try again.';
@@ -123,20 +123,20 @@ axios.interceptors.response.use(
           } else if (url.includes('/auth/reset-password/confirm')) {
             rateLimitMessage = 'Too many password reset attempts. Please try again later.';
           }
-          
+
           // Only show if not already handled by component
           if (!shouldSkipToast) {
             toast.error(rateLimitMessage);
           }
           break;
-          
+
         case 500:
         case 502:
         case 503:
           // Server error
           toast.error('Server error. Please try again later.');
           break;
-          
+
         default:
           // Generic error handling
           const errorMessage = data.error || data.detail || data.message || 'Something went wrong';
@@ -149,7 +149,7 @@ axios.interceptors.response.use(
       // Request setup error
       toast.error('Request failed. Please try again.');
     }
-    
+
     // Mark error as processed by interceptor
     markErrorAsProcessed(error);
     return Promise.reject(error);
@@ -166,7 +166,7 @@ export const validateFileUpload = (file, options = {}) => {
 
   // If video, update defaults
   const finalMaxSize = isVideo ? 100 * 1024 * 1024 : maxSize; // 100MB for video
-  const finalAllowedTypes = isVideo 
+  const finalAllowedTypes = isVideo
     ? ['video/mp4', 'video/x-msvideo', 'video/quicktime', 'video/webm']
     : allowedTypes;
 
@@ -181,7 +181,7 @@ export const validateFileUpload = (file, options = {}) => {
 
   // Validate file type
   if (!finalAllowedTypes.includes(file.type)) {
-    const typeNames = isVideo 
+    const typeNames = isVideo
       ? 'MP4, AVI, MOV, or WebM'
       : 'JPEG, PNG, GIF, or WebP';
     return {

@@ -31,6 +31,7 @@ import {
 import PropertyImporter from './PropertyImporter';
 import CriteriaBuilder from './CriteriaBuilder';
 import ViewingSlotManager from './ViewingSlotManager';
+import { useTranslation } from 'react-i18next';
 import { 
   saveTenantSelectionConfig,
   fetchPropertyDetails,
@@ -61,6 +62,7 @@ const steps = [
 ];
 
 const TenantSelectionSetup = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { propertyId } = useParams();

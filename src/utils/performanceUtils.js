@@ -12,6 +12,7 @@ export function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {
     const later = () => {
+  const { t } = useTranslation();
       clearTimeout(timeout);
       func(...args);
     };

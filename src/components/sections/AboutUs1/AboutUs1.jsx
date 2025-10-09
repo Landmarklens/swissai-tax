@@ -39,7 +39,7 @@ const AboutUs1 = () => {
           <img
             src={imageSrc}
             width={'100%'}
-            alt="HomeAI"
+            alt={t("filing.homeai")}
             style={{
               objectFit: 'cover',
               borderRadius: '10px'

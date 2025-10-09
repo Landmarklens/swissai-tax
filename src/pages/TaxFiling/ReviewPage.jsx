@@ -54,7 +54,7 @@ const ReviewPage = () => {
       setCalculation(response.data.calculation);
       setError(null);
     } catch (err) {
-      setError('Failed to load review data. Please try again.');
+      setError(t('review.error_load'));
       if (process.env.NODE_ENV === 'development') {
         console.error('Review load error:', err);
       }
@@ -104,7 +104,7 @@ const ReviewPage = () => {
       if (process.env.NODE_ENV === 'development') {
         console.error('PDF download failed:', err);
       }
-      setError('Failed to download PDF. Please try again.');
+      setError(t('review.error_pdf'));
     } finally {
       setDownloadingPDF(false);
     }
@@ -150,17 +150,17 @@ const ReviewPage = () => {
           <MuiLink component={Link} to="/tax-filing/interview" underline="hover" color="inherit">
             {t('Interview')}
           </MuiLink>
-          <Typography color="text.primary">{t('Review & Calculate')}</Typography>
+          <Typography color="text.primary">{t('review.title')}</Typography>
         </Breadcrumbs>
 
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
           <Box>
             <Typography variant="h3" fontWeight={700} gutterBottom>
-              {t('Review & Calculate')}
+              {t('review.title')}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {t('Review your information and tax calculation before submitting')}
+              {t('review.subtitle')}
             </Typography>
           </Box>
           <Button
@@ -187,7 +187,7 @@ const ReviewPage = () => {
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                   <Typography variant="h6" fontWeight={600}>
-                    {t('Personal Information')}
+                    {t('review.personal_info')}
                   </Typography>
                   <IconButton
                     size="small"
@@ -199,22 +199,22 @@ const ReviewPage = () => {
 
                 <Box display="flex" flexDirection="column" gap={2}>
                   <EditableField
-                    label={t('Full Name')}
+                    label={t('filing.full_name')}
                     value={sessionData?.personal?.fullName || ''}
                     onSave={(value) => handleFieldUpdate('personal', 'fullName', value)}
                   />
                   <EditableField
-                    label={t('Canton')}
+                    label={t('filing.canton')}
                     value={sessionData?.personal?.canton || ''}
                     onSave={(value) => handleFieldUpdate('personal', 'canton', value)}
                   />
                   <EditableField
-                    label={t('Filing Status')}
+                    label={t('filing.filing_status')}
                     value={sessionData?.personal?.filingStatus || ''}
                     onSave={(value) => handleFieldUpdate('personal', 'filingStatus', value)}
                   />
                   <EditableField
-                    label={t('Dependents')}
+                    label={t('filing.dependents')}
                     value={sessionData?.personal?.dependents || 0}
                     type="number"
                     onSave={(value) => handleFieldUpdate('personal', 'dependents', value)}
@@ -228,7 +228,7 @@ const ReviewPage = () => {
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                   <Typography variant="h6" fontWeight={600}>
-                    {t('Income Summary')}
+                    {t('review.income_summary')}
                   </Typography>
                   <IconButton
                     size="small"
@@ -263,7 +263,7 @@ const ReviewPage = () => {
                   <Divider />
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body1" fontWeight={600}>
-                      {t('Total Income')}
+                      {t('review.total_income')}
                     </Typography>
                     <Typography variant="body1" fontWeight={700}>
                       CHF {((sessionData?.income?.employment || 0) + (sessionData?.income?.investment || 0) + (sessionData?.income?.other || 0)).toLocaleString('de-CH')}
@@ -320,7 +320,7 @@ const ReviewPage = () => {
                   <Divider />
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body1" fontWeight={600}>
-                      {t('Total Deductions')}
+                      {t('review.total_deductions')}
                     </Typography>
                     <Typography variant="body1" fontWeight={700} color="success.main">
                       CHF {((sessionData?.deductions?.pillar3a || 0) + (sessionData?.deductions?.healthInsurance || 0) + (sessionData?.deductions?.childcare || 0) + (sessionData?.deductions?.workExpenses || 0)).toLocaleString('de-CH')}
@@ -344,7 +344,7 @@ const ReviewPage = () => {
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate('/tax-filing/documents')}
           >
-            {t('Back to Documents')}
+            {t('review.back_to_documents')}
           </Button>
           <Button
             variant="contained"
@@ -352,7 +352,7 @@ const ReviewPage = () => {
             endIcon={<ArrowForwardIcon />}
             onClick={handleContinue}
           >
-            {sessionData?.requiresPayment ? t('Continue to Payment') : t('Continue to Submit')}
+            {sessionData?.requiresPayment ? t('review.continue_payment') : t('review.continue_submit')}
           </Button>
         </Box>
       </Container>

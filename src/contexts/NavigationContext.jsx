@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Navigation Context for maintaining application state across module transitions
@@ -13,6 +14,7 @@ const NavigationContext = createContext({
 });
 
 export const useNavigationContext = () => {
+  const { t } = useTranslation();
   const context = useContext(NavigationContext);
   if (!context) {
     throw new Error('useNavigationContext must be used within NavigationProvider');

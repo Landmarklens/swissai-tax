@@ -67,7 +67,7 @@ const LoggedInFooter = () => {
               md: 0
             }
           }}>
-          <ImageComponent name="logo" height={26} alt="HOME AI Logo" />
+          <ImageComponent name="logo" height={26} alt={t("filing.home_ai_logo")} />
         </Box>
 
         <NavLinks

@@ -1,4 +1,5 @@
 export const transformToArray = (obj) => {
+  const { t } = useTranslation();
   if (!obj) {
     return [];
   }

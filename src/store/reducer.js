@@ -6,6 +6,7 @@ import userReducer from './slices/userSlice';
 import taxFilingReducer from './slices/taxFilingSlice';
 import accountReducer from './slices/accountSlice';
 import dashboardReducer from './slices/dashboardSlice';
+import { useTranslation } from 'react-i18next';
 
 const persistConfig = {
   key: 'root',

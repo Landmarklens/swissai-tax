@@ -1,4 +1,5 @@
 import { Box, Button, styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const ButtonsBox = styled(Box)({
   width: 'calc(100% - 32px)',
@@ -25,6 +26,7 @@ const StyledButton = styled(Button)(({ bgColor }) => ({
 }));
 
 const ChatButtons = ({ buttons }) => {
+  const { t } = useTranslation();
   return (
     <ButtonsBox>
       {buttons.map(({ variant, icon, text, onClick }, index) => (

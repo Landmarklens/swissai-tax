@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import { useTranslation } from 'react-i18next';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -23,5 +24,6 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 // From https://github.com/mui/material-ui/issues/9496#issuecomment-959408221
 
 export default function ProgressBar(props) {
+  const { t } = useTranslation();
   return <BorderLinearProgress variant="determinate" value={props.value} />;
 }

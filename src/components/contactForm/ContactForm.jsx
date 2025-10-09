@@ -110,7 +110,7 @@ const ContactManagerForm = ({ open, handleClose }) => {
               <TextField
                 variant="outlined"
                 fullWidth
-                placeholder="876-987-9876"
+                placeholder={t("filing.8769879876")}
                 sx={textFieldStyle}
               />
             </Box>

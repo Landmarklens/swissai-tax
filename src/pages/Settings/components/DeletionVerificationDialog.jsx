@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogTitle,
@@ -17,6 +18,7 @@ import {
 } from '@mui/icons-material';
 
 const DeletionVerificationDialog = ({ open, onClose, onVerify, loading, error }) => {
+  const { t } = useTranslation();
   const [code, setCode] = useState('');
   const [localError, setLocalError] = useState('');
 
@@ -66,7 +68,7 @@ const DeletionVerificationDialog = ({ open, onClose, onVerify, loading, error })
 
           <TextField
             fullWidth
-            label="Verification Code"
+            label={t("filing.verification_code")}
             value={code}
             onChange={handleCodeChange}
             placeholder="000000"

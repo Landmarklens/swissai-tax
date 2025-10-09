@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
 import { theme } from '../../theme/theme';
+import { useTranslation } from 'react-i18next';
 
 const StyledButton = styled(Button)({
   color: theme.palette.aiCard.blue,
@@ -15,6 +16,7 @@ const StyledButton = styled(Button)({
 });
 
 function CustomButton({ text, icon, onClick }) {
+  const { t } = useTranslation();
   return (
     <StyledButton onClick={onClick} variant="outlined" startIcon={icon}>
       {text}

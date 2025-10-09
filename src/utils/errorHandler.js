@@ -4,6 +4,7 @@
  * @returns {Object} Normalized error object with message and code
  */
 export const normalizeError = (error) => {
+  const { t } = useTranslation();
   // Handle axios response errors
   if (error.response?.data) {
     const data = error.response.data;

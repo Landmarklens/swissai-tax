@@ -20,6 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const QuestionCard = ({
   question,
@@ -30,6 +31,7 @@ const QuestionCard = ({
   error,
   isLastQuestion = false
 }) => {
+  const { t } = useTranslation();
   const handleCheckboxChange = (optionValue, checked) => {
     const currentValues = value || [];
     if (checked) {

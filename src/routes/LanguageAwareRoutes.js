@@ -6,6 +6,7 @@ import { NAVIGATION_ROUTE } from '../constants';
 import NotFound from '../pages/NotFound';
 
 const LanguageAwareRoutes = () => {
+  const { t } = useTranslation();
   const { i18n } = useTranslation();
   const location = useLocation();
 

@@ -8,8 +8,10 @@ import {
   getSubscription
 } from '../../../../../../store/slices/subscriptionsSlice';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 const FinalConfirmationNotice = ({ handleCloseModal, decrementStep, incrementStep }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +34,7 @@ const FinalConfirmationNotice = ({ handleCloseModal, decrementStep, incrementSte
     <div className="final-confirmation-notice-modal-body">
       <ModalHeader handleCloseModal={handleCloseModal} />
       <div className="content">
-        <h2 className="title">Just making sure.</h2>
+        <h2 className="title">{t('filing.just_making_sure')}</h2>
         <p className="description">
           You’ll only be able to match 1 and won’t be able to get premium feature.
         </p>

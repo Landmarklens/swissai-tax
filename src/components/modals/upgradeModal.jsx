@@ -80,7 +80,7 @@ const UpgradeModal = ({ currentPlan, upgradePlan, translate, open, onClose }) =>
           </Typography>
 
           <Box display="flex" gap={2} mt={4}>
-            <PlanCard title="Premium Advance Search" price="CHF 99.99" keyFeatures={featuresPlan} />
+            <PlanCard title={t("filing.premium_advance_search")} price="CHF 99.99" keyFeatures={featuresPlan} />
             {/* <Plan
               wrapperStyles={{
                 width: '100%',

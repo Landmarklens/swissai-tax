@@ -1,5 +1,6 @@
 import './ModalFooter.scss';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const ModalFooter = ({
   handleGoBack,
@@ -8,6 +9,7 @@ const ModalFooter = ({
   isUnsubscribed,
   isLoading
 }) => {
+  const { t } = useTranslation();
   return (
     <div style={isUnsubscribed && { justifyContent: 'center' }} className="modal-footer">
       {!isUnsubscribed && (

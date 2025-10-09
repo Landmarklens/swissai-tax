@@ -25,21 +25,46 @@ class EncryptionService:
         If no key provided, tries AWS Secrets Manager, then environment variable
         """
         if key:
-            self.key = key.encode() if isinstance(key, str) else key
+            # If key is provided, validate it's a proper Fernet key
+            try:
+                key_bytes = key.encode() if isinstance(key, str) else key
+                # Test if it's a valid Fernet key
+                Fernet(key_bytes)
+                self.key = key_bytes
+            except Exception as e:
+                logger.warning(f"Provided key is not a valid Fernet key: {e}")
+                # Generate a new valid key
+                self.key = Fernet.generate_key()
+                logger.warning("Generated new encryption key - should be stored securely!")
         else:
             # Try AWS Secrets Manager first (production)
             try:
                 from utils.aws_secrets import get_encryption_key
                 aws_key = get_encryption_key()
                 if aws_key:
-                    self.key = aws_key.encode()
-                    logger.info("Using encryption key from AWS Secrets Manager")
+                    # Validate the key from AWS
+                    try:
+                        key_bytes = aws_key.encode()
+                        Fernet(key_bytes)
+                        self.key = key_bytes
+                        logger.info("Using encryption key from AWS Secrets Manager")
+                    except Exception as e:
+                        logger.warning(f"AWS key is not a valid Fernet key: {e}")
+                        self.key = Fernet.generate_key()
+                        logger.warning("Generated new encryption key - should be stored securely!")
                 else:
                     # Fallback: Try environment variable
                     env_key = os.environ.get('ENCRYPTION_KEY')
                     if env_key:
-                        self.key = env_key.encode()
-                        logger.info("Using encryption key from environment variable")
+                        try:
+                            key_bytes = env_key.encode()
+                            Fernet(key_bytes)
+                            self.key = key_bytes
+                            logger.info("Using encryption key from environment variable")
+                        except Exception as e:
+                            logger.warning(f"Environment key is not a valid Fernet key: {e}")
+                            self.key = Fernet.generate_key()
+                            logger.warning("Generated new encryption key - should be stored securely!")
                     else:
                         # Generate new key (should be stored securely)
                         self.key = Fernet.generate_key()
@@ -48,8 +73,15 @@ class EncryptionService:
                 # If aws_secrets module not available, fall back to env var
                 env_key = os.environ.get('ENCRYPTION_KEY')
                 if env_key:
-                    self.key = env_key.encode()
-                    logger.info("Using encryption key from environment variable")
+                    try:
+                        key_bytes = env_key.encode()
+                        Fernet(key_bytes)
+                        self.key = key_bytes
+                        logger.info("Using encryption key from environment variable")
+                    except Exception as e:
+                        logger.warning(f"Environment key is not a valid Fernet key: {e}")
+                        self.key = Fernet.generate_key()
+                        logger.warning("Generated new encryption key - should be stored securely!")
                 else:
                     self.key = Fernet.generate_key()
                     logger.warning("Generated new encryption key - should be stored securely!")

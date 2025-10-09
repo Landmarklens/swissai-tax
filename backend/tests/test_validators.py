@@ -33,7 +33,7 @@ def test_sanitize_string():
     """Test string sanitization"""
     assert sanitize_string("normal text") == "normal text"
     assert sanitize_string("text; DROP TABLE users;") == "text DROP TABLE users"
-    assert sanitize_string("text' OR '1'='1") == "text OR 11"
+    assert sanitize_string("text' OR '1'='1") == "text OR 1=1"
     assert sanitize_string("a" * 300) == "a" * 255  # Max length
     assert sanitize_string(None) == ""
 

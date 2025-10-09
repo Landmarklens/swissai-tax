@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -33,6 +34,7 @@ const QuestionCard = ({
   isSubmitting,
   previousAnswer
 }) => {
+  const { t } = useTranslation();
   const [answer, setAnswer] = useState(previousAnswer || '');
   const [multiSelectAnswers, setMultiSelectAnswers] = useState(previousAnswer || []);
   const [showHelp, setShowHelp] = useState(false);
@@ -75,7 +77,7 @@ const QuestionCard = ({
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
           >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+            <FormControlLabel value="yes" control={<Radio />} label={t("filing.yes")} />
             <FormControlLabel value="no" control={<Radio />} label="No" />
           </RadioGroup>
         );
@@ -133,7 +135,7 @@ const QuestionCard = ({
             onChange={(e) => setAnswer(e.target.value)}
             placeholder={isCurrencyField ? "Enter amount" : "Enter number"}
             InputProps={isCurrencyField ? {
-              startAdornment: <InputAdornment position="start">CHF</InputAdornment>,
+              startAdornment: <InputAdornment position="start">{t('filing.chf')}</InputAdornment>,
             } : {}}
             inputProps={{
               min: question.validation_rules?.min || 0,
@@ -182,7 +184,7 @@ const QuestionCard = ({
             fullWidth
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            placeholder="Enter your answer"
+            placeholder={t("filing.enter_your_answer")}
           />
         );
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Paper,
@@ -50,17 +51,17 @@ import {
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { 
-  createViewingSlots, 
-  updateViewingSlot, 
+import {
+  createViewingSlots,
+  updateViewingSlot,
   deleteViewingSlot,
-  bulkCreateSlots 
+  bulkCreateSlots
 } from '../../../../store/slices/tenantSelectionSlice';
 
 const localizer = momentLocalizer(moment);
 
 const ViewingSlotManager = ({ propertyId, onComplete }) => {
-
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { viewingSlots, loading } = useSelector((state) => state.tenantSelection);
 
@@ -96,11 +97,11 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
   // Transform slots for calendar display
   const calendarEvents = viewingSlots?.map(slot => ({
     id: slot.id,
-    title: `${slot.current_allocated}/${slot.max_capacity} booked`,
+    title: t('viewing.booked_count', { current: slot.current_allocated, max: slot.max_capacity }),
     start: new Date(slot.slot_datetime),
     end: moment(slot.slot_datetime).add(slot.duration_minutes, 'minutes').toDate(),
     resource: slot,
-    color: slot.status === 'fully_booked' ? '#f44336' : 
+    color: slot.status === 'fully_booked' ? '#f44336' :
            slot.status === 'partially_booked' ? '#ff9800' : '#4caf50'
   })) || [];
 
@@ -126,14 +127,14 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
 
       if (result.error) {
         console.error('[ViewingSlotManager] Error creating slot:', result.error);
-        alert('Failed to create viewing slot: ' + (result.error.message || 'Unknown error'));
+        alert(t('modal.viewing_slots.error_create') + ': ' + (result.error.message || t('modal.viewing_slots.error_unknown')));
       } else {
         setShowSlotDialog(false);
         resetSlotForm();
       }
     } catch (error) {
       console.error('[ViewingSlotManager] Exception in handleCreateSlot:', error);
-      alert('Failed to create viewing slot: ' + error.message);
+      alert(t('modal.viewing_slots.error_create') + ': ' + error.message);
     }
   };
 
@@ -168,18 +169,18 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
 
       if (result.error) {
         console.error('[ViewingSlotManager] Error creating slots:', result.error);
-        alert('Failed to create viewing slots: ' + (result.error.message || 'Unknown error'));
+        alert(t('modal.viewing_slots.error_bulk_create') + ': ' + (result.error.message || t('modal.viewing_slots.error_unknown')));
       } else {
         setShowBulkDialog(false);
       }
     } catch (error) {
       console.error('[ViewingSlotManager] Exception in handleBulkCreate:', error);
-      alert('Failed to create viewing slots: ' + error.message);
+      alert(t('modal.viewing_slots.error_bulk_create') + ': ' + error.message);
     }
   };
 
   const handleDeleteSlot = async (slotId) => {
-    if (window.confirm('Are you sure you want to delete this viewing slot?')) {
+    if (window.confirm(t('modal.viewing_slots.confirm_delete'))) {
       await dispatch(deleteViewingSlot({ slotId }));
     }
   };
@@ -227,20 +228,20 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
   };
 
   const getSlotStatusLabel = (slot) => {
-    if (slot.status === 'cancelled') return 'Cancelled';
-    if (slot.status === 'fully_booked') return 'Full';
+    if (slot.status === 'cancelled') return t('viewing.cancelled');
+    if (slot.status === 'fully_booked') return t('viewing.status_full');
     if (slot.status === 'partially_booked') return `${slot.current_allocated}/${slot.max_capacity}`;
-    return 'Available';
+    return t('viewing.available');
   };
 
   const weekDays = [
-    { value: 0, label: 'Sun' },
-    { value: 1, label: 'Mon' },
-    { value: 2, label: 'Tue' },
-    { value: 3, label: 'Wed' },
-    { value: 4, label: 'Thu' },
-    { value: 5, label: 'Fri' },
-    { value: 6, label: 'Sat' }
+    { value: 0, label: t('viewing.weekday_sun') },
+    { value: 1, label: t('viewing.weekday_mon') },
+    { value: 2, label: t('viewing.weekday_tue') },
+    { value: 3, label: t('viewing.weekday_wed') },
+    { value: 4, label: t('viewing.weekday_thu') },
+    { value: 5, label: t('viewing.weekday_fri') },
+    { value: 6, label: t('viewing.weekday_sat') }
   ];
 
   return (
@@ -248,9 +249,9 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
       <Paper sx={{ p: 3, mb: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h5">
-            Viewing Schedule Management
+            {t('viewing.schedule_management')}
           </Typography>
-          
+
           <Box sx={{ display: 'flex', gap: 2 }}>
             <ToggleButtonGroup
               value={view}
@@ -265,15 +266,15 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                 <ViewIcon />
               </ToggleButton>
             </ToggleButtonGroup>
-            
+
             <Button
               variant="outlined"
               startIcon={<AutoIcon />}
               onClick={() => setShowBulkDialog(true)}
             >
-              Bulk Create
+              {t('viewing.bulk_create')}
             </Button>
-            
+
             <Button
               variant="contained"
               startIcon={<AddIcon />}
@@ -281,15 +282,14 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                 setShowSlotDialog(true);
               }}
             >
-              Add Slot
+              {t('viewing.add_slot')}
             </Button>
           </Box>
         </Box>
-        
+
         <Alert severity="info" sx={{ mb: 2 }}>
           <Typography variant="body2">
-            Viewing slots are automatically allocated to applicants based on availability. 
-            Each slot can accommodate multiple viewers (group viewings) or single applicants.
+            {t('viewing.auto_allocation_info')}
           </Typography>
         </Alert>
       </Paper>
@@ -344,17 +344,17 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
                     <ScheduleIcon fontSize="small" />
                     <Typography>
-                      {moment(slot.slot_datetime).format('HH:mm')} - 
+                      {moment(slot.slot_datetime).format('HH:mm')} -
                       {moment(slot.slot_datetime).add(slot.duration_minutes, 'minutes').format('HH:mm')}
                     </Typography>
                   </Box>
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                     <Badge badgeContent={slot.current_allocated} color="primary">
                       <PeopleIcon fontSize="small" />
                     </Badge>
                     <Typography variant="body2">
-                      {slot.current_allocated} of {slot.max_capacity} spots filled
+                      {t('viewing.spots_filled', { current: slot.current_allocated, max: slot.max_capacity })}
                     </Typography>
                   </Box>
                   
@@ -393,7 +393,7 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
       {/* Create/Edit Slot Dialog */}
       <Dialog open={showSlotDialog} onClose={() => setShowSlotDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {editingSlot ? 'Edit Viewing Slot' : 'Create Viewing Slot'}
+          {editingSlot ? t('modal.viewing_slots.edit_title') : t('modal.viewing_slots.create_title')}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -401,68 +401,68 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
               <TextField
                 fullWidth
                 type="date"
-                label="Date"
+                label={t('Date')}
                 value={slotForm.date}
                 onChange={(e) => setSlotForm({ ...slotForm, date: e.target.value })}
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 type="time"
-                label="Time"
+                label={t('Time')}
                 value={slotForm.time}
                 onChange={(e) => setSlotForm({ ...slotForm, time: e.target.value })}
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 type="number"
-                label="Duration (minutes)"
+                label={t('viewing.duration_minutes')}
                 value={slotForm.duration}
                 onChange={(e) => setSlotForm({ ...slotForm, duration: parseInt(e.target.value) })}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">min</InputAdornment>
+                  endAdornment: <InputAdornment position="end">{t('viewing.min')}</InputAdornment>
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 type="number"
-                label="Max Capacity"
+                label={t('viewing.max_capacity')}
                 value={slotForm.capacity}
                 onChange={(e) => setSlotForm({ ...slotForm, capacity: parseInt(e.target.value) })}
-                helperText="Number of viewers per slot"
+                helperText={t('viewing.viewers_per_slot')}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel>Viewing Type</InputLabel>
+                <InputLabel>{t('viewing.viewing_type')}</InputLabel>
                 <Select
                   value={slotForm.type}
                   onChange={(e) => setSlotForm({ ...slotForm, type: e.target.value })}
-                  label="Viewing Type"
+                  label={t('viewing.viewing_type')}
                 >
-                  <MenuItem value="individual">Individual Viewing</MenuItem>
-                  <MenuItem value="group">Group Viewing</MenuItem>
+                  <MenuItem value="individual">{t('viewing.individual_viewing')}</MenuItem>
+                  <MenuItem value="group">{t('viewing.group_viewing')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 fullWidth
                 multiline
                 rows={2}
-                label="Notes (optional)"
+                label={t('viewing.notes_optional')}
                 value={slotForm.notes}
                 onChange={(e) => setSlotForm({ ...slotForm, notes: e.target.value })}
               />
@@ -470,42 +470,42 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowSlotDialog(false)}>Cancel</Button>
+          <Button onClick={() => setShowSlotDialog(false)}>{t('Cancel')}</Button>
           <Button variant="contained" onClick={handleCreateSlot}>
-            {editingSlot ? 'Update' : 'Create'}
+            {editingSlot ? t('modal.viewing_slots.update') : t('modal.viewing_slots.create')}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Bulk Create Dialog */}
       <Dialog open={showBulkDialog} onClose={() => setShowBulkDialog(false)} maxWidth="md" fullWidth>
-        <DialogTitle>Bulk Create Viewing Slots</DialogTitle>
+        <DialogTitle>{t('modal.viewing_slots.bulk_create_title')}</DialogTitle>
         <DialogContent>
           <Grid container spacing={3} sx={{ mt: 1 }}>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 type="date"
-                label="Start Date"
+                label={t('viewing.start_date')}
                 value={bulkForm.startDate}
                 onChange={(e) => setBulkForm({ ...bulkForm, startDate: e.target.value })}
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 type="date"
-                label="End Date"
+                label={t('viewing.end_date')}
                 value={bulkForm.endDate}
                 onChange={(e) => setBulkForm({ ...bulkForm, endDate: e.target.value })}
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
-              <Typography gutterBottom>Select Weekdays</Typography>
+              <Typography gutterBottom>{t('viewing.select_weekdays')}</Typography>
               <ToggleButtonGroup
                 value={bulkForm.weekdays}
                 onChange={(e, newDays) => setBulkForm({ ...bulkForm, weekdays: newDays })}
@@ -518,36 +518,36 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                 ))}
               </ToggleButtonGroup>
             </Grid>
-            
+
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <Typography>Time Slots</Typography>
+                <Typography>{t('viewing.time_slots')}</Typography>
                 <Button size="small" startIcon={<AddIcon />} onClick={addTimeSlot}>
-                  Add Time Slot
+                  {t('viewing.add_time_slot')}
                 </Button>
               </Box>
-              
+
               {bulkForm.timeSlots.map((slot, index) => (
                 <Box key={index} sx={{ display: 'flex', gap: 2, mb: 2 }}>
                   <TextField
                     type="time"
-                    label="Time"
+                    label={t('Time')}
                     value={slot.time}
                     onChange={(e) => updateTimeSlot(index, 'time', e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   />
                   <TextField
                     type="number"
-                    label="Duration"
+                    label={t('viewing.duration')}
                     value={slot.duration}
                     onChange={(e) => updateTimeSlot(index, 'duration', parseInt(e.target.value))}
                     InputProps={{
-                      endAdornment: <InputAdornment position="end">min</InputAdornment>
+                      endAdornment: <InputAdornment position="end">{t('viewing.min')}</InputAdornment>
                     }}
                   />
                   <TextField
                     type="number"
-                    label="Capacity"
+                    label={t('viewing.capacity')}
                     value={slot.capacity}
                     onChange={(e) => updateTimeSlot(index, 'capacity', parseInt(e.target.value))}
                   />
@@ -557,7 +557,7 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                 </Box>
               ))}
             </Grid>
-            
+
             <Grid item xs={12}>
               <FormControlLabel
                 control={
@@ -566,15 +566,15 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                     onChange={(e) => setBulkForm({ ...bulkForm, autoAllocate: e.target.checked })}
                   />
                 }
-                label="Automatically allocate applicants to available slots"
+                label={t('viewing.auto_allocate_label')}
               />
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowBulkDialog(false)}>Cancel</Button>
+          <Button onClick={() => setShowBulkDialog(false)}>{t('Cancel')}</Button>
           <Button variant="contained" onClick={handleBulkCreate}>
-            Create Slots
+            {t('modal.viewing_slots.create_slots')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -582,7 +582,7 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
       {/* Summary Stats */}
       <Paper sx={{ p: 3, mt: 3 }}>
         <Typography variant="h6" gutterBottom>
-          Viewing Schedule Summary
+          {t('viewing.summary_title')}
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={6} md={3}>
@@ -591,45 +591,45 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
                 {viewingSlots?.length || 0}
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Total Slots
+                {t('viewing.total_slots')}
               </Typography>
             </Box>
           </Grid>
-          
+
           <Grid item xs={6} md={3}>
             <Box sx={{ textAlign: 'center' }}>
               <Typography variant="h4" color="success.main">
                 {viewingSlots?.filter(s => s.status === 'available').length || 0}
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Available
+                {t('viewing.available')}
               </Typography>
             </Box>
           </Grid>
-          
+
           <Grid item xs={6} md={3}>
             <Box sx={{ textAlign: 'center' }}>
               <Typography variant="h4" color="warning.main">
                 {viewingSlots?.filter(s => s.status === 'partially_booked').length || 0}
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Partially Booked
+                {t('viewing.partially_booked')}
               </Typography>
             </Box>
           </Grid>
-          
+
           <Grid item xs={6} md={3}>
             <Box sx={{ textAlign: 'center' }}>
               <Typography variant="h4" color="error.main">
                 {viewingSlots?.filter(s => s.status === 'fully_booked').length || 0}
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Fully Booked
+                {t('viewing.fully_booked')}
               </Typography>
             </Box>
           </Grid>
         </Grid>
-        
+
         {onComplete && (
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
@@ -638,7 +638,7 @@ const ViewingSlotManager = ({ propertyId, onComplete }) => {
               onClick={onComplete}
               disabled={!viewingSlots?.length}
             >
-              Continue to Next Step
+              {t('viewing.continue_next_step')}
             </Button>
           </Box>
         )}

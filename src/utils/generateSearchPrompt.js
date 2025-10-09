@@ -1,4 +1,5 @@
 function getArticle(propertyType) {
+  const { t } = useTranslation();
   if (!propertyType) return '';
   const firstLetter = propertyType.trim().charAt(0).toLowerCase();
   return ['a', 'e', 'i', 'o', 'u'].includes(firstLetter) ? 'an' : 'a';

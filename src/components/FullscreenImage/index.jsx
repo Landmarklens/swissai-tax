@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const FullscreenImage = ({ src, alt, style }) => {
+  const { t } = useTranslation();
   const imageRef = useRef(null);
 
   const openFullscreen = () => {

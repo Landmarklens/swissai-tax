@@ -31,6 +31,7 @@ import {
   Euro as EuroIcon
 } from '@mui/icons-material';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import { 
   generateAICard,
   updateLeadStatus
@@ -45,6 +46,7 @@ const ApplicationCard = ({
   showIdentity = false,
   compact = false
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [isRevealed, setIsRevealed] = useState(showIdentity);
   const [isGeneratingCard, setIsGeneratingCard] = useState(false);
@@ -125,14 +127,14 @@ const ApplicationCard = ({
             {hard_filter_passed ? (
               <Chip 
                 icon={<CheckCircleIcon />} 
-                label="Passed" 
+                label={t("filing.passed")} 
                 size="small" 
                 color="success" 
               />
             ) : (
               <Chip 
                 icon={<WarningIcon />} 
-                label="Failed" 
+                label={t("filing.failed")} 
                 size="small" 
                 color="error" 
               />
@@ -290,7 +292,7 @@ const ApplicationCard = ({
           {application.auto_allocated && (
             <Chip 
               icon={<PsychologyIcon />}
-              label="AI Allocated"
+              label={t("filing.ai_allocated")}
               variant="outlined"
               size="small"
               color="primary"

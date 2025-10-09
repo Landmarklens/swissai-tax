@@ -2,6 +2,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../../services/authService';
+import { useTranslation } from 'react-i18next';
 
 const initialState = {
   isAuthenticated: authService.isAuthenticated(),

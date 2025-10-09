@@ -138,8 +138,8 @@ class TestTaxInsightService:
         """Test child tax credits insight"""
         # Setup - user has 2 children
         answer_dict = {
-            'Q06': TaxAnswer(question_id='Q06', answer_value='yes'),
-            'Q06a': TaxAnswer(question_id='Q06a', answer_value='2')
+            'Q03': TaxAnswer(question_id='Q03', answer_value='yes'),
+            'Q03a': TaxAnswer(question_id='Q03a', answer_value='2')
         }
 
         # Execute
@@ -160,7 +160,7 @@ class TestTaxInsightService:
         """Test no insight when no children"""
         # Setup
         answer_dict = {
-            'Q06': TaxAnswer(question_id='Q06', answer_value='no')
+            'Q03': TaxAnswer(question_id='Q03', answer_value='no')
         }
 
         # Execute
@@ -214,7 +214,7 @@ class TestTaxInsightService:
         """Test property owner deductions insight"""
         # Setup
         answer_dict = {
-            'Q10': TaxAnswer(question_id='Q10', answer_value='yes')
+            'Q09': TaxAnswer(question_id='Q09', answer_value='yes')
         }
 
         # Execute
@@ -266,12 +266,12 @@ class TestTaxInsightService:
             ),
             TaxAnswer(
                 filing_session_id='filing-123',
-                question_id='Q06',
+                question_id='Q03',
                 answer_value='yes'  # Has children -> should generate insight
             ),
             TaxAnswer(
                 filing_session_id='filing-123',
-                question_id='Q06a',
+                question_id='Q03a',
                 answer_value='1'
             )
         ]

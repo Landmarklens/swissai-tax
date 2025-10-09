@@ -527,10 +527,10 @@ const GalleryCard = ({ data, onCardClick, onDetailsClick }) => {
           width: '100%',
           borderTop: `1px solid ${theme.palette.border.blue}`
         }}>
-        <IconButton size="small" aria-label="Like">
+        <IconButton size="small" aria-label={t("filing.like")}>
           👍
         </IconButton>
-        <IconButton onClick={handleClickDislike} size="small" aria-label="Dislike">
+        <IconButton onClick={handleClickDislike} size="small" aria-label={t("filing.dislike")}>
           👎
         </IconButton>
       </Box>

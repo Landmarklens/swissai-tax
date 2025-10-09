@@ -18,6 +18,7 @@ export const features = {
 
 // Helper to check if a feature is enabled
 export const isFeatureEnabled = (featureName) => {
+  const { t } = useTranslation();
   const isEnabled = features[featureName] === true;
     exists: featureName in features,
     value: features[featureName],

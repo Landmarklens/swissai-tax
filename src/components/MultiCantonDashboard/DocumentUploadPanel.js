@@ -29,6 +29,7 @@ import {
   Close as CloseIcon
 } from '@mui/icons-material';
 import { getApiUrl } from '../../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = getApiUrl();
 
@@ -43,6 +44,7 @@ const SUPPORTED_DOCUMENTS = [
 ];
 
 const DocumentUploadPanel = ({ filingId, onDocumentProcessed }) => {
+  const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);

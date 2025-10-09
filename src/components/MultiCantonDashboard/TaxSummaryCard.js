@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardContent,
@@ -20,6 +21,7 @@ import {
 } from '@mui/icons-material';
 
 const TaxSummaryCard = ({ totalTaxBurden, numFilings, primaryFiling, calculations }) => {
+  const { t } = useTranslation();
   // Calculate breakdown
   const totalIncome = Object.values(calculations).reduce(
     (sum, calc) => sum + (calc.income?.total || 0), 0
@@ -107,27 +109,27 @@ const TaxSummaryCard = ({ totalTaxBurden, numFilings, primaryFiling, calculation
             <Box display="flex" flexDirection="column" gap={1}>
               {federalTax > 0 && (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2">Federal:</Typography>
+                  <Typography variant="body2">{t('filing.federal')}</Typography>
                   <Typography variant="body2" fontWeight="bold">
                     CHF {federalTax.toLocaleString('de-CH', { minimumFractionDigits: 0 })}
                   </Typography>
                 </Box>
               )}
               <Box display="flex" justifyContent="space-between">
-                <Typography variant="body2">Cantonal:</Typography>
+                <Typography variant="body2">{t('filing.cantonal')}</Typography>
                 <Typography variant="body2" fontWeight="bold">
                   CHF {cantonalTax.toLocaleString('de-CH', { minimumFractionDigits: 0 })}
                 </Typography>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Typography variant="body2">Municipal:</Typography>
+                <Typography variant="body2">{t('filing.municipal')}</Typography>
                 <Typography variant="body2" fontWeight="bold">
                   CHF {municipalTax.toLocaleString('de-CH', { minimumFractionDigits: 0 })}
                 </Typography>
               </Box>
               {churchTax > 0 && (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2">Church:</Typography>
+                  <Typography variant="body2">{t('filing.church')}</Typography>
                   <Typography variant="body2" fontWeight="bold">
                     CHF {churchTax.toLocaleString('de-CH', { minimumFractionDigits: 0 })}
                   </Typography>

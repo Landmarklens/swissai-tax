@@ -28,6 +28,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { useTranslation } from 'react-i18next';
 
 const SUPPORTED_PORTALS = [
   { value: 'auto', label: 'Auto-detect', icon: '🔍' },
@@ -44,6 +45,7 @@ const ImportMethodStep = ({
   validationErrors,
   onValidationErrorsChange
 }) => {
+  const { t } = useTranslation();
   const [url, setUrl] = useState(propertyData.url || '');
   const [portal, setPortal] = useState(propertyData.portal || 'auto');
   const [manualData, setManualData] = useState({
@@ -180,12 +182,12 @@ const ImportMethodStep = ({
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Property URL"
+            label={t("filing.property_url")}
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             error={!!validationErrors.url}
             helperText={validationErrors.url || 'Example: https://www.homegate.ch/rent/...'}
-            placeholder="https://www.homegate.ch/rent/..."
+            placeholder={t("filing.httpswwwhomegatechrent")}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -198,11 +200,11 @@ const ImportMethodStep = ({
         
         <Grid item xs={12} md={6}>
           <FormControl fullWidth>
-            <InputLabel>Portal</InputLabel>
+            <InputLabel>{t('filing.portal')}</InputLabel>
             <Select
               value={portal}
               onChange={(e) => setPortal(e.target.value)}
-              label="Portal"
+              label={t("filing.portal")}
             >
               {SUPPORTED_PORTALS.map((p) => (
                 <MenuItem key={p.value} value={p.value}>
@@ -219,7 +221,7 @@ const ImportMethodStep = ({
       
       <Alert severity="info" sx={{ mt: 3 }}>
         <Typography variant="body2">
-          <strong>Supported Portals:</strong>
+          <strong>{t('filing.supported_portals')}</strong>
         </Typography>
         <Box sx={{ mt: 1 }}>
           {SUPPORTED_PORTALS.slice(1).map((p) => (
@@ -249,10 +251,10 @@ const ImportMethodStep = ({
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Property Title (Optional)"
+            label={t("filing.property_title_optional")}
             value={manualData.title}
             onChange={handleManualDataChange('title')}
-            placeholder="e.g., Beautiful 3.5 Room Apartment"
+            placeholder={t("filing.eg_beautiful_35_room_apartment")}
             error={!!validationErrors.title}
             helperText={validationErrors.title}
           />
@@ -262,10 +264,10 @@ const ImportMethodStep = ({
           <TextField
             fullWidth
             required
-            label="Full Address"
+            label={t("filing.full_address")}
             value={manualData.address}
             onChange={handleManualDataChange('address')}
-            placeholder="e.g., Bahnhofstrasse 10, 8001 Zürich"
+            placeholder={t("filing.eg_bahnhofstrasse_10_8001_zrich")}
             error={!!validationErrors.address}
             helperText={validationErrors.address || 'Enter the complete address including street, number, postal code and city'}
             InputProps={{
@@ -283,7 +285,7 @@ const ImportMethodStep = ({
             fullWidth
             required
             type="number"
-            label="Monthly Rent (CHF)"
+            label={t("filing.monthly_rent_chf")}
             value={manualData.price_chf}
             onChange={handleManualDataChange('price_chf')}
             error={!!validationErrors.price}
@@ -303,7 +305,7 @@ const ImportMethodStep = ({
             fullWidth
             required
             type="number"
-            label="Number of Rooms"
+            label={t("filing.number_of_rooms")}
             value={manualData.bedrooms}
             onChange={handleManualDataChange('bedrooms')}
             error={!!validationErrors.bedrooms}
@@ -318,7 +320,7 @@ const ImportMethodStep = ({
           <TextField
             fullWidth
             type="number"
-            label="Size (m²)"
+            label={t("filing.size_m")}
             value={manualData.square_meters}
             onChange={handleManualDataChange('square_meters')}
             InputProps={{
@@ -334,7 +336,7 @@ const ImportMethodStep = ({
         <Grid item xs={12} md={6}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              label="Available From"
+              label={t("filing.available_from")}
               value={manualData.available_from}
               onChange={(newValue) => handleManualDataChange('available_from')(newValue)}
               minDate={new Date()}
@@ -352,10 +354,10 @@ const ImportMethodStep = ({
             fullWidth
             multiline
             rows={4}
-            label="Description (Optional)"
+            label={t("filing.description_optional")}
             value={manualData.description}
             onChange={handleManualDataChange('description')}
-            placeholder="Add any additional details about the property..."
+            placeholder={t("filing.add_any_additional_details_about_t_6c0c03")}
           />
         </Grid>
       </Grid>

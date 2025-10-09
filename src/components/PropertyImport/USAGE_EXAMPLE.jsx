@@ -9,6 +9,7 @@ import { PropertyImportModal } from './index';
  * This replaces the old two-modal approach with a single unified flow
  */
 const PropertyImportExample = () => {
+  const { t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -75,6 +76,7 @@ export default PropertyImportExample;
  * 
  * ```jsx
  * import { EmailStatusWidget } from '@/components/PropertyImport';
+import { useTranslation } from 'react-i18next';
  * 
  * // In Messages component:
  * <EmailStatusWidget 

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'it'];
 
 const LanguageWrapper = () => {
+  const { t } = useTranslation();
   const { lang } = useParams();
   const { i18n } = useTranslation();
 

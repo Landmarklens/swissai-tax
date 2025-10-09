@@ -1,7 +1,9 @@
 import React from 'react';
 import { Snackbar, Alert, AlertTitle } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const NotificationSnackbar = ({ open, onClose, severity = 'info', title, message }) => {
+  const { t } = useTranslation();
   return (
     <Snackbar
       open={open}

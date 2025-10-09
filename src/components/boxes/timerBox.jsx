@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { theme } from '../../theme/theme';
+import { useTranslation } from 'react-i18next';
 
 const CustomTimeBox = styled(Box)({
   width: '40px',

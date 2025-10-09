@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Custom hook for managing user type (tenant/landlord) across the application
  * Syncs with localStorage to maintain consistency across pages
  */
 export const useUserType = () => {
+  const { t } = useTranslation();
   const [userType, setUserType] = useState(() => {
     // Check localStorage for existing preference
     const savedType = localStorage.getItem('globalUserType');

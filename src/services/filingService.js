@@ -4,6 +4,7 @@
  */
 
 import { filingAPI } from './api';
+import { useTranslation } from 'react-i18next';
 
 const filingService = {
   /**

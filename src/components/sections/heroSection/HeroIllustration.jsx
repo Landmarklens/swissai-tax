@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const HeroIllustration = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{

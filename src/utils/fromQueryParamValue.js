@@ -4,6 +4,7 @@
  * @returns {string} - The decoded string in its original form.
  */
 export function fromQueryParamValue(encodedValue) {
+  const { t } = useTranslation();
   if (typeof encodedValue !== 'string') {
     return;
   }

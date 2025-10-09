@@ -23,6 +23,7 @@ import CompletionStep from './steps/CompletionStep';
 
 // Import hooks
 import { useEmailMonitoring } from './hooks/useEmailMonitoring';
+import { useTranslation } from 'react-i18next';
 
 // Import Redux actions
 import { 
@@ -41,6 +42,7 @@ const steps = [
 ];
 
 const PropertyImportModal = ({ open, onClose }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { importFlow, loading, error } = useSelector((state) => state.tenantSelection);
   
@@ -139,7 +141,7 @@ const PropertyImportModal = ({ open, onClose }) => {
   const validateManualEntry = () => {
     const errors = {};
     if (!propertyData.title && !propertyData.address) {
-      errors.title = 'Please enter a property title or address';
+      errors.title={t("filing.please_enter_a_property_title_or_address")};
     }
     if (!propertyData.address) {
       errors.address = 'Address is required';

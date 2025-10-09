@@ -38,10 +38,12 @@ import TaxSummaryCard from './TaxSummaryCard';
 import OptimizationPanel from './OptimizationPanel';
 import DocumentUploadPanel from './DocumentUploadPanel';
 import { getApiUrl } from '../../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = getApiUrl();
 
 const MultiCantonDashboard = ({ userId, taxYear }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [filings, setFilings] = useState([]);
   const [primaryFiling, setPrimaryFiling] = useState(null);
@@ -214,7 +216,7 @@ const MultiCantonDashboard = ({ userId, taxYear }) => {
           </Typography>
         </Box>
         <Box>
-          <Tooltip title="Download all PDFs as ZIP">
+          <Tooltip title={t("filing.download_all_pdfs_as_zip")}>
             <Button
               variant="contained"
               startIcon={<DownloadIcon />}
@@ -224,7 +226,7 @@ const MultiCantonDashboard = ({ userId, taxYear }) => {
               Download All
             </Button>
           </Tooltip>
-          <Tooltip title="Refresh data">
+          <Tooltip title={t("filing.refresh_data")}>
             <IconButton onClick={loadFilings}>
               <RefreshIcon />
             </IconButton>
@@ -243,7 +245,7 @@ const MultiCantonDashboard = ({ userId, taxYear }) => {
       {/* Multi-Canton Info Alert */}
       {secondaryFilings.length > 0 && (
         <Alert severity="info" sx={{ mb: 3 }} icon={<InfoIcon />}>
-          <strong>Multi-Canton Filing:</strong> You have properties in multiple cantons
+          <strong>{t('filing.multicanton_filing')}</strong> You have properties in multiple cantons
           and must file separate tax returns for each canton. We've automatically created
           all necessary filings for you.
         </Alert>
@@ -256,7 +258,7 @@ const MultiCantonDashboard = ({ userId, taxYear }) => {
           <Box mb={3}>
             <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
               Primary Filing
-              <Chip label="Main Residence" size="small" color="primary" sx={{ ml: 2 }} />
+              <Chip label={t("filing.main_residence")} size="small" color="primary" sx={{ ml: 2 }} />
             </Typography>
             <FilingCard
               filing={primaryFiling}
@@ -340,26 +342,26 @@ const MultiCantonDashboard = ({ userId, taxYear }) => {
                     {filing.canton} {filing.is_primary ? '(Primary)' : '(Secondary)'}
                   </Typography>
                   <Box display="flex" justifyContent="space-between" mb={0.5}>
-                    <Typography variant="body2" color="textSecondary">Federal:</Typography>
+                    <Typography variant="body2" color="textSecondary">{t('filing.federal')}</Typography>
                     <Typography variant="body2">
                       CHF {(calc.federal_tax || 0).toLocaleString('de-CH', { minimumFractionDigits: 2 })}
                     </Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" mb={0.5}>
-                    <Typography variant="body2" color="textSecondary">Cantonal:</Typography>
+                    <Typography variant="body2" color="textSecondary">{t('filing.cantonal')}</Typography>
                     <Typography variant="body2">
                       CHF {(calc.cantonal_tax || 0).toLocaleString('de-CH', { minimumFractionDigits: 2 })}
                     </Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" mb={0.5}>
-                    <Typography variant="body2" color="textSecondary">Municipal:</Typography>
+                    <Typography variant="body2" color="textSecondary">{t('filing.municipal')}</Typography>
                     <Typography variant="body2">
                       CHF {(calc.municipal_tax || 0).toLocaleString('de-CH', { minimumFractionDigits: 2 })}
                     </Typography>
                   </Box>
                   <Divider sx={{ my: 1 }} />
                   <Box display="flex" justifyContent="space-between">
-                    <Typography variant="body2" fontWeight="bold">Total:</Typography>
+                    <Typography variant="body2" fontWeight="bold">{t('filing.total')}</Typography>
                     <Typography variant="body2" fontWeight="bold">
                       CHF {(calc.total_tax || 0).toLocaleString('de-CH', { minimumFractionDigits: 2 })}
                     </Typography>

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const STORAGE_KEY = 'ai_chats';
 
 export const  useChatStorage = (activeChat) => {
+  const { t } = useTranslation();
   const [chats, setChats] = useState([]);
 
   useEffect(() => {

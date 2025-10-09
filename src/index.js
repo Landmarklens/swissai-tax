@@ -9,6 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistedStore } from './store';
 import './i18n';
 import './config/axiosConfig'; // Initialize axios configuration
+import { initializeAnalytics, setupConsentListener } from './utils/cookieConsent/analyticsIntegration';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -20,6 +21,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // Load Google Auth debug tools
 import('./utils/googleAuthDebug');
+setupConsentListener();
+initializeAnalytics();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

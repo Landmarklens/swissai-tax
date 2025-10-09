@@ -141,7 +141,7 @@ const DataExportSection = () => {
             {t('Export Your Data')}
           </Typography>
           <Box flex={1} />
-          <Tooltip title="Refresh exports list">
+          <Tooltip title={t("filing.refresh_exports_list")}>
             <IconButton
               size="small"
               onClick={fetchExports}
@@ -180,15 +180,15 @@ const DataExportSection = () => {
 
           <Box display="flex" gap={2} flexDirection={{ xs: 'column', sm: 'row' }}>
             <FormControl fullWidth sx={{ maxWidth: { sm: 200 } }}>
-              <InputLabel>Format</InputLabel>
+              <InputLabel>{t('filing.format')}</InputLabel>
               <Select
                 value={format}
                 onChange={(e) => setFormat(e.target.value)}
-                label="Format"
+                label={t("filing.format")}
                 disabled={loading}
               >
-                <MenuItem value="json">JSON (Structured)</MenuItem>
-                <MenuItem value="csv">CSV (Tabular)</MenuItem>
+                <MenuItem value="json">{t('filing.json_structured')}</MenuItem>
+                <MenuItem value="csv">{t('filing.csv_tabular')}</MenuItem>
               </Select>
             </FormControl>
 

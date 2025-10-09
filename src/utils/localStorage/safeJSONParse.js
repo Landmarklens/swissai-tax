@@ -5,6 +5,7 @@
  * @returns {*} The parsed value or default value
  */
 export function safeJSONParse(key, defaultValue = null) {
+  const { t } = useTranslation();
   try {
     const item = localStorage.getItem(key);
     if (!item) return defaultValue;

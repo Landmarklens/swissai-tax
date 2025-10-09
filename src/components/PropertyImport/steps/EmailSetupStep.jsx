@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Paper,
@@ -41,6 +42,7 @@ const EmailSetupStep = ({
   monitoringStatus,
   testResult
 }) => {
+  const { t } = useTranslation();
   const [testStatus, setTestStatus] = useState(emailConfig.testStatus || 'not_tested');
   const [timeRemaining, setTimeRemaining] = useState(60);
   const [copied, setCopied] = useState({ email: false, subject: false });
@@ -143,17 +145,17 @@ const EmailSetupStep = ({
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', mt: 2 }}>
         <Box textAlign="center">
           <EmailIcon color="primary" />
-          <Typography variant="caption">Portal Listing</Typography>
+          <Typography variant="caption">{t('filing.portal_listing')}</Typography>
         </Box>
         <ArrowIcon color="action" />
         <Box textAlign="center">
           <EmailIcon color="secondary" />
-          <Typography variant="caption">Managed Email</Typography>
+          <Typography variant="caption">{t('filing.managed_email')}</Typography>
         </Box>
         <ArrowIcon color="action" />
         <Box textAlign="center">
           <CheckIcon color="success" />
-          <Typography variant="caption">Your Dashboard</Typography>
+          <Typography variant="caption">{t('filing.your_dashboard')}</Typography>
         </Box>
       </Box>
       <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
@@ -443,16 +445,16 @@ const EmailSetupStep = ({
               onChange={handlePersonalEmailChange}
             />
           }
-          label="Also forward copies to my personal email"
+          label={t("filing.also_forward_copies_to_my_personal_email")}
         />
         
         <Collapse in={emailConfig.forwardToPersonal}>
           <TextField
             fullWidth
-            label="Your Personal Email"
+            label={t("filing.your_personal_email")}
             value={emailConfig.personalEmail}
             onChange={handlePersonalEmailAddressChange}
-            placeholder="your.email@example.com"
+            placeholder={t("filing.youremailexamplecom")}
             sx={{ mt: 2 }}
             helperText="You'll receive a copy of each application in your personal inbox"
           />

@@ -1,6 +1,8 @@
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 export const valueFromUserData = (key) => {
+  const { t } = useTranslation();
   const UserData = localStorage.getItem('userData');
   if (UserData !== undefined && UserData !== null) {
     return UserData[key];

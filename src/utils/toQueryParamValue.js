@@ -4,6 +4,7 @@
  * @returns {string} - The encoded string, safe for use in query parameters.
  */
 export function toQueryParamValue(input) {
+  const { t } = useTranslation();
   if (typeof input !== 'string') {
     throw new TypeError('Expected input to be a string');
   }

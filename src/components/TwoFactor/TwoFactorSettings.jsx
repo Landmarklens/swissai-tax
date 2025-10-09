@@ -25,11 +25,13 @@ import {
 } from '@mui/icons-material';
 import twoFactorService from '../../services/twoFactorService';
 import TwoFactorSetup from './TwoFactorSetup';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Component for managing 2FA settings
  */
 const TwoFactorSettings = () => {
+  const { t } = useTranslation();
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -61,11 +63,11 @@ const TwoFactorSettings = () => {
         console.log('[2FA Settings] Status data:', result.data);
         setStatus(result.data);
       } else {
-        setError(result.error || 'Failed to load 2FA status');
+        setError(result.error || t('twoFactor.error.loadStatus'));
       }
     } catch (err) {
       console.error('[2FA Settings] Load status error:', err);
-      setError('Failed to load 2FA status');
+      setError(t('twoFactor.error.loadStatus'));
     } finally {
       setLoading(false);
     }
@@ -73,7 +75,7 @@ const TwoFactorSettings = () => {
 
   const handleDisable = async () => {
     if (!password) {
-      setError('Please enter your password');
+      setError(t('twoFactor.error.enterPassword'));
       return;
     }
 
@@ -84,15 +86,15 @@ const TwoFactorSettings = () => {
       const result = await twoFactorService.disable(password);
 
       if (result.success) {
-        setSuccess('Two-factor authentication disabled successfully');
+        setSuccess(t('twoFactor.success.disabled'));
         setShowDisableDialog(false);
         setPassword('');
         loadStatus();
       } else {
-        setError(result.error || 'Failed to disable 2FA');
+        setError(result.error || t('twoFactor.error.disableFailed'));
       }
     } catch (err) {
-      setError('Failed to disable 2FA');
+      setError(t('twoFactor.error.disableFailed'));
     } finally {
       setActionLoading(false);
     }
@@ -100,7 +102,7 @@ const TwoFactorSettings = () => {
 
   const handleRegenerate = async () => {
     if (!password) {
-      setError('Please enter your password');
+      setError(t('twoFactor.error.enterPassword'));
       return;
     }
 
@@ -112,14 +114,14 @@ const TwoFactorSettings = () => {
 
       if (result.success) {
         setNewBackupCodes(result.data.backup_codes);
-        setSuccess('Backup codes regenerated successfully');
+        setSuccess(t('twoFactor.success.regenerated'));
         setPassword('');
         loadStatus();
       } else {
-        setError(result.error || 'Failed to regenerate backup codes');
+        setError(result.error || t('twoFactor.error.regenerateFailed'));
       }
     } catch (err) {
-      setError('Failed to regenerate backup codes');
+      setError(t('twoFactor.error.regenerateFailed'));
     } finally {
       setActionLoading(false);
     }
@@ -135,7 +137,7 @@ const TwoFactorSettings = () => {
     if (newBackupCodes) {
       const copied = await twoFactorService.copyBackupCodes(newBackupCodes);
       if (copied) {
-        setSuccess('Backup codes copied to clipboard!');
+        setSuccess(t('twoFactor.success.copied'));
         setTimeout(() => setSuccess(''), 3000);
       }
     }
@@ -154,7 +156,7 @@ const TwoFactorSettings = () => {
       <TwoFactorSetup
         onComplete={async () => {
           setShowSetup(false);
-          setSuccess('Two-factor authentication enabled successfully!');
+          setSuccess(t('twoFactor.success.enabled'));
           // Small delay to ensure backend has processed
           await new Promise(resolve => setTimeout(resolve, 500));
           await loadStatus();
@@ -183,12 +185,12 @@ const TwoFactorSettings = () => {
           <Box>
             <Box display="flex" alignItems="center" gap={1} mb={0.5}>
               <Typography variant="subtitle1" fontWeight={600}>
-                Two-Factor Authentication
+                {t('twoFactor.title')}
               </Typography>
               {status?.enabled && (
                 <Chip
                   icon={<CheckIcon />}
-                  label="Enabled"
+                  label={t('twoFactor.enabled')}
                   color="success"
                   size="small"
                 />
@@ -196,8 +198,8 @@ const TwoFactorSettings = () => {
             </Box>
             <Typography variant="body2" color="text.secondary">
               {status?.enabled
-                ? 'Your account is protected with 2FA'
-                : 'Add an extra layer of security to your account'}
+                ? t('twoFactor.accountProtected')
+                : t('twoFactor.addSecurity')}
             </Typography>
           </Box>
           {!status?.enabled ? (
@@ -206,7 +208,7 @@ const TwoFactorSettings = () => {
               variant="contained"
               onClick={() => setShowSetup(true)}
             >
-              Enable
+              {t('twoFactor.enable')}
             </Button>
           ) : (
             <Button
@@ -214,7 +216,7 @@ const TwoFactorSettings = () => {
               color="error"
               onClick={() => setShowDisableDialog(true)}
             >
-              Disable
+              {t('twoFactor.disable')}
             </Button>
           )}
         </Box>
@@ -222,16 +224,16 @@ const TwoFactorSettings = () => {
 
       {/* Disable 2FA Dialog */}
       <Dialog open={showDisableDialog} onClose={() => !actionLoading && setShowDisableDialog(false)}>
-        <DialogTitle>Disable Two-Factor Authentication?</DialogTitle>
+        <DialogTitle>{t('twoFactor.disableTitle')}</DialogTitle>
         <DialogContent>
           <Typography variant="body2" paragraph>
-            This will make your account less secure. Enter your password to confirm.
+            {t('twoFactor.disableWarning')}
           </Typography>
 
           <TextField
             fullWidth
             type="password"
-            label="Password"
+            label={t('twoFactor.password')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             margin="normal"
@@ -240,7 +242,7 @@ const TwoFactorSettings = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDisableDialog(false)} disabled={actionLoading}>
-            Cancel
+            {t('twoFactor.cancel')}
           </Button>
           <Button
             onClick={handleDisable}
@@ -249,7 +251,7 @@ const TwoFactorSettings = () => {
             disabled={actionLoading || !password}
             startIcon={actionLoading && <CircularProgress size={20} />}
           >
-            {actionLoading ? 'Disabling...' : 'Disable 2FA'}
+            {actionLoading ? t('twoFactor.disabling') : t('twoFactor.disable2FA')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -261,18 +263,18 @@ const TwoFactorSettings = () => {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Regenerate Backup Codes</DialogTitle>
+        <DialogTitle>{t('twoFactor.regenerateTitle')}</DialogTitle>
         <DialogContent>
           {!newBackupCodes ? (
             <>
               <Alert severity="warning" sx={{ mb: 2 }}>
-                This will invalidate all existing backup codes. Enter your password to confirm.
+                {t('twoFactor.regenerateWarning')}
               </Alert>
 
               <TextField
                 fullWidth
                 type="password"
-                label="Password"
+                label={t('twoFactor.password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 margin="normal"
@@ -282,7 +284,7 @@ const TwoFactorSettings = () => {
           ) : (
             <>
               <Alert severity="success" sx={{ mb: 2 }}>
-                New backup codes generated! Save them in a secure location.
+                {t('twoFactor.newCodesSuccess')}
               </Alert>
 
               <Paper variant="outlined" sx={{ p: 2, bgcolor: 'grey.50', my: 2 }}>
@@ -304,10 +306,10 @@ const TwoFactorSettings = () => {
 
               <Box display="flex" gap={2} justifyContent="center">
                 <Button variant="outlined" onClick={handleDownloadCodes}>
-                  Download
+                  {t('twoFactor.download')}
                 </Button>
                 <Button variant="outlined" onClick={handleCopyCodes}>
-                  Copy
+                  {t('twoFactor.copy')}
                 </Button>
               </Box>
             </>
@@ -317,7 +319,7 @@ const TwoFactorSettings = () => {
           {!newBackupCodes ? (
             <>
               <Button onClick={() => setShowRegenerateDialog(false)} disabled={actionLoading}>
-                Cancel
+                {t('twoFactor.cancel')}
               </Button>
               <Button
                 onClick={handleRegenerate}
@@ -325,7 +327,7 @@ const TwoFactorSettings = () => {
                 disabled={actionLoading || !password}
                 startIcon={actionLoading && <CircularProgress size={20} />}
               >
-                {actionLoading ? 'Generating...' : 'Regenerate'}
+                {actionLoading ? t('twoFactor.generating') : t('twoFactor.regenerate')}
               </Button>
             </>
           ) : (
@@ -337,7 +339,7 @@ const TwoFactorSettings = () => {
               }}
               variant="contained"
             >
-              Done
+              {t('twoFactor.done')}
             </Button>
           )}
         </DialogActions>

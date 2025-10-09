@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * useHover hook
@@ -7,6 +8,7 @@ import { useRef, useState, useEffect } from 'react';
  * @returns [ref, isHovered]
  */
 export function useHover() {
+  const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef(null);
 

@@ -1,4 +1,5 @@
 export function groupByStepAndInsights(data) {
+  const { t } = useTranslation();
   if (!data) {
     return;
   }

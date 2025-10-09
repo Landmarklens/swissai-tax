@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const useSteps = ({ initialStep = 1, totalSteps }) => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(initialStep);
 
   const incrementStep = () => {

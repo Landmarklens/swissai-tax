@@ -5,8 +5,10 @@ import { useSelector } from 'react-redux';
 import { selectAccount } from '../../store/slices/accountSlice';
 import ProfileDropdown from '../loggedInHeader/ProfileDropdown';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import authService from '../../services/authService'
 export const PersonalAccountIcon = () => {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const isUserAuthenticated = authService.isAuthenticated();

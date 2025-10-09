@@ -4,6 +4,7 @@
  * @returns {Object} Transformed object with snake_case keys
  */
 export const toSnakeCase = (obj) => {
+  const { t } = useTranslation();
   if (obj === null || obj === undefined) {
     return obj;
   }

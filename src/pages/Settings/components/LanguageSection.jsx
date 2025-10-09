@@ -17,6 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 const LanguageSection = () => {
+  const { t } = useTranslation();
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState(i18n.language || 'en');
   const [hasChanges, setHasChanges] = useState(false);
@@ -50,10 +51,10 @@ const LanguageSection = () => {
               onChange={handleLanguageChange}
               label={t('Application Language')}
             >
-              <MenuItem value="en">English</MenuItem>
-              <MenuItem value="de">Deutsch</MenuItem>
-              <MenuItem value="fr">Français</MenuItem>
-              <MenuItem value="it">Italiano</MenuItem>
+              <MenuItem value="en">{t('filing.english')}</MenuItem>
+              <MenuItem value="de">{t('filing.deutsch')}</MenuItem>
+              <MenuItem value="fr">{t('filing.franais')}</MenuItem>
+              <MenuItem value="it">{t('filing.italiano')}</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -3,8 +3,10 @@ import { Container, Typography, Box, Divider } from '@mui/material';
 import { QuickFormCard } from './Chat/AIChat/QuickFormCard/QuickFormCard';
 import { ConversationProgress } from './Chat/AIChat/ConversationProgress/ConversationProgress';
 import LoggedInLayout from './LoggedInLayout/LoggedInLayout';
+import { useTranslation } from 'react-i18next';
 
 const ComponentShowcase = () => {
+  const { t } = useTranslation();
   return (
     <LoggedInLayout>
       <Container maxWidth="lg" sx={{ py: 4 }}>

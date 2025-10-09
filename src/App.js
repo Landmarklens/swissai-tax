@@ -9,6 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { ToastContainer } from 'react-toastify';
 import { useWebVitals } from './hooks/useWebVitals';
+import CookieConsent from './components/CookieConsent';
 
 function App() {
   // Monitor Core Web Vitals in development
@@ -24,6 +25,7 @@ function App() {
         >
           <HelmetProvider>
             <AppRoutesWithLanguage />
+            <CookieConsent />
             <ToastContainer
               position="top-right"
               autoClose={5000}

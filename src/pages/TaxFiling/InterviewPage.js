@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
 import TaxEstimateSidebar from './components/TaxEstimateSidebar';
@@ -24,6 +25,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 const InterviewPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { filingId } = useParams();
@@ -46,11 +48,11 @@ const InterviewPage = () => {
 
   // Interview categories for stepper
   const categories = [
-    'Personal Information',
-    'Income Sources',
-    'Deductions',
-    'Property & Assets',
-    'Special Situations'
+    t('interview.category_personal_info'),
+    t('interview.category_income_sources'),
+    t('interview.category_deductions'),
+    t('interview.category_property_assets'),
+    t('interview.category_special_situations')
   ];
 
   const getCategoryIndex = (questionId) => {
@@ -175,7 +177,7 @@ const InterviewPage = () => {
       setProgress(response.data.progress || 0);
       setError(null);
     } catch (err) {
-      setError('Failed to start interview. Please try again.');
+      setError(t('interview.error_start_failed'));
       console.error('Interview start error:', err);
       console.error('Error details:', err.response?.data);
     } finally {
@@ -196,7 +198,7 @@ const InterviewPage = () => {
 
       // Check if answer was invalid
       if (!response.data.valid) {
-        setError(response.data.error || 'Invalid answer. Please try again.');
+        setError(response.data.error || t('interview.error_invalid_answer'));
         setSubmitting(false);
         return;
       }
@@ -252,7 +254,7 @@ const InterviewPage = () => {
         setError(null);
       }
     } catch (err) {
-      setError('Failed to submit answer. Please try again.');
+      setError(t('interview.error_submit_failed'));
       console.error('Answer submission error:', err);
       console.error('Error response:', err.response?.data);
     } finally {
@@ -281,13 +283,13 @@ const InterviewPage = () => {
         {/* Page Title and Save Status */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
           <Typography variant="h4" fontWeight={700}>
-            Swiss Tax Filing 2024
+            {t('interview.page_title')}
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
             {saving && (
               <Chip
                 icon={<SaveIcon />}
-                label="Saving..."
+                label={t('interview.saving')}
                 size="small"
                 color="warning"
               />
@@ -295,7 +297,7 @@ const InterviewPage = () => {
             {lastSaved && !saving && (
               <Chip
                 icon={<CheckCircleIcon />}
-                label={`Saved ${Math.floor((new Date() - lastSaved) / 60000)}m ago`}
+                label={t('interview.saved_time_ago', { minutes: Math.floor((new Date() - lastSaved) / 60000) })}
                 size="small"
                 color="success"
               />
@@ -306,7 +308,7 @@ const InterviewPage = () => {
               onClick={autoSave}
               disabled={saving || !hasUnsavedChanges}
             >
-              Save Draft
+              {t('interview.save_draft')}
             </Button>
           </Box>
         </Box>

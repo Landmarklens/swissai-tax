@@ -4,6 +4,7 @@
  */
 
 import { settingsAPI } from './api';
+import { useTranslation } from 'react-i18next';
 
 const settingsService = {
   /**

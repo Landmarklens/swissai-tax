@@ -4,6 +4,7 @@
  */
 
 import { profileAPI } from './api';
+import { useTranslation } from 'react-i18next';
 
 const profileService = {
   /**

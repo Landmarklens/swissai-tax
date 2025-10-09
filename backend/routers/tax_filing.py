@@ -14,7 +14,7 @@ from db.session import get_db
 from services.tax_filing_service import TaxFilingService
 from services.postal_code_service import get_postal_code_service
 from services.audit_log_service import AuditLogService
-from core.security import get_current_user
+from utils.auth import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -339,6 +339,9 @@ async def update_filing(
 
         return filing.to_dict()
 
+    except HTTPException:
+        # Re-raise HTTPException as-is (don't wrap it)
+        raise
     except ValueError as e:
         logger.warning(f"Filing update validation error: {e}")
         raise HTTPException(
@@ -457,7 +460,7 @@ async def restore_filing(
         )
 
 
-@router.get("/filings/statistics", response_model=dict)
+@router.get("/statistics", response_model=dict)
 async def get_statistics(
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)

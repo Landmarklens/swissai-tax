@@ -1,0 +1,95 @@
+================================================================================
+SWISSAI TAX BACKEND - TEST COVERAGE ANALYSIS REPORT
+================================================================================
+Generated: 2025-10-08 20:54:30
+
+================================================================================
+1. OVERALL COVERAGE STATISTICS
+================================================================================
+Total Statements:     12,222
+Covered Lines:        7,673
+Missing Lines:        4,549
+Coverage Percentage:  62.78%
+
+Test Execution Summary:
+  - Total Tests: 373
+  - Passed: 323 (86.6%)
+  - Failed: 47 (12.6%)
+  - Skipped: 3 (0.8%)
+  - Execution Time: 9m 47s
+
+================================================================================
+2. FILES WITH LOW COVERAGE (<50%)
+================================================================================
+Total files with <50% coverage: 46
+
+ 1. check_db_state.py                                                   0.00%
+    Statements:   35 | Covered:    0 | Missing:   35
+ 2. create_database.py                                                  0.00%
+    Statements:   31 | Covered:    0 | Missing:   31
+ 3. run_migration.py                                                    0.00%
+    Statements:   14 | Covered:    0 | Missing:   14
+ 4. run_migrations.py                                                   0.00%
+    Statements:   44 | Covered:    0 | Missing:   44
+ 5. services/ai_document_intelligence_service.py                        0.00%
+    Statements:  206 | Covered:    0 | Missing:  206
+ 6. services/ai_tax_optimization_service.py                             0.00%
+    Statements:  153 | Covered:    0 | Missing:  153
+ 7. utils/token.py                                                      0.00%
+    Statements:   20 | Covered:    0 | Missing:   20
+ 8. services/tax_calculation_service.py                                 8.81%
+    Statements:  193 | Covered:   17 | Missing:  176
+ 9. services/interview_service.py                                      13.93%
+    Statements:  201 | Covered:   28 | Missing:  173
+10. scripts/rotate_encryption_key.py                                   14.10%
+    Statements:  234 | Covered:   33 | Missing:  201
+11. services/pdf_generators/ech0196_pdf_generator.py                   15.14%
+    Statements:  218 | Covered:   33 | Missing:  185
+12. services/data_export_service.py                                    17.42%
+    Statements:  155 | Covered:   27 | Missing:  128
+13. utils/password.py                                                  17.65%
+    Statements:   17 | Covered:    3 | Missing:   14
+14. services/background_jobs.py                                        20.35%
+    Statements:  113 | Covered:   23 | Missing:   90
+15. services/postal_code_service.py                                    20.48%
+    Statements:   83 | Covered:   17 | Missing:   66
+16. services/s3_storage_service.py                                     21.88%
+    Statements:  128 | Covered:   28 | Missing:  100
+17. services/document_service.py                                       22.95%
+    Statements:  122 | Covered:   28 | Missing:   94
+18. services/user_counter_service.py                                   25.00%
+    Statements:   60 | Covered:   15 | Missing:   45
+19. routers/pdf_generation.py                                          25.42%
+    Statements:  177 | Covered:   45 | Missing:  132
+20. routers/swisstax/settings.py                                       26.00%
+    Statements:   50 | Covered:   13 | Missing:   37
+
+================================================================================
+3. CRITICAL FILES WITH ZERO COVERAGE
+================================================================================
+  - services/ai_document_intelligence_service.py                      (206 statements)
+  - services/ai_tax_optimization_service.py                           (153 statements)
+
+================================================================================
+4. COVERAGE BY CATEGORY
+================================================================================
+
+ROUTERS:
+  Total Files: 20
+  Average Coverage: 45.32%
+  Files with <50% coverage: 12
+
+SERVICES:
+  Total Files: 37
+  Average Coverage: 41.35%
+  Files with <50% coverage: 19
+
+MODELS:
+  Total Files: 22
+  Average Coverage: 79.27%
+  Files with <50% coverage: 1
+
+UTILS:
+  Total Files: 14
+  Average Coverage: 54.39%
+  Files with <50% coverage: 6

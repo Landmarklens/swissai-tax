@@ -123,7 +123,7 @@ const UploadedImages = ({ images, onDelete, inputRef }) => {
             <ImageComponent
               name="uploaded-image"
               src={image.url}
-              alt="Uploaded"
+              alt={t("filing.uploaded")}
               style={{
                 width: '100%',
                 height: '100%',
@@ -152,7 +152,7 @@ const UploadedImages = ({ images, onDelete, inputRef }) => {
               margin: 'auto'
             }}
           >
-            <ImageComponent name="logo" src={uploadIcon} height={30} alt="HOME AI Logo" />
+            <ImageComponent name="logo" src={uploadIcon} height={30} alt={t("filing.home_ai_logo")} />
           </Box>
           <Button
             variant="contained"

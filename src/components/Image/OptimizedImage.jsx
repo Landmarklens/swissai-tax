@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Skeleton } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const OptimizedImage = ({
   src = '',
@@ -8,9 +9,10 @@ const OptimizedImage = ({
   height,
   alt = '',
   style = {},
-  onClick = () => {},
+  onClick = () => {
+  const { t } = useTranslation();},
   loading = 'lazy', // 'lazy' | 'eager'
-  placeholder = 'blur',
+  placeholder={t("filing.blur")},
   sizes,
   srcSet,
   webpSrc, // WebP version of the image

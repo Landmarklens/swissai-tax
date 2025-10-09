@@ -113,7 +113,7 @@ class TestAuth2FA:
 
     @patch('routers.auth.verify_temp_2fa_jwt')
     @patch('routers.auth.get_user_by_email')
-    @patch('routers.auth.two_factor_service')
+    @patch('services.two_factor_service.two_factor_service')
     @patch('routers.auth.sign_jwt')
     @patch('routers.auth.get_db')
     def test_verify_2fa_with_totp(self, mock_get_db, mock_sign_jwt, mock_2fa_service, mock_get_user, mock_verify_temp, client, mock_2fa_user):
@@ -146,7 +146,7 @@ class TestAuth2FA:
 
     @patch('routers.auth.verify_temp_2fa_jwt')
     @patch('routers.auth.get_user_by_email')
-    @patch('routers.auth.two_factor_service')
+    @patch('services.two_factor_service.two_factor_service')
     @patch('routers.auth.get_db')
     def test_verify_2fa_with_backup_code(self, mock_get_db, mock_2fa_service, mock_get_user, mock_verify_temp, client, mock_2fa_user):
         """Test 2FA verification with backup code."""
@@ -159,6 +159,7 @@ class TestAuth2FA:
         mock_2fa_service.decrypt_secret.return_value = "decrypted_secret"
         mock_2fa_service.verify_totp.return_value = False
         mock_2fa_service.verify_backup_code.return_value = True
+        mock_2fa_service.get_remaining_backup_codes_count.return_value = 5  # Return integer, not MagicMock
         mock_db = MagicMock()
         mock_get_db.return_value = mock_db
 
@@ -172,7 +173,7 @@ class TestAuth2FA:
 
     @patch('routers.auth.verify_temp_2fa_jwt')
     @patch('routers.auth.get_user_by_email')
-    @patch('routers.auth.two_factor_service')
+    @patch('services.two_factor_service.two_factor_service')
     @patch('routers.auth.get_db')
     def test_verify_2fa_invalid_code(self, mock_get_db, mock_2fa_service, mock_get_user, mock_verify_temp, client, mock_2fa_user):
         """Test 2FA verification with invalid code."""
@@ -233,7 +234,7 @@ class TestAuth2FA:
 
     @patch('routers.auth.verify_temp_2fa_jwt')
     @patch('routers.auth.get_user_by_email')
-    @patch('routers.auth.two_factor_service')
+    @patch('services.two_factor_service.two_factor_service')
     @patch('routers.auth.sign_jwt')
     @patch('routers.auth.get_db')
     def test_verify_2fa_with_cookie(self, mock_get_db, mock_sign_jwt, mock_2fa_service, mock_get_user, mock_verify_temp, client, mock_2fa_user):
@@ -264,10 +265,9 @@ class TestAuth2FA:
 
     @patch('routers.auth.verify_temp_2fa_jwt')
     @patch('routers.auth.get_user_by_email')
-    @patch('routers.auth.two_factor_service')
+    @patch('services.two_factor_service.two_factor_service')
     @patch('routers.auth.sign_jwt')
-    @patch('routers.auth.get_db')
-    def test_verify_2fa_updates_last_login(self, mock_get_db, mock_sign_jwt, mock_2fa_service, mock_get_user, mock_verify_temp, client, mock_2fa_user):
+    def test_verify_2fa_updates_last_login(self, mock_sign_jwt, mock_2fa_service, mock_get_user, mock_verify_temp, client, mock_2fa_user, mock_db_session):
         """Test that 2FA verification updates last_login timestamp."""
         mock_verify_temp.return_value = {
             "email": "2fa@example.com",
@@ -281,8 +281,6 @@ class TestAuth2FA:
             "access_token": "full_jwt_token",
             "token_type": "bearer"
         }
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
 
         initial_last_login = mock_2fa_user.last_login
 
@@ -295,7 +293,8 @@ class TestAuth2FA:
         # Verify last_login was updated
         assert mock_2fa_user.last_login != initial_last_login
         assert isinstance(mock_2fa_user.last_login, datetime)
-        mock_db.commit.assert_called()
+        # Verify database commit was called (from the autouse fixture's mock_db_session)
+        mock_db_session.commit.assert_called()
 
 
 if __name__ == "__main__":

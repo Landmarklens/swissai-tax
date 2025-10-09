@@ -4,6 +4,7 @@
  */
 
 import { subscriptionAPI } from './api';
+import { useTranslation } from 'react-i18next';
 
 const subscriptionService = {
   /**

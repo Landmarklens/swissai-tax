@@ -96,7 +96,7 @@ const FAQSection = () => {
         {/* Free text example (not a bullet point) */}
         {question.freeTextExample && (
           <Typography sx={{ mt: 1, mb: 1 }}>
-            <strong>Example:</strong> {question.freeTextExample.replace('Example: ', '')}
+            <strong>{t('filing.example')}</strong> {question.freeTextExample.replace('Example: ', '')}
           </Typography>
         )}
 
@@ -106,7 +106,7 @@ const FAQSection = () => {
             {question.familyConsiderations.map((consideration, idx) => (
               <li key={idx}>
                 <Typography>
-                  <strong>Family Considerations:</strong> {consideration.replace('Family Considerations: ', '')}
+                  <strong>{t('filing.family_considerations')}</strong> {consideration.replace('Family Considerations: ', '')}
                 </Typography>
               </li>
             ))}

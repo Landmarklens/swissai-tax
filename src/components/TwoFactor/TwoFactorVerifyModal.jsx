@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
 import twoFactorService from '../../services/twoFactorService';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Modal for verifying 2FA code during login
@@ -23,6 +24,7 @@ import twoFactorService from '../../services/twoFactorService';
  * @param {function} onSuccess - Success callback with user data
  */
 const TwoFactorVerifyModal = ({ open, onClose, tempToken, onSuccess }) => {
+  const { t } = useTranslation();
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -95,7 +97,7 @@ const TwoFactorVerifyModal = ({ open, onClose, tempToken, onSuccess }) => {
 
               <TextField
                 fullWidth
-                label="Authentication Code"
+                label={t("filing.authentication_code")}
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 onKeyPress={handleKeyPress}
@@ -133,11 +135,11 @@ const TwoFactorVerifyModal = ({ open, onClose, tempToken, onSuccess }) => {
 
               <TextField
                 fullWidth
-                label="Backup Code"
+                label={t("filing.backup_code")}
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase().slice(0, 9))}
                 onKeyPress={handleKeyPress}
-                placeholder="XXXX-XXXX"
+                placeholder={t("filing.xxxxxxxx")}
                 margin="normal"
                 autoFocus
                 disabled={loading}
@@ -172,7 +174,7 @@ const TwoFactorVerifyModal = ({ open, onClose, tempToken, onSuccess }) => {
 
           <Box sx={{ mt: 3, p: 2, bgcolor: 'info.light', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary">
-              <strong>Lost access to your authenticator?</strong><br />
+              <strong>{t('filing.lost_access_to_your_authenticator')}</strong><br />
               Use a backup code to log in, then regenerate new codes from your settings.
             </Typography>
           </Box>

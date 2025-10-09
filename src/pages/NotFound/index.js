@@ -4,6 +4,7 @@ import SEOHelmet from '../../components/SEO/SEOHelmet';
 import { keyframes } from '@mui/system';
 import { theme } from '../../theme/theme';
 import { House, ArrowBack, Warning } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const bounce = keyframes`
   0%, 20%, 50%, 80%, 100% {
@@ -35,6 +36,7 @@ const moveRight = keyframes`
 `;
 
 const NotFound = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const background404s = Array.from({ length: 20 }).map((_, index) => ({
@@ -48,7 +50,7 @@ const NotFound = () => {
   return (
     <>
       <SEOHelmet
-        title="404 - Page Not Found | HomeAI"
+        title={t("filing.404_page_not_found_homeai")}
         description="The page you're looking for doesn't exist. Let's help you find your way back home."
         noindex={true}
       />

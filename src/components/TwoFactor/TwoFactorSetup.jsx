@@ -24,6 +24,7 @@ import {
   CheckCircle as CheckIcon
 } from '@mui/icons-material';
 import twoFactorService from '../../services/twoFactorService';
+import { useTranslation } from 'react-i18next';
 
 const steps = ['Scan QR Code', 'Verify Code', 'Save Backup Codes'];
 
@@ -33,6 +34,7 @@ const steps = ['Scan QR Code', 'Verify Code', 'Save Backup Codes'];
  * @param {function} onCancel - Callback when user cancels
  */
 const TwoFactorSetup = ({ onComplete, onCancel }) => {
+  const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -222,7 +224,7 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
             {qrCode && (
               <img
                 src={qrCode}
-                alt="2FA QR Code"
+                alt={t("filing.2fa_qr_code")}
                 style={{ maxWidth: '250px', border: '1px solid #ddd', padding: '10px' }}
               />
             )}
@@ -242,7 +244,7 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
               size="small"
               sx={{ fontFamily: 'monospace' }}
             />
-            <Tooltip title="Copy to clipboard">
+            <Tooltip title={t("filing.copy_to_clipboard")}>
               <IconButton onClick={handleCopySecret} color="primary">
                 <CopyIcon />
               </IconButton>
@@ -264,7 +266,7 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
 
           <TextField
             fullWidth
-            label="Authentication Code"
+            label={t("filing.authentication_code")}
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             placeholder="123456"
@@ -287,7 +289,7 @@ const TwoFactorSetup = ({ onComplete, onCancel }) => {
           </Typography>
 
           <Alert severity="warning" sx={{ mb: 2 }}>
-            <strong>Important!</strong> Store these backup codes in a safe place. You can use them to
+            <strong>{t('filing.important')}</strong> Store these backup codes in a safe place. You can use them to
             access your account if you lose your authenticator device.
           </Alert>
 

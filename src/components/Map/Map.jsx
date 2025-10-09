@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Box } from '@mui/material';
 import { theme } from '../../theme/theme';
+import { useTranslation } from 'react-i18next';
 
 // Custom marker icon
 const markerIcon = new L.Icon({
@@ -19,6 +20,7 @@ const markerIcon = new L.Icon({
 const tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
 const Map = () => {
+  const { t } = useTranslation();
   const position = [47.3769, 8.5417]; // Example coordinates (Zurich, Switzerland)
   const radius = 100; // Circle radius in meters
 
@@ -53,7 +55,7 @@ const Map = () => {
         >
           <TileLayer
             url={tileUrl}
-            attribution='&copy; <a href="https://carto.com/attributions">Carto</a> contributors'
+            attribution='&copy; <a href="https://carto.com/attributions">{t('filing.carto')}</a> contributors'
           />
           <Marker position={position} icon={markerIcon} />
           <Circle center={position} radius={radius} color="#4285F4" />

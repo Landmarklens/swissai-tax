@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
 const nameRules = /^[a-zA-Z\s'-]+$/;

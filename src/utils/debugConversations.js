@@ -1,5 +1,6 @@
 // Debug helper to inspect conversation data
 export const debugConversations = (conversations) => {
+  const { t } = useTranslation();
   if (!conversations || conversations.length === 0) {
     console.log('No conversations to debug');
     return;

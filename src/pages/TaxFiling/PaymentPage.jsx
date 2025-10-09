@@ -42,42 +42,42 @@ const PaymentPage = () => {
   const plans = [
     {
       id: 'basic',
-      name: t('Basic'),
+      name: t('payment.plan.basic'),
       price: 0,
-      currency: 'CHF',
+      currency: t('payment.currency'),
       features: [
-        { text: t('Basic tax calculation'), included: true },
-        { text: t('Q&A interview'), included: true },
-        { text: t('Document upload'), included: false },
-        { text: t('E-filing'), included: false },
-        { text: t('Support'), included: false }
+        { text: t('payment.feature.basic_tax_calculation'), included: true },
+        { text: t('payment.feature.qa_interview'), included: true },
+        { text: t('payment.feature.document_upload'), included: false },
+        { text: t('payment.feature.e_filing'), included: false },
+        { text: t('payment.feature.support'), included: false }
       ]
     },
     {
       id: 'standard',
-      name: t('Standard'),
+      name: t('payment.plan.standard'),
       price: 39,
-      currency: 'CHF',
+      currency: t('payment.currency'),
       recommended: true,
       features: [
-        { text: t('All Basic features'), included: true },
-        { text: t('Unlimited document uploads'), included: true },
-        { text: t('OCR scanning'), included: true },
-        { text: t('E-filing support'), included: true },
-        { text: t('Email support'), included: true }
+        { text: t('payment.feature.all_basic_features'), included: true },
+        { text: t('payment.feature.unlimited_document_uploads'), included: true },
+        { text: t('payment.feature.ocr_scanning'), included: true },
+        { text: t('payment.feature.e_filing_support'), included: true },
+        { text: t('payment.feature.email_support'), included: true }
       ]
     },
     {
       id: 'premium',
-      name: t('Premium'),
+      name: t('payment.plan.premium'),
       price: 99,
-      currency: 'CHF',
+      currency: t('payment.currency'),
       features: [
-        { text: t('All Standard features'), included: true },
-        { text: t('Expert review'), included: true },
-        { text: t('Phone support'), included: true },
-        { text: t('Priority processing'), included: true },
-        { text: t('Tax optimization tips'), included: true }
+        { text: t('payment.feature.all_standard_features'), included: true },
+        { text: t('payment.feature.expert_review'), included: true },
+        { text: t('payment.feature.phone_support'), included: true },
+        { text: t('payment.feature.priority_processing'), included: true },
+        { text: t('payment.feature.tax_optimization_tips'), included: true }
       ]
     }
   ];
@@ -115,10 +115,10 @@ const PaymentPage = () => {
       <Container maxWidth="lg" sx={{ py: 6, flex: 1 }}>
         <Box mb={4}>
           <Typography variant="h3" fontWeight={700} gutterBottom>
-            {t('Choose Your Plan')}
+            {t('payment.page_title')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {t('Select a plan that best fits your needs')}
+            {t('payment.page_subtitle')}
           </Typography>
         </Box>
 
@@ -141,7 +141,7 @@ const PaymentPage = () => {
               >
                 {plan.recommended && (
                   <Chip
-                    label={t('Recommended')}
+                    label={t('payment.plan.recommended')}
                     color="primary"
                     size="small"
                     sx={{
@@ -160,7 +160,7 @@ const PaymentPage = () => {
 
                   <Box display="flex" alignItems="baseline" mb={3}>
                     <Typography variant="h3" fontWeight={700} color="primary">
-                      {plan.price === 0 ? t('FREE') : plan.price}
+                      {plan.price === 0 ? t('payment.free') : plan.price}
                     </Typography>
                     {plan.price > 0 && (
                       <Typography variant="body2" color="text.secondary" ml={0.5}>
@@ -197,7 +197,7 @@ const PaymentPage = () => {
                     fullWidth
                     sx={{ mt: 2 }}
                   >
-                    {selectedPlan === plan.id ? t('Selected') : t('Select Plan')}
+                    {selectedPlan === plan.id ? t('payment.plan.selected') : t('payment.plan.select')}
                   </Button>
                 </CardContent>
               </Card>
@@ -210,7 +210,7 @@ const PaymentPage = () => {
           <Card sx={{ mb: 4 }}>
             <CardContent>
               <Typography variant="h6" fontWeight={600} mb={3}>
-                {t('Payment Method')}
+                {t('payment.method.title')}
               </Typography>
 
               <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
@@ -220,7 +220,7 @@ const PaymentPage = () => {
                   label={
                     <Box display="flex" alignItems="center" gap={1}>
                       <CreditCardIcon />
-                      <Typography>{t('Credit Card (Visa, Mastercard, Amex)')}</Typography>
+                      <Typography>{t('payment.method.credit_card')}</Typography>
                     </Box>
                   }
                   sx={{ mb: 2 }}
@@ -231,7 +231,7 @@ const PaymentPage = () => {
                   label={
                     <Box display="flex" alignItems="center" gap={1}>
                       <CreditCardIcon />
-                      <Typography>{t('Twint')}</Typography>
+                      <Typography>{t('payment.method.twint')}</Typography>
                     </Box>
                   }
                   sx={{ mb: 2 }}
@@ -242,7 +242,7 @@ const PaymentPage = () => {
                   label={
                     <Box display="flex" alignItems="center" gap={1}>
                       <BankIcon />
-                      <Typography>{t('Bank Transfer')}</Typography>
+                      <Typography>{t('payment.method.bank_transfer')}</Typography>
                     </Box>
                   }
                 />
@@ -254,7 +254,7 @@ const PaymentPage = () => {
                     <Box display="flex" alignItems="center" gap={1}>
                       <LockIcon fontSize="small" />
                       <Typography variant="body2">
-                        {t('Secure payment processing powered by Stripe')}
+                        {t('payment.secure_stripe')}
                       </Typography>
                     </Box>
                   </Alert>
@@ -268,7 +268,7 @@ const PaymentPage = () => {
                     }}
                   >
                     <Typography variant="body2" color="text.secondary">
-                      {t('Stripe payment form will be integrated here')}
+                      {t('payment.stripe_form_placeholder')}
                     </Typography>
                   </Box>
                 </Box>
@@ -276,7 +276,7 @@ const PaymentPage = () => {
 
               {paymentMethod === 'bank' && (
                 <Alert severity="info" sx={{ mt: 3 }}>
-                  {t('Bank transfer details will be sent to your email after submission')}
+                  {t('payment.bank_transfer_notice')}
                 </Alert>
               )}
             </CardContent>
@@ -287,14 +287,14 @@ const PaymentPage = () => {
         <Card sx={{ mb: 4, backgroundColor: '#FAFAFA' }}>
           <CardContent>
             <Typography variant="h6" fontWeight={600} mb={2}>
-              {t('Order Summary')}
+              {t('payment.summary_title')}
             </Typography>
 
             <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography variant="body1">{selectedPlanDetails?.name} {t('Plan')}</Typography>
+              <Typography variant="body1">{selectedPlanDetails?.name} {t('payment.summary_plan_suffix')}</Typography>
               <Typography variant="body1" fontWeight={600}>
                 {selectedPlanDetails?.price === 0
-                  ? t('FREE')
+                  ? t('payment.free')
                   : `${selectedPlanDetails?.currency} ${selectedPlanDetails?.price}`}
               </Typography>
             </Box>
@@ -303,11 +303,11 @@ const PaymentPage = () => {
 
             <Box display="flex" justifyContent="space-between">
               <Typography variant="h6" fontWeight={700}>
-                {t('Total')}
+                {t('payment.summary_total')}
               </Typography>
               <Typography variant="h6" fontWeight={700} color="primary">
                 {selectedPlanDetails?.price === 0
-                  ? t('FREE')
+                  ? t('payment.free')
                   : `${selectedPlanDetails?.currency} ${selectedPlanDetails?.price}`}
               </Typography>
             </Box>
@@ -321,7 +321,7 @@ const PaymentPage = () => {
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate('/tax-filing/review')}
           >
-            {t('Back')}
+            {t('payment.button.back')}
           </Button>
           <Button
             variant="contained"
@@ -330,10 +330,10 @@ const PaymentPage = () => {
             disabled={processing}
           >
             {processing
-              ? t('Processing...')
+              ? t('payment.button.processing')
               : selectedPlan === 'basic'
-              ? t('Continue')
-              : `${t('Pay')} ${selectedPlanDetails?.currency} ${selectedPlanDetails?.price}`}
+              ? t('payment.button.continue')
+              : `${t('payment.button.pay')} ${selectedPlanDetails?.currency} ${selectedPlanDetails?.price}`}
           </Button>
         </Box>
       </Container>

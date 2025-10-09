@@ -4,6 +4,7 @@
  */
 
 import { dashboardAPI } from './api';
+import { useTranslation } from 'react-i18next';
 
 const dashboardService = {
   /**

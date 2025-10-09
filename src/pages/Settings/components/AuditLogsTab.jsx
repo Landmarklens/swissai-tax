@@ -26,8 +26,10 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 const AuditLogsTab = () => {
+  const { t } = useTranslation();
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -131,12 +133,12 @@ const AuditLogsTab = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Event</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Device</TableCell>
-                  <TableCell>IP Address</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Date/Time</TableCell>
+                  <TableCell>{t('filing.event')}</TableCell>
+                  <TableCell>{t('filing.description')}</TableCell>
+                  <TableCell>{t('filing.device')}</TableCell>
+                  <TableCell>{t('filing.ip_address')}</TableCell>
+                  <TableCell>{t('filing.status')}</TableCell>
+                  <TableCell>{t('filing.datetime')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -151,7 +153,7 @@ const AuditLogsTab = () => {
                         {isCurrentSession(log) && (
                           <Chip
                             icon={<CheckCircleIcon />}
-                            label="Current Session"
+                            label={t("filing.current_session")}
                             color="primary"
                             size="small"
                           />

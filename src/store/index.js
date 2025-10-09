@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import rootReducer from './reducer';
+import { useTranslation } from 'react-i18next';
 
 export const store = configureStore({
   reducer: rootReducer,

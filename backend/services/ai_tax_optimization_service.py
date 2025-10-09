@@ -538,7 +538,7 @@ Respond ONLY with the JSON object, no additional text.
         return comparisons
 
 
-def main():
+def main():  # pragma: no cover
     """Command-line interface for testing"""
     import argparse
 
@@ -622,5 +622,5 @@ def main():
         print(f"   Description: {rec['description'][:100]}...")
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     main()

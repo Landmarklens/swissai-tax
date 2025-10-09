@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '../config/api';
+import { useTranslation } from 'react-i18next';
 
 class ConfigService {
   constructor() {

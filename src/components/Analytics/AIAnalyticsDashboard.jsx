@@ -56,8 +56,10 @@ import axios from 'axios';
 // Import AI components
 import AIRentPredictor from './AIRentPredictor';
 import RenovationImpactSimulator from './RenovationImpactSimulator';
+import { useTranslation } from 'react-i18next';
 
 const AIAnalyticsDashboard = ({ propertyId, cantonFilter, propertyTypeFilter }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -343,7 +345,7 @@ const AIAnalyticsDashboard = ({ propertyId, cantonFilter, propertyTypeFilter }) 
             <CardContent>
               <Stack direction="row" spacing={1} alignItems="center" mb={2}>
                 <AIIcon color="primary" />
-                <Typography variant="h6">AI Market Insights</Typography>
+                <Typography variant="h6">{t('filing.ai_market_insights')}</Typography>
               </Stack>
               <Alert severity="info" icon={<AIIcon />}>
                 {marketTrends.ai_insights}
@@ -571,24 +573,24 @@ const AIAnalyticsDashboard = ({ propertyId, cantonFilter, propertyTypeFilter }) 
           
           <Stack direction="row" spacing={2}>
             <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Deal Type</InputLabel>
+              <InputLabel>{t('filing.deal_type')}</InputLabel>
               <Select
                 value={dealType}
-                label="Deal Type"
+                label={t("filing.deal_type")}
                 onChange={(e) => setDealType(e.target.value)}
               >
-                <MenuItem value="rent">Rent</MenuItem>
-                <MenuItem value="buy">Buy</MenuItem>
+                <MenuItem value="rent">{t('filing.rent')}</MenuItem>
+                <MenuItem value="buy">{t('filing.buy')}</MenuItem>
               </Select>
             </FormControl>
             
-            <Tooltip title="Refresh Data">
+            <Tooltip title={t("filing.refresh_data")}>
               <IconButton onClick={handleRefresh} disabled={loading}>
                 <RefreshIcon />
               </IconButton>
             </Tooltip>
             
-            <Tooltip title="Export Report">
+            <Tooltip title={t("filing.export_report")}>
               <IconButton>
                 <DownloadIcon />
               </IconButton>
@@ -607,10 +609,10 @@ const AIAnalyticsDashboard = ({ propertyId, cantonFilter, propertyTypeFilter }) 
           variant="scrollable"
           scrollButtons="auto"
         >
-          <Tab label="Market Overview" icon={<DashboardIcon />} iconPosition="start" />
-          <Tab label="Rent Prediction" icon={<TrendingUpIcon />} iconPosition="start" />
-          <Tab label="Renovation Simulator" icon={<BuildIcon />} iconPosition="start" />
-          <Tab label="Competitive Analysis" icon={<AnalyticsIcon />} iconPosition="start" />
+          <Tab label={t("filing.market_overview")} icon={<DashboardIcon />} iconPosition="start" />
+          <Tab label={t("filing.rent_prediction")} icon={<TrendingUpIcon />} iconPosition="start" />
+          <Tab label={t("filing.renovation_simulator")} icon={<BuildIcon />} iconPosition="start" />
+          <Tab label={t("filing.competitive_analysis")} icon={<AnalyticsIcon />} iconPosition="start" />
         </Tabs>
       </Paper>
 

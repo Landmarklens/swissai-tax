@@ -1,0 +1,166 @@
+================================================================================
+TOP 10 FILES REQUIRING URGENT TEST COVERAGE
+================================================================================
+
+Priority is based on:
+  1. File type (routers and core services are critical)
+  2. Size (larger files have more potential bugs)
+  3. Current coverage gap (lower coverage = higher priority)
+
+================================================================================
+
+#1 - services/ai_document_intelligence_service.py
+    Category:         SERVICE
+    Current Coverage: 0.00%
+    Total Statements: 206
+    Lines Covered:    0
+    Lines Missing:    206
+    Priority Score:   210.60
+
+    RECOMMENDATION: Create comprehensive test suite from scratch
+
+#2 - services/ai_tax_optimization_service.py
+    Category:         SERVICE
+    Current Coverage: 0.00%
+    Total Statements: 153
+    Lines Covered:    0
+    Lines Missing:    153
+    Priority Score:   205.30
+
+    RECOMMENDATION: Create comprehensive test suite from scratch
+
+#3 - services/tax_calculation_service.py
+    Category:         SERVICE
+    Current Coverage: 8.81%
+    Total Statements: 193
+    Lines Covered:    17
+    Lines Missing:    176
+    Priority Score:   195.49
+
+    RECOMMENDATION: Major test expansion needed - critical paths untested
+
+#4 - routers/pdf_generation.py
+    Category:         ROUTER
+    Current Coverage: 25.42%
+    Total Statements: 177
+    Lines Covered:    45
+    Lines Missing:    132
+    Priority Score:   192.28
+
+    RECOMMENDATION: Add tests for edge cases and error handling
+
+#5 - services/interview_service.py
+    Category:         SERVICE
+    Current Coverage: 13.93%
+    Total Statements: 201
+    Lines Covered:    28
+    Lines Missing:    173
+    Priority Score:   191.17
+
+    RECOMMENDATION: Major test expansion needed - critical paths untested
+
+#6 - routers/swisstax/settings.py
+    Category:         ROUTER
+    Current Coverage: 26.00%
+    Total Statements: 50
+    Lines Covered:    13
+    Lines Missing:    37
+    Priority Score:   179.00
+
+    RECOMMENDATION: Add tests for edge cases and error handling
+
+#7 - routers/tax_filing.py
+    Category:         ROUTER
+    Current Coverage: 39.16%
+    Total Statements: 166
+    Lines Covered:    65
+    Lines Missing:    101
+    Priority Score:   177.44
+
+    RECOMMENDATION: Add tests for edge cases and error handling
+
+#8 - routers/user_data.py
+    Category:         ROUTER
+    Current Coverage: 31.76%
+    Total Statements: 85
+    Lines Covered:    27
+    Lines Missing:    58
+    Priority Score:   176.74
+
+    RECOMMENDATION: Add tests for edge cases and error handling
+
+#9 - services/pdf_generators/ech0196_pdf_generator.py
+    Category:         SERVICE
+    Current Coverage: 15.14%
+    Total Statements: 218
+    Lines Covered:    33
+    Lines Missing:    185
+    Priority Score:   176.66
+
+    RECOMMENDATION: Major test expansion needed - critical paths untested
+
+#10 - routers/two_factor.py
+    Category:         ROUTER
+    Current Coverage: 34.00%
+    Total Statements: 100
+    Lines Covered:    34
+    Lines Missing:    66
+    Priority Score:   176.00
+
+    RECOMMENDATION: Add tests for edge cases and error handling
+
+================================================================================
+DETAILED BREAKDOWN BY CATEGORY
+================================================================================
+
+ROUTERS - Top 5 Priority Files:
+--------------------------------------------------------------------------------
+  1. routers/pdf_generation.py
+     Coverage:  25.42% | Statements:  177 | Priority: 192.28
+  2. routers/swisstax/settings.py
+     Coverage:  26.00% | Statements:   50 | Priority: 179.00
+  3. routers/tax_filing.py
+     Coverage:  39.16% | Statements:  166 | Priority: 177.44
+  4. routers/user_data.py
+     Coverage:  31.76% | Statements:   85 | Priority: 176.74
+  5. routers/two_factor.py
+     Coverage:  34.00% | Statements:  100 | Priority: 176.00
+
+SERVICES - Top 5 Priority Files:
+--------------------------------------------------------------------------------
+  1. services/ai_document_intelligence_service.py
+     Coverage:   0.00% | Statements:  206 | Priority: 210.60
+  2. services/ai_tax_optimization_service.py
+     Coverage:   0.00% | Statements:  153 | Priority: 205.30
+  3. services/tax_calculation_service.py
+     Coverage:   8.81% | Statements:  193 | Priority: 195.49
+  4. services/interview_service.py
+     Coverage:  13.93% | Statements:  201 | Priority: 191.17
+  5. services/pdf_generators/ech0196_pdf_generator.py
+     Coverage:  15.14% | Statements:  218 | Priority: 176.66
+
+MODELS - Top 5 Priority Files:
+--------------------------------------------------------------------------------
+  1. models/question.py
+     Coverage:  36.64% | Statements:  131 | Priority: 126.46
+  2. models/reset_token.py
+     Coverage:  62.96% | Statements:   27 | Priority:  89.74
+  3. models/swisstax/data_export.py
+     Coverage:  70.00% | Statements:   50 | Priority:  85.00
+  4. models/tax_calculation.py
+     Coverage:  80.00% | Statements:   85 | Priority:  78.50
+  5. models/swisstax/deletion_request.py
+     Coverage:  78.05% | Statements:   41 | Priority:  76.05
+
+UTILS - Top 5 Priority Files:
+--------------------------------------------------------------------------------
+  1. utils/token.py
+     Coverage:   0.00% | Statements:   20 | Priority: 132.00
+  2. utils/password.py
+     Coverage:  17.65% | Statements:   17 | Priority: 114.05
+  3. utils/s3_encryption.py
+     Coverage:  27.78% | Statements:  108 | Priority: 113.02
+  4. utils/validators.py
+     Coverage:  36.73% | Statements:  147 | Priority: 107.97
+  5. utils/aws_secrets.py
+     Coverage:  39.81% | Statements:  103 | Priority: 100.49

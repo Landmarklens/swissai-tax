@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardContent,
@@ -27,74 +28,75 @@ import {
 } from '@mui/icons-material';
 
 const DocumentChecklist = ({ requirements }) => {
+  const { t } = useTranslation();
   // Map document types to icons and descriptions
   const documentInfo = {
     lohnausweis: {
       icon: <Work />,
-      label: 'Salary Certificate (Lohnausweis)',
-      description: 'Annual salary statement from your employer',
-      category: 'Employment'
+      label: t('document.checklist.types.lohnausweis.label'),
+      description: t('document.checklist.types.lohnausweis.description'),
+      category: t('document.checklist.categories.employment')
     },
     unemployment_statement: {
       icon: <Assignment />,
-      label: 'Unemployment Benefits Statement',
-      description: 'Statement from unemployment insurance',
-      category: 'Benefits'
+      label: t('document.checklist.types.unemployment_statement.label'),
+      description: t('document.checklist.types.unemployment_statement.description'),
+      category: t('document.checklist.categories.benefits')
     },
     insurance_benefits: {
       icon: <Assignment />,
-      label: 'Insurance Benefits Statement',
-      description: 'Disability or accident insurance benefits',
-      category: 'Benefits'
+      label: t('document.checklist.types.insurance_benefits.label'),
+      description: t('document.checklist.types.insurance_benefits.description'),
+      category: t('document.checklist.categories.benefits')
     },
     pension_certificate: {
       icon: <AccountBalance />,
-      label: 'Pension Fund Certificate',
-      description: '2nd pillar pension statement',
-      category: 'Pension'
+      label: t('document.checklist.types.pension_certificate.label'),
+      description: t('document.checklist.types.pension_certificate.description'),
+      category: t('document.checklist.categories.pension')
     },
     pillar_3a_certificate: {
       icon: <AccountBalance />,
-      label: 'Pillar 3a Certificate',
-      description: 'Private pension savings statement',
-      category: 'Pension'
+      label: t('document.checklist.types.pillar_3a_certificate.label'),
+      description: t('document.checklist.types.pillar_3a_certificate.description'),
+      category: t('document.checklist.categories.pension')
     },
     property_tax_statement: {
       icon: <Home />,
-      label: 'Property Tax Statement',
-      description: 'Real estate tax assessment',
-      category: 'Property'
+      label: t('document.checklist.types.property_tax_statement.label'),
+      description: t('document.checklist.types.property_tax_statement.description'),
+      category: t('document.checklist.categories.property')
     },
     mortgage_statement: {
       icon: <Home />,
-      label: 'Mortgage Statement',
-      description: 'Annual mortgage interest statement',
-      category: 'Property'
+      label: t('document.checklist.types.mortgage_statement.label'),
+      description: t('document.checklist.types.mortgage_statement.description'),
+      category: t('document.checklist.categories.property')
     },
     securities_statement: {
       icon: <AttachMoney />,
-      label: 'Securities Account Statement',
-      description: 'Investment account annual statement',
-      category: 'Investments'
+      label: t('document.checklist.types.securities_statement.label'),
+      description: t('document.checklist.types.securities_statement.description'),
+      category: t('document.checklist.categories.investments')
     },
     donation_receipts: {
       icon: <VolunteerActivism />,
-      label: 'Donation Receipts',
-      description: 'Receipts from charitable organizations',
-      category: 'Deductions'
+      label: t('document.checklist.types.donation_receipts.label'),
+      description: t('document.checklist.types.donation_receipts.description'),
+      category: t('document.checklist.categories.deductions')
     },
     medical_receipts: {
       icon: <LocalHospital />,
-      label: 'Medical Expense Receipts',
-      description: 'Medical bills and pharmacy receipts',
-      category: 'Deductions'
+      label: t('document.checklist.types.medical_receipts.label'),
+      description: t('document.checklist.types.medical_receipts.description'),
+      category: t('document.checklist.categories.deductions')
     }
   };
 
   // Group requirements by category
   const groupedRequirements = requirements.reduce((acc, req) => {
     const info = documentInfo[req.type] || {
-      category: 'Other',
+      category: t('document.checklist.categories.other'),
       icon: <Description />,
       label: req.type,
       description: req.description
@@ -117,7 +119,7 @@ const DocumentChecklist = ({ requirements }) => {
   if (!requirements || requirements.length === 0) {
     return (
       <Alert severity="info">
-        No documents required based on your answers.
+        {t('document.checklist.no_documents_required')}
       </Alert>
     );
   }
@@ -127,10 +129,10 @@ const DocumentChecklist = ({ requirements }) => {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>
-            Required Documents Checklist
+            {t('document.checklist.title')}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Based on your answers, you'll need to provide the following documents
+            {t('document.checklist.subtitle')}
           </Typography>
 
           {/* Summary Stats */}
@@ -141,7 +143,7 @@ const DocumentChecklist = ({ requirements }) => {
                   {totalDocuments}
                 </Typography>
                 <Typography variant="body2" color="primary.contrastText">
-                  Total Documents
+                  {t('document.checklist.total_documents')}
                 </Typography>
               </Paper>
             </Grid>
@@ -151,7 +153,7 @@ const DocumentChecklist = ({ requirements }) => {
                   {Object.keys(groupedRequirements).length}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Categories
+                  {t('document.checklist.categories_label')}
                 </Typography>
               </Paper>
             </Grid>
@@ -186,7 +188,7 @@ const DocumentChecklist = ({ requirements }) => {
                           </Typography>
                           {doc.quantity > 1 && (
                             <Chip
-                              label={`${doc.quantity} required`}
+                              label={t('document.checklist.quantity_required', { count: doc.quantity })}
                               size="small"
                               color="primary"
                             />
@@ -199,7 +201,7 @@ const DocumentChecklist = ({ requirements }) => {
                             {doc.description}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            Rule: {doc.rule}
+                            {t('document.checklist.rule_label')}: {doc.rule}
                           </Typography>
                         </Box>
                       }
@@ -213,16 +215,16 @@ const DocumentChecklist = ({ requirements }) => {
           {/* Important Notes */}
           <Alert severity="info" sx={{ mt: 3 }}>
             <Typography variant="subtitle2" gutterBottom>
-              Important Notes:
+              {t('document.checklist.important_notes')}
             </Typography>
             <Typography variant="body2">
-              • Ensure all documents are for tax year {new Date().getFullYear() - 1}
+              • {t('document.checklist.note_tax_year', { year: new Date().getFullYear() - 1 })}
             </Typography>
             <Typography variant="body2">
-              • Documents should be in PDF or image format
+              • {t('document.checklist.note_format')}
             </Typography>
             <Typography variant="body2">
-              • Keep original copies for your records
+              • {t('document.checklist.note_originals')}
             </Typography>
           </Alert>
         </CardContent>

@@ -3,6 +3,7 @@ import { Box, Typography, Select, MenuItem, useMediaQuery } from '@mui/material'
 import { useVirtualScroll } from '../../hooks/useOptimized';
 import GalleryCard from '../galleryCard/GalleryCard';
 import { theme } from '../../theme/theme';
+import { useTranslation } from 'react-i18next';
 
 // Memoized GalleryCard to prevent unnecessary re-renders
 const MemoizedGalleryCard = memo(GalleryCard, (prevProps, nextProps) => {
@@ -11,6 +12,7 @@ const MemoizedGalleryCard = memo(GalleryCard, (prevProps, nextProps) => {
 });
 
 const OptimizedGallery = ({ recommendations = [], onCardClick }) => {
+  const { t } = useTranslation();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Virtualization setup

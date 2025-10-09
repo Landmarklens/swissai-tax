@@ -35,6 +35,7 @@ import {
   Info as InfoIcon
 } from '@mui/icons-material';
 import { getApiUrl } from '../../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = getApiUrl();
 
@@ -51,6 +52,7 @@ const DIFFICULTY_ICONS = {
 };
 
 const OptimizationPanel = ({ open, onClose, filingId }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [recommendations, setRecommendations] = useState([]);
   const [totalSavings, setTotalSavings] = useState(0);
@@ -104,7 +106,7 @@ const OptimizationPanel = ({ open, onClose, filingId }) => {
     >
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="h5">Tax Optimization Recommendations</Typography>
+          <Typography variant="h5">{t('filing.tax_optimization_recommendations')}</Typography>
           {!loading && recommendations.length > 0 && (
             <Chip
               icon={<SaveIcon />}
@@ -274,7 +276,7 @@ const OptimizationPanel = ({ open, onClose, filingId }) => {
             {/* Disclaimer */}
             <Alert severity="info" sx={{ mt: 3 }}>
               <Typography variant="body2">
-                <strong>Disclaimer:</strong> These are AI-generated recommendations based on your tax situation.
+                <strong>{t('filing.disclaimer')}</strong> These are AI-generated recommendations based on your tax situation.
                 All strategies are legal under Swiss tax law. However, we recommend consulting with a tax
                 professional before implementing any significant tax strategies.
               </Typography>
@@ -284,7 +286,7 @@ const OptimizationPanel = ({ open, onClose, filingId }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
+        <Button onClick={handleClose}>{t('filing.close')}</Button>
         {!loading && recommendations.length > 0 && (
           <Button variant="contained" onClick={handleClose}>
             Implement Recommendations

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { interviewAPI, documentAPI, calculationAPI } from '../../services/api';
+import { useTranslation } from 'react-i18next';
 
 // Async thunks
 export const startInterview = createAsyncThunk(

@@ -65,7 +65,7 @@ const ImageUpload = ({ onFileSelect, inputRef, handleFiles, description, btnText
           margin: 'auto'
         }}
       >
-        <ImageComponent name="logo" src={uploadIcon} height={30} alt="HOME AI Logo" />
+        <ImageComponent name="logo" src={uploadIcon} height={30} alt={t("filing.home_ai_logo")} />
       </Box>
       <Typography variant="h6" gutterBottom sx={{ marginTop: '16px' }}>
         {t('Upload a file or drag and drop here')}

@@ -66,7 +66,7 @@ const SignContractModal = ({ open, handleClose, handleConfirm, data, setData }) 
                 </FormLabel>
                 <TextField
                   size="small"
-                  placeholder="Jon Adams"
+                  placeholder={t("filing.jon_adams")}
                   variant="outlined"
                   fullWidth
                   value={data.legalName}
@@ -107,7 +107,7 @@ const SignContractModal = ({ open, handleClose, handleConfirm, data, setData }) 
               <Box padding="24px">
                 <TextField
                   size="small"
-                  placeholder="Signature"
+                  placeholder={t("filing.signature")}
                   variant="standard"
                   value={data.signature}
                   onChange={(e) => setData({ ...data, signature: e.target.value })}

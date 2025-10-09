@@ -1,8 +1,10 @@
 import React from 'react';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { Avatar } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const AIAvatar = ({ isHeader = false, sx }) => {
+  const { t } = useTranslation();
   return (
     <Avatar
       sx={{

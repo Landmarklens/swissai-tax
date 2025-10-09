@@ -33,6 +33,7 @@ import { toast } from 'react-toastify';
  * />
  */
 const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
+  const { t } = useTranslation();
   const [jobStatus, setJobStatus] = useState({
     status: 'pending',
     progress_percentage: 0,
@@ -246,6 +247,7 @@ const ImportJobProgress = ({ jobId, onComplete, onError, onCancel }) => {
           if (data.type === 'job_finished') {
             if (data.status === 'completed' && data.property_id) {
               toast.success('✅ Property import completed successfully!');
+import { useTranslation } from 'react-i18next';
               onComplete?.(data.property_id, data);
             } else if (data.status === 'failed') {
               toast.error(`❌ Import failed: ${data.error_message || 'Unknown error'}`);

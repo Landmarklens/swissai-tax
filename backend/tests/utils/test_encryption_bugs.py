@@ -109,12 +109,18 @@ class TestBug8SilentDecryptionFailure:
         # For now, test the process_result_value directly
         encrypted_type = EncryptedString()
 
-        # Create fake encrypted data with wrong key
-        service1 = EncryptionService()
+        # Create fake encrypted data with a specific key
+        key1 = Fernet.generate_key()
+        service1 = EncryptionService(key=key1.decode())
         encrypted_value = service1.encrypt("secret")
 
-        # Change the global encryption key
-        service2 = EncryptionService()
+        # Create a different key to simulate key mismatch
+        key2 = Fernet.generate_key()
+        service2 = EncryptionService(key=key2.decode())
+
+        # Replace the singleton with service2 (different key)
+        from utils import encryption
+        encryption._encryption_service = service2
 
         # FIXED: Should raise ValueError, not return None
         with pytest.raises(ValueError, match="Failed to decrypt"):

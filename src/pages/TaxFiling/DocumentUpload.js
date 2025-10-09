@@ -44,8 +44,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadDocument } from '../../store/slices/taxFilingSlice';
 import { documentAPI } from '../../services/api';
+import { useTranslation } from 'react-i18next';
 
 const DocumentUpload = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { session, documents } = useSelector((state) => state.taxFiling);
@@ -70,7 +72,7 @@ const DocumentUpload = () => {
 
   const onDrop = useCallback(async (acceptedFiles, fileRejections, documentType) => {
     if (fileRejections.length > 0) {
-      alert('Please upload only PDF, JPG, or PNG files under 10MB');
+      alert(t('document.file_type_error'));
       return;
     }
 
@@ -103,7 +105,7 @@ const DocumentUpload = () => {
       }
     } catch (error) {
       console.error('Upload failed:', error);
-      alert('Failed to upload document. Please try again.');
+      alert(t('document.upload_error'));
     } finally {
       setUploading(false);
       setTimeout(() => setUploadProgress({}), 1000);
@@ -116,11 +118,11 @@ const DocumentUpload = () => {
     try {
       // Start OCR processing
       await documentAPI.processDocument(ocrDocument.documentId);
-      alert('OCR processing started. This may take a few moments.');
+      alert(t('document.ocr_processing_started'));
       setOcrDialog(false);
     } catch (error) {
       console.error('OCR failed:', error);
-      alert('Failed to process document. Please try again.');
+      alert(t('document.ocr_processing_error'));
     }
   };
 
@@ -141,11 +143,11 @@ const DocumentUpload = () => {
 
   const getDocumentName = (code) => {
     const names = {
-      LOHNAUSWEIS: 'Salary Certificate',
-      PILLAR_3A: 'Pillar 3a Certificate',
-      INSURANCE_PREMIUM: 'Insurance Premium Statement',
-      BANK_STATEMENTS: 'Bank Statements',
-      MEDICAL_RECEIPTS: 'Medical Receipts'
+      LOHNAUSWEIS: t('document.salary_certificate'),
+      PILLAR_3A: t('document.pillar_3a_certificate'),
+      INSURANCE_PREMIUM: t('document.insurance_premium_statement'),
+      BANK_STATEMENTS: t('document.bank_statements'),
+      MEDICAL_RECEIPTS: t('document.medical_receipts')
     };
     return names[code] || code;
   };
@@ -157,31 +159,30 @@ const DocumentUpload = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom align="center" sx={{ mb: 4 }}>
-        Upload Your Documents
+        {t('document.upload_title')}
       </Typography>
 
       {/* Progress Stepper */}
       <Box sx={{ mb: 4 }}>
         <Stepper activeStep={1} alternativeLabel>
           <Step completed>
-            <StepLabel>Interview</StepLabel>
+            <StepLabel>{t('document.interview')}</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Documents</StepLabel>
+            <StepLabel>{t('document.documents')}</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Review</StepLabel>
+            <StepLabel>{t('document.review')}</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Submit</StepLabel>
+            <StepLabel>{t('document.submit')}</StepLabel>
           </Step>
         </Stepper>
       </Box>
 
       {/* Info Alert */}
       <Alert severity="info" icon={<Info />} sx={{ mb: 3 }}>
-        Based on your interview answers, please upload the following documents.
-        Our OCR technology will automatically extract relevant information.
+        {t('document.upload_info_message')}
       </Alert>
 
       {/* Document Upload Cards */}
@@ -206,7 +207,7 @@ const DocumentUpload = () => {
                     {status?.uploaded && (
                       <Chip
                         size="small"
-                        label={status.verified ? 'Verified' : 'Uploaded'}
+                        label={status.verified ? t('document.verified') : t('document.uploaded')}
                         color={status.verified ? 'success' : 'warning'}
                         icon={status.verified ? <Check /> : <Warning />}
                       />
@@ -226,7 +227,7 @@ const DocumentUpload = () => {
                           </ListItemIcon>
                           <ListItemText
                             primary={status.fileName}
-                            secondary="Uploaded successfully"
+                            secondary={t('document.uploaded_successfully')}
                           />
                           <ListItemSecondaryAction>
                             <IconButton edge="end" size="small">
@@ -247,7 +248,7 @@ const DocumentUpload = () => {
                             setOcrDialog(true);
                           }}
                         >
-                          Run OCR Scan
+                          {t('document.run_ocr_scan')}
                         </Button>
                       )}
                     </Box>
@@ -271,11 +272,11 @@ const DocumentUpload = () => {
                       <CloudUpload sx={{ fontSize: 40, color: 'text.secondary', mb: 1 }} />
                       <Typography variant="body2">
                         {dropzone.isDragActive
-                          ? 'Drop the file here'
-                          : 'Drag & drop or click to upload'}
+                          ? t('document.drop_file_here')
+                          : t('document.drag_drop_or_click')}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        PDF, JPG, PNG (max 10MB)
+                        {t('document.file_format_info')}
                       </Typography>
                       {uploadProgress[doc.code] !== undefined && (
                         <Box mt={2}>
@@ -294,13 +295,13 @@ const DocumentUpload = () => {
       {/* Optional Documents Section */}
       <Paper sx={{ mt: 4, p: 3 }}>
         <Typography variant="h6" gutterBottom>
-          Additional Documents (Optional)
+          {t('document.additional_documents_optional')}
         </Typography>
         <Typography variant="body2" color="text.secondary" paragraph>
-          Upload any additional documents that may help reduce your tax burden
+          {t('document.additional_documents_info')}
         </Typography>
         <Button variant="outlined" startIcon={<CloudUpload />}>
-          Upload Additional Documents
+          {t('document.upload_additional_documents')}
         </Button>
       </Paper>
 
@@ -311,7 +312,7 @@ const DocumentUpload = () => {
           startIcon={<ArrowBack />}
           onClick={() => navigate('/tax-filing/interview')}
         >
-          Back to Interview
+          {t('document.back_to_interview')}
         </Button>
         <Button
           variant="contained"
@@ -319,29 +320,27 @@ const DocumentUpload = () => {
           onClick={() => navigate('/tax-filing/review')}
           disabled={!allDocumentsUploaded}
         >
-          Continue to Review
+          {t('document.continue_to_review')}
         </Button>
       </Box>
 
       {/* OCR Dialog */}
       <Dialog open={ocrDialog} onClose={() => setOcrDialog(false)}>
-        <DialogTitle>Process Document with OCR</DialogTitle>
+        <DialogTitle>{t('document.process_document_with_ocr')}</DialogTitle>
         <DialogContent>
           <Typography variant="body1" paragraph>
-            Would you like to automatically extract information from{' '}
-            <strong>{ocrDocument?.fileName}</strong>?
+            {t('document.ocr_extract_question', { fileName: ocrDocument?.fileName })}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Our OCR technology will scan the document and automatically fill in relevant
-            tax information, saving you time and reducing errors.
+            {t('document.ocr_description')}
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOcrDialog(false)}>
-            Skip
+            {t('document.skip')}
           </Button>
           <Button variant="contained" onClick={handleStartOCR} startIcon={<Scanner />}>
-            Start OCR Scan
+            {t('document.start_ocr_scan')}
           </Button>
         </DialogActions>
       </Dialog>

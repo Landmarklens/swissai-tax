@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Custom hook for error handling in functional components
  * Provides error state management and error throwing capability
  */
 export const useErrorHandler = () => {
+  const { t } = useTranslation();
   const [error, setError] = useState(null);
 
   // Reset error state

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDataWithQuery } from '../../api/apiClient';
+import { useTranslation } from 'react-i18next';
 const initialState = {
   isLoading: false,
   isSuccess: false,

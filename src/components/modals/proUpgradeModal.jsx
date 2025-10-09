@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import CloseIcon from '@mui/icons-material/Close';
 import Plan from '../plan/plan';
 import DiscountOffer from '../discountOffer/discountOffer';
+import { useTranslation } from 'react-i18next';
 
 const StyledModalBox = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -26,6 +27,7 @@ const PlansContainer = styled('div')(({ theme }) => ({
 }));
 
 const ProUpgradeModal = ({ proPlan, discountOffer, open, onClose }) => {
+  const { t } = useTranslation();
   return (
     <Modal
       open={open}

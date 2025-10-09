@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import authService from '../../services/authService';
 import config from '../../config/environments';
+import { useTranslation } from 'react-i18next';
 const API_URL = config.API_BASE_URL;
 
 const initialState = {

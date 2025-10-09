@@ -34,6 +34,7 @@ const ForgotPassword = withSuspense(lazy(() => import('../pages/ForgotPassword/F
 const ResetPassword = withSuspense(lazy(() => import('../pages/ResetPassword/ResetPassword')));
 const Terms = withSuspense(lazy(() => import('../pages/Terms/Terms')));
 const Policy = withSuspense(lazy(() => import('../pages/Policy/Policy')));
+const CookiePolicy = withSuspense(lazy(() => import('../pages/Policy/CookiePolicy')));
 
 // Dashboard and account pages
 const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
@@ -228,5 +229,6 @@ export const LAZY_NAVIGATION_ROUTE = [
 
   // Legal
   { path: '/terms', element: <Terms /> },
-  { path: '/privacy-policy', element: <Policy /> }
+  { path: '/privacy-policy', element: <Policy /> },
+  { path: '/cookie-policy', element: <CookiePolicy /> }
 ];

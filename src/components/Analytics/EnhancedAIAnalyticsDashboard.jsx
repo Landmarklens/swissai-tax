@@ -73,6 +73,7 @@ import WhatIfAnalysis from './WhatIfAnalysis';
 import CompetitiveIntelligence from './CompetitiveIntelligence';
 import MarketForecast from './MarketForecast';
 import PropertyValuation from './PropertyValuation';
+import { useTranslation } from 'react-i18next';
 
 // Modern color palette with gradients
 const CHART_COLORS = {
@@ -92,6 +93,7 @@ const CHART_COLORS = {
 };
 
 const EnhancedAIAnalyticsDashboard = ({ propertyId: propPropertyId }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -222,7 +224,7 @@ const EnhancedAIAnalyticsDashboard = ({ propertyId: propPropertyId }) => {
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <AIIcon fontSize="large" />
                 <Chip
-                  label="AI Powered"
+                  label={t("filing.ai_powered")}
                   size="small"
                   sx={{
                     bgcolor: 'rgba(255,255,255,0.2)',
@@ -473,19 +475,19 @@ const EnhancedAIAnalyticsDashboard = ({ propertyId: propPropertyId }) => {
           
           <Stack direction="row" spacing={2} alignItems="center">
             <FormControl sx={{ minWidth: 250 }} size="small">
-              <InputLabel id="property-select-label">Select Your Property</InputLabel>
+              <InputLabel id="property-select-label">{t('filing.select_your_property')}</InputLabel>
               <Select
                 labelId="property-select-label"
                 value={selectedPropertyId || ''}
                 onChange={(e) => {
                   setSelectedPropertyId(e.target.value || null);
                 }}
-                label="Select Your Property"
+                label={t("filing.select_your_property")}
                 startAdornment={<HomeIcon sx={{ ml: 1, mr: 0.5, color: 'text.secondary' }} />}
               >
                 {properties.length === 0 ? (
                   <MenuItem value="" disabled>
-                    <em>No properties available</em>
+                    <em>{t('filing.no_properties_available')}</em>
                   </MenuItem>
                 ) : (
                   properties.map((property) => (
@@ -497,7 +499,7 @@ const EnhancedAIAnalyticsDashboard = ({ propertyId: propPropertyId }) => {
               </Select>
             </FormControl>
             
-            <Tooltip title="Refresh Data">
+            <Tooltip title={t("filing.refresh_data")}>
               <IconButton 
                 onClick={handleRefresh} 
                 disabled={refreshing}
@@ -512,7 +514,7 @@ const EnhancedAIAnalyticsDashboard = ({ propertyId: propPropertyId }) => {
               </IconButton>
             </Tooltip>
             
-            <Tooltip title="Export Report">
+            <Tooltip title={t("filing.export_report")}>
               <IconButton
                 sx={{
                   background: alpha(theme.palette.secondary.main, 0.1),
@@ -548,10 +550,10 @@ const EnhancedAIAnalyticsDashboard = ({ propertyId: propPropertyId }) => {
             },
           }}
         >
-          <Tab label="Market Intelligence" icon={<DashboardIcon />} iconPosition="start" />
-          <Tab label="What-If Analysis" icon={<BuildIcon />} iconPosition="start" />
-          <Tab label="Competitive Position" icon={<CompareIcon />} iconPosition="start" />
-          <Tab label="Value Estimation" icon={<MoneyIcon />} iconPosition="start" />
+          <Tab label={t("filing.market_intelligence")} icon={<DashboardIcon />} iconPosition="start" />
+          <Tab label={t("filing.whatif_analysis")} icon={<BuildIcon />} iconPosition="start" />
+          <Tab label={t("filing.competitive_position")} icon={<CompareIcon />} iconPosition="start" />
+          <Tab label={t("filing.value_estimation")} icon={<MoneyIcon />} iconPosition="start" />
         </Tabs>
       </Paper>
 

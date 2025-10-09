@@ -57,8 +57,10 @@ import {
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 import { getApiUrl } from '../../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const CompetitiveIntelligence = ({ property, insights }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const { token } = useAuth();
   const [competitiveData, setCompetitiveData] = useState(null);
@@ -364,13 +366,13 @@ const CompetitiveIntelligence = ({ property, insights }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Property</TableCell>
-                    <TableCell align="right">Price (CHF)</TableCell>
-                    <TableCell align="center">Bedrooms</TableCell>
-                    <TableCell align="center">Size (m²)</TableCell>
-                    <TableCell align="center">Distance</TableCell>
-                    <TableCell align="center">Price/m²</TableCell>
-                    <TableCell align="center">Comparison</TableCell>
+                    <TableCell>{t('filing.property')}</TableCell>
+                    <TableCell align="right">{t('filing.price_chf')}</TableCell>
+                    <TableCell align="center">{t('filing.bedrooms')}</TableCell>
+                    <TableCell align="center">{t('filing.size_m')}</TableCell>
+                    <TableCell align="center">{t('filing.distance')}</TableCell>
+                    <TableCell align="center">{t('filing.pricem')}</TableCell>
+                    <TableCell align="center">{t('filing.comparison')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -383,7 +385,7 @@ const CompetitiveIntelligence = ({ property, insights }) => {
                     <TableCell>
                       <Stack direction="row" spacing={1} alignItems="center">
                         <StarIcon color="primary" fontSize="small" />
-                        <Typography>Your Property</Typography>
+                        <Typography>{t('filing.your_property')}</Typography>
                       </Stack>
                     </TableCell>
                     <TableCell align="right">
@@ -398,7 +400,7 @@ const CompetitiveIntelligence = ({ property, insights }) => {
                         : '-'}
                     </TableCell>
                     <TableCell align="center">
-                      <Chip label="Reference" size="small" color="primary" />
+                      <Chip label={t("filing.reference")} size="small" color="primary" />
                     </TableCell>
                   </TableRow>
                   

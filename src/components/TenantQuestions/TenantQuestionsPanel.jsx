@@ -26,6 +26,7 @@ import {
   Warning as WarningIcon
 } from '@mui/icons-material';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import {
   fetchOwnerQuestions,
   fetchPropertyQuestions,
@@ -36,6 +37,7 @@ import {
 } from '../../store/slices/tenantQuestionsSlice';
 
 const TenantQuestionsPanel = ({ propertyId = null }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const [responseText, setResponseText] = useState('');
@@ -265,7 +267,7 @@ const TenantQuestionsPanel = ({ propertyId = null }) => {
                           fullWidth
                           multiline
                           rows={3}
-                          placeholder="Type your response..."
+                          placeholder={t("filing.type_your_response")}
                           value={responseText}
                           onChange={(e) => setResponseText(e.target.value)}
                           disabled={isResponding}

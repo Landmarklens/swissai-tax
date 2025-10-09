@@ -398,12 +398,12 @@ const FilingsListPage = () => {
 
                           <Box sx={{ mb: 2 }}>
                             <Chip
-                              label={filing.canton || 'No canton'}
+                              label={filing.canton || t('filings.no_canton')}
                               size="small"
                               sx={{ mr: 1 }}
                             />
                             <Chip
-                              label={filing.status}
+                              label={t(`filings.status.${filing.status}`)}
                               size="small"
                               color={getStatusColor(filing.status)}
                             />
@@ -527,7 +527,7 @@ const FilingsListPage = () => {
                   handlePostalCodeLookup(value);
                 }
               }}
-              placeholder="e.g. 8001"
+              placeholder={t('filings.postal_code_placeholder')}
               required
               fullWidth
               helperText={

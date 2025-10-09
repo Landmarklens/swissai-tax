@@ -16,6 +16,7 @@ import {
   KeyboardArrowRight
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const ProgressTracker = ({
   steps,
@@ -25,6 +26,7 @@ const ProgressTracker = ({
   onStepClick,
   allowStepNavigation = false
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 

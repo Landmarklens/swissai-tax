@@ -1,6 +1,7 @@
 // AWS Parameter Store Service
 // Fetches configuration and secrets from AWS Systems Manager Parameter Store
 import logger from './loggingService';
+import { useTranslation } from 'react-i18next';
 
 class AWSParameterStoreService {
   constructor() {

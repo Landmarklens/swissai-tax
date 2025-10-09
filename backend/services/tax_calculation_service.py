@@ -29,7 +29,7 @@ class TaxCalculationService:
         deductions_data = self._calculate_deductions(answers)
 
         # Calculate taxable income
-        taxable_income = max(0, income_data['total_income'] - deductions_data['total_deductions'])
+        taxable_income = Decimal(str(max(0, income_data['total_income'] - deductions_data['total_deductions'])))
 
         # Calculate federal tax
         federal_tax = self._calculate_federal_tax(taxable_income, answers)
@@ -65,8 +65,8 @@ class TaxCalculationService:
             'municipal_tax': float(municipal_tax),
             'church_tax': float(church_tax),
             'total_tax': float(total_tax),
-            'effective_rate': float((total_tax / max(income_data['total_income'], 1)) * 100),
-            'monthly_tax': float(total_tax / 12)
+            'effective_rate': float((total_tax / Decimal(str(max(income_data['total_income'], 1)))) * 100),
+            'monthly_tax': float(total_tax / Decimal('12'))
         }
 
     def _get_session_answers(self, session_id: str) -> Dict[str, Any]:

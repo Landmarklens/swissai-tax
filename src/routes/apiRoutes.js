@@ -1,4 +1,5 @@
 import { getApiUrl } from '../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const BASE_URL = getApiUrl();
 

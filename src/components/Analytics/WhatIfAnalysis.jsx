@@ -55,6 +55,7 @@ import {
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 import { getApiUrl } from '../../utils/api/getApiUrl';
+import { useTranslation } from 'react-i18next';
 
 const renovationOptions = [
   { id: 'kitchen', name: 'Kitchen Renovation', icon: <KitchenIcon />, color: '#6366F1' },
@@ -70,6 +71,7 @@ const renovationOptions = [
 ];
 
 const WhatIfAnalysis = ({ property }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const { token } = useAuth();
   const [selectedRenovations, setSelectedRenovations] = useState([]);
@@ -418,7 +420,7 @@ const WhatIfAnalysis = ({ property }) => {
                   <Stack spacing={3}>
                     <Box>
                       <Stack direction="row" justifyContent="space-between" mb={1}>
-                        <Typography variant="body2">Current Appeal</Typography>
+                        <Typography variant="body2">{t('filing.current_appeal')}</Typography>
                         <Typography variant="body2" fontWeight="bold">
                           {(analysis.market_appeal?.current_appeal_score * 100).toFixed(0)}%
                         </Typography>
@@ -432,7 +434,7 @@ const WhatIfAnalysis = ({ property }) => {
                     
                     <Box>
                       <Stack direction="row" justifyContent="space-between" mb={1}>
-                        <Typography variant="body2">Projected Appeal</Typography>
+                        <Typography variant="body2">{t('filing.projected_appeal')}</Typography>
                         <Typography variant="body2" fontWeight="bold" color="success.main">
                           {(analysis.market_appeal?.projected_appeal_score * 100).toFixed(0)}%
                         </Typography>

@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 export const LoginSchema = Yup.object().shape({
   email: Yup.string()

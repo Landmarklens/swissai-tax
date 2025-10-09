@@ -1,10 +1,12 @@
 import React from 'react';
 import { SignupSchema } from '../../validations/signupValidation';
 import { Formik, Form, Field } from 'formik';
+import { useTranslation } from 'react-i18next';
 function Signup() {
+  const { t } = useTranslation();
   return (
     <div>
-      <h1>Signup</h1>
+      <h1>{t('filing.signup')}</h1>
       <Formik
         initialValues={{
           firstName: '',

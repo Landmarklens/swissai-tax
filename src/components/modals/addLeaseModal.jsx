@@ -211,7 +211,7 @@ const AddLeaseModal = ({ open, handleClose, openNewContractModal, data, setData 
                 </Typography>
                 <TextField
                   size="small"
-                  placeholder="Jon Adams"
+                  placeholder={t("filing.jon_adams")}
                   type="text"
                   sx={{ borderColor: 'rgba(0, 6, 46, 0.20)' }}
                   variant="outlined"

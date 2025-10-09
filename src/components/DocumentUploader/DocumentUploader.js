@@ -24,6 +24,7 @@ import {
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const DocumentUploader = ({
   documentType,
@@ -34,6 +35,7 @@ const DocumentUploader = ({
   acceptedFormats = { 'application/pdf': ['.pdf'], 'image/*': ['.jpg', '.jpeg', '.png'] },
   multiple = false
 }) => {
+  const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -211,9 +213,9 @@ const DocumentUploader = ({
                 oder klicken zum Auswählen
               </Typography>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 1 }}>
-                <Chip label="PDF" size="small" />
-                <Chip label="JPG" size="small" />
-                <Chip label="PNG" size="small" />
+                <Chip label={t("document.pdf")} size="small" />
+                <Chip label={t("document.jpg")} size="small" />
+                <Chip label={t("document.png")} size="small" />
               </Box>
               <Typography variant="caption" color="text.muted" sx={{ mt: 2, display: 'block' }}>
                 Maximale Dateigrösse: {formatFileSize(maxSize)}

@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../../config/api';
+import { useTranslation } from 'react-i18next';
 
 export const useLandlordCounter = () => {
+  const { t } = useTranslation();
   const [landlordCount, setLandlordCount] = useState(0);
   const hasInitialized = useRef(false);
   const animationIntervalRef = useRef(null);

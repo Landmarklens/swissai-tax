@@ -48,6 +48,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const renovationIcons = {
   kitchen: <KitchenIcon />,
@@ -67,6 +68,7 @@ const renovationIcons = {
 };
 
 const RenovationImpactSimulator = ({ propertyId }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [loadingTypes, setLoadingTypes] = useState(true);
   const [renovationTypes, setRenovationTypes] = useState([]);
@@ -164,7 +166,7 @@ const RenovationImpactSimulator = ({ propertyId }) => {
         <CardContent>
           <Box display="flex" alignItems="center" justifyContent="center" py={4}>
             <CircularProgress size={20} />
-            <Typography ml={2}>Loading renovation options...</Typography>
+            <Typography ml={2}>{t('filing.loading_renovation_options')}</Typography>
           </Box>
         </CardContent>
       </Card>
@@ -241,15 +243,15 @@ const RenovationImpactSimulator = ({ propertyId }) => {
         {/* Quality Level Selection */}
         <Box mb={3}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Quality Level</FormLabel>
+            <FormLabel component="legend">{t('filing.quality_level')}</FormLabel>
             <RadioGroup
               row
               value={qualityLevel}
               onChange={handleQualityChange}
             >
-              <FormControlLabel value="budget" control={<Radio />} label="Budget" />
-              <FormControlLabel value="typical" control={<Radio />} label="Typical" />
-              <FormControlLabel value="premium" control={<Radio />} label="Premium" />
+              <FormControlLabel value="budget" control={<Radio />} label={t("filing.budget")} />
+              <FormControlLabel value="typical" control={<Radio />} label={t("filing.typical")} />
+              <FormControlLabel value="premium" control={<Radio />} label={t("filing.premium")} />
             </RadioGroup>
           </FormControl>
         </Box>
@@ -327,7 +329,7 @@ const RenovationImpactSimulator = ({ propertyId }) => {
                   <Stack spacing={2}>
                     <Box>
                       <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography variant="body1">Total Investment</Typography>
+                        <Typography variant="body1">{t('filing.total_investment')}</Typography>
                         <Typography variant="h6" fontWeight="bold">
                           CHF {impact.total_cost?.toLocaleString()}
                         </Typography>
@@ -335,7 +337,7 @@ const RenovationImpactSimulator = ({ propertyId }) => {
                     </Box>
                     <Box>
                       <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography variant="body1">ROI Period</Typography>
+                        <Typography variant="body1">{t('filing.roi_period')}</Typography>
                         <Chip
                           label={`${impact.roi_years?.toFixed(1) || 'N/A'} years`}
                           color={getROIColor(impact.roi_years)}
@@ -344,7 +346,7 @@ const RenovationImpactSimulator = ({ propertyId }) => {
                     </Box>
                     <Box>
                       <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography variant="body1">Annual ROI</Typography>
+                        <Typography variant="body1">{t('filing.annual_roi')}</Typography>
                         <Typography variant="h6" fontWeight="bold" color="primary">
                           {impact.roi_percentage?.toFixed(1)}%
                         </Typography>

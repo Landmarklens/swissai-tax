@@ -5,8 +5,10 @@ import { useDispatch } from 'react-redux';
 import { fetchUserProfile } from '../../store/slices/accountSlice';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
 import { CircularProgress, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const GoogleCallback = () => {
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -88,7 +90,7 @@ const GoogleCallback = () => {
   return (
     <>
       <SEOHelmet
-        title="Signing in... - HomeAI"
+        title={t("filing.signing_in_homeai")}
         description="Completing Google authentication"
       />
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">

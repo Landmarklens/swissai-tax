@@ -1,7 +1,9 @@
 import React from 'react';
 import { useField } from 'formik';
 import { FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 function CustomInput({ label, ...props }) {
+  const { t } = useTranslation();
   const [field, meta, helpers] = useField(props);
   return (
     <>

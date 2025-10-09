@@ -1,7 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 
 const FAQSchema = ({ faqs }) => {
+  const { t } = useTranslation();
   // Default FAQs if not provided
   const defaultFAQs = [
     {

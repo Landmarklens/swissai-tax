@@ -1,6 +1,8 @@
 import { useLayoutEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const useWindowSize = () => {
+  const { t } = useTranslation();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
   const handleSize = () => {

@@ -9,6 +9,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardContent,
@@ -38,6 +39,7 @@ const CANTON_FLAGS = {
 };
 
 const FilingCard = ({ filing, calculation, isPrimary, onDownloadPDF }) => {
+  const { t } = useTranslation();
   if (!filing) return null;
 
   const cantonFlag = CANTON_FLAGS[filing.canton] || '📋';
@@ -50,14 +52,14 @@ const FilingCard = ({ filing, calculation, isPrimary, onDownloadPDF }) => {
         {isComplete ? (
           <Chip
             icon={<CheckIcon />}
-            label="Calculated"
+            label={t("filing.calculated")}
             color="success"
             size="small"
           />
         ) : (
           <Chip
             icon={<WarningIcon />}
-            label="Incomplete"
+            label={t("filing.incomplete")}
             color="warning"
             size="small"
           />
@@ -147,11 +149,11 @@ const FilingCard = ({ filing, calculation, isPrimary, onDownloadPDF }) => {
           <Typography variant="caption" color="textSecondary">
             {isPrimary ? (
               <>
-                <strong>Primary filing</strong> includes all income sources and federal tax.
+                <strong>{t('filing.primary_filing')}</strong> includes all income sources and federal tax.
               </>
             ) : (
               <>
-                <strong>Secondary filing</strong> includes only property income for this canton.
+                <strong>{t('filing.secondary_filing')}</strong> includes only property income for this canton.
               </>
             )}
           </Typography>
@@ -160,7 +162,7 @@ const FilingCard = ({ filing, calculation, isPrimary, onDownloadPDF }) => {
 
       {/* Download Actions */}
       <CardActions sx={{ p: 2, pt: 0 }}>
-        <Tooltip title="Modern eCH-0196 PDF with barcode (recommended)">
+        <Tooltip title={t("filing.modern_ech0196_pdf_with_barcode_re_ff32c6")}>
           <Button
             variant="contained"
             startIcon={<DownloadIcon />}

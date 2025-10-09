@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { getCLS, getFID, getLCP, getTTFB, getFCP } from 'web-vitals';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Custom hook to measure and report Core Web Vitals
@@ -7,6 +8,7 @@ import { getCLS, getFID, getLCP, getTTFB, getFCP } from 'web-vitals';
  * @param {boolean} logToConsole - Whether to log metrics to console
  */
 export const useWebVitals = (onReport, logToConsole = true) => {
+  const { t } = useTranslation();
   useEffect(() => {
     const handleReport = (metric) => {
       // Log to console if enabled

@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const BreadcrumbSchema = ({ items }) => {
-  const location = useLocation();
   const { i18n, t } = useTranslation();
+  const location = useLocation();
   const currentLang = i18n.language;
   const baseUrl = 'https://homeai.ch';
 

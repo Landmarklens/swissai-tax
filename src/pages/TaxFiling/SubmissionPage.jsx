@@ -68,7 +68,7 @@ const SubmissionPage = () => {
         confirmation_number: response.data.confirmation_number
       });
     } catch (err) {
-      setError('Submission failed. Please try again or contact support.');
+      setError(t('submission.error_message'));
       if (process.env.NODE_ENV === 'development') {
         console.error('Submission error:', err);
       }
@@ -112,23 +112,23 @@ const SubmissionPage = () => {
             <CheckCircleIcon sx={{ fontSize: 80, color: '#4CAF50', mb: 3 }} />
 
             <Typography variant="h3" fontWeight={700} gutterBottom>
-              {t('Submission Successful!')}
+              {t('submission.success_title')}
             </Typography>
 
             <Typography variant="body1" color="text.secondary" paragraph>
-              {t('Your tax filing has been successfully submitted')}
+              {t('submission.success_message')}
             </Typography>
 
             <Card sx={{ mt: 4, textAlign: 'left' }}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600} mb={2}>
-                  {t('Confirmation Details')}
+                  {t('submission.confirmation_details')}
                 </Typography>
 
                 <Box display="flex" flexDirection="column" gap={2}>
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body2" color="text.secondary">
-                      {t('Confirmation Number')}:
+                      {t('submission.confirmation_number')}:
                     </Typography>
                     <Typography variant="body2" fontWeight={600} sx={{ fontFamily: 'monospace' }}>
                       {confirmationNumber}
@@ -137,7 +137,7 @@ const SubmissionPage = () => {
 
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body2" color="text.secondary">
-                      {t('Tax Year')}:
+                      {t('submission.tax_year')}:
                     </Typography>
                     <Typography variant="body2" fontWeight={600}>
                       {taxYear}
@@ -146,16 +146,16 @@ const SubmissionPage = () => {
 
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body2" color="text.secondary">
-                      {t('Submission Method')}:
+                      {t('submission.submission_method')}:
                     </Typography>
                     <Typography variant="body2" fontWeight={600}>
-                      {submissionMethod === 'efile' ? t('E-Filing') : t('Manual Submission')}
+                      {submissionMethod === 'efile' ? t('submission.efile') : t('submission.manual_submission')}
                     </Typography>
                   </Box>
 
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body2" color="text.secondary">
-                      {t('Submitted Date')}:
+                      {t('submission.submitted_date')}:
                     </Typography>
                     <Typography variant="body2" fontWeight={600}>
                       {new Date().toLocaleDateString('en-GB')}
@@ -167,7 +167,7 @@ const SubmissionPage = () => {
                   <Box display="flex" alignItems="center" gap={1}>
                     <EmailIcon fontSize="small" />
                     <Typography variant="body2">
-                      {t('A confirmation email has been sent to your registered email address')}
+                      {t('submission.email_confirmation')}
                     </Typography>
                   </Box>
                 </Alert>
@@ -180,13 +180,13 @@ const SubmissionPage = () => {
                 startIcon={<DownloadIcon />}
                 onClick={handleDownloadPDF}
               >
-                {t('Download PDF')}
+                {t('submission.download_pdf')}
               </Button>
               <Button
                 variant="contained"
                 onClick={handleGoToDashboard}
               >
-                {t('Go to Dashboard')}
+                {t('submission.go_to_dashboard')}
               </Button>
             </Box>
           </Box>
@@ -204,10 +204,10 @@ const SubmissionPage = () => {
       <Container maxWidth="lg" sx={{ py: 6, flex: 1 }}>
         <Box mb={4}>
           <Typography variant="h3" fontWeight={700} gutterBottom>
-            {t('Submit Your Tax Filing')}
+            {t('submission.page_title')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {t('Choose your preferred submission method')}
+            {t('submission.page_subtitle')}
           </Typography>
         </Box>
 
@@ -240,11 +240,11 @@ const SubmissionPage = () => {
                     <Box display="flex" alignItems="center" gap={1} mb={1}>
                       <CloudIcon sx={{ color: '#003DA5' }} />
                       <Typography variant="h6" fontWeight={600}>
-                        {t('E-Filing')} ({t('Recommended')})
+                        {t('submission.efile')} ({t('submission.recommended')})
                       </Typography>
                     </Box>
                     <Typography variant="body2" color="text.secondary" paragraph>
-                      {t('Submit directly to')} {canton} {t('tax authority')}
+                      {t('submission.efile_description', { canton })}
                     </Typography>
 
                     <List dense>
@@ -253,7 +253,7 @@ const SubmissionPage = () => {
                           <CheckCircleIcon sx={{ fontSize: 20, color: '#4CAF50' }} />
                         </ListItemIcon>
                         <ListItemText
-                          primary={t('Instant confirmation')}
+                          primary={t('submission.instant_confirmation')}
                           primaryTypographyProps={{ variant: 'body2' }}
                         />
                       </ListItem>
@@ -262,7 +262,7 @@ const SubmissionPage = () => {
                           <CheckCircleIcon sx={{ fontSize: 20, color: '#4CAF50' }} />
                         </ListItemIcon>
                         <ListItemText
-                          primary={t('Faster processing time')}
+                          primary={t('submission.faster_processing')}
                           primaryTypographyProps={{ variant: 'body2' }}
                         />
                       </ListItem>
@@ -271,7 +271,7 @@ const SubmissionPage = () => {
                           <CheckCircleIcon sx={{ fontSize: 20, color: '#4CAF50' }} />
                         </ListItemIcon>
                         <ListItemText
-                          primary={t('Automatic receipt and confirmation number')}
+                          primary={t('submission.automatic_receipt')}
                           primaryTypographyProps={{ variant: 'body2' }}
                         />
                       </ListItem>
@@ -302,15 +302,15 @@ const SubmissionPage = () => {
                     <Box display="flex" alignItems="center" gap={1} mb={1}>
                       <PdfIcon sx={{ color: '#DC0018' }} />
                       <Typography variant="h6" fontWeight={600}>
-                        {t('Manual Submission')}
+                        {t('submission.manual_submission')}
                       </Typography>
                     </Box>
                     <Typography variant="body2" color="text.secondary" paragraph>
-                      {t('Download PDF and submit yourself')}
+                      {t('submission.manual_description')}
                     </Typography>
 
                     <Alert severity="warning" sx={{ mb: 2 }}>
-                      {t('You will need to submit the forms to the tax office yourself')}
+                      {t('submission.manual_warning')}
                     </Alert>
 
                     <Box
@@ -321,7 +321,7 @@ const SubmissionPage = () => {
                       }}
                     >
                       <Typography variant="caption" fontWeight={600} display="block" mb={0.5}>
-                        {t('Submission Address')}:
+                        {t('submission.submission_address')}:
                       </Typography>
                       <Typography variant="body2">
                         Kantonales Steueramt Zürich<br />
@@ -340,22 +340,22 @@ const SubmissionPage = () => {
         {/* Important Reminders */}
         <Alert severity="info" icon={<WarningIcon />} sx={{ mb: 4 }}>
           <Typography variant="subtitle2" fontWeight={600} gutterBottom>
-            {t('Important Reminders')}
+            {t('submission.important_reminders')}
           </Typography>
           <List dense>
             <ListItem sx={{ px: 0 }}>
               <Typography variant="body2">
-                • {t('Deadline')}: {deadline}
+                • {t('submission.deadline_label')}: {deadline}
               </Typography>
             </ListItem>
             <ListItem sx={{ px: 0 }}>
               <Typography variant="body2">
-                • {t('Keep copies of all documents for at least 10 years')}
+                • {t('submission.keep_documents')}
               </Typography>
             </ListItem>
             <ListItem sx={{ px: 0 }}>
               <Typography variant="body2">
-                • {t('Check your email for confirmation')}
+                • {t('submission.check_email')}
               </Typography>
             </ListItem>
           </List>
@@ -369,7 +369,7 @@ const SubmissionPage = () => {
             onClick={() => navigate('/tax-filing/review')}
             disabled={submitting}
           >
-            {t('Back')}
+            {t('submission.back')}
           </Button>
           <Button
             variant="contained"
@@ -379,10 +379,10 @@ const SubmissionPage = () => {
             startIcon={submitting ? <CircularProgress size={20} /> : submissionMethod === 'efile' ? <CloudIcon /> : <PdfIcon />}
           >
             {submitting
-              ? t('Submitting...')
+              ? t('submission.submitting')
               : submissionMethod === 'efile'
-              ? t('Submit via E-Filing')
-              : t('Download PDF Forms')}
+              ? t('submission.submit_efile_button')
+              : t('submission.download_pdf_forms')}
           </Button>
         </Box>
       </Container>

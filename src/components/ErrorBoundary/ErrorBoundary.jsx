@@ -5,8 +5,8 @@ import { ErrorOutline as ErrorIcon } from '@mui/icons-material';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      hasError: false, 
+    this.state = {
+      hasError: false,
       error: null,
       errorInfo: null,
       errorCount: 0
@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component {
     if (process.env.NODE_ENV === 'development') {
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
-    
+
     // Update state with error details
     this.setState(prevState => ({
       error,
@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component {
   logErrorToService = (error, errorInfo) => {
     // Implement error logging to your service
     // Example: Sentry.captureException(error, { extra: errorInfo });
-    
+
     // For now, just log to console
     console.error('Error logged to service:', {
       message: error.toString(),
@@ -52,12 +52,12 @@ class ErrorBoundary extends React.Component {
 
   handleReset = () => {
     // Reset the error boundary state
-    this.setState({ 
-      hasError: false, 
-      error: null, 
-      errorInfo: null 
+    this.setState({
+      hasError: false,
+      error: null,
+      errorInfo: null
     });
-    
+
     // Optional: Reload the page if errors persist
     if (this.state.errorCount > 3) {
       window.location.reload();
@@ -96,30 +96,30 @@ class ErrorBoundary extends React.Component {
               backgroundColor: '#fff'
             }}
           >
-            <ErrorIcon 
-              sx={{ 
-                fontSize: 64, 
+            <ErrorIcon
+              sx={{
+                fontSize: 64,
                 color: 'error.main',
-                mb: 2 
-              }} 
+                mb: 2
+              }}
             />
-            
+
             <Typography variant="h5" gutterBottom color="error">
               Oops! Something went wrong
             </Typography>
-            
+
             <Typography variant="body1" color="text.secondary" paragraph>
-              We're sorry, but an unexpected error occurred. 
+              We're sorry, but an unexpected error occurred.
               {errorCount > 1 && ` This has happened ${errorCount} times.`}
             </Typography>
 
             {/* Show error details in development */}
             {showDetails && process.env.NODE_ENV === 'development' && error && (
-              <Alert 
-                severity="error" 
-                sx={{ 
-                  mt: 2, 
-                  mb: 2, 
+              <Alert
+                severity="error"
+                sx={{
+                  mt: 2,
+                  mb: 2,
                   textAlign: 'left',
                   wordBreak: 'break-word'
                 }}
@@ -133,10 +133,10 @@ class ErrorBoundary extends React.Component {
                 {errorInfo && (
                   <details style={{ marginTop: '8px', cursor: 'pointer' }}>
                     <summary>Component Stack</summary>
-                    <Typography 
-                      variant="body2" 
-                      component="pre" 
-                      sx={{ 
+                    <Typography
+                      variant="body2"
+                      component="pre"
+                      sx={{
                         fontSize: '0.75rem',
                         overflow: 'auto',
                         maxHeight: '200px'
@@ -150,15 +150,15 @@ class ErrorBoundary extends React.Component {
             )}
 
             <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center' }}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 onClick={this.handleReset}
                 color="primary"
               >
                 Try Again
               </Button>
-              
-              <Button 
+
+              <Button
                 variant="outlined"
                 onClick={() => window.location.href = '/'}
                 color="secondary"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/system';
+import { useTranslation } from 'react-i18next';
 
 const CounterWrapper = styled(Box)(({ theme }) => ({
   textAlign: 'center',
@@ -31,6 +32,7 @@ const CounterLabel = styled(Typography)(({ theme }) => ({
 
 // Custom hook for intersection observer
 const useInView = (options = {}) => {
+  const { t } = useTranslation();
   const [inView, setInView] = useState(false);
   const ref = useRef(null);
 

@@ -181,13 +181,19 @@ class TestTaxFilingService:
         )
 
         # Mock queries
+        query_call_count = {'TaxFilingSession': 0}
+
         def query_side_effect(model):
             mock_query = Mock()
             mock_query.filter.return_value = mock_query
 
             if model == TaxFilingSession:
                 # First call returns source, second returns None (no existing)
-                mock_query.first.side_effect = [source_filing, None]
+                query_call_count['TaxFilingSession'] += 1
+                if query_call_count['TaxFilingSession'] == 1:
+                    mock_query.first.return_value = source_filing
+                else:
+                    mock_query.first.return_value = None
             elif model == TaxAnswer:
                 mock_query.all.return_value = [answer1, answer2]
 

@@ -18,8 +18,10 @@ import { Upload, Calculate, CheckCircle } from '@mui/icons-material';
 import DocumentChecklist from '../../components/Interview/DocumentChecklist';
 import ProfileSummary from '../../components/Interview/ProfileSummary';
 import { api } from '../../services/api';
+import { useTranslation } from 'react-i18next';
 
 const DocumentChecklistPage = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

@@ -28,8 +28,10 @@ import Policy from '../pages/Policy/Policy';
 import Chat from '../pages/Chat/Chat';
 import TenantSelection from '../pages/TenantSelection';
 import DocumentSigningPage from '../components/pages/DocumentSigningPage';
+import { useTranslation } from 'react-i18next';
 
 const ProtectedRoute = ({ children }) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const isAuthenticated = authService.isAuthenticated();
 

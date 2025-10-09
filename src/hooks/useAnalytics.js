@@ -4,8 +4,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { analyticsAPI } from '../api/analytics';
+import { useTranslation } from 'react-i18next';
 
 export const useComprehensiveAnalytics = (filters = {}) => {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

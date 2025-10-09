@@ -8,7 +8,7 @@ export const getErrorMessage = (error, defaultMessage = 'Something went wrong') 
   // Handle different error structures
   if (error.response?.data) {
     const data = error.response.data;
-    
+
     // Try different fields in order of preference
     if (data.error) return data.error;
     if (data.detail) {
@@ -20,7 +20,7 @@ export const getErrorMessage = (error, defaultMessage = 'Something went wrong') 
     }
     if (data.message) return data.message;
   }
-  
+
   // Fallback to error message or default
   return error.message || defaultMessage;
 };

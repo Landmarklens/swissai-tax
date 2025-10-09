@@ -6,6 +6,7 @@
  * Check if browser supports WebP format
  */
 export const supportsWebP = () => {
+  const { t } = useTranslation();
   if (typeof window === 'undefined') return false;
 
   const canvas = document.createElement('canvas');

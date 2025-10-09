@@ -64,7 +64,7 @@ const AICard = ({
           <Box
             component="img"
             src={image}
-            alt="Background Image"
+            alt={t("filing.background_image")}
             sx={{
               position: 'absolute',
               top: '0',

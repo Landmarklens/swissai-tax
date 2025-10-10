@@ -70,7 +70,7 @@ async def create_incident(
     """
     # TODO: Add admin role check
     status_service = StatusService(db)
-    new_incident = await status_service.create_incident(incident.dict())
+    new_incident = await status_service.create_incident(incident.model_dump())
     return new_incident
 
 
@@ -90,7 +90,7 @@ async def update_incident(
     try:
         updated_incident = await status_service.update_incident(
             incident_id,
-            {k: v for k, v in update.dict().items() if v is not None}
+            {k: v for k, v in update.model_dump().items() if v is not None}
         )
         return updated_incident
     except ValueError as e:

@@ -47,32 +47,9 @@ const GoogleCallback = () => {
         const profileAction = await dispatch(fetchUserProfile());
 
         if (fetchUserProfile.fulfilled.match(profileAction)) {
-          // Handle redirects based on user type
-          if (userType === 'landlord') {
-            navigate('/owner-account?section=dashboard');
-          } else if (userType === 'tenant') {
-            // Check for saved plan
-            const plan = localStorage.getItem('plan');
-            if (plan) {
-              localStorage.removeItem('plan');
-              navigate(`/payment/${plan}`);
-              return;
-            }
-
-            // Check for saved search input
-            const savedInput = localStorage.getItem('input') || sessionStorage.getItem('temp_input');
-            if (savedInput) {
-              const params = new URLSearchParams({ input: savedInput });
-              navigate(`/chat?${params.toString()}`);
-              localStorage.removeItem('input');
-              sessionStorage.removeItem('temp_input');
-            } else {
-              navigate('/my-account?section=searches');
-            }
-          } else {
-            // Default redirect
-            navigate('/my-account?section=searches');
-          }
+          // Redirect to filings page for SwissTax app
+          console.log('[GoogleCallback] Login successful, redirecting to filings');
+          navigate('/filings');
         } else {
           // If profile fetch failed, still redirect to a safe page
           console.error('[GoogleCallback] Profile fetch failed:', profileAction);

@@ -108,6 +108,9 @@ class SessionService:
         Returns:
             List of UserSession objects
         """
+        # Expire all cached objects to ensure we get fresh data from DB
+        db.expire_all()
+
         query = db.query(UserSession).filter(UserSession.user_id == uuid.UUID(user_id))
 
         if active_only:

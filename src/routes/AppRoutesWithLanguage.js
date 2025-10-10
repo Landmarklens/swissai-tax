@@ -13,7 +13,12 @@ const AppRoutesWithLanguage = () => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Scroll to top immediately and forcefully
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Backup scroll after a short delay to ensure it happens after render
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 0);
     // Update document title - this will be replaced with SEOHelmet later
     document.title = t("filing.swisstax");
   }, [location.pathname, t]);

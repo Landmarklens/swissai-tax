@@ -6,6 +6,21 @@ import twoFactorService from '../../services/twoFactorService';
 
 jest.mock('../../services/twoFactorService');
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => {
+      const translations = {
+        'filing.authentication_code': 'Authentication Code',
+        'filing.backup_code': 'Backup Code',
+        'filing.xxxxxxxx': 'XXXXXXXX',
+        'filing.lost_access_to_your_authenticator': 'Lost access to your authenticator?'
+      };
+      return translations[key] || key;
+    }
+  })
+}));
+
 describe('TwoFactorVerifyModal', () => {
   const mockOnClose = jest.fn();
   const mockOnSuccess = jest.fn();
@@ -122,11 +137,11 @@ describe('TwoFactorVerifyModal', () => {
       />
     );
 
-    const toggleLink = screen.getByText(/Use backup code instead/i);
+    const toggleLink = screen.getByText(/Use a backup code instead/i);
     fireEvent.click(toggleLink);
 
     expect(screen.getByLabelText(/Backup Code/i)).toBeInTheDocument();
-    expect(screen.getByText(/Use authenticator app instead/i)).toBeInTheDocument();
+    expect(screen.getByText(/Use authenticator app code instead/i)).toBeInTheDocument();
   });
 
   it('should verify backup code successfully', async () => {
@@ -145,7 +160,7 @@ describe('TwoFactorVerifyModal', () => {
     );
 
     // Toggle to backup code mode
-    const toggleLink = screen.getByText(/Use backup code instead/i);
+    const toggleLink = screen.getByText(/Use a backup code instead/i);
     fireEvent.click(toggleLink);
 
     const input = screen.getByLabelText(/Backup Code/i);
@@ -234,7 +249,7 @@ describe('TwoFactorVerifyModal', () => {
     });
 
     // Toggle to backup code mode
-    const toggleLink = screen.getByText(/Use backup code instead/i);
+    const toggleLink = screen.getByText(/Use a backup code instead/i);
     fireEvent.click(toggleLink);
 
     // Error should be cleared

@@ -65,8 +65,16 @@ const Header = () => {
     { to: '/contact-us', label: t('Contact Us') }
   ];
 
-  // Filter menu options when user is in filing process
-  const visibleMenuOptions = isInFilingProcess ? [] : menuOptions;
+  const loggedInMenuOptions = [
+    { to: '/dashboard', label: t('Dashboard') },
+    { to: '/filings', label: t('Tax Filings') },
+    { to: '/documents', label: t('Documents') },
+    { to: '/profile', label: t('Profile') },
+    { to: '/settings', label: t('Settings') }
+  ];
+
+  // Filter menu options when user is in filing process or logged in
+  const visibleMenuOptions = isInFilingProcess ? [] : (isLoggedIn ? loggedInMenuOptions : menuOptions);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -100,7 +108,7 @@ const Header = () => {
 
   const getStartedHandler = () => {
     if (isAuthenticated) {
-      return navigate('/chat');
+      return navigate('/dashboard');
     }
 
     // toast.error('Please log in');
@@ -146,22 +154,23 @@ const Header = () => {
         </ListItem>
 
         {!isLoggedIn && (
-          <ListItem>
-            <Button
-              variant="outlined"
-              fullWidth
-              className={styles.drawerLoginButton}
-              onClick={handleLoginClick}>
-              {t('Log In')}
-            </Button>
-          </ListItem>
+          <>
+            <ListItem>
+              <Button
+                variant="outlined"
+                fullWidth
+                className={styles.drawerLoginButton}
+                onClick={handleLoginClick}>
+                {t('Log In')}
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Button variant="contained" fullWidth onClick={getStartedHandler}>
+                {t('Get Started')}
+              </Button>
+            </ListItem>
+          </>
         )}
-
-        <ListItem>
-          <Button variant="contained" fullWidth onClick={getStartedHandler}>
-            {t('Get Started')}
-          </Button>
-        </ListItem>
       </List>
     </Box>
   );

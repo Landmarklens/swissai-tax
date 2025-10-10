@@ -56,14 +56,21 @@ def mock_get_db(mock_db_session):
 @pytest.fixture
 def mock_user():
     """Create a basic mock user without 2FA."""
+    import uuid
     user = Mock(spec=User)
-    user.id = 1
+    user.id = uuid.uuid4()  # UUID object, not string
     user.email = "test@example.com"
     user.password = "$2b$12$hashed_password"
     user.first_name = "Test"
     user.last_name = "User"
+    user.phone = "+41791234567"
+    user.address = "Test Street 1"
+    user.postal_code = "8001"
+    user.canton = "ZH"
+    user.municipality = "Zürich"
     user.preferred_language = "en"
     user.avatar_url = None
+    user.is_active = True
     user.two_factor_enabled = False
     user.two_factor_secret = None
     user.two_factor_backup_codes = None
@@ -77,14 +84,21 @@ def mock_user():
 @pytest.fixture
 def mock_user_with_2fa():
     """Create a mock user with 2FA enabled."""
+    import uuid
     user = Mock(spec=User)
-    user.id = 2
+    user.id = uuid.uuid4()  # UUID object, not string
     user.email = "2fa@example.com"
     user.password = "$2b$12$hashed_password"
     user.first_name = "TwoFactor"
     user.last_name = "User"
+    user.phone = "+41791234568"
+    user.address = "Test Street 2"
+    user.postal_code = "8002"
+    user.canton = "ZH"
+    user.municipality = "Zürich"
     user.preferred_language = "en"
     user.avatar_url = None
+    user.is_active = True
     user.two_factor_enabled = True
     user.two_factor_secret = "encrypted_secret_data"
     user.two_factor_backup_codes = "encrypted_backup_codes"
@@ -98,14 +112,21 @@ def mock_user_with_2fa():
 @pytest.fixture
 def mock_admin_user():
     """Create a mock admin user."""
+    import uuid
     user = Mock(spec=User)
-    user.id = 999
+    user.id = uuid.uuid4()  # UUID object, not string
     user.email = "admin@example.com"
     user.password = "$2b$12$hashed_password"
     user.first_name = "Admin"
     user.last_name = "User"
+    user.phone = "+41791234569"
+    user.address = "Admin Street 1"
+    user.postal_code = "8003"
+    user.canton = "ZH"
+    user.municipality = "Zürich"
     user.preferred_language = "en"
     user.avatar_url = None
+    user.is_active = True
     user.two_factor_enabled = True
     user.two_factor_secret = "encrypted_secret"
     user.two_factor_backup_codes = "encrypted_codes"

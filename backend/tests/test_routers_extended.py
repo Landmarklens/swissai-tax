@@ -905,9 +905,10 @@ class TestUserRouter:
 
     def test_list_of_users_success(self, authenticated_client_no_2fa):
         """Test GET /api/user/list"""
+        import uuid
         mock_users = [
-            {'id': 1, 'email': 'user1@example.com', 'first_name': 'User', 'last_name': 'One'},
-            {'id': 2, 'email': 'user2@example.com', 'first_name': 'User', 'last_name': 'Two'}
+            {'id': str(uuid.uuid4()), 'email': 'user1@example.com', 'first_name': 'User', 'last_name': 'One'},
+            {'id': str(uuid.uuid4()), 'email': 'user2@example.com', 'first_name': 'User', 'last_name': 'Two'}
         ]
 
         with patch('routers.user.UserService.get_list_of_users') as mock_list:
@@ -946,11 +947,12 @@ class TestUserRouter:
         from jose import jwt
         from config import settings
         import uuid
+        import time
 
         payload = {
             'sub': 'user-123',
             'session_id': str(uuid.uuid4()),
-            'exp': datetime.utcnow().timestamp() + 3600
+            'exp': int(time.time()) + 3600  # Integer timestamp
         }
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
 
@@ -984,6 +986,14 @@ class TestUserRouter:
         updated_user.email = mock_user.email
         updated_user.first_name = 'Updated'
         updated_user.last_name = 'Name'
+        updated_user.phone = mock_user.phone
+        updated_user.address = mock_user.address
+        updated_user.postal_code = mock_user.postal_code
+        updated_user.canton = mock_user.canton
+        updated_user.municipality = mock_user.municipality
+        updated_user.preferred_language = mock_user.preferred_language
+        updated_user.avatar_url = mock_user.avatar_url
+        updated_user.is_active = mock_user.is_active
 
         with patch('routers.user.UserService.update_user') as mock_update:
             mock_update.return_value = updated_user
@@ -1078,17 +1088,25 @@ class TestUserRouter:
 
     def test_deactivate_user_forbidden(self, authenticated_client_no_2fa, mock_user):
         """Test DELETE /api/user/{user_id} - different user"""
-        response = authenticated_client_no_2fa.delete('/api/user/999')
+        import uuid
+        other_user_id = str(uuid.uuid4())
+        response = authenticated_client_no_2fa.delete(f'/api/user/{other_user_id}')
 
         assert response.status_code == 403
         assert 'Not authorized' in response.json()['detail']
 
     def test_upload_pdf_success(self, authenticated_client_no_2fa, mock_user):
         """Test POST /api/user/{user_id}/pdfs/upload"""
+        import uuid
+        from datetime import datetime
+
         mock_result = {
-            'document_id': 'doc-123',
-            'file_name': 'test.pdf',
-            'status': 'uploaded'
+            'id': uuid.uuid4(),
+            'user_id': mock_user.id,
+            'filename': 'test.pdf',
+            'file_size': 1024,
+            'upload_status': 'pending',
+            'created_at': datetime.utcnow()
         }
 
         with patch('routers.user.pdf_service.upload_pdf_background') as mock_upload:
@@ -1104,15 +1122,18 @@ class TestUserRouter:
 
             assert response.status_code == 202
             data = response.json()
-            assert data['document_id'] == 'doc-123'
+            assert data['filename'] == 'test.pdf'
+            assert data['upload_status'] == 'pending'
 
     def test_upload_pdf_forbidden(self, authenticated_client_no_2fa, mock_user):
         """Test POST /api/user/{user_id}/pdfs/upload - different user"""
+        import uuid
+        other_user_id = str(uuid.uuid4())
         file_content = b'%PDF-1.4 fake pdf'
         files = {'file': ('test.pdf', file_content, 'application/pdf')}
 
         response = authenticated_client_no_2fa.post(
-            '/api/user/999/pdfs/upload',
+            f'/api/user/{other_user_id}/pdfs/upload',
             files=files
         )
 
@@ -1130,7 +1151,7 @@ class TestMultiCantonFilingRouter:
         """Test POST /api/multi-canton/filings/primary"""
         mock_filing = TaxFilingSession(
             id='filing-123',
-            user_id=str(mock_user.id),
+            user_id=mock_user.id,
             tax_year=2024,
             canton='ZH',
             name='My 2024 Tax Return',
@@ -1188,7 +1209,7 @@ class TestMultiCantonFilingRouter:
         """Test POST /api/multi-canton/filings/secondary"""
         primary_filing = TaxFilingSession(
             id='primary-123',
-            user_id=str(mock_user.id),
+            user_id=mock_user.id,  # UUID object, not string
             tax_year=2024,
             canton='ZH',
             name='Primary Filing',
@@ -1201,7 +1222,7 @@ class TestMultiCantonFilingRouter:
         secondary_filings = [
             TaxFilingSession(
                 id='secondary-1',
-                user_id=str(mock_user.id),
+                user_id=mock_user.id,
                 tax_year=2024,
                 canton='BE',
                 name='Secondary Filing BE',
@@ -1213,7 +1234,7 @@ class TestMultiCantonFilingRouter:
             ),
             TaxFilingSession(
                 id='secondary-2',
-                user_id=str(mock_user.id),
+                user_id=mock_user.id,
                 tax_year=2024,
                 canton='GE',
                 name='Secondary Filing GE',
@@ -1288,7 +1309,7 @@ class TestMultiCantonFilingRouter:
         filings = [
             TaxFilingSession(
                 id='primary-123',
-                user_id=str(mock_user.id),
+                user_id=mock_user.id,
                 tax_year=2024,
                 canton='ZH',
                 name='Primary',
@@ -1300,7 +1321,7 @@ class TestMultiCantonFilingRouter:
             ),
             TaxFilingSession(
                 id='secondary-1',
-                user_id=str(mock_user.id),
+                user_id=mock_user.id,
                 tax_year=2024,
                 canton='BE',
                 name='Secondary',
@@ -1339,7 +1360,7 @@ class TestMultiCantonFilingRouter:
         """Test GET /api/multi-canton/filings/{tax_year}/primary"""
         primary_filing = TaxFilingSession(
             id='primary-123',
-            user_id=str(mock_user.id),
+            user_id=mock_user.id,
             tax_year=2024,
             canton='ZH',
             name='Primary',
@@ -1373,7 +1394,7 @@ class TestMultiCantonFilingRouter:
         """Test GET /api/multi-canton/filings/{filing_id}/secondaries"""
         primary_filing = TaxFilingSession(
             id='primary-123',
-            user_id=str(mock_user.id),
+            user_id=mock_user.id,
             tax_year=2024,
             canton='ZH',
             name='Primary',
@@ -1386,7 +1407,7 @@ class TestMultiCantonFilingRouter:
         secondary_filings = [
             TaxFilingSession(
                 id='secondary-1',
-                user_id=str(mock_user.id),
+                user_id=mock_user.id,
                 tax_year=2024,
                 canton='BE',
                 name='Secondary',

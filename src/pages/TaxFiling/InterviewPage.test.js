@@ -10,6 +10,32 @@ import configureStore from 'redux-mock-store';
 import InterviewPage from './InterviewPage';
 import { api } from '../../services/api';
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => {
+      const translations = {
+        'interview.error_start_failed': 'Failed to start interview',
+        'interview.error_submit_failed': 'Failed to submit answer',
+        'interview.error_invalid_answer': 'Invalid answer format. Please try again.',
+        'interview.page_title': 'Tax Interview',
+        'interview.saving': 'Saving...',
+        'interview.saved_time_ago': 'Saved {{minutes}} minutes ago',
+        'interview.save_draft': 'Save Draft',
+        'interview.category_personal_info': 'Personal Information',
+        'interview.category_income_sources': 'Income Sources',
+        'interview.category_deductions': 'Deductions',
+        'interview.category_property_assets': 'Property & Assets',
+        'interview.category_special_situations': 'Special Situations'
+      };
+      return translations[key] || key;
+    },
+    i18n: {
+      language: 'en'
+    }
+  })
+}));
+
 // Mock dependencies
 jest.mock('../../services/api', () => ({
   api: {

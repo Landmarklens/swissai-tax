@@ -2,7 +2,8 @@
 API endpoints for multi-canton tax filing management
 """
 
-from typing import List
+from typing import List, Optional
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
@@ -31,12 +32,12 @@ class CreateSecondaryFilingsRequest(BaseModel):
 
 class FilingResponse(BaseModel):
     id: str
-    user_id: str
+    user_id: UUID
     tax_year: int
     canton: str
     name: str
     is_primary: bool
-    parent_filing_id: str = None
+    parent_filing_id: Optional[str] = None
     status: str
     completion_percentage: int
     language: str

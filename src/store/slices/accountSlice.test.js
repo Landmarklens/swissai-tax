@@ -16,7 +16,7 @@ const API_URL = config.API_BASE_URL;
 
 describe('accountSlice', () => {
   let store;
-  const mockUser = { access_token: 'test-token' };
+  const mockUser = { id: 1, email: 'test@example.com' };
 
   beforeEach(() => {
     store = configureStore({
@@ -26,6 +26,7 @@ describe('accountSlice', () => {
     });
     jest.clearAllMocks();
     authService.getCurrentUser.mockReturnValue(mockUser);
+    authService.setCurrentUser.mockImplementation(() => {});
   });
 
   describe('initial state', () => {
@@ -35,7 +36,8 @@ describe('accountSlice', () => {
         isLoading: false,
         isSuccess: false,
         error: null,
-        data: null
+        data: null,
+        profile: null
       });
     });
   });
@@ -59,14 +61,14 @@ describe('accountSlice', () => {
 
       await store.dispatch(fetchUserProfile());
 
-      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/user/profile`, {
-        headers: { Authorization: 'Bearer test-token' }
-      });
+      // Cookie-based auth - no Authorization header
+      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/user/profile`);
 
       const state = store.getState().account;
       expect(state.isLoading).toBe(false);
       expect(state.isSuccess).toBe(true);
       expect(state.data).toEqual(mockProfile);
+      expect(authService.setCurrentUser).toHaveBeenCalledWith(mockProfile);
     });
 
     it('should handle fetchUserProfile.rejected', async () => {
@@ -97,10 +99,10 @@ describe('accountSlice', () => {
 
       await store.dispatch(editUserProfile(userData));
 
+      // Cookie-based auth - no Authorization header
       expect(axios.put).toHaveBeenCalledWith(
         `${API_URL}/api/user/profile`,
-        userData,
-        { headers: { Authorization: 'Bearer test-token' } }
+        userData
       );
 
       const state = store.getState().account;
@@ -149,12 +151,12 @@ describe('accountSlice', () => {
 
       await store.dispatch(updateProfileAvatar(mockFile));
 
+      // Cookie-based auth - only Content-Type header for multipart
       expect(axios.put).toHaveBeenCalledWith(
         `${API_URL}/api/user/profile/avatar`,
         expect.any(FormData),
         {
           headers: {
-            Authorization: 'Bearer test-token',
             'Content-Type': 'multipart/form-data'
           }
         }

@@ -1,7 +1,7 @@
 """add_user_sessions_table
 
 Revision ID: 20251010_sessions
-Revises: b67837f77083
+Revises: 20251008_file_url
 Create Date: 2025-10-10 10:00:00.000000
 
 This migration creates the user_sessions table for session management.
@@ -16,7 +16,7 @@ import uuid
 
 # revision identifiers, used by Alembic.
 revision: str = '20251010_sessions'
-down_revision: Union[str, Sequence[str], None] = 'b67837f77083'
+down_revision: Union[str, Sequence[str], None] = '20251008_file_url'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

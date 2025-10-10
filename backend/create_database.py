@@ -8,11 +8,14 @@ from psycopg2 import sql
 
 
 def create_database():
-    # Connection parameters
-    host = os.getenv('DATABASE_HOST', 'webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com')
-    port = int(os.getenv('DATABASE_PORT', 5432))
-    user = os.getenv('DATABASE_USER', 'webscrapinguser')
+    # Connection parameters - loaded from Parameter Store via environment variables
+    host = os.getenv('DATABASE_HOST')
+    port = int(os.getenv('DATABASE_PORT', '5432'))
+    user = os.getenv('DATABASE_USER')
     password = os.getenv('DATABASE_PASSWORD')
+
+    if not all([host, user, password]):
+        raise ValueError("Missing required database environment variables: DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD")
 
     # First connect to the default postgres database
     try:

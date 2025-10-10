@@ -34,6 +34,7 @@ const StatusPage = () => {
   const [incidents, setIncidents] = useState([]);
   const [uptime, setUptime] = useState({});
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     // Scroll to top element if available
@@ -58,6 +59,14 @@ const StatusPage = () => {
       topRef.current.scrollIntoView({ behavior: 'instant', block: 'start' });
     }
   }, [loading]);
+
+  // Update current time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchStatusData = async () => {
     try {
@@ -148,7 +157,7 @@ const StatusPage = () => {
   const activeIncidents = incidents.filter(i => i.status !== 'resolved');
 
   // Format current time in Switzerland timezone
-  const switzerlandTime = new Date().toLocaleString('en-US', {
+  const switzerlandTime = currentTime.toLocaleString('en-US', {
     timeZone: 'Europe/Zurich',
     year: 'numeric',
     month: 'long',

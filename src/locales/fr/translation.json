@@ -2005,11 +2005,11 @@
   "security": {
     "meta": {
       "title": "Sécurité et Protection des Données | SwissAI Tax",
-      "description": "Découvrez comment SwissAI Tax protège vos données avec le cryptage AES-256, l'authentification à deux facteurs, la conformité RGPD et la sécurité de niveau suisse."
+      "description": "Toutes les données stockées en Suisse avec cryptage AES-256, authentification à deux facteurs, conformité RGPD et sécurité de niveau suisse."
     },
     "hero": {
       "title": "Votre sécurité est notre priorité",
-      "subtitle": "Sécurité et protection des données de niveau suisse pour vos informations fiscales",
+      "subtitle": "Toutes les données stockées en Suisse avec cryptage de niveau militaire et sécurité de niveau suisse",
       "cta_enable_2fa": "Activer l'authentification à deux facteurs",
       "cta_privacy_policy": "Politique de confidentialité"
     },
@@ -2017,9 +2017,9 @@
       "title": "Fonctionnalités de sécurité",
       "subtitle": "Protection de niveau entreprise pour vos données sensibles",
       "encryption": {
-        "title": "Cryptage de bout en bout",
-        "description": "Toutes les données sensibles sont protégées par un cryptage AES-256 au repos et en transit",
-        "details": "Nous utilisons le cryptage AES-256 standard de l'industrie (chiffrement Fernet) pour protéger vos informations fiscales sensibles. Les clés de cryptage sont stockées en toute sécurité dans AWS Secrets Manager avec prise en charge de la rotation automatique. Vos données sont cryptées avant d'être stockées dans notre base de données et restent cryptées pendant la transmission via HTTPS. Ce cryptage de niveau militaire garantit que même si les données sont interceptées, elles ne peuvent pas être lues sans les clés de déchiffrement appropriées."
+        "title": "Stockage de données suisse & cryptage",
+        "description": "Toutes les données sont stockées en Suisse et protégées par un cryptage AES-256 au repos et en transit",
+        "details": "Vos données fiscales sont stockées exclusivement en Suisse et protégées par le cryptage AES-256 standard de l'industrie (chiffrement Fernet). Toutes les données restent sur des serveurs suisses avec des clés de cryptage stockées en toute sécurité dans AWS Secrets Manager avec prise en charge de la rotation automatique. Vos données sont cryptées avant d'être stockées dans notre base de données suisse et restent cryptées pendant la transmission via HTTPS. Ce cryptage de niveau militaire garantit que même si les données sont interceptées, elles ne peuvent pas être lues sans les clés de déchiffrement appropriées. En stockant toutes les données en Suisse, nous garantissons la conformité aux lois suisses sur la protection des données et maintenons vos informations sous juridiction suisse."
       },
       "2fa": {
         "title": "Authentification à deux facteurs",
@@ -2063,8 +2063,12 @@
     "faq": {
       "title": "FAQ Sécurité",
       "q1": {
+        "question": "Où sont stockées mes données?",
+        "answer": "Toutes vos données sont stockées exclusivement en Suisse sur des serveurs suisses. Nous ne transférons ni ne stockons aucune de vos informations fiscales en dehors de la Suisse. Cela garantit que vos données restent sous juridiction suisse et soumises aux lois strictes suisses sur la protection des données, vous offrant le plus haut niveau de confidentialité et de sécurité."
+      },
+      "q1a": {
         "question": "Comment mes données fiscales sont-elles cryptées?",
-        "answer": "Toutes les données sensibles sont cryptées à l'aide du cryptage AES-256 au repos et en transit. Les clés de cryptage sont stockées en toute sécurité dans AWS Secrets Manager avec prise en charge de la rotation automatique."
+        "answer": "Toutes les données sensibles sont cryptées à l'aide du cryptage AES-256 de niveau militaire au repos et en transit. Les clés de cryptage sont stockées en toute sécurité dans AWS Secrets Manager avec prise en charge de la rotation automatique. Vos données sont cryptées sur des serveurs suisses avant leur stockage."
       },
       "q2": {
         "question": "Le personnel de SwissAI peut-il accéder à mes données?",

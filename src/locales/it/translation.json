@@ -2050,11 +2050,11 @@
   "security": {
     "meta": {
       "title": "Sicurezza e Protezione dei Dati | SwissAI Tax",
-      "description": "Scopri come SwissAI Tax protegge i tuoi dati con crittografia AES-256, autenticazione a due fattori, conformità GDPR e sicurezza di livello svizzero."
+      "description": "Tutti i dati archiviati in Svizzera con crittografia AES-256, autenticazione a due fattori, conformità GDPR e sicurezza di livello svizzero."
     },
     "hero": {
       "title": "La tua sicurezza è la nostra priorità",
-      "subtitle": "Sicurezza e protezione dei dati di livello svizzero per le tue informazioni fiscali",
+      "subtitle": "Tutti i dati archiviati in Svizzera con crittografia di livello militare e sicurezza di livello svizzero",
       "cta_enable_2fa": "Attiva l'autenticazione a due fattori",
       "cta_privacy_policy": "Informativa sulla privacy"
     },
@@ -2062,9 +2062,9 @@
       "title": "Funzionalità di sicurezza",
       "subtitle": "Protezione di livello aziendale per i tuoi dati sensibili",
       "encryption": {
-        "title": "Crittografia end-to-end",
-        "description": "Tutti i dati sensibili sono protetti con crittografia AES-256 a riposo e in transito",
-        "details": "Utilizziamo la crittografia AES-256 standard del settore (cifrario Fernet) per proteggere le tue informazioni fiscali sensibili. Le chiavi di crittografia sono archiviate in modo sicuro in AWS Secrets Manager con supporto per la rotazione automatica. I tuoi dati vengono crittografati prima di essere archiviati nel nostro database e rimangono crittografati durante la trasmissione tramite HTTPS. Questa crittografia di livello militare garantisce che anche se i dati vengono intercettati, non possono essere letti senza le chiavi di decrittografia appropriate."
+        "title": "Archiviazione dati svizzera & crittografia",
+        "description": "Tutti i dati sono archiviati in Svizzera e protetti con crittografia AES-256 a riposo e in transito",
+        "details": "I tuoi dati fiscali sono archiviati esclusivamente in Svizzera e protetti con la crittografia AES-256 standard del settore (cifrario Fernet). Tutti i dati rimangono su server svizzeri con chiavi di crittografia archiviate in modo sicuro in AWS Secrets Manager con supporto per la rotazione automatica. I tuoi dati vengono crittografati prima di essere archiviati nel nostro database svizzero e rimangono crittografati durante la trasmissione tramite HTTPS. Questa crittografia di livello militare garantisce che anche se i dati vengono intercettati, non possono essere letti senza le chiavi di decrittografia appropriate. Archiviando tutti i dati in Svizzera, garantiamo la conformità alle leggi svizzere sulla protezione dei dati e manteniamo le tue informazioni sotto la giurisdizione svizzera."
       },
       "2fa": {
         "title": "Autenticazione a due fattori",
@@ -2108,8 +2108,12 @@
     "faq": {
       "title": "FAQ sulla sicurezza",
       "q1": {
+        "question": "Dove sono archiviati i miei dati?",
+        "answer": "Tutti i tuoi dati sono archiviati esclusivamente in Svizzera su server svizzeri. Non trasferiamo né archiviamo alcuna delle tue informazioni fiscali al di fuori della Svizzera. Ciò garantisce che i tuoi dati rimangano sotto la giurisdizione svizzera e soggetti alle rigorose leggi svizzere sulla protezione dei dati, offrendoti il massimo livello di privacy e sicurezza."
+      },
+      "q1a": {
         "question": "Come vengono crittografati i miei dati fiscali?",
-        "answer": "Tutti i dati sensibili sono crittografati utilizzando la crittografia AES-256 sia a riposo che in transito. Le chiavi di crittografia sono archiviate in modo sicuro in AWS Secrets Manager con supporto per la rotazione automatica."
+        "answer": "Tutti i dati sensibili sono crittografati utilizzando la crittografia AES-256 di livello militare sia a riposo che in transito. Le chiavi di crittografia sono archiviate in modo sicuro in AWS Secrets Manager con supporto per la rotazione automatica. I tuoi dati vengono crittografati su server svizzeri prima dell'archiviazione."
       },
       "q2": {
         "question": "Il personale di SwissAI può accedere ai miei dati?",

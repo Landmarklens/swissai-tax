@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const faqItems = [
   { questionKey: 'security.faq.q1.question', answerKey: 'security.faq.q1.answer' },
+  { questionKey: 'security.faq.q1a.question', answerKey: 'security.faq.q1a.answer' },
   { questionKey: 'security.faq.q2.question', answerKey: 'security.faq.q2.answer' },
   { questionKey: 'security.faq.q3.question', answerKey: 'security.faq.q3.answer' },
   { questionKey: 'security.faq.q4.question', answerKey: 'security.faq.q4.answer' },

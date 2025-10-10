@@ -2346,11 +2346,11 @@
   "security": {
     "meta": {
       "title": "Sicherheit & Datenschutz | SwissAI Tax",
-      "description": "Erfahren Sie, wie SwissAI Tax Ihre Daten mit AES-256-Verschlüsselung, 2FA, DSGVO-Konformität und Sicherheit nach Schweizer Standard schützt."
+      "description": "Alle Daten werden in der Schweiz gespeichert mit AES-256-Verschlüsselung, 2FA, DSGVO-Konformität und Sicherheit nach Schweizer Standard."
     },
     "hero": {
       "title": "Ihre Sicherheit ist unsere Priorität",
-      "subtitle": "Sicherheit und Datenschutz nach Schweizer Standard für Ihre Steuerinformationen",
+      "subtitle": "Alle Daten werden in der Schweiz gespeichert mit militärischer Verschlüsselung und Sicherheit nach Schweizer Standard",
       "cta_enable_2fa": "Zwei-Faktor-Authentifizierung aktivieren",
       "cta_privacy_policy": "Datenschutzrichtlinie"
     },
@@ -2358,9 +2358,9 @@
       "title": "Sicherheitsfunktionen",
       "subtitle": "Schutz auf Unternehmensniveau für Ihre sensiblen Daten",
       "encryption": {
-        "title": "Ende-zu-Ende-Verschlüsselung",
-        "description": "Alle sensiblen Daten sind mit AES-256-Verschlüsselung im Ruhezustand und während der Übertragung geschützt",
-        "details": "Wir verwenden die branchenübliche AES-256-Verschlüsselung (Fernet-Chiffre) zum Schutz Ihrer sensiblen Steuerinformationen. Verschlüsselungsschlüssel werden sicher im AWS Secrets Manager mit automatischer Rotationsunterstützung gespeichert. Ihre Daten werden verschlüsselt, bevor sie in unserer Datenbank gespeichert werden, und bleiben während der Übertragung über HTTPS verschlüsselt. Diese militärische Verschlüsselung gewährleistet, dass selbst wenn Daten abgefangen werden, sie ohne die entsprechenden Entschlüsselungsschlüssel nicht gelesen werden können."
+        "title": "Schweizer Datenspeicherung & Verschlüsselung",
+        "description": "Alle Daten werden in der Schweiz gespeichert und mit AES-256-Verschlüsselung im Ruhezustand und während der Übertragung geschützt",
+        "details": "Ihre Steuerdaten werden ausschliesslich in der Schweiz gespeichert und mit der branchenüblichen AES-256-Verschlüsselung (Fernet-Chiffre) geschützt. Alle Daten verbleiben auf Schweizer Servern, wobei Verschlüsselungsschlüssel sicher im AWS Secrets Manager mit automatischer Rotationsunterstützung gespeichert werden. Ihre Daten werden verschlüsselt, bevor sie in unserer Schweizer Datenbank gespeichert werden, und bleiben während der Übertragung über HTTPS verschlüsselt. Diese militärische Verschlüsselung gewährleistet, dass selbst wenn Daten abgefangen werden, sie ohne die entsprechenden Entschlüsselungsschlüssel nicht gelesen werden können. Durch die Speicherung aller Daten in der Schweiz stellen wir die Einhaltung der Schweizer Datenschutzgesetze sicher und halten Ihre Informationen unter Schweizer Rechtsprechung."
       },
       "2fa": {
         "title": "Zwei-Faktor-Authentifizierung",
@@ -2404,8 +2404,12 @@
     "faq": {
       "title": "Sicherheits-FAQ",
       "q1": {
+        "question": "Wo werden meine Daten gespeichert?",
+        "answer": "Alle Ihre Daten werden ausschliesslich in der Schweiz auf Schweizer Servern gespeichert. Wir übertragen oder speichern keine Ihrer Steuerinformationen ausserhalb der Schweiz. Dies stellt sicher, dass Ihre Daten unter Schweizer Rechtsprechung verbleiben und den strengen Schweizer Datenschutzgesetzen unterliegen, was Ihnen das höchste Mass an Privatsphäre und Sicherheit bietet."
+      },
+      "q1a": {
         "question": "Wie werden meine Steuerdaten verschlüsselt?",
-        "answer": "Alle sensiblen Daten werden sowohl im Ruhezustand als auch während der Übertragung mit AES-256-Verschlüsselung verschlüsselt. Verschlüsselungsschlüssel werden sicher im AWS Secrets Manager mit automatischer Rotationsunterstützung gespeichert."
+        "answer": "Alle sensiblen Daten werden sowohl im Ruhezustand als auch während der Übertragung mit AES-256-Verschlüsselung auf militärischem Niveau verschlüsselt. Verschlüsselungsschlüssel werden sicher im AWS Secrets Manager mit automatischer Rotationsunterstützung gespeichert. Ihre Daten werden auf Schweizer Servern verschlüsselt, bevor sie gespeichert werden."
       },
       "q2": {
         "question": "Können SwissAI-Mitarbeiter auf meine Daten zugreifen?",

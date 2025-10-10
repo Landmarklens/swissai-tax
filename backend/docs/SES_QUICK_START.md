@@ -8,7 +8,7 @@
 
 ### **Step 1: Open AWS SES Console**
 ```
-https://console.aws.amazon.com/ses/home?region=eu-central-1
+https://console.aws.amazon.com/ses/home?region=us-east-1
 ```
 
 ### **Step 2: Verify Sender Email**
@@ -81,7 +81,7 @@ cd backend/scripts
 ```bash
 aws ses get-identity-verification-attributes \
   --identities noreply@swissai.tax contact@swissai.tax \
-  --region eu-central-1
+  --region us-east-1
 ```
 
 ### **Send Test Email**
@@ -91,7 +91,7 @@ aws ses send-email \
   --to contact@swissai.tax \
   --subject "Test" \
   --text "Test message" \
-  --region eu-central-1
+  --region us-east-1
 ```
 
 ### **Run Backend Test**

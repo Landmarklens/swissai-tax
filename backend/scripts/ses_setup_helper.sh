@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 DOMAIN="swissai.tax"
 SENDER_EMAIL="noreply@swissai.tax"
 CONTACT_EMAIL="contact@swissai.tax"
-AWS_REGION="eu-central-1"
+AWS_REGION="us-east-1"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}AWS SES Setup Helper for SwissAI Tax${NC}"

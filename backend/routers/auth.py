@@ -113,15 +113,6 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
 
 @router.get("/login/google/callback", include_in_schema=False)
 async def callback(request: Request, response: Response, db=Depends(get_db)):
-    import logging
-    logger = logging.getLogger(__name__)
-
-    logger.info("="*80)
-    logger.info("[GOOGLE OAUTH] Callback received")
-    logger.info(f"[GOOGLE OAUTH] Request host: {request.headers.get('host')}")
-    logger.info(f"[GOOGLE OAUTH] Request origin: {request.headers.get('origin')}")
-    logger.info(f"[GOOGLE OAUTH] Request referer: {request.headers.get('referer')}")
-
     # Get fresh flow instance
     oauth_flow = get_flow()
     oauth_flow.fetch_token(code=request.query_params["code"])
@@ -129,8 +120,6 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
 
     user_info_service = build('oauth2', 'v2', credentials=credentials)
     user_info = user_info_service.userinfo().get().execute()
-
-    logger.info(f"[GOOGLE OAUTH] User email: {user_info.get('email')}")
 
     encoded_state = request.query_params.get('state', '')
 
@@ -150,12 +139,10 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
         if not hmac.compare_digest(received_signature, expected_signature):
             raise HTTPException(status_code=400, detail="Invalid state parameter")
 
-    except Exception as e:
-        logger.error(f"[GOOGLE OAUTH] State validation failed: {e}")
+    except Exception:
         raise HTTPException(status_code=400, detail="Invalid state parameter")
 
     redirect_url = state_data.pop('redirect_url')
-    logger.info(f"[GOOGLE OAUTH] Redirect URL: {redirect_url}")
 
     email = user_info['email']
     user_info['provider_id'] = user_info.pop('id')
@@ -164,9 +151,7 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
     user_info['last_name'] = user_info.pop('family_name')
 
     user = get_user_by_email(db, email)
-    is_new_user = False
     if user is None or not user.is_active:
-        # Create user_data safely without direct unpacking
         user_data = {
             "email": email,
             "provider_id": user_info.get("provider_id"),
@@ -176,20 +161,14 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
             "preferred_language": state_data.get("language", "en")
         }
         user = await create_social_user(db, user_data, "google")
-        is_new_user = True
-        logger.info(f"[GOOGLE OAUTH] Created new user: {email}")
-    else:
-        logger.info(f"[GOOGLE OAUTH] Existing user: {email}")
 
     # Generate session ID for tracking
     import uuid
     session_id = str(uuid.uuid4())
-    logger.info(f"[GOOGLE OAUTH] Generated session_id: {session_id}")
 
     # Generate JWT token with session ID
     token_response = sign_jwt(user_info["email"], session_id=session_id)
     access_token = token_response["access_token"]
-    logger.info(f"[GOOGLE OAUTH] Generated JWT token (length: {len(access_token)})")
 
     # Create session record
     from services.session_service import session_service
@@ -201,9 +180,8 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
             request=request,
             is_current=True
         )
-        logger.info(f"[GOOGLE OAUTH] Session record created in database")
-    except Exception as e:
-        logger.warning(f"[GOOGLE OAUTH] Failed to create session record: {e}")
+    except Exception:
+        pass  # Session creation is optional
 
     # Log successful login with session ID
     try:
@@ -214,28 +192,21 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
             request.headers.get("user-agent", ""),
             session_id=session_id
         )
-    except Exception as e:
-        logger.warning(f"[GOOGLE OAUTH] Failed to log audit event: {e}")
+    except Exception:
+        pass  # Audit logging is optional
 
     # Check if user requires subscription
     requires_subscription = should_require_subscription(user, db)
-    logger.info(f"[GOOGLE OAUTH] Requires subscription: {requires_subscription}")
 
     # Build redirect URL (frontend will use cookie for auth, not URL params)
     final_redirect_url = redirect_url
-
-    # Add subscription flag if needed - GoogleCallback will handle the redirect
     if requires_subscription:
         final_redirect_url = f"{final_redirect_url}?requires_subscription=true"
 
-    logger.info(f"[GOOGLE OAUTH] Final redirect URL: {final_redirect_url}")
-
     # Get cookie settings based on request
     cookie_settings = get_cookie_settings_for_request(request)
-    logger.info(f"[GOOGLE OAUTH] Cookie settings: {cookie_settings}")
 
-    # Create redirect response with proper status code
-    # Use 302 (Found) instead of 307 - browsers handle cookies better with 302
+    # Create redirect response with 302 status code
     redirect_response = RedirectResponse(url=final_redirect_url, status_code=302)
 
     # Set httpOnly cookie on the redirect response
@@ -244,10 +215,6 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
         value=f"Bearer {access_token}",
         **cookie_settings
     )
-
-    logger.info(f"[GOOGLE OAUTH] Cookie 'access_token' set with value 'Bearer {access_token[:20]}...'")
-    logger.info(f"[GOOGLE OAUTH] Returning 302 redirect to: {final_redirect_url}")
-    logger.info("="*80)
 
     return redirect_response
 
@@ -281,10 +248,6 @@ async def user_login(
                 # Generate temporary token for 2FA verification
                 temp_token_response = sign_temp_2fa_jwt(db_user.email, str(db_user.id))
 
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.info(f"[LOGIN] 2FA required for user: {db_user.email}")
-
                 # Return 2FA challenge (no session token yet)
                 return {
                     "success": True,
@@ -312,9 +275,8 @@ async def user_login(
                     request=request,
                     is_current=True
                 )
-            except Exception as e:
-                import logging
-                logging.getLogger(__name__).warning(f"Failed to create session record: {e}")
+            except Exception:
+                pass  # Session creation is optional
 
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)
@@ -328,27 +290,18 @@ async def user_login(
                     request.headers.get("user-agent", ""),
                     session_id=session_id
                 )
-            except Exception as e:
-                import logging
-                logging.getLogger(__name__).warning(f"Failed to log audit event: {e}")
+            except Exception:
+                pass  # Audit logging is optional
 
             # Set httpOnly cookie (new secure method)
             if use_cookie:
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.info(f"[LOGIN DEBUG] Setting cookie for user: {db_user.email}")
-
                 cookie_settings = get_cookie_settings_for_request(request)
-                logger.info(f"[LOGIN DEBUG] Cookie settings: {cookie_settings}")
-                logger.info(f"[LOGIN DEBUG] Token length: {len(access_token)}")
 
                 response.set_cookie(
                     key="access_token",
                     value=f"Bearer {access_token}",
                     **cookie_settings
                 )
-
-                logger.info(f"[LOGIN DEBUG] Cookie set successfully")
 
                 # Return user data without token (cookie handles auth)
                 return {

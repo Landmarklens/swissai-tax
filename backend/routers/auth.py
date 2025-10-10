@@ -112,7 +112,7 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
 
 
 @router.get("/login/google/callback", include_in_schema=False)
-async def callback(request: Request, db=Depends(get_db)):
+async def callback(request: Request, response: Response, db=Depends(get_db)):
     # Get fresh flow instance
     oauth_flow = get_flow()
     oauth_flow.fetch_token(code=request.query_params["code"])
@@ -122,26 +122,26 @@ async def callback(request: Request, db=Depends(get_db)):
     user_info = user_info_service.userinfo().get().execute()
 
     encoded_state = request.query_params.get('state', '')
-    
+
     # Validate the state parameter
     try:
         decoded_state = json.loads(base64.urlsafe_b64decode(encoded_state).decode())
         state_data = decoded_state.get('data', {})
         received_signature = decoded_state.get('signature', '')
-        
+
         # Verify signature
         expected_signature = hmac.new(
             settings.SECRET_KEY.encode(),
             json.dumps(state_data).encode(),
             hashlib.sha256
         ).hexdigest()
-        
+
         if not hmac.compare_digest(received_signature, expected_signature):
             raise HTTPException(status_code=400, detail="Invalid state parameter")
-            
+
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid state parameter")
-    
+
     redirect_url = state_data.pop('redirect_url')
     email = user_info['email']
     user_info['provider_id'] = user_info.pop('id')
@@ -164,24 +164,59 @@ async def callback(request: Request, db=Depends(get_db)):
         user = await create_social_user(db, user_data, "google")
         is_new_user = True
 
-    token = sign_jwt(user_info["email"])
+    # Generate session ID for tracking
+    import uuid
+    session_id = str(uuid.uuid4())
 
-    if isinstance(token, dict):
-        token_query = urlencode(token)
-    else:
-        token_query = urlencode({"access_token": token})
+    # Generate JWT token with session ID
+    token_response = sign_jwt(user_info["email"], session_id=session_id)
+    access_token = token_response["access_token"]
 
-    # Check if user requires subscription using helper function
+    # Create session record
+    from services.session_service import session_service
+    try:
+        session_service.create_session(
+            db=db,
+            user_id=str(user.id),
+            session_id=session_id,
+            request=request,
+            is_current=True
+        )
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to create session record: {e}")
+
+    # Set httpOnly cookie for secure authentication
+    response.set_cookie(
+        key="access_token",
+        value=f"Bearer {access_token}",
+        **COOKIE_SETTINGS
+    )
+
+    # Log successful login with session ID
+    try:
+        log_login_success(
+            db,
+            user.id,
+            request.client.host if request.client else "unknown",
+            request.headers.get("user-agent", ""),
+            session_id=session_id
+        )
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to log audit event: {e}")
+
+    # Check if user requires subscription
     requires_subscription = should_require_subscription(user, db)
 
-    # Build redirect URL with tokens
-    redirect_url = f"{redirect_url}?{token_query}"
+    # Build redirect URL (frontend will use cookie for auth, not URL params)
+    final_redirect_url = redirect_url
 
     # Add subscription flag if needed - GoogleCallback will handle the redirect
     if requires_subscription:
-        redirect_url = f"{redirect_url}&requires_subscription=true"
+        final_redirect_url = f"{final_redirect_url}?requires_subscription=true"
 
-    return RedirectResponse(url=redirect_url)
+    return RedirectResponse(url=final_redirect_url)
 
 
 @router.post("/login")
@@ -233,6 +268,20 @@ async def user_login(
             # Generate JWT token with session ID
             token_response = sign_jwt(user.email, session_id=session_id)
             access_token = token_response["access_token"]
+
+            # Create session record
+            from services.session_service import session_service
+            try:
+                session_service.create_session(
+                    db=db,
+                    user_id=str(db_user.id),
+                    session_id=session_id,
+                    request=request,
+                    is_current=True
+                )
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Failed to create session record: {e}")
 
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)
@@ -365,6 +414,19 @@ async def verify_two_factor_login(
         token_response = sign_jwt(db_user.email, session_id=session_id)
         access_token = token_response["access_token"]
 
+        # Create session record
+        from services.session_service import session_service
+        try:
+            session_service.create_session(
+                db=db,
+                user_id=str(db_user.id),
+                session_id=session_id,
+                request=request,
+                is_current=True
+            )
+        except Exception as e:
+            logger.warning(f"Failed to create session record: {e}")
+
         # Check if user requires subscription
         requires_subscription = should_require_subscription(db_user, db)
 
@@ -432,11 +494,42 @@ async def verify_two_factor_login(
 
 
 @router.post("/logout")
-async def logout(response: Response):
+async def logout(
+    request: Request,
+    response: Response,
+    current_user: User = Depends(get_current_user),
+    db=Depends(get_db)
+):
     """
-    Logout endpoint - clears the authentication cookie
+    Logout endpoint - clears cookie and revokes session
     """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    # Get session_id from request
+    from core.security import get_session_id_from_request
+    session_id = get_session_id_from_request(request)
+
+    # Revoke session in database
+    if session_id:
+        from services.session_service import session_service
+        session_service.revoke_session_by_session_id(db, session_id)
+
+        # Log logout
+        try:
+            log_logout(
+                db,
+                current_user.id,
+                request.client.host if request.client else "unknown",
+                request.headers.get("user-agent", ""),
+                session_id=session_id
+            )
+        except Exception as e:
+            logger.warning(f"Failed to log logout: {e}")
+
+    # Clear cookie
     response.delete_cookie(key="access_token")
+
     return {"success": True, "message": "Logged out successfully"}
 
 

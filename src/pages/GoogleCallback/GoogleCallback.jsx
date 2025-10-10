@@ -17,11 +17,9 @@ const GoogleCallback = () => {
 
   useEffect(() => {
     const handleCallback = async () => {
-
-      const access_token = searchParams.get('access_token');
-      const token_type = searchParams.get('token_type');
       const error = searchParams.get('error');
       const error_description = searchParams.get('error_description');
+      const requires_subscription = searchParams.get('requires_subscription');
 
       if (error) {
         console.error('[GoogleCallback] OAuth error:', error, error_description);
@@ -29,35 +27,25 @@ const GoogleCallback = () => {
         return;
       }
 
-      if (access_token && token_type) {
-        // LEGACY: Store tokens temporarily for backward compatibility
-        // TODO: Backend should use httpOnly cookies instead of URL params
-        localStorage.setItem('user', JSON.stringify({ access_token, token_type }));
+      // Backend now sets httpOnly cookie with auth token
+      // Fetch user profile to populate Redux store and localStorage
+      console.log('[GoogleCallback] Fetching user profile...');
+      const profileAction = await dispatch(fetchUserProfile());
 
-        // Decode token to get user type
-        let decoded;
-        let userType;
-        try {
-          decoded = jwtDecode(access_token);
-          userType = decoded?.user_type;
-        } catch (decodeError) {
-          console.error('[GoogleCallback] Failed to decode token:', decodeError);
-        }
+      if (fetchUserProfile.fulfilled.match(profileAction)) {
+        console.log('[GoogleCallback] Login successful, redirecting to filings');
 
-        // Fetch user profile - this will store proper user data
-        const profileAction = await dispatch(fetchUserProfile());
-
-        if (fetchUserProfile.fulfilled.match(profileAction)) {
-          // Redirect to filings page for SwissTax app
-          console.log('[GoogleCallback] Login successful, redirecting to filings');
-          navigate('/filings');
+        // Check if subscription is required
+        if (requires_subscription === 'true') {
+          // Redirect to subscription page
+          navigate('/billing');
         } else {
-          // If profile fetch failed, still redirect to a safe page
-          console.error('[GoogleCallback] Profile fetch failed:', profileAction);
-          navigate('/');
+          // Redirect to filings page
+          navigate('/filings');
         }
       } else {
-        // No tokens found, redirect to home
+        // If profile fetch failed, redirect to home
+        console.error('[GoogleCallback] Profile fetch failed:', profileAction);
         navigate('/');
       }
     };

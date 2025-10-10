@@ -13,12 +13,23 @@ const AppRoutesWithLanguage = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // Disable automatic scroll restoration
+    if (window.history.scrollRestoration) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     // Scroll to top immediately and forcefully
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    // Backup scroll after a short delay to ensure it happens after render
-    setTimeout(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Backup scroll using requestAnimationFrame to ensure it happens after render
+    requestAnimationFrame(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+
     // Update document title - this will be replaced with SEOHelmet later
     document.title = t("filing.swisstax");
   }, [location.pathname, t]);

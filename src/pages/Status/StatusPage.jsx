@@ -35,14 +35,22 @@ const StatusPage = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
-    // Force scroll to top on mount and after content loads
-    const scrollToTop = () => {
+    // Immediately scroll to top
+    if (window.history.scrollRestoration) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    // Multiple attempts to ensure scroll happens
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Use requestAnimationFrame for after-render scroll
+    requestAnimationFrame(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-    };
-
-    scrollToTop();
+    });
 
     fetchStatusData();
     // Refresh every 60 seconds
@@ -53,9 +61,11 @@ const StatusPage = () => {
   // Also scroll to top after loading completes
   useEffect(() => {
     if (!loading) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      });
     }
   }, [loading]);
 

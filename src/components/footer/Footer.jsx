@@ -227,7 +227,7 @@ const Footer = () => {
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: { xs: 'center', sm: 'space-between' },
               alignItems: 'center'
             }}>
             <Box
@@ -250,7 +250,8 @@ const Footer = () => {
                 color: theme.palette.primary,
                 rowGap: 0.5,
                 columnGap: 2,
-                flexWrap: 'wrap'
+                flexWrap: 'wrap',
+                justifyContent: { xs: 'center', sm: 'flex-end' }
               }}>
               <StyledLink to={`/${currentLang}/status`} style={{ fontSize: '12px' }}>
                 {t('Status')}

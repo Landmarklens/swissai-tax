@@ -9,13 +9,17 @@ from config import settings
 
 ALGORITHM = "HS256"
 
-# Cookie settings for production - sliding window session
+# Cookie settings - adjusted based on environment
+# For localhost: secure=False, samesite="lax" (works across ports)
+# For production: secure=True, samesite="none", domain=".swissai.tax" (works across subdomains)
+_is_localhost = "localhost" in settings.API_URL or "127.0.0.1" in settings.API_URL
+
 COOKIE_SETTINGS = {
     "httponly": True,
-    "secure": settings.ENVIRONMENT == "production",  # HTTPS only in production
-    "samesite": "none" if settings.ENVIRONMENT == "production" else "lax",  # "none" required for cross-domain
+    "secure": not _is_localhost,  # False for localhost (HTTP), True for production (HTTPS)
+    "samesite": "lax" if _is_localhost else "none",  # "lax" for localhost, "none" for cross-domain
     "max_age": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Match JWT expiry (6 hours)
-    # Don't set domain - let browser handle it automatically for cross-domain (api.swissai.tax)
+    "domain": None if _is_localhost else ".swissai.tax",  # No domain for localhost, .swissai.tax for production
 }
 
 

@@ -141,6 +141,7 @@ const Footer = () => {
                       justifyContent: 'center'
                     }}>
                       <StyledLink to="/features">{t('Features')}</StyledLink>
+                      <StyledLink to="/security">{t('Security')}</StyledLink>
                       <StyledLink to="/contact-us">{t('Contact Us')}</StyledLink>
                       <StyledLink to="/plan">{t('Pricing')}</StyledLink>
                       <StyledLink to="/blog-list">{t('Blog')}</StyledLink>
@@ -249,6 +250,9 @@ const Footer = () => {
                 columnGap: 2,
                 flexWrap: 'wrap'
               }}>
+              <StyledLink to="/security" style={{ fontSize: '12px' }}>
+                {t('Security')}
+              </StyledLink>
               <StyledLink to="/privacy-policy" style={{ fontSize: '12px' }}>
                 {t('Privacy Policy')}
               </StyledLink>

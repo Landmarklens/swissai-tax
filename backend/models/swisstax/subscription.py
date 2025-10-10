@@ -3,7 +3,7 @@ Subscription and Payment models for SwissAI Tax
 Maps to swisstax.subscriptions and swisstax.payments tables
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
                         Numeric, String, text)
@@ -50,6 +50,23 @@ class Subscription(SwissTaxBase, Base):
     cancel_at_period_end = Column(Boolean, default=False)
     canceled_at = Column(DateTime(timezone=True))
 
+    # Commitment tracking (for 5-year price lock plans)
+    plan_commitment_years = Column(Integer, default=1)
+    commitment_start_date = Column(DateTime(timezone=True))
+    commitment_end_date = Column(DateTime(timezone=True))
+
+    # Trial period tracking
+    trial_start = Column(DateTime(timezone=True))
+    trial_end = Column(DateTime(timezone=True))
+
+    # Subscription management
+    pause_requested = Column(Boolean, default=False)
+    pause_reason = Column(String(500))
+    switch_requested = Column(Boolean, default=False)
+    switch_to_plan = Column(String(50))
+    cancellation_requested_at = Column(DateTime(timezone=True))
+    cancellation_reason = Column(String(500))
+
     # Pricing
     price_chf = Column(Numeric(10, 2), nullable=False)
     currency = Column(String(3), default='CHF')
@@ -74,6 +91,25 @@ class Subscription(SwissTaxBase, Base):
     def is_canceled(self):
         """Check if subscription is canceled"""
         return self.status == 'canceled' or self.cancel_at_period_end
+
+    @property
+    def is_in_trial(self):
+        """Check if subscription is in trial period"""
+        if not self.trial_end:
+            return False
+        now = datetime.now(timezone.utc).replace(tzinfo=None)  # Remove timezone for comparison
+        trial_end = self.trial_end.replace(tzinfo=None) if self.trial_end.tzinfo else self.trial_end
+        return now < trial_end
+
+    @property
+    def is_committed(self):
+        """Check if subscription has multi-year commitment"""
+        return self.plan_commitment_years > 1
+
+    @property
+    def can_cancel_now(self):
+        """Check if subscription can be canceled immediately (only during trial)"""
+        return self.is_in_trial
 
 
 class Payment(SwissTaxBase, Base):

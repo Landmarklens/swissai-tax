@@ -10,11 +10,17 @@ logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
-    # Stripe settings (optional for SwissAI Tax)
+    # Stripe settings
     STRIPE_WEBHOOK_SECRET: str | None = Field(None)
     STRIPE_SECRET_KEY: str | None = Field(None)
     STRIPE_PUBLISHABLE_KEY: str | None = Field(None)
-    STRIPE_MONTHLY: str | None = Field(None)
+
+    # Stripe Price IDs for subscription plans
+    STRIPE_PRICE_ANNUAL_FLEX: str | None = Field(None)  # CHF 129/year - cancel anytime
+    STRIPE_PRICE_5_YEAR_LOCK: str | None = Field(None)  # CHF 89/year - 5 year commitment
+
+    # Feature flag for Stripe subscriptions
+    ENABLE_SUBSCRIPTIONS: bool = Field(False)
 
     # JWT settings
     # SECURITY: SECRET_KEY must be loaded from Parameter Store (/swissai/api/jwt-secret)
@@ -46,7 +52,6 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = Field("production")  # Added for CORS debug middleware
     FRONTEND_URL: str = Field("https://swissai.tax")
     API_URL: str = Field("https://api.swissai.tax")
-    ENFORCE_SUBSCRIPTIONS: bool = Field(False)  # Whether to enforce subscription requirements
 
     # SENDGRID
     SENDGRID_API_KEY: str | None = Field(None)
@@ -122,6 +127,12 @@ class Settings(BaseSettings):
                 '/swissai-tax/google/client-id': 'GOOGLE_CLIENT_ID',
                 '/swissai-tax/google/client-secret': 'GOOGLE_CLIENT_SECRET',
                 '/swissai-tax/google/redirect-uri': 'GOOGLE_REDIRECT_URI',
+                '/swissai-tax/stripe/secret-key': 'STRIPE_SECRET_KEY',
+                '/swissai-tax/stripe/publishable-key': 'STRIPE_PUBLISHABLE_KEY',
+                '/swissai-tax/stripe/webhook-secret': 'STRIPE_WEBHOOK_SECRET',
+                '/swissai-tax/stripe/price-annual-flex': 'STRIPE_PRICE_ANNUAL_FLEX',
+                '/swissai-tax/stripe/price-5-year-lock': 'STRIPE_PRICE_5_YEAR_LOCK',
+                '/swissai-tax/features/enable-subscriptions': 'ENABLE_SUBSCRIPTIONS',
                 '/homeai/prod/AWS_REGION': 'AWS_REGION',
                 '/homeai/prod/AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
                 '/homeai/prod/AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
@@ -172,22 +183,24 @@ class Settings(BaseSettings):
             raise ValueError("SECRET_KEY must be at least 32 characters for security")
 
     @property
-    def STRIPE_PRODUCT_IDS(self) -> dict[str, str]:
-        from schemas.subscription import SubscriptionPlan
-
-        return {
-            SubscriptionPlan.FREE: self.STRIPE_MONTHLY,
-            SubscriptionPlan.MONTHLY: self.STRIPE_MONTHLY,
-        }
+    def STRIPE_PLAN_PRICES(self) -> dict[str, str]:
+        """Map of plan types to Stripe Price IDs"""
+        prices = {}
+        if self.STRIPE_PRICE_ANNUAL_FLEX:
+            prices['annual_flex'] = self.STRIPE_PRICE_ANNUAL_FLEX
+        if self.STRIPE_PRICE_5_YEAR_LOCK:
+            prices['5_year_lock'] = self.STRIPE_PRICE_5_YEAR_LOCK
+        return prices
 
     @property
-    def STRIPE_PRODUCT_PLANS(self):
-        from schemas.subscription import SubscriptionPlan
-
-        plans = {
-            self.STRIPE_MONTHLY: SubscriptionPlan.MONTHLY,
-        }
-        return plans
+    def STRIPE_PRICE_TO_PLAN(self) -> dict[str, str]:
+        """Reverse mapping: Stripe Price ID to plan type"""
+        mapping = {}
+        if self.STRIPE_PRICE_ANNUAL_FLEX:
+            mapping[self.STRIPE_PRICE_ANNUAL_FLEX] = 'annual_flex'
+        if self.STRIPE_PRICE_5_YEAR_LOCK:
+            mapping[self.STRIPE_PRICE_5_YEAR_LOCK] = '5_year_lock'
+        return mapping
 
 
 settings = Settings()

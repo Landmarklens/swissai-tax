@@ -23,8 +23,19 @@ class PaymentIntentResponse(BaseModel):
 
 class SubscriptionCreate(BaseModel):
     """Create a new subscription"""
-    plan_type: str = Field(..., pattern="^(basic|standard|premium)$")
-    payment_method_id: str
+    plan_type: str = Field(..., pattern="^(annual_flex|5_year_lock)$")
+    payment_method_id: Optional[str] = None  # Can be None if using SetupIntent
+
+
+class SetupIntentCreate(BaseModel):
+    """Create a SetupIntent for collecting payment method"""
+    plan_type: str = Field(..., pattern="^(annual_flex|5_year_lock)$")
+
+
+class SetupIntentResponse(BaseModel):
+    """SetupIntent response"""
+    client_secret: str
+    setup_intent_id: str
 
 
 class SubscriptionResponse(BaseModel):
@@ -40,16 +51,42 @@ class SubscriptionResponse(BaseModel):
     stripe_customer_id: Optional[str] = None
     stripe_subscription_id: Optional[str] = None
 
+    # Trial information
+    trial_start: Optional[datetime] = None
+    trial_end: Optional[datetime] = None
+    is_in_trial: bool = False
+
+    # Commitment information
+    plan_commitment_years: int = 1
+    commitment_start_date: Optional[datetime] = None
+    commitment_end_date: Optional[datetime] = None
+    is_committed: bool = False
+    can_cancel_now: bool = True
+
+    # Management requests
+    pause_requested: bool = False
+    switch_requested: bool = False
+    cancellation_requested_at: Optional[datetime] = None
+
     class Config:
         from_attributes = True
 
 
 class SubscriptionCancel(BaseModel):
     """Cancel subscription request"""
-    immediately: bool = Field(
-        False,
-        description="If true, cancel immediately. If false, cancel at period end"
-    )
+    reason: Optional[str] = Field(None, description="Cancellation reason")
+
+
+class SubscriptionSwitch(BaseModel):
+    """Switch subscription plan"""
+    new_plan_type: str = Field(..., pattern="^(annual_flex|5_year_lock)$")
+    reason: Optional[str] = Field(None, description="Reason for switching")
+
+
+class SubscriptionPause(BaseModel):
+    """Pause subscription request"""
+    reason: str = Field(..., description="Reason for pausing")
+    resume_date: Optional[datetime] = Field(None, description="When to resume (None = indefinite)")
 
 
 class PaymentResponse(BaseModel):

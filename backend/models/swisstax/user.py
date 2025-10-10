@@ -67,6 +67,9 @@ class User(SwissTaxBase, Base):
     is_grandfathered = Column(Boolean, server_default='false', nullable=False)  # Bypass subscription
     is_test_user = Column(Boolean, server_default='false', nullable=False)  # Test account
 
+    # Stripe Integration
+    stripe_customer_id = Column(String(255), unique=True, nullable=True)  # Stripe Customer ID
+
     # Two-Factor Authentication Fields
     two_factor_enabled = Column(Boolean, server_default='false', nullable=False)
     two_factor_secret = Column(String(255), nullable=True)  # Encrypted TOTP secret

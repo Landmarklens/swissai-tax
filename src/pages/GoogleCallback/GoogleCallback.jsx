@@ -30,7 +30,8 @@ const GoogleCallback = () => {
       }
 
       if (access_token && token_type) {
-        // Store the tokens
+        // LEGACY: Store tokens temporarily for backward compatibility
+        // TODO: Backend should use httpOnly cookies instead of URL params
         localStorage.setItem('user', JSON.stringify({ access_token, token_type }));
 
         // Decode token to get user type
@@ -43,7 +44,7 @@ const GoogleCallback = () => {
           console.error('[GoogleCallback] Failed to decode token:', decodeError);
         }
 
-        // Fetch user profile
+        // Fetch user profile - this will store proper user data
         const profileAction = await dispatch(fetchUserProfile());
 
         if (fetchUserProfile.fulfilled.match(profileAction)) {

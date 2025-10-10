@@ -28,6 +28,7 @@ import Policy from '../pages/Policy/Policy';
 import Chat from '../pages/Chat/Chat';
 import TenantSelection from '../pages/TenantSelection';
 import DocumentSigningPage from '../components/pages/DocumentSigningPage';
+import GoogleCallback from '../pages/GoogleCallback/GoogleCallback';
 import { useTranslation } from 'react-i18next';
 
 const ProtectedRoute = ({ children }) => {
@@ -44,7 +45,8 @@ const ProtectedRoute = ({ children }) => {
 
 export const NAVIGATION_ROUTE = [
   { path: '/', element: <Home /> },
-  { path: '/google-redirect', element: <Home /> },
+  { path: '/google-redirect', element: <GoogleCallback /> },
+  { path: '/auth/google/callback', element: <GoogleCallback /> },
   { path: '/how-it-works', element: <HowItWorks /> },
   {
     path: '/tenants',

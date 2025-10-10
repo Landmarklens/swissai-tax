@@ -24,29 +24,98 @@ describe('authService', () => {
 
   describe('initiateGoogleLogin', () => {
     it('should initiate Google login with userType', async () => {
-      const mockResponse = { data: { authUrl: 'https://google.com/auth' } };
+      const mockResponse = { data: { authorization_url: 'https://google.com/auth' } };
       axios.get.mockResolvedValue(mockResponse);
 
-      const result = await authService.initiateGoogleLogin('customer');
+      const result = await authService.initiateGoogleLogin('tenant');
 
       // The redirect_url is dynamically calculated based on window.location
       // So we just check that the call was made with the correct user_type
-      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/auth/login/google`,
+      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/auth/login/google`,
         expect.objectContaining({
           params: expect.objectContaining({
-            user_type: 'customer',
+            user_type: 'tenant',
             redirect_url: expect.any(String) // Accept any redirect URL since it's dynamically calculated
           })
         })
       );
-      expect(result).toEqual({ authUrl: 'https://google.com/auth' });
+      expect(result).toEqual({ authorization_url: 'https://google.com/auth' });
+    });
+
+    it('should use environment variable for redirect URL when set', async () => {
+      const originalEnv = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
+      process.env.REACT_APP_GOOGLE_REDIRECT_URL = 'https://swissai.tax/en/google-redirect';
+
+      const mockResponse = { data: { authorization_url: 'https://google.com/auth' } };
+      axios.get.mockResolvedValue(mockResponse);
+
+      await authService.initiateGoogleLogin('tenant');
+
+      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/auth/login/google`,
+        expect.objectContaining({
+          params: expect.objectContaining({
+            redirect_url: 'https://swissai.tax/en/google-redirect'
+          })
+        })
+      );
+
+      // Restore original value
+      process.env.REACT_APP_GOOGLE_REDIRECT_URL = originalEnv;
+    });
+
+    it('should construct redirect URL for localhost', async () => {
+      const originalHostname = window.location.hostname;
+      const originalPathname = window.location.pathname;
+
+      // Mock localhost
+      delete window.location;
+      window.location = {
+        hostname: 'localhost',
+        origin: 'http://localhost:3000',
+        pathname: '/en/home'
+      };
+
+      const mockResponse = { data: { authorization_url: 'https://google.com/auth' } };
+      axios.get.mockResolvedValue(mockResponse);
+
+      await authService.initiateGoogleLogin('tenant');
+
+      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/auth/login/google`,
+        expect.objectContaining({
+          params: expect.objectContaining({
+            redirect_url: 'http://localhost:3000/en/google-redirect'
+          })
+        })
+      );
+
+      // Restore
+      window.location.hostname = originalHostname;
+      window.location.pathname = originalPathname;
     });
 
     it('should handle error in initiateGoogleLogin', async () => {
       const error = { response: { data: { message: 'Error' } } };
       axios.get.mockRejectedValue(error);
 
-      await expect(authService.initiateGoogleLogin('customer')).rejects.toEqual({ message: 'Error' });
+      await expect(authService.initiateGoogleLogin('tenant')).rejects.toEqual({ message: 'Error' });
+    });
+
+    it('should log error when authorization_url is missing', async () => {
+      const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const mockResponse = { data: {} }; // Missing authorization_url
+      axios.get.mockResolvedValue(mockResponse);
+
+      await authService.initiateGoogleLogin('tenant');
+
+      expect(consoleError).toHaveBeenCalledWith(
+        '[AuthService] Invalid response - missing authorization_url'
+      );
+      expect(consoleError).toHaveBeenCalledWith(
+        '[AuthService] Full response:',
+        mockResponse
+      );
+
+      consoleError.mockRestore();
     });
   });
 
@@ -62,7 +131,7 @@ describe('authService', () => {
 
       const result = await authService.handleGoogleLoginCallback();
 
-      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/auth/login/google/callback`);
+      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/auth/login/google/callback`);
       expect(localStorage.getItem('user')).toEqual(JSON.stringify(mockResponse.data));
       expect(result).toEqual(mockResponse.data);
     });
@@ -80,7 +149,7 @@ describe('authService', () => {
 
       const result = await authService.googleSignIn('idToken123');
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/google`, { idToken: 'idToken123' });
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/google`, { idToken: 'idToken123' });
       expect(localStorage.getItem('user')).toEqual(JSON.stringify(mockResponse.data));
       expect(result).toEqual(mockResponse.data);
     });
@@ -90,7 +159,7 @@ describe('authService', () => {
     it('should login with email and password', async () => {
       const mockResponse = {
         data: {
-          access_token: 'token123',
+          success: true,
           user: { id: 1, email: 'test@example.com' }
         }
       };
@@ -98,11 +167,11 @@ describe('authService', () => {
 
       const result = await authService.login('test@example.com', 'password123');
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/login`, {
-        email: 'test@example.com',
-        password: 'password123'
-      });
-      expect(localStorage.getItem('user')).toEqual(JSON.stringify(mockResponse.data));
+      expect(axios.post).toHaveBeenCalledWith(
+        `${API_URL}/api/auth/login?use_cookie=true`,
+        { email: 'test@example.com', password: 'password123' },
+        { withCredentials: true }
+      );
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -118,13 +187,13 @@ describe('authService', () => {
   describe('register', () => {
     it('should register a new user', async () => {
       const userData = { email: 'test@example.com', password: 'password123', name: 'Test User' };
-      const mockResponse = { data: { message: 'Registration successful' } };
+      const mockResponse = { data: { id: 1, email: 'test@example.com' } };
       axios.post.mockResolvedValue(mockResponse);
 
       const result = await authService.register(userData);
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/register`, userData);
-      expect(result).toEqual({ message: 'Registration successful' });
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/register`, userData);
+      expect(result).toEqual({ id: 1, email: 'test@example.com' });
     });
   });
 
@@ -147,12 +216,14 @@ describe('authService', () => {
   });
 
   describe('logout', () => {
-    it('should clear localStorage on logout', () => {
+    it('should call logout endpoint and clear localStorage', async () => {
+      axios.post.mockResolvedValue({ data: { success: true } });
       localStorage.setItem('user', JSON.stringify({ id: 1 }));
       localStorage.setItem('otherData', 'test');
 
-      authService.logout();
+      await authService.logout();
 
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/logout`, {}, { withCredentials: true });
       expect(localStorage.getItem('user')).toBeNull();
       expect(localStorage.getItem('otherData')).toBeNull();
     });
@@ -175,8 +246,8 @@ describe('authService', () => {
   });
 
   describe('isAuthenticated', () => {
-    it('should return true if user has access_token', () => {
-      localStorage.setItem('user', JSON.stringify({ access_token: createValidToken() }));
+    it('should return true if user has email', () => {
+      localStorage.setItem('user', JSON.stringify({ email: 'test@example.com' }));
 
       expect(authService.isAuthenticated()).toBe(true);
     });
@@ -185,7 +256,7 @@ describe('authService', () => {
       expect(authService.isAuthenticated()).toBe(false);
     });
 
-    it('should return false if user has no access_token', () => {
+    it('should return false if user has no email', () => {
       localStorage.setItem('user', JSON.stringify({ id: 1 }));
 
       expect(authService.isAuthenticated()).toBe(false);
@@ -215,10 +286,10 @@ describe('authService', () => {
 
       const result = await authService.refreshToken();
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/refresh-token`, {
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/refresh-token`, {
         refresh_token: 'refresh_token'
       });
-      
+
       const updatedUser = JSON.parse(localStorage.getItem('user'));
       expect(updatedUser.access_token).toBe('new_token');
       expect(result).toEqual({ access_token: 'new_token' });
@@ -232,7 +303,7 @@ describe('authService', () => {
 
       const result = await authService.requestResetPassword('test@example.com');
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/reset-password/request`, {
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/reset-password/request`, {
         email: 'test@example.com'
       });
       expect(result).toEqual({ message: 'Reset link sent', status: 200 });
@@ -251,7 +322,7 @@ describe('authService', () => {
 
       const result = await authService.verifyResetPassword('token123');
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/reset-password/verify`, {
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/reset-password/verify`, {
         token: 'token123'
       });
       expect(result).toEqual({ valid: true, status: 200 });
@@ -273,7 +344,7 @@ describe('authService', () => {
         new_password: 'newPassword123'
       });
 
-      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/auth/reset-password/confirm`, {
+      expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/reset-password/confirm`, {
         token: 'token123',
         new_password: 'newPassword123'
       });
@@ -283,6 +354,28 @@ describe('authService', () => {
     it('should return error if no token or password provided', async () => {
       const result = await authService.confirmResetPassword({ token: 'token123' });
       expect(result).toEqual({ error: 'Token and new password are required to password reset.' });
+    });
+  });
+
+  describe('checkAuth', () => {
+    it('should verify authentication status with backend', async () => {
+      const mockResponse = { data: { id: 1, email: 'test@example.com' } };
+      axios.get.mockResolvedValue(mockResponse);
+
+      const result = await authService.checkAuth();
+
+      expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/user/me`, { withCredentials: true });
+      expect(result).toBe(true);
+      expect(authService.getCurrentUser()).toEqual({ id: 1, email: 'test@example.com' });
+    });
+
+    it('should return false on error', async () => {
+      axios.get.mockRejectedValue(new Error('Unauthorized'));
+
+      const result = await authService.checkAuth();
+
+      expect(result).toBe(false);
+      expect(authService.getCurrentUser()).toBeNull();
     });
   });
 });

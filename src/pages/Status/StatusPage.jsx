@@ -165,8 +165,7 @@ const StatusPage = () => {
         title={t('status.meta.title', 'System Status - SwissAI Tax')}
         description={t('status.meta.description', 'Real-time status and uptime information for SwissAI Tax services')}
       />
-      <div ref={topRef} style={{ position: 'absolute', top: 0 }} />
-      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Box ref={topRef} sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Header />
 
         <Box component="main" sx={{ flex: 1 }}>

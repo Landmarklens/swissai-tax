@@ -14,9 +14,10 @@ ALGORITHM = "HS256"
 COOKIE_SETTINGS = {
     "httponly": True,
     "secure": True,  # HTTPS only (overridden for localhost)
-    "samesite": "none",  # Cross-domain (overridden to "lax" for localhost)
+    "samesite": "lax",  # Lax is better for same-site subdomains (overridden for localhost)
     "max_age": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Match JWT expiry (6 hours)
     "domain": ".swissai.tax",  # Allow across subdomains (cleared for localhost)
+    "path": "/"  # Ensure cookie is available on all paths
 }
 
 

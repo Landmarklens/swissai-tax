@@ -209,40 +209,19 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
     if requires_subscription:
         final_redirect_url = f"{final_redirect_url}?requires_subscription=true"
 
-    # Return HTML page that sets cookie and redirects
-    # This ensures cookie is set before redirect completes
-    from fastapi.responses import HTMLResponse
+    # Create redirect response with proper status code
+    # Use 302 (Found) instead of 307 - browsers handle cookies better with 302
+    redirect_response = RedirectResponse(url=final_redirect_url, status_code=302)
 
+    # Set httpOnly cookie on the redirect response
     cookie_settings = get_cookie_settings_for_request(request)
-
-    # Build Set-Cookie header manually for the HTML response
-    html_content = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Completing Sign In...</title>
-        <meta http-equiv="refresh" content="0;url={final_redirect_url}">
-    </head>
-    <body>
-        <p>Completing sign in...</p>
-        <script>
-            // Redirect after a brief delay to ensure cookie is set
-            setTimeout(function() {{
-                window.location.href = "{final_redirect_url}";
-            }}, 100);
-        </script>
-    </body>
-    </html>
-    """
-
-    response = HTMLResponse(content=html_content)
-    response.set_cookie(
+    redirect_response.set_cookie(
         key="access_token",
         value=f"Bearer {access_token}",
         **cookie_settings
     )
 
-    return response
+    return redirect_response
 
 
 @router.post("/login")

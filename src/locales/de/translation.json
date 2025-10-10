@@ -2342,5 +2342,94 @@
       "email": "E-Mail",
       "address": "Adresse"
     }
+  },
+  "security": {
+    "meta": {
+      "title": "Sicherheit & Datenschutz | SwissAI Tax",
+      "description": "Erfahren Sie, wie SwissAI Tax Ihre Daten mit AES-256-Verschlüsselung, 2FA, DSGVO-Konformität und Sicherheit nach Schweizer Standard schützt."
+    },
+    "hero": {
+      "title": "Ihre Sicherheit ist unsere Priorität",
+      "subtitle": "Sicherheit und Datenschutz nach Schweizer Standard für Ihre Steuerinformationen",
+      "cta_enable_2fa": "Zwei-Faktor-Authentifizierung aktivieren",
+      "cta_privacy_policy": "Datenschutzrichtlinie"
+    },
+    "features": {
+      "title": "Sicherheitsfunktionen",
+      "subtitle": "Schutz auf Unternehmensniveau für Ihre sensiblen Daten",
+      "encryption": {
+        "title": "Ende-zu-Ende-Verschlüsselung",
+        "description": "Alle sensiblen Daten sind mit AES-256-Verschlüsselung im Ruhezustand und während der Übertragung geschützt"
+      },
+      "2fa": {
+        "title": "Zwei-Faktor-Authentifizierung",
+        "description": "Fügen Sie eine zusätzliche Sicherheitsebene mit TOTP-Authentifizierungs-Apps und Backup-Codes hinzu"
+      },
+      "sessions": {
+        "title": "Sitzungsverwaltung",
+        "description": "Überwachen und widerrufen Sie den Zugriff von jedem Gerät mit unseren Sitzungsverwaltungstools"
+      },
+      "audit": {
+        "title": "Vollständiger Audit-Trail",
+        "description": "Verfolgen Sie jede Aktion auf Ihrem Konto mit detaillierten, durchsuchbaren Aktivitätsprotokollen"
+      },
+      "gdpr": {
+        "title": "DSGVO-konform",
+        "description": "Vollständige Datenportabilität, Recht auf Löschung und transparente Datenpraktiken"
+      },
+      "auth": {
+        "title": "Sichere Authentifizierung",
+        "description": "HttpOnly-Cookies, PBKDF2-Passwort-Hashing und sichere Sitzungsverwaltung"
+      },
+      "aws": {
+        "title": "AWS-Infrastruktur",
+        "description": "Sicherheit auf Unternehmensniveau mit AWS Secrets Manager und verschlüsselter Speicherung"
+      },
+      "headers": {
+        "title": "Sicherheits-Header",
+        "description": "HSTS, CSP, XSS-Schutz und Clickjacking-Prävention aktiviert"
+      }
+    },
+    "compliance": {
+      "title": "Compliance & Standards",
+      "swiss_privacy": "Schweizer Datenschutzgesetze",
+      "gdpr": "EU-DSGVO-konform",
+      "owasp": "OWASP Best Practices",
+      "aws": "AWS-Sicherheitsstandards"
+    },
+    "faq": {
+      "title": "Sicherheits-FAQ",
+      "q1": {
+        "question": "Wie werden meine Steuerdaten verschlüsselt?",
+        "answer": "Alle sensiblen Daten werden sowohl im Ruhezustand als auch während der Übertragung mit AES-256-Verschlüsselung verschlüsselt. Verschlüsselungsschlüssel werden sicher im AWS Secrets Manager mit automatischer Rotationsunterstützung gespeichert."
+      },
+      "q2": {
+        "question": "Können SwissAI-Mitarbeiter auf meine Daten zugreifen?",
+        "answer": "Ihre sensiblen Steuerdaten sind Ende-zu-Ende verschlüsselt. Unsere Mitarbeiter können verschlüsselte Felder ohne entsprechende Autorisierung nicht einsehen, und alle Zugriffe werden in unserem Audit-Trail protokolliert."
+      },
+      "q3": {
+        "question": "Wie lange bewahren Sie meine Daten auf?",
+        "answer": "Wir bewahren Ihre Daten wie vom Schweizer Steuerrecht vorgeschrieben auf. Sie können jederzeit über Ihre Kontoeinstellungen die Löschung beantragen, die innerhalb von 30 Tagen bearbeitet wird."
+      },
+      "q4": {
+        "question": "Was passiert, wenn ich mein 2FA-Gerät verliere?",
+        "answer": "Sie können Ihre Backup-Wiederherstellungscodes verwenden, um wieder Zugriff zu erhalten. Wenn Sie sowohl Ihr Gerät als auch die Backup-Codes verloren haben, wenden Sie sich an unser Support-Team zur Kontowiederherstellung."
+      },
+      "q5": {
+        "question": "Wie lade ich meine Daten herunter?",
+        "answer": "Navigieren Sie zu Einstellungen > Datenschutz und klicken Sie auf 'Meine Daten exportieren'. Sie erhalten innerhalb von 24 Stunden einen vollständigen JSON-Export aller Ihrer Kontodaten."
+      },
+      "q6": {
+        "question": "Wie werden Passwörter gespeichert?",
+        "answer": "Passwörter werden mit PBKDF2-HMAC-SHA256 mit 100.000 Iterationen und einem eindeutigen 32-Byte-Salt gehasht. Dieses Einweg-Hashing bedeutet, dass selbst wir Ihr Passwort nicht wiederherstellen können."
+      }
+    },
+    "actions": {
+      "title": "Übernehmen Sie die Kontrolle über Ihre Sicherheit",
+      "manage_settings": "Sicherheitseinstellungen verwalten",
+      "privacy_policy": "Datenschutzrichtlinie lesen",
+      "enable_2fa": "Zwei-Faktor-Authentifizierung aktivieren",
+      "contact": "Fragen? Kontaktieren Sie security@swissai.tax"
+    }
   }
 }

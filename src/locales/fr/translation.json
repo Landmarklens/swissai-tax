@@ -2001,5 +2001,94 @@
   "results.back_to_documents": "Retour aux documents",
   "results.print_summary": "Imprimer le résumé",
   "results.download_pdf": "Télécharger le PDF",
-  "results.submit_tax_filing": "Soumettre la déclaration fiscale"
+  "results.submit_tax_filing": "Soumettre la déclaration fiscale",
+  "security": {
+    "meta": {
+      "title": "Sécurité et Protection des Données | SwissAI Tax",
+      "description": "Découvrez comment SwissAI Tax protège vos données avec le cryptage AES-256, l'authentification à deux facteurs, la conformité RGPD et la sécurité de niveau suisse."
+    },
+    "hero": {
+      "title": "Votre sécurité est notre priorité",
+      "subtitle": "Sécurité et protection des données de niveau suisse pour vos informations fiscales",
+      "cta_enable_2fa": "Activer l'authentification à deux facteurs",
+      "cta_privacy_policy": "Politique de confidentialité"
+    },
+    "features": {
+      "title": "Fonctionnalités de sécurité",
+      "subtitle": "Protection de niveau entreprise pour vos données sensibles",
+      "encryption": {
+        "title": "Cryptage de bout en bout",
+        "description": "Toutes les données sensibles sont protégées par un cryptage AES-256 au repos et en transit"
+      },
+      "2fa": {
+        "title": "Authentification à deux facteurs",
+        "description": "Ajoutez une couche de sécurité supplémentaire avec les applications d'authentification TOTP et les codes de secours"
+      },
+      "sessions": {
+        "title": "Gestion des sessions",
+        "description": "Surveillez et révoquez l'accès depuis n'importe quel appareil avec nos outils de gestion de session"
+      },
+      "audit": {
+        "title": "Journal d'audit complet",
+        "description": "Suivez chaque action sur votre compte avec des journaux d'activité détaillés et consultables"
+      },
+      "gdpr": {
+        "title": "Conforme au RGPD",
+        "description": "Portabilité complète des données, droit à l'effacement et pratiques de données transparentes"
+      },
+      "auth": {
+        "title": "Authentification sécurisée",
+        "description": "Cookies HttpOnly, hachage de mots de passe PBKDF2 et gestion sécurisée des sessions"
+      },
+      "aws": {
+        "title": "Infrastructure AWS",
+        "description": "Sécurité de niveau entreprise avec AWS Secrets Manager et stockage crypté"
+      },
+      "headers": {
+        "title": "En-têtes de sécurité",
+        "description": "HSTS, CSP, protection XSS et prévention du détournement de clics activés"
+      }
+    },
+    "compliance": {
+      "title": "Conformité et normes",
+      "swiss_privacy": "Lois suisses sur la protection des données",
+      "gdpr": "Conforme au RGPD de l'UE",
+      "owasp": "Meilleures pratiques OWASP",
+      "aws": "Normes de sécurité AWS"
+    },
+    "faq": {
+      "title": "FAQ Sécurité",
+      "q1": {
+        "question": "Comment mes données fiscales sont-elles cryptées?",
+        "answer": "Toutes les données sensibles sont cryptées à l'aide du cryptage AES-256 au repos et en transit. Les clés de cryptage sont stockées en toute sécurité dans AWS Secrets Manager avec prise en charge de la rotation automatique."
+      },
+      "q2": {
+        "question": "Le personnel de SwissAI peut-il accéder à mes données?",
+        "answer": "Vos données fiscales sensibles sont cryptées de bout en bout. Notre personnel ne peut pas consulter les champs cryptés sans autorisation appropriée, et tous les accès sont enregistrés dans notre journal d'audit."
+      },
+      "q3": {
+        "question": "Combien de temps conservez-vous mes données?",
+        "answer": "Nous conservons vos données conformément à la législation fiscale suisse. Vous pouvez demander la suppression à tout moment via les paramètres de votre compte, qui sera traitée dans les 30 jours."
+      },
+      "q4": {
+        "question": "Que se passe-t-il si je perds mon appareil d'authentification à deux facteurs?",
+        "answer": "Vous pouvez utiliser vos codes de récupération de secours pour retrouver l'accès. Si vous avez perdu à la fois votre appareil et vos codes de secours, contactez notre équipe d'assistance pour la récupération du compte."
+      },
+      "q5": {
+        "question": "Comment télécharger mes données?",
+        "answer": "Accédez à Paramètres > Confidentialité des données et cliquez sur 'Exporter mes données'. Vous recevrez une exportation JSON complète de toutes vos données de compte dans les 24 heures."
+      },
+      "q6": {
+        "question": "Comment les mots de passe sont-ils stockés?",
+        "answer": "Les mots de passe sont hachés en utilisant PBKDF2-HMAC-SHA256 avec 100 000 itérations et un sel unique de 32 octets. Ce hachage unidirectionnel signifie que même nous ne pouvons pas récupérer votre mot de passe."
+      }
+    },
+    "actions": {
+      "title": "Prenez le contrôle de votre sécurité",
+      "manage_settings": "Gérer les paramètres de sécurité",
+      "privacy_policy": "Lire la politique de confidentialité",
+      "enable_2fa": "Activer l'authentification à deux facteurs",
+      "contact": "Des questions? Contactez security@swissai.tax"
+    }
+  }
 }

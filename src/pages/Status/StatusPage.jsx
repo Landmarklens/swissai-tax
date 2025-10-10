@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Container,
   Box,
@@ -27,6 +27,7 @@ import UptimeChart from './UptimeChart';
 
 const StatusPage = () => {
   const { t } = useTranslation();
+  const topRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [overallStatus, setOverallStatus] = useState('operational');
   const [services, setServices] = useState([]);
@@ -35,22 +36,15 @@ const StatusPage = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
-    // Immediately scroll to top
-    if (window.history.scrollRestoration) {
-      window.history.scrollRestoration = 'manual';
+    // Scroll to top element if available
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'instant', block: 'start' });
     }
 
-    // Multiple attempts to ensure scroll happens
+    // Fallback to window scroll
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-
-    // Use requestAnimationFrame for after-render scroll
-    requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    });
 
     fetchStatusData();
     // Refresh every 60 seconds
@@ -60,12 +54,8 @@ const StatusPage = () => {
 
   // Also scroll to top after loading completes
   useEffect(() => {
-    if (!loading) {
-      requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-      });
+    if (!loading && topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'instant', block: 'start' });
     }
   }, [loading]);
 
@@ -175,6 +165,7 @@ const StatusPage = () => {
         title={t('status.meta.title', 'System Status - SwissAI Tax')}
         description={t('status.meta.description', 'Real-time status and uptime information for SwissAI Tax services')}
       />
+      <div ref={topRef} style={{ position: 'absolute', top: 0 }} />
       <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Header />
 

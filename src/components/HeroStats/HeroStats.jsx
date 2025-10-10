@@ -119,6 +119,13 @@ const HeroStats = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchStats = async () => {
+    // Skip fetch if offline
+    if (!navigator.onLine) {
+      setLoading(false);
+      setRefreshing(false);
+      return;
+    }
+
     try {
       setRefreshing(true);
       const response = await fetch('https://api.homeai.ch/api/landlord-stats/', {
@@ -126,6 +133,7 @@ const HeroStats = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       });
 
       if (!response.ok) {
@@ -136,7 +144,10 @@ const HeroStats = () => {
       setStats(data);
       setError(null);
     } catch (err) {
-      console.error('[DEBUG] Error fetching landlord stats:', err);
+      // Only log if online (suppress offline errors)
+      if (navigator.onLine) {
+        console.error('[DEBUG] Error fetching landlord stats:', err);
+      }
       // Set fallback stats
       setStats({
         properties_managed: 847,
@@ -155,8 +166,13 @@ const HeroStats = () => {
 
   useEffect(() => {
     fetchStats();
-    // Refresh stats every 30 seconds
-    const interval = setInterval(fetchStats, 30000);
+    // Refresh stats every 30 seconds with network detection
+    const interval = setInterval(() => {
+      // Only fetch if online to prevent network errors
+      if (navigator.onLine) {
+        fetchStats();
+      }
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 

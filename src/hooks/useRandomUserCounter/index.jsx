@@ -16,8 +16,15 @@ export const useRandomUserCounter = () => {
     let isMounted = true;
 
     const fetchUserCount = async () => {
+      // Skip fetch if offline
+      if (!navigator.onLine) {
+        return;
+      }
+
       try {
-        const response = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.USER_COUNTER}`);
+        const response = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.USER_COUNTER}`, {
+          timeout: 10000, // 10 second timeout
+        });
         const count = response.data.user_count;
 
         if (typeof count === 'number' && isMounted) {
@@ -109,7 +116,8 @@ export const useRandomUserCounter = () => {
 
     // Set up polling every 60 seconds to reduce server load
     pollingIntervalRef.current = setInterval(() => {
-      if (isMounted && hasInitialized.current) {
+      // Only fetch if online to prevent network errors
+      if (isMounted && hasInitialized.current && navigator.onLine) {
         fetchUserCount();
       }
     }, 60000); // 60 seconds

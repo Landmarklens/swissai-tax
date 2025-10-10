@@ -16,8 +16,15 @@ export const useLandlordCounter = () => {
     let isMounted = true;
 
     const fetchLandlordStats = async () => {
+      // Skip fetch if offline
+      if (!navigator.onLine) {
+        return;
+      }
+
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/landlord-stats/`);
+        const response = await axios.get(`${API_BASE_URL}/api/landlord-stats/`, {
+          timeout: 10000, // 10 second timeout
+        });
         const count = response.data.active_landlords;
 
         if (typeof count === 'number' && isMounted) {
@@ -109,7 +116,8 @@ export const useLandlordCounter = () => {
 
     // Set up polling every 60 seconds to reduce server load
     pollingIntervalRef.current = setInterval(() => {
-      if (isMounted && hasInitialized.current) {
+      // Only fetch if online to prevent network errors
+      if (isMounted && hasInitialized.current && navigator.onLine) {
         fetchLandlordStats();
       }
     }, 60000); // 60 seconds

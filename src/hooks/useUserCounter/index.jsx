@@ -22,8 +22,15 @@ export const useUserCounter = () => {
 
   // Fetch count from API
   const fetchCount = useCallback(async () => {
+    // Skip fetch if offline
+    if (!navigator.onLine) {
+      return lastApiCountRef.current;
+    }
+
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/user-counter/`);
+      const response = await axios.get(`${API_BASE_URL}/api/user-counter/`, {
+        timeout: 10000, // 10 second timeout
+      });
       const newCount = response.data.user_count;
 
       lastApiCountRef.current = newCount;
@@ -35,7 +42,10 @@ export const useUserCounter = () => {
 
       return newCount;
     } catch (error) {
-      console.error('Error fetching user counter:', error);
+      // Only log if online (suppress offline errors)
+      if (navigator.onLine) {
+        console.error('Error fetching user counter:', error);
+      }
       // Fallback to simulated count if API fails
       return lastApiCountRef.current;
     }
@@ -77,9 +87,12 @@ export const useUserCounter = () => {
     // Initial fetch
     fetchCount();
 
-    // Set up polling
+    // Set up polling with network detection
     const pollInterval = setInterval(() => {
-      fetchCount();
+      // Only fetch if online to prevent network errors
+      if (navigator.onLine) {
+        fetchCount();
+      }
     }, 60000); // 60 seconds
 
     return () => clearInterval(pollInterval);

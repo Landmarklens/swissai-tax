@@ -72,6 +72,11 @@ export const useEmailMonitoring = (propertyId) => {
     }
 
     pollingIntervalRef.current = setInterval(async () => {
+      // Skip polling if offline
+      if (!navigator.onLine) {
+        return;
+      }
+
       try {
         const response = await fetch(`/api/properties/${config.propertyId}/check-test-email`, {
           method: 'POST',
@@ -82,16 +87,20 @@ export const useEmailMonitoring = (propertyId) => {
           body: JSON.stringify({
             managedEmail: config.managedEmail,
             verificationCode: config.verificationCode
-          })
+          }),
+          signal: AbortSignal.timeout(10000), // 10 second timeout
         });
 
         const data = await response.json();
-        
+
         if (data.emailReceived) {
           handleEmailReceived(data);
         }
       } catch (error) {
-        console.error('Polling error:', error);
+        // Only log if online (suppress offline errors)
+        if (navigator.onLine) {
+          console.error('Polling error:', error);
+        }
       }
     }, POLLING_INTERVAL);
   }, []);

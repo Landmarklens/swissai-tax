@@ -2063,11 +2063,13 @@
       "subtitle": "Protezione di livello aziendale per i tuoi dati sensibili",
       "encryption": {
         "title": "Crittografia end-to-end",
-        "description": "Tutti i dati sensibili sono protetti con crittografia AES-256 a riposo e in transito"
+        "description": "Tutti i dati sensibili sono protetti con crittografia AES-256 a riposo e in transito",
+        "details": "Utilizziamo la crittografia AES-256 standard del settore (cifrario Fernet) per proteggere le tue informazioni fiscali sensibili. Le chiavi di crittografia sono archiviate in modo sicuro in AWS Secrets Manager con supporto per la rotazione automatica. I tuoi dati vengono crittografati prima di essere archiviati nel nostro database e rimangono crittografati durante la trasmissione tramite HTTPS. Questa crittografia di livello militare garantisce che anche se i dati vengono intercettati, non possono essere letti senza le chiavi di decrittografia appropriate."
       },
       "2fa": {
         "title": "Autenticazione a due fattori",
-        "description": "Aggiungi un ulteriore livello di sicurezza con app di autenticazione TOTP e codici di backup"
+        "description": "Aggiungi un ulteriore livello di sicurezza con app di autenticazione TOTP e codici di backup",
+        "details": "L'autenticazione a due fattori (2FA) aggiunge un ulteriore livello di sicurezza al tuo account. Dopo aver abilitato la 2FA, avrai bisogno sia della tua password che di una password monouso basata sul tempo (TOTP) da un'app di autenticazione per accedere. Supportiamo app popolari come Google Authenticator, Authy e 1Password. Riceverai anche 10 codici di recupero di backup che possono essere utilizzati se perdi l'accesso al tuo dispositivo di autenticazione. Tutti i segreti 2FA sono crittografati nel nostro database."
       },
       "sessions": {
         "title": "Gestione delle sessioni",
@@ -2079,7 +2081,8 @@
       },
       "gdpr": {
         "title": "Conforme al GDPR",
-        "description": "Piena portabilità dei dati, diritto alla cancellazione e pratiche di dati trasparenti"
+        "description": "Piena portabilità dei dati, diritto alla cancellazione e pratiche di dati trasparenti",
+        "details": "Siamo pienamente conformi al Regolamento generale sulla protezione dei dati (GDPR) dell'UE e alle leggi svizzere sulla protezione dei dati. Hai il diritto di accedere, esportare ed eliminare i tuoi dati personali in qualsiasi momento. La nostra funzione di esportazione dati fornisce un'esportazione JSON completa di tutte le informazioni del tuo account entro 24 ore. Le richieste di cancellazione dei dati vengono elaborate entro 30 giorni. Manteniamo pratiche di dati trasparenti e raccogliamo solo i dati necessari per fornire i nostri servizi di dichiarazione fiscale. Puoi gestire tutte le tue impostazioni sulla privacy dal tuo pannello di controllo dell'account."
       },
       "auth": {
         "title": "Autenticazione sicura",
@@ -2091,7 +2094,8 @@
       },
       "headers": {
         "title": "Intestazioni di sicurezza",
-        "description": "HSTS, CSP, protezione XSS e prevenzione del clickjacking abilitati"
+        "description": "HSTS, CSP, protezione XSS e prevenzione del clickjacking abilitati",
+        "details": "La nostra applicazione implementa intestazioni di sicurezza HTTP complete per proteggere contro le vulnerabilità web comuni. Utilizziamo Strict-Transport-Security (HSTS) per imporre le connessioni HTTPS, Content-Security-Policy (CSP) per prevenire attacchi di cross-site scripting, X-Frame-Options per prevenire il clickjacking e X-Content-Type-Options per prevenire il MIME-sniffing. Queste intestazioni lavorano insieme per creare più livelli di difesa contro potenziali minacce alla sicurezza, garantendo che il tuo browser carichi solo contenuti affidabili dai nostri server."
       }
     },
     "compliance": {
@@ -2126,6 +2130,14 @@
       "q6": {
         "question": "Come vengono archiviate le password?",
         "answer": "Le password sono sottoposte a hash utilizzando PBKDF2-HMAC-SHA256 con 100.000 iterazioni e un salt univoco di 32 byte. Questo hashing unidirezionale significa che nemmeno noi possiamo recuperare la tua password."
+      },
+      "q7": {
+        "question": "I miei dati vengono sottoposti a backup in modo sicuro?",
+        "answer": "Sì, eseguiamo backup crittografati automatizzati di tutti i dati quotidianamente. I backup vengono archiviati in regioni AWS separate con gli stessi standard di crittografia dei dati di produzione. Testiamo regolarmente i nostri processi di ripristino dei backup per garantire che i dati possano essere recuperati in caso di guasto del sistema."
+      },
+      "q8": {
+        "question": "Eseguite audit di sicurezza?",
+        "answer": "Eseguiamo regolarmente audit di sicurezza interni e test di penetrazione per identificare e correggere le vulnerabilità. La nostra infrastruttura segue le migliori pratiche di sicurezza OWASP e gli standard di sicurezza AWS. Manteniamo anche registri di audit dettagliati di tutti gli accessi al sistema e delle attività degli utenti per scopi di monitoraggio della sicurezza e conformità."
       }
     },
     "actions": {

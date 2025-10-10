@@ -2018,11 +2018,13 @@
       "subtitle": "Protection de niveau entreprise pour vos données sensibles",
       "encryption": {
         "title": "Cryptage de bout en bout",
-        "description": "Toutes les données sensibles sont protégées par un cryptage AES-256 au repos et en transit"
+        "description": "Toutes les données sensibles sont protégées par un cryptage AES-256 au repos et en transit",
+        "details": "Nous utilisons le cryptage AES-256 standard de l'industrie (chiffrement Fernet) pour protéger vos informations fiscales sensibles. Les clés de cryptage sont stockées en toute sécurité dans AWS Secrets Manager avec prise en charge de la rotation automatique. Vos données sont cryptées avant d'être stockées dans notre base de données et restent cryptées pendant la transmission via HTTPS. Ce cryptage de niveau militaire garantit que même si les données sont interceptées, elles ne peuvent pas être lues sans les clés de déchiffrement appropriées."
       },
       "2fa": {
         "title": "Authentification à deux facteurs",
-        "description": "Ajoutez une couche de sécurité supplémentaire avec les applications d'authentification TOTP et les codes de secours"
+        "description": "Ajoutez une couche de sécurité supplémentaire avec les applications d'authentification TOTP et les codes de secours",
+        "details": "L'authentification à deux facteurs (2FA) ajoute une couche de sécurité supplémentaire à votre compte. Après avoir activé la 2FA, vous aurez besoin à la fois de votre mot de passe et d'un mot de passe à usage unique basé sur le temps (TOTP) d'une application d'authentification pour vous connecter. Nous prenons en charge les applications populaires comme Google Authenticator, Authy et 1Password. Vous recevrez également 10 codes de récupération de secours qui peuvent être utilisés si vous perdez l'accès à votre appareil d'authentification. Tous les secrets 2FA sont cryptés dans notre base de données."
       },
       "sessions": {
         "title": "Gestion des sessions",
@@ -2034,7 +2036,8 @@
       },
       "gdpr": {
         "title": "Conforme au RGPD",
-        "description": "Portabilité complète des données, droit à l'effacement et pratiques de données transparentes"
+        "description": "Portabilité complète des données, droit à l'effacement et pratiques de données transparentes",
+        "details": "Nous sommes pleinement conformes au Règlement général sur la protection des données (RGPD) de l'UE et aux lois suisses sur la protection des données. Vous avez le droit d'accéder, d'exporter et de supprimer vos données personnelles à tout moment. Notre fonction d'exportation de données fournit une exportation JSON complète de toutes vos informations de compte dans les 24 heures. Les demandes de suppression de données sont traitées dans les 30 jours. Nous maintenons des pratiques de données transparentes et ne collectons que les données nécessaires à la fourniture de nos services de déclaration fiscale. Vous pouvez gérer tous vos paramètres de confidentialité depuis votre tableau de bord."
       },
       "auth": {
         "title": "Authentification sécurisée",
@@ -2046,7 +2049,8 @@
       },
       "headers": {
         "title": "En-têtes de sécurité",
-        "description": "HSTS, CSP, protection XSS et prévention du détournement de clics activés"
+        "description": "HSTS, CSP, protection XSS et prévention du détournement de clics activés",
+        "details": "Notre application implémente des en-têtes de sécurité HTTP complets pour protéger contre les vulnérabilités web courantes. Nous utilisons Strict-Transport-Security (HSTS) pour imposer les connexions HTTPS, Content-Security-Policy (CSP) pour prévenir les attaques de script intersites, X-Frame-Options pour prévenir le détournement de clics et X-Content-Type-Options pour prévenir le reniflage MIME. Ces en-têtes fonctionnent ensemble pour créer plusieurs couches de défense contre les menaces de sécurité potentielles, garantissant que votre navigateur ne charge que du contenu de confiance provenant de nos serveurs."
       }
     },
     "compliance": {
@@ -2081,6 +2085,14 @@
       "q6": {
         "question": "Comment les mots de passe sont-ils stockés?",
         "answer": "Les mots de passe sont hachés en utilisant PBKDF2-HMAC-SHA256 avec 100 000 itérations et un sel unique de 32 octets. Ce hachage unidirectionnel signifie que même nous ne pouvons pas récupérer votre mot de passe."
+      },
+      "q7": {
+        "question": "Mes données sont-elles sauvegardées en toute sécurité?",
+        "answer": "Oui, nous effectuons des sauvegardes cryptées automatisées de toutes les données quotidiennement. Les sauvegardes sont stockées dans des régions AWS séparées avec les mêmes normes de cryptage que les données de production. Nous testons régulièrement nos processus de restauration de sauvegarde pour garantir que les données peuvent être récupérées en cas de défaillance du système."
+      },
+      "q8": {
+        "question": "Effectuez-vous des audits de sécurité?",
+        "answer": "Nous effectuons régulièrement des audits de sécurité internes et des tests d'intrusion pour identifier et corriger les vulnérabilités. Notre infrastructure suit les meilleures pratiques de sécurité OWASP et les normes de sécurité AWS. Nous maintenons également des journaux d'audit détaillés de tous les accès au système et des activités des utilisateurs à des fins de surveillance de la sécurité et de conformité."
       }
     },
     "actions": {

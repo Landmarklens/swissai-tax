@@ -2359,11 +2359,13 @@
       "subtitle": "Schutz auf Unternehmensniveau für Ihre sensiblen Daten",
       "encryption": {
         "title": "Ende-zu-Ende-Verschlüsselung",
-        "description": "Alle sensiblen Daten sind mit AES-256-Verschlüsselung im Ruhezustand und während der Übertragung geschützt"
+        "description": "Alle sensiblen Daten sind mit AES-256-Verschlüsselung im Ruhezustand und während der Übertragung geschützt",
+        "details": "Wir verwenden die branchenübliche AES-256-Verschlüsselung (Fernet-Chiffre) zum Schutz Ihrer sensiblen Steuerinformationen. Verschlüsselungsschlüssel werden sicher im AWS Secrets Manager mit automatischer Rotationsunterstützung gespeichert. Ihre Daten werden verschlüsselt, bevor sie in unserer Datenbank gespeichert werden, und bleiben während der Übertragung über HTTPS verschlüsselt. Diese militärische Verschlüsselung gewährleistet, dass selbst wenn Daten abgefangen werden, sie ohne die entsprechenden Entschlüsselungsschlüssel nicht gelesen werden können."
       },
       "2fa": {
         "title": "Zwei-Faktor-Authentifizierung",
-        "description": "Fügen Sie eine zusätzliche Sicherheitsebene mit TOTP-Authentifizierungs-Apps und Backup-Codes hinzu"
+        "description": "Fügen Sie eine zusätzliche Sicherheitsebene mit TOTP-Authentifizierungs-Apps und Backup-Codes hinzu",
+        "details": "Die Zwei-Faktor-Authentifizierung (2FA) fügt Ihrem Konto eine zusätzliche Sicherheitsebene hinzu. Nach der Aktivierung von 2FA benötigen Sie sowohl Ihr Passwort als auch ein zeitbasiertes Einmalpasswort (TOTP) von einer Authentifizierungs-App, um sich anzumelden. Wir unterstützen beliebte Apps wie Google Authenticator, Authy und 1Password. Sie erhalten ausserdem 10 Backup-Wiederherstellungscodes, die verwendet werden können, falls Sie den Zugriff auf Ihr Authentifizierungsgerät verlieren. Alle 2FA-Geheimnisse werden verschlüsselt in unserer Datenbank gespeichert."
       },
       "sessions": {
         "title": "Sitzungsverwaltung",
@@ -2375,7 +2377,8 @@
       },
       "gdpr": {
         "title": "DSGVO-konform",
-        "description": "Vollständige Datenportabilität, Recht auf Löschung und transparente Datenpraktiken"
+        "description": "Vollständige Datenportabilität, Recht auf Löschung und transparente Datenpraktiken",
+        "details": "Wir entsprechen vollständig der EU-Datenschutz-Grundverordnung (DSGVO) und den Schweizer Datenschutzgesetzen. Sie haben jederzeit das Recht, auf Ihre persönlichen Daten zuzugreifen, diese zu exportieren und zu löschen. Unsere Datenexportfunktion stellt einen vollständigen JSON-Export aller Ihrer Kontoinformationen innerhalb von 24 Stunden bereit. Löschanfragen werden innerhalb von 30 Tagen bearbeitet. Wir pflegen transparente Datenpraktiken und sammeln nur Daten, die für die Bereitstellung unserer Steuererklärungsdienste erforderlich sind. Sie können alle Ihre Datenschutzeinstellungen über Ihr Konto-Dashboard verwalten."
       },
       "auth": {
         "title": "Sichere Authentifizierung",
@@ -2387,7 +2390,8 @@
       },
       "headers": {
         "title": "Sicherheits-Header",
-        "description": "HSTS, CSP, XSS-Schutz und Clickjacking-Prävention aktiviert"
+        "description": "HSTS, CSP, XSS-Schutz und Clickjacking-Prävention aktiviert",
+        "details": "Unsere Anwendung implementiert umfassende HTTP-Sicherheits-Header zum Schutz vor gängigen Web-Schwachstellen. Wir verwenden Strict-Transport-Security (HSTS) zur Durchsetzung von HTTPS-Verbindungen, Content-Security-Policy (CSP) zur Verhinderung von Cross-Site-Scripting-Angriffen, X-Frame-Options zur Verhinderung von Clickjacking und X-Content-Type-Options zur Verhinderung von MIME-Sniffing. Diese Header arbeiten zusammen, um mehrere Verteidigungsebenen gegen potenzielle Sicherheitsbedrohungen zu schaffen und sicherzustellen, dass Ihr Browser nur vertrauenswürdige Inhalte von unseren Servern lädt."
       }
     },
     "compliance": {
@@ -2422,6 +2426,14 @@
       "q6": {
         "question": "Wie werden Passwörter gespeichert?",
         "answer": "Passwörter werden mit PBKDF2-HMAC-SHA256 mit 100.000 Iterationen und einem eindeutigen 32-Byte-Salt gehasht. Dieses Einweg-Hashing bedeutet, dass selbst wir Ihr Passwort nicht wiederherstellen können."
+      },
+      "q7": {
+        "question": "Werden meine Daten sicher gesichert?",
+        "answer": "Ja, wir führen täglich automatisierte verschlüsselte Backups aller Daten durch. Backups werden in separaten AWS-Regionen mit denselben Verschlüsselungsstandards wie Produktionsdaten gespeichert. Wir testen regelmässig unsere Backup-Wiederherstellungsprozesse, um sicherzustellen, dass Daten im Falle eines Systemausfalls wiederhergestellt werden können."
+      },
+      "q8": {
+        "question": "Führen Sie Sicherheitsaudits durch?",
+        "answer": "Wir führen regelmässig interne Sicherheitsaudits und Penetrationstests durch, um Schwachstellen zu identifizieren und zu beheben. Unsere Infrastruktur folgt den OWASP-Sicherheitsbest Practices und AWS-Sicherheitsstandards. Wir führen ausserdem detaillierte Audit-Logs aller Systemzugriffe und Benutzeraktivitäten für Sicherheitsüberwachung und Compliance-Zwecke."
       }
     },
     "actions": {

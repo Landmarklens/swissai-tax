@@ -1,6 +1,7 @@
 import { Menu, MenuItem, ListItemIcon, ListItemText, styled, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { SignOut } from '../../assets/svg/SignOut';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -25,6 +26,9 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
 
   function handleMenuClick(action) {
     switch(action) {
+      case 'dashboard':
+        navigate('/dashboard');
+        break;
       case 'tax-filings':
         navigate('/filings');
         break;
@@ -78,6 +82,14 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
       }}
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+
+      {/* Dashboard Menu Item */}
+      <MenuItem onClick={() => handleMenuClick('dashboard')}>
+        <ListItemIcon sx={{ minWidth: '28px!important' }}>
+          <DashboardIcon sx={{ fontSize: 20 }} />
+        </ListItemIcon>
+        <ListItemText>{t('Dashboard')}</ListItemText>
+      </MenuItem>
 
       {/* Tax Filing Menu Items */}
       <MenuItem onClick={() => handleMenuClick('tax-filings')}>

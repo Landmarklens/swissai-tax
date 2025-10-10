@@ -1,6 +1,6 @@
 """
 Contact form router
-Handles contact form submissions and sends emails to noreply@swissai.tax
+Handles contact form submissions and sends emails to contact@swissai.tax
 """
 
 import logging

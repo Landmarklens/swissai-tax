@@ -427,8 +427,8 @@ class TestEmailService:
             # Check sender email
             assert call_kwargs["Source"] == "noreply@swissai.tax"
 
-            # Check recipient email (updated to noreply)
-            assert "noreply@swissai.tax" in call_kwargs["Destination"]["ToAddresses"]
+            # Check recipient email (contact inbox)
+            assert "contact@swissai.tax" in call_kwargs["Destination"]["ToAddresses"]
 
             # Check Reply-To is set to user's email
             assert form_data["email"] in call_kwargs["ReplyToAddresses"]

@@ -34,7 +34,7 @@ async def test_contact_email():
 
     print(f"\n📧 Sending test contact form email...")
     print(f"   From: noreply@swissai.tax")
-    print(f"   To: noreply@swissai.tax")
+    print(f"   To: contact@swissai.tax")
     print(f"   Subject: Contact Form: {form_data['subject']}")
 
     try:
@@ -43,7 +43,7 @@ async def test_contact_email():
         if result['status'] == 'success':
             print(f"\n✅ SUCCESS!")
             print(f"   MessageId: {result.get('message_id', 'N/A')}")
-            print(f"\n📬 Check inbox for: noreply@swissai.tax")
+            print(f"\n📬 Check inbox for: contact@swissai.tax")
             print(f"   Look for email from: noreply@swissai.tax")
             return True
         else:

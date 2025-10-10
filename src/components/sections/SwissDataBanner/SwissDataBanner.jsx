@@ -46,11 +46,12 @@ const SwissDataBanner = () => {
           elevation={0}
           sx={{
             p: { xs: 3, md: 4 },
-            bgcolor: '#DC0018',
-            color: 'white',
+            bgcolor: 'white',
+            color: '#1a1a1a',
             borderRadius: 2,
             mb: 4,
-            textAlign: 'center'
+            textAlign: 'center',
+            border: '2px solid #DC0018'
           }}
         >
           <Typography

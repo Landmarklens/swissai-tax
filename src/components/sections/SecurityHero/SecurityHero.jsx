@@ -9,8 +9,8 @@ const SecurityHero = () => {
   return (
     <Box
       sx={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
+        bgcolor: 'white',
+        color: '#1a1a1a',
         py: { xs: 6, md: 8 },
         textAlign: 'center'
       }}
@@ -23,14 +23,14 @@ const SecurityHero = () => {
               width: 80,
               height: 80,
               borderRadius: '50%',
-              bgcolor: 'rgba(255, 255, 255, 0.2)',
+              bgcolor: '#667eea15',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '2px solid rgba(255, 255, 255, 0.3)'
+              border: '2px solid #667eea30'
             }}
           >
-            <Shield sx={{ fontSize: 48, color: 'white' }} />
+            <Shield sx={{ fontSize: 48, color: '#667eea' }} />
           </Box>
 
           {/* Title */}

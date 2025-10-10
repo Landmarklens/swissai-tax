@@ -60,6 +60,7 @@ const Header = () => {
     // { to: '/owners', label: t('For Owners') },
     { to: '/features', label: t('Features') },
     { to: '/plan', label: t('Pricing') },
+    { to: '/security', label: t('Security') },
     { to: '/faq', label: t('FAQ') },
     // { to: "/about-us", label: t("About Us") },
     { to: '/contact-us', label: t('Contact Us') }

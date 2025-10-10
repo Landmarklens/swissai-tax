@@ -40,6 +40,7 @@ const SubscriptionCheckout = () => {
 
   useEffect(() => {
     initializeCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planType]);
 
   const initializeCheckout = async () => {
@@ -95,6 +96,19 @@ const SubscriptionCheckout = () => {
   const handleCancel = () => {
     navigate('/subscription/plans');
   };
+
+  // Check if Stripe is configured
+  if (!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
+    return (
+      <Container maxWidth="md" className="subscription-checkout-page">
+        <Box sx={{ py: 6 }}>
+          <Alert severity="error">
+            {t('subscription.error.stripe_not_configured', 'Stripe is not configured. Please contact support.')}
+          </Alert>
+        </Box>
+      </Container>
+    );
+  }
 
   if (loading && !setupIntent) {
     return (

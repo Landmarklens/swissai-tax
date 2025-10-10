@@ -2099,6 +2099,27 @@
         "answer": "Nous effectuons régulièrement des audits de sécurité internes et des tests d'intrusion pour identifier et corriger les vulnérabilités. Notre infrastructure suit les meilleures pratiques de sécurité OWASP et les normes de sécurité AWS. Nous maintenons également des journaux d'audit détaillés de tous les accès au système et des activités des utilisateurs à des fins de surveillance de la sécurité et de conformité."
       }
     },
+    "swissBanner": {
+      "title": "100% Stockage & Chiffrement des Données en Suisse",
+      "subtitle": "Vos données fiscales ne quittent jamais la Suisse. Stockées sur des serveurs suisses, chiffrées au repos, protégées par la loi suisse.",
+      "location": {
+        "title": "Serveurs Suisses Uniquement",
+        "description": "Toutes les données stockées exclusivement en Suisse, jamais transférées à l'étranger"
+      },
+      "encryption": {
+        "title": "Chiffrement au Repos",
+        "description": "Le chiffrement AES-256 de niveau militaire protège vos données 24h/24 et 7j/7"
+      },
+      "protection": {
+        "title": "Juridiction Suisse",
+        "description": "Protégées par les lois suisses strictes sur la protection des données et la vie privée"
+      },
+      "compliance": {
+        "title": "Normes Suisses",
+        "description": "Conforme à la Loi fédérale sur la protection des données (LPD)"
+      },
+      "guarantee": "🔒 Garanti : Vos données restent en Suisse, chiffrées au repos et en transit, protégées par la loi suisse"
+    },
     "actions": {
       "title": "Prenez le contrôle de votre sécurité",
       "manage_settings": "Gérer les paramètres de sécurité",

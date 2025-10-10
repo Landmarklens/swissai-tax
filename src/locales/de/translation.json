@@ -2440,6 +2440,27 @@
         "answer": "Wir führen regelmässig interne Sicherheitsaudits und Penetrationstests durch, um Schwachstellen zu identifizieren und zu beheben. Unsere Infrastruktur folgt den OWASP-Sicherheitsbest Practices und AWS-Sicherheitsstandards. Wir führen ausserdem detaillierte Audit-Logs aller Systemzugriffe und Benutzeraktivitäten für Sicherheitsüberwachung und Compliance-Zwecke."
       }
     },
+    "swissBanner": {
+      "title": "100% Schweizer Datenspeicherung & Verschlüsselung",
+      "subtitle": "Ihre Steuerdaten verlassen die Schweiz nie. Gespeichert auf Schweizer Servern, verschlüsselt im Ruhezustand, geschützt durch Schweizer Recht.",
+      "location": {
+        "title": "Nur Schweizer Server",
+        "description": "Alle Daten ausschliesslich in der Schweiz gespeichert, niemals ins Ausland übertragen"
+      },
+      "encryption": {
+        "title": "Verschlüsselt im Ruhezustand",
+        "description": "Militärische AES-256-Verschlüsselung schützt Ihre Daten rund um die Uhr"
+      },
+      "protection": {
+        "title": "Schweizer Rechtshoheit",
+        "description": "Geschützt durch strenge Schweizer Datenschutz- und Privatsphäregesetze"
+      },
+      "compliance": {
+        "title": "Schweizer Standards",
+        "description": "Konform mit dem Bundesgesetz über den Datenschutz (DSG)"
+      },
+      "guarantee": "🔒 Garantiert: Ihre Daten bleiben in der Schweiz, verschlüsselt im Ruhezustand und während der Übertragung, geschützt durch Schweizer Recht"
+    },
     "actions": {
       "title": "Übernehmen Sie die Kontrolle über Ihre Sicherheit",
       "manage_settings": "Sicherheitseinstellungen verwalten",

@@ -2144,6 +2144,27 @@
         "answer": "Eseguiamo regolarmente audit di sicurezza interni e test di penetrazione per identificare e correggere le vulnerabilità. La nostra infrastruttura segue le migliori pratiche di sicurezza OWASP e gli standard di sicurezza AWS. Manteniamo anche registri di audit dettagliati di tutti gli accessi al sistema e delle attività degli utenti per scopi di monitoraggio della sicurezza e conformità."
       }
     },
+    "swissBanner": {
+      "title": "100% Archiviazione e Crittografia dei Dati in Svizzera",
+      "subtitle": "I vostri dati fiscali non lasciano mai la Svizzera. Archiviati su server svizzeri, crittografati a riposo, protetti dalla legge svizzera.",
+      "location": {
+        "title": "Solo Server Svizzeri",
+        "description": "Tutti i dati archiviati esclusivamente in Svizzera, mai trasferiti all'estero"
+      },
+      "encryption": {
+        "title": "Crittografia a Riposo",
+        "description": "La crittografia AES-256 di livello militare protegge i vostri dati 24 ore su 24"
+      },
+      "protection": {
+        "title": "Giurisdizione Svizzera",
+        "description": "Protetti dalle rigorose leggi svizzere sulla protezione dei dati e sulla privacy"
+      },
+      "compliance": {
+        "title": "Standard Svizzeri",
+        "description": "Conforme alla Legge federale sulla protezione dei dati (LPD)"
+      },
+      "guarantee": "🔒 Garantito: I vostri dati rimangono in Svizzera, crittografati a riposo e in transito, protetti dalla legge svizzera"
+    },
     "actions": {
       "title": "Prendi il controllo della tua sicurezza",
       "manage_settings": "Gestisci le impostazioni di sicurezza",

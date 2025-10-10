@@ -5,6 +5,7 @@ import SEOHelmet from '../../components/SEO/SEOHelmet';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import SecurityHero from '../../components/sections/SecurityHero/SecurityHero';
+import SwissDataBanner from '../../components/sections/SwissDataBanner/SwissDataBanner';
 import SecurityFeatures from '../../components/sections/SecurityFeatures/SecurityFeatures';
 import SecurityFAQ from '../../components/sections/SecurityFAQ/SecurityFAQ';
 import SecurityActions from '../../components/sections/SecurityActions/SecurityActions';
@@ -24,6 +25,7 @@ const Security = () => {
 
         <Box component="main" sx={{ flex: 1 }}>
           <SecurityHero />
+          <SwissDataBanner />
           <SecurityFeatures />
           <SecurityFAQ />
           <SecurityActions />

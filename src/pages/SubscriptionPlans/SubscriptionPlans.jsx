@@ -31,6 +31,7 @@ const SubscriptionPlans = () => {
 
   useEffect(() => {
     checkCurrentSubscription();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkCurrentSubscription = async () => {
@@ -119,7 +120,7 @@ const SubscriptionPlans = () => {
             {t('subscription.title', 'Choose Your Plan')}
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
-            {t('subscription.subtitle', 'Start with a 30-day free trial. No credit card required.')}
+            {t('subscription.subtitle', 'Start with a 30-day free trial. Cancel anytime, no charge until trial ends.')}
           </Typography>
           <Chip
             label={t('subscription.trial_badge', '30-Day Free Trial')}

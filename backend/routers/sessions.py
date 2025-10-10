@@ -194,3 +194,67 @@ async def get_session_count(
     except Exception as e:
         logger.error(f"Failed to get session count for user {current_user.id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to get session count")
+
+
+@router.post("/sessions/cleanup-duplicates")
+@rate_limit("5/hour")
+async def cleanup_duplicate_sessions(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Cleanup duplicate sessions for the current user.
+    Keeps only the most recent session per device/IP combination.
+
+    Returns:
+        Number of duplicate sessions removed
+    """
+    try:
+        from models.user_session import UserSession
+        from sqlalchemy import and_
+
+        # Get all active sessions for this user
+        sessions = db.query(UserSession).filter(
+            and_(
+                UserSession.user_id == current_user.id,
+                UserSession.is_active == True
+            )
+        ).order_by(UserSession.created_at.desc()).all()
+
+        # Group sessions by device_name and ip_address
+        session_groups = {}
+        for session in sessions:
+            key = (session.device_name, session.ip_address)
+            if key not in session_groups:
+                session_groups[key] = []
+            session_groups[key].append(session)
+
+        # Find and remove duplicates
+        duplicates_removed = 0
+        for key, group in session_groups.items():
+            if len(group) > 1:
+                # Keep the most recent session (first in list, already sorted desc)
+                keep_session = group[0]
+
+                # Revoke all older duplicate sessions
+                for duplicate in group[1:]:
+                    duplicate.revoke()
+                    duplicates_removed += 1
+                    logger.info(f"Removed duplicate session {duplicate.id} for user {current_user.id}")
+
+        db.commit()
+
+        logger.info(f"Cleaned up {duplicates_removed} duplicate sessions for user {current_user.id}")
+
+        return {
+            "success": True,
+            "message": f"Removed {duplicates_removed} duplicate session(s)",
+            "duplicates_removed": duplicates_removed,
+            "remaining_sessions": len(session_groups)
+        }
+
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to cleanup duplicate sessions for user {current_user.id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to cleanup duplicate sessions")

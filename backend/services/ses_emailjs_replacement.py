@@ -228,7 +228,8 @@ class EmailService:
 
         # Get sender email from settings
         sender_email = getattr(settings, 'SES_SENDER_EMAIL', 'noreply@swissai.tax')
-        recipient_email = 'contact@swissai.tax'
+        # Send to noreply for now (contact@swissai.tax can be created later)
+        recipient_email = 'noreply@swissai.tax'
 
         # Extract form data
         first_name = form_data.get('firstName', '')

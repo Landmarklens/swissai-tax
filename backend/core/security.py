@@ -222,9 +222,30 @@ async def get_current_user(request: Request):
                 from db.session import get_db
                 db = next(get_db())
                 try:
-                    if not session_service.validate_session(db, session_id):
-                        logger.warning(f"[AUTH DEBUG] Invalid session {session_id}")
-                        raise HTTPException(status_code=401, detail="Session invalid or expired")
+                    logger.info(f"[AUTH DEBUG] Validating session: {session_id}")
+                    session_exists = session_service.get_session_by_id(db, session_id)
+
+                    if not session_exists:
+                        # Session doesn't exist - create it (handles legacy logins before session mgmt)
+                        logger.info(f"[AUTH DEBUG] Session {session_id} not found, creating it")
+                        try:
+                            session_service.create_session(
+                                db=db,
+                                user_id=str(user.id),
+                                session_id=session_id,
+                                request=request,
+                                is_current=True,
+                                expires_in_days=30
+                            )
+                            logger.info(f"[AUTH DEBUG] Created missing session {session_id}")
+                        except Exception as e:
+                            logger.error(f"[AUTH DEBUG] Failed to create session: {e}")
+                    else:
+                        # Session exists, validate and update it
+                        if not session_service.validate_session(db, session_id):
+                            logger.warning(f"[AUTH DEBUG] Invalid session {session_id}")
+                            raise HTTPException(status_code=401, detail="Session invalid or expired")
+                        logger.info(f"[AUTH DEBUG] Session {session_id} validated and updated")
                 finally:
                     db.close()
 
@@ -248,9 +269,30 @@ async def get_current_user(request: Request):
             from db.session import get_db
             db = next(get_db())
             try:
-                if not session_service.validate_session(db, session_id):
-                    logger.warning(f"[AUTH DEBUG] Invalid session {session_id}")
-                    raise HTTPException(status_code=401, detail="Session invalid or expired")
+                logger.info(f"[AUTH DEBUG] Validating session: {session_id}")
+                session_exists = session_service.get_session_by_id(db, session_id)
+
+                if not session_exists:
+                    # Session doesn't exist - create it (handles legacy logins before session mgmt)
+                    logger.info(f"[AUTH DEBUG] Session {session_id} not found, creating it")
+                    try:
+                        session_service.create_session(
+                            db=db,
+                            user_id=str(user.id),
+                            session_id=session_id,
+                            request=request,
+                            is_current=True,
+                            expires_in_days=30
+                        )
+                        logger.info(f"[AUTH DEBUG] Created missing session {session_id}")
+                    except Exception as e:
+                        logger.error(f"[AUTH DEBUG] Failed to create session: {e}")
+                else:
+                    # Session exists, validate and update it
+                    if not session_service.validate_session(db, session_id):
+                        logger.warning(f"[AUTH DEBUG] Invalid session {session_id}")
+                        raise HTTPException(status_code=401, detail="Session invalid or expired")
+                    logger.info(f"[AUTH DEBUG] Session {session_id} validated and updated")
             finally:
                 db.close()
 

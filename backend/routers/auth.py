@@ -41,7 +41,7 @@ def should_require_subscription(user, db) -> bool:
     Check if a user should be redirected to subscription checkout.
 
     Returns True if:
-    - ENFORCE_SUBSCRIPTIONS is enabled
+    - ENABLE_SUBSCRIPTIONS is enabled
     - User is not grandfathered or test user
     - User has no active subscription
 
@@ -52,7 +52,7 @@ def should_require_subscription(user, db) -> bool:
     Returns:
         bool: True if subscription is required, False otherwise
     """
-    if not settings.ENFORCE_SUBSCRIPTIONS:
+    if not settings.ENABLE_SUBSCRIPTIONS:
         return False
 
     # Grandfathered user bypass
@@ -113,6 +113,15 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
 
 @router.get("/login/google/callback", include_in_schema=False)
 async def callback(request: Request, response: Response, db=Depends(get_db)):
+    import logging
+    logger = logging.getLogger(__name__)
+
+    logger.info("="*80)
+    logger.info("[GOOGLE OAUTH] Callback received")
+    logger.info(f"[GOOGLE OAUTH] Request host: {request.headers.get('host')}")
+    logger.info(f"[GOOGLE OAUTH] Request origin: {request.headers.get('origin')}")
+    logger.info(f"[GOOGLE OAUTH] Request referer: {request.headers.get('referer')}")
+
     # Get fresh flow instance
     oauth_flow = get_flow()
     oauth_flow.fetch_token(code=request.query_params["code"])
@@ -120,6 +129,8 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
 
     user_info_service = build('oauth2', 'v2', credentials=credentials)
     user_info = user_info_service.userinfo().get().execute()
+
+    logger.info(f"[GOOGLE OAUTH] User email: {user_info.get('email')}")
 
     encoded_state = request.query_params.get('state', '')
 
@@ -139,10 +150,13 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
         if not hmac.compare_digest(received_signature, expected_signature):
             raise HTTPException(status_code=400, detail="Invalid state parameter")
 
-    except Exception:
+    except Exception as e:
+        logger.error(f"[GOOGLE OAUTH] State validation failed: {e}")
         raise HTTPException(status_code=400, detail="Invalid state parameter")
 
     redirect_url = state_data.pop('redirect_url')
+    logger.info(f"[GOOGLE OAUTH] Redirect URL: {redirect_url}")
+
     email = user_info['email']
     user_info['provider_id'] = user_info.pop('id')
     user_info['avatar_url'] = user_info.pop('picture')
@@ -163,14 +177,19 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
         }
         user = await create_social_user(db, user_data, "google")
         is_new_user = True
+        logger.info(f"[GOOGLE OAUTH] Created new user: {email}")
+    else:
+        logger.info(f"[GOOGLE OAUTH] Existing user: {email}")
 
     # Generate session ID for tracking
     import uuid
     session_id = str(uuid.uuid4())
+    logger.info(f"[GOOGLE OAUTH] Generated session_id: {session_id}")
 
     # Generate JWT token with session ID
     token_response = sign_jwt(user_info["email"], session_id=session_id)
     access_token = token_response["access_token"]
+    logger.info(f"[GOOGLE OAUTH] Generated JWT token (length: {len(access_token)})")
 
     # Create session record
     from services.session_service import session_service
@@ -182,9 +201,9 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
             request=request,
             is_current=True
         )
+        logger.info(f"[GOOGLE OAUTH] Session record created in database")
     except Exception as e:
-        import logging
-        logging.getLogger(__name__).warning(f"Failed to create session record: {e}")
+        logger.warning(f"[GOOGLE OAUTH] Failed to create session record: {e}")
 
     # Log successful login with session ID
     try:
@@ -196,11 +215,11 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
             session_id=session_id
         )
     except Exception as e:
-        import logging
-        logging.getLogger(__name__).warning(f"Failed to log audit event: {e}")
+        logger.warning(f"[GOOGLE OAUTH] Failed to log audit event: {e}")
 
     # Check if user requires subscription
     requires_subscription = should_require_subscription(user, db)
+    logger.info(f"[GOOGLE OAUTH] Requires subscription: {requires_subscription}")
 
     # Build redirect URL (frontend will use cookie for auth, not URL params)
     final_redirect_url = redirect_url
@@ -209,17 +228,26 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
     if requires_subscription:
         final_redirect_url = f"{final_redirect_url}?requires_subscription=true"
 
+    logger.info(f"[GOOGLE OAUTH] Final redirect URL: {final_redirect_url}")
+
+    # Get cookie settings based on request
+    cookie_settings = get_cookie_settings_for_request(request)
+    logger.info(f"[GOOGLE OAUTH] Cookie settings: {cookie_settings}")
+
     # Create redirect response with proper status code
     # Use 302 (Found) instead of 307 - browsers handle cookies better with 302
     redirect_response = RedirectResponse(url=final_redirect_url, status_code=302)
 
     # Set httpOnly cookie on the redirect response
-    cookie_settings = get_cookie_settings_for_request(request)
     redirect_response.set_cookie(
         key="access_token",
         value=f"Bearer {access_token}",
         **cookie_settings
     )
+
+    logger.info(f"[GOOGLE OAUTH] Cookie 'access_token' set with value 'Bearer {access_token[:20]}...'")
+    logger.info(f"[GOOGLE OAUTH] Returning 302 redirect to: {final_redirect_url}")
+    logger.info("="*80)
 
     return redirect_response
 

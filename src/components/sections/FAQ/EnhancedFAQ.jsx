@@ -32,9 +32,8 @@ import faqService from '../../../services/faqService';
 import { getFAQ } from '../../../constants/FAQ';
 import './faq.scss';
 
-const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
+const EnhancedFAQ = () => {
   const { t } = useTranslation();
-  const [userType, setUserType] = useState(initialUserType);
   const [faqData, setFaqData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,23 +43,24 @@ const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
   const [searchResults, setSearchResults] = useState(null);
   const [searching, setSearching] = useState(false);
 
-  // Fetch FAQ data when user type changes
+  // Load FAQ data on mount
   useEffect(() => {
     loadFAQs();
-  }, [userType]);
+  }, [t]);
 
   const loadFAQs = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const data = await faqService.getAllFAQs(userType);
+      const data = await faqService.getAllFAQs();
       setFaqData(data);
       setSelectedCategory(null);
       setSearchResults(null);
     } catch (err) {
       console.error('Failed to load FAQs:', err);
       setError('Failed to load FAQs. Using offline data.');
-      // Fallback to static FAQ for general questions
+      // Fallback to static FAQ data
       const staticFAQ = getFAQ(t);
       setFaqData({
         title: t('faq.heading'),
@@ -89,8 +89,9 @@ const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
     }
 
     setSearching(true);
+
     try {
-      const results = await faqService.searchFAQs(userType, searchQuery);
+      const results = await faqService.searchFAQs(searchQuery);
       setSearchResults(results);
       setSelectedCategory(null);
     } catch (err) {
@@ -112,17 +113,10 @@ const EnhancedFAQ = ({ initialUserType = 'tenant' }) => {
           });
         });
         setSearchResults(localResults);
+        setSelectedCategory(null);
       }
     } finally {
       setSearching(false);
-    }
-  };
-
-  const handleUserTypeChange = (event, newUserType) => {
-    if (newUserType !== null) {
-      setUserType(newUserType);
-      setSearchQuery('');
-      setSearchResults(null);
     }
   };
 

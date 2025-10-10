@@ -3,12 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 class FAQService {
   /**
-   * Get all FAQs for a specific user type
-   * @param {string} userType - 'landlord' or 'tenant'
+   * Get all FAQs
    */
-  async getAllFAQs(userType) {
+  async getAllFAQs() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/faq/?user_type=${userType}`, {
+      const response = await fetch(`${API_BASE_URL}/api/faq/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

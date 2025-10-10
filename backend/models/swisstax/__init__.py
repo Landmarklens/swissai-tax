@@ -13,6 +13,10 @@ from .settings import UserSettings
 from .subscription import Payment, Subscription
 from .tax import StandardDeduction, TaxRate, TaxYear
 from .user import User
+from .referral_code import ReferralCode
+from .referral_usage import ReferralUsage
+from .referral_reward import ReferralReward
+from .account_credit import UserAccountCredit
 
 # Note: InterviewSession and Document now imported from parent models/ directory
 
@@ -32,4 +36,8 @@ __all__ = [
     'UserSettings',
     'DeletionRequest',
     'DataExport',
+    'ReferralCode',
+    'ReferralUsage',
+    'ReferralReward',
+    'UserAccountCredit',
 ]

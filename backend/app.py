@@ -25,7 +25,7 @@ from config import settings as app_settings
 
 # Import routers
 from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions, contact
-from routers.swisstax import dashboard, filing, payment, profile, settings, subscription
+from routers.swisstax import dashboard, filing, payment, profile, settings, subscription, referrals
 from services.document_service import DocumentService
 from services.interview_service import interview_service
 from services.tax_calculation_service import TaxCalculationService
@@ -236,6 +236,7 @@ app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 app.include_router(filing.router, prefix="/api/filing", tags=["filing"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(subscription.router, prefix="/api/subscription", tags=["subscription"])
+app.include_router(referrals.router, prefix="/api", tags=["referrals"])
 app.include_router(contact.router, tags=["contact"])
 
 # Pydantic models for request/response validation

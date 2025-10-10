@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # NOTE: app.py already includes: auth, user, user_counter, dashboard, profile, settings, filing, payment
 # We only add the NEW routers here to avoid duplicates
 try:
-    from routers import (documents, health, insights, interview, multi_canton_filing,
+    from routers import (documents, faq, health, insights, interview, multi_canton_filing,
                          pdf_generation, sessions, status, tax_calculation, tax_filing, two_factor)
 
     # Tax-specific routers (not in app.py)
@@ -23,6 +23,9 @@ try:
     app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
     app.include_router(tax_filing.router, prefix="/api/tax-filing", tags=["Tax Filing"])
     app.include_router(insights.router, prefix="/api/insights", tags=["Insights"])
+
+    # FAQ router (public - no authentication required)
+    app.include_router(faq.router, prefix="/api/faq", tags=["FAQ"])
 
     # Multi-canton and PDF generation routers (NEW - not in app.py)
     app.include_router(multi_canton_filing.router, tags=["Multi-Canton Filing"])

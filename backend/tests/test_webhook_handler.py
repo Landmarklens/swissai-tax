@@ -12,8 +12,7 @@ import stripe
 
 from app import app
 from models.swisstax.user import User
-from models.swisstax.subscription import Subscription
-from models.swisstax.payment import Payment
+from models.swisstax.subscription import Subscription, Payment
 
 
 @pytest.fixture

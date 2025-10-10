@@ -1,7 +1,7 @@
 """create incidents table for status page
 
 Revision ID: 20251010_incidents
-Revises: 20251010_sessions
+Revises: 20251010_stripe_customer
 Create Date: 2025-10-10
 
 """
@@ -13,7 +13,7 @@ import uuid
 
 # revision identifiers, used by Alembic.
 revision = '20251010_incidents'
-down_revision = '20251010_sessions'
+down_revision = '20251010_stripe_customer'
 branch_labels = None
 depends_on = None
 

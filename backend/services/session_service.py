@@ -42,6 +42,29 @@ class SessionService:
             Created UserSession object
         """
         try:
+            # Check if session already exists (prevent duplicates)
+            existing_session = db.query(UserSession).filter(
+                UserSession.session_id == session_id
+            ).first()
+
+            if existing_session:
+                logger.info(f"Session {session_id} already exists, returning existing session")
+                # Update last_active and return existing session
+                existing_session.last_active = datetime.utcnow()
+                if is_current and not existing_session.is_current:
+                    # Mark all other sessions as not current
+                    db.query(UserSession).filter(
+                        and_(
+                            UserSession.user_id == existing_session.user_id,
+                            UserSession.is_current == True,
+                            UserSession.id != existing_session.id
+                        )
+                    ).update({"is_current": False})
+                    existing_session.is_current = True
+                db.commit()
+                db.refresh(existing_session)
+                return existing_session
+
             # Parse device information from User-Agent
             user_agent = request.headers.get("user-agent", "")
             device_info = DeviceParser.parse_user_agent(user_agent)

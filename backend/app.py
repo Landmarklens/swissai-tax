@@ -165,7 +165,7 @@ async def sliding_session_middleware(request: Request, call_next):
     This creates a sliding window session - as long as user is active,
     their session stays alive for 6 hours from last activity
     """
-    from core.security import COOKIE_SETTINGS, create_access_token
+    from core.security import create_access_token, get_cookie_settings_for_request
     from jose import jwt
 
     response = await call_next(request)
@@ -174,20 +174,27 @@ async def sliding_session_middleware(request: Request, call_next):
     access_token = request.cookies.get("access_token")
     if access_token:
         try:
+            # Remove "Bearer " prefix if present for decoding
+            token = access_token.replace("Bearer ", "")
+
             # Decode token to get user info
-            payload = jwt.decode(access_token, app_settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(token, app_settings.SECRET_KEY, algorithms=["HS256"])
             email = payload.get("email")
             user_type = payload.get("user_type")
+            session_id = payload.get("session_id")
 
             if email:
-                # Create a new token with refreshed expiry
-                new_token = create_access_token(email, user_type)
+                # Create a new token with refreshed expiry (keep session_id)
+                new_token = create_access_token(email, user_type, session_id)
+
+                # Get appropriate cookie settings for this request (localhost vs production)
+                cookie_settings = get_cookie_settings_for_request(request)
 
                 # Set new cookie with refreshed expiry
                 response.set_cookie(
                     key="access_token",
-                    value=new_token,
-                    **COOKIE_SETTINGS
+                    value=f"Bearer {new_token}",
+                    **cookie_settings
                 )
                 logger.debug(f"Refreshed session for user: {email}")
         except Exception as e:

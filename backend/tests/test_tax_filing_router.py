@@ -26,8 +26,8 @@ def mock_user():
 @pytest.fixture
 def client():
     """Create test client with mocked authentication"""
-    # Override the dependency
-    from utils.auth import get_current_user
+    # Override the dependency - tax_filing router uses core.security.get_current_user
+    from core.security import get_current_user
 
     app.dependency_overrides[get_current_user] = lambda: mock_user()
 
@@ -381,7 +381,6 @@ class TestTaxFilingRouter:
     def test_unauthorized_access(self, mock_db):
         """Test endpoints without authentication"""
         # Create client without auth override
-        from utils.auth import get_current_user
         test_client = TestClient(app)
 
         # Execute - no auth override

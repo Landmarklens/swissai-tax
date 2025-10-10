@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
@@ -12,6 +12,11 @@ import SecurityActions from '../../components/sections/SecurityActions/SecurityA
 
 const Security = () => {
   const { t } = useTranslation();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

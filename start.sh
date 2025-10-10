@@ -31,16 +31,73 @@ cd /app/backend
 python3 -m pip install --quiet --no-cache-dir -r requirements-apprunner.txt
 echo "Dependencies installed successfully"
 
-# Load database configuration from Parameter Store
+# Load database configuration from Parameter Store using Python boto3
 echo "========================================="
 echo "LOADING CONFIGURATION FROM PARAMETER STORE"
 echo "========================================="
-export DATABASE_HOST=$(aws ssm get-parameter --name "/swissai-tax/db/host" --region us-east-1 --query "Parameter.Value" --output text 2>&1 || echo "")
-export DATABASE_PORT=$(aws ssm get-parameter --name "/swissai-tax/db/port" --region us-east-1 --query "Parameter.Value" --output text 2>&1 || echo "5432")
-export DATABASE_NAME=$(aws ssm get-parameter --name "/swissai-tax/db/database" --region us-east-1 --query "Parameter.Value" --output text 2>&1 || echo "swissai_tax")
-export DATABASE_USER=$(aws ssm get-parameter --name "/swissai-tax/db/username" --region us-east-1 --query "Parameter.Value" --output text 2>&1 || echo "")
-export DATABASE_PASSWORD=$(aws ssm get-parameter --name "/swissai-tax/db/password" --with-decryption --region us-east-1 --query "Parameter.Value" --output text 2>&1 || echo "")
-export DATABASE_SCHEMA=$(aws ssm get-parameter --name "/swissai-tax/db/schema" --region us-east-1 --query "Parameter.Value" --output text 2>&1 || echo "public")
+python3 << 'PYTHON_SCRIPT'
+import boto3
+import os
+
+ssm = boto3.client('ssm', region_name='us-east-1')
+
+params = {
+    'DATABASE_HOST': '/swissai-tax/db/host',
+    'DATABASE_PORT': '/swissai-tax/db/port',
+    'DATABASE_NAME': '/swissai-tax/db/database',
+    'DATABASE_USER': '/swissai-tax/db/username',
+    'DATABASE_PASSWORD': '/swissai-tax/db/password',
+    'DATABASE_SCHEMA': '/swissai-tax/db/schema'
+}
+
+for env_var, param_name in params.items():
+    try:
+        decrypt = env_var == 'DATABASE_PASSWORD'
+        response = ssm.get_parameter(Name=param_name, WithDecryption=decrypt)
+        value = response['Parameter']['Value']
+        print(f"export {env_var}='{value}'")
+    except Exception as e:
+        # Use defaults for optional parameters
+        if env_var == 'DATABASE_PORT':
+            print(f"export {env_var}='5432'")
+        elif env_var == 'DATABASE_SCHEMA':
+            print(f"export {env_var}='public'")
+        elif env_var == 'DATABASE_NAME':
+            print(f"export {env_var}='swissai_tax'")
+        else:
+            print(f"export {env_var}=''")
+            print(f"# Warning: Failed to fetch {param_name}: {e}", file=__import__('sys').stderr)
+PYTHON_SCRIPT
+
+# Source the exports
+eval "$(python3 << 'PYTHON_SCRIPT'
+import boto3
+ssm = boto3.client('ssm', region_name='us-east-1')
+params = {
+    'DATABASE_HOST': '/swissai-tax/db/host',
+    'DATABASE_PORT': '/swissai-tax/db/port',
+    'DATABASE_NAME': '/swissai-tax/db/database',
+    'DATABASE_USER': '/swissai-tax/db/username',
+    'DATABASE_PASSWORD': '/swissai-tax/db/password',
+    'DATABASE_SCHEMA': '/swissai-tax/db/schema'
+}
+for env_var, param_name in params.items():
+    try:
+        decrypt = env_var == 'DATABASE_PASSWORD'
+        response = ssm.get_parameter(Name=param_name, WithDecryption=decrypt)
+        value = response['Parameter']['Value'].replace("'", "'\\''")
+        print(f"export {env_var}='{value}'")
+    except:
+        if env_var == 'DATABASE_PORT':
+            print(f"export {env_var}='5432'")
+        elif env_var == 'DATABASE_SCHEMA':
+            print(f"export {env_var}='public'")
+        elif env_var == 'DATABASE_NAME':
+            print(f"export {env_var}='swissai_tax'")
+        else:
+            print(f"export {env_var}=''")
+PYTHON_SCRIPT
+)"
 
 echo "Configuration loaded from Parameter Store:"
 echo "  DATABASE_HOST: ${DATABASE_HOST}"

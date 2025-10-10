@@ -49,7 +49,8 @@ const StyledLink = styled(Link)`
 `;
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language || 'en';
 
   const outerBox = {
     display: 'flex',
@@ -105,7 +106,7 @@ const Footer = () => {
                   justifyContent: { xs: 'center', md: 'flex-start' },
                   mb: { xs: 2, md: 0 }
                 }}>
-                  <Link to="/" style={{ textDecoration: 'none' }}>
+                  <Link to={`/${currentLang}`} style={{ textDecoration: 'none' }}>
                     <Typography
                       variant="h6"
                       sx={{
@@ -140,13 +141,13 @@ const Footer = () => {
                       flexWrap: 'wrap',
                       justifyContent: 'center'
                     }}>
-                      <StyledLink to="/features">{t('Features')}</StyledLink>
-                      <StyledLink to="/security">{t('Security')}</StyledLink>
-                      <StyledLink to="/contact-us">{t('Contact Us')}</StyledLink>
-                      <StyledLink to="/plan">{t('Pricing')}</StyledLink>
-                      <StyledLink to="/blog-list">{t('Blog')}</StyledLink>
-                      <StyledLink to="/faq">{t('FAQ')}</StyledLink>
-                      <StyledLink to="/status">{t('Status')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/features`}>{t('Features')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/security`}>{t('Security')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/contact-us`}>{t('Contact Us')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/plan`}>{t('Pricing')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/blog-list`}>{t('Blog')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/faq`}>{t('FAQ')}</StyledLink>
+                      <StyledLink to={`/${currentLang}/status`}>{t('Status')}</StyledLink>
                     </Box>
                     <Typography
                       sx={{
@@ -251,16 +252,16 @@ const Footer = () => {
                 columnGap: 2,
                 flexWrap: 'wrap'
               }}>
-              <StyledLink to="/status" style={{ fontSize: '12px' }}>
+              <StyledLink to={`/${currentLang}/status`} style={{ fontSize: '12px' }}>
                 {t('Status')}
               </StyledLink>
-              <StyledLink to="/security" style={{ fontSize: '12px' }}>
+              <StyledLink to={`/${currentLang}/security`} style={{ fontSize: '12px' }}>
                 {t('Security')}
               </StyledLink>
-              <StyledLink to="/privacy-policy" style={{ fontSize: '12px' }}>
+              <StyledLink to={`/${currentLang}/privacy-policy`} style={{ fontSize: '12px' }}>
                 {t('Privacy Policy')}
               </StyledLink>
-              <StyledLink to="/terms-and-conditions" style={{ fontSize: '12px' }}>
+              <StyledLink to={`/${currentLang}/terms-and-conditions`} style={{ fontSize: '12px' }}>
                 {t('Terms and Conditions')}
               </StyledLink>
             </Box>

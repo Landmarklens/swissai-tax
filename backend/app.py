@@ -24,7 +24,7 @@ sys.path.append(os.path.dirname(__file__))
 from config import settings as app_settings
 
 # Import routers
-from routers import auth, user, user_counter, audit_logs, user_data, interview
+from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions
 from routers.swisstax import dashboard, filing, payment, profile, settings, subscription
 from services.document_service import DocumentService
 from services.interview_service import interview_service
@@ -221,11 +221,14 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 # Include routers
+app.include_router(health.router)  # No prefix - includes /health
+app.include_router(status.router)  # No prefix - includes /api/status
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(user.router, prefix="/api/user", tags=["user"])
 app.include_router(user_data.router, prefix="/api/user", tags=["user-data"])
 app.include_router(user_counter.router, prefix="/api/user-counter", tags=["user-counter"])
 app.include_router(audit_logs.router, prefix="/api/audit-logs", tags=["audit-logs"])
+app.include_router(sessions.router, prefix="/api", tags=["sessions"])
 app.include_router(interview.router, prefix="/api/interview", tags=["interview"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(profile.router, prefix="/api/profile", tags=["profile"])

@@ -3,7 +3,6 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { Box, Typography, IconButton, Container } from '@mui/material';
 import { theme } from '../../theme/theme';
-import AICard from '../../components/sections/aiCard/AICard';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { useLocation } from 'react-router-dom';
@@ -200,18 +199,6 @@ const Layout = ({ children, backgroundColor, heading, text, isTenants, isOwners,
         )}
       </Box>
       <Box sx={{ backgroundColor: backgroundColor }}>{children}</Box>
-      <Box sx={{ display: paths.includes(location.pathname) && 'none' }}>
-        <AICard
-          background={theme.palette.background.default}
-          buttonColor={theme.palette.accent.blue}
-          elementColor={'#e9eeff'}
-          textColor={'black'}
-          space={0}
-          isTenants
-          isOwners
-          isAbout
-        />
-      </Box>
 
       <Footer />
     </Box>

@@ -187,10 +187,23 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
         logging.getLogger(__name__).warning(f"Failed to create session record: {e}")
 
     # Set httpOnly cookie for secure authentication
+    # Detect if request is from localhost to adjust cookie settings
+    host = request.headers.get("host", "")
+    is_localhost = "localhost" in host or "127.0.0.1" in host
+
+    cookie_settings = COOKIE_SETTINGS.copy()
+    if is_localhost:
+        # Override for localhost: allow HTTP, use lax samesite, no domain restriction
+        cookie_settings.update({
+            "secure": False,
+            "samesite": "lax",
+            "domain": None
+        })
+
     response.set_cookie(
         key="access_token",
         value=f"Bearer {access_token}",
-        **COOKIE_SETTINGS
+        **cookie_settings
     )
 
     # Log successful login with session ID
@@ -304,13 +317,28 @@ async def user_login(
                 import logging
                 logger = logging.getLogger(__name__)
                 logger.info(f"[LOGIN DEBUG] Setting cookie for user: {db_user.email}")
-                logger.info(f"[LOGIN DEBUG] Cookie settings: {COOKIE_SETTINGS}")
+
+                # Detect if request is from localhost to adjust cookie settings
+                host = request.headers.get("host", "")
+                is_localhost = "localhost" in host or "127.0.0.1" in host
+
+                cookie_settings = COOKIE_SETTINGS.copy()
+                if is_localhost:
+                    # Override for localhost: allow HTTP, use lax samesite, no domain restriction
+                    cookie_settings.update({
+                        "secure": False,
+                        "samesite": "lax",
+                        "domain": None
+                    })
+                    logger.info(f"[LOGIN DEBUG] Using localhost cookie settings")
+
+                logger.info(f"[LOGIN DEBUG] Cookie settings: {cookie_settings}")
                 logger.info(f"[LOGIN DEBUG] Token length: {len(access_token)}")
 
                 response.set_cookie(
                     key="access_token",
                     value=f"Bearer {access_token}",
-                    **COOKIE_SETTINGS
+                    **cookie_settings
                 )
 
                 logger.info(f"[LOGIN DEBUG] Cookie set successfully")
@@ -450,10 +478,23 @@ async def verify_two_factor_login(
 
         # Set httpOnly cookie if requested
         if use_cookie:
+            # Detect if request is from localhost to adjust cookie settings
+            host = request.headers.get("host", "")
+            is_localhost = "localhost" in host or "127.0.0.1" in host
+
+            cookie_settings = COOKIE_SETTINGS.copy()
+            if is_localhost:
+                # Override for localhost: allow HTTP, use lax samesite, no domain restriction
+                cookie_settings.update({
+                    "secure": False,
+                    "samesite": "lax",
+                    "domain": None
+                })
+
             response.set_cookie(
                 key="access_token",
                 value=f"Bearer {access_token}",
-                **COOKIE_SETTINGS
+                **cookie_settings
             )
 
             # Return user data without token (cookie handles auth)

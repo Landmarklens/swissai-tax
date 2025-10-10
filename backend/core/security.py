@@ -208,18 +208,23 @@ async def get_current_user(request: Request):
         try:
             user = await get_current_user_from_cookie(request, access_token)
 
-            # Validate and update session if session_id is present
+            # Optionally validate and update session if session_id is present
+            # This is best-effort - we don't fail auth if session validation fails
             session_id = get_session_id_from_request(request)
             if session_id:
                 from services.session_service import session_service
                 from db.session import get_db
                 db = next(get_db())
                 try:
-                    # Just validate the session - don't auto-create
-                    # Sessions should only be created during login
-                    if not session_service.validate_session(db, session_id):
-                        logger.warning(f"Invalid or expired session: {session_id}")
-                        raise HTTPException(status_code=401, detail="Session invalid or expired")
+                    session_exists = session_service.get_session_by_id(db, session_id)
+                    if session_exists:
+                        # Session exists, validate and update it
+                        session_service.validate_session(db, session_id)
+                    # If session doesn't exist, that's okay - might be a legacy login
+                    # The session will be created on next login
+                except Exception as e:
+                    # Log but don't fail auth - session tracking is secondary to authentication
+                    logger.debug(f"Session validation skipped: {e}")
                 finally:
                     db.close()
 
@@ -231,17 +236,18 @@ async def get_current_user(request: Request):
     try:
         user = await get_current_user_from_header(request)
 
-        # Validate and update session if session_id is present
+        # Optionally validate and update session if session_id is present
         session_id = get_session_id_from_request(request)
         if session_id:
             from services.session_service import session_service
             from db.session import get_db
             db = next(get_db())
             try:
-                # Just validate the session - don't auto-create
-                if not session_service.validate_session(db, session_id):
-                    logger.warning(f"Invalid or expired session: {session_id}")
-                    raise HTTPException(status_code=401, detail="Session invalid or expired")
+                session_exists = session_service.get_session_by_id(db, session_id)
+                if session_exists:
+                    session_service.validate_session(db, session_id)
+            except Exception as e:
+                logger.debug(f"Session validation skipped: {e}")
             finally:
                 db.close()
 

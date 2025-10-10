@@ -263,6 +263,18 @@ const StatusPage = () => {
         </Typography>
       </Box>
 
+      {/* Network Error Alert */}
+      {networkError && !isOnline && (
+        <Alert severity="warning" sx={{ mb: 4 }}>
+          <Typography variant="body1" fontWeight="600">
+            {t('status.networkOffline', 'You are currently offline')}
+          </Typography>
+          <Typography variant="body2">
+            {t('status.networkOfflineDescription', 'Status updates are paused. They will resume automatically when your connection is restored.')}
+          </Typography>
+        </Alert>
+      )}
+
       {/* Overall Status Banner */}
       <Paper
         elevation={0}

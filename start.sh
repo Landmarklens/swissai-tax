@@ -31,13 +31,28 @@ cd /app/backend
 python3 -m pip install --quiet --no-cache-dir -r requirements-apprunner.txt
 echo "Dependencies installed successfully"
 
+# Load database configuration from Parameter Store
+echo "========================================="
+echo "LOADING CONFIGURATION FROM PARAMETER STORE"
+echo "========================================="
+export DATABASE_HOST=$(aws ssm get-parameter --name "/swissai-tax/db/host" --region us-east-1 --query "Parameter.Value" --output text 2>/dev/null || echo "")
+export DATABASE_PORT=$(aws ssm get-parameter --name "/swissai-tax/db/port" --region us-east-1 --query "Parameter.Value" --output text 2>/dev/null || echo "5432")
+export DATABASE_NAME=$(aws ssm get-parameter --name "/swissai-tax/db/database" --region us-east-1 --query "Parameter.Value" --output text 2>/dev/null || echo "swissai_tax")
+export DATABASE_USER=$(aws ssm get-parameter --name "/swissai-tax/db/username" --region us-east-1 --query "Parameter.Value" --output text 2>/dev/null || echo "")
+export DATABASE_PASSWORD=$(aws ssm get-parameter --name "/swissai-tax/db/password" --with-decryption --region us-east-1 --query "Parameter.Value" --output text 2>/dev/null || echo "")
+export DATABASE_SCHEMA=$(aws ssm get-parameter --name "/swissai-tax/db/schema" --region us-east-1 --query "Parameter.Value" --output text 2>/dev/null || echo "public")
+
+echo "Configuration loaded from Parameter Store:"
+echo "  DATABASE_HOST: ${DATABASE_HOST}"
+echo "  DATABASE_PORT: ${DATABASE_PORT}"
+echo "  DATABASE_NAME: ${DATABASE_NAME}"
+echo "  DATABASE_USER: ${DATABASE_USER}"
+echo "  DATABASE_SCHEMA: ${DATABASE_SCHEMA}"
+
 # Create database if needed
 echo "========================================="
 echo "DATABASE SETUP"
 echo "========================================="
-echo "Database user: ${DATABASE_USER}"
-echo "Database host: ${DATABASE_HOST}"
-echo "Database name: ${DATABASE_NAME}"
 cd /app
 echo "Running create_database.py..."
 python3 backend/create_database.py || echo "Database setup failed, continuing anyway..."

@@ -211,6 +211,20 @@ async def get_current_user(request: Request):
     try:
         user = await get_current_user_from_header(request)
         logger.info(f"[AUTH DEBUG] Header auth SUCCESS - User: {user.email}")
+
+        # Validate session if session_id is present (same as cookie auth)
+        session_id = get_session_id_from_request(request)
+        if session_id:
+            from services.session_service import session_service
+            from db.session import get_db
+            db = next(get_db())
+            try:
+                if not session_service.validate_session(db, session_id):
+                    logger.warning(f"[AUTH DEBUG] Invalid session {session_id}")
+                    raise HTTPException(status_code=401, detail="Session invalid or expired")
+            finally:
+                db.close()
+
         return user
     except HTTPException as e:
         logger.error(f"[AUTH DEBUG] Header auth FAILED: {e.status_code} - {e.detail}")

@@ -186,13 +186,6 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
         import logging
         logging.getLogger(__name__).warning(f"Failed to create session record: {e}")
 
-    # Set httpOnly cookie for secure authentication
-    response.set_cookie(
-        key="access_token",
-        value=f"Bearer {access_token}",
-        **get_cookie_settings_for_request(request)
-    )
-
     # Log successful login with session ID
     try:
         log_login_success(
@@ -216,7 +209,17 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
     if requires_subscription:
         final_redirect_url = f"{final_redirect_url}?requires_subscription=true"
 
-    return RedirectResponse(url=final_redirect_url)
+    # Create redirect response first
+    redirect_response = RedirectResponse(url=final_redirect_url)
+
+    # Set httpOnly cookie on the redirect response (this is critical!)
+    redirect_response.set_cookie(
+        key="access_token",
+        value=f"Bearer {access_token}",
+        **get_cookie_settings_for_request(request)
+    )
+
+    return redirect_response
 
 
 @router.post("/login")

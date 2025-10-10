@@ -62,7 +62,7 @@ const SocialButton = styled(Button)(({ theme }) => ({
   }
 }));
 
-const LoginSignupModal = ({ open, onClose }) => {
+const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
   const { t } = useTranslation();
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
@@ -151,7 +151,12 @@ const LoginSignupModal = ({ open, onClose }) => {
           // Only close and navigate if not skipped (e.g., when showing 2FA setup)
           if (!skipCloseAndNavigate) {
             onClose();
-            navigate('/filings');
+            // Use callback if provided, otherwise default to /filings
+            if (onAuthSuccess) {
+              onAuthSuccess();
+            } else {
+              navigate('/filings');
+            }
           }
         } else if (fetchUserProfile.rejected.match(profileAction)) {
           toast.error(profileAction?.error?.message || t('Login failed'));
@@ -177,7 +182,12 @@ const LoginSignupModal = ({ open, onClose }) => {
       if (fetchUserProfile.fulfilled.match(profileAction)) {
         toast.success(t('Login successful!'));
         onClose();
-        navigate('/filings');
+        // Use callback if provided, otherwise default to /filings
+        if (onAuthSuccess) {
+          onAuthSuccess();
+        } else {
+          navigate('/filings');
+        }
       } else {
         toast.error(t('Failed to load profile'));
       }
@@ -233,13 +243,23 @@ const LoginSignupModal = ({ open, onClose }) => {
     setShow2FASetup(false);
     toast.success(t('Two-factor authentication enabled successfully!'));
     onClose();
-    navigate('/filings');
+    // Use callback if provided, otherwise default to /filings
+    if (onAuthSuccess) {
+      onAuthSuccess();
+    } else {
+      navigate('/filings');
+    }
   };
 
   const handle2FASetupCancel = () => {
     setShow2FASetup(false);
     onClose();
-    navigate('/filings');
+    // Use callback if provided, otherwise default to /filings
+    if (onAuthSuccess) {
+      onAuthSuccess();
+    } else {
+      navigate('/filings');
+    }
   };
 
   return (

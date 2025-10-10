@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -33,7 +33,7 @@ import {
   Twitter as TwitterIcon,
   ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Header from '../../components/header/Header';
@@ -52,9 +52,11 @@ const Homepage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  const location = useLocation();
   const currentLang = i18n.language || 'en';
   const userCount = useUserCounter();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const features = [
     {
@@ -117,12 +119,33 @@ const Homepage = () => {
   ];
 
 
+  // Handle plan selection from location state (when user clicks plan while unauthenticated)
+  useEffect(() => {
+    if (location.state?.showAuth && location.state?.selectedPlan) {
+      setSelectedPlan(location.state.selectedPlan);
+      setLoginModalOpen(true);
+
+      // Clear location state to prevent reopening modal on page refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   const handleGetStarted = () => {
     const isAuthenticated = authService.isAuthenticated();
     if (isAuthenticated) {
       navigate(`/${currentLang}/tax-filing/interview`);
     } else {
       setLoginModalOpen(true);
+    }
+  };
+
+  // Handle successful authentication - redirect to checkout with selected plan
+  const handleAuthSuccess = () => {
+    if (selectedPlan) {
+      navigate(`/${currentLang}/subscription/checkout/${selectedPlan}`);
+      setSelectedPlan(null); // Clear selected plan
+    } else {
+      navigate(`/${currentLang}/filings`);
     }
   };
 
@@ -465,6 +488,7 @@ const Homepage = () => {
       <LoginSignupModal
         open={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
       />
     </Box>
   );

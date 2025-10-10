@@ -15,9 +15,14 @@ class Settings(BaseSettings):
     STRIPE_SECRET_KEY: str | None = Field(None)
     STRIPE_PUBLISHABLE_KEY: str | None = Field(None)
 
-    # Stripe Price IDs for subscription plans
-    STRIPE_PRICE_ANNUAL_FLEX: str | None = Field(None)  # CHF 129/year - cancel anytime
-    STRIPE_PRICE_5_YEAR_LOCK: str | None = Field(None)  # CHF 89/year - 5 year commitment
+    # Stripe Price IDs for subscription plans (4-tier model)
+    STRIPE_PRICE_BASIC: str | None = Field(None)  # CHF 49/year - Basic plan
+    STRIPE_PRICE_PRO: str | None = Field(None)  # CHF 99/year - Pro plan (most popular)
+    STRIPE_PRICE_PREMIUM: str | None = Field(None)  # CHF 149/year - Premium plan
+
+    # Legacy price IDs (deprecated, keeping for migration)
+    STRIPE_PRICE_ANNUAL_FLEX: str | None = Field(None)
+    STRIPE_PRICE_5_YEAR_LOCK: str | None = Field(None)
 
     # Feature flag for Stripe subscriptions
     ENABLE_SUBSCRIPTIONS: bool = Field(False)
@@ -130,8 +135,11 @@ class Settings(BaseSettings):
                 '/swissai-tax/stripe/secret-key': 'STRIPE_SECRET_KEY',
                 '/swissai-tax/stripe/publishable-key': 'STRIPE_PUBLISHABLE_KEY',
                 '/swissai-tax/stripe/webhook-secret': 'STRIPE_WEBHOOK_SECRET',
-                '/swissai-tax/stripe/price-annual-flex': 'STRIPE_PRICE_ANNUAL_FLEX',
-                '/swissai-tax/stripe/price-5-year-lock': 'STRIPE_PRICE_5_YEAR_LOCK',
+                '/swissai-tax/stripe/price-basic': 'STRIPE_PRICE_BASIC',
+                '/swissai-tax/stripe/price-pro': 'STRIPE_PRICE_PRO',
+                '/swissai-tax/stripe/price-premium': 'STRIPE_PRICE_PREMIUM',
+                '/swissai-tax/stripe/price-annual-flex': 'STRIPE_PRICE_ANNUAL_FLEX',  # Legacy
+                '/swissai-tax/stripe/price-5-year-lock': 'STRIPE_PRICE_5_YEAR_LOCK',  # Legacy
                 '/swissai-tax/features/enable-subscriptions': 'ENABLE_SUBSCRIPTIONS',
                 '/homeai/prod/AWS_REGION': 'AWS_REGION',
                 '/homeai/prod/AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
@@ -184,8 +192,17 @@ class Settings(BaseSettings):
 
     @property
     def STRIPE_PLAN_PRICES(self) -> dict[str, str]:
-        """Map of plan types to Stripe Price IDs"""
+        """Map of plan types to Stripe Price IDs (4-tier model)"""
         prices = {}
+        # New 4-tier model
+        if self.STRIPE_PRICE_BASIC:
+            prices['basic'] = self.STRIPE_PRICE_BASIC
+        if self.STRIPE_PRICE_PRO:
+            prices['pro'] = self.STRIPE_PRICE_PRO
+        if self.STRIPE_PRICE_PREMIUM:
+            prices['premium'] = self.STRIPE_PRICE_PREMIUM
+
+        # Legacy plans (for backward compatibility)
         if self.STRIPE_PRICE_ANNUAL_FLEX:
             prices['annual_flex'] = self.STRIPE_PRICE_ANNUAL_FLEX
         if self.STRIPE_PRICE_5_YEAR_LOCK:
@@ -196,6 +213,15 @@ class Settings(BaseSettings):
     def STRIPE_PRICE_TO_PLAN(self) -> dict[str, str]:
         """Reverse mapping: Stripe Price ID to plan type"""
         mapping = {}
+        # New 4-tier model
+        if self.STRIPE_PRICE_BASIC:
+            mapping[self.STRIPE_PRICE_BASIC] = 'basic'
+        if self.STRIPE_PRICE_PRO:
+            mapping[self.STRIPE_PRICE_PRO] = 'pro'
+        if self.STRIPE_PRICE_PREMIUM:
+            mapping[self.STRIPE_PRICE_PREMIUM] = 'premium'
+
+        # Legacy plans (for backward compatibility)
         if self.STRIPE_PRICE_ANNUAL_FLEX:
             mapping[self.STRIPE_PRICE_ANNUAL_FLEX] = 'annual_flex'
         if self.STRIPE_PRICE_5_YEAR_LOCK:

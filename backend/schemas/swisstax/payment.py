@@ -23,13 +23,13 @@ class PaymentIntentResponse(BaseModel):
 
 class SubscriptionCreate(BaseModel):
     """Create a new subscription"""
-    plan_type: str = Field(..., pattern="^(annual_flex|5_year_lock)$")
+    plan_type: str = Field(..., pattern="^(free|basic|pro|premium|annual_flex|5_year_lock)$")
     payment_method_id: Optional[str] = None  # Can be None if using SetupIntent
 
 
 class SetupIntentCreate(BaseModel):
     """Create a SetupIntent for collecting payment method"""
-    plan_type: str = Field(..., pattern="^(annual_flex|5_year_lock)$")
+    plan_type: str = Field(..., pattern="^(basic|pro|premium|annual_flex|5_year_lock)$")
 
 
 class SetupIntentResponse(BaseModel):
@@ -79,7 +79,7 @@ class SubscriptionCancel(BaseModel):
 
 class SubscriptionSwitch(BaseModel):
     """Switch subscription plan"""
-    new_plan_type: str = Field(..., pattern="^(annual_flex|5_year_lock)$")
+    new_plan_type: str = Field(..., pattern="^(basic|pro|premium|annual_flex|5_year_lock)$")
     reason: Optional[str] = Field(None, description="Reason for switching")
 
 

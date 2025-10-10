@@ -53,6 +53,22 @@ const subscriptionService = {
   },
 
   /**
+   * Create a free subscription (no Stripe required)
+   * @returns {Promise} Subscription details
+   */
+  createFreeSubscription: async () => {
+    try {
+      const response = await api.post('/api/subscription/create', {
+        plan_type: 'free',
+        payment_method_id: null
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to create free subscription');
+    }
+  },
+
+  /**
    * Get current user subscription
    * @returns {Promise} Current subscription or null
    */

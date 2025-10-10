@@ -98,15 +98,10 @@ async def create_subscription(
     db: Session = Depends(get_db)
 ):
     """
-    Create a new subscription with 30-day trial
-    Requires payment method to be already attached to customer (via SetupIntent)
+    Create a new subscription with 30-day trial (for paid plans) or free subscription
+    Free plan: No Stripe required, database-only subscription
+    Paid plans: Requires payment method to be already attached to customer (via SetupIntent)
     """
-    if not settings.ENABLE_SUBSCRIPTIONS:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Subscriptions are not enabled yet"
-        )
-
     # Check if user already has an active subscription
     existing_sub = (
         db.query(Subscription)
@@ -120,6 +115,46 @@ async def create_subscription(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User already has an active subscription"
+        )
+
+    # ========================================================================
+    # SPECIAL HANDLING FOR FREE PLAN - No Stripe required
+    # ========================================================================
+    if sub_data.plan_type == 'free':
+        plan_config = _get_plan_config('free')
+
+        # Create free subscription record in database (no Stripe)
+        subscription = Subscription(
+            user_id=current_user.id,
+            plan_type='free',
+            status='active',  # Free plan is immediately active
+            stripe_subscription_id=None,  # No Stripe subscription
+            stripe_customer_id=None,  # No Stripe customer needed
+            stripe_price_id=None,  # No Stripe price
+            current_period_start=datetime.utcnow(),
+            current_period_end=None,  # Free plan doesn't expire
+            price_chf=0.00,
+            plan_commitment_years=0,
+            trial_start=None,  # No trial for free plan
+            trial_end=None,
+            commitment_start_date=None,
+            commitment_end_date=None,
+            cancel_at_period_end=False
+        )
+
+        db.add(subscription)
+        db.commit()
+        db.refresh(subscription)
+
+        return _build_subscription_response(subscription)
+
+    # ========================================================================
+    # PAID PLANS - Require Stripe integration
+    # ========================================================================
+    if not settings.ENABLE_SUBSCRIPTIONS:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Subscriptions are not enabled yet"
         )
 
     stripe_service = get_stripe_service()
@@ -139,8 +174,9 @@ async def create_subscription(
             detail=f"Invalid plan type: {sub_data.plan_type}"
         )
 
-    # Determine commitment years
-    commitment_years = 5 if sub_data.plan_type == '5_year_lock' else 1
+    # Determine commitment years and pricing based on plan
+    plan_config = _get_plan_config(sub_data.plan_type)
+    commitment_years = plan_config['commitment_years']
 
     # Create Stripe subscription with trial
     try:
@@ -166,8 +202,8 @@ async def create_subscription(
     commitment_start = trial_end
     commitment_end = commitment_start + timedelta(days=365 * commitment_years)
 
-    # Determine price
-    price_chf = 89.00 if sub_data.plan_type == '5_year_lock' else 129.00
+    # Get price from plan config
+    price_chf = plan_config['price_chf']
 
     # Create subscription record in database
     subscription = Subscription(
@@ -259,12 +295,15 @@ async def cancel_subscription(
             detail="Cancellation already requested"
         )
 
-    # For 5-year commitment: Only allow cancellation during trial
+    # Legacy: For 5-year commitment, only allow cancellation during trial
     if subscription.plan_type == '5_year_lock' and not subscription.is_in_trial:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="5-year plan can only be canceled during the 30-day trial period"
         )
+
+    # New 4-tier model: All plans (basic, pro, premium) can cancel anytime
+    # Free plan has no subscription to cancel
 
     # Cancel in Stripe (immediately during trial, at period end otherwise)
     if settings.ENABLE_SUBSCRIPTIONS:
@@ -367,9 +406,10 @@ async def switch_subscription_plan(
                 detail=f"Failed to switch plan: {str(e)}"
             )
 
-    # Update subscription in database
-    new_commitment_years = 5 if switch_data.new_plan_type == '5_year_lock' else 1
-    new_price_chf = 89.00 if switch_data.new_plan_type == '5_year_lock' else 129.00
+    # Get new plan configuration
+    new_plan_config = _get_plan_config(switch_data.new_plan_type)
+    new_commitment_years = new_plan_config['commitment_years']
+    new_price_chf = new_plan_config['price_chf']
 
     subscription.plan_type = switch_data.new_plan_type
     subscription.stripe_price_id = new_price_id
@@ -516,6 +556,49 @@ async def get_billing_history(
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
+
+def _get_plan_config(plan_type: str) -> dict:
+    """
+    Get plan configuration (price, commitment, features)
+    Supports new 4-tier model: free, basic, pro, premium
+    """
+    plans = {
+        # New 4-tier model
+        'free': {
+            'price_chf': 0.00,
+            'commitment_years': 0,
+            'name': 'Free'
+        },
+        'basic': {
+            'price_chf': 49.00,
+            'commitment_years': 1,
+            'name': 'Basic'
+        },
+        'pro': {
+            'price_chf': 99.00,
+            'commitment_years': 1,
+            'name': 'Pro'
+        },
+        'premium': {
+            'price_chf': 149.00,
+            'commitment_years': 1,
+            'name': 'Premium'
+        },
+        # Legacy plans (for backward compatibility)
+        'annual_flex': {
+            'price_chf': 129.00,
+            'commitment_years': 1,
+            'name': 'Annual Flex'
+        },
+        '5_year_lock': {
+            'price_chf': 89.00,
+            'commitment_years': 5,
+            'name': '5-Year Price Lock'
+        }
+    }
+
+    return plans.get(plan_type, plans['free'])
+
 
 def _build_subscription_response(subscription: Subscription) -> SubscriptionResponse:
     """Build SubscriptionResponse from Subscription model"""

@@ -9,17 +9,15 @@ from config import settings
 
 ALGORITHM = "HS256"
 
-# Cookie settings - adjusted based on environment
-# For localhost: secure=False, samesite="lax" (works across ports)
-# For production: secure=True, samesite="none", domain=".swissai.tax" (works across subdomains)
-_is_localhost = "localhost" in settings.API_URL or "127.0.0.1" in settings.API_URL
-
+# Default cookie settings for production
+# Note: These are overridden at request time for localhost (see auth.py)
+# For production HTTPS: secure=True, samesite="none", domain=".swissai.tax"
 COOKIE_SETTINGS = {
     "httponly": True,
-    "secure": not _is_localhost,  # False for localhost (HTTP), True for production (HTTPS)
-    "samesite": "lax" if _is_localhost else "none",  # "lax" for localhost, "none" for cross-domain
+    "secure": True,  # HTTPS only (overridden for localhost)
+    "samesite": "none",  # Cross-domain (overridden to "lax" for localhost)
     "max_age": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Match JWT expiry (6 hours)
-    "domain": None if _is_localhost else ".swissai.tax",  # No domain for localhost, .swissai.tax for production
+    "domain": ".swissai.tax",  # Allow across subdomains (cleared for localhost)
 }
 
 

@@ -657,7 +657,7 @@ class TestInsightsRouter:
             mock_generate.return_value = mock_insights
 
             response = authenticated_client_no_2fa.post(
-                '/generate/filing-123',
+                '/api/insights/generate/filing-123',
                 json={'force_regenerate': False}
             )
 
@@ -673,7 +673,7 @@ class TestInsightsRouter:
             mock_generate.return_value = []
 
             response = authenticated_client_no_2fa.post(
-                '/generate/filing-123',
+                '/api/insights/generate/filing-123',
                 json={'force_regenerate': True}
             )
 

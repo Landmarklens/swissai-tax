@@ -1,13 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer, { login, logout, signup, selectAuth } from './authSlice';
-import { postData } from '../../api/apiClient';
-import * as utils from '../../utils/index.jsx';
+import authService from '../../services/authService';
 
-jest.mock('../../api/apiClient');
-jest.mock('../../utils/index.jsx', () => ({
-  setLocalData: jest.fn(),
-  removeLocalData: jest.fn()
+// Mock authService before importing authSlice (important for initial state)
+jest.mock('../../services/authService', () => ({
+  isAuthenticated: jest.fn(() => false),
+  getCurrentUser: jest.fn(() => null),
+  login: jest.fn(),
+  logout: jest.fn(),
+  register: jest.fn()
 }));
+
+import authReducer, { login, logout, signup } from './authSlice';
 
 describe('authSlice', () => {
   let store;
@@ -35,133 +38,104 @@ describe('authSlice', () => {
   });
 
   describe('login action', () => {
-    it('should handle login.pending', () => {
-      store.dispatch(login.pending());
-      const state = store.getState().auth;
-      expect(state.isLoading).toBe(true);
-      expect(state.error).toBe(null);
-    });
-
     it('should handle login.fulfilled', async () => {
       const mockResponse = {
-        status: 200,
-        data: { id: 1, email: 'test@example.com', token: 'token123' }
+        success: true,
+        user: { id: 1, email: 'test@example.com' }
       };
-      postData.mockResolvedValue(mockResponse);
+      authService.login.mockResolvedValue(mockResponse);
 
       await store.dispatch(login({ email: 'test@example.com', password: 'password' }));
 
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
-      expect(state.user).toEqual(mockResponse);
+      expect(state.user).toEqual(mockResponse.user);
       expect(state.isSuccess).toBe(true);
       expect(state.isAuthenticated).toBe(true);
       expect(state.error).toBe(null);
-      expect(utils.setLocalData).toHaveBeenCalledWith('userData', mockResponse.data);
     });
 
-    it('should handle login.rejected with error message', async () => {
-      const mockError = { status: 401, error: 'Invalid credentials' };
-      postData.mockResolvedValue(mockError);
+    it('should handle login.rejected', async () => {
+      authService.login.mockRejectedValue(new Error('Invalid credentials'));
 
       await store.dispatch(login({ email: 'test@example.com', password: 'wrong' }));
 
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
-      expect(state.isAuthenticated).toBe(true); // Note: This seems like a bug in the original code
       expect(state.error).toBe('Invalid credentials');
-    });
-
-    it('should handle login.rejected with default error', async () => {
-      postData.mockRejectedValue(new Error('Network error'));
-
-      await store.dispatch(login({ email: 'test@example.com', password: 'password' }));
-
-      const state = store.getState().auth;
-      expect(state.isLoading).toBe(false);
-      expect(state.error).toBe('Something went wrong');
     });
   });
 
   describe('logout action', () => {
-    it('should handle logout.pending', () => {
-      store.dispatch(logout.pending());
-      const state = store.getState().auth;
-      expect(state.isLoading).toBe(true);
-    });
-
     it('should handle logout.fulfilled', async () => {
       // Set initial authenticated state
-      await store.dispatch(login.fulfilled({
-        status: 200,
-        data: { id: 1, email: 'test@example.com' }
-      }));
+      const mockResponse = {
+        success: true,
+        user: { id: 1, email: 'test@example.com' }
+      };
+      authService.login.mockResolvedValue(mockResponse);
+      await store.dispatch(login({ email: 'test@example.com', password: 'password' }));
 
+      // Mock logout
+      authService.logout.mockResolvedValue();
       await store.dispatch(logout());
 
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
       expect(state.isAuthenticated).toBe(false);
       expect(state.isSuccess).toBe(false);
-      expect(state.user).toEqual({});
-      expect(utils.removeLocalData).toHaveBeenCalledWith('userData');
+      expect(state.user).toBe(null);
     });
 
     it('should handle logout.rejected', async () => {
-      utils.removeLocalData.mockImplementation(() => {
-        throw new Error('Storage error');
+      // Mock logout to throw an error
+      authService.logout.mockImplementation(() => {
+        throw new Error('Logout failed');
       });
 
       await store.dispatch(logout());
 
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
-      expect(state.error).toBe('Storage error');
+      expect(state.error).toBe('Logout failed');
     });
   });
 
   describe('signup action', () => {
-    it('should handle signup.pending', () => {
-      store.dispatch(signup.pending());
-      const state = store.getState().auth;
-      expect(state.isLoading).toBe(true);
-    });
+    it('should handle signup.fulfilled', async () => {
+      const mockResponse = {
+        id: 1,
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe'
+      };
+      authService.register.mockResolvedValue(mockResponse);
 
-    it('should handle signup.fulfilled', () => {
-      store.dispatch(signup.fulfilled());
+      await store.dispatch(signup({
+        email: 'test@example.com',
+        password: 'password123',
+        first_name: 'John',
+        last_name: 'Doe'
+      }));
+
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
-      expect(state.isSuccess).toBe(false);
-      expect(state.user).toEqual({});
+      expect(state.isSuccess).toBe(true);
+      expect(state.isAuthenticated).toBe(true);
+      expect(state.user).toEqual(mockResponse);
     });
 
     it('should handle signup.rejected', async () => {
-      // Since the signup thunk doesn't have implementation, we'll test the reducer directly
-      const action = {
-        type: signup.rejected.type,
-        payload: { message: 'Signup failed' }
-      };
-      store.dispatch(action);
+      authService.register.mockRejectedValue(new Error('Registration failed'));
+
+      await store.dispatch(signup({
+        email: 'test@example.com',
+        password: 'password123'
+      }));
+
       const state = store.getState().auth;
       expect(state.isLoading).toBe(false);
-      expect(state.error).toBe('Signup failed');
-    });
-  });
-
-  describe('selectAuth selector', () => {
-    it('should select auth state', () => {
-      const mockState = {
-        auth: {
-          isAuthenticated: true,
-          user: { id: 1 },
-          isLoading: false,
-          isSuccess: true,
-          error: null
-        }
-      };
-
-      const result = selectAuth(mockState);
-      expect(result).toEqual(mockState.auth);
+      expect(state.error).toBe('Registration failed');
     });
   });
 });

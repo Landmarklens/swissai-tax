@@ -459,8 +459,8 @@ class TestBackgroundJobScheduler(unittest.TestCase):
         mock_scheduler.start.assert_called_once()
         self.assertTrue(scheduler._is_running)
 
-        # Verify jobs were added (4 jobs)
-        self.assertEqual(mock_scheduler.add_job.call_count, 4)
+        # Verify jobs were added (5 jobs)
+        self.assertEqual(mock_scheduler.add_job.call_count, 5)
 
         # Verify job IDs
         job_ids = [call[1]['id'] for call in mock_scheduler.add_job.call_args_list]
@@ -468,6 +468,7 @@ class TestBackgroundJobScheduler(unittest.TestCase):
         self.assertIn('process_pending_exports', job_ids)
         self.assertIn('cleanup_expired_exports', job_ids)
         self.assertIn('cleanup_old_audit_logs', job_ids)
+        self.assertIn('cleanup_expired_sessions', job_ids)
 
     @patch('services.background_jobs.BackgroundScheduler')
     @patch('services.background_jobs.logger')

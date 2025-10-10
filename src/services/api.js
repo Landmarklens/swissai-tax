@@ -11,8 +11,10 @@ const api = axios.create({
 });
 
 // Request interceptor - now simplified since cookies are sent automatically
-api.interceptors.request.use(
-  (config) => {
+// Guard for testing - only set up interceptors if they exist
+if (api.interceptors && api.interceptors.request) {
+  api.interceptors.request.use(
+    (config) => {
     // Cookies are automatically sent by the browser
     // No need to manually add Authorization header
 
@@ -55,6 +57,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+}
 
 // Interview API endpoints
 export const interviewAPI = {

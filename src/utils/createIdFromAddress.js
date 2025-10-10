@@ -1,5 +1,4 @@
 export function createStringId(address) {
-  const { t } = useTranslation();
   // Convert the address to lowercase
   let id = address.toLowerCase();
 

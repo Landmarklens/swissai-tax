@@ -44,7 +44,19 @@ describe('authService', () => {
 
     it('should use environment variable for redirect URL when set', async () => {
       const originalEnv = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
+      const originalLocation = window.location;
+
+      // Set environment variable
       process.env.REACT_APP_GOOGLE_REDIRECT_URL = 'https://swissai.tax/en/google-redirect';
+
+      // Mock window.location to NOT be localhost
+      delete window.location;
+      window.location = {
+        hostname: 'swissai.tax',
+        origin: 'https://swissai.tax',
+        pathname: '/en/home',
+        href: 'https://swissai.tax/en/home'
+      };
 
       const mockResponse = { data: { authorization_url: 'https://google.com/auth' } };
       axios.get.mockResolvedValue(mockResponse);
@@ -59,8 +71,9 @@ describe('authService', () => {
         })
       );
 
-      // Restore original value
+      // Restore original values
       process.env.REACT_APP_GOOGLE_REDIRECT_URL = originalEnv;
+      window.location = originalLocation;
     });
 
     it('should construct redirect URL for localhost', async () => {
@@ -123,8 +136,9 @@ describe('authService', () => {
     it('should handle Google login callback and store user', async () => {
       const mockResponse = {
         data: {
-          access_token: 'token123',
-          user: { id: 1, email: 'test@example.com' }
+          id: 1,
+          email: 'test@example.com',
+          access_token: 'token123'
         }
       };
       axios.get.mockResolvedValue(mockResponse);
@@ -132,7 +146,9 @@ describe('authService', () => {
       const result = await authService.handleGoogleLoginCallback();
 
       expect(axios.get).toHaveBeenCalledWith(`${API_URL}/api/auth/login/google/callback`);
-      expect(localStorage.getItem('user')).toEqual(JSON.stringify(mockResponse.data));
+      // access_token is NOT stored in localStorage (cookie-based auth)
+      const expectedStored = { id: 1, email: 'test@example.com' };
+      expect(localStorage.getItem('user')).toEqual(JSON.stringify(expectedStored));
       expect(result).toEqual(mockResponse.data);
     });
   });
@@ -141,8 +157,9 @@ describe('authService', () => {
     it('should sign in with Google and store user', async () => {
       const mockResponse = {
         data: {
-          access_token: 'token123',
-          user: { id: 1, email: 'test@example.com' }
+          id: 1,
+          email: 'test@example.com',
+          access_token: 'token123'
         }
       };
       axios.post.mockResolvedValue(mockResponse);
@@ -150,7 +167,9 @@ describe('authService', () => {
       const result = await authService.googleSignIn('idToken123');
 
       expect(axios.post).toHaveBeenCalledWith(`${API_URL}/api/auth/google`, { idToken: 'idToken123' });
-      expect(localStorage.getItem('user')).toEqual(JSON.stringify(mockResponse.data));
+      // access_token is NOT stored in localStorage (cookie-based auth)
+      const expectedStored = { id: 1, email: 'test@example.com' };
+      expect(localStorage.getItem('user')).toEqual(JSON.stringify(expectedStored));
       expect(result).toEqual(mockResponse.data);
     });
   });
@@ -278,8 +297,15 @@ describe('authService', () => {
 
   describe('refreshToken', () => {
     it('should refresh token and update localStorage', async () => {
-      const currentUser = { access_token: createValidToken(), refresh_token: 'refresh_token' };
-      localStorage.setItem('user', JSON.stringify(currentUser));
+      const currentUser = {
+        id: 1,
+        email: 'test@example.com',
+        access_token: createValidToken(),
+        refresh_token: 'refresh_token'
+      };
+      // Store without access_token (as setCurrentUser would do)
+      const { access_token, refresh_token, ...userData } = currentUser;
+      localStorage.setItem('user', JSON.stringify({ ...userData, refresh_token }));
 
       const mockResponse = { data: { access_token: 'new_token' } };
       axios.post.mockResolvedValue(mockResponse);
@@ -290,8 +316,9 @@ describe('authService', () => {
         refresh_token: 'refresh_token'
       });
 
+      // access_token is NOT stored in localStorage (cookie-based auth)
       const updatedUser = JSON.parse(localStorage.getItem('user'));
-      expect(updatedUser.access_token).toBe('new_token');
+      expect(updatedUser.access_token).toBeUndefined();
       expect(result).toEqual({ access_token: 'new_token' });
     });
   });

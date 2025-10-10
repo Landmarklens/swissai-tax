@@ -44,6 +44,8 @@ import { useUserCounter } from '../../hooks/useUserCounter';
 import LoginSignupModal from '../../components/login/Login';
 import authService from '../../services/authService';
 import TrustBadges from '../../components/TrustBadges/TrustBadges';
+import SwissDataBanner from '../../components/sections/SwissDataBanner/SwissDataBanner';
+import SubscriptionPlans from '../SubscriptionPlans/SubscriptionPlans';
 
 const Homepage = () => {
   const { t, i18n } = useTranslation();
@@ -114,32 +116,6 @@ const Homepage = () => {
     { value: "20 Min", label: t('homepage.stats.time') }
   ];
 
-  const pricingPlan = {
-    name: t('plan.name'),
-    price: "CHF 49.99",
-    description: t('plan.price_description'),
-    features: [
-      { included: true, text: t('plan.features.feature1') },
-      { included: true, text: t('plan.features.feature2') },
-      { included: true, text: t('plan.features.feature3') },
-      { included: true, text: t('plan.features.feature4') },
-      { included: true, text: t('plan.features.feature5') },
-      { included: true, text: t('plan.features.feature6') },
-      { included: true, text: t('plan.features.feature7') },
-      { included: true, text: t('plan.features.feature8') },
-      { included: true, text: t('plan.features.feature9') },
-      { included: true, text: t('plan.features.feature10') },
-      { included: true, text: t('plan.features.feature11') },
-      { included: true, text: t('plan.features.feature12') },
-      { included: true, text: t('plan.features.feature13') },
-      { included: true, text: t('plan.features.feature14') },
-      { included: true, text: t('plan.features.feature15') },
-      { included: true, text: t('plan.features.feature16') }
-    ],
-    buttonText: t('plan.cta_button'),
-    buttonVariant: "contained",
-    featured: true
-  };
 
   const handleGetStarted = () => {
     const isAuthenticated = authService.isAuthenticated();
@@ -474,157 +450,12 @@ const Homepage = () => {
         </Container>
       </Box>
 
-      {/* Pricing Section */}
-      <Box sx={{ py: 8, bgcolor: 'background.lightGrey' }}>
-        <Container maxWidth="lg">
-          <Typography
-            variant="h2"
-            align="center"
-            gutterBottom
-            sx={{ mb: 2, fontSize: { xs: '28px', md: '36px' } }}
-          >
-            {t('homepage.pricing.title')}
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            color="text.secondary"
-            sx={{ mb: 6, maxWidth: '600px', mx: 'auto' }}
-          >
-            {t('homepage.pricing.subtitle')}
-          </Typography>
+      {/* Swiss Data Security Banner */}
+      <SwissDataBanner />
 
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              style={{ width: '100%', maxWidth: '1100px' }}
-            >
-              <Card
-                sx={{
-                  p: 5,
-                  border: '2px solid',
-                  borderColor: '#DC0018',
-                  borderRadius: 3,
-                  bgcolor: 'white',
-                  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)'
-                }}
-              >
-                {/* Plan Name */}
-                <Typography
-                  variant="h3"
-                  align="center"
-                  fontWeight={700}
-                  sx={{ mb: 3, fontSize: { xs: '28px', md: '32px' } }}
-                >
-                  {pricingPlan.name}
-                </Typography>
-
-                {/* Price */}
-                <Typography
-                  variant="h2"
-                  align="center"
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: { xs: '56px', md: '72px' },
-                    color: '#DC0018',
-                    lineHeight: 1.1,
-                    mb: 1
-                  }}
-                >
-                  CHF 49.99
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  align="center"
-                  sx={{ mb: 4, fontSize: '14px' }}
-                >
-                  per tax return / one-time payment
-                </Typography>
-
-                {/* Description */}
-                <Typography
-                  variant="body1"
-                  color="text.secondary"
-                  align="center"
-                  sx={{ mb: 5, fontSize: '16px', maxWidth: '800px', mx: 'auto' }}
-                >
-                  {t('plan.description')}
-                </Typography>
-
-                {/* Features - 2 Columns */}
-                <Box
-                  sx={{
-                    mb: 5,
-                    display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-                    gap: 2.5,
-                    maxWidth: '900px',
-                    mx: 'auto'
-                  }}
-                >
-                  {pricingPlan.features.map((feature, idx) => (
-                    <Box key={idx} sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                      <CheckIcon
-                        sx={{
-                          color: '#4CAF50',
-                          fontSize: 22,
-                          mr: 1.5,
-                          mt: 0.2,
-                          flexShrink: 0
-                        }}
-                      />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontSize: '15px', lineHeight: 1.7, color: 'text.primary' }}
-                      >
-                        {feature.text}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
-
-                {/* CTA Button */}
-                <Button
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  onClick={handleGetStarted}
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{
-                    py: 2.5,
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    bgcolor: '#DC0018',
-                    '&:hover': {
-                      bgcolor: '#B00015'
-                    },
-                    textTransform: 'none',
-                    borderRadius: 2,
-                    maxWidth: '900px',
-                    mx: 'auto'
-                  }}
-                >
-                  {pricingPlan.buttonText}
-                </Button>
-
-                {/* Money-back guarantee */}
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  align="center"
-                  sx={{ mt: 3, fontSize: '14px' }}
-                >
-                  {t('homepage.pricing.guarantee')}
-                </Typography>
-              </Card>
-            </motion.div>
-          </Box>
-        </Container>
+      {/* Pricing Section - New Subscription Plans */}
+      <Box sx={{ bgcolor: 'background.paper' }}>
+        <SubscriptionPlans />
       </Box>
 
       {/* Footer */}

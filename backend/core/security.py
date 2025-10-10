@@ -10,7 +10,6 @@ from config import settings
 ALGORITHM = "HS256"
 
 # Default cookie settings for production
-# Note: These are overridden at request time for localhost (see auth.py)
 # For production HTTPS: secure=True, samesite="none", domain=".swissai.tax"
 COOKIE_SETTINGS = {
     "httponly": True,
@@ -19,6 +18,36 @@ COOKIE_SETTINGS = {
     "max_age": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Match JWT expiry (6 hours)
     "domain": ".swissai.tax",  # Allow across subdomains (cleared for localhost)
 }
+
+
+def get_cookie_settings_for_request(request: Request) -> dict:
+    """
+    Get appropriate cookie settings based on request origin.
+
+    Automatically detects localhost and adjusts cookie settings:
+    - Localhost (HTTP): secure=False, samesite="lax", no domain restriction
+    - Production (HTTPS): secure=True, samesite="none", domain=".swissai.tax"
+
+    Args:
+        request: FastAPI Request object
+
+    Returns:
+        Dictionary of cookie settings ready for response.set_cookie()
+    """
+    host = request.headers.get("host", "")
+    is_localhost = "localhost" in host or "127.0.0.1" in host
+
+    cookie_settings = COOKIE_SETTINGS.copy()
+
+    if is_localhost:
+        # Override for localhost: allow HTTP, use lax samesite, no domain restriction
+        cookie_settings.update({
+            "secure": False,
+            "samesite": "lax",
+            "domain": None
+        })
+
+    return cookie_settings
 
 
 def create_access_token(email: str, user_type: str = None, session_id: str = None) -> str:

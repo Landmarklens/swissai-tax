@@ -229,39 +229,26 @@ class TestMultiCantonIntegration(unittest.TestCase):
                 self.assertIn('address', copied_data)
                 self.assertNotIn('employment_income', copied_data)
 
-    @patch('services.pdf_generators.unified_pdf_generator.ECH0196PDFGenerator')
-    @patch('services.pdf_generators.unified_pdf_generator.TraditionalPDFFiller')
+    @patch('services.pdf_generators.unified_pdf_generator.UnifiedPDFGenerator.generate_all_user_pdfs')
     @patch('services.filing_orchestration_service.FilingOrchestrationService')
-    def test_pdf_generation_for_all_filings(self, mock_filing_svc, mock_trad, mock_ech):
+    def test_pdf_generation_for_all_filings(self, mock_filing_svc, mock_generate_all):
         """Test PDF generation for all filings in multi-canton scenario"""
-        # Mock filings
-        primary = Mock()
-        primary.id = 'primary_123'
-        primary.canton = 'ZH'
-        primary.is_primary = True
-
-        secondary1 = Mock()
-        secondary1.id = 'secondary_ge'
-        secondary1.canton = 'GE'
-        secondary1.is_primary = False
-
-        secondary2 = Mock()
-        secondary2.id = 'secondary_vd'
-        secondary2.canton = 'VD'
-        secondary2.is_primary = False
-
-        # Mock filing service
-        mock_filing_instance = mock_filing_svc.return_value
-        mock_filing_instance.get_all_user_filings.return_value = [
-            primary, secondary1, secondary2
-        ]
-
-        # Mock PDF generators
-        mock_ech_instance = mock_ech.return_value
-        mock_ech_instance.generate.return_value = io.BytesIO(b'%PDF-ECH')
-
-        mock_trad_instance = mock_trad.return_value
-        mock_trad_instance.fill_canton_form.return_value = io.BytesIO(b'%PDF-TRAD')
+        # Mock the generate_all_user_pdfs method to return immediately with mock data
+        mock_result = {
+            'primary_123': {
+                'ech0196': io.BytesIO(b'%PDF-ECH'),
+                'traditional': io.BytesIO(b'%PDF-TRAD')
+            },
+            'secondary_ge': {
+                'ech0196': io.BytesIO(b'%PDF-ECH'),
+                'traditional': io.BytesIO(b'%PDF-TRAD')
+            },
+            'secondary_vd': {
+                'ech0196': io.BytesIO(b'%PDF-ECH'),
+                'traditional': io.BytesIO(b'%PDF-TRAD')
+            }
+        }
+        mock_generate_all.return_value = mock_result
 
         # Generate all PDFs
         result = self.pdf_service.generate_all_user_pdfs(

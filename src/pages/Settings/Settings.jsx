@@ -23,6 +23,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import PreferencesTab from './components/PreferencesTab';
 import { TwoFactorSettings } from '../../components/TwoFactor';
+import { SessionManagement } from '../../components/SessionManagement';
 import AuditLogsTab from './components/AuditLogsTab';
 import AccountDeletionSection from './components/AccountDeletionSection';
 import DataExportSection from './components/DataExportSection';
@@ -102,6 +103,9 @@ const Settings = () => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TwoFactorSettings />
+            </Grid>
+            <Grid item xs={12}>
+              <SessionManagement />
             </Grid>
           </Grid>
         )}

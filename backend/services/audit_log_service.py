@@ -206,12 +206,12 @@ def log_login_failed(db: Session, email: str, ip: str, user_agent: str, reason: 
     return None  # Will implement this differently
 
 
-def log_logout(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str) -> Optional[AuditLog]:
+def log_logout(db: Session, user_id: Union[UUID, str], ip: str, user_agent: str, session_id: Optional[str] = None) -> Optional[AuditLog]:
     """Log user logout"""
     return AuditLogService.log_event(
         db, user_id, "logout", "authentication",
         "User logged out",
-        ip, user_agent
+        ip, user_agent, session_id=session_id
     )
 
 
@@ -341,4 +341,32 @@ def log_tax_filing_restored(db: Session, user_id: Union[UUID, str], filing_id: s
         f"Restored tax filing for {tax_year} - {canton}",
         ip, user_agent,
         metadata={"filing_id": filing_id, "tax_year": tax_year, "canton": canton}
+    )
+
+
+def log_session_revoked(db: Session, user_id: Union[UUID, str], ip_address: str, user_agent: str, session_uuid: str) -> Optional[AuditLog]:
+    """Log session revocation"""
+    return AuditLogService.log_event(
+        db=db,
+        user_id=user_id,
+        event_type="session_revoked",
+        event_category="security",
+        description=f"User revoked session {session_uuid}",
+        ip_address=ip_address,
+        user_agent=user_agent,
+        metadata={"session_uuid": session_uuid}
+    )
+
+
+def log_all_sessions_revoked(db: Session, user_id: Union[UUID, str], ip_address: str, user_agent: str, count: int) -> Optional[AuditLog]:
+    """Log bulk session revocation"""
+    return AuditLogService.log_event(
+        db=db,
+        user_id=user_id,
+        event_type="all_sessions_revoked",
+        event_category="security",
+        description=f"User revoked {count} other session(s)",
+        ip_address=ip_address,
+        user_agent=user_agent,
+        metadata={"sessions_revoked": count}
     )

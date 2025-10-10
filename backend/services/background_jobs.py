@@ -14,6 +14,7 @@ from db.session import SessionLocal
 from services.user_deletion_service import UserDeletionService
 from services.data_export_service import DataExportService
 from services.audit_log_service import AuditLogService
+from services.session_service import session_service
 
 logger = logging.getLogger(__name__)
 
@@ -177,6 +178,26 @@ class BackgroundJobScheduler:
         except Exception as e:
             logger.error(f"Error in audit logs cleanup job: {e}", exc_info=True)
 
+    def cleanup_expired_sessions(self):
+        """
+        Clean up expired user sessions
+        Runs every hour
+        """
+        try:
+            logger.info("Starting expired sessions cleanup job")
+            db = SessionLocal()
+
+            try:
+                deleted_count = session_service.cleanup_expired_sessions(db)
+
+                logger.info(f"Expired sessions cleanup completed: {deleted_count} sessions cleaned up")
+
+            finally:
+                db.close()
+
+        except Exception as e:
+            logger.error(f"Error in expired sessions cleanup job: {e}", exc_info=True)
+
     def start(self):
         """Start the background scheduler"""
         if self._is_running:
@@ -231,6 +252,18 @@ class BackgroundJobScheduler:
                 misfire_grace_time=3600  # 1 hour grace period
             )
             logger.info("Scheduled job: Clean up old audit logs (weekly on Sunday at 3 AM)")
+
+            # Job 5: Clean up expired sessions every hour
+            self.scheduler.add_job(
+                func=self.cleanup_expired_sessions,
+                trigger=IntervalTrigger(hours=1),
+                id='cleanup_expired_sessions',
+                name='Clean Up Expired User Sessions',
+                replace_existing=True,
+                max_instances=1,
+                misfire_grace_time=300  # 5 minute grace period
+            )
+            logger.info("Scheduled job: Clean up expired sessions (every hour)")
 
             # Start scheduler
             self.scheduler.start()

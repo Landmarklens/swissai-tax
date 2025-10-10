@@ -1,0 +1,196 @@
+"""
+Session Management API Router
+Endpoints for managing user sessions
+"""
+from fastapi import Depends, HTTPException, Request
+from sqlalchemy.orm import Session
+from typing import List
+import logging
+
+from core.security import get_current_user
+from db.session import get_db
+from models.swisstax import User
+from services.session_service import session_service
+from utils.router import Router
+from utils.fastapi_rate_limiter import rate_limit
+
+router = Router()
+logger = logging.getLogger(__name__)
+
+
+@router.get("/sessions")
+@rate_limit("100/minute")
+async def list_sessions(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    List all active sessions for the current user
+
+    Returns:
+        List of session objects with device and location info
+    """
+    try:
+        sessions = session_service.get_user_sessions(
+            db=db,
+            user_id=str(current_user.id),
+            active_only=True,
+            include_expired=False
+        )
+
+        # Convert to dict for JSON response
+        session_list = [session.to_dict() for session in sessions]
+
+        return {
+            "success": True,
+            "sessions": session_list,
+            "count": len(session_list)
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to list sessions for user {current_user.id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to retrieve sessions")
+
+
+@router.delete("/sessions/{session_uuid}")
+@rate_limit("20/minute")
+async def revoke_session(
+    session_uuid: str,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Revoke a specific session
+
+    Args:
+        session_uuid: UUID of the session to revoke
+
+    Returns:
+        Success message
+    """
+    try:
+        # Attempt to revoke the session
+        success = session_service.revoke_session(
+            db=db,
+            session_uuid=session_uuid,
+            user_id=str(current_user.id)
+        )
+
+        if not success:
+            raise HTTPException(
+                status_code=404,
+                detail="Session not found or you don't have permission to revoke it"
+            )
+
+        # Log the action for audit
+        from services.audit_log_service import log_session_revoked
+        try:
+            log_session_revoked(
+                db,
+                current_user.id,
+                request.client.host if request.client else "unknown",
+                request.headers.get("user-agent", ""),
+                session_uuid
+            )
+        except Exception as audit_error:
+            logger.warning(f"Failed to log session revocation: {audit_error}")
+
+        return {
+            "success": True,
+            "message": "Session revoked successfully"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to revoke session {session_uuid}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to revoke session")
+
+
+@router.post("/sessions/revoke-all")
+@rate_limit("10/minute")
+async def revoke_all_other_sessions(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Revoke all sessions except the current one
+
+    Returns:
+        Number of sessions revoked
+    """
+    try:
+        # Get current session_id from JWT
+        # This should be available in the JWT payload
+        from core.security import get_session_id_from_request
+        current_session_id = get_session_id_from_request(request)
+
+        if not current_session_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Could not determine current session"
+            )
+
+        # Revoke all other sessions
+        count = session_service.revoke_all_other_sessions(
+            db=db,
+            current_session_id=current_session_id,
+            user_id=str(current_user.id)
+        )
+
+        # Log the action for audit
+        from services.audit_log_service import log_all_sessions_revoked
+        try:
+            log_all_sessions_revoked(
+                db,
+                current_user.id,
+                request.client.host if request.client else "unknown",
+                request.headers.get("user-agent", ""),
+                count
+            )
+        except Exception as audit_error:
+            logger.warning(f"Failed to log bulk session revocation: {audit_error}")
+
+        return {
+            "success": True,
+            "message": f"Revoked {count} session(s)",
+            "count": count
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to revoke all sessions for user {current_user.id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to revoke sessions")
+
+
+@router.get("/sessions/count")
+@rate_limit("100/minute")
+async def get_session_count(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get count of active sessions for the current user
+
+    Returns:
+        Number of active sessions
+    """
+    try:
+        count = session_service.get_active_session_count(
+            db=db,
+            user_id=str(current_user.id)
+        )
+
+        return {
+            "success": True,
+            "count": count
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get session count for user {current_user.id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to get session count")

@@ -2011,6 +2011,39 @@
       "copied": "Codici di backup copiati negli appunti!"
     }
   },
+  "sessions": {
+    "title": "Sessioni Attive",
+    "description": "Gestisci i dispositivi connessi al tuo account",
+    "currentSession": "Sessione corrente",
+    "lastActive": "Ultima attività",
+    "location": "Posizione",
+    "revoke": "Revoca",
+    "revokeAll": "Revoca tutte le altre sessioni",
+    "revokeAllTitle": "Revoca Tutte le Sessioni",
+    "confirmRevoke": "Sei sicuro di voler revocare questa sessione? Questo dispositivo verrà disconnesso immediatamente.",
+    "confirmRevokeAll": "Sei sicuro di voler revocare tutte le altre sessioni?",
+    "revokeAllWarning": "Questo ti disconnetterà su tutti gli altri dispositivi. Il tuo dispositivo corrente rimarrà connesso.",
+    "revokeSuccess": "Sessione revocata con successo",
+    "revokeAllSuccess": "{{count}} sessione/i revocata/e con successo",
+    "cancel": "Annulla",
+    "revoking": "Revoca in corso...",
+    "refresh": "Aggiorna",
+    "noSessions": "Nessuna sessione attiva trovata",
+    "unknownDevice": "Dispositivo sconosciuto",
+    "unknownBrowser": "Browser sconosciuto",
+    "unknownIP": "IP sconosciuto",
+    "unknownTime": "Ora sconosciuta",
+    "deviceTypes": {
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "tablet": "Tablet"
+    },
+    "error": {
+      "loadFailed": "Impossibile caricare le sessioni",
+      "revokeFailed": "Impossibile revocare la sessione",
+      "revokeAllFailed": "Impossibile revocare tutte le sessioni"
+    }
+  },
   "Enable Two-Factor Authentication": "Abilita autenticazione a due fattori",
   "Add an extra layer of security to your account (Recommended)": "Aggiungi un ulteriore livello di sicurezza al tuo account (Consigliato)",
   "Two-factor authentication enabled successfully!": "Autenticazione a due fattori abilitata con successo!"

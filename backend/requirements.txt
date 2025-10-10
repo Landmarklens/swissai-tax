@@ -171,3 +171,4 @@ websocket-client==1.8.0
 websockets==15.0.1
 yarl==1.20.0
 zipp==3.22.0
+user-agents==2.2.0  # Device detection for session management

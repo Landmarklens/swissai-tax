@@ -130,6 +130,38 @@ async def get_current_user_from_header(
         raise HTTPException(status_code=401, detail="Invalid authentication")
 
 
+def get_session_id_from_request(request: Request) -> str:
+    """
+    Extract session_id from JWT token in request
+
+    Args:
+        request: FastAPI Request object
+
+    Returns:
+        session_id from JWT or None
+    """
+    # Try cookie first
+    access_token = request.cookies.get("access_token")
+
+    if not access_token:
+        # Try authorization header
+        auth_header = request.headers.get("authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            access_token = auth_header[7:]  # Remove "Bearer " prefix
+
+    if access_token:
+        # Remove "Bearer " prefix if present
+        token = access_token.replace("Bearer ", "")
+
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+            return payload.get("session_id")
+        except JWTError:
+            return None
+
+    return None
+
+
 async def get_current_user(request: Request):
     """
     Main authentication method that tries both cookie and header.
@@ -151,6 +183,20 @@ async def get_current_user(request: Request):
         try:
             user = await get_current_user_from_cookie(request, access_token)
             logger.info(f"[AUTH DEBUG] Cookie auth SUCCESS - User: {user.email}")
+
+            # Validate session if session_id is present
+            session_id = get_session_id_from_request(request)
+            if session_id:
+                from services.session_service import session_service
+                from db.session import get_db
+                db = next(get_db())
+                try:
+                    if not session_service.validate_session(db, session_id):
+                        logger.warning(f"[AUTH DEBUG] Invalid session {session_id}")
+                        raise HTTPException(status_code=401, detail="Session invalid or expired")
+                finally:
+                    db.close()
+
             return user
         except HTTPException as e:
             logger.error(f"[AUTH DEBUG] Cookie auth FAILED: {e.status_code} - {e.detail}")

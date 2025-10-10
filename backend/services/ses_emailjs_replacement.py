@@ -201,6 +201,196 @@ class EmailService:
 
         return await self.send_password_reset_email(to_email, reset_link)
 
+    async def send_contact_form_email(self, form_data: dict) -> Dict:
+        """
+        Send contact form submission email to contact@swissai.tax
+
+        Args:
+            form_data: Dictionary containing form fields
+                - firstName: User's first name
+                - lastName: User's last name
+                - email: User's email address
+                - phone: User's phone number (optional)
+                - subject: Subject line
+                - message: Message content
+                - inquiry: Inquiry type (optional)
+
+        Returns:
+            dict: Response with status and status_code
+        """
+        if not self.ses_client:
+            logger.error("SES client not initialized")
+            return {
+                "status": "error",
+                "status_code": 500,
+                "message": "Email service not configured"
+            }
+
+        # Get sender email from settings
+        sender_email = getattr(settings, 'SES_SENDER_EMAIL', 'noreply@swissai.tax')
+        recipient_email = 'contact@swissai.tax'
+
+        # Extract form data
+        first_name = form_data.get('firstName', '')
+        last_name = form_data.get('lastName', '')
+        user_email = form_data.get('email', '')
+        phone = form_data.get('phone', 'Not provided')
+        subject = form_data.get('subject', 'Contact Form Submission')
+        message = form_data.get('message', '')
+        inquiry_type = form_data.get('inquiry', 'general')
+
+        # Email subject
+        email_subject = f"Contact Form: {subject}"
+
+        # Get current timestamp
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+
+        # HTML email body
+        html_body = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background-color: #DC0018; color: white; padding: 20px; text-align: center; }}
+                .content {{ padding: 30px; background-color: #f9f9f9; }}
+                .field {{ margin-bottom: 15px; }}
+                .field-label {{ font-weight: bold; color: #555; }}
+                .field-value {{ color: #333; margin-top: 5px; }}
+                .message-box {{
+                    background-color: white;
+                    padding: 15px;
+                    border-left: 4px solid #DC0018;
+                    margin-top: 10px;
+                }}
+                .footer {{ padding: 20px; text-align: center; color: #666; font-size: 12px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>SwissAI Tax - Contact Form</h1>
+                </div>
+                <div class="content">
+                    <h2>New Contact Form Submission</h2>
+
+                    <div class="field">
+                        <div class="field-label">Name:</div>
+                        <div class="field-value">{first_name} {last_name}</div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Email:</div>
+                        <div class="field-value"><a href="mailto:{user_email}">{user_email}</a></div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Phone:</div>
+                        <div class="field-value">{phone}</div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Subject:</div>
+                        <div class="field-value">{subject}</div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Inquiry Type:</div>
+                        <div class="field-value">{inquiry_type}</div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Message:</div>
+                        <div class="message-box">{message}</div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Submitted:</div>
+                        <div class="field-value">{timestamp}</div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p>© 2024 SwissAI Tax. All rights reserved.</p>
+                    <p>This is an automated notification from the contact form.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        # Plain text version
+        text_body = f"""
+        SwissAI Tax - Contact Form Submission
+
+        Name: {first_name} {last_name}
+        Email: {user_email}
+        Phone: {phone}
+        Subject: {subject}
+        Inquiry Type: {inquiry_type}
+
+        Message:
+        {message}
+
+        Submitted: {timestamp}
+
+        © 2024 SwissAI Tax. All rights reserved.
+        """
+
+        try:
+            # Send email using SES with Reply-To header
+            response = self.ses_client.send_email(
+                Source=sender_email,
+                Destination={
+                    'ToAddresses': [recipient_email]
+                },
+                Message={
+                    'Subject': {
+                        'Data': email_subject,
+                        'Charset': 'UTF-8'
+                    },
+                    'Body': {
+                        'Text': {
+                            'Data': text_body,
+                            'Charset': 'UTF-8'
+                        },
+                        'Html': {
+                            'Data': html_body,
+                            'Charset': 'UTF-8'
+                        }
+                    }
+                },
+                ReplyToAddresses=[user_email]  # Allow direct reply to user
+            )
+
+            logger.info(f"Contact form email sent from {user_email} to {recipient_email}. MessageId: {response['MessageId']}")
+
+            return {
+                "status": "success",
+                "status_code": 200,
+                "message": "Contact form submitted successfully",
+                "message_id": response['MessageId']
+            }
+
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            error_message = e.response['Error']['Message']
+            logger.error(f"SES Error sending contact form email: {error_code} - {error_message}")
+
+            return {
+                "status": "error",
+                "status_code": 500,
+                "message": f"Failed to send email: {error_code}"
+            }
+        except Exception as e:
+            logger.error(f"Unexpected error sending contact form email: {str(e)}")
+            return {
+                "status": "error",
+                "status_code": 500,
+                "message": "Failed to send email"
+            }
+
 
 # Maintain backward compatibility with EmailJSService name
 EmailJSService = EmailService()

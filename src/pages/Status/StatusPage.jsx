@@ -35,6 +35,9 @@ const StatusPage = () => {
   const [uptime, setUptime] = useState({});
   const [lastUpdated, setLastUpdated] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [networkError, setNetworkError] = useState(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     // Scroll to top element if available
@@ -47,10 +50,53 @@ const StatusPage = () => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
 
+    // Initial fetch
     fetchStatusData();
-    // Refresh every 60 seconds
-    const interval = setInterval(fetchStatusData, 60000);
-    return () => clearInterval(interval);
+
+    // Setup polling interval
+    const startPolling = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      intervalRef.current = setInterval(() => {
+        // Only fetch if online
+        if (navigator.onLine) {
+          fetchStatusData();
+        }
+      }, 60000);
+    };
+
+    startPolling();
+
+    // Cleanup interval on unmount
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // Listen for online/offline events
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      setNetworkError(false);
+      // Immediately fetch when coming back online
+      fetchStatusData();
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+      setNetworkError(true);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   // Also scroll to top after loading completes
@@ -69,24 +115,49 @@ const StatusPage = () => {
   }, []);
 
   const fetchStatusData = async () => {
+    // Don't attempt to fetch if offline
+    if (!navigator.onLine) {
+      setNetworkError(true);
+      return;
+    }
+
     try {
       // Fetch current status
-      const statusResponse = await axios.get('/api/status/current');
+      const statusResponse = await axios.get('/api/status/current', {
+        timeout: 10000, // 10 second timeout
+      });
       setServices(statusResponse.data.services);
       setOverallStatus(statusResponse.data.overall_status);
       setLastUpdated(new Date(statusResponse.data.last_updated));
 
       // Fetch incidents
-      const incidentsResponse = await axios.get('/api/status/incidents');
+      const incidentsResponse = await axios.get('/api/status/incidents', {
+        timeout: 10000,
+      });
       setIncidents(incidentsResponse.data);
 
       // Fetch uptime data
-      const uptimeResponse = await axios.get('/api/status/uptime?days=90');
+      const uptimeResponse = await axios.get('/api/status/uptime?days=90', {
+        timeout: 10000,
+      });
       setUptime(uptimeResponse.data);
 
       setLoading(false);
+      setNetworkError(false);
     } catch (error) {
-      console.error('Error fetching status data:', error);
+      // Only log non-network errors or if we're online
+      if (navigator.onLine && error.code !== 'ERR_NETWORK') {
+        console.error('Error fetching status data:', error);
+      }
+
+      // Set network error flag if it's a network-related error
+      if (error.code === 'ECONNABORTED' ||
+          error.code === 'ERR_NETWORK' ||
+          error.message?.includes('Network Error') ||
+          error.message?.includes('ERR_NAME_NOT_RESOLVED')) {
+        setNetworkError(true);
+      }
+
       setLoading(false);
     }
   };
@@ -208,9 +279,6 @@ const StatusPage = () => {
           <Box flex={1}>
             <Typography variant="h4" fontWeight="600">
               {getStatusText(overallStatus)}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {t('status.lastUpdated', 'Last updated')}: {lastUpdated?.toLocaleString()}
             </Typography>
           </Box>
         </Box>

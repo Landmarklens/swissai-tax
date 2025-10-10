@@ -17,7 +17,7 @@ import { fetchUserProfile } from '../../store/slices/accountSlice';
 import { useTranslation } from 'react-i18next';
 import { jwtDecode } from 'jwt-decode';
 import ErrorBoundary from '../ErrorBoundary';
-import { TwoFactorVerifyModal } from '../TwoFactor';
+import { TwoFactorVerifyModal, TwoFactorSetup } from '../TwoFactor';
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -69,6 +69,7 @@ const LoginSignupModal = ({ open, onClose }) => {
   const [hasLoginError, setHasLoginError] = useState(false);
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [temp2FAToken, setTemp2FAToken] = useState('');
+  const [show2FASetup, setShow2FASetup] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -115,7 +116,7 @@ const LoginSignupModal = ({ open, onClose }) => {
     setShowSignupForm(false);
   };
 
-  const handleLoginSubmit = async (data, type) => {
+  const handleLoginSubmit = async (data, skipCloseAndNavigate = false) => {
     try {
       if (hasLoginError) {
         return;
@@ -144,27 +145,18 @@ const LoginSignupModal = ({ open, onClose }) => {
       // Cookie-based auth returns {success: true, user: {...}}
       // Legacy token-based auth returns {access_token: "..."}
       if (login.success || login.access_token) {
-        console.log('[LOGIN DEBUG] Login successful, fetching user profile...');
         const profileAction = await dispatch(fetchUserProfile());
-        console.log('[LOGIN DEBUG] Profile action:', profileAction);
-        console.log('[LOGIN DEBUG] Is fulfilled?', fetchUserProfile.fulfilled.match(profileAction));
-        console.log('[LOGIN DEBUG] Is rejected?', fetchUserProfile.rejected.match(profileAction));
 
         if (fetchUserProfile.fulfilled.match(profileAction)) {
-          console.log('[LOGIN DEBUG] Profile fetched successfully, closing modal and navigating...');
-          onClose();
-
-          // Redirect to filings page
-          console.log('[LOGIN DEBUG] Navigating to /filings');
-          navigate('/filings');
-          console.log('[LOGIN DEBUG] Navigate called');
+          // Only close and navigate if not skipped (e.g., when showing 2FA setup)
+          if (!skipCloseAndNavigate) {
+            onClose();
+            navigate('/filings');
+          }
         } else if (fetchUserProfile.rejected.match(profileAction)) {
-          console.log('[LOGIN DEBUG] Profile fetch rejected:', profileAction?.error);
           toast.error(profileAction?.error?.message || t('Login failed'));
           setHasLoginError(true);
         }
-      } else {
-        console.log('[LOGIN DEBUG] Login response does not have success or access_token:', login);
       }
     } catch (error) {
       if (!hasLoginError) {
@@ -204,8 +196,17 @@ const LoginSignupModal = ({ open, onClose }) => {
       if (register.id) {
         // Show success message
         toast.success(t('Registration successful! Logging you in...'));
+
         // Auto-login with the credentials just used for registration
-        await handleLoginSubmit(userData, false);
+        // Skip close/navigate if 2FA setup will be shown
+        const skipCloseAndNavigate = userData.enable_2fa;
+        await handleLoginSubmit(userData, skipCloseAndNavigate);
+
+        // If user opted for 2FA during signup, show setup modal
+        if (userData.enable_2fa) {
+          setShow2FASetup(true);
+        }
+        // Note: If enable_2fa is false, handleLoginSubmit already handled close/navigate
       }
     } catch (error) {
       // Extract error message from response
@@ -226,6 +227,19 @@ const LoginSignupModal = ({ open, onClose }) => {
         toast.error(t('Registration failed. Please try again.'));
       }
     }
+  };
+
+  const handle2FASetupComplete = () => {
+    setShow2FASetup(false);
+    toast.success(t('Two-factor authentication enabled successfully!'));
+    onClose();
+    navigate('/filings');
+  };
+
+  const handle2FASetupCancel = () => {
+    setShow2FASetup(false);
+    onClose();
+    navigate('/filings');
   };
 
   return (
@@ -397,6 +411,35 @@ const LoginSignupModal = ({ open, onClose }) => {
         tempToken={temp2FAToken}
         onSuccess={handle2FASuccess}
       />
+
+      {/* Two-Factor Setup Modal for New Signup */}
+      {show2FASetup && (
+        <Modal
+          open={show2FASetup}
+          onClose={handle2FASetupCancel}
+          aria-labelledby="2fa-setup-modal"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: { xs: '95%', sm: '90%', md: '800px' },
+              maxHeight: '90vh',
+              overflow: 'auto',
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: 24,
+            }}
+          >
+            <TwoFactorSetup
+              onComplete={handle2FASetupComplete}
+              onCancel={handle2FASetupCancel}
+            />
+          </Box>
+        </Modal>
+      )}
     </>
   );
 };

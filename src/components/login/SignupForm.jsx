@@ -34,20 +34,22 @@ const SignupForm = ({ onBack, onSubmit }) => {
       firstName: '',
       lastName: '',
       acceptTerms: false,
+      enable2FA: false,
       user_type: 'tenant', // Default for tax app
       status: 'active',
       language: 'en'
     },
     validationSchema,
     onSubmit: async (values) => {
-      const { confirmPassword, acceptTerms, firstName, lastName, language, email, password } = values;
+      const { confirmPassword, acceptTerms, firstName, lastName, language, email, password, enable2FA } = values;
       // Only send fields that backend expects
       const dataToSend = {
         email,
         password,
         first_name: firstName,
         last_name: lastName,
-        preferred_language: language
+        preferred_language: language,
+        enable_2fa: enable2FA
       };
       onSubmit(dataToSend);
       changeLocalLanguage(language);
@@ -182,6 +184,28 @@ const SignupForm = ({ onBack, onSubmit }) => {
           {formik.errors.acceptTerms}
         </Typography>
       )}
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            name="enable2FA"
+            checked={formik.values.enable2FA}
+            onChange={formik.handleChange}
+            color="primary"
+          />
+        }
+        label={
+          <Box>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+              {t('Enable Two-Factor Authentication')}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {t('Add an extra layer of security to your account (Recommended)')}
+            </Typography>
+          </Box>
+        }
+        sx={{ mt: 1, mb: 1, alignItems: 'flex-start' }}
+      />
 
       <Button
         type="submit"

@@ -2010,5 +2010,8 @@
       "enabled": "Autenticazione a due fattori abilitata con successo!",
       "copied": "Codici di backup copiati negli appunti!"
     }
-  }
+  },
+  "Enable Two-Factor Authentication": "Abilita autenticazione a due fattori",
+  "Add an extra layer of security to your account (Recommended)": "Aggiungi un ulteriore livello di sicurezza al tuo account (Consigliato)",
+  "Two-factor authentication enabled successfully!": "Autenticazione a due fattori abilitata con successo!"
 }

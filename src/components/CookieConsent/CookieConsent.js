@@ -44,9 +44,44 @@ const CookieConsent = () => {
 
   useEffect(() => {
     // Check if user has already given consent
-    const userHasConsent = hasConsent();
-    setShowBanner(!userHasConsent);
-    setOpen(!userHasConsent);
+    const checkAndUpdateConsent = () => {
+      const userHasConsent = hasConsent();
+      setShowBanner(!userHasConsent);
+      setOpen(!userHasConsent);
+    };
+
+    // Initial check
+    checkAndUpdateConsent();
+
+    // Listen for consent updates from same tab
+    const handleConsentUpdated = () => {
+      checkAndUpdateConsent();
+    };
+
+    // Listen for consent updates from other tabs
+    const handleStorageChange = (e) => {
+      // Only react to changes in our consent key
+      if (e.key === 'swissai_cookie_consent') {
+        checkAndUpdateConsent();
+      }
+    };
+
+    // Listen for consent cleared event
+    const handleConsentCleared = () => {
+      checkAndUpdateConsent();
+    };
+
+    // Add event listeners
+    window.addEventListener('cookieConsentUpdated', handleConsentUpdated);
+    window.addEventListener('cookieConsentCleared', handleConsentCleared);
+    window.addEventListener('storage', handleStorageChange);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('cookieConsentUpdated', handleConsentUpdated);
+      window.removeEventListener('cookieConsentCleared', handleConsentCleared);
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const handleAcceptAll = () => {

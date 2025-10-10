@@ -1,0 +1,17 @@
+.subscription-checkout-page {
+  min-height: 80vh;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+
+  .MuiStepper-root {
+    background: transparent;
+  }
+
+  @media (max-width: 600px) {
+    .MuiStepper-root {
+      .MuiStepLabel-label {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

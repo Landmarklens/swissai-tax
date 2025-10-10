@@ -1,0 +1,12 @@
+.subscription-success-page {
+  min-height: 80vh;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+
+  @media (max-width: 600px) {
+    .MuiBox-root {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}

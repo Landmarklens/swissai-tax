@@ -18,6 +18,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
+import Header from '../../components/header/Header';
+import Footer from '../../components/footer/Footer';
+import SEOHelmet from '../../components/SEO/SEOHelmet';
 import ServiceStatus from './ServiceStatus';
 import IncidentTimeline from './IncidentTimeline';
 import UptimeChart from './UptimeChart';
@@ -108,23 +111,57 @@ const StatusPage = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <LinearProgress />
-      </Container>
+      <>
+        <SEOHelmet
+          title={t('status.meta.title', 'System Status - SwissAI Tax')}
+          description={t('status.meta.description', 'Real-time status and uptime information for SwissAI Tax services')}
+        />
+        <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <Header />
+          <Container maxWidth="lg" sx={{ py: 8, flex: 1 }}>
+            <LinearProgress />
+          </Container>
+          <Footer />
+        </Box>
+      </>
     );
   }
 
   const activeIncidents = incidents.filter(i => i.status !== 'resolved');
 
+  // Format current time in Switzerland timezone
+  const switzerlandTime = new Date().toLocaleString('en-US', {
+    timeZone: 'Europe/Zurich',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZoneName: 'short'
+  });
+
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
+    <>
+      <SEOHelmet
+        title={t('status.meta.title', 'System Status - SwissAI Tax')}
+        description={t('status.meta.description', 'Real-time status and uptime information for SwissAI Tax services')}
+      />
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
+
+        <Box component="main" sx={{ flex: 1 }}>
+          <Container maxWidth="lg" sx={{ py: 8 }}>
       {/* Header */}
       <Box sx={{ mb: 6, textAlign: 'center' }}>
         <Typography variant="h3" fontWeight="600" gutterBottom>
           {t('status.pageTitle', 'SwissAI Tax System Status')}
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="text.secondary" gutterBottom>
           {t('status.pageDescription', 'Real-time status and uptime information for all services')}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontStyle: 'italic' }}>
+          {t('status.asOf', 'Status as of')} {switzerlandTime}
         </Typography>
       </Box>
 
@@ -201,7 +238,12 @@ const StatusPage = () => {
         <Divider sx={{ my: 2 }} />
         <IncidentTimeline incidents={incidents} />
       </Paper>
-    </Container>
+          </Container>
+        </Box>
+
+        <Footer />
+      </Box>
+    </>
   );
 };
 

@@ -46,18 +46,13 @@ const BillingTab = () => {
 
     try {
       // Fetch subscription and invoices in parallel
-      const [subscriptionResult, invoicesResult] = await Promise.all([
+      const [subscriptionData, invoicesData] = await Promise.all([
         subscriptionService.getCurrentSubscription(),
         subscriptionService.getInvoices()
       ]);
 
-      if (subscriptionResult.success) {
-        setSubscription(subscriptionResult.data);
-      }
-
-      if (invoicesResult.success) {
-        setInvoices(invoicesResult.data);
-      }
+      setSubscription(subscriptionData);
+      setInvoices(invoicesData || []);
     } catch (err) {
       setError('Failed to load billing information');
       console.error('Error fetching subscription data:', err);
@@ -69,15 +64,11 @@ const BillingTab = () => {
   const handleCancelPlan = async () => {
     setCanceling(true);
     try {
-      const result = await subscriptionService.cancelSubscription(false);
+      await subscriptionService.cancelSubscription('User requested cancellation from billing page');
 
-      if (result.success) {
-        // Refresh subscription data
-        await fetchSubscriptionData();
-        setCancelDialogOpen(false);
-      } else {
-        setError(result.error);
-      }
+      // Refresh subscription data
+      await fetchSubscriptionData();
+      setCancelDialogOpen(false);
     } catch (err) {
       setError('Failed to cancel subscription');
       console.error('Error canceling subscription:', err);

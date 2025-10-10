@@ -1,0 +1,23 @@
+.subscription-plans-page {
+  min-height: 80vh;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+
+  .plan-card {
+    &.popular {
+      box-shadow: 0 8px 16px rgba(25, 118, 210, 0.2);
+    }
+
+    .MuiCardContent-root {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 960px) {
+    .plan-card {
+      margin-bottom: 2rem;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.manage-subscription-page {
+  min-height: 80vh;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+
+  @media (max-width: 960px) {
+    .MuiGrid-item {
+      &:last-child {
+        order: -1; // Move action cards to top on mobile
+      }
+    }
+  }
+}

@@ -29,6 +29,10 @@ import Chat from '../pages/Chat/Chat';
 import TenantSelection from '../pages/TenantSelection';
 import DocumentSigningPage from '../components/pages/DocumentSigningPage';
 import GoogleCallback from '../pages/GoogleCallback/GoogleCallback';
+import SubscriptionPlans from '../pages/SubscriptionPlans/SubscriptionPlans';
+import SubscriptionCheckout from '../pages/SubscriptionCheckout/SubscriptionCheckout';
+import SubscriptionSuccess from '../pages/SubscriptionSuccess/SubscriptionSuccess';
+import ManageSubscription from '../pages/ManageSubscription/ManageSubscription';
 import { useTranslation } from 'react-i18next';
 
 const ProtectedRoute = ({ children }) => {
@@ -197,5 +201,34 @@ export const NAVIGATION_ROUTE = [
   {
     path: '/sign/:documentId',
     element: <DocumentSigningPage />
+  },
+  // Subscription routes
+  {
+    path: '/subscription/plans',
+    element: <SubscriptionPlans />
+  },
+  {
+    path: '/subscription/checkout/:planType',
+    element: (
+      <ProtectedRoute>
+        <SubscriptionCheckout />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/subscription/success',
+    element: (
+      <ProtectedRoute>
+        <SubscriptionSuccess />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/subscription/manage',
+    element: (
+      <ProtectedRoute>
+        <ManageSubscription />
+      </ProtectedRoute>
+    )
   }
 ];

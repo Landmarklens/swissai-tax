@@ -35,14 +35,29 @@ const StatusPage = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
-    // Scroll to top when component mounts
-    window.scrollTo(0, 0);
+    // Force scroll to top on mount and after content loads
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    scrollToTop();
 
     fetchStatusData();
     // Refresh every 60 seconds
     const interval = setInterval(fetchStatusData, 60000);
     return () => clearInterval(interval);
   }, []);
+
+  // Also scroll to top after loading completes
+  useEffect(() => {
+    if (!loading) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  }, [loading]);
 
   const fetchStatusData = async () => {
     try {

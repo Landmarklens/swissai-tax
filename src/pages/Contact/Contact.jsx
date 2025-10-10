@@ -177,7 +177,7 @@ const Contact = () => {
     onSubmit: async (values, formikHelpers) => {
       try {
         // Get API URL from parameter store and ensure no trailing slash
-        let apiUrl = await parameterStore.getParameter('API_BASE_URL') || 'https://api.homeai.ch';
+        let apiUrl = await parameterStore.getParameter('API_BASE_URL') || 'https://api.swissai.tax';
         apiUrl = apiUrl.replace(/\/$/, ''); // Remove trailing slash if present
 
         const response = await fetch(`${apiUrl}/api/contact`, {
@@ -295,7 +295,7 @@ const Contact = () => {
                       <Box sx={{ display: 'flex', alignItems: 'center' }} mt={3}>
                         <EmailOutlinedIcon sx={upperIconStyle} />
                         <Typography variant="body1" style={{ color: 'white' }} gutterBottom>
-                          contact@homeai.ch
+                          contact@swissai.tax
                         </Typography>
                       </Box>
 

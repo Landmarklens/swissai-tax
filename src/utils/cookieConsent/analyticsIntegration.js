@@ -14,14 +14,12 @@ export const initializeAnalytics = () => {
   if (typeof window.gtag === 'function') {
     if (analyticsAllowed) {
       // Enable Google Analytics
-      console.log('[Cookie Consent] Analytics enabled');
       window.gtag('consent', 'update', {
         analytics_storage: 'granted',
         ad_storage: 'denied', // We don't use ads
       });
     } else {
       // Disable Google Analytics
-      console.log('[Cookie Consent] Analytics disabled');
       window.gtag('consent', 'update', {
         analytics_storage: 'denied',
         ad_storage: 'denied',
@@ -36,7 +34,6 @@ export const initializeAnalytics = () => {
  */
 export const trackPageView = (path) => {
   if (!isCategoryAllowed(CookieCategories.ANALYTICS)) {
-    console.log('[Cookie Consent] Analytics blocked - page view not tracked');
     return;
   }
 
@@ -56,7 +53,6 @@ export const trackPageView = (path) => {
  */
 export const trackEvent = (action, category, label = null, value = null) => {
   if (!isCategoryAllowed(CookieCategories.ANALYTICS)) {
-    console.log('[Cookie Consent] Analytics blocked - event not tracked:', action);
     return;
   }
 
@@ -76,7 +72,6 @@ export const trackEvent = (action, category, label = null, value = null) => {
  * Disable all analytics tracking and clear analytics cookies
  */
 export const disableAnalytics = () => {
-  console.log('[Cookie Consent] Disabling analytics and clearing cookies');
 
   // Update gtag consent
   if (typeof window.gtag === 'function') {
@@ -109,7 +104,6 @@ export const canUseFeature = (category) => {
 export const setupConsentListener = () => {
   window.addEventListener('cookieConsentUpdated', (event) => {
     const consent = event.detail;
-    console.log('[Cookie Consent] Consent updated:', consent);
 
     if (consent.preferences[CookieCategories.ANALYTICS]) {
       initializeAnalytics();
@@ -119,7 +113,6 @@ export const setupConsentListener = () => {
   });
 
   window.addEventListener('cookieConsentCleared', () => {
-    console.log('[Cookie Consent] Consent cleared');
     disableAnalytics();
   });
 };

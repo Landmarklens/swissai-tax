@@ -44,12 +44,9 @@ export const clearGoogleAuthLogs = () => {
   console.log('✅ Google Auth debug logs cleared');
 };
 
-// Make functions available globally for console debugging
+// Make functions available globally for console debugging (silently)
 if (typeof window !== 'undefined') {
   window.checkGoogleAuthLogs = checkGoogleAuthLogs;
   window.clearGoogleAuthLogs = clearGoogleAuthLogs;
-
-  console.log('🔧 Google Auth Debug Tools Available:');
-  console.log('  - checkGoogleAuthLogs() : View all stored debug logs');
-  console.log('  - clearGoogleAuthLogs() : Clear all debug logs');
+  // Debug tools available: checkGoogleAuthLogs(), clearGoogleAuthLogs()
 }

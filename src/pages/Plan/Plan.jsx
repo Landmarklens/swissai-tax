@@ -1,43 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Card,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Chip,
-  Stack
+  Box
 } from '@mui/material';
-import {
-  Check as CheckIcon,
-  ArrowForward as ArrowForwardIcon
-} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
-import LoginSignupModal from '../../components/login/Login';
-import authService from '../../services/authService';
+import SubscriptionPlans from '../SubscriptionPlans/SubscriptionPlans';
 
 const Plan = () => {
-  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const currentLang = i18n.language || 'en';
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
-
-  const handleGetStarted = () => {
-    const isAuthenticated = authService.isAuthenticated();
-    if (isAuthenticated) {
-      navigate(`/${currentLang}/tax-filing/interview`);
-    } else {
-      setLoginModalOpen(true);
-    }
-  };
 
   const features = [
     t('plan.features.feature1'),

@@ -10,16 +10,12 @@ class AuthService {
 
   // Set current user - only store non-sensitive data
   setCurrentUser(user) {
-    console.log('[AUTH DEBUG] setCurrentUser called with:', user);
     this.user = user;
     if (user) {
       // Remove sensitive token data before storing
       const { access_token, token_type, ...userData } = user;
-      console.log('[AUTH DEBUG] Saving to localStorage:', userData);
       localStorage.setItem('user', JSON.stringify(userData));
-      console.log('[AUTH DEBUG] localStorage after save:', localStorage.getItem('user'));
     } else {
-      console.log('[AUTH DEBUG] Removing user from localStorage');
       localStorage.removeItem('user');
     }
   }
@@ -187,15 +183,11 @@ const authService = {
     if (!authServiceInstance.user) {
       try {
         const stored = localStorage.getItem('user');
-        console.log('[AUTH DEBUG] getCurrentUser - localStorage user:', stored);
         authServiceInstance.user = stored ? JSON.parse(stored) : null;
-        console.log('[AUTH DEBUG] getCurrentUser - parsed user:', authServiceInstance.user);
       } catch (error) {
-        console.error('[AUTH DEBUG] Error parsing stored user:', error);
         authServiceInstance.user = null;
       }
     } else {
-      console.log('[AUTH DEBUG] getCurrentUser - cached user:', authServiceInstance.user);
     }
 
     return authServiceInstance.user;
@@ -205,8 +197,6 @@ const authService = {
   isAuthenticated: () => {
     const user = authService.getCurrentUser();
     const isAuth = !!user && !!user.email;
-    console.log('[AUTH DEBUG] isAuthenticated check - user:', user);
-    console.log('[AUTH DEBUG] isAuthenticated result:', isAuth);
     // User data exists in localStorage = authenticated
     // Cookie is checked by backend on each request
     return isAuth;

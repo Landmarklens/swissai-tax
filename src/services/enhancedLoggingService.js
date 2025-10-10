@@ -389,16 +389,6 @@ if (typeof window !== 'undefined') {
     logger.setLogLevel(level);
   };
 
-  console.log(`
-📊 Logging Service Initialized
-Commands available in console:
-- logger.debug(category, message, data)
-- logger.info(category, message, data)
-- logger.warn(category, message, data)
-- logger.error(category, message, data)
-- showLogs() - Display logs summary
-- clearLogs() - Clear all logs
-- exportLogs() - Download logs as JSON
-- setLogLevel('DEBUG'|'INFO'|'WARN'|'ERROR'|'CRITICAL')
-  `);
+  // Logging service commands available silently (no console spam)
+  // Use: showLogs(), clearLogs(), exportLogs(), setLogLevel()
 }

@@ -203,7 +203,10 @@ class EmailService:
 
     async def send_contact_form_email(self, form_data: dict) -> Dict:
         """
-        Send contact form submission email to contact@swissai.tax
+        Send contact form submission via SNS to contact@swissai.tax
+
+        Uses SNS instead of direct SES because SES emails to the same domain
+        in the same AWS account don't trigger receipt rules to WorkMail.
 
         Args:
             form_data: Dictionary containing form fields
@@ -218,18 +221,24 @@ class EmailService:
         Returns:
             dict: Response with status and status_code
         """
-        if not self.ses_client:
-            logger.error("SES client not initialized")
+        # Use SNS for contact form notifications
+        try:
+            sns_client = boto3.client(
+                'sns',
+                region_name=settings.AWS_REGION,
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize SNS client: {str(e)}")
             return {
                 "status": "error",
                 "status_code": 500,
-                "message": "Email service not configured"
+                "message": "Notification service not configured"
             }
 
-        # Get sender email from settings
-        sender_email = getattr(settings, 'SES_SENDER_EMAIL', 'noreply@swissai.tax')
-        # Send contact form submissions to dedicated contact inbox
-        recipient_email = 'contact@swissai.tax'
+        # SNS topic ARN for contact form notifications
+        sns_topic_arn = 'arn:aws:sns:us-east-1:445567083171:SwissAITax-ContactForm-Notifications'
 
         # Extract form data
         first_name = form_data.get('firstName', '')
@@ -240,12 +249,12 @@ class EmailService:
         message = form_data.get('message', '')
         inquiry_type = form_data.get('inquiry', 'general')
 
-        # Email subject
-        email_subject = f"Contact Form: {subject}"
-
         # Get current timestamp
         from datetime import datetime
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+
+        # Email subject for SNS
+        email_subject = f"SwissAI Tax Contact Form: {subject}"
 
         # HTML email body
         html_body = f"""
@@ -340,32 +349,15 @@ class EmailService:
         """
 
         try:
-            # Send email using SES with Reply-To header
-            response = self.ses_client.send_email(
-                Source=sender_email,
-                Destination={
-                    'ToAddresses': [recipient_email]
-                },
-                Message={
-                    'Subject': {
-                        'Data': email_subject,
-                        'Charset': 'UTF-8'
-                    },
-                    'Body': {
-                        'Text': {
-                            'Data': text_body,
-                            'Charset': 'UTF-8'
-                        },
-                        'Html': {
-                            'Data': html_body,
-                            'Charset': 'UTF-8'
-                        }
-                    }
-                },
-                ReplyToAddresses=[user_email]  # Allow direct reply to user
+            # Publish to SNS topic (which emails contact@swissai.tax)
+            # SNS messages arrive in WorkMail because they come from external AWS service
+            response = sns_client.publish(
+                TopicArn=sns_topic_arn,
+                Subject=email_subject,
+                Message=text_body
             )
 
-            logger.info(f"Contact form email sent from {user_email} to {recipient_email}. MessageId: {response['MessageId']}")
+            logger.info(f"Contact form notification published to SNS from {user_email}. MessageId: {response['MessageId']}")
 
             return {
                 "status": "success",
@@ -377,19 +369,19 @@ class EmailService:
         except ClientError as e:
             error_code = e.response['Error']['Code']
             error_message = e.response['Error']['Message']
-            logger.error(f"SES Error sending contact form email: {error_code} - {error_message}")
+            logger.error(f"SNS Error publishing contact form: {error_code} - {error_message}")
 
             return {
                 "status": "error",
                 "status_code": 500,
-                "message": f"Failed to send email: {error_code}"
+                "message": f"Failed to send notification: {error_code}"
             }
         except Exception as e:
-            logger.error(f"Unexpected error sending contact form email: {str(e)}")
+            logger.error(f"Unexpected error publishing contact form to SNS: {str(e)}")
             return {
                 "status": "error",
                 "status_code": 500,
-                "message": "Failed to send email"
+                "message": "Failed to send notification"
             }
 
 

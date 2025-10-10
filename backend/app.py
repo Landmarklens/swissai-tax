@@ -262,17 +262,8 @@ class TaxEstimateRequest(BaseModel):
     canton: str = Field("ZH", description="Canton code")
     maritalStatus: str = Field("single", description="Marital status")
 
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    """Health check endpoint"""
-    db_healthy = check_db_health()
-    return {
-        "status": "healthy" if db_healthy else "degraded",
-        "service": "swissai-tax-api",
-        "database": "connected" if db_healthy else "disconnected",
-        "timestamp": datetime.utcnow().isoformat()
-    }
+# Health check endpoint has been moved to routers/health.py
+# The /health router is now included via: app.include_router(health.router)
 
 # NOTE: Interview endpoints moved to routers/interview.py (registered in main.py)
 

@@ -239,7 +239,13 @@ async def get_current_user(request: Request):
                             )
                             logger.info(f"[AUTH DEBUG] Created missing session {session_id}")
                         except Exception as e:
-                            logger.error(f"[AUTH DEBUG] Failed to create session: {e}")
+                            # Race condition - another request may have created it
+                            logger.warning(f"[AUTH DEBUG] Failed to create session (race condition?): {e}")
+                            # Try to validate it now (another thread likely created it)
+                            if session_service.validate_session(db, session_id):
+                                logger.info(f"[AUTH DEBUG] Session validated after race condition")
+                            else:
+                                logger.error(f"[AUTH DEBUG] Session still invalid after creation attempt")
                     else:
                         # Session exists, validate and update it
                         if not session_service.validate_session(db, session_id):
@@ -286,7 +292,13 @@ async def get_current_user(request: Request):
                         )
                         logger.info(f"[AUTH DEBUG] Created missing session {session_id}")
                     except Exception as e:
-                        logger.error(f"[AUTH DEBUG] Failed to create session: {e}")
+                        # Race condition - another request may have created it
+                        logger.warning(f"[AUTH DEBUG] Failed to create session (race condition?): {e}")
+                        # Try to validate it now (another thread likely created it)
+                        if session_service.validate_session(db, session_id):
+                            logger.info(f"[AUTH DEBUG] Session validated after race condition")
+                        else:
+                            logger.error(f"[AUTH DEBUG] Session still invalid after creation attempt")
                 else:
                     # Session exists, validate and update it
                     if not session_service.validate_session(db, session_id):

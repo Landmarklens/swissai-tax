@@ -26,7 +26,7 @@ import { PersonalAccountIcon } from '../personalAccountIcon/personalAccountIcon'
 import authService from '../../services/authService';
 import { toast } from 'react-toastify';
 
-const Header = ({ handleClickOpen }) => {
+const Header = () => {
   const { t } = useTranslation();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -107,6 +107,21 @@ const Header = ({ handleClickOpen }) => {
     setLoginOpen(true);
   };
 
+  const handleLoginClick = () => {
+    setLoginOpen(true);
+    const savedInput = localStorage.getItem('input');
+    localStorage.clear();
+    if (savedInput) {
+      const decodedInput = decodeURIComponent(savedInput);
+      localStorage.setItem('input', decodedInput);
+    }
+  };
+
+  const handleModalClose = () => {
+    setSearchParams({});
+    setLoginOpen(false);
+  };
+
   const drawerContent = (
     <Box
       onClick={toggleDrawer(false)}
@@ -136,7 +151,7 @@ const Header = ({ handleClickOpen }) => {
               variant="outlined"
               fullWidth
               className={styles.drawerLoginButton}
-              onClick={handleClickOpen}>
+              onClick={handleLoginClick}>
               {t('Log In')}
             </Button>
           </ListItem>
@@ -150,21 +165,6 @@ const Header = ({ handleClickOpen }) => {
       </List>
     </Box>
   );
-
-  const handleLoginClick = () => {
-    setLoginOpen(true);
-    const savedInput = localStorage.getItem('input');
-    localStorage.clear();
-    if (savedInput) {
-      const decodedInput = decodeURIComponent(savedInput);
-      localStorage.setItem('input', decodedInput);
-    }
-  };
-
-  const handleModalClose = () => {
-    setSearchParams({});
-    setLoginOpen(false);
-  };
 
   return (
     <>

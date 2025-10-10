@@ -146,6 +146,7 @@ const Footer = () => {
                       <StyledLink to="/plan">{t('Pricing')}</StyledLink>
                       <StyledLink to="/blog-list">{t('Blog')}</StyledLink>
                       <StyledLink to="/faq">{t('FAQ')}</StyledLink>
+                      <StyledLink to="/status">{t('Status')}</StyledLink>
                     </Box>
                     <Typography
                       sx={{
@@ -250,6 +251,9 @@ const Footer = () => {
                 columnGap: 2,
                 flexWrap: 'wrap'
               }}>
+              <StyledLink to="/status" style={{ fontSize: '12px' }}>
+                {t('Status')}
+              </StyledLink>
               <StyledLink to="/security" style={{ fontSize: '12px' }}>
                 {t('Security')}
               </StyledLink>

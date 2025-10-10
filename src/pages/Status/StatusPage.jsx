@@ -35,6 +35,9 @@ const StatusPage = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
     fetchStatusData();
     // Refresh every 60 seconds
     const interval = setInterval(fetchStatusData, 60000);

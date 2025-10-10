@@ -82,36 +82,33 @@ const AICard = ({
             fontSize: '28px'
           }}
         >
-          {userType === 'landlord' 
+          {userType === 'landlord'
             ? (
               <>
                 {t('Let AI Handle Your Property Management')} - <br />
                 {t('Find Quality Tenants Faster Than Ever!')}
               </>
             )
-            : (
-              <>
-                {t('Start Your Search with Our AI')} - <br />
-                {t('Get Matched to Your Dream Apartment Today!')}
-              </>
-            )
+            : null
           }
         </Typography>
-        <Button
-          variant="contained"
-          component={Link}
-          to={userType === 'landlord' ? '/owner-account' : '/plan'}
-          sx={{
-            backgroundColor: buttonColor,
-            color: 'white',
-            marginTop: '20px',
-            '&:hover': {
-              backgroundColor: '#333'
-            }
-          }}
-        >
-          {userType === 'landlord' ? t('List Your Property') : t('Get Started')}
-        </Button>
+        {userType === 'landlord' && (
+          <Button
+            variant="contained"
+            component={Link}
+            to="/owner-account"
+            sx={{
+              backgroundColor: buttonColor,
+              color: 'white',
+              marginTop: '20px',
+              '&:hover': {
+                backgroundColor: '#333'
+              }
+            }}
+          >
+            {t('List Your Property')}
+          </Button>
+        )}
 
         <Box
           sx={{

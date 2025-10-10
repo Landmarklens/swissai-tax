@@ -12,12 +12,12 @@ const resources = {
   de: { translation: translationDE }
 };
 
-const lng = localStorage.getItem('i18nextLng') || 'en';
+const lng = localStorage.getItem('i18nextLng') || 'de';
 
 i18n.use(initReactI18next).init({
   resources,
   lng,
-  fallbackLng: 'en',
+  fallbackLng: 'de',
   interpolation: {
     escapeValue: false
   }

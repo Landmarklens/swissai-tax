@@ -245,6 +245,11 @@ async def list_data_exports(
         export_responses = []
         for exp in exports:
             try:
+                # Explicitly call property methods to avoid Pydantic attribute confusion
+                is_available = bool(exp.is_available)
+                is_expired = bool(exp.is_expired)
+                hours_until_expiry = float(exp.hours_until_expiry) if exp.hours_until_expiry is not None else 0.0
+
                 export_responses.append(DataExportResponse(
                     id=exp.id,
                     status=exp.status,
@@ -254,9 +259,9 @@ async def list_data_exports(
                     created_at=exp.created_at,
                     completed_at=exp.completed_at,
                     expires_at=exp.expires_at,
-                    hours_until_expiry=exp.hours_until_expiry,
-                    is_available=exp.is_available,
-                    is_expired=exp.is_expired,
+                    hours_until_expiry=hours_until_expiry,
+                    is_available=is_available,
+                    is_expired=is_expired,
                     error_message=exp.error_message
                 ))
             except Exception as e:
@@ -272,7 +277,7 @@ async def list_data_exports(
                     created_at=exp.created_at,
                     completed_at=exp.completed_at,
                     expires_at=exp.expires_at,
-                    hours_until_expiry=0,
+                    hours_until_expiry=0.0,
                     is_available=False,
                     is_expired=True,
                     error_message=exp.error_message or "Error processing export data"
@@ -317,6 +322,11 @@ async def get_data_export(
     if not export:
         raise HTTPException(status_code=404, detail="Export not found")
 
+    # Explicitly call property methods to avoid Pydantic attribute confusion
+    is_available = bool(export.is_available)
+    is_expired = bool(export.is_expired)
+    hours_until_expiry = float(export.hours_until_expiry) if export.hours_until_expiry is not None else 0.0
+
     return DataExportResponse(
         id=export.id,
         status=export.status,
@@ -326,9 +336,9 @@ async def get_data_export(
         created_at=export.created_at,
         completed_at=export.completed_at,
         expires_at=export.expires_at,
-        hours_until_expiry=export.hours_until_expiry,
-        is_available=export.is_available,
-        is_expired=export.is_expired,
+        hours_until_expiry=hours_until_expiry,
+        is_available=is_available,
+        is_expired=is_expired,
         error_message=export.error_message
     )
 

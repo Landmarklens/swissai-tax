@@ -85,6 +85,7 @@ describe('SessionManagement', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useRealTimers();
   });
 
   afterEach(() => {
@@ -146,7 +147,7 @@ describe('SessionManagement', () => {
 
   // Test auto-refresh
   it('should auto-refresh sessions every 30 seconds', async () => {
-    jest.useFakeTimers();
+    jest.useFakeTimers({ shouldClearNativeTimers: true });
 
     sessionService.getSessions.mockResolvedValue({
       success: true,
@@ -161,8 +162,9 @@ describe('SessionManagement', () => {
     });
 
     // Fast-forward 30 seconds
-    act(() => {
+    await act(async () => {
       jest.advanceTimersByTime(30000);
+      await Promise.resolve();
     });
 
     // Should have called again
@@ -171,8 +173,9 @@ describe('SessionManagement', () => {
     });
 
     // Fast-forward another 30 seconds
-    act(() => {
+    await act(async () => {
       jest.advanceTimersByTime(30000);
+      await Promise.resolve();
     });
 
     await waitFor(() => {
@@ -184,7 +187,7 @@ describe('SessionManagement', () => {
 
   // Test cleanup on unmount
   it('should clear interval on unmount', async () => {
-    jest.useFakeTimers();
+    jest.useFakeTimers({ shouldClearNativeTimers: true });
 
     sessionService.getSessions.mockResolvedValue({
       success: true,
@@ -200,8 +203,9 @@ describe('SessionManagement', () => {
     unmount();
 
     // Fast-forward time - should not call again after unmount
-    act(() => {
+    await act(async () => {
       jest.advanceTimersByTime(30000);
+      await Promise.resolve();
     });
 
     expect(sessionService.getSessions).toHaveBeenCalledTimes(1);

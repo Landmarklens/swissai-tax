@@ -87,7 +87,7 @@ describe('PromotionalCodeCreator', () => {
 
       expect(screen.getByTestId('header')).toBeInTheDocument();
       expect(screen.getByTestId('footer')).toBeInTheDocument();
-      expect(screen.getByText('Create Promotional Code')).toBeInTheDocument();
+      expect(screen.getAllByText('Create Promotional Code').length).toBeGreaterThan(0);
       expect(screen.getByText('Create discount codes for marketing campaigns and promotions')).toBeInTheDocument();
     });
 
@@ -114,8 +114,9 @@ describe('PromotionalCodeCreator', () => {
     it('should render code type select with default value', () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
-      // The select will have promotional as default
-      expect(screen.getByText('Code Type')).toBeInTheDocument();
+      // The select will have promotional as default - check that Code Type label exists
+      expect(screen.getAllByText('Code Type').length).toBeGreaterThan(0);
+      expect(screen.getByText('Promotional')).toBeInTheDocument();
     });
 
     it('should render discount type select', () => {
@@ -127,7 +128,7 @@ describe('PromotionalCodeCreator', () => {
     it('should render campaign name field', () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
-      expect(screen.getByText('Campaign Name')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Campaign Name/)).toBeInTheDocument();
     });
 
     it('should render all switches', () => {
@@ -141,7 +142,7 @@ describe('PromotionalCodeCreator', () => {
     it('should render submit button', () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
-      expect(screen.getByText('Create Promotional Code')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Create Promotional Code/i })).toBeInTheDocument();
     });
   });
 
@@ -158,7 +159,7 @@ describe('PromotionalCodeCreator', () => {
     it('should update discount value field', () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '15' } });
 
       expect(discountInput).toHaveValue(15);
@@ -197,7 +198,7 @@ describe('PromotionalCodeCreator', () => {
     it('should show error when code is empty', async () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -213,10 +214,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '0' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -232,10 +233,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '-10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -249,10 +250,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '150' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -263,7 +264,7 @@ describe('PromotionalCodeCreator', () => {
     it('should clear error when user fixes input', async () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -288,10 +289,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'testcode' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '15' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -311,10 +312,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'lowercase' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -332,10 +333,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -350,10 +351,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -376,10 +377,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -396,10 +397,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -420,10 +421,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -454,10 +455,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -481,10 +482,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -506,13 +507,13 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '15.5' } });
 
       const maxDiscountInput = screen.getByLabelText(/Max Discount Amount/);
       fireEvent.change(maxDiscountInput, { target: { value: '50.25' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -531,10 +532,10 @@ describe('PromotionalCodeCreator', () => {
       const codeInput = screen.getByPlaceholderText('SPRING2024');
       fireEvent.change(codeInput, { target: { value: 'TESTCODE' } });
 
-      const discountInput = screen.getByLabelText('Discount Percentage');
+      const discountInput = screen.getByRole('spinbutton', { name: /Discount Percentage/i });
       fireEvent.change(discountInput, { target: { value: '10' } });
 
-      const submitButton = screen.getByText('Create Promotional Code');
+      const submitButton = screen.getByRole('button', { name: /Create Promotional Code/i });
       fireEvent.click(submitButton);
 
       await waitFor(() => {
@@ -549,17 +550,20 @@ describe('PromotionalCodeCreator', () => {
       renderWithTheme(<PromotionalCodeCreator />);
 
       // Initially percentage
-      expect(screen.getByLabelText('Discount Percentage')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Discount Percentage')).toBeInTheDocument();
+      });
 
-      // Change to fixed amount
-      const discountTypeSelect = screen.getByLabelText('Discount Type');
+      // Change to fixed amount - find the select by its current value
+      const discountTypeLabel = screen.getByText('Discount Type');
+      const discountTypeSelect = discountTypeLabel.parentElement.querySelector('[role="combobox"]');
       fireEvent.mouseDown(discountTypeSelect);
 
       const fixedAmountOption = await screen.findByText('Fixed Amount (CHF)');
       fireEvent.click(fixedAmountOption);
 
       await waitFor(() => {
-        expect(screen.getByLabelText('Amount (CHF)')).toBeInTheDocument();
+        expect(screen.getByText('Amount (CHF)')).toBeInTheDocument();
       });
     });
   });

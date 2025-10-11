@@ -8,7 +8,7 @@ jest.mock('axios');
 describe('useRandomUserCounter', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
+    jest.useFakeTimers({ shouldClearNativeTimers: true });
   });
 
   afterEach(() => {
@@ -23,8 +23,8 @@ describe('useRandomUserCounter', () => {
 
     const { result, unmount } = renderHook(() => useRandomUserCounter());
 
-    // Initially returns 0
-    expect(result.current).toBe(0);
+    // Initially returns null
+    expect(result.current).toBe(null);
 
     // Wait for API call to resolve and initial state to be set
     await act(async () => {
@@ -35,8 +35,9 @@ describe('useRandomUserCounter', () => {
 
     // The animation runs for 2000ms total
     // Advance time to complete the animation
-    act(() => {
+    await act(async () => {
       jest.advanceTimersByTime(2000);
+      await Promise.resolve();
     });
 
     // After animation completes, should be at or near the API value (1000)

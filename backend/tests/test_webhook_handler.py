@@ -4,7 +4,7 @@ Tests webhook event processing and signature verification
 """
 import pytest
 from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch, MagicMock, PropertyMock
 from uuid import uuid4
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -229,14 +229,16 @@ class TestSubscriptionUpdatedEvent:
         mock_db_session = MagicMock()
         mock_get_db.return_value.__enter__.return_value = mock_db_session
 
-        # Mock existing subscription with proper datetime value for trial_end
-        mock_existing_sub = Mock()
-        mock_existing_sub.configure_mock(
-            id=uuid4(),
-            status="trialing",
-            trial_end=None,  # Set to None to avoid datetime comparison issues
-            commitment_start_date=None
-        )
+        # Mock existing subscription with PropertyMock for trial_end to allow proper comparisons
+        mock_existing_sub = Mock(spec=Subscription)
+        mock_existing_sub.id = uuid4()
+        mock_existing_sub.status = "trialing"
+        mock_existing_sub.commitment_start_date = None
+        mock_existing_sub.current_period_start = None
+        mock_existing_sub.current_period_end = None
+        mock_existing_sub.cancel_at_period_end = False
+        # Use PropertyMock to set trial_end as a real None value
+        type(mock_existing_sub).trial_end = PropertyMock(return_value=None)
 
         # Setup query chain properly
         subscription_query = MagicMock()
@@ -274,13 +276,18 @@ class TestSubscriptionUpdatedEvent:
         mock_get_db.return_value.__enter__.return_value = mock_db_session
 
         # Mock existing subscription in trial with proper datetime values
-        mock_existing_sub = Mock()
-        mock_existing_sub.configure_mock(
-            id=uuid4(),
-            status="trialing",
-            trial_end=datetime.utcnow() - timedelta(days=1),  # Trial ended
-            commitment_start_date=None
-        )
+        # Create a simple object instead of Mock to allow proper attribute comparisons
+        class MockSubscription:
+            def __init__(self):
+                self.id = uuid4()
+                self.status = "trialing"
+                self.trial_end = datetime.utcnow() - timedelta(days=1)  # Trial ended
+                self.commitment_start_date = None
+                self.current_period_start = None
+                self.current_period_end = None
+                self.cancel_at_period_end = False
+
+        mock_existing_sub = MockSubscription()
 
         # Setup query chain properly
         subscription_query = MagicMock()

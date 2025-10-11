@@ -32,6 +32,16 @@ async def list_sessions(
         List of session objects with device and location info
     """
     try:
+        # Update current session's last_active timestamp
+        from core.security import get_session_id_from_request
+        session_id = get_session_id_from_request(request)
+        if session_id:
+            try:
+                session_service.update_last_active(db, session_id)
+                logger.debug(f"Updated last_active for session {session_id}")
+            except Exception as e:
+                logger.warning(f"Failed to update last_active for session {session_id}: {e}")
+
         sessions = session_service.get_user_sessions(
             db=db,
             user_id=str(current_user.id),
@@ -165,6 +175,45 @@ async def revoke_all_other_sessions(
     except Exception as e:
         logger.error(f"Failed to revoke all sessions for user {current_user.id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to revoke sessions")
+
+
+@router.post("/sessions/heartbeat")
+@rate_limit("100/minute")
+async def session_heartbeat(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update the current session's last_active timestamp (heartbeat/keepalive)
+
+    Returns:
+        Success status
+    """
+    try:
+        from core.security import get_session_id_from_request
+        session_id = get_session_id_from_request(request)
+
+        if not session_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Could not determine current session"
+            )
+
+        # Update last_active timestamp
+        session_service.update_last_active(db, session_id)
+
+        return {
+            "success": True,
+            "message": "Session updated",
+            "timestamp": session_service.get_session_by_id(db, session_id).last_active.isoformat() if session_service.get_session_by_id(db, session_id) else None
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to update session heartbeat for user {current_user.id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to update session")
 
 
 @router.get("/sessions/count")

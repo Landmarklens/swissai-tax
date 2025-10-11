@@ -100,6 +100,27 @@ class SessionService:
                     )
                 ).update({"is_current": False})
 
+            # Clean up old sessions from the same device/IP to prevent duplicates
+            # Keep only the most recent session per device/IP combination
+            try:
+                old_sessions = db.query(UserSession).filter(
+                    and_(
+                        UserSession.user_id == new_session.user_id,
+                        UserSession.device_name == new_session.device_name,
+                        UserSession.ip_address == new_session.ip_address,
+                        UserSession.is_active == True,
+                        UserSession.session_id != session_id  # Don't include the new session
+                    )
+                ).all()
+
+                if old_sessions:
+                    logger.info(f"Found {len(old_sessions)} old sessions from same device/IP for user {user_id}, revoking them")
+                    for old_session in old_sessions:
+                        old_session.revoke()
+            except Exception as e:
+                logger.warning(f"Failed to cleanup old sessions during creation: {e}")
+                # Don't fail the session creation if cleanup fails
+
             db.add(new_session)
             db.commit()
             db.refresh(new_session)

@@ -383,22 +383,24 @@ async def download_export(
 
     # Download file from S3 presigned URL and stream to user
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(export.file_url, timeout=30.0)
-            response.raise_for_status()
+        # Determine filename
+        filename = f"swissai-tax-export-{export.id}.{export.format}"
 
-            # Determine filename
-            filename = f"swissai-tax-export-{export.id}.{export.format}"
+        # Stream the file in chunks to avoid loading entire file into memory
+        async def stream_from_s3():
+            async with httpx.AsyncClient() as client:
+                async with client.stream('GET', export.file_url, timeout=30.0) as response:
+                    response.raise_for_status()
+                    async for chunk in response.aiter_bytes(chunk_size=8192):
+                        yield chunk
 
-            # Stream the file back to the user
-            return StreamingResponse(
-                iter([response.content]),
-                media_type='application/octet-stream',
-                headers={
-                    'Content-Disposition': f'attachment; filename="{filename}"',
-                    'Content-Length': str(len(response.content))
-                }
-            )
+        return StreamingResponse(
+            stream_from_s3(),
+            media_type='application/octet-stream',
+            headers={
+                'Content-Disposition': f'attachment; filename="{filename}"'
+            }
+        )
     except httpx.HTTPError as e:
         logger.error(f"Error downloading export {export_id} from S3: {e}")
         raise HTTPException(status_code=500, detail="Failed to download export file")

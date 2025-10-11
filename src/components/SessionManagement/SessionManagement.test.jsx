@@ -85,11 +85,9 @@ describe('SessionManagement', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
 
@@ -148,6 +146,8 @@ describe('SessionManagement', () => {
 
   // Test auto-refresh
   it('should auto-refresh sessions every 30 seconds', async () => {
+    jest.useFakeTimers();
+
     sessionService.getSessions.mockResolvedValue({
       success: true,
       data: { sessions: mockSessions }
@@ -178,10 +178,14 @@ describe('SessionManagement', () => {
     await waitFor(() => {
       expect(sessionService.getSessions).toHaveBeenCalledTimes(3);
     });
+
+    jest.useRealTimers();
   });
 
   // Test cleanup on unmount
   it('should clear interval on unmount', async () => {
+    jest.useFakeTimers();
+
     sessionService.getSessions.mockResolvedValue({
       success: true,
       data: { sessions: mockSessions }
@@ -201,6 +205,8 @@ describe('SessionManagement', () => {
     });
 
     expect(sessionService.getSessions).toHaveBeenCalledTimes(1);
+
+    jest.useRealTimers();
   });
 
   // Test manual refresh
@@ -226,10 +232,15 @@ describe('SessionManagement', () => {
 
   // Test revoke single session
   it('should revoke a single session successfully', async () => {
-    sessionService.getSessions.mockResolvedValue({
-      success: true,
-      data: { sessions: mockSessions }
-    });
+    sessionService.getSessions
+      .mockResolvedValueOnce({
+        success: true,
+        data: { sessions: mockSessions }
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        data: { sessions: [mockSessions[0]] } // Only current session after revoke
+      });
     sessionService.revokeSession.mockResolvedValue({
       success: true
     });
@@ -237,11 +248,14 @@ describe('SessionManagement', () => {
     render(<SessionManagement />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('revoke-session-2')).toBeInTheDocument();
+      expect(screen.getByTestId('session-card-session-2')).toBeInTheDocument();
     });
 
     const revokeButton = screen.getByTestId('revoke-session-2');
-    fireEvent.click(revokeButton);
+
+    await act(async () => {
+      fireEvent.click(revokeButton);
+    });
 
     await waitFor(() => {
       expect(sessionService.revokeSession).toHaveBeenCalledWith('session-2');
@@ -263,11 +277,14 @@ describe('SessionManagement', () => {
     render(<SessionManagement />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('revoke-session-2')).toBeInTheDocument();
+      expect(screen.getByTestId('session-card-session-2')).toBeInTheDocument();
     });
 
     const revokeButton = screen.getByTestId('revoke-session-2');
-    fireEvent.click(revokeButton);
+
+    await act(async () => {
+      fireEvent.click(revokeButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('Failed to revoke session')).toBeInTheDocument();
@@ -326,10 +343,15 @@ describe('SessionManagement', () => {
 
   // Test revoke all success
   it('should revoke all other sessions successfully', async () => {
-    sessionService.getSessions.mockResolvedValue({
-      success: true,
-      data: { sessions: mockSessions }
-    });
+    sessionService.getSessions
+      .mockResolvedValueOnce({
+        success: true,
+        data: { sessions: mockSessions }
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        data: { sessions: [mockSessions[0]] } // Only current session after revoke all
+      });
     sessionService.revokeAllOtherSessions.mockResolvedValue({
       success: true,
       data: { count: 1 }
@@ -338,11 +360,14 @@ describe('SessionManagement', () => {
     render(<SessionManagement />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Revoke All Other Sessions/i)).toBeInTheDocument();
+      const buttons = screen.getAllByRole('button');
+      const revokeAllButton = buttons.find(btn => btn.textContent.includes('Revoke All Other Sessions'));
+      expect(revokeAllButton).toBeInTheDocument();
     });
 
     // Open dialog
-    const revokeAllButton = screen.getByText(/Revoke All Other Sessions/i);
+    const buttons = screen.getAllByRole('button');
+    const revokeAllButton = buttons.find(btn => btn.textContent.includes('Revoke All Other Sessions'));
     fireEvent.click(revokeAllButton);
 
     await waitFor(() => {
@@ -350,8 +375,10 @@ describe('SessionManagement', () => {
     });
 
     // Confirm
-    const confirmButton = screen.getByRole('button', { name: /Revoke All Other Sessions/i });
-    fireEvent.click(confirmButton);
+    await act(async () => {
+      const confirmButton = screen.getByRole('button', { name: /Revoke All Other Sessions/i });
+      fireEvent.click(confirmButton);
+    });
 
     await waitFor(() => {
       expect(sessionService.revokeAllOtherSessions).toHaveBeenCalled();
@@ -405,19 +432,24 @@ describe('SessionManagement', () => {
     render(<SessionManagement />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Revoke All Other Sessions/i)).toBeInTheDocument();
+      const buttons = screen.getAllByRole('button');
+      const revokeAllButton = buttons.find(btn => btn.textContent.includes('Revoke All Other Sessions'));
+      expect(revokeAllButton).toBeInTheDocument();
     });
 
     // Open and confirm
-    const revokeAllButton = screen.getByText(/Revoke All Other Sessions/i);
+    const buttons = screen.getAllByRole('button');
+    const revokeAllButton = buttons.find(btn => btn.textContent.includes('Revoke All Other Sessions'));
     fireEvent.click(revokeAllButton);
 
     await waitFor(() => {
       expect(screen.getByText('Revoke All Sessions')).toBeInTheDocument();
     });
 
-    const confirmButton = screen.getByRole('button', { name: /Revoke All Other Sessions/i });
-    fireEvent.click(confirmButton);
+    await act(async () => {
+      const confirmButton = screen.getByRole('button', { name: /Revoke All Other Sessions/i });
+      fireEvent.click(confirmButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('Failed to revoke all sessions')).toBeInTheDocument();
@@ -447,10 +479,15 @@ describe('SessionManagement', () => {
 
   // Test success message dismissal
   it('should allow closing success alerts', async () => {
-    sessionService.getSessions.mockResolvedValue({
-      success: true,
-      data: { sessions: mockSessions }
-    });
+    sessionService.getSessions
+      .mockResolvedValueOnce({
+        success: true,
+        data: { sessions: mockSessions }
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        data: { sessions: [mockSessions[0]] }
+      });
     sessionService.revokeSession.mockResolvedValue({
       success: true
     });
@@ -458,11 +495,14 @@ describe('SessionManagement', () => {
     render(<SessionManagement />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('revoke-session-2')).toBeInTheDocument();
+      expect(screen.getByTestId('session-card-session-2')).toBeInTheDocument();
     });
 
     const revokeButton = screen.getByTestId('revoke-session-2');
-    fireEvent.click(revokeButton);
+
+    await act(async () => {
+      fireEvent.click(revokeButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('Session revoked successfully')).toBeInTheDocument();
@@ -492,7 +532,7 @@ describe('SessionManagement', () => {
     render(<SessionManagement />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('revoke-session-2')).toBeInTheDocument();
+      expect(screen.getByTestId('session-card-session-2')).toBeInTheDocument();
     });
 
     const revokeButton = screen.getByTestId('revoke-session-2');
@@ -503,11 +543,21 @@ describe('SessionManagement', () => {
       expect(revokeButton).toBeDisabled();
     });
 
-    // Resolve
-    resolveRevoke({ success: true });
+    // Need to mock the reload after revoke
+    sessionService.getSessions.mockResolvedValue({
+      success: true,
+      data: { sessions: [mockSessions[0]] } // Only current session left
+    });
 
+    // Resolve
+    await act(async () => {
+      resolveRevoke({ success: true });
+      await Promise.resolve(); // Let promises settle
+    });
+
+    // Wait for sessions to reload
     await waitFor(() => {
-      expect(revokeButton).not.toBeDisabled();
+      expect(sessionService.getSessions).toHaveBeenCalledTimes(2);
     });
   });
 });

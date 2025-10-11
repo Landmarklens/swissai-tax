@@ -280,10 +280,16 @@ describe('ManageSubscription', () => {
       });
 
       await waitFor(() => {
-        const switchButton = screen.getByText('Switch Plan');
-        fireEvent.click(switchButton);
-
         expect(screen.getByText('Switch Plan')).toBeInTheDocument();
+      });
+
+      const switchButton = screen.getByText('Switch Plan');
+
+      await act(async () => {
+        fireEvent.click(switchButton);
+      });
+
+      await waitFor(() => {
         expect(screen.getByText(/Switch to Annual Flex/)).toBeInTheDocument();
       });
     });
@@ -297,11 +303,21 @@ describe('ManageSubscription', () => {
       });
 
       await waitFor(() => {
-        const switchButton = screen.getByText('Switch Plan');
+        expect(screen.getByText('Switch Plan')).toBeInTheDocument();
+      });
+
+      const switchButton = screen.getByText('Switch Plan');
+
+      await act(async () => {
         fireEvent.click(switchButton);
       });
 
+      await waitFor(() => {
+        expect(screen.getByText('Confirm Switch')).toBeInTheDocument();
+      });
+
       const confirmButton = screen.getByText('Confirm Switch');
+
       await act(async () => {
         fireEvent.click(confirmButton);
       });
@@ -329,6 +345,8 @@ describe('ManageSubscription', () => {
 
   describe('Error Handling', () => {
     it('should display error when fetching subscription fails', async () => {
+      const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
       subscriptionService.getCurrentSubscription.mockRejectedValue(
         new Error('Network error')
       );
@@ -340,6 +358,8 @@ describe('ManageSubscription', () => {
       await waitFor(() => {
         expect(screen.getByText(/Failed to load subscription/)).toBeInTheDocument();
       });
+
+      consoleError.mockRestore();
     });
 
     it('should show error when cancellation fails', async () => {

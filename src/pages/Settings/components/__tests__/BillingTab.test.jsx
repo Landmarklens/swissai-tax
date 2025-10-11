@@ -216,7 +216,9 @@ describe('BillingTab', () => {
       data: mockInvoices
     });
 
-    render(<BillingTab />);
+    await act(async () => {
+      render(<BillingTab />);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('premium')).toBeInTheDocument();

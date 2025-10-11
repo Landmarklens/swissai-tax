@@ -435,7 +435,9 @@ describe('AccountCredits', () => {
         data: null
       });
 
-      renderWithTheme(<AccountCredits />);
+      await act(async () => {
+        renderWithTheme(<AccountCredits />);
+      });
 
       await waitFor(() => {
         expect(screen.getByText('CHF 0.00')).toBeInTheDocument();

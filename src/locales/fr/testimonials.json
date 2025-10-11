@@ -1,0 +1,40 @@
+{
+  "testimonials": [
+    {
+      "id": 1,
+      "text": "J'ai pu trouver le logement parfait en un rien de temps. Le service était exceptionnel et si facile à utiliser."
+    },
+    {
+      "id": 2,
+      "text": "Très efficace et convivial. J'ai trouvé un excellent endroit qui correspond parfaitement à mes besoins."
+    },
+    {
+      "id": 3,
+      "text": "Une expérience fantastique ! La recherche pilotée par l'IA a rendu tout si simple et sans stress."
+    },
+    {
+      "id": 4,
+      "text": "Bon service, bien que j'aie eu quelques problèmes mineurs avec les filtres de recherche. Dans l'ensemble, une expérience positive."
+    },
+    {
+      "id": 5,
+      "text": "Facile à utiliser et fiable. J'ai trouvé un excellent appartement que j'adore."
+    },
+    {
+      "id": 6,
+      "text": "Ce service m'a fait gagner énormément de temps. Hautement recommandé pour toute personne à la recherche d'un nouveau logement."
+    },
+    {
+      "id": 7,
+      "text": "Processus fluide du début à la fin. Les informations étaient parfaitement adaptées."
+    },
+    {
+      "id": 8,
+      "text": "La meilleure façon de trouver un logement. Simple, efficace et précis."
+    },
+    {
+      "id": 9,
+      "text": "J'ai eu une excellente expérience. J'ai trouvé un bel endroit rapidement et sans tracas."
+    }
+  ]
+}

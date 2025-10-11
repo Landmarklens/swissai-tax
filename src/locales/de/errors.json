@@ -1,0 +1,32 @@
+{
+  "general": {
+    "somethingWentWrong": "Ein Fehler ist aufgetreten",
+    "unknownError": "Unbekannter Fehler"
+  },
+  "network": {
+    "error": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung."
+  },
+  "auth": {
+    "unauthorized": "Bitte melden Sie sich an, um fortzufahren.",
+    "tokenExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
+  },
+  "resource": {
+    "notFound": "Die angeforderte Ressource wurde nicht gefunden."
+  },
+  "server": {
+    "error": "Serverfehler. Bitte versuchen Sie es später erneut."
+  },
+  "rateLimit": {
+    "exceeded": "Zu viele Anfragen. Bitte verlangsamen Sie."
+  },
+  "codes": {
+    "NETWORK_ERROR": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
+    "UNAUTHORIZED": "Bitte melden Sie sich an, um fortzufahren.",
+    "TOKEN_EXPIRED": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "NOT_FOUND": "Die angeforderte Ressource wurde nicht gefunden.",
+    "SERVER_ERROR": "Serverfehler. Bitte versuchen Sie es später erneut.",
+    "RATE_LIMIT": "Zu viele Anfragen. Bitte verlangsamen Sie.",
+    "UNKNOWN_ERROR": "Ein Fehler ist aufgetreten",
+    "VALIDATION_ERROR": "Bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut."
+  }
+}

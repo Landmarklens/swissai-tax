@@ -1,0 +1,191 @@
+{
+  "plans": {
+    "free": {
+      "title": "Gratis",
+      "price": "Gratis",
+      "description": "Basisplan für grundlegende Bedürfnisse",
+      "buttonText": "Jetzt starten",
+      "features": [
+        {
+          "title": "Grundlegende Immobiliensuche",
+          "description": "Die KI sucht Immobilien basierend auf wesentlichen Kriterien wie Budget, Standort, Pendelzeit zur Arbeit und zu Familienmitgliedern sowie Immobiliengrösse."
+        },
+        {
+          "title": "Täglicher Marktscan",
+          "description": "Immobiliensuche einmal täglich."
+        },
+        {
+          "title": "Begrenzter Suchbereich",
+          "description": "Bis zu 1 aktive Immobilienübereinstimmung pro Monat."
+        },
+        {
+          "title": "Textbasierte Analyse",
+          "description": "Die KI analysiert nur Immobilienbeschreibungen ohne Berücksichtigung von Fotos."
+        },
+        {
+          "title": "Community-Support",
+          "description": "Zugang zu einer Benutzer-Community für Hilfe und Beratung."
+        }
+      ],
+      "advantages": [
+        "Kostenlos ohne finanzielle Verpflichtung.",
+        "Ideal für Benutzer mit einfachen Bedürfnissen oder am Anfang ihrer Immobiliensuche.",
+        "Erleben Sie KI-gesteuerte Immobiliensuche kostenlos."
+      ]
+    },
+    "comprehensive": {
+      "title": "Erweiterte Suche",
+      "price": "CHF99.99",
+      "description": "Für anspruchsvolle Mieter, Berufstätige oder Familien, die eine hochgradig personalisierte und proaktive Immobiliensucherfahrung benötigen.",
+      "buttonText": "Jetzt starten",
+      "features": [
+        {
+          "title": "Optimale Immobiliensuche",
+          "description": "Die KI bewertet Immobilien basierend auf Pendelzeit, Annehmlichkeiten, Lebensqualität, lokalen Trends und potenziellen Problemen."
+        },
+        {
+          "title": "Echtzeit-Marktscan",
+          "description": "Kontinuierliche Marktscans mit sofortigen Updates."
+        },
+        {
+          "title": "Erweiterter Suchbereich",
+          "description": "Bis zu 30 aktive Immobilienübereinstimmungen pro Monat."
+        },
+        {
+          "title": "Detaillierte Analyse",
+          "description": "KI führt eine tiefgehende Analyse von Text und Fotos durch und bewertet Details wie Aussichtsqualität, Lärmpegel, Innenarchitektur und Nähe zu Annehmlichkeiten."
+        },
+        {
+          "title": "VIP-Support",
+          "description": "Prioritärer Kundenservice mit dedizierten Account-Managern."
+        },
+        {
+          "title": "WhatsApp-Benachrichtigungen",
+          "description": "Sofortige Benachrichtigungen über WhatsApp für neue Immobilienübereinstimmungen und Markt-Updates."
+        }
+      ],
+      "advantages": [
+        "Die umfassendste verfügbare Immobiliensucherfahrung.",
+        "Perfekt für Benutzer mit spezifischen Anforderungen in wettbewerbsintensiven Märkten.",
+        "Hochgradig personalisierte Einblicke und Echtzeit-Updates via WhatsApp und E-Mail."
+      ]
+    }
+  },
+  "shortPlans": {
+    "free": {
+      "title": "Gratis",
+      "price": "Gratis",
+      "description": "Basisplan für grundlegende Bedürfnisse",
+      "buttonText": "Kostenlose Woche starten",
+      "features": [
+        "Begrenzte Immobilienübereinstimmungen",
+        "Grundlegende KI-Unterstützung"
+      ]
+    },
+    "comprehensive": {
+      "title": "Erweiterte Suche",
+      "price": "CHF99.99",
+      "description": "Umfassende Lösung für Berufstätige",
+      "buttonText": "Jetzt starten",
+      "features": [
+        "Vollständige KI-Funktionen",
+        "Personalisierte Marktanalyse",
+        "24/7 dedizierter Support"
+      ]
+    }
+  },
+  "upgradePlan": {
+    "name": "Erweiterte Suche",
+    "price": "CHF99.99",
+    "keyFeatures": [
+      {
+        "feature": "Erweiterte Immobiliensuche",
+        "description": "Steuern, andere Interessen wie Hobbys usw."
+      },
+      {
+        "feature": "Häufiger Marktscan",
+        "description": "Regelmässige Updates zu Markttrends."
+      },
+      {
+        "feature": "Breiterer Suchbereich",
+        "description": "Grössere Auswahl an Immobilien und Daten."
+      },
+      {
+        "feature": "Automatische Benachrichtigungen",
+        "description": "Benachrichtigungen für neue Immobilien."
+      },
+      {
+        "feature": "Text- und Basis-Fotoanalyse",
+        "description": "KI-basierte Immobilienanalyse."
+      },
+      {
+        "feature": "Persönlicher Support",
+        "description": "Dedizierter Kundensupport."
+      }
+    ]
+  },
+  "proPlan": {
+    "name": "Pro: Umfassende Suche",
+    "price": "CHF79.99",
+    "originalPrice": "CHF99.99",
+    "keyFeatures": [
+      {
+        "feature": "Optimale Immobiliensuche",
+        "description": "Fortgeschrittener Matching-Algorithmus"
+      },
+      {
+        "feature": "Echtzeit-Marktscan",
+        "description": "Kontinuierliche Marktscans mit sofortigen Updates."
+      },
+      {
+        "feature": "Erweiterter Suchbereich",
+        "description": "Maximale Immobilienabdeckung"
+      },
+      {
+        "feature": "Detaillierte Analyse",
+        "description": "Umfassende Immobilienbewertung"
+      },
+      {
+        "feature": "VIP-Support",
+        "description": "Premium-Kundenservice"
+      },
+      {
+        "feature": "WhatsApp-Benachrichtigungen",
+        "description": "Sofortige mobile Benachrichtigungen"
+      }
+    ]
+  },
+  "differences": [
+    {
+      "title": "Suchhäufigkeit",
+      "description": "Reicht von täglich (Gratis) bis Echtzeit (Pro und VIP)."
+    },
+    {
+      "title": "Suchbereich:",
+      "description": "Begrenzt auf 1 Übereinstimmung pro Monat in Gratis, 10 in Premium, 30 in Pro und unbegrenzt in VIP."
+    },
+    {
+      "title": "Datenanalyse:",
+      "description": "Nur Text in Gratis, grundlegende Fotoanalyse in Premium und detaillierte Analyse mit Umwelt- und Marktdaten in Pro und VIP."
+    },
+    {
+      "title": "Support:",
+      "description": "Community-basiert in Gratis, E-Mail-Support in Premium, dedizierte Account-Manager in Pro und Priority-Service in VIP"
+    },
+    {
+      "title": "Exklusive Extras:",
+      "description": "Der VIP-Plan bietet automatisierte Bewerbungseinreichungen und Echtzeit-Kommunikation via WhatsApp."
+    }
+  ],
+  "cancelSubscriptionReasons": [
+    "Möchte nur monatlich zahlen",
+    "HOME AI reicht für meine Bedürfnisse aus",
+    "Premium ist zu teuer",
+    "Premium-Funktionen sind für mich nicht wertvoll",
+    "Produkt hat zu viele Fehler",
+    "Nicht mehr benötigt",
+    "Nutze Diagramm-Tools nicht genug zum Bezahlen",
+    "Kenne die Home AI Suche nicht",
+    "Andere"
+  ]
+}

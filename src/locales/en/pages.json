@@ -1,0 +1,165 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "404 | Page Not Found - HomeAI",
+      "metaDescription": "The page you're looking for doesn't exist. Let's help you find your way back home.",
+      "heading": "404 | Page Not Found",
+      "message": "Oops! It looks like the page you're looking for doesn't exist. Let's get you back on track.",
+      "goBack": "Go Back",
+      "goHome": "Go Home",
+      "footer": "HOME AI"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Any question or remarks? Just write us a message!",
+      "contactInformation": "Contact Information",
+      "companyName": "LandMarK Lens GMBH",
+      "email": "contact@swissai.tax",
+      "address": "Sandbuckstrasse 24, Schneisingen 5425",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phoneNumber": "Phone number",
+      "message": "Message",
+      "sendMessage": "Send Message",
+      "enterFirstName": "Enter your First name",
+      "enterLastName": "Enter your Last name",
+      "enterEmail": "Enter your Email",
+      "writeMessage": "Write your Message..",
+      "successMessage": "Thank you for your request! We'll get back to you soon.",
+      "validationErrors": {
+        "invalidEmail": "Invalid email address",
+        "required": "Required",
+        "firstNameMin": "First name must be at least 2 characters",
+        "firstNameMax": "First name must be at most 50 characters",
+        "lastNameMin": "Last name must be at least 2 characters",
+        "lastNameMax": "Last name must be at most 50 characters",
+        "subjectMin": "Subject must be at least 3 characters",
+        "subjectMax": "Subject must be at most 100 characters",
+        "selectSubject": "Please select a subject",
+        "messageMin": "Message must be at least 10 characters",
+        "messageMax": "Message must be at most 2000 characters",
+        "phoneInvalid": "Phone number must contain only digits, spaces, +, or -",
+        "phoneTooShort": "Phone number is too short",
+        "phoneTooLong": "Phone number is too long"
+      },
+      "errors": {
+        "validationFailed": "Validation failed. Please check your input.",
+        "tooManyRequests": "Too many requests. Please wait a moment and try again.",
+        "checkInput": "Please check your input and try again.",
+        "sendFailed": "Failed to send message. Please try again later.",
+        "networkError": "Network error. Please check your connection and try again."
+      }
+    },
+    "auth": {
+      "forgotPassword": {
+        "title": "Reset Password - SwissAI Tax",
+        "metaDescription": "Reset your SwissAI Tax account password",
+        "heading": "Forgot Password",
+        "instructions": "Enter your email to receive password reset instructions.",
+        "emailAddress": "Email Address",
+        "sendResetLink": "Send Reset Link",
+        "thankYou": "Thank You",
+        "confirmationMessage": "If an account with that email exists, you will receive password reset instructions."
+      },
+      "resetPassword": {
+        "title": "Reset Password - SwissAI Tax",
+        "metaDescription": "Create a new password for your SwissAI Tax account",
+        "heading": "Reset Password",
+        "instructions": "Set up a new password.",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password",
+        "confirmPassword": "Confirm your Password",
+        "resetButton": "Reset Password",
+        "successHeading": "Password Reset Successful",
+        "successMessage": "Your password has been updated. You can now log in.",
+        "goToLogin": "Go to Login",
+        "invalidLinkHeading": "Invalid or Expired Link",
+        "invalidLinkMessage": "The password reset link is invalid or has expired. Please request a new one.",
+        "errors": {
+          "invalidToken": "Invalid token or password.",
+          "resetFailed": "Failed to reset password. The link may have expired."
+        }
+      }
+    },
+    "taxFiling": {
+      "documentChecklistPage": {
+        "title": "Document Upload",
+        "steps": {
+          "completeInterview": "Complete Interview",
+          "uploadDocuments": "Upload Documents",
+          "calculateTaxes": "Calculate Taxes",
+          "reviewSubmit": "Review & Submit"
+        },
+        "uploadProgress": "Upload Progress",
+        "yourProfile": "Your Profile",
+        "documentsUploaded": "Documents uploaded",
+        "requiredDocuments": "Required Documents",
+        "documentsInstructions": "Based on your interview answers, you need to upload the following documents:",
+        "backToInterview": "Back to Interview",
+        "calculating": "Calculating...",
+        "calculateMyTaxes": "Calculate My Taxes",
+        "calculateWithoutDocs": "Calculate without all documents (estimate)",
+        "uploadError": "Failed to upload"
+      },
+      "filingsListPage": {
+        "title": "My Tax Filings",
+        "subtitle": "Manage your tax returns across multiple years and cantons",
+        "newFiling": "New Filing",
+        "loadingFilings": "Loading filings...",
+        "stats": {
+          "total": "Total Filings",
+          "completed": "Completed",
+          "inProgress": "In Progress"
+        },
+        "noFilings": "No filings yet",
+        "getStarted": "Start your first tax filing to see it here",
+        "startTaxFiling": "Start Tax Filing",
+        "filing": "filing",
+        "filings": "filings",
+        "noCanton": "No canton",
+        "status": {
+          "completed": "Completed",
+          "submitted": "Submitted",
+          "in_progress": "In Progress",
+          "draft": "Draft"
+        },
+        "secondary": "Secondary",
+        "progress": "Progress",
+        "lastUpdated": "Last updated",
+        "continue": "Continue",
+        "viewDetails": "View Details",
+        "edit": "Edit",
+        "copyToNewYear": "Copy to New Year",
+        "delete": "Delete",
+        "confirmDelete": "Are you sure you want to delete this filing?",
+        "createNew": "Create New Tax Filing",
+        "taxYear": "Tax Year",
+        "postalCode": "Postal Code (ZIP)",
+        "postalCodePlaceholder": "e.g., 8001",
+        "lookingUpPostalCode": "Looking up postal code...",
+        "enterPostalCode": "Enter your 4-digit postal code",
+        "municipality": "Municipality",
+        "canton": "Canton",
+        "autoFilledFromPostalCode": "Auto-filled from postal code",
+        "cancel": "Cancel",
+        "createAndStart": "Create and Start",
+        "copyFiling": "Copy Filing to New Year",
+        "copyInfo": "This will create a copy of your filing data for a new tax year. You can then update it with current information.",
+        "newYear": "New Tax Year"
+      }
+    },
+    "blog": {
+      "blogList": {
+        "heading": "Blog",
+        "subtitle": "Stay ahead of the curve with our team's real estate updates.",
+        "all": "All"
+      },
+      "blogItem": {
+        "back": "Back",
+        "previous": "Previous",
+        "next": "Next",
+        "relatedArticles": "Related Articles"
+      }
+    }
+  }
+}

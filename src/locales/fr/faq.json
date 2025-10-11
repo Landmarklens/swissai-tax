@@ -1,0 +1,134 @@
+{
+  "faq": [
+    {
+      "category": "Premiers pas",
+      "questions": [
+        {
+          "question": "Qu'est-ce que SwissAI Tax?",
+          "answer": "SwissAI Tax est une plateforme intelligente de déclaration fiscale suisse qui utilise l'IA pour simplifier votre déclaration d'impôts. Nous prenons en charge les 26 cantons suisses avec un calcul automatique des impôts fédéraux, cantonaux et communaux."
+        },
+        {
+          "question": "Qui peut utiliser SwissAI Tax?",
+          "answer": "Toute personne vivant en Suisse et devant déclarer ses impôts peut utiliser notre plateforme. Que vous soyez employé, indépendant, retraité ou que vous ayez plusieurs sources de revenus, SwissAI Tax s'adapte à votre situation."
+        },
+        {
+          "question": "Quels cantons sont pris en charge?",
+          "answer": "Les 26 cantons suisses sont entièrement pris en charge: Zurich, Berne, Lucerne, Uri, Schwyz, Obwald, Nidwald, Glaris, Zoug, Fribourg, Soleure, Bâle-Ville, Bâle-Campagne, Schaffhouse, Appenzell Rhodes-Extérieures, Appenzell Rhodes-Intérieures, Saint-Gall, Grisons, Argovie, Thurgovie, Tessin, Vaud, Valais, Neuchâtel, Genève et Jura."
+        },
+        {
+          "question": "Quelles langues sont disponibles?",
+          "answer": "SwissAI Tax est disponible dans les quatre langues nationales suisses: allemand (Deutsch), français, italien (Italiano) et anglais. Vous pouvez changer de langue à tout moment."
+        }
+      ]
+    },
+    {
+      "category": "Processus de déclaration fiscale",
+      "questions": [
+        {
+          "question": "Comment fonctionne l'interview IA?",
+          "answer": "Notre questionnaire interactif (Q01-Q14) vous guide à travers des questions simples sur vos revenus, votre situation familiale, vos déductions et vos dépenses. L'IA adapte les questions en fonction de vos réponses, ne posant que ce qui est pertinent pour votre situation. Aucune connaissance fiscale requise!"
+        },
+        {
+          "question": "Quels documents dois-je télécharger?",
+          "answer": "Les documents courants comprennent: les certificats de salaire, les confirmations d'assurance, les reçus de dons, les relevés d'intérêts hypothécaires, les frais de garde d'enfants et les factures médicales. Notre IA vous indique exactement quels documents vous avez besoin en fonction de vos réponses à l'interview."
+        },
+        {
+          "question": "Comment fonctionne le téléchargement de documents?",
+          "answer": "Glissez-déposez simplement vos documents (PDF, JPG, PNG). Notre IA utilise l'OCR (Reconnaissance Optique de Caractères) alimentée par AWS Textract pour extraire automatiquement les données pertinentes. Vous pouvez vérifier et modifier les données extraites avant soumission."
+        },
+        {
+          "question": "Quelle est la précision des calculs fiscaux?",
+          "answer": "Nos calculs utilisent les taux d'imposition officiels suisses mis à jour pour l'année fiscale en cours. Nous calculons l'impôt fédéral, l'impôt cantonal et l'impôt communal en fonction de votre emplacement exact. Toutes les formules sont validées selon les directives officielles des autorités fiscales."
+        },
+        {
+          "question": "Puis-je enregistrer ma progression et continuer plus tard?",
+          "answer": "Oui! Vos données sont automatiquement enregistrées au fur et à mesure que vous progressez dans l'interview. Vous pouvez vous déconnecter et revenir à tout moment pour continuer où vous vous êtes arrêté. Toutes les données sont stockées en toute sécurité et cryptées."
+        }
+      ]
+    },
+    {
+      "category": "Déductions & Économies",
+      "questions": [
+        {
+          "question": "Comment fonctionne le détecteur automatique de déductions?",
+          "answer": "Notre IA analyse votre situation et identifie toutes les déductions applicables: frais professionnels (déplacements, repas, formation professionnelle), primes d'assurance (santé, vie, pension), dons, frais de garde d'enfants, dépenses de formation, et plus encore. Nous nous assurons que vous ne manquez aucune économie."
+        },
+        {
+          "question": "Quelles sont les déductions les plus courantes que je peux réclamer?",
+          "answer": "Les déductions courantes comprennent: les assurances obligatoires (AVS, AI, AC, APG), les primes d'assurance maladie, les cotisations au pilier 3a, les frais professionnels, les frais de garde d'enfants, les dons aux organisations caritatives, les frais de formation/perfectionnement et les intérêts hypothécaires."
+        },
+        {
+          "question": "Puis-je déduire les frais de bureau à domicile?",
+          "answer": "Oui, si vous travaillez régulièrement à domicile, vous pouvez déduire une partie du loyer, des services publics et des coûts d'équipement. Notre IA calcule le montant autorisé en fonction des réglementations fiscales suisses et des règles spécifiques de votre canton."
+        },
+        {
+          "question": "Comment maximiser mon remboursement d'impôt?",
+          "answer": "Téléchargez tous les documents pertinents, répondez aux questions de l'interview de manière approfondie et laissez notre IA trouver chaque déduction. Nous fournissons des suggestions pour des stratégies d'économie d'impôts et vous montrons l'impact de différents scénarios avant le dépôt."
+        }
+      ]
+    },
+    {
+      "category": "Sécurité & Confidentialité",
+      "questions": [
+        {
+          "question": "Mes données sont-elles sécurisées?",
+          "answer": "Absolument. Vos données sont cryptées en transit (HTTPS) et au repos. Nous utilisons AWS S3 pour le stockage des documents avec un cryptage de niveau bancaire. Toutes les données restent en Suisse. Nous sommes conformes au RGPD et ne partageons jamais vos informations avec des tiers."
+        },
+        {
+          "question": "Où sont stockées mes données?",
+          "answer": "Toutes vos données sont stockées sur des serveurs suisses sécurisés (région AWS Europe Francfort). Les documents sont cryptés à l'aide du cryptage AES-128 avec cryptage authentifié (même standard utilisé par les grandes banques). Les connexions aux bases de données utilisent SSL/TLS. Votre vie privée est notre priorité absolue."
+        },
+        {
+          "question": "Puis-je supprimer mes données?",
+          "answer": "Oui, vous pouvez supprimer votre compte et toutes les données associées à tout moment depuis vos paramètres de profil. Nous respectons le droit à l'oubli en vertu du RGPD. La suppression est permanente et irréversible."
+        },
+        {
+          "question": "Partagez-vous mes données avec les autorités fiscales?",
+          "answer": "Non. Nous ne partageons jamais automatiquement vos données avec qui que ce soit. Vous gardez le contrôle total. Lorsque vous êtes prêt, vous téléchargez vos formulaires fiscaux complétés et les soumettez vous-même à votre office cantonal des impôts."
+        }
+      ]
+    },
+    {
+      "category": "Support technique",
+      "questions": [
+        {
+          "question": "Que faire si je rencontre une erreur lors du dépôt?",
+          "answer": "Notre équipe d'assistance est disponible par e-mail et chat en direct. La plupart des problèmes courants sont résolus dans les 24 heures. Consultez notre Centre d'aide pour des guides de dépannage et des tutoriels vidéo."
+        },
+        {
+          "question": "Puis-je utiliser SwissAI Tax sur des appareils mobiles?",
+          "answer": "Oui! Notre plateforme est entièrement responsive et fonctionne sur smartphones, tablettes et ordinateurs de bureau. L'interface s'adapte à la taille de votre écran pour une utilisation optimale."
+        },
+        {
+          "question": "Quels navigateurs sont pris en charge?",
+          "answer": "Nous prenons en charge tous les navigateurs modernes: Chrome, Firefox, Safari et Edge. Pour une meilleure expérience, utilisez la dernière version de votre navigateur préféré."
+        },
+        {
+          "question": "Que se passe-t-il si j'ai besoin d'aide pour des situations fiscales complexes?",
+          "answer": "Pour les cas complexes (revenus d'entreprise, actifs étrangers, héritages), notre IA vous guide à travers les bases, et vous pouvez éventuellement vous connecter avec des conseillers fiscaux suisses certifiés via notre réseau de partenaires."
+        }
+      ]
+    },
+    {
+      "category": "Tarifs & Paiement",
+      "questions": [
+        {
+          "question": "Combien coûte SwissAI Tax?",
+          "answer": "Nous proposons des tarifs transparents: une version gratuite pour les déclarations fiscales simples, et des plans premium à partir de CHF 49 pour des fonctionnalités avancées comme le support multi-cantons, les téléchargements de documents illimités et le support prioritaire."
+        },
+        {
+          "question": "Puis-je essayer avant d'acheter?",
+          "answer": "Absolument! Commencez l'interview fiscale et voyez vos calculs gratuitement. Vous ne payez que lorsque vous êtes prêt à télécharger vos formulaires fiscaux complétés. Aucune carte de crédit requise pour commencer."
+        },
+        {
+          "question": "Quels modes de paiement acceptez-vous?",
+          "answer": "Nous acceptons toutes les principales cartes de crédit (Visa, Mastercard, American Express), Twint et les virements bancaires. Tous les paiements sont traités en toute sécurité via Stripe."
+        },
+        {
+          "question": "Offrez-vous des remboursements?",
+          "answer": "Oui. Si vous n'êtes pas satisfait de notre service, contactez-nous dans les 30 jours pour un remboursement complet. Votre satisfaction est notre priorité."
+        }
+      ]
+    }
+  ]
+}

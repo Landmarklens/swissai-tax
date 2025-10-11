@@ -1,0 +1,61 @@
+{
+  "login": {
+    "email": {
+      "invalid": "Format d'e-mail invalide",
+      "required": "L'e-mail est requis",
+      "tooLong": "L'e-mail est trop long"
+    },
+    "password": {
+      "minLength": "Le mot de passe doit contenir au moins 6 caractères",
+      "tooLong": "Le mot de passe est trop long",
+      "required": "Le mot de passe est requis"
+    }
+  },
+  "signup": {
+    "firstName": {
+      "minLength": "Le prénom doit contenir au moins 2 caractères",
+      "tooLong": "Le prénom est trop long",
+      "invalidFormat": "Le prénom ne peut contenir que des lettres, espaces, traits d'union et apostrophes",
+      "required": "Le prénom est requis"
+    },
+    "lastName": {
+      "minLength": "Le nom de famille doit contenir au moins 2 caractères",
+      "tooLong": "Le nom de famille est trop long",
+      "invalidFormat": "Le nom de famille ne peut contenir que des lettres, espaces, traits d'union et apostrophes",
+      "required": "Le nom de famille est requis"
+    },
+    "email": {
+      "invalid": "Format d'e-mail invalide",
+      "required": "L'e-mail est requis",
+      "tooLong": "L'e-mail est trop long"
+    },
+    "password": {
+      "minLength": "Le mot de passe doit contenir au moins 6 caractères",
+      "tooLong": "Le mot de passe est trop long",
+      "complexity": "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre",
+      "required": "Le mot de passe est requis"
+    },
+    "confirmPassword": {
+      "mustMatch": "Les mots de passe doivent correspondre",
+      "required": "Veuillez confirmer votre mot de passe"
+    }
+  },
+  "field": {
+    "required": "{{fieldName}} est requis",
+    "email": {
+      "invalid": "Veuillez saisir une adresse e-mail valide"
+    },
+    "phone": {
+      "invalid": "Veuillez saisir un numéro de téléphone valide"
+    },
+    "currency": {
+      "invalid": "Veuillez saisir un montant valide (ex: 1234.56)"
+    },
+    "date": {
+      "invalid": "Veuillez saisir une date valide"
+    },
+    "signature": {
+      "required": "La signature est requise"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "general": {
+    "somethingWentWrong": "Si è verificato un errore",
+    "unknownError": "Errore sconosciuto"
+  },
+  "network": {
+    "error": "Errore di rete. La preghiamo di verificare la connessione."
+  },
+  "auth": {
+    "unauthorized": "La preghiamo di effettuare l'accesso per continuare.",
+    "tokenExpired": "La sessione è scaduta. La preghiamo di effettuare nuovamente l'accesso."
+  },
+  "resource": {
+    "notFound": "La risorsa richiesta non è stata trovata."
+  },
+  "server": {
+    "error": "Errore del server. La preghiamo di riprovare più tardi."
+  },
+  "rateLimit": {
+    "exceeded": "Troppe richieste. La preghiamo di rallentare."
+  },
+  "codes": {
+    "NETWORK_ERROR": "Errore di rete. La preghiamo di verificare la connessione.",
+    "UNAUTHORIZED": "La preghiamo di effettuare l'accesso per continuare.",
+    "TOKEN_EXPIRED": "La sessione è scaduta. La preghiamo di effettuare nuovamente l'accesso.",
+    "NOT_FOUND": "La risorsa richiesta non è stata trovata.",
+    "SERVER_ERROR": "Errore del server. La preghiamo di riprovare più tardi.",
+    "RATE_LIMIT": "Troppe richieste. La preghiamo di rallentare.",
+    "UNKNOWN_ERROR": "Si è verificato un errore",
+    "VALIDATION_ERROR": "La preghiamo di verificare i dati inseriti e riprovare."
+  }
+}

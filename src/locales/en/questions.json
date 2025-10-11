@@ -1,0 +1,192 @@
+{
+  "stepper": [
+    {
+      "id": 1,
+      "label": "General Preferences"
+    },
+    {
+      "id": 2,
+      "label": "Type of Property"
+    },
+    {
+      "id": 3,
+      "label": "Budget"
+    },
+    {
+      "id": 4,
+      "label": "Space and Layout"
+    },
+    {
+      "id": 5,
+      "label": "Lifestyle and Amenities"
+    },
+    {
+      "id": 6,
+      "label": "Personal and Family Considerations"
+    },
+    {
+      "id": 7,
+      "label": "Property Features"
+    },
+    {
+      "id": 8,
+      "label": "Additional Considerations"
+    },
+    {
+      "id": 9,
+      "label": "Timing and Deadlines"
+    },
+    {
+      "id": 10,
+      "label": "Flexibility and Prioritization"
+    },
+    {
+      "id": 11,
+      "label": "Feedback and Follow-Up"
+    }
+  ],
+  "questions": {
+    "steps": [
+      {
+        "id": 1,
+        "label": "Location Preferences",
+        "questions": [
+          {
+            "id": 1,
+            "question": "What city or neighborhood are you interested in?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 2,
+            "question": "How close would you like your home to be from your workplace or school?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 3,
+            "question": "Do you need easy access to public transport?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 4,
+            "question": "How important is the safety of the neighborhood to you?",
+            "type": "scale",
+            "scaleMin": 1,
+            "scaleMax": 5,
+            "required": true
+          },
+          {
+            "id": 5,
+            "question": "What types of amenities would you like nearby?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "label": "Budget and Financial Considerations",
+        "questions": [
+          {
+            "id": 6,
+            "question": "What is your maximum monthly budget for rent or mortgage?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 7,
+            "question": "If buying, how much can you afford for the down payment?",
+            "type": "number",
+            "required": false
+          },
+          {
+            "id": 8,
+            "question": "Are there any other financial considerations we should know about?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "label": "Apartment Features and Amenities",
+        "questions": [
+          {
+            "id": 9,
+            "question": "What type of apartment are you looking for? (e.g., studio, 1-bedroom, 2-bedroom)",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 10,
+            "question": "Do you have any preferences for apartment amenities? (e.g., pool, gym, parking)",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 11,
+            "question": "What is the minimum number of bedrooms you need?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 12,
+            "question": "Do you need any specific features in the apartment? (e.g., balcony, fireplace)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "Lifestyle and Personal Preferences",
+        "questions": [
+          {
+            "id": 13,
+            "question": "Do you prefer a quiet or lively neighborhood?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 14,
+            "question": "Do you have any pets or plan to get any in the future?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 15,
+            "question": "Are there any hobbies or activities you want to be close to? (e.g., hiking, dining)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "label": "Move-in Readiness and Timing",
+        "questions": [
+          {
+            "id": 16,
+            "question": "When do you plan to move in?",
+            "type": "date",
+            "required": true
+          },
+          {
+            "id": 17,
+            "question": "Are you looking for a home that is move-in ready or are you open to renovations?",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 18,
+            "question": "Do you need to coordinate with your current lease end date?",
+            "type": "boolean",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "services": {
+    "auth": {
+      "loginFailed": "Échec de la connexion",
+      "registrationFailed": "Échec de l'inscription",
+      "emailRequired": "L'adresse e-mail est requise pour demander une réinitialisation du mot de passe.",
+      "tokenRequired": "Le jeton est requis pour vérifier une réinitialisation de mot de passe.",
+      "failedToRequestPasswordReset": "Échec de la demande de réinitialisation du mot de passe",
+      "failedToVerifyResetToken": "Échec de la vérification du jeton de réinitialisation",
+      "tokenAndPasswordRequired": "Le jeton et le nouveau mot de passe sont requis pour réinitialiser le mot de passe.",
+      "failedToResetPassword": "Échec de la réinitialisation du mot de passe"
+    },
+    "twoFactor": {
+      "failedToInitialize": "Échec de l'initialisation de la configuration 2FA",
+      "failedToVerify": "Échec de la vérification du code 2FA",
+      "invalidVerificationCode": "Code de vérification invalide",
+      "failedToDisable": "Échec de la désactivation de la 2FA",
+      "failedToRegenerateBackupCodes": "Échec de la régénération des codes de secours",
+      "failedToGetStatus": "Échec de l'obtention du statut 2FA",
+      "backupCodesTitle": "SwissAI Tax - Codes de secours d'authentification à deux facteurs",
+      "backupCodesImportant": "IMPORTANT : Conservez ces codes en lieu sûr.",
+      "backupCodesUsage": "Chaque code ne peut être utilisé qu'une seule fois.",
+      "backupCodesHeader": "Codes de secours :",
+      "backupCodesGenerated": "Générés le :",
+      "backupCodesKeepSafe": "Conservez ces codes en sécurité !"
+    },
+    "user": {
+      "verificationCodeSent": "Code de vérification envoyé à votre adresse e-mail",
+      "failedToRequestAccountDeletion": "Échec de la demande de suppression du compte",
+      "invalidVerificationCode": "Code de vérification invalide",
+      "accountDeletionScheduled": "Suppression du compte planifiée avec succès",
+      "accountDeletionCancelled": "Suppression du compte annulée avec succès",
+      "failedToCancelAccountDeletion": "Échec de l'annulation de la suppression du compte",
+      "failedToGetDeletionStatus": "Échec de l'obtention du statut de suppression",
+      "dataExportRequested": "Export de données demandé au format {{format}}",
+      "failedToRequestDataExport": "Échec de la demande d'export de données",
+      "failedToListDataExports": "Échec de la liste des exports de données",
+      "failedToGetExportDetails": "Échec de l'obtention des détails d'export"
+    },
+    "profile": {
+      "failedToFetchProfile": "Échec de la récupération du profil",
+      "personalInfoUpdated": "Informations personnelles mises à jour avec succès",
+      "failedToUpdatePersonalInfo": "Échec de la mise à jour des informations personnelles",
+      "taxProfileUpdated": "Profil fiscal mis à jour avec succès",
+      "failedToUpdateTaxProfile": "Échec de la mise à jour du profil fiscal",
+      "securitySettingsUpdated": "Paramètres de sécurité mis à jour avec succès",
+      "failedToUpdateSecuritySettings": "Échec de la mise à jour des paramètres de sécurité"
+    },
+    "settings": {
+      "failedToFetchSettings": "Échec de la récupération des paramètres",
+      "preferencesUpdated": "Préférences mises à jour avec succès",
+      "failedToUpdatePreferences": "Échec de la mise à jour des préférences",
+      "notificationSettingsUpdated": "Paramètres de notification mis à jour avec succès",
+      "failedToUpdateNotificationSettings": "Échec de la mise à jour des paramètres de notification",
+      "documentSettingsUpdated": "Paramètres de document mis à jour avec succès",
+      "failedToUpdateDocumentSettings": "Échec de la mise à jour des paramètres de document"
+    },
+    "payment": {
+      "failedToCreatePaymentIntent": "Échec de la création de l'intention de paiement",
+      "planTypeRequired": "Le type d'abonnement est requis",
+      "invalidPlanType": "Type d'abonnement invalide",
+      "plans": {
+        "basic": {
+          "name": "Basique",
+          "features": {
+            "singleReturn": "Déclaration fiscale unique",
+            "basicDeductions": "Déductions de base",
+            "emailSupport": "Support par e-mail"
+          }
+        },
+        "standard": {
+          "name": "Standard",
+          "features": {
+            "multipleReturns": "Plusieurs déclarations fiscales",
+            "allDeductions": "Toutes les déductions",
+            "prioritySupport": "Support e-mail prioritaire",
+            "documentUpload": "Téléchargement de documents & OCR"
+          }
+        },
+        "premium": {
+          "name": "Premium",
+          "features": {
+            "unlimitedReturns": "Déclarations fiscales illimitées",
+            "allOptimizations": "Toutes les déductions & optimisations",
+            "phoneEmailSupport": "Support téléphonique & e-mail",
+            "documentUpload": "Téléchargement de documents & OCR",
+            "expertReview": "Révision par expert fiscal",
+            "auditProtection": "Protection en cas d'audit"
+          }
+        }
+      }
+    },
+    "subscription": {
+      "failedToCreateSetupIntent": "Échec de la création de l'intention de configuration",
+      "failedToCreateSubscription": "Échec de la création de l'abonnement",
+      "failedToCreateFreeSubscription": "Échec de la création de l'abonnement gratuit",
+      "failedToFetchSubscription": "Échec de la récupération de l'abonnement",
+      "subscriptionCanceled": "Abonnement annulé avec succès",
+      "failedToCancelSubscription": "Échec de l'annulation de l'abonnement",
+      "planSwitched": "Abonnement changé avec succès",
+      "failedToSwitchPlan": "Échec du changement d'abonnement",
+      "pauseRequestSubmitted": "Demande de suspension soumise avec succès",
+      "failedToRequestPause": "Échec de la demande de suspension",
+      "failedToFetchInvoices": "Échec de la récupération des factures",
+      "noPaymentMethod": "Aucun moyen de paiement",
+      "cardOnFile": "Carte enregistrée",
+      "plans": {
+        "annualFlex": {
+          "name": "Flex Annuel",
+          "description": "Annulation à tout moment, paiement annuel",
+          "features": {
+            "allFeatures": "Toutes les fonctionnalités fiscales",
+            "documentManagement": "Gestion de documents",
+            "taxOptimization": "Conseils d'optimisation fiscale",
+            "cancelAnytime": "Annulation à tout moment"
+          }
+        },
+        "fiveYearLock": {
+          "name": "Garantie de prix 5 ans",
+          "description": "Prix le plus bas garanti pendant 5 ans",
+          "features": {
+            "allFeatures": "Toutes les fonctionnalités fiscales",
+            "documentManagement": "Gestion de documents",
+            "taxOptimization": "Conseils d'optimisation fiscale",
+            "priceLocked": "Prix garanti pendant 5 ans",
+            "savings": "Économisez CHF 200/an"
+          }
+        }
+      }
+    },
+    "referral": {
+      "failedToFetchReferralCode": "Échec de la récupération du code de parrainage",
+      "failedToFetchReferralStats": "Échec de la récupération des statistiques de parrainage",
+      "failedToFetchAccountCredits": "Échec de la récupération des crédits du compte",
+      "failedToValidateDiscountCode": "Échec de la validation du code de réduction",
+      "failedToCreatePromotionalCode": "Échec de la création du code promotionnel"
+    },
+    "filing": {
+      "filingSubmitted": "Déclaration fiscale soumise avec succès",
+      "failedToSubmitFiling": "Échec de la soumission de la déclaration fiscale",
+      "failedToFetchFilingDetails": "Échec de la récupération des détails de la déclaration",
+      "failedToFetchFilingReviewData": "Échec de la récupération des données de révision",
+      "status": {
+        "draft": "Brouillon",
+        "review": "En révision",
+        "submitted": "Soumis",
+        "accepted": "Accepté",
+        "rejected": "Rejeté"
+      }
+    },
+    "dashboard": {
+      "failedToFetchDashboardData": "Échec de la récupération des données du tableau de bord"
+    },
+    "session": {
+      "failedToRetrieveSessions": "Échec de la récupération des sessions",
+      "failedToRevokeSession": "Échec de la révocation de la session",
+      "failedToRevokeSessions": "Échec de la révocation des sessions",
+      "failedToGetSessionCount": "Échec de l'obtention du nombre de sessions"
+    },
+    "location": {
+      "failedToFetchLocationData": "Échec de la récupération des données de localisation",
+      "locationNotFound": "Localisation non trouvée",
+      "geocodingFailed": "Échec du géocodage : {{status}}"
+    }
+  }
+}

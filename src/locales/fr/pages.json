@@ -1,0 +1,165 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "404 | Page non trouvée - HomeAI",
+      "metaDescription": "La page que vous recherchez n'existe pas. Laissez-nous vous aider à retrouver votre chemin.",
+      "heading": "404 | Page non trouvée",
+      "message": "Oups ! Il semble que la page que vous recherchez n'existe pas. Laissez-nous vous remettre sur la bonne voie.",
+      "goBack": "Retour",
+      "goHome": "Accueil",
+      "footer": "HOME AI"
+    },
+    "contact": {
+      "title": "Contactez-nous",
+      "subtitle": "Vous avez des questions ou des remarques ? Écrivez-nous simplement un message !",
+      "contactInformation": "Informations de contact",
+      "companyName": "LandMarK Lens GMBH",
+      "email": "contact@swissai.tax",
+      "address": "Sandbuckstrasse 24, Schneisingen 5425",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "Numéro de téléphone",
+      "message": "Message",
+      "sendMessage": "Envoyer le message",
+      "enterFirstName": "Entrez votre prénom",
+      "enterLastName": "Entrez votre nom",
+      "enterEmail": "Entrez votre e-mail",
+      "writeMessage": "Écrivez votre message...",
+      "successMessage": "Merci pour votre demande ! Nous vous répondrons bientôt.",
+      "validationErrors": {
+        "invalidEmail": "Adresse e-mail invalide",
+        "required": "Champ obligatoire",
+        "firstNameMin": "Le prénom doit contenir au moins 2 caractères",
+        "firstNameMax": "Le prénom doit contenir au maximum 50 caractères",
+        "lastNameMin": "Le nom doit contenir au moins 2 caractères",
+        "lastNameMax": "Le nom doit contenir au maximum 50 caractères",
+        "subjectMin": "Le sujet doit contenir au moins 3 caractères",
+        "subjectMax": "Le sujet doit contenir au maximum 100 caractères",
+        "selectSubject": "Veuillez sélectionner un sujet",
+        "messageMin": "Le message doit contenir au moins 10 caractères",
+        "messageMax": "Le message doit contenir au maximum 2000 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres, espaces, + ou -",
+        "phoneTooShort": "Le numéro de téléphone est trop court",
+        "phoneTooLong": "Le numéro de téléphone est trop long"
+      },
+      "errors": {
+        "validationFailed": "Échec de la validation. Veuillez vérifier votre saisie.",
+        "tooManyRequests": "Trop de requêtes. Veuillez patienter un instant et réessayer.",
+        "checkInput": "Veuillez vérifier votre saisie et réessayer.",
+        "sendFailed": "Échec de l'envoi du message. Veuillez réessayer plus tard.",
+        "networkError": "Erreur réseau. Veuillez vérifier votre connexion et réessayer."
+      }
+    },
+    "auth": {
+      "forgotPassword": {
+        "title": "Réinitialiser le mot de passe - SwissAI Tax",
+        "metaDescription": "Réinitialisez le mot de passe de votre compte SwissAI Tax",
+        "heading": "Mot de passe oublié",
+        "instructions": "Entrez votre e-mail pour recevoir les instructions de réinitialisation du mot de passe.",
+        "emailAddress": "Adresse e-mail",
+        "sendResetLink": "Envoyer le lien de réinitialisation",
+        "thankYou": "Merci",
+        "confirmationMessage": "Si un compte existe avec cette adresse e-mail, vous recevrez des instructions pour réinitialiser votre mot de passe."
+      },
+      "resetPassword": {
+        "title": "Réinitialiser le mot de passe - SwissAI Tax",
+        "metaDescription": "Créez un nouveau mot de passe pour votre compte SwissAI Tax",
+        "heading": "Réinitialiser le mot de passe",
+        "instructions": "Configurez un nouveau mot de passe.",
+        "newPassword": "Nouveau mot de passe",
+        "confirmNewPassword": "Confirmer le nouveau mot de passe",
+        "confirmPassword": "Confirmez votre mot de passe",
+        "resetButton": "Réinitialiser le mot de passe",
+        "successHeading": "Réinitialisation du mot de passe réussie",
+        "successMessage": "Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.",
+        "goToLogin": "Aller à la connexion",
+        "invalidLinkHeading": "Lien invalide ou expiré",
+        "invalidLinkMessage": "Le lien de réinitialisation du mot de passe est invalide ou a expiré. Veuillez en demander un nouveau.",
+        "errors": {
+          "invalidToken": "Jeton ou mot de passe invalide.",
+          "resetFailed": "Échec de la réinitialisation du mot de passe. Le lien a peut-être expiré."
+        }
+      }
+    },
+    "taxFiling": {
+      "documentChecklistPage": {
+        "title": "Téléchargement de documents",
+        "steps": {
+          "completeInterview": "Terminer l'entretien",
+          "uploadDocuments": "Télécharger les documents",
+          "calculateTaxes": "Calculer les impôts",
+          "reviewSubmit": "Vérifier et soumettre"
+        },
+        "uploadProgress": "Progression du téléchargement",
+        "yourProfile": "Votre profil",
+        "documentsUploaded": "Documents téléchargés",
+        "requiredDocuments": "Documents requis",
+        "documentsInstructions": "En fonction de vos réponses à l'entretien, vous devez télécharger les documents suivants :",
+        "backToInterview": "Retour à l'entretien",
+        "calculating": "Calcul en cours...",
+        "calculateMyTaxes": "Calculer mes impôts",
+        "calculateWithoutDocs": "Calculer sans tous les documents (estimation)",
+        "uploadError": "Échec du téléchargement"
+      },
+      "filingsListPage": {
+        "title": "Mes déclarations fiscales",
+        "subtitle": "Gérez vos déclarations fiscales sur plusieurs années et cantons",
+        "newFiling": "Nouvelle déclaration",
+        "loadingFilings": "Chargement des déclarations...",
+        "stats": {
+          "total": "Total des déclarations",
+          "completed": "Terminées",
+          "inProgress": "En cours"
+        },
+        "noFilings": "Aucune déclaration pour le moment",
+        "getStarted": "Commencez votre première déclaration fiscale pour la voir ici",
+        "startTaxFiling": "Commencer la déclaration fiscale",
+        "filing": "déclaration",
+        "filings": "déclarations",
+        "noCanton": "Pas de canton",
+        "status": {
+          "completed": "Terminée",
+          "submitted": "Soumise",
+          "in_progress": "En cours",
+          "draft": "Brouillon"
+        },
+        "secondary": "Secondaire",
+        "progress": "Progression",
+        "lastUpdated": "Dernière mise à jour",
+        "continue": "Continuer",
+        "viewDetails": "Voir les détails",
+        "edit": "Modifier",
+        "copyToNewYear": "Copier vers nouvelle année",
+        "delete": "Supprimer",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette déclaration ?",
+        "createNew": "Créer une nouvelle déclaration fiscale",
+        "taxYear": "Année fiscale",
+        "postalCode": "Code postal (NPA)",
+        "postalCodePlaceholder": "p. ex. 8001",
+        "lookingUpPostalCode": "Recherche du code postal...",
+        "enterPostalCode": "Entrez votre code postal à 4 chiffres",
+        "municipality": "Commune",
+        "canton": "Canton",
+        "autoFilledFromPostalCode": "Rempli automatiquement à partir du code postal",
+        "cancel": "Annuler",
+        "createAndStart": "Créer et commencer",
+        "copyFiling": "Copier la déclaration vers une nouvelle année",
+        "copyInfo": "Cela créera une copie de vos données fiscales pour une nouvelle année fiscale. Vous pourrez ensuite les mettre à jour avec les informations actuelles.",
+        "newYear": "Nouvelle année fiscale"
+      }
+    },
+    "blog": {
+      "blogList": {
+        "heading": "Blog",
+        "subtitle": "Restez à la pointe avec les actualités immobilières de notre équipe.",
+        "all": "Tout"
+      },
+      "blogItem": {
+        "back": "Retour",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "relatedArticles": "Articles connexes"
+      }
+    }
+  }
+}

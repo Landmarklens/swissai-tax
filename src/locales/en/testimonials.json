@@ -1,0 +1,40 @@
+{
+  "testimonials": [
+    {
+      "id": 1,
+      "text": "I was able to find the perfect home in no time. The service was exceptional and so easy to use."
+    },
+    {
+      "id": 2,
+      "text": "Very efficient and user-friendly. Found a great place that fits my needs perfectly."
+    },
+    {
+      "id": 3,
+      "text": "A fantastic experience! The AI-driven search made everything so simple and stress-free."
+    },
+    {
+      "id": 4,
+      "text": "Good service, though I had some minor issues with the search filters. Overall, a positive experience."
+    },
+    {
+      "id": 5,
+      "text": "Easy to use and reliable. I found a great apartment that I love."
+    },
+    {
+      "id": 6,
+      "text": "This service saved me so much time. Highly recommended for anyone looking for a new home."
+    },
+    {
+      "id": 7,
+      "text": "Smooth process from start to finish. The insights were spot-on."
+    },
+    {
+      "id": 8,
+      "text": "The best way to find a home. Simple, efficient, and accurate."
+    },
+    {
+      "id": 9,
+      "text": "I had a great experience. Found a nice place quickly and without any hassle."
+    }
+  ]
+}

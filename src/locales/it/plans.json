@@ -1,0 +1,191 @@
+{
+  "plans": {
+    "free": {
+      "title": "Gratuito",
+      "price": "Gratuito",
+      "description": "Piano base per esigenze essenziali",
+      "buttonText": "Inizia",
+      "features": [
+        {
+          "title": "Ricerca immobiliare di base",
+          "description": "L'IA cerca proprietà in base a criteri essenziali come budget, posizione, tempo di spostamento al lavoro e ai familiari, e dimensione della proprietà."
+        },
+        {
+          "title": "Scansione giornaliera del mercato",
+          "description": "Ricerca di proprietà una volta al giorno."
+        },
+        {
+          "title": "Ambito di ricerca limitato",
+          "description": "Fino a 1 corrispondenza immobiliare attiva al mese."
+        },
+        {
+          "title": "Analisi testuale",
+          "description": "L'IA analizza solo le descrizioni delle proprietà senza considerare le foto."
+        },
+        {
+          "title": "Supporto della community",
+          "description": "Accesso a una community di utenti per aiuto e consigli."
+        }
+      ],
+      "advantages": [
+        "Gratuito senza impegno finanziario.",
+        "Ideale per utenti con esigenze semplici o all'inizio della ricerca immobiliare.",
+        "Scopri la ricerca immobiliare assistita dall'IA gratuitamente."
+      ]
+    },
+    "comprehensive": {
+      "title": "Ricerca avanzata",
+      "price": "CHF99.99",
+      "description": "Per affittuari esigenti, professionisti o famiglie che necessitano di un'esperienza di ricerca immobiliare altamente personalizzata e proattiva.",
+      "buttonText": "Inizia",
+      "features": [
+        {
+          "title": "Ricerca immobiliare ottimale",
+          "description": "L'IA valuta le proprietà in base a spostamenti, servizi, vivibilità, tendenze locali e potenziali problemi."
+        },
+        {
+          "title": "Scansione del mercato in tempo reale",
+          "description": "Scansioni continue del mercato con aggiornamenti istantanei."
+        },
+        {
+          "title": "Ambito di ricerca ampliato",
+          "description": "Fino a 30 corrispondenze immobiliari attive al mese."
+        },
+        {
+          "title": "Analisi approfondita",
+          "description": "L'IA conduce un'analisi approfondita di testo e foto, valutando dettagli come la qualità della vista, i livelli di rumore, il design degli interni e la vicinanza ai servizi."
+        },
+        {
+          "title": "Supporto VIP",
+          "description": "Servizio clienti prioritario con account manager dedicati."
+        },
+        {
+          "title": "Notifiche WhatsApp",
+          "description": "Avvisi istantanei via WhatsApp per nuove corrispondenze immobiliari e aggiornamenti di mercato."
+        }
+      ],
+      "advantages": [
+        "L'esperienza di ricerca immobiliare più completa disponibile.",
+        "Perfetto per utenti con esigenze specifiche in mercati competitivi.",
+        "Informazioni altamente personalizzate e aggiornamenti in tempo reale via WhatsApp ed e-mail."
+      ]
+    }
+  },
+  "shortPlans": {
+    "free": {
+      "title": "Gratuito",
+      "price": "Gratuito",
+      "description": "Piano base per esigenze essenziali",
+      "buttonText": "Inizia settimana gratuita",
+      "features": [
+        "Corrispondenze immobiliari limitate",
+        "Assistenza IA di base"
+      ]
+    },
+    "comprehensive": {
+      "title": "Ricerca avanzata",
+      "price": "CHF99.99",
+      "description": "Soluzione completa per professionisti",
+      "buttonText": "Inizia",
+      "features": [
+        "Capacità IA complete",
+        "Analisi di mercato personalizzata",
+        "Supporto dedicato 24/7"
+      ]
+    }
+  },
+  "upgradePlan": {
+    "name": "Ricerca avanzata",
+    "price": "CHF99.99",
+    "keyFeatures": [
+      {
+        "feature": "Ricerca immobiliare migliorata",
+        "description": "Tasse, altri interessi come hobby, ecc."
+      },
+      {
+        "feature": "Scansione frequente del mercato",
+        "description": "Aggiornamenti regolari sulle tendenze di mercato."
+      },
+      {
+        "feature": "Ambito di ricerca più ampio",
+        "description": "Maggiore gamma di proprietà e dati."
+      },
+      {
+        "feature": "Avvisi automatizzati",
+        "description": "Notifiche per nuove proprietà."
+      },
+      {
+        "feature": "Analisi di testo e foto di base",
+        "description": "Analisi immobiliare basata sull'IA."
+      },
+      {
+        "feature": "Supporto personalizzato",
+        "description": "Assistenza clienti dedicata."
+      }
+    ]
+  },
+  "proPlan": {
+    "name": "Pro: Ricerca completa",
+    "price": "CHF79.99",
+    "originalPrice": "CHF99.99",
+    "keyFeatures": [
+      {
+        "feature": "Ricerca immobiliare ottimale",
+        "description": "Algoritmo di corrispondenza avanzato"
+      },
+      {
+        "feature": "Scansione del mercato in tempo reale",
+        "description": "Scansioni continue del mercato con aggiornamenti istantanei."
+      },
+      {
+        "feature": "Ambito di ricerca ampliato",
+        "description": "Copertura immobiliare massima"
+      },
+      {
+        "feature": "Analisi approfondita",
+        "description": "Valutazione immobiliare completa"
+      },
+      {
+        "feature": "Supporto VIP",
+        "description": "Servizio clienti premium"
+      },
+      {
+        "feature": "Notifiche WhatsApp",
+        "description": "Avvisi mobili istantanei"
+      }
+    ]
+  },
+  "differences": [
+    {
+      "title": "Frequenza di ricerca",
+      "description": "Va da giornaliera (Gratuito) a tempo reale (Pro e VIP)."
+    },
+    {
+      "title": "Ambito di ricerca:",
+      "description": "Limitato a 1 corrispondenza al mese in Gratuito, 10 in Premium, 30 in Pro e illimitato in VIP."
+    },
+    {
+      "title": "Analisi dei dati:",
+      "description": "Solo testo in Gratuito, analisi foto di base in Premium e analisi approfondita con dati ambientali e di mercato in Pro e VIP."
+    },
+    {
+      "title": "Supporto:",
+      "description": "Basato sulla community in Gratuito, supporto via e-mail in Premium, account manager dedicati in Pro e servizio prioritario in VIP"
+    },
+    {
+      "title": "Extra esclusivi:",
+      "description": "Il piano VIP offre presentazioni automatizzate di candidature e comunicazione in tempo reale via WhatsApp."
+    }
+  ],
+  "cancelSubscriptionReasons": [
+    "Voglio pagare solo mensilmente",
+    "HOME AI è sufficiente per le mie esigenze",
+    "Premium è troppo costoso",
+    "Le funzionalità Premium non mi sono utili",
+    "Il prodotto ha troppi bug",
+    "Non più necessario",
+    "Non uso abbastanza gli strumenti di diagrammi per pagare",
+    "Non conosco la ricerca Home AI",
+    "Altro"
+  ]
+}

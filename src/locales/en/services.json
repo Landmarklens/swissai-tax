@@ -1,0 +1,166 @@
+{
+  "services": {
+    "auth": {
+      "loginFailed": "Login failed",
+      "registrationFailed": "Registration failed",
+      "emailRequired": "Email is required to request a password reset.",
+      "tokenRequired": "Token is required to verify a password reset.",
+      "failedToRequestPasswordReset": "Failed to request password reset",
+      "failedToVerifyResetToken": "Failed to verify reset token",
+      "tokenAndPasswordRequired": "Token and new password are required to password reset.",
+      "failedToResetPassword": "Failed to reset password"
+    },
+    "twoFactor": {
+      "failedToInitialize": "Failed to initialize 2FA setup",
+      "failedToVerify": "Failed to verify 2FA code",
+      "invalidVerificationCode": "Invalid verification code",
+      "failedToDisable": "Failed to disable 2FA",
+      "failedToRegenerateBackupCodes": "Failed to regenerate backup codes",
+      "failedToGetStatus": "Failed to get 2FA status",
+      "backupCodesTitle": "SwissAI Tax - Two-Factor Authentication Backup Codes",
+      "backupCodesImportant": "IMPORTANT: Store these codes in a safe place.",
+      "backupCodesUsage": "Each code can only be used once.",
+      "backupCodesHeader": "Backup Codes:",
+      "backupCodesGenerated": "Generated:",
+      "backupCodesKeepSafe": "Keep these codes safe and secure!"
+    },
+    "user": {
+      "verificationCodeSent": "Verification code sent to your email",
+      "failedToRequestAccountDeletion": "Failed to request account deletion",
+      "invalidVerificationCode": "Invalid verification code",
+      "accountDeletionScheduled": "Account deletion scheduled successfully",
+      "accountDeletionCancelled": "Account deletion cancelled successfully",
+      "failedToCancelAccountDeletion": "Failed to cancel account deletion",
+      "failedToGetDeletionStatus": "Failed to get deletion status",
+      "dataExportRequested": "Data export requested in {{format}} format",
+      "failedToRequestDataExport": "Failed to request data export",
+      "failedToListDataExports": "Failed to list data exports",
+      "failedToGetExportDetails": "Failed to get export details"
+    },
+    "profile": {
+      "failedToFetchProfile": "Failed to fetch profile",
+      "personalInfoUpdated": "Personal information updated successfully",
+      "failedToUpdatePersonalInfo": "Failed to update personal information",
+      "taxProfileUpdated": "Tax profile updated successfully",
+      "failedToUpdateTaxProfile": "Failed to update tax profile",
+      "securitySettingsUpdated": "Security settings updated successfully",
+      "failedToUpdateSecuritySettings": "Failed to update security settings"
+    },
+    "settings": {
+      "failedToFetchSettings": "Failed to fetch settings",
+      "preferencesUpdated": "Preferences updated successfully",
+      "failedToUpdatePreferences": "Failed to update preferences",
+      "notificationSettingsUpdated": "Notification settings updated successfully",
+      "failedToUpdateNotificationSettings": "Failed to update notification settings",
+      "documentSettingsUpdated": "Document settings updated successfully",
+      "failedToUpdateDocumentSettings": "Failed to update document settings"
+    },
+    "payment": {
+      "failedToCreatePaymentIntent": "Failed to create payment intent",
+      "planTypeRequired": "Plan type is required",
+      "invalidPlanType": "Invalid plan type",
+      "plans": {
+        "basic": {
+          "name": "Basic",
+          "features": {
+            "singleReturn": "Single tax return",
+            "basicDeductions": "Basic deductions",
+            "emailSupport": "Email support"
+          }
+        },
+        "standard": {
+          "name": "Standard",
+          "features": {
+            "multipleReturns": "Multiple tax returns",
+            "allDeductions": "All deductions",
+            "prioritySupport": "Priority email support",
+            "documentUpload": "Document upload & OCR"
+          }
+        },
+        "premium": {
+          "name": "Premium",
+          "features": {
+            "unlimitedReturns": "Unlimited tax returns",
+            "allOptimizations": "All deductions & optimizations",
+            "phoneEmailSupport": "Phone & email support",
+            "documentUpload": "Document upload & OCR",
+            "expertReview": "Tax expert review",
+            "auditProtection": "Audit protection"
+          }
+        }
+      }
+    },
+    "subscription": {
+      "failedToCreateSetupIntent": "Failed to create setup intent",
+      "failedToCreateSubscription": "Failed to create subscription",
+      "failedToCreateFreeSubscription": "Failed to create free subscription",
+      "failedToFetchSubscription": "Failed to fetch subscription",
+      "subscriptionCanceled": "Subscription canceled successfully",
+      "failedToCancelSubscription": "Failed to cancel subscription",
+      "planSwitched": "Plan switched successfully",
+      "failedToSwitchPlan": "Failed to switch plan",
+      "pauseRequestSubmitted": "Pause request submitted successfully",
+      "failedToRequestPause": "Failed to request pause",
+      "failedToFetchInvoices": "Failed to fetch invoices",
+      "noPaymentMethod": "No payment method",
+      "cardOnFile": "Card on file",
+      "plans": {
+        "annualFlex": {
+          "name": "Annual Flex",
+          "description": "Cancel anytime, pay annually",
+          "features": {
+            "allFeatures": "All tax filing features",
+            "documentManagement": "Document management",
+            "taxOptimization": "Tax optimization insights",
+            "cancelAnytime": "Cancel anytime"
+          }
+        },
+        "fiveYearLock": {
+          "name": "5-Year Price Lock",
+          "description": "Lock in lowest price for 5 years",
+          "features": {
+            "allFeatures": "All tax filing features",
+            "documentManagement": "Document management",
+            "taxOptimization": "Tax optimization insights",
+            "priceLocked": "Price locked for 5 years",
+            "savings": "Save CHF 200/year"
+          }
+        }
+      }
+    },
+    "referral": {
+      "failedToFetchReferralCode": "Failed to fetch referral code",
+      "failedToFetchReferralStats": "Failed to fetch referral stats",
+      "failedToFetchAccountCredits": "Failed to fetch account credits",
+      "failedToValidateDiscountCode": "Failed to validate discount code",
+      "failedToCreatePromotionalCode": "Failed to create promotional code"
+    },
+    "filing": {
+      "filingSubmitted": "Filing submitted successfully",
+      "failedToSubmitFiling": "Failed to submit filing",
+      "failedToFetchFilingDetails": "Failed to fetch filing details",
+      "failedToFetchFilingReviewData": "Failed to fetch filing review data",
+      "status": {
+        "draft": "Draft",
+        "review": "Under Review",
+        "submitted": "Submitted",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      }
+    },
+    "dashboard": {
+      "failedToFetchDashboardData": "Failed to fetch dashboard data"
+    },
+    "session": {
+      "failedToRetrieveSessions": "Failed to retrieve sessions",
+      "failedToRevokeSession": "Failed to revoke session",
+      "failedToRevokeSessions": "Failed to revoke sessions",
+      "failedToGetSessionCount": "Failed to get session count"
+    },
+    "location": {
+      "failedToFetchLocationData": "Failed to fetch location data",
+      "locationNotFound": "Location not found",
+      "geocodingFailed": "Geocoding failed: {{status}}"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "login": {
+    "email": {
+      "invalid": "Ungültiges E-Mail-Format",
+      "required": "E-Mail ist erforderlich",
+      "tooLong": "E-Mail ist zu lang"
+    },
+    "password": {
+      "minLength": "Passwort muss mindestens 6 Zeichen lang sein",
+      "tooLong": "Passwort ist zu lang",
+      "required": "Passwort ist erforderlich"
+    }
+  },
+  "signup": {
+    "firstName": {
+      "minLength": "Vorname muss mindestens 2 Zeichen lang sein",
+      "tooLong": "Vorname ist zu lang",
+      "invalidFormat": "Vorname darf nur Buchstaben, Leerzeichen, Bindestriche und Apostrophe enthalten",
+      "required": "Vorname ist erforderlich"
+    },
+    "lastName": {
+      "minLength": "Nachname muss mindestens 2 Zeichen lang sein",
+      "tooLong": "Nachname ist zu lang",
+      "invalidFormat": "Nachname darf nur Buchstaben, Leerzeichen, Bindestriche und Apostrophe enthalten",
+      "required": "Nachname ist erforderlich"
+    },
+    "email": {
+      "invalid": "Ungültiges E-Mail-Format",
+      "required": "E-Mail ist erforderlich",
+      "tooLong": "E-Mail ist zu lang"
+    },
+    "password": {
+      "minLength": "Passwort muss mindestens 6 Zeichen lang sein",
+      "tooLong": "Passwort ist zu lang",
+      "complexity": "Passwort muss mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Ziffer enthalten",
+      "required": "Passwort ist erforderlich"
+    },
+    "confirmPassword": {
+      "mustMatch": "Passwörter müssen übereinstimmen",
+      "required": "Bitte bestätigen Sie Ihr Passwort"
+    }
+  },
+  "field": {
+    "required": "{{fieldName}} ist erforderlich",
+    "email": {
+      "invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+    },
+    "phone": {
+      "invalid": "Bitte geben Sie eine gültige Telefonnummer ein"
+    },
+    "currency": {
+      "invalid": "Bitte geben Sie einen gültigen Betrag ein (z.B. 1234.56)"
+    },
+    "date": {
+      "invalid": "Bitte geben Sie ein gültiges Datum ein"
+    },
+    "signature": {
+      "required": "Unterschrift ist erforderlich"
+    }
+  }
+}

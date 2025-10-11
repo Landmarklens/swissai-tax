@@ -1,0 +1,53 @@
+{
+  "articles_7_to_13": [
+    {
+      "id": 7,
+      "title": "How to Use AI-Powered Tenant Scoring and Auto-Matching",
+      "category": "AI Features",
+      "subTitle": "Master HomeAI's intelligent tenant selection system for better rental outcomes",
+      "summary": "This comprehensive 3000+ word guide covers HomeAI's AI tenant scoring system, including setup configuration, auto-matching features, understanding AI recommendations, notification management, advanced optimization features, best practices, troubleshooting, and measuring success metrics."
+    },
+    {
+      "id": 8,
+      "title": "How to Set Up and Manage Viewing Slots with Automated Scheduling",
+      "category": "Property Management",
+      "subTitle": "Streamline property viewings with intelligent scheduling and automation",
+      "summary": "Complete guide to HomeAI's automated viewing scheduler covering system overview, initial setup, recurring viewing windows, group vs individual viewings, automated confirmation system, calendar integration, advanced automation features, mobile management, troubleshooting, and best practices."
+    },
+    {
+      "id": 9,
+      "title": "How to Generate and Send Digital Rental Contracts",
+      "category": "Legal & Automation",
+      "subTitle": "Automate contract creation, customization, and digital signing for faster lease execution",
+      "summary": "Comprehensive guide to HomeAI's digital contract system including system architecture, initial setup, contract generation features, template customization, digital signature process, contract tracking, advanced features like bulk generation and amendments, integration capabilities, security and compliance, and best practices."
+    },
+    {
+      "id": 10,
+      "title": "How to Use the AI Chat Assistant for Tenant Communication",
+      "category": "AI Features",
+      "subTitle": "Master AI-powered conversations for efficient, 24/7 tenant communication",
+      "summary": "In-depth guide covering HomeAI's AI Chat Assistant system architecture, capabilities, initial setup, communication style configuration, automated response templates, conversation flow design, managing AI-assisted conversations, confidence indicators, seamless handoff process, conversation auditing, multilingual support, sentiment-based responses, predictive assistance, performance optimization, and best practices."
+    },
+    {
+      "id": 11,
+      "title": "How to Manage Document Verification and Storage",
+      "category": "Document Management",
+      "subTitle": "Streamline document collection, verification, and organization with AI-powered tools",
+      "summary": "Complete guide to HomeAI's intelligent document management system covering system architecture, document categories, initial setup, collection portal, AI verification features including OCR and authenticity checks, document requirements configuration, expiration tracking and alerts, advanced features like bulk operations and analytics, integration capabilities, security and compliance measures, and best practices."
+    },
+    {
+      "id": 12,
+      "title": "How to Track and Analyze Property Performance with Analytics Dashboard",
+      "category": "Analytics & Insights",
+      "subTitle": "Transform property data into actionable insights for portfolio optimization",
+      "summary": "Extensive guide to HomeAI's Analytics Dashboard covering dashboard architecture, key metrics overview, initial setup, understanding occupancy analysis, financial performance metrics, custom report builder, viewing analytics, tenant application trends monitoring, advanced predictive analytics, comparative market analysis, scenario planning, performance optimization, alert configuration, integration options, and best practices for data-driven property management."
+    },
+    {
+      "id": 13,
+      "title": "Using HomeAI Analytics to Optimize Your Portfolio",
+      "category": "Platform Features",
+      "subTitle": "Leverage data-driven insights for better property management decisions",
+      "summary": "Portfolio optimization guide covering dashboard overview, key performance indicators (KPIs), portfolio performance dashboard, market analysis tools, tenant analytics deep dive, financial analytics features, predictive analytics capabilities, custom report builder, alert configuration, benchmarking properties, AI recommendations, data export options, mobile analytics, ROI tracking, seasonal trends analysis, integration capabilities, goal setting and tracking, power user tips, and best practices for maximizing portfolio value."
+    }
+  ]
+}

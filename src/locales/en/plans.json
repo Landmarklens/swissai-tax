@@ -1,0 +1,191 @@
+{
+  "plans": {
+    "free": {
+      "title": "Free",
+      "price": "Free",
+      "description": "Basic plan for essential needs",
+      "buttonText": "Get Started",
+      "features": [
+        {
+          "title": "Basic Property Matching",
+          "description": "The AI matches properties based on essential criteria such as budget, location, commute time to work and family members, and property size."
+        },
+        {
+          "title": "Daily Market Scan",
+          "description": "Property scans once a day."
+        },
+        {
+          "title": "Limited Search Scope",
+          "description": "Up to 1 active property match per month."
+        },
+        {
+          "title": "Text-Based Analysis",
+          "description": "The AI analyzes only property descriptions without considering photos."
+        },
+        {
+          "title": "Community Support",
+          "description": "Access to a user community for help and advice."
+        }
+      ],
+      "advantages": [
+        "Free with no financial commitment.",
+        "Ideal for users with simple needs or just starting their property search.",
+        "Experience AI-driven property search at no cost."
+      ]
+    },
+    "comprehensive": {
+      "title": "Advanced Search",
+      "price": "CHF99.99",
+      "description": "High-demand renters, professionals, or families needing a highly personalized and proactive property search experience.",
+      "buttonText": "Get Started",
+      "features": [
+        {
+          "title": "Ultimate Property Matching",
+          "description": "The AI evaluates properties based on commute, amenities, livability, local trends, and potential issues."
+        },
+        {
+          "title": "Real-Time Market Scan",
+          "description": "Continuous market scans with instant updates."
+        },
+        {
+          "title": "Expanded Search Scope",
+          "description": "Up to 30 active property matches per month."
+        },
+        {
+          "title": "In-Depth Analysis",
+          "description": "AI conducts deep analysis of text and photos, evaluating details like view quality, noise levels, interior design, and proximity to amenities."
+        },
+        {
+          "title": "VIP Support",
+          "description": "Priority customer service with dedicated account managers."
+        },
+        {
+          "title": "WhatsApp Notifications",
+          "description": "Instant alerts via WhatsApp for new property matches and market updates."
+        }
+      ],
+      "advantages": [
+        "The most comprehensive property search experience available.",
+        "Perfect for users with specific needs in competitive markets.",
+        "Highly personalized insights and real-time updates via WhatsApp and email."
+      ]
+    }
+  },
+  "shortPlans": {
+    "free": {
+      "title": "Free",
+      "price": "Free",
+      "description": "Basic plan for essential needs",
+      "buttonText": "Start Free Week",
+      "features": [
+        "Limited property matches",
+        "Basic AI assistance"
+      ]
+    },
+    "comprehensive": {
+      "title": "Advanced Search",
+      "price": "CHF99.99",
+      "description": "Comprehensive solution for professionals",
+      "buttonText": "Get Started",
+      "features": [
+        "Full AI capabilities",
+        "Personalized market analysis",
+        "24/7 dedicated support"
+      ]
+    }
+  },
+  "upgradePlan": {
+    "name": "Advanced Search",
+    "price": "CHF99.99",
+    "keyFeatures": [
+      {
+        "feature": "Enhanced Property Matching",
+        "description": "Taxes, other interests like hobbies etc."
+      },
+      {
+        "feature": "Frequent Market Scan",
+        "description": "Regular updates on market trends."
+      },
+      {
+        "feature": "Broader Search Scope",
+        "description": "Wider range of properties and data."
+      },
+      {
+        "feature": "Automated Alerts",
+        "description": "Notifications for new properties."
+      },
+      {
+        "feature": "Text and Basic Photo Analysis",
+        "description": "AI-based property analysis."
+      },
+      {
+        "feature": "Personalized Support",
+        "description": "Dedicated customer support."
+      }
+    ]
+  },
+  "proPlan": {
+    "name": "Pro: Comprehensive Search",
+    "price": "CHF79.99",
+    "originalPrice": "CHF99.99",
+    "keyFeatures": [
+      {
+        "feature": "Ultimate Property Matching",
+        "description": "Advanced matching algorithm"
+      },
+      {
+        "feature": "Real-Time Market Scan",
+        "description": "Continuous market scans with instant updates."
+      },
+      {
+        "feature": "Expanded Search Scope",
+        "description": "Maximum property coverage"
+      },
+      {
+        "feature": "In-Depth Analysis",
+        "description": "Comprehensive property evaluation"
+      },
+      {
+        "feature": "VIP Support",
+        "description": "Premium customer service"
+      },
+      {
+        "feature": "WhatsApp Notifications",
+        "description": "Instant mobile alerts"
+      }
+    ]
+  },
+  "differences": [
+    {
+      "title": "Search Frequency",
+      "description": "Ranges from daily (Free) to real-time (Pro and VIP)."
+    },
+    {
+      "title": "Search Scope:",
+      "description": "Limited to 1 match per month in Free, 10 in Premium, 30 in Pro, and unlimited in VIP."
+    },
+    {
+      "title": "Data Analysis:",
+      "description": "Text-only in Free, basic photo analysis in Premium, and in-depth analysis with environmental and market data in Pro and VIP."
+    },
+    {
+      "title": "Support:",
+      "description": "Community-based in Free, email support in Premium, dedicated account managers in Pro, and priority service in VIP"
+    },
+    {
+      "title": "Exclusive Extras:",
+      "description": "The VIP Plan offers automated application submissions and real-time communication via WhatsApp."
+    }
+  ],
+  "cancelSubscriptionReasons": [
+    "Only want to pay monthly",
+    "HOME AI sufficient for my needs",
+    "Premium is too expensive",
+    "Premium features are not valuable to me",
+    "Product has too many bugs",
+    "No Longer Need",
+    "Don't use diagramming tools enough to pay",
+    "Don't know the Home AI Search",
+    "Other"
+  ]
+}

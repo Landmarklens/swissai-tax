@@ -1,0 +1,30 @@
+{
+  "components": {
+    "cancelSubscriptionFlow": {
+      "unsubscribeReasons": {
+        "title": "Tell us why you're cancelling",
+        "subtitle": "We'd love to understand what we could improve",
+        "reasons": {
+          "only_pay_monthly": "Only want to pay monthly",
+          "home_ai_sufficient": "HOME AI sufficient for my needs",
+          "premium_too_expensive": "Premium is too expensive",
+          "premium_not_valuable": "Premium features are not valuable to me",
+          "too_many_bugs": "Product has too many bugs",
+          "no_longer_need": "No Longer Need",
+          "dont_use_enough": "Don't use diagramming tools enough to pay",
+          "dont_know_home_ai_search": "Don't know the Home AI Search",
+          "other": "Other"
+        },
+        "otherPlaceholder": "Please tell us more...",
+        "continueButton": "Continue",
+        "cancelButton": "Go Back"
+      },
+      "confirmation": {
+        "title": "Are you sure?",
+        "message": "You'll lose access to all premium features",
+        "confirmButton": "Yes, Cancel Subscription",
+        "keepButton": "Keep My Subscription"
+      }
+    }
+  }
+}

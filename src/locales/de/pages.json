@@ -1,0 +1,165 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "404 | Seite nicht gefunden - HomeAI",
+      "metaDescription": "Die Seite, die Sie suchen, existiert nicht. Lassen Sie uns Ihnen helfen, den Weg zurück zu finden.",
+      "heading": "404 | Seite nicht gefunden",
+      "message": "Hoppla! Die Seite, die Sie suchen, existiert leider nicht. Lassen Sie uns Sie zurück auf den richtigen Weg bringen.",
+      "goBack": "Zurück",
+      "goHome": "Zur Startseite",
+      "footer": "HOME AI"
+    },
+    "contact": {
+      "title": "Kontaktieren Sie uns",
+      "subtitle": "Haben Sie Fragen oder Anmerkungen? Schreiben Sie uns einfach eine Nachricht!",
+      "contactInformation": "Kontaktinformationen",
+      "companyName": "LandMarK Lens GMBH",
+      "email": "contact@swissai.tax",
+      "address": "Sandbuckstrasse 24, Schneisingen 5425",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "phoneNumber": "Telefonnummer",
+      "message": "Nachricht",
+      "sendMessage": "Nachricht senden",
+      "enterFirstName": "Geben Sie Ihren Vornamen ein",
+      "enterLastName": "Geben Sie Ihren Nachnamen ein",
+      "enterEmail": "Geben Sie Ihre E-Mail ein",
+      "writeMessage": "Schreiben Sie Ihre Nachricht...",
+      "successMessage": "Vielen Dank für Ihre Anfrage! Wir melden uns bald bei Ihnen.",
+      "validationErrors": {
+        "invalidEmail": "Ungültige E-Mail-Adresse",
+        "required": "Pflichtfeld",
+        "firstNameMin": "Der Vorname muss mindestens 2 Zeichen lang sein",
+        "firstNameMax": "Der Vorname darf höchstens 50 Zeichen lang sein",
+        "lastNameMin": "Der Nachname muss mindestens 2 Zeichen lang sein",
+        "lastNameMax": "Der Nachname darf höchstens 50 Zeichen lang sein",
+        "subjectMin": "Der Betreff muss mindestens 3 Zeichen lang sein",
+        "subjectMax": "Der Betreff darf höchstens 100 Zeichen lang sein",
+        "selectSubject": "Bitte wählen Sie einen Betreff",
+        "messageMin": "Die Nachricht muss mindestens 10 Zeichen lang sein",
+        "messageMax": "Die Nachricht darf höchstens 2000 Zeichen lang sein",
+        "phoneInvalid": "Die Telefonnummer darf nur Ziffern, Leerzeichen, + oder - enthalten",
+        "phoneTooShort": "Die Telefonnummer ist zu kurz",
+        "phoneTooLong": "Die Telefonnummer ist zu lang"
+      },
+      "errors": {
+        "validationFailed": "Validierung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingabe.",
+        "tooManyRequests": "Zu viele Anfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+        "checkInput": "Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut.",
+        "sendFailed": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+        "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+      }
+    },
+    "auth": {
+      "forgotPassword": {
+        "title": "Passwort zurücksetzen - SwissAI Tax",
+        "metaDescription": "Setzen Sie Ihr SwissAI Tax Kontopasswort zurück",
+        "heading": "Passwort vergessen",
+        "instructions": "Geben Sie Ihre E-Mail-Adresse ein, um Anweisungen zum Zurücksetzen des Passworts zu erhalten.",
+        "emailAddress": "E-Mail-Adresse",
+        "sendResetLink": "Link zum Zurücksetzen senden",
+        "thankYou": "Vielen Dank",
+        "confirmationMessage": "Falls ein Konto mit dieser E-Mail-Adresse existiert, erhalten Sie Anweisungen zum Zurücksetzen des Passworts."
+      },
+      "resetPassword": {
+        "title": "Passwort zurücksetzen - SwissAI Tax",
+        "metaDescription": "Erstellen Sie ein neues Passwort für Ihr SwissAI Tax Konto",
+        "heading": "Passwort zurücksetzen",
+        "instructions": "Richten Sie ein neues Passwort ein.",
+        "newPassword": "Neues Passwort",
+        "confirmNewPassword": "Neues Passwort bestätigen",
+        "confirmPassword": "Bestätigen Sie Ihr Passwort",
+        "resetButton": "Passwort zurücksetzen",
+        "successHeading": "Passwort erfolgreich zurückgesetzt",
+        "successMessage": "Ihr Passwort wurde aktualisiert. Sie können sich jetzt anmelden.",
+        "goToLogin": "Zur Anmeldung",
+        "invalidLinkHeading": "Ungültiger oder abgelaufener Link",
+        "invalidLinkMessage": "Der Link zum Zurücksetzen des Passworts ist ungültig oder abgelaufen. Bitte fordern Sie einen neuen an.",
+        "errors": {
+          "invalidToken": "Ungültiges Token oder Passwort.",
+          "resetFailed": "Passwort konnte nicht zurückgesetzt werden. Der Link ist möglicherweise abgelaufen."
+        }
+      }
+    },
+    "taxFiling": {
+      "documentChecklistPage": {
+        "title": "Dokumente hochladen",
+        "steps": {
+          "completeInterview": "Interview abschliessen",
+          "uploadDocuments": "Dokumente hochladen",
+          "calculateTaxes": "Steuern berechnen",
+          "reviewSubmit": "Überprüfen & Einreichen"
+        },
+        "uploadProgress": "Upload-Fortschritt",
+        "yourProfile": "Ihr Profil",
+        "documentsUploaded": "Hochgeladene Dokumente",
+        "requiredDocuments": "Erforderliche Dokumente",
+        "documentsInstructions": "Basierend auf Ihren Antworten müssen Sie folgende Dokumente hochladen:",
+        "backToInterview": "Zurück zum Interview",
+        "calculating": "Berechnung läuft...",
+        "calculateMyTaxes": "Meine Steuern berechnen",
+        "calculateWithoutDocs": "Ohne alle Dokumente berechnen (Schätzung)",
+        "uploadError": "Upload fehlgeschlagen"
+      },
+      "filingsListPage": {
+        "title": "Meine Steuererklärungen",
+        "subtitle": "Verwalten Sie Ihre Steuererklärungen über mehrere Jahre und Kantone",
+        "newFiling": "Neue Steuererklärung",
+        "loadingFilings": "Steuererklärungen werden geladen...",
+        "stats": {
+          "total": "Gesamte Steuererklärungen",
+          "completed": "Abgeschlossen",
+          "inProgress": "In Bearbeitung"
+        },
+        "noFilings": "Noch keine Steuererklärungen",
+        "getStarted": "Starten Sie Ihre erste Steuererklärung, um sie hier zu sehen",
+        "startTaxFiling": "Steuererklärung starten",
+        "filing": "Steuererklärung",
+        "filings": "Steuererklärungen",
+        "noCanton": "Kein Kanton",
+        "status": {
+          "completed": "Abgeschlossen",
+          "submitted": "Eingereicht",
+          "in_progress": "In Bearbeitung",
+          "draft": "Entwurf"
+        },
+        "secondary": "Sekundär",
+        "progress": "Fortschritt",
+        "lastUpdated": "Zuletzt aktualisiert",
+        "continue": "Fortfahren",
+        "viewDetails": "Details anzeigen",
+        "edit": "Bearbeiten",
+        "copyToNewYear": "In neues Jahr kopieren",
+        "delete": "Löschen",
+        "confirmDelete": "Möchten Sie diese Steuererklärung wirklich löschen?",
+        "createNew": "Neue Steuererklärung erstellen",
+        "taxYear": "Steuerjahr",
+        "postalCode": "Postleitzahl (PLZ)",
+        "postalCodePlaceholder": "z.B. 8001",
+        "lookingUpPostalCode": "Postleitzahl wird gesucht...",
+        "enterPostalCode": "Geben Sie Ihre 4-stellige Postleitzahl ein",
+        "municipality": "Gemeinde",
+        "canton": "Kanton",
+        "autoFilledFromPostalCode": "Automatisch ausgefüllt anhand der Postleitzahl",
+        "cancel": "Abbrechen",
+        "createAndStart": "Erstellen und starten",
+        "copyFiling": "Steuererklärung in neues Jahr kopieren",
+        "copyInfo": "Dies erstellt eine Kopie Ihrer Steuerdaten für ein neues Steuerjahr. Sie können diese dann mit aktuellen Informationen aktualisieren.",
+        "newYear": "Neues Steuerjahr"
+      }
+    },
+    "blog": {
+      "blogList": {
+        "heading": "Blog",
+        "subtitle": "Bleiben Sie auf dem Laufenden mit den Immobilien-Updates unseres Teams.",
+        "all": "Alle"
+      },
+      "blogItem": {
+        "back": "Zurück",
+        "previous": "Vorherige",
+        "next": "Nächste",
+        "relatedArticles": "Verwandte Artikel"
+      }
+    }
+  }
+}

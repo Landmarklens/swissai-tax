@@ -1,0 +1,32 @@
+{
+  "general": {
+    "somethingWentWrong": "Something went wrong",
+    "unknownError": "Unknown error"
+  },
+  "network": {
+    "error": "Network error. Please check your connection."
+  },
+  "auth": {
+    "unauthorized": "Please log in to continue.",
+    "tokenExpired": "Your session has expired. Please log in again."
+  },
+  "resource": {
+    "notFound": "The requested resource was not found."
+  },
+  "server": {
+    "error": "Server error. Please try again later."
+  },
+  "rateLimit": {
+    "exceeded": "Too many requests. Please slow down."
+  },
+  "codes": {
+    "NETWORK_ERROR": "Network error. Please check your connection.",
+    "UNAUTHORIZED": "Please log in to continue.",
+    "TOKEN_EXPIRED": "Your session has expired. Please log in again.",
+    "NOT_FOUND": "The requested resource was not found.",
+    "SERVER_ERROR": "Server error. Please try again later.",
+    "RATE_LIMIT": "Too many requests. Please slow down.",
+    "UNKNOWN_ERROR": "Something went wrong",
+    "VALIDATION_ERROR": "Please check your input and try again."
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "login": {
+    "email": {
+      "invalid": "Invalid email format",
+      "required": "Email is required",
+      "tooLong": "Email is too long"
+    },
+    "password": {
+      "minLength": "Password must be at least 6 characters",
+      "tooLong": "Password is too long",
+      "required": "Password is required"
+    }
+  },
+  "signup": {
+    "firstName": {
+      "minLength": "First name must be at least 2 characters",
+      "tooLong": "First name is too long",
+      "invalidFormat": "First name can only contain letters, spaces, hyphens and apostrophes",
+      "required": "First name is required"
+    },
+    "lastName": {
+      "minLength": "Last name must be at least 2 characters",
+      "tooLong": "Last name is too long",
+      "invalidFormat": "Last name can only contain letters, spaces, hyphens and apostrophes",
+      "required": "Last name is required"
+    },
+    "email": {
+      "invalid": "Invalid email format",
+      "required": "Email is required",
+      "tooLong": "Email is too long"
+    },
+    "password": {
+      "minLength": "Password must be at least 6 characters",
+      "tooLong": "Password is too long",
+      "complexity": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      "required": "Password is required"
+    },
+    "confirmPassword": {
+      "mustMatch": "Passwords must match",
+      "required": "Please confirm your password"
+    }
+  },
+  "field": {
+    "required": "{{fieldName}} is required",
+    "email": {
+      "invalid": "Please enter a valid email address"
+    },
+    "phone": {
+      "invalid": "Please enter a valid phone number"
+    },
+    "currency": {
+      "invalid": "Please enter a valid amount (e.g., 1234.56)"
+    },
+    "date": {
+      "invalid": "Please enter a valid date"
+    },
+    "signature": {
+      "required": "Signature is required"
+    }
+  }
+}

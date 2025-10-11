@@ -1,0 +1,134 @@
+{
+  "faq": [
+    {
+      "category": "Erste Schritte",
+      "questions": [
+        {
+          "question": "Was ist SwissAI Tax?",
+          "answer": "SwissAI Tax ist eine intelligente Schweizer Steuererklärungsplattform, die KI verwendet, um Ihre Steuererklärung zu vereinfachen. Wir unterstützen alle 26 Schweizer Kantone mit automatischer Berechnung der Bundes-, Kantons- und Gemeindesteuern."
+        },
+        {
+          "question": "Wer kann SwissAI Tax nutzen?",
+          "answer": "Jeder, der in der Schweiz lebt und Steuern einreichen muss, kann unsere Plattform nutzen. Ob Sie Angestellter, Selbstständiger, Rentner sind oder mehrere Einkommensquellen haben – SwissAI Tax passt sich Ihrer Situation an."
+        },
+        {
+          "question": "Welche Kantone werden unterstützt?",
+          "answer": "Alle 26 Schweizer Kantone werden vollständig unterstützt: Zürich, Bern, Luzern, Uri, Schwyz, Obwalden, Nidwalden, Glarus, Zug, Fribourg, Solothurn, Basel-Stadt, Basel-Landschaft, Schaffhausen, Appenzell Ausserrhoden, Appenzell Innerrhoden, St. Gallen, Graubünden, Aargau, Thurgau, Tessin, Waadt, Wallis, Neuenburg, Genf und Jura."
+        },
+        {
+          "question": "Welche Sprachen sind verfügbar?",
+          "answer": "SwissAI Tax ist in allen vier Schweizer Landessprachen verfügbar: Deutsch, Französisch (Français), Italienisch (Italiano) und Englisch. Sie können jederzeit die Sprache wechseln."
+        }
+      ]
+    },
+    {
+      "category": "Steuererklärungsprozess",
+      "questions": [
+        {
+          "question": "Wie funktioniert das KI-Interview?",
+          "answer": "Unser interaktiver Fragebogen (Q01-Q14) führt Sie durch einfache Fragen zu Ihrem Einkommen, Ihrer Familiensituation, Abzügen und Ausgaben. Die KI passt die Fragen basierend auf Ihren Antworten an und stellt nur relevante Fragen für Ihre Situation. Keine Steuerkenntnisse erforderlich!"
+        },
+        {
+          "question": "Welche Dokumente muss ich hochladen?",
+          "answer": "Gängige Dokumente umfassen: Lohnausweise, Versicherungsbestätigungen, Spendenquittungen, Hypothekarzinsabrechnungen, Kinderbetreuungskosten und Arztrechnungen. Unsere KI sagt Ihnen genau, welche Dokumente Sie basierend auf Ihren Interview-Antworten benötigen."
+        },
+        {
+          "question": "Wie funktioniert der Dokument-Upload?",
+          "answer": "Ziehen Sie einfach Ihre Dokumente per Drag & Drop (PDF, JPG, PNG). Unsere KI verwendet OCR (Optische Zeichenerkennung) mit AWS Textract, um automatisch relevante Daten zu extrahieren. Sie können die extrahierten Daten vor der Einreichung überprüfen und bearbeiten."
+        },
+        {
+          "question": "Wie genau sind die Steuerberechnungen?",
+          "answer": "Unsere Berechnungen verwenden offizielle Schweizer Steuersätze, die für das aktuelle Steuerjahr aktualisiert wurden. Wir berechnen Bundessteuer, Kantonssteuer und Gemeindesteuer basierend auf Ihrem genauen Standort. Alle Formeln sind gegen offizielle Richtlinien der Steuerbehörden validiert."
+        },
+        {
+          "question": "Kann ich meinen Fortschritt speichern und später fortfahren?",
+          "answer": "Ja! Ihre Daten werden automatisch gespeichert, während Sie durch das Interview fortschreiten. Sie können sich jederzeit abmelden und zurückkehren, um dort weiterzumachen, wo Sie aufgehört haben. Alle Daten werden sicher gespeichert und verschlüsselt."
+        }
+      ]
+    },
+    {
+      "category": "Abzüge & Einsparungen",
+      "questions": [
+        {
+          "question": "Wie funktioniert der automatische Abzugsfinder?",
+          "answer": "Unsere KI analysiert Ihre Situation und identifiziert alle anwendbaren Abzüge: Berufsauslagen (Pendeln, Verpflegung, berufliche Weiterbildung), Versicherungsprämien (Kranken-, Lebens-, Pensionsversicherung), Spenden, Kinderbetreuungskosten, Bildungsausgaben und mehr. Wir stellen sicher, dass Sie keine Einsparungen verpassen."
+        },
+        {
+          "question": "Was sind die häufigsten Abzüge, die ich geltend machen kann?",
+          "answer": "Häufige Abzüge umfassen: obligatorische Versicherungen (AHV, IV, ALV, KTG), Krankenversicherungsprämien, Säule 3a-Beiträge, berufsbedingte Ausgaben, Kinderbetreuungskosten, Spenden an wohltätige Organisationen, Aus-/Weiterbildungskosten und Hypothekarzinsen."
+        },
+        {
+          "question": "Kann ich Homeoffice-Ausgaben abziehen?",
+          "answer": "Ja, wenn Sie regelmässig von zu Hause aus arbeiten, können Sie einen Teil der Miete, Nebenkosten und Ausrüstungskosten abziehen. Unsere KI berechnet den zulässigen Betrag basierend auf den Schweizer Steuervorschriften und den spezifischen Regeln Ihres Kantons."
+        },
+        {
+          "question": "Wie maximiere ich meine Steuerrückerstattung?",
+          "answer": "Laden Sie alle relevanten Dokumente hoch, beantworten Sie die Interview-Fragen gründlich und lassen Sie unsere KI jeden Abzug finden. Wir geben Ihnen Vorschläge für steuersparende Strategien und zeigen Ihnen die Auswirkungen verschiedener Szenarien vor der Einreichung."
+        }
+      ]
+    },
+    {
+      "category": "Sicherheit & Datenschutz",
+      "questions": [
+        {
+          "question": "Sind meine Daten sicher?",
+          "answer": "Absolut. Ihre Daten sind während der Übertragung (HTTPS) und im Ruhezustand verschlüsselt. Wir verwenden AWS S3 für die Dokumentenspeicherung mit Verschlüsselung auf Bankniveau. Alle Daten bleiben in der Schweiz. Wir sind DSGVO-konform und teilen Ihre Informationen niemals mit Dritten."
+        },
+        {
+          "question": "Wo werden meine Daten gespeichert?",
+          "answer": "Alle Ihre Daten werden auf sicheren Schweizer Servern gespeichert (AWS Europe Frankfurt Region). Dokumente werden mit AES-128-Verschlüsselung mit authentifizierter Verschlüsselung verschlüsselt (derselbe Standard, der von grossen Banken verwendet wird). Datenbankverbindungen verwenden SSL/TLS. Ihre Privatsphäre hat für uns oberste Priorität."
+        },
+        {
+          "question": "Kann ich meine Daten löschen?",
+          "answer": "Ja, Sie können Ihr Konto und alle zugehörigen Daten jederzeit über Ihre Profileinstellungen löschen. Wir erfüllen das Recht auf Vergessenwerden gemäss DSGVO. Die Löschung ist dauerhaft und unwiderruflich."
+        },
+        {
+          "question": "Teilen Sie meine Daten mit den Steuerbehörden?",
+          "answer": "Nein. Wir teilen Ihre Daten niemals automatisch mit jemandem. Sie behalten die vollständige Kontrolle. Wenn Sie bereit sind, laden Sie Ihre ausgefüllten Steuerformulare herunter und reichen sie selbst bei Ihrem kantonalen Steueramt ein."
+        }
+      ]
+    },
+    {
+      "category": "Technischer Support",
+      "questions": [
+        {
+          "question": "Was passiert, wenn ich während der Einreichung auf einen Fehler stosse?",
+          "answer": "Unser Support-Team ist per E-Mail und Live-Chat verfügbar. Die meisten häufigen Probleme werden innerhalb von 24 Stunden gelöst. Überprüfen Sie unser Hilfe-Center für Fehlerbehebungsanleitungen und Video-Tutorials."
+        },
+        {
+          "question": "Kann ich SwissAI Tax auf mobilen Geräten verwenden?",
+          "answer": "Ja! Unsere Plattform ist vollständig responsiv und funktioniert auf Smartphones, Tablets und Desktop-Computern. Die Benutzeroberfläche passt sich Ihrer Bildschirmgrösse für optimale Benutzerfreundlichkeit an."
+        },
+        {
+          "question": "Welche Browser werden unterstützt?",
+          "answer": "Wir unterstützen alle modernen Browser: Chrome, Firefox, Safari und Edge. Für das beste Erlebnis verwenden Sie die neueste Version Ihres bevorzugten Browsers."
+        },
+        {
+          "question": "Was passiert, wenn ich Hilfe bei komplexen Steuersituationen benötige?",
+          "answer": "Für komplexe Fälle (Geschäftseinkommen, ausländische Vermögenswerte, Erbschaften) führt Sie unsere KI durch die Grundlagen, und Sie können sich optional über unser Partnernetzwerk mit zertifizierten Schweizer Steuerberatern verbinden."
+        }
+      ]
+    },
+    {
+      "category": "Preise & Zahlung",
+      "questions": [
+        {
+          "question": "Wie viel kostet SwissAI Tax?",
+          "answer": "Wir bieten transparente Preise: eine kostenlose Version für einfache Steuererklärungen und Premium-Pläne ab CHF 49 für erweiterte Funktionen wie Multi-Kanton-Unterstützung, unbegrenzte Dokument-Uploads und Priority-Support."
+        },
+        {
+          "question": "Kann ich es vor dem Kauf ausprobieren?",
+          "answer": "Auf jeden Fall! Starten Sie das Steuerinterview und sehen Sie Ihre Berechnungen kostenlos. Sie zahlen nur, wenn Sie bereit sind, Ihre ausgefüllten Steuerformulare herunterzuladen. Keine Kreditkarte erforderlich, um zu beginnen."
+        },
+        {
+          "question": "Welche Zahlungsmethoden akzeptieren Sie?",
+          "answer": "Wir akzeptieren alle gängigen Kreditkarten (Visa, Mastercard, American Express), Twint und Banküberweisungen. Alle Zahlungen werden sicher über Stripe abgewickelt."
+        },
+        {
+          "question": "Bieten Sie Rückerstattungen an?",
+          "answer": "Ja. Wenn Sie mit unserem Service nicht zufrieden sind, kontaktieren Sie uns innerhalb von 30 Tagen für eine vollständige Rückerstattung. Ihre Zufriedenheit ist unsere Priorität."
+        }
+      ]
+    }
+  ]
+}

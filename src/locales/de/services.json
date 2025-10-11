@@ -1,0 +1,166 @@
+{
+  "services": {
+    "auth": {
+      "loginFailed": "Anmeldung fehlgeschlagen",
+      "registrationFailed": "Registrierung fehlgeschlagen",
+      "emailRequired": "E-Mail-Adresse ist erforderlich, um ein neues Passwort anzufordern.",
+      "tokenRequired": "Token ist erforderlich, um die Passwortzurücksetzung zu verifizieren.",
+      "failedToRequestPasswordReset": "Anfrage zur Passwortzurücksetzung fehlgeschlagen",
+      "failedToVerifyResetToken": "Verifizierung des Zurücksetzungstokens fehlgeschlagen",
+      "tokenAndPasswordRequired": "Token und neues Passwort sind erforderlich, um das Passwort zurückzusetzen.",
+      "failedToResetPassword": "Passwortzurücksetzung fehlgeschlagen"
+    },
+    "twoFactor": {
+      "failedToInitialize": "Initialisierung der 2FA-Einrichtung fehlgeschlagen",
+      "failedToVerify": "Verifizierung des 2FA-Codes fehlgeschlagen",
+      "invalidVerificationCode": "Ungültiger Verifizierungscode",
+      "failedToDisable": "Deaktivierung der 2FA fehlgeschlagen",
+      "failedToRegenerateBackupCodes": "Erneuerung der Backup-Codes fehlgeschlagen",
+      "failedToGetStatus": "Abruf des 2FA-Status fehlgeschlagen",
+      "backupCodesTitle": "SwissAI Tax - Zwei-Faktor-Authentifizierung Backup-Codes",
+      "backupCodesImportant": "WICHTIG: Bewahren Sie diese Codes an einem sicheren Ort auf.",
+      "backupCodesUsage": "Jeder Code kann nur einmal verwendet werden.",
+      "backupCodesHeader": "Backup-Codes:",
+      "backupCodesGenerated": "Erstellt:",
+      "backupCodesKeepSafe": "Bewahren Sie diese Codes sicher auf!"
+    },
+    "user": {
+      "verificationCodeSent": "Verifizierungscode wurde an Ihre E-Mail-Adresse gesendet",
+      "failedToRequestAccountDeletion": "Anfrage zur Kontolöschung fehlgeschlagen",
+      "invalidVerificationCode": "Ungültiger Verifizierungscode",
+      "accountDeletionScheduled": "Kontolöschung erfolgreich geplant",
+      "accountDeletionCancelled": "Kontolöschung erfolgreich abgebrochen",
+      "failedToCancelAccountDeletion": "Abbruch der Kontolöschung fehlgeschlagen",
+      "failedToGetDeletionStatus": "Abruf des Löschstatus fehlgeschlagen",
+      "dataExportRequested": "Datenexport im {{format}}-Format angefordert",
+      "failedToRequestDataExport": "Anforderung des Datenexports fehlgeschlagen",
+      "failedToListDataExports": "Auflistung der Datenexporte fehlgeschlagen",
+      "failedToGetExportDetails": "Abruf der Exportdetails fehlgeschlagen"
+    },
+    "profile": {
+      "failedToFetchProfile": "Abruf des Profils fehlgeschlagen",
+      "personalInfoUpdated": "Persönliche Informationen erfolgreich aktualisiert",
+      "failedToUpdatePersonalInfo": "Aktualisierung der persönlichen Informationen fehlgeschlagen",
+      "taxProfileUpdated": "Steuerprofil erfolgreich aktualisiert",
+      "failedToUpdateTaxProfile": "Aktualisierung des Steuerprofils fehlgeschlagen",
+      "securitySettingsUpdated": "Sicherheitseinstellungen erfolgreich aktualisiert",
+      "failedToUpdateSecuritySettings": "Aktualisierung der Sicherheitseinstellungen fehlgeschlagen"
+    },
+    "settings": {
+      "failedToFetchSettings": "Abruf der Einstellungen fehlgeschlagen",
+      "preferencesUpdated": "Einstellungen erfolgreich aktualisiert",
+      "failedToUpdatePreferences": "Aktualisierung der Einstellungen fehlgeschlagen",
+      "notificationSettingsUpdated": "Benachrichtigungseinstellungen erfolgreich aktualisiert",
+      "failedToUpdateNotificationSettings": "Aktualisierung der Benachrichtigungseinstellungen fehlgeschlagen",
+      "documentSettingsUpdated": "Dokumenteinstellungen erfolgreich aktualisiert",
+      "failedToUpdateDocumentSettings": "Aktualisierung der Dokumenteinstellungen fehlgeschlagen"
+    },
+    "payment": {
+      "failedToCreatePaymentIntent": "Erstellung der Zahlungsabsicht fehlgeschlagen",
+      "planTypeRequired": "Tariftyp ist erforderlich",
+      "invalidPlanType": "Ungültiger Tariftyp",
+      "plans": {
+        "basic": {
+          "name": "Basis",
+          "features": {
+            "singleReturn": "Einzelne Steuererklärung",
+            "basicDeductions": "Grundlegende Abzüge",
+            "emailSupport": "E-Mail-Support"
+          }
+        },
+        "standard": {
+          "name": "Standard",
+          "features": {
+            "multipleReturns": "Mehrere Steuererklärungen",
+            "allDeductions": "Alle Abzüge",
+            "prioritySupport": "Prioritäts-E-Mail-Support",
+            "documentUpload": "Dokumenten-Upload & OCR"
+          }
+        },
+        "premium": {
+          "name": "Premium",
+          "features": {
+            "unlimitedReturns": "Unbegrenzte Steuererklärungen",
+            "allOptimizations": "Alle Abzüge & Optimierungen",
+            "phoneEmailSupport": "Telefon- & E-Mail-Support",
+            "documentUpload": "Dokumenten-Upload & OCR",
+            "expertReview": "Steuerberater-Prüfung",
+            "auditProtection": "Prüfungsschutz"
+          }
+        }
+      }
+    },
+    "subscription": {
+      "failedToCreateSetupIntent": "Erstellung der Einrichtungsabsicht fehlgeschlagen",
+      "failedToCreateSubscription": "Erstellung des Abonnements fehlgeschlagen",
+      "failedToCreateFreeSubscription": "Erstellung des kostenlosen Abonnements fehlgeschlagen",
+      "failedToFetchSubscription": "Abruf des Abonnements fehlgeschlagen",
+      "subscriptionCanceled": "Abonnement erfolgreich gekündigt",
+      "failedToCancelSubscription": "Kündigung des Abonnements fehlgeschlagen",
+      "planSwitched": "Tarifwechsel erfolgreich",
+      "failedToSwitchPlan": "Tarifwechsel fehlgeschlagen",
+      "pauseRequestSubmitted": "Pausenantrag erfolgreich eingereicht",
+      "failedToRequestPause": "Anforderung der Pause fehlgeschlagen",
+      "failedToFetchInvoices": "Abruf der Rechnungen fehlgeschlagen",
+      "noPaymentMethod": "Keine Zahlungsmethode",
+      "cardOnFile": "Hinterlegte Karte",
+      "plans": {
+        "annualFlex": {
+          "name": "Jahres-Flex",
+          "description": "Jederzeit kündbar, jährliche Zahlung",
+          "features": {
+            "allFeatures": "Alle Steuererklärungsfunktionen",
+            "documentManagement": "Dokumentenverwaltung",
+            "taxOptimization": "Steueroptimierungs-Einblicke",
+            "cancelAnytime": "Jederzeit kündbar"
+          }
+        },
+        "fiveYearLock": {
+          "name": "5-Jahres-Preisgarantie",
+          "description": "Niedrigsten Preis für 5 Jahre sichern",
+          "features": {
+            "allFeatures": "Alle Steuererklärungsfunktionen",
+            "documentManagement": "Dokumentenverwaltung",
+            "taxOptimization": "Steueroptimierungs-Einblicke",
+            "priceLocked": "Preis für 5 Jahre garantiert",
+            "savings": "CHF 200/Jahr sparen"
+          }
+        }
+      }
+    },
+    "referral": {
+      "failedToFetchReferralCode": "Abruf des Empfehlungscodes fehlgeschlagen",
+      "failedToFetchReferralStats": "Abruf der Empfehlungsstatistiken fehlgeschlagen",
+      "failedToFetchAccountCredits": "Abruf der Kontoguthaben fehlgeschlagen",
+      "failedToValidateDiscountCode": "Validierung des Rabattcodes fehlgeschlagen",
+      "failedToCreatePromotionalCode": "Erstellung des Aktionscodes fehlgeschlagen"
+    },
+    "filing": {
+      "filingSubmitted": "Steuererklärung erfolgreich eingereicht",
+      "failedToSubmitFiling": "Einreichung der Steuererklärung fehlgeschlagen",
+      "failedToFetchFilingDetails": "Abruf der Einreichungsdetails fehlgeschlagen",
+      "failedToFetchFilingReviewData": "Abruf der Prüfungsdaten fehlgeschlagen",
+      "status": {
+        "draft": "Entwurf",
+        "review": "In Prüfung",
+        "submitted": "Eingereicht",
+        "accepted": "Akzeptiert",
+        "rejected": "Abgelehnt"
+      }
+    },
+    "dashboard": {
+      "failedToFetchDashboardData": "Abruf der Dashboard-Daten fehlgeschlagen"
+    },
+    "session": {
+      "failedToRetrieveSessions": "Abruf der Sitzungen fehlgeschlagen",
+      "failedToRevokeSession": "Widerruf der Sitzung fehlgeschlagen",
+      "failedToRevokeSessions": "Widerruf der Sitzungen fehlgeschlagen",
+      "failedToGetSessionCount": "Abruf der Sitzungsanzahl fehlgeschlagen"
+    },
+    "location": {
+      "failedToFetchLocationData": "Abruf der Standortdaten fehlgeschlagen",
+      "locationNotFound": "Standort nicht gefunden",
+      "geocodingFailed": "Geocodierung fehlgeschlagen: {{status}}"
+    }
+  }
+}

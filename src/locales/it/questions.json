@@ -1,0 +1,192 @@
+{
+  "stepper": [
+    {
+      "id": 1,
+      "label": "Preferenze generali"
+    },
+    {
+      "id": 2,
+      "label": "Tipo di proprietà"
+    },
+    {
+      "id": 3,
+      "label": "Budget"
+    },
+    {
+      "id": 4,
+      "label": "Spazio e disposizione"
+    },
+    {
+      "id": 5,
+      "label": "Stile di vita e servizi"
+    },
+    {
+      "id": 6,
+      "label": "Considerazioni personali e familiari"
+    },
+    {
+      "id": 7,
+      "label": "Caratteristiche della proprietà"
+    },
+    {
+      "id": 8,
+      "label": "Considerazioni aggiuntive"
+    },
+    {
+      "id": 9,
+      "label": "Tempi e scadenze"
+    },
+    {
+      "id": 10,
+      "label": "Flessibilità e priorità"
+    },
+    {
+      "id": 11,
+      "label": "Feedback e follow-up"
+    }
+  ],
+  "questions": {
+    "steps": [
+      {
+        "id": 1,
+        "label": "Preferenze di ubicazione",
+        "questions": [
+          {
+            "id": 1,
+            "question": "Quale città o quartiere ti interessa?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 2,
+            "question": "Quanto vicino vorresti abitare al tuo luogo di lavoro o scuola?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 3,
+            "question": "Hai bisogno di un facile accesso ai trasporti pubblici?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 4,
+            "question": "Quanto è importante per te la sicurezza del quartiere?",
+            "type": "scale",
+            "scaleMin": 1,
+            "scaleMax": 5,
+            "required": true
+          },
+          {
+            "id": 5,
+            "question": "Che tipo di servizi vorresti nelle vicinanze?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "label": "Budget e considerazioni finanziarie",
+        "questions": [
+          {
+            "id": 6,
+            "question": "Qual è il tuo budget mensile massimo per l'affitto o il mutuo?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 7,
+            "question": "Se acquisti: quanto puoi permetterti per l'acconto?",
+            "type": "number",
+            "required": false
+          },
+          {
+            "id": 8,
+            "question": "Ci sono altre considerazioni finanziarie che dovremmo conoscere?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "label": "Caratteristiche e servizi dell'appartamento",
+        "questions": [
+          {
+            "id": 9,
+            "question": "Che tipo di appartamento stai cercando? (es: monolocale, 1 camera, 2 camere)",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 10,
+            "question": "Hai preferenze per i servizi dell'appartamento? (es: piscina, palestra, parcheggio)",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 11,
+            "question": "Qual è il numero minimo di camere da letto di cui hai bisogno?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 12,
+            "question": "Hai bisogno di caratteristiche specifiche nell'appartamento? (es: balcone, camino)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "Stile di vita e preferenze personali",
+        "questions": [
+          {
+            "id": 13,
+            "question": "Preferisci un quartiere tranquillo o vivace?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 14,
+            "question": "Hai animali domestici o prevedi di prenderne in futuro?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 15,
+            "question": "Ci sono hobby o attività vicino ai quali vorresti essere? (es: escursionismo, ristorazione)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "label": "Disponibilità e tempi di trasloco",
+        "questions": [
+          {
+            "id": 16,
+            "question": "Quando prevedi di trasferirti?",
+            "type": "date",
+            "required": true
+          },
+          {
+            "id": 17,
+            "question": "Cerchi un'abitazione pronta per il trasloco o sei aperto a ristrutturazioni?",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 18,
+            "question": "Devi coordinarti con la data di scadenza del tuo contratto di locazione attuale?",
+            "type": "boolean",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

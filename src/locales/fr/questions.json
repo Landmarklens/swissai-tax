@@ -1,0 +1,192 @@
+{
+  "stepper": [
+    {
+      "id": 1,
+      "label": "Préférences générales"
+    },
+    {
+      "id": 2,
+      "label": "Type de propriété"
+    },
+    {
+      "id": 3,
+      "label": "Budget"
+    },
+    {
+      "id": 4,
+      "label": "Espace et agencement"
+    },
+    {
+      "id": 5,
+      "label": "Style de vie et commodités"
+    },
+    {
+      "id": 6,
+      "label": "Considérations personnelles et familiales"
+    },
+    {
+      "id": 7,
+      "label": "Caractéristiques de la propriété"
+    },
+    {
+      "id": 8,
+      "label": "Considérations supplémentaires"
+    },
+    {
+      "id": 9,
+      "label": "Calendrier et délais"
+    },
+    {
+      "id": 10,
+      "label": "Flexibilité et priorisation"
+    },
+    {
+      "id": 11,
+      "label": "Retours et suivi"
+    }
+  ],
+  "questions": {
+    "steps": [
+      {
+        "id": 1,
+        "label": "Préférences d'emplacement",
+        "questions": [
+          {
+            "id": 1,
+            "question": "Quelle ville ou quel quartier vous intéresse?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 2,
+            "question": "À quelle distance souhaitez-vous habiter de votre lieu de travail ou école?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 3,
+            "question": "Avez-vous besoin d'un accès facile aux transports publics?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 4,
+            "question": "Quelle importance accordez-vous à la sécurité du quartier?",
+            "type": "scale",
+            "scaleMin": 1,
+            "scaleMax": 5,
+            "required": true
+          },
+          {
+            "id": 5,
+            "question": "Quels types de commodités souhaitez-vous à proximité?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "label": "Budget et considérations financières",
+        "questions": [
+          {
+            "id": 6,
+            "question": "Quel est votre budget mensuel maximum pour le loyer ou l'hypothèque?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 7,
+            "question": "Si vous achetez: quel montant pouvez-vous vous permettre pour l'acompte?",
+            "type": "number",
+            "required": false
+          },
+          {
+            "id": 8,
+            "question": "Y a-t-il d'autres considérations financières que nous devrions connaître?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "label": "Caractéristiques et commodités de l'appartement",
+        "questions": [
+          {
+            "id": 9,
+            "question": "Quel type d'appartement recherchez-vous? (ex: studio, 1 pièce, 2 pièces)",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 10,
+            "question": "Avez-vous des préférences pour les commodités de l'appartement? (ex: piscine, salle de sport, parking)",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 11,
+            "question": "Quel est le nombre minimum de chambres dont vous avez besoin?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 12,
+            "question": "Avez-vous besoin de caractéristiques spécifiques dans l'appartement? (ex: balcon, cheminée)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "Style de vie et préférences personnelles",
+        "questions": [
+          {
+            "id": 13,
+            "question": "Préférez-vous un quartier calme ou animé?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 14,
+            "question": "Avez-vous des animaux de compagnie ou prévoyez-vous d'en avoir à l'avenir?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 15,
+            "question": "Y a-t-il des loisirs ou des activités à proximité desquels vous souhaitez être? (ex: randonnée, restaurants)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "label": "Disponibilité et calendrier d'emménagement",
+        "questions": [
+          {
+            "id": 16,
+            "question": "Quand prévoyez-vous d'emménager?",
+            "type": "date",
+            "required": true
+          },
+          {
+            "id": 17,
+            "question": "Recherchez-vous un logement prêt à emménager ou êtes-vous ouvert aux rénovations?",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 18,
+            "question": "Devez-vous coordonner avec la date de fin de votre bail actuel?",
+            "type": "boolean",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

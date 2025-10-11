@@ -1,0 +1,40 @@
+{
+  "testimonials": [
+    {
+      "id": 1,
+      "text": "Sono riuscita a trovare la casa perfetta in pochissimo tempo. Il servizio è stato eccezionale e così facile da usare."
+    },
+    {
+      "id": 2,
+      "text": "Molto efficiente e intuitivo. Ho trovato un posto fantastico che si adatta perfettamente alle mie esigenze."
+    },
+    {
+      "id": 3,
+      "text": "Un'esperienza fantastica! La ricerca guidata dall'IA ha reso tutto così semplice e senza stress."
+    },
+    {
+      "id": 4,
+      "text": "Buon servizio, anche se ho avuto alcuni problemi minori con i filtri di ricerca. Nel complesso, un'esperienza positiva."
+    },
+    {
+      "id": 5,
+      "text": "Facile da usare e affidabile. Ho trovato un ottimo appartamento che adoro."
+    },
+    {
+      "id": 6,
+      "text": "Questo servizio mi ha fatto risparmiare tantissimo tempo. Altamente consigliato per chiunque cerchi una nuova casa."
+    },
+    {
+      "id": 7,
+      "text": "Processo fluido dall'inizio alla fine. Le informazioni erano perfette."
+    },
+    {
+      "id": 8,
+      "text": "Il modo migliore per trovare una casa. Semplice, efficiente e accurato."
+    },
+    {
+      "id": 9,
+      "text": "Ho avuto un'ottima esperienza. Ho trovato un bel posto rapidamente e senza problemi."
+    }
+  ]
+}

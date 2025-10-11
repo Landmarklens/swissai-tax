@@ -1,0 +1,61 @@
+{
+  "login": {
+    "email": {
+      "invalid": "Formato e-mail non valido",
+      "required": "L'e-mail è obbligatoria",
+      "tooLong": "L'e-mail è troppo lunga"
+    },
+    "password": {
+      "minLength": "La password deve contenere almeno 6 caratteri",
+      "tooLong": "La password è troppo lunga",
+      "required": "La password è obbligatoria"
+    }
+  },
+  "signup": {
+    "firstName": {
+      "minLength": "Il nome deve contenere almeno 2 caratteri",
+      "tooLong": "Il nome è troppo lungo",
+      "invalidFormat": "Il nome può contenere solo lettere, spazi, trattini e apostrofi",
+      "required": "Il nome è obbligatorio"
+    },
+    "lastName": {
+      "minLength": "Il cognome deve contenere almeno 2 caratteri",
+      "tooLong": "Il cognome è troppo lungo",
+      "invalidFormat": "Il cognome può contenere solo lettere, spazi, trattini e apostrofi",
+      "required": "Il cognome è obbligatorio"
+    },
+    "email": {
+      "invalid": "Formato e-mail non valido",
+      "required": "L'e-mail è obbligatoria",
+      "tooLong": "L'e-mail è troppo lunga"
+    },
+    "password": {
+      "minLength": "La password deve contenere almeno 6 caratteri",
+      "tooLong": "La password è troppo lunga",
+      "complexity": "La password deve contenere almeno una lettera maiuscola, una lettera minuscola e un numero",
+      "required": "La password è obbligatoria"
+    },
+    "confirmPassword": {
+      "mustMatch": "Le password devono corrispondere",
+      "required": "La preghiamo di confermare la password"
+    }
+  },
+  "field": {
+    "required": "{{fieldName}} è obbligatorio",
+    "email": {
+      "invalid": "La preghiamo di inserire un indirizzo e-mail valido"
+    },
+    "phone": {
+      "invalid": "La preghiamo di inserire un numero di telefono valido"
+    },
+    "currency": {
+      "invalid": "La preghiamo di inserire un importo valido (es: 1234.56)"
+    },
+    "date": {
+      "invalid": "La preghiamo di inserire una data valida"
+    },
+    "signature": {
+      "required": "La firma è obbligatoria"
+    }
+  }
+}

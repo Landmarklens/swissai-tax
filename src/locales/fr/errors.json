@@ -1,0 +1,32 @@
+{
+  "general": {
+    "somethingWentWrong": "Une erreur s'est produite",
+    "unknownError": "Erreur inconnue"
+  },
+  "network": {
+    "error": "Erreur réseau. Veuillez vérifier votre connexion."
+  },
+  "auth": {
+    "unauthorized": "Veuillez vous connecter pour continuer.",
+    "tokenExpired": "Votre session a expiré. Veuillez vous reconnecter."
+  },
+  "resource": {
+    "notFound": "La ressource demandée n'a pas été trouvée."
+  },
+  "server": {
+    "error": "Erreur serveur. Veuillez réessayer plus tard."
+  },
+  "rateLimit": {
+    "exceeded": "Trop de requêtes. Veuillez ralentir."
+  },
+  "codes": {
+    "NETWORK_ERROR": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "UNAUTHORIZED": "Veuillez vous connecter pour continuer.",
+    "TOKEN_EXPIRED": "Votre session a expiré. Veuillez vous reconnecter.",
+    "NOT_FOUND": "La ressource demandée n'a pas été trouvée.",
+    "SERVER_ERROR": "Erreur serveur. Veuillez réessayer plus tard.",
+    "RATE_LIMIT": "Trop de requêtes. Veuillez ralentir.",
+    "UNKNOWN_ERROR": "Une erreur s'est produite",
+    "VALIDATION_ERROR": "Veuillez vérifier vos entrées et réessayer."
+  }
+}

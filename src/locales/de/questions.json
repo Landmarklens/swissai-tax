@@ -1,0 +1,192 @@
+{
+  "stepper": [
+    {
+      "id": 1,
+      "label": "Allgemeine Präferenzen"
+    },
+    {
+      "id": 2,
+      "label": "Art der Immobilie"
+    },
+    {
+      "id": 3,
+      "label": "Budget"
+    },
+    {
+      "id": 4,
+      "label": "Raum und Aufteilung"
+    },
+    {
+      "id": 5,
+      "label": "Lebensstil und Annehmlichkeiten"
+    },
+    {
+      "id": 6,
+      "label": "Persönliche und familiäre Überlegungen"
+    },
+    {
+      "id": 7,
+      "label": "Immobilienmerkmale"
+    },
+    {
+      "id": 8,
+      "label": "Zusätzliche Überlegungen"
+    },
+    {
+      "id": 9,
+      "label": "Zeitplan und Fristen"
+    },
+    {
+      "id": 10,
+      "label": "Flexibilität und Priorisierung"
+    },
+    {
+      "id": 11,
+      "label": "Feedback und Nachverfolgung"
+    }
+  ],
+  "questions": {
+    "steps": [
+      {
+        "id": 1,
+        "label": "Standortpräferenzen",
+        "questions": [
+          {
+            "id": 1,
+            "question": "Für welche Stadt oder Nachbarschaft interessieren Sie sich?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 2,
+            "question": "Wie nah möchten Sie an Ihrem Arbeitsplatz oder Ihrer Schule wohnen?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 3,
+            "question": "Benötigen Sie einen einfachen Zugang zu öffentlichen Verkehrsmitteln?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 4,
+            "question": "Wie wichtig ist Ihnen die Sicherheit der Nachbarschaft?",
+            "type": "scale",
+            "scaleMin": 1,
+            "scaleMax": 5,
+            "required": true
+          },
+          {
+            "id": 5,
+            "question": "Welche Art von Annehmlichkeiten möchten Sie in der Nähe haben?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "label": "Budget und finanzielle Überlegungen",
+        "questions": [
+          {
+            "id": 6,
+            "question": "Was ist Ihr maximales monatliches Budget für Miete oder Hypothek?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 7,
+            "question": "Falls Sie kaufen: Wie viel können Sie sich für die Anzahlung leisten?",
+            "type": "number",
+            "required": false
+          },
+          {
+            "id": 8,
+            "question": "Gibt es andere finanzielle Überlegungen, die wir kennen sollten?",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "label": "Wohnungsmerkmale und Annehmlichkeiten",
+        "questions": [
+          {
+            "id": 9,
+            "question": "Nach welcher Art von Wohnung suchen Sie? (z.B. Studio, 1-Zimmer, 2-Zimmer)",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 10,
+            "question": "Haben Sie Präferenzen für Wohnungsannehmlichkeiten? (z.B. Pool, Fitnessstudio, Parkplatz)",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 11,
+            "question": "Was ist die Mindestanzahl der Schlafzimmer, die Sie benötigen?",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": 12,
+            "question": "Benötigen Sie spezifische Merkmale in der Wohnung? (z.B. Balkon, Kamin)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "Lebensstil und persönliche Präferenzen",
+        "questions": [
+          {
+            "id": 13,
+            "question": "Bevorzugen Sie eine ruhige oder lebhafte Nachbarschaft?",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": 14,
+            "question": "Haben Sie Haustiere oder planen Sie, in Zukunft welche anzuschaffen?",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "id": 15,
+            "question": "Gibt es Hobbys oder Aktivitäten, in deren Nähe Sie sein möchten? (z.B. Wandern, Essen gehen)",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "label": "Einzugsbereitschaft und Zeitplan",
+        "questions": [
+          {
+            "id": 16,
+            "question": "Wann planen Sie einzuziehen?",
+            "type": "date",
+            "required": true
+          },
+          {
+            "id": 17,
+            "question": "Suchen Sie eine bezugsfertige Wohnung oder sind Sie offen für Renovierungen?",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": 18,
+            "question": "Müssen Sie sich mit dem Enddatum Ihres aktuellen Mietvertrags abstimmen?",
+            "type": "boolean",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

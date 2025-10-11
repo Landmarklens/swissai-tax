@@ -129,7 +129,7 @@ const EnhancedFAQ = () => {
       <Box>
         {/* Main answer */}
         <Typography paragraph sx={{ mb: 2 }}>
-          {t(question.answer)}
+          {question.answer}
         </Typography>
 
         {/* Bullet points */}
@@ -251,7 +251,7 @@ const EnhancedFAQ = () => {
             {faqData.categories.map((category) => (
               <Grid item key={category.name}>
                 <Chip
-                  label={`${t(category.name)} (${category.questions?.length || 0})`}
+                  label={`${category.name} (${category.questions?.length || 0})`}
                   onClick={() => setSelectedCategory(category.name)}
                   color={selectedCategory === category.name ? 'primary' : 'default'}
                   variant={selectedCategory === category.name ? 'filled' : 'outlined'}
@@ -274,7 +274,7 @@ const EnhancedFAQ = () => {
         <Box key={category.name} mb={4}>
           {!searchResults && !selectedCategory && (
             <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 600 }}>
-              {t(category.name)}
+              {category.name}
             </Typography>
           )}
           
@@ -293,7 +293,7 @@ const EnhancedFAQ = () => {
                 <Box display="flex" alignItems="center" width="100%">
                   <QuestionAnswerIcon sx={{ mr: 2, color: 'primary.main' }} />
                   <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    {t(question.question)}
+                    {question.question}
                   </Typography>
                   {searchResults && (
                     <Chip 

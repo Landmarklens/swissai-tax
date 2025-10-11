@@ -558,7 +558,8 @@ describe('BillingTab', () => {
 
     // Confirm cancellation
     const confirmButtons = screen.getAllByText('Cancel Plan');
-    const confirmButton = confirmButtons.find(btn => btn.closest('[role="dialog"]'));
+    // The second "Cancel Plan" button is the confirm button in the dialog
+    const confirmButton = confirmButtons[1];
 
     fireEvent.click(confirmButton);
 
@@ -597,7 +598,8 @@ describe('BillingTab', () => {
     });
 
     const confirmButtons = screen.getAllByText('Cancel Plan');
-    const confirmButton = confirmButtons.find(btn => btn.closest('[role="dialog"]'));
+    // The second "Cancel Plan" button is the confirm button in the dialog
+    const confirmButton = confirmButtons[1];
 
     fireEvent.click(confirmButton);
 

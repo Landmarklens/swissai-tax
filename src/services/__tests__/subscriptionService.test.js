@@ -3,10 +3,10 @@
  * Tests all subscription service methods and API interactions
  */
 import subscriptionService from '../subscriptionService';
-import api from '../axiosService';
+import { api } from '../api';
 
-// Mock axios service
-jest.mock('../axiosService');
+// Mock api service
+jest.mock('../api');
 
 describe('Subscription Service', () => {
   beforeEach(() => {

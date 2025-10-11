@@ -24,12 +24,11 @@ class FAQService {
   }
 
   /**
-   * Get FAQ categories for a user type
-   * @param {string} userType - 'landlord' or 'tenant'
+   * Get FAQ categories
    */
-  async getCategories(userType) {
+  async getCategories() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/faq/categories?user_type=${userType}`, {
+      const response = await fetch(`${API_BASE_URL}/api/faq/categories`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -47,13 +46,12 @@ class FAQService {
 
   /**
    * Search FAQs by keyword
-   * @param {string} userType - 'landlord' or 'tenant'
    * @param {string} query - Search query
    */
-  async searchFAQs(userType, query) {
+  async searchFAQs(query) {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/faq/search?user_type=${userType}&q=${encodeURIComponent(query)}`,
+        `${API_BASE_URL}/api/faq/search?q=${encodeURIComponent(query)}`,
         {
           method: 'GET',
           headers: {
@@ -73,13 +71,12 @@ class FAQService {
 
   /**
    * Get popular FAQs
-   * @param {string} userType - 'landlord' or 'tenant'
    * @param {number} limit - Number of FAQs to return
    */
-  async getPopularFAQs(userType, limit = 5) {
+  async getPopularFAQs(limit = 5) {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/faq/popular?user_type=${userType}&limit=${limit}`,
+        `${API_BASE_URL}/api/faq/popular?limit=${limit}`,
         {
           method: 'GET',
           headers: {
@@ -99,13 +96,12 @@ class FAQService {
 
   /**
    * Get FAQs for a specific category
-   * @param {string} userType - 'landlord' or 'tenant'
    * @param {string} categoryName - Category name
    */
-  async getCategoryFAQs(userType, categoryName) {
+  async getCategoryFAQs(categoryName) {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/faq/category/${encodeURIComponent(categoryName)}?user_type=${userType}`,
+        `${API_BASE_URL}/api/faq/category/${encodeURIComponent(categoryName)}`,
         {
           method: 'GET',
           headers: {
@@ -125,13 +121,12 @@ class FAQService {
 
   /**
    * Get a specific FAQ by ID
-   * @param {string} userType - 'landlord' or 'tenant'
    * @param {string} faqId - FAQ ID
    */
-  async getFAQById(userType, faqId) {
+  async getFAQById(faqId) {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/faq/${faqId}?user_type=${userType}`,
+        `${API_BASE_URL}/api/faq/${faqId}`,
         {
           method: 'GET',
           headers: {
@@ -151,14 +146,13 @@ class FAQService {
 
   /**
    * Get related FAQs
-   * @param {string} userType - 'landlord' or 'tenant'
    * @param {string} faqId - FAQ ID
    * @param {number} limit - Number of related FAQs
    */
-  async getRelatedFAQs(userType, faqId, limit = 3) {
+  async getRelatedFAQs(faqId, limit = 3) {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/faq/${faqId}/related?user_type=${userType}&limit=${limit}`,
+        `${API_BASE_URL}/api/faq/${faqId}/related?limit=${limit}`,
         {
           method: 'GET',
           headers: {

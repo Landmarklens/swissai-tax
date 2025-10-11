@@ -7,8 +7,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   CircularProgress,
   Alert,
   Chip,
@@ -16,13 +14,10 @@ import {
   Paper,
   Grid,
   IconButton,
-  Tooltip,
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
   Search as SearchIcon,
-  Home as HomeIcon,
-  Business as BusinessIcon,
   Clear as ClearIcon,
   QuestionAnswer as QuestionAnswerIcon,
   Category as CategoryIcon,
@@ -330,17 +325,14 @@ const EnhancedFAQ = () => {
         </Box>
       )}
 
-      {/* Popular FAQs Section */}
+      {/* Help Section */}
       {!searchResults && !selectedCategory && (
         <Box mt={8} p={4} bgcolor="grey.50" borderRadius={2}>
           <Typography variant="h5" gutterBottom fontWeight="600">
             {t('Still have questions?')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {userType === 'tenant' 
-              ? t('Contact our support team or browse our tenant guide for more information.')
-              : t('Reach out to our landlord success team or check our property management resources.')
-            }
+            {t('Contact our support team for personalized assistance with your Swiss tax filing.')}
           </Typography>
         </Box>
       )}

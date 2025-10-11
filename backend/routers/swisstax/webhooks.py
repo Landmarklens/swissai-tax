@@ -116,20 +116,40 @@ def handle_subscription_created(data: dict, db: Session):
 
     logger.info(f"Subscription created: {subscription_id} for customer {customer_id} - Status: {status}")
 
-    # Find subscription in database
+    # Find user by customer ID
+    user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
+    if not user:
+        logger.warning(f"User not found for customer {customer_id}")
+        return
+
+    # Find or create subscription
     subscription = db.query(Subscription).filter(
         Subscription.stripe_subscription_id == subscription_id
     ).first()
 
     if subscription:
-        # Update existing subscription (should already exist from create endpoint)
+        # Update existing subscription
         subscription.status = status
         subscription.current_period_start = datetime.fromtimestamp(data['current_period_start'])
         subscription.current_period_end = datetime.fromtimestamp(data['current_period_end'])
-        db.commit()
         logger.info(f"Updated existing subscription {subscription_id}")
     else:
-        logger.warning(f"Subscription {subscription_id} not found in database during creation webhook")
+        # Create new subscription
+        subscription = Subscription(
+            user_id=user.id,
+            stripe_subscription_id=subscription_id,
+            stripe_customer_id=customer_id,
+            status=status,
+            current_period_start=datetime.fromtimestamp(data['current_period_start']),
+            current_period_end=datetime.fromtimestamp(data['current_period_end']),
+            trial_start=datetime.fromtimestamp(data['trial_start']) if data.get('trial_start') else None,
+            trial_end=datetime.fromtimestamp(data['trial_end']) if data.get('trial_end') else None,
+            cancel_at_period_end=data.get('cancel_at_period_end', False)
+        )
+        db.add(subscription)
+        logger.info(f"Created new subscription {subscription_id}")
+
+    db.commit()
 
 
 def handle_subscription_updated(data: dict, db: Session):

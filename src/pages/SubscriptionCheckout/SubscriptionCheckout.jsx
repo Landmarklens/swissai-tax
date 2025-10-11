@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
@@ -15,6 +15,7 @@ import {
   StepLabel
 } from '@mui/material';
 import PaymentForm from '../../components/subscription/PaymentForm';
+import DiscountCodeInput from '../../components/Referrals/DiscountCodeInput';
 import subscriptionService from '../../services/subscriptionService';
 import './SubscriptionCheckout.scss';
 
@@ -25,12 +26,18 @@ const SubscriptionCheckout = () => {
   const { planType } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
 
   const [setupIntent, setSetupIntent] = useState(null);
   const [planDetails, setPlanDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
+  const [discountInfo, setDiscountInfo] = useState(null);
+  const [finalPrice, setFinalPrice] = useState(null);
+
+  // Get referral code from URL if present
+  const initialCode = searchParams.get('ref') || '';
 
   const steps = [
     t('subscription.checkout.step_plan', 'Select Plan'),
@@ -73,15 +80,27 @@ const SubscriptionCheckout = () => {
       setLoading(true);
       setActiveStep(2); // Move to confirm step
 
-      // Create subscription with payment method
+      // Prepare subscription data with optional discount code
+      const subscriptionData = {
+        plan_type: planType,
+        payment_method_id: paymentMethodId
+      };
+
+      // Add discount code if applied
+      if (discountInfo && discountInfo.code) {
+        subscriptionData.discount_code = discountInfo.code;
+      }
+
+      // Create subscription with payment method and discount
       const subscription = await subscriptionService.createSubscription(
         planType,
-        paymentMethodId
+        paymentMethodId,
+        discountInfo?.code
       );
 
       // Navigate to success page
       navigate('/subscription/success', {
-        state: { subscription, planType }
+        state: { subscription, planType, discountApplied: discountInfo }
       });
     } catch (err) {
       console.error('Error creating subscription:', err);
@@ -95,6 +114,16 @@ const SubscriptionCheckout = () => {
 
   const handleCancel = () => {
     navigate('/subscription/plans');
+  };
+
+  const handleDiscountApplied = (discount) => {
+    setDiscountInfo(discount);
+    setFinalPrice(discount.final_price_chf);
+  };
+
+  const handleDiscountRemoved = () => {
+    setDiscountInfo(null);
+    setFinalPrice(planDetails?.price || null);
   };
 
   // Check if Stripe is configured
@@ -152,8 +181,13 @@ const SubscriptionCheckout = () => {
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 2 }}>
               <Typography variant="h4" component="span" sx={{ fontWeight: 'bold' }}>
-                CHF {planDetails.price}
+                CHF {finalPrice !== null ? finalPrice : planDetails.price}
               </Typography>
+              {discountInfo && (
+                <Typography variant="h6" component="span" color="text.secondary" sx={{ ml: 1, textDecoration: 'line-through' }}>
+                  CHF {planDetails.price}
+                </Typography>
+              )}
               <Typography variant="h6" component="span" color="text.secondary" sx={{ ml: 1 }}>
                 {t('subscription.billing.annual', '/ year')}
               </Typography>
@@ -169,6 +203,22 @@ const SubscriptionCheckout = () => {
             <Typography variant="body2" color="text.secondary">
               {planDetails.description}
             </Typography>
+          </Paper>
+        )}
+
+        {/* Discount Code Input */}
+        {planDetails && (
+          <Paper sx={{ p: 3, mb: 4 }}>
+            <Typography variant="h6" gutterBottom>
+              {t('subscription.checkout.discount_code', 'Have a Discount Code?')}
+            </Typography>
+            <DiscountCodeInput
+              planType={planType}
+              originalPrice={planDetails.price}
+              onDiscountApplied={handleDiscountApplied}
+              onDiscountRemoved={handleDiscountRemoved}
+              initialCode={initialCode}
+            />
           </Paper>
         )}
 

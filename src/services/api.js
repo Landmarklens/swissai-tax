@@ -172,4 +172,13 @@ export const userDataAPI = {
   getExport: (exportId) => api.get(`/api/user/export/${exportId}`),
 };
 
+// Referral API endpoints
+export const referralAPI = {
+  getMyCode: () => api.get('/api/referrals/my-code'),
+  getMyStats: () => api.get('/api/referrals/my-stats'),
+  getMyCredits: () => api.get('/api/referrals/my-credits'),
+  validateCode: (code, planType) => api.post('/api/referrals/validate-code', { code, plan_type: planType }),
+  createPromotionalCode: (data) => api.post('/api/referrals/admin/create-code', data),
+};
+
 export { api };

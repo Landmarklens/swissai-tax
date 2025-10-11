@@ -22,7 +22,7 @@ import subscriptionService from '../../services/subscriptionService';
 import authService from '../../services/authService';
 import './SubscriptionPlans.scss';
 
-const SubscriptionPlans = () => {
+const SubscriptionPlans = ({ referralCode = '' }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -68,8 +68,11 @@ const SubscriptionPlans = () => {
         return;
       }
 
-      // Paid plans: Navigate to payment method collection page
-      navigate(`/subscription/checkout/${planType}`);
+      // Paid plans: Navigate to payment method collection page with optional referral code
+      const checkoutPath = referralCode
+        ? `/subscription/checkout/${planType}?ref=${referralCode}`
+        : `/subscription/checkout/${planType}`;
+      navigate(checkoutPath);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to start subscription process');
       console.error('Error selecting plan:', err);

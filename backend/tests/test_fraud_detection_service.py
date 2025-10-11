@@ -27,6 +27,7 @@ class TestFraudDetectionService:
         # Mock queries to return 0 usages
         mock_query = MagicMock()
         mock_query.filter.return_value.count.return_value = 0
+        mock_query.filter.return_value.first.return_value = None  # No duplicate usage
         mock_db_session.query.return_value = mock_query
 
         request_metadata = {
@@ -219,6 +220,7 @@ class TestFraudDetectionService:
         # Mock queries
         mock_query = MagicMock()
         mock_query.filter.return_value.count.return_value = 0
+        mock_query.filter.return_value.first.return_value = None  # No duplicate usage
         mock_db_session.query.return_value = mock_query
 
         # Execute without IP
@@ -249,6 +251,7 @@ class TestFraudDetectionService:
 
         usage_query = MagicMock()
         usage_query.filter.return_value.count.return_value = 0
+        usage_query.filter.return_value.first.return_value = None  # No duplicate usage
 
         call_count = [0]
         def query_side_effect(model):

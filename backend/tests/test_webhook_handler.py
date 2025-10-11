@@ -29,50 +29,57 @@ def valid_webhook_signature():
 
 @pytest.fixture
 def mock_stripe_event():
-    """Create mock Stripe event"""
-    event = Mock()
-    event.id = "evt_test123"
-    event.type = "customer.subscription.created"
-    event.data = Mock()
-    event.data.object = Mock()
-    return event
+    """Create mock Stripe event as dictionary"""
+    return {
+        'id': "evt_test123",
+        'type': "customer.subscription.created",
+        'data': {
+            'object': {}
+        }
+    }
 
 
 @pytest.fixture
 def mock_subscription_object():
-    """Create mock Stripe subscription object"""
+    """Create mock Stripe subscription object as dictionary"""
     now_timestamp = int(datetime.utcnow().timestamp())
-    sub = Mock()
-    sub.id = "sub_stripe123"
-    sub.customer = "cus_test123"
-    sub.status = "active"
-    sub.current_period_start = now_timestamp
-    sub.current_period_end = now_timestamp + (365 * 24 * 60 * 60)
-    sub.trial_start = now_timestamp
-    sub.trial_end = now_timestamp + (30 * 24 * 60 * 60)
-    sub.cancel_at_period_end = False
-    sub.items = Mock()
-    sub.items.data = [Mock(price=Mock(id="price_123"))]
-    sub.metadata = {"plan_type": "basic", "user_id": str(uuid4())}
-    return sub
+    return {
+        'id': "sub_stripe123",
+        'customer': "cus_test123",
+        'status': "active",
+        'current_period_start': now_timestamp,
+        'current_period_end': now_timestamp + (365 * 24 * 60 * 60),
+        'trial_start': now_timestamp,
+        'trial_end': now_timestamp + (30 * 24 * 60 * 60),
+        'cancel_at_period_end': False,
+        'items': {
+            'data': [{'price': {'id': "price_123"}}]
+        },
+        'metadata': {"plan_type": "basic", "user_id": str(uuid4())}
+    }
 
 
 @pytest.fixture
 def mock_invoice_object():
-    """Create mock Stripe invoice object"""
+    """Create mock Stripe invoice object as dictionary"""
     now_timestamp = int(datetime.utcnow().timestamp())
-    invoice = Mock()
-    invoice.id = "in_test123"
-    invoice.customer = "cus_test123"
-    invoice.subscription = "sub_test123"
-    invoice.amount_paid = 4900
-    invoice.amount_due = 4900
-    invoice.currency = "chf"
-    invoice.status = "paid"
-    invoice.created = now_timestamp
-    invoice.invoice_pdf = "https://stripe.com/invoice.pdf"
-    invoice.hosted_invoice_url = "https://stripe.com/invoice"
-    return invoice
+    return {
+        'id': "in_test123",
+        'customer': "cus_test123",
+        'subscription': "sub_test123",
+        'amount_paid': 4900,
+        'amount_due': 4900,
+        'currency': "chf",
+        'status': "paid",
+        'created': now_timestamp,
+        'invoice_pdf': "https://stripe.com/invoice.pdf",
+        'hosted_invoice_url': "https://stripe.com/invoice",
+        'charge': "ch_test123",
+        'payment_intent': "pi_test123",
+        'status_transitions': {
+            'paid_at': now_timestamp
+        }
+    }
 
 
 class TestWebhookSignatureVerification:
@@ -115,8 +122,8 @@ class TestSubscriptionCreatedEvent:
         mock_stripe_event, mock_subscription_object
     ):
         """Test creating new subscription from webhook"""
-        mock_stripe_event.type = "customer.subscription.created"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.created"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -148,8 +155,8 @@ class TestSubscriptionCreatedEvent:
         mock_stripe_event, mock_subscription_object
     ):
         """Test updating existing subscription from webhook"""
-        mock_stripe_event.type = "customer.subscription.created"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.created"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -186,9 +193,9 @@ class TestSubscriptionUpdatedEvent:
         mock_stripe_event, mock_subscription_object
     ):
         """Test subscription status update from webhook"""
-        mock_stripe_event.type = "customer.subscription.updated"
-        mock_subscription_object.status = "active"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.updated"
+        mock_subscription_object['status'] ="active"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -217,10 +224,10 @@ class TestSubscriptionUpdatedEvent:
         mock_stripe_event, mock_subscription_object
     ):
         """Test subscription transitioning from trial to active"""
-        mock_stripe_event.type = "customer.subscription.updated"
-        mock_subscription_object.status = "active"
-        mock_subscription_object.trial_end = None  # Trial ended
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.updated"
+        mock_subscription_object['status'] ="active"
+        mock_subscription_object['trial_end'] =None  # Trial ended
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -253,9 +260,9 @@ class TestSubscriptionDeletedEvent:
         mock_stripe_event, mock_subscription_object
     ):
         """Test subscription deletion marks as canceled"""
-        mock_stripe_event.type = "customer.subscription.deleted"
-        mock_subscription_object.status = "canceled"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.deleted"
+        mock_subscription_object['status'] ="canceled"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -288,8 +295,8 @@ class TestTrialWillEndEvent:
         mock_stripe_event, mock_subscription_object
     ):
         """Test trial ending notification is logged"""
-        mock_stripe_event.type = "customer.subscription.trial_will_end"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.trial_will_end"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -325,8 +332,8 @@ class TestInvoicePaymentSucceededEvent:
         mock_stripe_event, mock_invoice_object
     ):
         """Test successful payment creates payment record"""
-        mock_stripe_event.type = "invoice.payment_succeeded"
-        mock_stripe_event.data.object = mock_invoice_object
+        mock_stripe_event['type'] ="invoice.payment_succeeded"
+        mock_stripe_event['data']['object'] =mock_invoice_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -356,8 +363,8 @@ class TestInvoicePaymentSucceededEvent:
         mock_stripe_event, mock_invoice_object
     ):
         """Test successful payment updates subscription to active"""
-        mock_stripe_event.type = "invoice.payment_succeeded"
-        mock_stripe_event.data.object = mock_invoice_object
+        mock_stripe_event['type'] ="invoice.payment_succeeded"
+        mock_stripe_event['data']['object'] =mock_invoice_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -390,9 +397,9 @@ class TestInvoicePaymentFailedEvent:
         mock_stripe_event, mock_invoice_object
     ):
         """Test failed payment updates subscription to past_due"""
-        mock_stripe_event.type = "invoice.payment_failed"
-        mock_invoice_object.status = "open"
-        mock_stripe_event.data.object = mock_invoice_object
+        mock_stripe_event['type'] ="invoice.payment_failed"
+        mock_invoice_object['status'] ="open"
+        mock_stripe_event['data']['object'] =mock_invoice_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -421,9 +428,9 @@ class TestPaymentIntentEvents:
     @patch('routers.swisstax.webhooks.get_stripe_service')
     def test_payment_intent_succeeded(self, mock_get_stripe, client, valid_webhook_signature, mock_stripe_event):
         """Test payment intent succeeded event is logged"""
-        mock_stripe_event.type = "payment_intent.succeeded"
-        payment_intent = Mock(id="pi_123", amount=4900, currency="chf")
-        mock_stripe_event.data.object = payment_intent
+        mock_stripe_event['type'] ="payment_intent.succeeded"
+        payment_intent = {"id": "pi_123", "amount": 4900, "currency": "chf"}
+        mock_stripe_event['data']['object'] =payment_intent
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -440,9 +447,9 @@ class TestPaymentIntentEvents:
     @patch('routers.swisstax.webhooks.get_stripe_service')
     def test_payment_intent_payment_failed(self, mock_get_stripe, client, valid_webhook_signature, mock_stripe_event):
         """Test payment intent failed event is logged"""
-        mock_stripe_event.type = "payment_intent.payment_failed"
-        payment_intent = Mock(id="pi_123", amount=4900, currency="chf", last_payment_error=Mock(message="Card declined"))
-        mock_stripe_event.data.object = payment_intent
+        mock_stripe_event['type'] ="payment_intent.payment_failed"
+        payment_intent = {"id": "pi_123", "amount": 4900, "currency": "chf", "last_payment_error": {"message": "Card declined"}}
+        mock_stripe_event['data']['object'] =payment_intent
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -463,8 +470,8 @@ class TestUnhandledEvents:
     @patch('routers.swisstax.webhooks.get_stripe_service')
     def test_unhandled_event_type(self, mock_get_stripe, client, valid_webhook_signature, mock_stripe_event):
         """Test unhandled event types are acknowledged"""
-        mock_stripe_event.type = "customer.created"
-        mock_stripe_event.data.object = Mock()
+        mock_stripe_event['type'] ="customer.created"
+        mock_stripe_event['data']['object'] ={}
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -489,8 +496,8 @@ class TestWebhookErrorHandling:
         mock_stripe_event, mock_subscription_object
     ):
         """Test webhook handles database errors gracefully"""
-        mock_stripe_event.type = "customer.subscription.created"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.created"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event
@@ -539,8 +546,8 @@ class TestWebhookIdempotency:
         mock_stripe_event, mock_subscription_object
     ):
         """Test processing same webhook event twice is safe"""
-        mock_stripe_event.type = "customer.subscription.created"
-        mock_stripe_event.data.object = mock_subscription_object
+        mock_stripe_event['type'] ="customer.subscription.created"
+        mock_stripe_event['data']['object'] =mock_subscription_object
 
         mock_stripe_service = Mock()
         mock_stripe_service.construct_webhook_event.return_value = mock_stripe_event

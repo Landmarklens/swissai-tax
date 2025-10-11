@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 export const useRandomUserCounter = () => {
   const { t } = useTranslation();
-  const [userCount, setUserCount] = useState(0);
+  const [userCount, setUserCount] = useState(null); // Start with null to show loading state
   const hasInitialized = useRef(false);
   const animationIntervalRef = useRef(null);
   const pollingIntervalRef = useRef(null);
@@ -38,12 +38,13 @@ export const useRandomUserCounter = () => {
               clearInterval(animationIntervalRef.current);
             }
 
-            // Animate from 0 to actual count
-            let currentValue = 0;
+            // Animate from minimum value to actual count (never show 0)
+            const minStartValue = Math.min(50, count * 0.7); // Start from 50 or 70% of actual count
+            let currentValue = minStartValue;
             const targetValue = count;
             const duration = 2000; // 2 seconds animation
             const steps = 40; // Number of steps in the animation
-            const increment = targetValue / steps;
+            const increment = (targetValue - minStartValue) / steps;
             const stepDuration = duration / steps;
 
             animationIntervalRef.current = setInterval(() => {
@@ -70,8 +71,8 @@ export const useRandomUserCounter = () => {
           hasInitialized.current = true;
           lastApiValue.current = 145;
 
-          // Start with 0 and increment to a reasonable number
-          let simulatedCount = 0;
+          // Start from a minimum value, never show 0
+          let simulatedCount = 100; // Start from 100 instead of 0
           const targetCount = 145; // Default fallback count
 
           animationIntervalRef.current = setInterval(() => {

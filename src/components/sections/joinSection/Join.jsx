@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, Skeleton } from '@mui/material';
 import CountUp from 'react-countup';
 import { useDispatch } from 'react-redux';
 import { useTranslation, Trans } from 'react-i18next';
@@ -73,23 +73,45 @@ const Join = () => {
       </Typography>
 
       <Box>
-        <Typography
-          variant="h1"
-          component="h2"
-          sx={{
-            backgroundColor: '#e1e9ff',
-            textAlign: 'center',
-            py: '30px',
-            width: { xs: '80vw', sm: '40vw' },
-            borderRadius: 1,
-            fontSize: '28px',
-            fontFamily: 'SF Pro Display',
-            color: '#3E63DD',
-            fontWeight: 700
-          }}
-        >
-          {`${_count ?? 0} ${t('tax filings started this week')}`}
-        </Typography>
+        {_count === null ? (
+          <Box
+            sx={{
+              backgroundColor: '#e1e9ff',
+              textAlign: 'center',
+              py: '30px',
+              width: { xs: '80vw', sm: '40vw' },
+              borderRadius: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Skeleton
+              variant="text"
+              width="80%"
+              height={40}
+              sx={{ bgcolor: 'rgba(62, 99, 221, 0.15)' }}
+            />
+          </Box>
+        ) : (
+          <Typography
+            variant="h1"
+            component="h2"
+            sx={{
+              backgroundColor: '#e1e9ff',
+              textAlign: 'center',
+              py: '30px',
+              width: { xs: '80vw', sm: '40vw' },
+              borderRadius: 1,
+              fontSize: '28px',
+              fontFamily: 'SF Pro Display',
+              color: '#3E63DD',
+              fontWeight: 700
+            }}
+          >
+            {`${_count} ${t('tax filings started this week')}`}
+          </Typography>
+        )}
       </Box>
 
       <Button

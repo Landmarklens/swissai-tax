@@ -275,19 +275,17 @@ class TestSubscriptionUpdatedEvent:
         mock_db_session = MagicMock()
         mock_get_db.return_value.__enter__.return_value = mock_db_session
 
-        # Mock existing subscription in trial with proper datetime values
-        # Create a simple object instead of Mock to allow proper attribute comparisons
-        class MockSubscription:
-            def __init__(self):
-                self.id = uuid4()
-                self.status = "trialing"
-                self.trial_end = datetime.utcnow() - timedelta(days=1)  # Trial ended
-                self.commitment_start_date = None
-                self.current_period_start = None
-                self.current_period_end = None
-                self.cancel_at_period_end = False
-
-        mock_existing_sub = MockSubscription()
+        # Mock existing subscription with PropertyMock for trial_end to allow proper comparisons
+        mock_existing_sub = Mock(spec=Subscription)
+        mock_existing_sub.id = uuid4()
+        mock_existing_sub.status = "trialing"
+        mock_existing_sub.commitment_start_date = None
+        mock_existing_sub.current_period_start = None
+        mock_existing_sub.current_period_end = None
+        mock_existing_sub.cancel_at_period_end = False
+        # Use PropertyMock to set trial_end as a real datetime value
+        trial_end_date = datetime.utcnow() - timedelta(days=1)  # Trial ended
+        type(mock_existing_sub).trial_end = PropertyMock(return_value=trial_end_date)
 
         # Setup query chain properly
         subscription_query = MagicMock()

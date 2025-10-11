@@ -175,7 +175,8 @@ def handle_subscription_updated(data: dict, db: Session):
 
     # Check if trial ended (transition from trialing to active)
     if new_status == 'active' and subscription.trial_end:
-        if datetime.utcnow() >= subscription.trial_end:
+        # Defensive check: ensure trial_end is a datetime object before comparison
+        if isinstance(subscription.trial_end, datetime) and datetime.utcnow() >= subscription.trial_end:
             logger.info(f"Trial ended for subscription {subscription_id}")
             # Trial has ended, commitment period started
             if not subscription.commitment_start_date:

@@ -21,6 +21,39 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/health", tags=["health"])
 
 
+@router.get("/scheduler")
+async def health_scheduler():
+    """
+    Background scheduler health check endpoint
+    Returns scheduler status and job information
+    """
+    try:
+        from services.background_jobs import get_scheduler
+
+        scheduler = get_scheduler()
+        status_info = scheduler.get_jobs_status()
+
+        if status_info['status'] == 'running':
+            return {
+                "status": "healthy",
+                "details": f"Scheduler running with {len(status_info.get('jobs', []))} jobs",
+                "jobs": status_info.get('jobs', [])
+            }
+        else:
+            return {
+                "status": "down",
+                "details": "Scheduler is not running",
+                "jobs": []
+            }
+    except Exception as e:
+        logger.error(f"Scheduler health check failed: {e}")
+        return {
+            "status": "down",
+            "details": f"Scheduler error: {str(e)[:100]}",
+            "jobs": []
+        }
+
+
 @router.get("/", response_model=SimpleHealthResponse)
 async def health_check():
     """
@@ -45,6 +78,7 @@ async def detailed_health_check(db: AsyncSession = Depends(get_db)):
         "api": await check_api_health(),
         "database": await check_database_health(db),
         "storage": await check_s3_health(),
+        "scheduler": await check_scheduler_health(),
     }
 
     # Add optional service checks
@@ -140,6 +174,38 @@ async def check_s3_health() -> Dict[str, Any]:
             "status": "down",
             "response_time_ms": 0,
             "details": f"S3 error: {str(e)[:100]}"
+        }
+
+
+async def check_scheduler_health() -> Dict[str, Any]:
+    """Check background job scheduler status"""
+    start_time = time.time()
+    try:
+        from services.background_jobs import get_scheduler
+
+        scheduler = get_scheduler()
+        status_info = scheduler.get_jobs_status()
+        response_time = int((time.time() - start_time) * 1000)
+
+        if status_info['status'] == 'running':
+            job_count = len(status_info.get('jobs', []))
+            return {
+                "status": "healthy",
+                "response_time_ms": response_time,
+                "details": f"Scheduler running with {job_count} jobs"
+            }
+        else:
+            return {
+                "status": "down",
+                "response_time_ms": response_time,
+                "details": "Scheduler is not running"
+            }
+    except Exception as e:
+        logger.error(f"Scheduler health check failed: {e}")
+        return {
+            "status": "down",
+            "response_time_ms": 0,
+            "details": f"Scheduler error: {str(e)[:100]}"
         }
 
 

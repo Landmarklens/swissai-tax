@@ -82,9 +82,17 @@ const DataExportSection = () => {
   };
 
   const handleDownload = (exportItem) => {
-    if (exportItem.file_url) {
-      window.open(exportItem.file_url, '_blank');
-    }
+    // Use the API download endpoint instead of direct S3 URL
+    // This avoids browser warnings about external domains
+    const downloadUrl = `${process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.tax'}/api/user/export/${exportItem.id}/download`;
+
+    // Create temporary anchor to trigger download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `swissai-tax-export-${exportItem.id}.${exportItem.format}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getStatusIcon = (status) => {
@@ -286,7 +294,7 @@ const DataExportSection = () => {
                     secondaryTypographyProps={{ component: 'div' }}
                   />
 
-                  {exportItem.status === 'completed' && exportItem.file_url && (
+                  {exportItem.status === 'completed' && exportItem.is_available && (
                     <Button
                       variant="outlined"
                       size="small"

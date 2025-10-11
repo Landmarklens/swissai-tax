@@ -343,8 +343,62 @@ async def get_data_export(
     )
 
 
-# TODO: Add download endpoint that streams the actual file
-# @router.get("/download-export/{export_id}")
-# async def download_export(export_id: str, ...):
-#     # Stream file from S3 or return generated content
-#     pass
+@router.get("/export/{export_id}/download")
+async def download_export(
+    export_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Download data export file
+    Proxies the file through the API to avoid S3 domain warnings
+    """
+    try:
+        from uuid import UUID
+        export_uuid = UUID(export_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid export ID")
+
+    from models.swisstax import DataExport
+    from fastapi.responses import StreamingResponse
+    import httpx
+
+    export = db.query(DataExport).filter(
+        DataExport.id == export_uuid,
+        DataExport.user_id == current_user.id
+    ).first()
+
+    if not export:
+        raise HTTPException(status_code=404, detail="Export not found")
+
+    if export.status != 'completed':
+        raise HTTPException(status_code=400, detail="Export is not ready for download")
+
+    if not export.file_url:
+        raise HTTPException(status_code=404, detail="Export file not found")
+
+    # Check if expired
+    if export.is_expired:
+        raise HTTPException(status_code=410, detail="Export has expired")
+
+    # Download file from S3 presigned URL and stream to user
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(export.file_url, timeout=30.0)
+            response.raise_for_status()
+
+            # Determine filename
+            filename = f"swissai-tax-export-{export.id}.{export.format}"
+
+            # Stream the file back to the user
+            return StreamingResponse(
+                iter([response.content]),
+                media_type='application/octet-stream',
+                headers={
+                    'Content-Disposition': f'attachment; filename="{filename}"',
+                    'Content-Length': str(len(response.content))
+                }
+            )
+    except httpx.HTTPError as e:
+        logger.error(f"Error downloading export {export_id} from S3: {e}")
+        raise HTTPException(status_code=500, detail="Failed to download export file")

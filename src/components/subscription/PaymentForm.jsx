@@ -75,7 +75,7 @@ const PaymentForm = ({ setupIntent, planType, planDetails, onSuccess, onCancel, 
 
   return (
     <Paper sx={{ p: 4 }}>
-      <form onSubmit={handleSubmit}>
+      <form role="form" onSubmit={handleSubmit}>
         {/* Security Badge */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
           <LockIcon sx={{ mr: 1, color: 'success.main' }} />

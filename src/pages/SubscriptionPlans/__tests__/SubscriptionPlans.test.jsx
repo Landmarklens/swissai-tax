@@ -399,7 +399,10 @@ describe('SubscriptionPlans', () => {
         expect(screen.getByRole('progressbar')).toBeInTheDocument();
       });
 
-      resolvePromise({ plan_type: 'free', status: 'active' });
+      await act(async () => {
+        resolvePromise({ plan_type: 'free', status: 'active' });
+        await Promise.resolve();
+      });
 
       await waitFor(() => {
         expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
@@ -430,7 +433,10 @@ describe('SubscriptionPlans', () => {
         });
       });
 
-      resolvePromise({ plan_type: 'free', status: 'active' });
+      await act(async () => {
+        resolvePromise({ plan_type: 'free', status: 'active' });
+        await Promise.resolve();
+      });
     });
   });
 

@@ -129,18 +129,19 @@ describe('Header Component', () => {
       expect(screen.getByTestId('login-modal')).toBeInTheDocument();
     });
 
-    it('should clear localStorage except input when opening login modal', () => {
+    it('should preserve localStorage including cookie consent when opening login modal', () => {
       authService.isAuthenticated.mockReturnValue(false);
-      localStorage.setItem('input', 'test%20input');
-      localStorage.setItem('otherData', 'should be removed');
+      localStorage.setItem('swissai_cookie_consent', JSON.stringify({ version: '1.0', preferences: { analytics: true } }));
+      localStorage.setItem('otherData', 'should be preserved');
 
       renderHeader();
 
       const loginButton = screen.getByRole('button', { name: 'Log In' });
       fireEvent.click(loginButton);
 
-      expect(localStorage.getItem('input')).toBe('test input');
-      expect(localStorage.getItem('otherData')).toBeNull();
+      // Cookie consent and other data should be preserved
+      expect(localStorage.getItem('swissai_cookie_consent')).toBeTruthy();
+      expect(localStorage.getItem('otherData')).toBe('should be preserved');
     });
   });
 

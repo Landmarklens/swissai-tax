@@ -118,12 +118,8 @@ const Header = () => {
 
   const handleLoginClick = () => {
     setLoginOpen(true);
-    const savedInput = localStorage.getItem('input');
-    localStorage.clear();
-    if (savedInput) {
-      const decodedInput = decodeURIComponent(savedInput);
-      localStorage.setItem('input', decodedInput);
-    }
+    // Note: We intentionally don't clear localStorage here to preserve
+    // cookie consent and other user preferences across login sessions
   };
 
   const handleModalClose = () => {

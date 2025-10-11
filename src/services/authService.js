@@ -173,7 +173,17 @@ const authService = {
     } finally {
       // Clear local state
       authServiceInstance.setCurrentUser(null);
-      localStorage.clear();
+
+      // Selectively clear auth-related items while preserving user preferences
+      const itemsToPreserve = ['swissai_cookie_consent', 'i18nextLng'];
+      const allKeys = Object.keys(localStorage);
+
+      allKeys.forEach(key => {
+        if (!itemsToPreserve.includes(key)) {
+          localStorage.removeItem(key);
+        }
+      });
+
       // Don't redirect here - let the calling code handle navigation
     }
   },

@@ -246,6 +246,33 @@ describe('authService', () => {
       expect(localStorage.getItem('user')).toBeNull();
       expect(localStorage.getItem('otherData')).toBeNull();
     });
+
+    it('should preserve cookie consent and language preferences when logging out', async () => {
+      axios.post.mockResolvedValue({ data: { success: true } });
+      localStorage.setItem('user', JSON.stringify({ id: 1, email: 'test@example.com' }));
+      localStorage.setItem('swissai_cookie_consent', JSON.stringify({
+        version: '1.0',
+        preferences: { analytics: true, preferences: true }
+      }));
+      localStorage.setItem('i18nextLng', 'de');
+      localStorage.setItem('authToken', 'token123');
+      localStorage.setItem('otherData', 'should be cleared');
+
+      await authService.logout();
+
+      // Auth-related items should be cleared
+      expect(localStorage.getItem('user')).toBeNull();
+      expect(localStorage.getItem('authToken')).toBeNull();
+      expect(localStorage.getItem('otherData')).toBeNull();
+
+      // User preferences should be preserved
+      expect(localStorage.getItem('swissai_cookie_consent')).toBeTruthy();
+      expect(JSON.parse(localStorage.getItem('swissai_cookie_consent'))).toEqual({
+        version: '1.0',
+        preferences: { analytics: true, preferences: true }
+      });
+      expect(localStorage.getItem('i18nextLng')).toBe('de');
+    });
   });
 
   describe('getCurrentUser', () => {

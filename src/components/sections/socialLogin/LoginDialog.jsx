@@ -15,7 +15,7 @@ const LoginDialog = ({ open, handleClose }) => {
 
   const handleGoogleLogin = (response) => {
     handleClose();
-    localStorage.clear()
+    // Note: Removed localStorage.clear() to preserve cookie consent and user preferences
   };
 
   const handleMicrosoftLogin = (response) => {

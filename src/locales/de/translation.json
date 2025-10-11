@@ -2468,5 +2468,29 @@
       "enable_2fa": "Zwei-Faktor-Authentifizierung aktivieren",
       "contact": "Fragen? Kontaktieren Sie security@swissai.tax"
     }
-  }
+  },
+  "Referrals": "Empfehlungen",
+  "Refer Friends & Earn Rewards": "Freunde empfehlen & Belohnungen verdienen",
+  "Share your referral code and earn CHF 10 credit for each friend who subscribes": "Teilen Sie Ihren Empfehlungscode und verdienen Sie CHF 10 Guthaben für jeden Freund, der sich anmeldet",
+  "Total Referrals": "Gesamt Empfehlungen",
+  "converted to paid subscriptions": "in bezahlte Abonnements umgewandelt",
+  "Total Earned": "Gesamt Verdient",
+  "Lifetime rewards from referrals": "Lebenslange Belohnungen aus Empfehlungen",
+  "Available Credits": "Verfügbares Guthaben",
+  "Can be used for subscription payments": "Kann für Abonnementzahlungen verwendet werden",
+  "Your Referral Code": "Ihr Empfehlungscode",
+  "Share this code with friends or use the link below": "Teilen Sie diesen Code mit Freunden oder verwenden Sie den unten stehenden Link",
+  "Copy Code": "Code kopieren",
+  "Copy Link": "Link kopieren",
+  "Share": "Teilen",
+  "How It Works": "Wie es funktioniert",
+  "Share Your Code": "Teilen Sie Ihren Code",
+  "Send your unique referral code or link to friends": "Senden Sie Ihren einzigartigen Empfehlungscode oder Link an Freunde",
+  "They Subscribe": "Sie abonnieren",
+  "Your friend uses the code and gets 10% off their first year": "Ihr Freund verwendet den Code und erhält 10% Rabatt auf das erste Jahr",
+  "You Earn Credits": "Sie verdienen Guthaben",
+  "Get CHF 10 credit when they complete their payment": "Erhalten Sie CHF 10 Guthaben, wenn sie ihre Zahlung abschließen",
+  "Credit History": "Guthabenhistorie",
+  "subscription.checkout.discount_code": "Haben Sie einen Rabattcode?",
+  "Failed to load referral data": "Fehler beim Laden der Empfehlungsdaten"
 }

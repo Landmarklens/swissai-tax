@@ -2172,5 +2172,18 @@
       "enable_2fa": "Attiva l'autenticazione a due fattori",
       "contact": "Domande? Contatta security@swissai.tax"
     }
-  }
+  },
+  "Referrals": "Referenze",
+  "Refer Friends & Earn Rewards": "Segnala amici e guadagna premi",
+  "Share your referral code and earn CHF 10 credit for each friend who subscribes": "Condividi il tuo codice di riferimento e guadagna CHF 10 di credito per ogni amico che si abbona",
+  "Total Referrals": "Totale referenze",
+  "Total Earned": "Totale guadagnato",
+  "Available Credits": "Crediti disponibili",
+  "Your Referral Code": "Il tuo codice di riferimento",
+  "Copy Link": "Copia link",
+  "Share": "Condividi",
+  "How It Works": "Come funziona",
+  "Credit History": "Storico crediti",
+  "subscription.checkout.discount_code": "Hai un codice sconto?",
+  "Failed to load referral data": "Impossibile caricare i dati di riferimento"
 }

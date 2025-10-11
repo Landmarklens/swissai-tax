@@ -2127,5 +2127,18 @@
       "enable_2fa": "Activer l'authentification à deux facteurs",
       "contact": "Des questions? Contactez security@swissai.tax"
     }
-  }
+  },
+  "Referrals": "Parrainages",
+  "Refer Friends & Earn Rewards": "Parrainer des amis et gagner des récompenses",
+  "Share your referral code and earn CHF 10 credit for each friend who subscribes": "Partagez votre code de parrainage et gagnez CHF 10 de crédit pour chaque ami qui s'abonne",
+  "Total Referrals": "Total des parrainages",
+  "Total Earned": "Total gagné",
+  "Available Credits": "Crédits disponibles",
+  "Your Referral Code": "Votre code de parrainage",
+  "Copy Link": "Copier le lien",
+  "Share": "Partager",
+  "How It Works": "Comment ça marche",
+  "Credit History": "Historique des crédits",
+  "subscription.checkout.discount_code": "Avez-vous un code de réduction?",
+  "Failed to load referral data": "Échec du chargement des données de parrainage"
 }

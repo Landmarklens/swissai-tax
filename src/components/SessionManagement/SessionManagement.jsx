@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -36,16 +36,14 @@ const SessionManagement = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [showRevokeAllDialog, setShowRevokeAllDialog] = useState(false);
 
-  // Load sessions on mount
-  useEffect(() => {
-    loadSessions();
-  }, []);
-
   /**
    * Load all active sessions
+   * @param {boolean} showLoading - Show loading spinner (default: true)
    */
-  const loadSessions = async () => {
-    setLoading(true);
+  const loadSessions = useCallback(async (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true);
+    }
     setError('');
 
     try {
@@ -60,9 +58,24 @@ const SessionManagement = () => {
       console.error('[Sessions] Load error:', err);
       setError(t('sessions.error.loadFailed'));
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
-  };
+  }, [t]); // Only recreate if translation function changes
+
+  // Load sessions on mount and set up auto-refresh
+  useEffect(() => {
+    loadSessions(true); // Initial load with loading spinner
+
+    // Auto-refresh sessions every 30 seconds to keep "last active" times current
+    const refreshInterval = setInterval(() => {
+      loadSessions(false); // Silent refresh without loading spinner
+    }, 30000); // 30 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(refreshInterval);
+  }, [loadSessions]); // Recreate interval if loadSessions changes
 
   /**
    * Revoke a specific session
@@ -77,8 +90,8 @@ const SessionManagement = () => {
 
       if (result.success) {
         setSuccess(t('sessions.revokeSuccess'));
-        // Reload sessions
-        await loadSessions();
+        // Reload sessions with loading indicator
+        await loadSessions(true);
       } else {
         setError(result.error || t('sessions.error.revokeFailed'));
       }
@@ -104,8 +117,8 @@ const SessionManagement = () => {
       if (result.success) {
         setSuccess(t('sessions.revokeAllSuccess', { count: result.data.count || 0 }));
         setShowRevokeAllDialog(false);
-        // Reload sessions
-        await loadSessions();
+        // Reload sessions with loading indicator
+        await loadSessions(true);
       } else {
         setError(result.error || t('sessions.error.revokeAllFailed'));
       }
@@ -162,7 +175,7 @@ const SessionManagement = () => {
           {/* Refresh Button */}
           <Button
             startIcon={<RefreshIcon />}
-            onClick={loadSessions}
+            onClick={() => loadSessions(true)}
             disabled={loading}
             variant="outlined"
             size="small"

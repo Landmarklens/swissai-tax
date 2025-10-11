@@ -54,6 +54,16 @@ const ReviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/ReviewPage
 const PaymentPage = withSuspense(lazy(() => import('../pages/TaxFiling/PaymentPage')));
 const SubmissionPage = withSuspense(lazy(() => import('../pages/TaxFiling/SubmissionPage')));
 
+// Subscription pages
+const SubscriptionCheckout = withSuspense(lazy(() => import('../pages/SubscriptionCheckout/SubscriptionCheckout')));
+const ManageSubscription = withSuspense(lazy(() => import('../pages/ManageSubscription/ManageSubscription')));
+
+// Referral pages
+const ReferralDashboard = withSuspense(lazy(() => import('../pages/Referrals/ReferralDashboard')));
+
+// Admin pages
+const PromotionalCodeCreator = withSuspense(lazy(() => import('../pages/Admin/PromotionalCodeCreator')));
+
 // Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -114,6 +124,42 @@ export const LAZY_NAVIGATION_ROUTE = [
     element: (
       <ProtectedRoute>
         <Billing />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/referrals',
+    element: (
+      <ProtectedRoute>
+        <ReferralDashboard />
+      </ProtectedRoute>
+    )
+  },
+
+  // Subscription management (protected)
+  {
+    path: '/subscription/checkout/:planType',
+    element: (
+      <ProtectedRoute>
+        <SubscriptionCheckout />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/subscription/manage',
+    element: (
+      <ProtectedRoute>
+        <ManageSubscription />
+      </ProtectedRoute>
+    )
+  },
+
+  // Admin pages (protected - add role check later)
+  {
+    path: '/admin/promotional-codes',
+    element: (
+      <ProtectedRoute>
+        <PromotionalCodeCreator />
       </ProtectedRoute>
     )
   },

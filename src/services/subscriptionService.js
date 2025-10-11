@@ -32,14 +32,22 @@ const subscriptionService = {
    * Create a new subscription
    * @param {string} planType - 'annual_flex' or '5_year_lock'
    * @param {string} paymentMethodId - Stripe payment method ID (optional)
+   * @param {string} discountCode - Referral or promotional code (optional)
    * @returns {Promise} Subscription details
    */
-  createSubscription: async (planType, paymentMethodId = null) => {
+  createSubscription: async (planType, paymentMethodId = null, discountCode = null) => {
     try {
-      const response = await api.post('/api/subscription/create', {
+      const payload = {
         plan_type: planType,
         payment_method_id: paymentMethodId
-      });
+      };
+
+      // Add discount code if provided
+      if (discountCode) {
+        payload.discount_code = discountCode;
+      }
+
+      const response = await api.post('/api/subscription/create', payload);
       return {
         success: true,
         data: response.data

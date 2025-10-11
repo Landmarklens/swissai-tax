@@ -220,12 +220,14 @@ async def get_current_user(request: Request):
                     session_exists = session_service.get_session_by_id(db, session_id)
                     if session_exists:
                         # Session exists, validate and update it
-                        session_service.validate_session(db, session_id)
+                        is_valid = session_service.validate_session(db, session_id)
+                        if not is_valid:
+                            logger.warning(f"Session {session_id} validation failed - session may be expired or revoked")
                     # If session doesn't exist, that's okay - might be a legacy login
                     # The session will be created on next login
                 except Exception as e:
                     # Log but don't fail auth - session tracking is secondary to authentication
-                    logger.debug(f"Session validation skipped: {e}")
+                    logger.warning(f"Session validation skipped due to error: {e}", exc_info=True)
                 finally:
                     db.close()
 
@@ -246,9 +248,11 @@ async def get_current_user(request: Request):
             try:
                 session_exists = session_service.get_session_by_id(db, session_id)
                 if session_exists:
-                    session_service.validate_session(db, session_id)
+                    is_valid = session_service.validate_session(db, session_id)
+                    if not is_valid:
+                        logger.warning(f"Session {session_id} validation failed - session may be expired or revoked")
             except Exception as e:
-                logger.debug(f"Session validation skipped: {e}")
+                logger.warning(f"Session validation skipped due to error: {e}", exc_info=True)
             finally:
                 db.close()
 

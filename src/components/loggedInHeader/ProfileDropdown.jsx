@@ -8,6 +8,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import FolderIcon from '@mui/icons-material/Folder';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
 import { selectAccount } from '../../store/slices/accountSlice';
@@ -40,6 +41,9 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
         break;
       case 'billing':
         navigate('/billing');
+        break;
+      case 'referrals':
+        navigate('/referrals');
         break;
       case 'settings':
         navigate('/settings');
@@ -118,6 +122,13 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
           <ReceiptIcon sx={{ fontSize: 20 }} />
         </ListItemIcon>
         <ListItemText>{t('Billing')}</ListItemText>
+      </MenuItem>
+
+      <MenuItem onClick={() => handleMenuClick('referrals')}>
+        <ListItemIcon sx={{ minWidth: '28px!important' }}>
+          <CardGiftcardIcon sx={{ fontSize: 20 }} />
+        </ListItemIcon>
+        <ListItemText>{t('Referrals')}</ListItemText>
       </MenuItem>
 
       <MenuItem onClick={() => handleMenuClick('settings')}>

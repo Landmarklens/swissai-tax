@@ -48,14 +48,7 @@ const EnhancedFAQ = () => {
     setError(null);
 
     try {
-      const data = await faqService.getAllFAQs();
-      setFaqData(data);
-      setSelectedCategory(null);
-      setSearchResults(null);
-    } catch (err) {
-      console.error('Failed to load FAQs:', err);
-      setError('Failed to load FAQs. Using offline data.');
-      // Fallback to static FAQ data
+      // Use static FAQ data with translations for multi-language support
       const staticFAQ = getFAQ(t);
       setFaqData({
         title: t('faq.heading'),
@@ -71,6 +64,11 @@ const EnhancedFAQ = () => {
           }))
         }))
       });
+      setSelectedCategory(null);
+      setSearchResults(null);
+    } catch (err) {
+      console.error('Failed to load FAQs:', err);
+      setError('Failed to load FAQs.');
     } finally {
       setLoading(false);
     }
@@ -86,12 +84,7 @@ const EnhancedFAQ = () => {
     setSearching(true);
 
     try {
-      const results = await faqService.searchFAQs(searchQuery);
-      setSearchResults(results);
-      setSelectedCategory(null);
-    } catch (err) {
-      console.error('Search failed:', err);
-      // Perform local search as fallback
+      // Perform local search in static FAQ data
       if (faqData) {
         const localResults = [];
         faqData.categories.forEach(category => {
@@ -110,6 +103,8 @@ const EnhancedFAQ = () => {
         setSearchResults(localResults);
         setSelectedCategory(null);
       }
+    } catch (err) {
+      console.error('Search failed:', err);
     } finally {
       setSearching(false);
     }

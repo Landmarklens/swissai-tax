@@ -42,8 +42,7 @@ jobs:
 
     - name: Run tests
       run: |
-        echo "Tests will be added here"
-        # npm test -- --coverage --watchAll=false
+        npm test -- --coverage --watchAll=false --passWithNoTests=false
 
     - name: Build application
       env:

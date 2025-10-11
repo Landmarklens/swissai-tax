@@ -51,8 +51,8 @@ const BillingTab = () => {
         subscriptionService.getInvoices()
       ]);
 
-      setSubscription(subscriptionData);
-      setInvoices(invoicesData || []);
+      setSubscription(subscriptionData?.data || null);
+      setInvoices(invoicesData?.data || []);
     } catch (err) {
       setError('Failed to load billing information');
       console.error('Error fetching subscription data:', err);

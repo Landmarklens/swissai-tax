@@ -143,6 +143,7 @@ class DocumentService:
                 document_type as document_type_name
             FROM swisstax.documents
             WHERE session_id = %s::uuid
+                AND ocr_status != 'deleted'
             ORDER BY created_at DESC
         """
         documents = execute_query(query, (session_id,))
@@ -369,6 +370,7 @@ class DocumentService:
                 COALESCE(SUM(file_size), 0) as total_bytes
             FROM swisstax.documents
             WHERE user_id = %s
+                AND ocr_status != 'deleted'
         """
         result = execute_one(query, (user_id,))
 
@@ -401,6 +403,7 @@ class DocumentService:
                 EXTRACT(YEAR FROM created_at) as upload_year
             FROM swisstax.documents
             WHERE user_id = %s
+                AND ocr_status != 'deleted'
             ORDER BY created_at DESC
         """
         documents = execute_query(query, (user_id,))
@@ -428,6 +431,7 @@ class DocumentService:
                 document_type
             FROM swisstax.documents
             WHERE user_id = %s
+                AND ocr_status != 'deleted'
             ORDER BY created_at DESC
         """
         documents = execute_query(query, (user_id,))

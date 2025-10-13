@@ -232,7 +232,10 @@ class SessionService:
                 UserSession.session_id == session_id
             ).update({"last_active": datetime.utcnow()})
             db.commit()
-            logger.debug(f"Updated last_active for session {session_id}, rows affected: {result}")
+            if result == 0:
+                logger.warning(f"Update last_active for session {session_id}: No rows affected (session not found)")
+            else:
+                logger.info(f"Updated last_active for session {session_id}, rows affected: {result}")
         except Exception as e:
             logger.warning(f"Failed to update last_active for session {session_id}: {e}", exc_info=True)
             db.rollback()

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # NOTE: app.py already includes: auth, user, user_counter, dashboard, profile, settings, filing, payment
 # We only add the NEW routers here to avoid duplicates
 try:
-    from routers import (documents, faq, health, insights, interview, multi_canton_filing,
+    from routers import (debug_device, documents, faq, health, insights, interview, multi_canton_filing,
                          pdf_generation, sessions, status, tax_calculation, tax_filing, two_factor)
 
     # Tax-specific routers (not in app.py)
@@ -40,6 +40,9 @@ try:
     # Health check and status routers (no prefix - public endpoints)
     app.include_router(health.router, tags=["Health"])
     app.include_router(status.router, tags=["Status"])
+
+    # Debug router (for testing - can be removed in production)
+    app.include_router(debug_device.router, prefix="/api", tags=["Debug"])
 
     logger.info("All routers loaded successfully")
 except ImportError as e:

@@ -45,7 +45,7 @@ const ReviewPage = () => {
       const sessionId = location.state?.session_id || localStorage.getItem('currentSessionId');
 
       if (!sessionId) {
-        navigate('/dashboard');
+        navigate('/filings');
         return;
       }
 
@@ -144,8 +144,8 @@ const ReviewPage = () => {
       <Container maxWidth="lg" sx={{ py: 6, flex: 1 }}>
         {/* Breadcrumbs */}
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} sx={{ mb: 3 }}>
-          <MuiLink component={Link} to="/dashboard" underline="hover" color="inherit">
-            {t('Dashboard')}
+          <MuiLink component={Link} to="/filings" underline="hover" color="inherit">
+            {t('Tax Filings')}
           </MuiLink>
           <MuiLink component={Link} to="/tax-filing/interview" underline="hover" color="inherit">
             {t('Interview')}

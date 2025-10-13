@@ -40,7 +40,6 @@ const Security = withSuspense(lazy(() => import('../pages/Security/Security')));
 const SubscriptionPlans = withSuspense(lazy(() => import('../pages/SubscriptionPlans/SubscriptionPlans')));
 
 // Dashboard and account pages
-const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
 const Profile = withSuspense(lazy(() => import('../pages/Profile/Profile')));
 const Settings = withSuspense(lazy(() => import('../pages/Settings/Settings')));
 const Documents = withSuspense(lazy(() => import('../pages/Documents/Documents')));
@@ -88,14 +87,6 @@ export const LAZY_NAVIGATION_ROUTE = [
   { path: '/', element: <Homepage /> },
 
   // Dashboard and account pages (protected)
-  {
-    path: '/dashboard',
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    )
-  },
   {
     path: '/profile',
     element: (

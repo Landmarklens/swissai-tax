@@ -67,7 +67,6 @@ const Header = () => {
   ];
 
   const loggedInMenuOptions = [
-    { to: '/dashboard', label: t('Dashboard') },
     { to: '/filings', label: t('Tax Filings') },
     { to: '/documents', label: t('Documents') },
     { to: '/profile', label: t('Profile') },
@@ -109,7 +108,7 @@ const Header = () => {
 
   const getStartedHandler = () => {
     if (isAuthenticated) {
-      return navigate('/dashboard');
+      return navigate('/filings');
     }
 
     // toast.error('Please log in');

@@ -49,13 +49,13 @@ const Settings = () => {
         >
           <MuiLink
             component={Link}
-            to="/dashboard"
+            to="/filings"
             underline="hover"
             color="inherit"
             sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
           >
             <HomeIcon fontSize="small" />
-            {t('Dashboard')}
+            {t('Tax Filings')}
           </MuiLink>
           <Typography color="text.primary">{t('Settings')}</Typography>
         </Breadcrumbs>

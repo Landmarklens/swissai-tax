@@ -138,7 +138,7 @@ const TaxLoginModal = ({ open, onClose, mode: initialMode = 'choice' }) => {
       if (response.access_token) {
         toast.success(t('auth.login_success'));
         onClose();
-        navigate('/dashboard');
+        navigate('/filings');
       }
     } catch (error) {
       toast.error(error.message || t('auth.login_failed'));

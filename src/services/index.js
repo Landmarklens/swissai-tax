@@ -4,11 +4,10 @@
  */
 
 // API Client
-export { api, interviewAPI, documentAPI, calculationAPI, userAPI, dashboardAPI, profileAPI, settingsAPI, filingAPI, paymentAPI, authAPI } from './api';
+export { api, interviewAPI, documentAPI, calculationAPI, userAPI, profileAPI, settingsAPI, filingAPI, paymentAPI, authAPI } from './api';
 
 // Service Modules
 export { default as authService } from './authService';
-export { default as dashboardService } from './dashboardService';
 export { default as profileService } from './profileService';
 export { default as settingsService } from './settingsService';
 export { default as filingService } from './filingService';

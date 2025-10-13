@@ -98,7 +98,7 @@ const SubmissionPage = () => {
   };
 
   const handleGoToDashboard = () => {
-    navigate('/dashboard');
+    navigate('/filings');
   };
 
   // Success Dialog

@@ -228,9 +228,12 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
                   display: 'flex',
                   flexDirection: 'column',
                   position: 'relative',
-                  border: plan.popular ? '3px solid #1976d2' : plan.isFree ? '1px solid #e0e0e0' : '2px solid #e0e0e0',
+                  border: plan.popular ? '4px solid #1976d2' : plan.isFree ? '1px solid #e0e0e0' : '2px solid #e0e0e0',
+                  borderRadius: plan.popular ? 3 : 2,
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   bgcolor: plan.popular ? '#f5f9ff' : 'white',
+                  mt: plan.popular ? 2 : 0,
+                  mb: plan.popular ? 2 : 0,
                   '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: plan.popular ? '0 16px 32px rgba(25,118,210,0.25)' : '0 12px 24px rgba(0,0,0,0.15)'
@@ -242,17 +245,23 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
                     color="primary"
                     sx={{
                       position: 'absolute',
-                      top: -12,
+                      top: -16,
                       left: '50%',
                       transform: 'translateX(-50%)',
                       fontWeight: 'bold',
                       fontSize: '0.75rem',
-                      height: 28
+                      height: 30,
+                      px: 2
                     }}
                   />
                 )}
 
-                <CardContent sx={{ flexGrow: 1, p: 4 }}>
+                <CardContent sx={{
+                  flexGrow: 1,
+                  p: plan.popular ? 4 : 4,
+                  pt: plan.popular ? 5 : 4,
+                  pb: plan.popular ? 5 : 4
+                }}>
                   {/* Plan Header */}
                   <Typography variant="h4" component="h2" gutterBottom>
                     {plan.name}

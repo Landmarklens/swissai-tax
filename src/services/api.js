@@ -102,11 +102,6 @@ export const userAPI = {
   listUsers: () => api.get('/api/user/list'),
 };
 
-// Dashboard API endpoints
-export const dashboardAPI = {
-  getDashboard: () => api.get('/api/dashboard/'),
-};
-
 // Profile API endpoints
 export const profileAPI = {
   getProfile: () => api.get('/api/profile/'),

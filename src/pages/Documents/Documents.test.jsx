@@ -52,34 +52,24 @@ const mockDocuments = [
   }
 ];
 
-const renderWithRouter = async (component) => {
-  let result;
-  await act(async () => {
-    result = render(
-      <BrowserRouter>
-        {component}
-      </BrowserRouter>
-    );
-  });
-  return result;
+const renderWithRouter = (component) => {
+  return render(
+    <BrowserRouter>
+      {component}
+    </BrowserRouter>
+  );
 };
 
 describe('Documents Page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
   });
 
   describe('Initial Load', () => {
-    test('renders loading state initially', async () => {
+    test('renders loading state initially', () => {
       documentAPI.getAllUserDocuments = jest.fn(() => new Promise(() => {})); // Never resolves
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       expect(screen.getByRole('progressbar')).toBeInTheDocument();
     });
@@ -89,7 +79,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: mockDocuments })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('tax_2024.pdf')).toBeInTheDocument();
@@ -104,7 +94,7 @@ describe('Documents Page', () => {
         Promise.reject(new Error('Network error'))
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('Failed to load documents. Please try again.')).toBeInTheDocument();
@@ -116,7 +106,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: [] })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('No documents found')).toBeInTheDocument();
@@ -130,7 +120,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: mockDocuments })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         // Check that both years are displayed
@@ -144,7 +134,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: mockDocuments })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText(/1.*documents/)).toBeInTheDocument(); // 1 document in each year
@@ -156,7 +146,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: mockDocuments })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         const yearElements = screen.getAllByRole('button', { expanded: false }).map(el => el.textContent);
@@ -181,7 +171,7 @@ describe('Documents Page', () => {
       const appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation(() => {});
       const removeChildSpy = jest.spyOn(document.body, 'removeChild').mockImplementation(() => {});
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('tax_2024.pdf')).toBeInTheDocument();
@@ -189,11 +179,7 @@ describe('Documents Page', () => {
 
       // Click download button
       const downloadButtons = screen.getAllByRole('button', { name: '' });
-
-      await act(async () => {
-        fireEvent.click(downloadButtons[0]);
-        jest.advanceTimersByTime(150);
-      });
+      fireEvent.click(downloadButtons[0]);
 
       await waitFor(() => {
         expect(documentAPI.getDownloadUrl).toHaveBeenCalledWith('doc-1');
@@ -212,7 +198,7 @@ describe('Documents Page', () => {
       );
       documentAPI.getDownloadUrl = jest.fn(() => new Promise(() => {})); // Never resolves
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('tax_2024.pdf')).toBeInTheDocument();
@@ -220,10 +206,7 @@ describe('Documents Page', () => {
 
       // Click download button
       const downloadButtons = screen.getAllByRole('button', { name: '' });
-
-      await act(async () => {
-        fireEvent.click(downloadButtons[0]);
-      });
+      fireEvent.click(downloadButtons[0]);
 
       // Should show loading spinner
       await waitFor(() => {
@@ -240,7 +223,7 @@ describe('Documents Page', () => {
         Promise.reject(new Error('Download failed'))
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('tax_2024.pdf')).toBeInTheDocument();
@@ -248,10 +231,7 @@ describe('Documents Page', () => {
 
       // Click download button
       const downloadButtons = screen.getAllByRole('button', { name: '' });
-
-      await act(async () => {
-        fireEvent.click(downloadButtons[0]);
-      });
+      fireEvent.click(downloadButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByText('Failed to download document. Please try again.')).toBeInTheDocument();
@@ -266,7 +246,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: {} }) // No URL
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('tax_2024.pdf')).toBeInTheDocument();
@@ -274,10 +254,7 @@ describe('Documents Page', () => {
 
       // Click download button
       const downloadButtons = screen.getAllByRole('button', { name: '' });
-
-      await act(async () => {
-        fireEvent.click(downloadButtons[0]);
-      });
+      fireEvent.click(downloadButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByText('Failed to download document. Please try again.')).toBeInTheDocument();
@@ -291,7 +268,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: mockDocuments })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText(/1\.00 MB/)).toBeInTheDocument(); // 1048576 bytes
@@ -304,7 +281,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: mockDocuments })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         // Should display localized dates
@@ -323,7 +300,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: [invalidDoc] })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('N/A')).toBeInTheDocument();
@@ -337,7 +314,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: [] })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByTestId('header')).toBeInTheDocument();
@@ -350,7 +327,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: [] })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByTestId('document-management')).toBeInTheDocument();
@@ -362,7 +339,7 @@ describe('Documents Page', () => {
         Promise.resolve({ data: [] })
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('home')).toBeInTheDocument();
@@ -377,7 +354,7 @@ describe('Documents Page', () => {
         Promise.reject(new Error('Network error'))
       );
 
-      await renderWithRouter(<Documents />);
+      renderWithRouter(<Documents />);
 
       await waitFor(() => {
         expect(screen.getByText('Failed to load documents. Please try again.')).toBeInTheDocument();
@@ -385,10 +362,7 @@ describe('Documents Page', () => {
 
       // Click close button on snackbar
       const closeButton = screen.getByRole('button', { name: /close/i });
-
-      await act(async () => {
-        fireEvent.click(closeButton);
-      });
+      fireEvent.click(closeButton);
 
       await waitFor(() => {
         expect(screen.queryByText('Failed to load documents. Please try again.')).not.toBeInTheDocument();

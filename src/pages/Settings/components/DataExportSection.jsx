@@ -163,7 +163,9 @@ const DataExportSection = () => {
         {/* Success Message */}
         {success && (
           <Alert severity="success" onClose={() => setSuccess('')} sx={{ mb: 3 }}>
-            {success}
+            <Typography variant="body2" sx={{ color: '#000' }}>
+              {success}
+            </Typography>
           </Alert>
         )}
 
@@ -306,8 +308,13 @@ const DataExportSection = () => {
                     </Button>
                   )}
 
-                  {exportItem.status === 'processing' && (
-                    <CircularProgress size={24} />
+                  {(exportItem.status === 'processing' || exportItem.status === 'pending') && (
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <CircularProgress size={24} />
+                      <Typography variant="caption" color="text.secondary">
+                        Preparing export...
+                      </Typography>
+                    </Box>
                   )}
 
                   {exportItem.status === 'failed' && (

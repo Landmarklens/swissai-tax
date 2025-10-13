@@ -100,21 +100,39 @@ class SessionService:
                     )
                 ).update({"is_current": False})
 
-            # Clean up old sessions from the same device/IP to prevent duplicates
-            # Keep only the most recent session per device/IP combination
+            # Clean up old sessions from the same device using hybrid approach:
+            # 1. Same device + same IP: Always revoke (immediate duplicate)
+            # 2. Same device + different IP: Only revoke if inactive > 30 min (stale session)
             try:
-                old_sessions = db.query(UserSession).filter(
+                # Criterion 1: Same device AND same IP (definite duplicate)
+                exact_duplicates = db.query(UserSession).filter(
                     and_(
                         UserSession.user_id == new_session.user_id,
                         UserSession.device_name == new_session.device_name,
                         UserSession.ip_address == new_session.ip_address,
                         UserSession.is_active == True,
-                        UserSession.session_id != session_id  # Don't include the new session
+                        UserSession.session_id != session_id
                     )
                 ).all()
 
+                # Criterion 2: Same device, different IP, but inactive for > 30 minutes
+                # (likely a stale session from network switch)
+                stale_threshold = datetime.utcnow() - timedelta(minutes=30)
+                stale_same_device = db.query(UserSession).filter(
+                    and_(
+                        UserSession.user_id == new_session.user_id,
+                        UserSession.device_name == new_session.device_name,
+                        UserSession.ip_address != new_session.ip_address,
+                        UserSession.is_active == True,
+                        UserSession.last_active < stale_threshold,
+                        UserSession.session_id != session_id
+                    )
+                ).all()
+
+                old_sessions = exact_duplicates + stale_same_device
+
                 if old_sessions:
-                    logger.info(f"Found {len(old_sessions)} old sessions from same device/IP for user {user_id}, revoking them")
+                    logger.info(f"Found {len(old_sessions)} old sessions ({len(exact_duplicates)} exact duplicates, {len(stale_same_device)} stale) from same device for user {user_id}, revoking them")
                     for old_session in old_sessions:
                         old_session.revoke()
             except Exception as e:

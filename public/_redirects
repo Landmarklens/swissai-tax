@@ -1,0 +1,3 @@
+# Redirect all routes to index.html for React Router to handle
+# Except for files with extensions (static assets)
+/*    /index.html   200

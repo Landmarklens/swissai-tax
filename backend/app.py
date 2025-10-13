@@ -212,11 +212,28 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     logger.error(f"Validation errors: {exc.errors()}")
     logger.error(f"Request body: {await request.body()}")
 
+    # Convert errors to JSON-serializable format
+    errors = []
+    for error in exc.errors():
+        error_dict = {
+            "type": error.get("type"),
+            "loc": error.get("loc"),
+            "msg": error.get("msg"),
+            "input": error.get("input")
+        }
+        # Only include ctx if it exists and is serializable
+        if "ctx" in error:
+            ctx = error["ctx"]
+            if isinstance(ctx, dict):
+                # Convert any error objects to strings
+                error_dict["ctx"] = {k: str(v) if isinstance(v, Exception) else v for k, v in ctx.items()}
+        errors.append(error_dict)
+
     return JSONResponse(
         status_code=422,
         content={
-            "detail": exc.errors(),
-            "body": exc.body
+            "detail": errors,
+            "body": exc.body if exc.body else None
         }
     )
 

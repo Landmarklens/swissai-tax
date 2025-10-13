@@ -10,6 +10,8 @@ from fastapi.testclient import TestClient
 
 from main import app
 from models.swisstax.user import User
+from core.security import get_current_user
+from db.session import get_db
 
 
 class TestSessionRouter:
@@ -53,18 +55,22 @@ class TestSessionRouter:
             "expires_at": (datetime.utcnow() + timedelta(days=30)).isoformat()
         }
 
+    @pytest.fixture(autouse=True)
+    def setup_dependency_overrides(self):
+        """Setup and teardown for dependency overrides."""
+        yield
+        # Clear overrides after each test
+        app.dependency_overrides.clear()
+
     # Test GET /sessions
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_list_sessions_success(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user, mock_session_data
+        self, mock_session_service, client, test_user, mock_session_data
     ):
         """Test listing sessions successfully."""
-        # Setup mocks
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        # Override dependencies
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
 
         mock_session = Mock()
         mock_session.to_dict.return_value = mock_session_data
@@ -80,16 +86,13 @@ class TestSessionRouter:
         assert len(data["sessions"]) == 1
         assert data["count"] == 1
 
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_list_sessions_empty(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user
+        self, mock_session_service, client, test_user
     ):
         """Test listing sessions when user has no sessions."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
         mock_session_service.get_user_sessions.return_value = []
 
         response = client.get("/api/sessions")
@@ -100,16 +103,13 @@ class TestSessionRouter:
         assert len(data["sessions"]) == 0
         assert data["count"] == 0
 
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_list_sessions_error(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user
+        self, mock_session_service, client, test_user
     ):
         """Test listing sessions when service throws error."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
         mock_session_service.get_user_sessions.side_effect = Exception("Database error")
 
         response = client.get("/api/sessions")
@@ -117,16 +117,13 @@ class TestSessionRouter:
         assert response.status_code == 500
 
     # Test DELETE /sessions/{session_uuid}
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_revoke_session_success(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user
+        self, mock_session_service, client, test_user
     ):
         """Test revoking a session successfully."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
         mock_session_service.revoke_session.return_value = True
 
         session_uuid = str(uuid.uuid4())
@@ -137,16 +134,13 @@ class TestSessionRouter:
         assert data["success"] is True
         assert "revoked successfully" in data["message"]
 
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_revoke_session_not_found(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user
+        self, mock_session_service, client, test_user
     ):
         """Test revoking a non-existent session."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
         mock_session_service.revoke_session.return_value = False
 
         session_uuid = str(uuid.uuid4())
@@ -155,16 +149,13 @@ class TestSessionRouter:
         assert response.status_code == 404
 
     # Test POST /sessions/revoke-all
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_revoke_all_other_sessions_success(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user
+        self, mock_session_service, client, test_user
     ):
         """Test revoking all other sessions successfully."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
         mock_session_service.revoke_all_other_sessions.return_value = 3
 
         response = client.post("/api/sessions/revoke-all")
@@ -174,16 +165,13 @@ class TestSessionRouter:
         assert data["success"] is True
         assert data["count"] == 3
 
-    @patch('routers.sessions.get_current_user')
-    @patch('routers.sessions.get_db')
     def test_revoke_all_no_session_id(
-        self, mock_get_db, mock_get_current_user, client, test_user
+        self, client, test_user
     ):
         """Test revoking all other sessions when no session_id provided.
         This should still work as the endpoint uses cookies."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
 
         response = client.post("/api/sessions/revoke-all")
 
@@ -192,16 +180,13 @@ class TestSessionRouter:
         assert response.status_code in [200, 400]  # Accept either
 
     # Test GET /sessions/count
-    @patch('routers.sessions.get_current_user')
     @patch('routers.sessions.session_service')
-    @patch('routers.sessions.get_db')
     def test_get_session_count(
-        self, mock_get_db, mock_session_service, mock_get_current_user, client, test_user
+        self, mock_session_service, client, test_user
     ):
         """Test getting session count."""
-        mock_get_current_user.return_value = test_user
-        mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: MagicMock()
         mock_session_service.get_active_session_count.return_value = 5
 
         response = client.get("/api/sessions/count")
@@ -212,15 +197,13 @@ class TestSessionRouter:
         assert data["count"] == 5
 
     # Test POST /sessions/cleanup-duplicates
-    @patch('routers.sessions.get_current_user')
-    @patch('routers.sessions.get_db')
     def test_cleanup_duplicate_sessions(
-        self, mock_get_db, mock_get_current_user, client, test_user
+        self, client, test_user
     ):
         """Test cleaning up duplicate sessions."""
-        mock_get_current_user.return_value = test_user
         mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: mock_db
 
         # Mock sessions with duplicates
         session1 = Mock()
@@ -250,15 +233,13 @@ class TestSessionRouter:
         assert data["success"] is True
         assert data["duplicates_removed"] >= 0
 
-    @patch('routers.sessions.get_current_user')
-    @patch('routers.sessions.get_db')
     def test_cleanup_duplicate_sessions_error(
-        self, mock_get_db, mock_get_current_user, client, test_user
+        self, client, test_user
     ):
         """Test error handling during duplicate cleanup."""
-        mock_get_current_user.return_value = test_user
         mock_db = MagicMock()
-        mock_get_db.return_value = mock_db
+        app.dependency_overrides[get_current_user] = lambda: test_user
+        app.dependency_overrides[get_db] = lambda: mock_db
         mock_db.query.side_effect = Exception("Database error")
 
         response = client.post("/api/sessions/cleanup-duplicates")
@@ -266,19 +247,23 @@ class TestSessionRouter:
         assert response.status_code == 500
 
     # Test unauthorized access
-    @patch('routers.sessions.get_current_user')
-    def test_list_sessions_unauthorized(self, mock_get_current_user, client):
+    def test_list_sessions_unauthorized(self, client):
         """Test that unauthorized users cannot list sessions."""
-        mock_get_current_user.side_effect = HTTPException(status_code=401, detail="Not authenticated")
+        def raise_401():
+            raise HTTPException(status_code=401, detail="Not authenticated")
+
+        app.dependency_overrides[get_current_user] = raise_401
 
         response = client.get("/api/sessions")
 
         assert response.status_code == 401
 
-    @patch('routers.sessions.get_current_user')
-    def test_revoke_session_unauthorized(self, mock_get_current_user, client):
+    def test_revoke_session_unauthorized(self, client):
         """Test that unauthorized users cannot revoke sessions."""
-        mock_get_current_user.side_effect = HTTPException(status_code=401, detail="Not authenticated")
+        def raise_401():
+            raise HTTPException(status_code=401, detail="Not authenticated")
+
+        app.dependency_overrides[get_current_user] = raise_401
 
         session_uuid = str(uuid.uuid4())
         response = client.delete(f"/api/sessions/{session_uuid}")

@@ -5,7 +5,7 @@ Maps to swisstax.users table
 
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, String, text
+from sqlalchemy import Boolean, Column, DateTime, Integer, Numeric, String, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -75,6 +75,14 @@ class User(SwissTaxBase, Base):
     two_factor_secret = Column(String(255), nullable=True)  # Encrypted TOTP secret
     two_factor_backup_codes = Column(String(1000), nullable=True)  # Encrypted JSON array of backup codes
     two_factor_verified_at = Column(DateTime(timezone=True), nullable=True)  # When 2FA was enabled
+
+    # Referral System Fields
+    personal_referral_code = Column(String(50), unique=True, nullable=True)  # User's unique referral code
+    total_referrals_count = Column(Integer, server_default='0', nullable=False)  # Total referrals made
+    successful_referrals_count = Column(Integer, server_default='0', nullable=False)  # Successful referrals
+    total_rewards_earned_chf = Column(Numeric(10, 2), server_default='0.00', nullable=False)  # Total rewards earned
+    account_credit_balance_chf = Column(Numeric(10, 2), server_default='0.00', nullable=False)  # Current credit balance
+    referred_by_code = Column(String(50), nullable=True)  # Code used when user signed up
 
     # Relationships temporarily disabled to fix SQLAlchemy mapper configuration issues
     # These relationships are not currently used in the application code

@@ -241,3 +241,99 @@ async def delete_document(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to delete document: {str(e)}"
         )
+
+
+# ============================================================================
+# USER DOCUMENT MANAGEMENT ENDPOINTS
+# ============================================================================
+
+@router.get("/user/storage", response_model=dict)
+async def get_user_storage(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get user's storage usage information
+
+    - Returns total storage used and limit
+    - Includes document count
+    """
+    try:
+        storage_info = doc_service.get_user_storage_info(current_user.id)
+        return storage_info
+
+    except Exception as e:
+        logger.error(f"Error getting user storage: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get storage info: {str(e)}"
+        )
+
+
+@router.get("/user/all", response_model=List[dict])
+async def list_all_user_documents(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get list of all documents for the current user
+
+    - Returns documents grouped by year
+    - Includes all sessions
+    """
+    try:
+        documents = doc_service.list_all_user_documents(current_user.id)
+        return documents
+
+    except Exception as e:
+        logger.error(f"Error listing user documents: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list documents: {str(e)}"
+        )
+
+
+@router.post("/user/download-all", response_model=dict)
+async def download_all_documents(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Download all user documents as a ZIP archive
+
+    - Creates a ZIP file with all documents
+    - Returns presigned download URL
+    """
+    try:
+        result = doc_service.create_documents_zip(current_user.id)
+        return result
+
+    except Exception as e:
+        logger.error(f"Error creating document archive: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create document archive: {str(e)}"
+        )
+
+
+@router.delete("/user/old", response_model=dict)
+async def delete_old_documents(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete documents older than 7 years
+
+    - Follows Swiss retention requirements
+    - Returns count of deleted documents
+    """
+    try:
+        result = doc_service.delete_old_documents(current_user.id, years=7)
+        return result
+
+    except Exception as e:
+        logger.error(f"Error deleting old documents: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete old documents: {str(e)}"
+        )

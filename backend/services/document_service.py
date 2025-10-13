@@ -133,15 +133,26 @@ class DocumentService:
         """List all documents for a session"""
         query = """
             SELECT
-                d.id, d.file_name, d.file_size, d.mime_type, d.status,
-                d.uploaded_at, d.processed_at,
-                dt.code as document_type, dt.name_en as document_type_name
-            FROM swisstax.documents d
-            JOIN swisstax.document_types dt ON d.document_type_id = dt.id
-            WHERE d.session_id = %s AND d.status != 'deleted'
-            ORDER BY d.uploaded_at DESC
+                id::text as id,
+                file_name,
+                file_size,
+                mime_type,
+                ocr_status as status,
+                created_at as uploaded_at,
+                document_type,
+                document_type as document_type_name
+            FROM swisstax.documents
+            WHERE session_id = %s::uuid
+            ORDER BY created_at DESC
         """
-        return execute_query(query, (session_id,))
+        documents = execute_query(query, (session_id,))
+
+        # Convert timestamps
+        for doc in documents:
+            if doc.get('uploaded_at'):
+                doc['uploaded_at'] = doc['uploaded_at'].isoformat() if hasattr(doc['uploaded_at'], 'isoformat') else str(doc['uploaded_at'])
+
+        return documents
 
     def delete_document(self, document_id: str) -> bool:
         """Soft delete a document"""
@@ -345,3 +356,210 @@ class DocumentService:
             WHERE id = %s
         """
         execute_query(query, (status, document_id), fetch=False)
+
+    # ============================================================================
+    # USER DOCUMENT MANAGEMENT METHODS
+    # ============================================================================
+
+    def get_user_storage_info(self, user_id: str) -> Dict[str, Any]:
+        """Get user's storage usage information"""
+        query = """
+            SELECT
+                COUNT(*) as document_count,
+                COALESCE(SUM(file_size), 0) as total_bytes
+            FROM swisstax.documents
+            WHERE user_id = %s
+        """
+        result = execute_one(query, (user_id,))
+
+        if not result:
+            result = {'document_count': 0, 'total_bytes': 0}
+
+        total_mb = (result['total_bytes'] or 0) / (1024 * 1024)  # Convert to MB
+        storage_limit_mb = 500  # 500 MB default limit
+
+        return {
+            'storage_used_mb': round(total_mb, 2),
+            'storage_limit_mb': storage_limit_mb,
+            'storage_used_bytes': result['total_bytes'],
+            'document_count': result['document_count'],
+            'percentage_used': round((total_mb / storage_limit_mb) * 100, 2) if storage_limit_mb > 0 else 0
+        }
+
+    def list_all_user_documents(self, user_id: str) -> List[Dict[str, Any]]:
+        """List all documents for a user, organized by year"""
+        query = """
+            SELECT
+                id::text as id,
+                file_name,
+                file_size,
+                mime_type,
+                ocr_status as status,
+                created_at as uploaded_at,
+                document_type,
+                document_type as document_type_name,
+                EXTRACT(YEAR FROM created_at) as upload_year
+            FROM swisstax.documents
+            WHERE user_id = %s
+            ORDER BY created_at DESC
+        """
+        documents = execute_query(query, (user_id,))
+
+        # Convert timestamps to ISO format strings for JSON serialization
+        for doc in documents:
+            if doc.get('uploaded_at'):
+                doc['uploaded_at'] = doc['uploaded_at'].isoformat() if hasattr(doc['uploaded_at'], 'isoformat') else str(doc['uploaded_at'])
+
+        return documents
+
+    def create_documents_zip(self, user_id: str) -> Dict[str, Any]:
+        """Create a ZIP archive of all user documents"""
+        import io
+        import zipfile
+        from datetime import datetime
+
+        # Get all user documents
+        query = """
+            SELECT
+                id::text as id,
+                file_name,
+                s3_key,
+                EXTRACT(YEAR FROM created_at) as upload_year,
+                document_type
+            FROM swisstax.documents
+            WHERE user_id = %s
+            ORDER BY created_at DESC
+        """
+        documents = execute_query(query, (user_id,))
+
+        if not documents:
+            return {
+                'error': 'No documents found',
+                'document_count': 0
+            }
+
+        # Create ZIP file in memory
+        zip_buffer = io.BytesIO()
+
+        try:
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                successful_count = 0
+                for doc in documents:
+                    try:
+                        # Download file from S3
+                        response = s3_client.get_object(
+                            Bucket=S3_BUCKET,
+                            Key=doc['s3_key']
+                        )
+                        file_content = response['Body'].read()
+
+                        # Organize by year and document type
+                        year = int(doc['upload_year']) if doc['upload_year'] else 'unknown'
+                        doc_type = doc['document_type'] or 'other'
+                        zip_path = f"{year}/{doc_type}/{doc['file_name']}"
+
+                        # Add to ZIP
+                        zip_file.writestr(zip_path, file_content)
+                        successful_count += 1
+
+                    except ClientError as e:
+                        print(f"Error downloading document {doc['id']}: {e}")
+                        # Continue with other documents
+                    except Exception as e:
+                        print(f"Unexpected error processing document {doc['id']}: {e}")
+                        # Continue with other documents
+
+                if successful_count == 0:
+                    return {
+                        'error': 'Failed to add any documents to archive',
+                        'document_count': 0
+                    }
+
+            # Upload ZIP to S3
+            zip_buffer.seek(0)
+            timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+            zip_key = f"exports/{user_id}/documents_{timestamp}.zip"
+
+            s3_client.put_object(
+                Bucket=S3_BUCKET,
+                Key=zip_key,
+                Body=zip_buffer.getvalue(),
+                ContentType='application/zip',
+                ServerSideEncryption='AES256'
+            )
+
+            # Generate presigned download URL (valid for 1 hour)
+            download_url = s3_client.generate_presigned_url(
+                'get_object',
+                Params={
+                    'Bucket': S3_BUCKET,
+                    'Key': zip_key,
+                    'ResponseContentDisposition': f'attachment; filename="swissai_tax_documents_{timestamp}.zip"'
+                },
+                ExpiresIn=3600
+            )
+
+            return {
+                'download_url': download_url,
+                'document_count': len(documents),
+                'file_size_bytes': len(zip_buffer.getvalue()),
+                'expires_in': 3600,
+                'message': 'Document archive created successfully'
+            }
+
+        except Exception as e:
+            print(f"Error creating document archive: {e}")
+            raise
+
+    def delete_old_documents(self, user_id: str, years: int = 7) -> Dict[str, Any]:
+        """Delete documents older than specified years"""
+        from datetime import datetime, timedelta
+
+        cutoff_date = datetime.utcnow() - timedelta(days=years * 365)
+
+        # Get documents to delete
+        query = """
+            SELECT id::text as id, s3_key
+            FROM swisstax.documents
+            WHERE user_id = %s
+                AND created_at < %s
+        """
+        old_documents = execute_query(query, (user_id, cutoff_date))
+
+        if not old_documents:
+            return {
+                'deleted_count': 0,
+                'message': 'No documents older than 7 years found'
+            }
+
+        deleted_count = 0
+        failed_count = 0
+        for doc in old_documents:
+            try:
+                # Delete from S3
+                s3_client.delete_object(
+                    Bucket=S3_BUCKET,
+                    Key=doc['s3_key']
+                )
+
+                # Hard delete from database for old documents
+                delete_query = """
+                    DELETE FROM swisstax.documents
+                    WHERE id = %s::uuid
+                """
+                execute_query(delete_query, (doc['id'],), fetch=False)
+                deleted_count += 1
+
+            except ClientError as e:
+                print(f"Error deleting document {doc['id']} from S3: {e}")
+                failed_count += 1
+            except Exception as e:
+                print(f"Error deleting document {doc['id']} from database: {e}")
+                failed_count += 1
+
+        return {
+            'deleted_count': deleted_count,
+            'failed_count': failed_count,
+            'cutoff_date': cutoff_date.isoformat(),
+            'message': f'Successfully deleted {deleted_count} document(s) older than {years} years' + (f' ({failed_count} failed)' if failed_count > 0 else '')
+        }

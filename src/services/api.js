@@ -75,6 +75,11 @@ export const documentAPI = {
   deleteDocument: (documentId) => api.delete(`/api/documents?documentId=${documentId}`),
   processDocument: (documentId) => api.post('/api/documents/process', { documentId }),
   checkProcessingStatus: (documentId) => api.get(`/api/documents/status?documentId=${documentId}`),
+  // User document management
+  getUserStorage: () => api.get('/api/documents/user/storage'),
+  getAllUserDocuments: () => api.get('/api/documents/user/all'),
+  downloadAllDocuments: () => api.post('/api/documents/user/download-all'),
+  deleteOldDocuments: () => api.delete('/api/documents/user/old'),
 };
 
 // Tax Calculation API endpoints

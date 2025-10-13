@@ -6,7 +6,7 @@ import csv
 import json
 import io
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 from uuid import UUID
 
@@ -414,7 +414,9 @@ class DataExportService:
                     # Format dates for email
                     generated_date = export.completed_at.strftime('%B %d, %Y at %H:%M UTC')
                     expiry_date = export.expires_at.strftime('%B %d, %Y at %H:%M UTC')
-                    hours_until_expiry = int((export.expires_at - datetime.utcnow()).total_seconds() / 3600)
+                    # Handle timezone-aware datetime comparison
+                    now_utc = datetime.now(timezone.utc) if export.expires_at.tzinfo else datetime.utcnow()
+                    hours_until_expiry = int((export.expires_at - now_utc).total_seconds() / 3600)
 
                     email_result = self.email.send_export_ready_email(
                         to_email=user.email,

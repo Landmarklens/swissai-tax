@@ -217,17 +217,17 @@ class BackgroundJobScheduler:
             )
             logger.info("Scheduled job: Process pending deletions (every hour)")
 
-            # Job 2: Process pending data exports every 5 minutes
+            # Job 2: Process pending data exports every 30 seconds
             self.scheduler.add_job(
                 func=self.process_pending_exports,
-                trigger=IntervalTrigger(minutes=5),
+                trigger=IntervalTrigger(seconds=30),
                 id='process_pending_exports',
                 name='Process Pending Data Exports',
                 replace_existing=True,
                 max_instances=1,  # Prevent concurrent runs
-                misfire_grace_time=60  # 1 minute grace period
+                misfire_grace_time=30  # 30 seconds grace period
             )
-            logger.info("Scheduled job: Process pending exports (every 5 minutes)")
+            logger.info("Scheduled job: Process pending exports (every 30 seconds)")
 
             # Job 3: Clean up expired exports daily at 2 AM
             self.scheduler.add_job(

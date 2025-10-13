@@ -30,12 +30,12 @@ class S3EncryptedStorage:
 
         Args:
             bucket_name: S3 bucket name (defaults to TAX_DOCUMENTS_BUCKET env var)
-            region_name: AWS region (defaults to AWS_REGION env var)
+            region_name: AWS region where the S3 bucket is located (defaults to AWS_REGION env var)
             encryption_type: "SSE-S3" or "SSE-KMS" (default: SSE-KMS)
             kms_key_id: KMS key ID/ARN for SSE-KMS (defaults to TAX_KMS_KEY_ID env var)
         """
         self.bucket_name = bucket_name or os.environ.get('TAX_DOCUMENTS_BUCKET', 'swissai-tax-documents')
-        self.region_name = region_name or os.environ.get('AWS_REGION', 'us-east-1')
+        self.region_name = region_name or os.environ.get('AWS_S3_REGION', os.environ.get('AWS_REGION', 'eu-central-2'))
         self.encryption_type = encryption_type
         self.kms_key_id = kms_key_id or os.environ.get('TAX_KMS_KEY_ID')
 
@@ -330,6 +330,6 @@ def get_s3_storage() -> S3EncryptedStorage:
         from config import settings
         _s3_storage = S3EncryptedStorage(
             bucket_name=settings.AWS_S3_BUCKET_NAME,
-            region_name=settings.AWS_REGION
+            region_name=settings.AWS_S3_REGION
         )
     return _s3_storage

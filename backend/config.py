@@ -65,6 +65,7 @@ class Settings(BaseSettings):
     AWS_SECRET_ACCESS_KEY: str | None = Field(None)
     AWS_REGION: str = Field("us-east-1")
     AWS_S3_BUCKET_NAME: str = Field("swissai-tax-documents-1758721021")
+    AWS_S3_REGION: str = Field("eu-central-2")  # S3 bucket region (may differ from AWS_REGION)
 
     # OTHER
     ENVIRONMENT: str = Field("production")  # Added for CORS debug middleware
@@ -163,6 +164,7 @@ class Settings(BaseSettings):
                 '/swissai-tax/db/password': 'POSTGRES_PASSWORD',
                 '/swissai-tax/api/jwt-secret': 'SECRET_KEY',
                 '/swissai-tax/s3/documents-bucket': 'AWS_S3_BUCKET_NAME',
+                '/swissai-tax/s3/region': 'AWS_S3_REGION',
                 '/swissai-tax/email/sender': 'SES_SENDER_EMAIL',
                 '/swissai-tax/google/client-id': 'GOOGLE_CLIENT_ID',
                 '/swissai-tax/google/client-secret': 'GOOGLE_CLIENT_SECRET',

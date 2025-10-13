@@ -4,9 +4,14 @@ Tests API endpoints for document management
 """
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 from fastapi.testclient import TestClient
 from datetime import datetime
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 @pytest.fixture
@@ -21,7 +26,7 @@ def mock_current_user():
 @pytest.fixture
 def mock_doc_service():
     """Mock document service"""
-    with patch('backend.routers.documents.doc_service') as mock:
+    with patch('routers.documents.doc_service') as mock:
         yield mock
 
 
@@ -38,7 +43,7 @@ class TestGetUserStorage:
             'percentage_used': 25.1
         }
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.get('/api/documents/user/storage')
 
         assert response.status_code == 200
@@ -56,7 +61,7 @@ class TestGetUserStorage:
         """Test handling service errors"""
         mock_doc_service.get_user_storage_info.side_effect = Exception("Database error")
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.get('/api/documents/user/storage')
 
         assert response.status_code == 500
@@ -82,7 +87,7 @@ class TestGetAllUserDocuments:
         ]
         mock_doc_service.list_all_user_documents.return_value = mock_docs
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.get('/api/documents/user/all')
 
         assert response.status_code == 200
@@ -94,7 +99,7 @@ class TestGetAllUserDocuments:
         """Test getting documents when user has none"""
         mock_doc_service.list_all_user_documents.return_value = []
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.get('/api/documents/user/all')
 
         assert response.status_code == 200
@@ -114,7 +119,7 @@ class TestDownloadAllDocuments:
             'message': 'Document archive created successfully'
         }
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.post('/api/documents/user/download-all')
 
         assert response.status_code == 200
@@ -129,7 +134,7 @@ class TestDownloadAllDocuments:
             'document_count': 0
         }
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.post('/api/documents/user/download-all')
 
         assert response.status_code == 200
@@ -140,7 +145,7 @@ class TestDownloadAllDocuments:
         """Test handling S3 errors during ZIP creation"""
         mock_doc_service.create_documents_zip.side_effect = Exception("S3 error")
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.post('/api/documents/user/download-all')
 
         assert response.status_code == 500
@@ -158,7 +163,7 @@ class TestDeleteOldDocuments:
             'message': 'Successfully deleted 3 document(s) older than 7 years'
         }
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.delete('/api/documents/user/old')
 
         assert response.status_code == 200
@@ -173,7 +178,7 @@ class TestDeleteOldDocuments:
             'message': 'No documents older than 7 years found'
         }
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.delete('/api/documents/user/old')
 
         assert response.status_code == 200
@@ -189,7 +194,7 @@ class TestDeleteOldDocuments:
             'message': 'Successfully deleted 2 document(s) older than 7 years (1 failed)'
         }
 
-        with patch('backend.routers.documents.get_current_user', return_value=mock_current_user):
+        with patch('routers.documents.get_current_user', return_value=mock_current_user):
             response = client.delete('/api/documents/user/old')
 
         assert response.status_code == 200
@@ -203,7 +208,7 @@ class TestDeleteOldDocuments:
 def client():
     """Create a test client"""
     from fastapi import FastAPI
-    from backend.routers import documents
+    from routers import documents
 
     app = FastAPI()
     app.include_router(documents.router, prefix="/api/documents")

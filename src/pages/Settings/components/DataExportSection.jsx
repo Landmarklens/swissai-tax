@@ -53,17 +53,13 @@ const DataExportSection = () => {
     );
 
     if (hasPendingExports) {
-      console.log('[DataExportSection] Detected pending/processing exports, starting auto-polling...');
-
       // Poll every 5 seconds
       const pollInterval = setInterval(() => {
-        console.log('[DataExportSection] Auto-polling for export status updates...');
         fetchExports();
       }, 5000);
 
       // Clean up interval on unmount or when exports change
       return () => {
-        console.log('[DataExportSection] Stopping auto-polling');
         clearInterval(pollInterval);
       };
     }
@@ -74,14 +70,10 @@ const DataExportSection = () => {
     const result = await userService.listDataExports();
     setRefreshing(false);
 
-    console.log('[DataExportSection] Fetch exports result:', result);
-
     if (result.success) {
       const exportData = Array.isArray(result.data) ? result.data : [];
-      console.log('[DataExportSection] Setting exports:', exportData);
       setExports(exportData);
     } else {
-      console.error('[DataExportSection] Failed to fetch exports:', result.error);
       // On error, reset to empty array
       setExports([]);
     }
@@ -249,12 +241,6 @@ const DataExportSection = () => {
           Your Exports
         </Typography>
 
-        {(() => {
-          console.log('[DataExportSection] Rendering exports list, count:', exports.length);
-          console.log('[DataExportSection] Exports:', exports);
-          return null;
-        })()}
-
         {exports.length === 0 ? (
           <Alert severity="info">
             <Typography variant="body2">
@@ -263,9 +249,7 @@ const DataExportSection = () => {
           </Alert>
         ) : (
           <List>
-            {exports.map((exportItem, index) => {
-              console.log('[DataExportSection] Rendering export item:', exportItem);
-              return (
+            {exports.map((exportItem, index) => (
               <React.Fragment key={exportItem.id}>
                 {index > 0 && <Divider component="li" />}
                 <ListItem
@@ -347,8 +331,7 @@ const DataExportSection = () => {
                   )}
                 </ListItem>
               </React.Fragment>
-              );
-            })}
+            ))}
           </List>
         )}
       </CardContent>

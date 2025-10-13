@@ -48,7 +48,11 @@ class S3EncryptedStorage:
             logger.warning("SSE-KMS encryption selected but no KMS key ID provided. Falling back to SSE-S3")
             self.encryption_type = 'SSE-S3'
 
-        self.s3_client = boto3.client('s3', region_name=self.region_name)
+        # Configure S3 client with regional endpoint to avoid signature mismatch
+        # Use explicit regional endpoint URL for eu-central-2 to ensure proper URL generation
+        endpoint_url = f'https://s3.{self.region_name}.amazonaws.com'
+        self.s3_client = boto3.client('s3', region_name=self.region_name, endpoint_url=endpoint_url)
+        logger.info(f"S3 client initialized with region {self.region_name} and endpoint {endpoint_url}")
 
     def upload_document(
         self,

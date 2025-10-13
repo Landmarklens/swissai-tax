@@ -39,8 +39,10 @@ S3_BUCKET, S3_REGION = get_s3_config()
 print(f"[S3 Config] Final config - Bucket: {S3_BUCKET}, Region: {S3_REGION}")
 
 # Initialize AWS clients with correct regions
-s3_client = boto3.client('s3', region_name=S3_REGION)
-print(f"[S3 Config] S3 client initialized with region: {s3_client.meta.region_name}")
+# Use explicit regional endpoint URL to avoid signature mismatch
+endpoint_url = f'https://s3.{S3_REGION}.amazonaws.com'
+s3_client = boto3.client('s3', region_name=S3_REGION, endpoint_url=endpoint_url)
+print(f"[S3 Config] S3 client initialized with region: {s3_client.meta.region_name}, endpoint: {endpoint_url}")
 textract_client = boto3.client('textract', region_name='us-east-1')  # Textract in us-east-1
 
 

@@ -172,7 +172,9 @@ async def upload_document_directly(
         # Upload to S3 directly
         import boto3
         from config import settings
-        s3_client = boto3.client('s3', region_name=settings.AWS_S3_REGION)
+        # Use explicit regional endpoint to avoid signature mismatch
+        endpoint_url = f'https://s3.{settings.AWS_S3_REGION}.amazonaws.com'
+        s3_client = boto3.client('s3', region_name=settings.AWS_S3_REGION, endpoint_url=endpoint_url)
 
         file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'pdf'
         s3_key = f"documents/{session_id}/{document_type}/{file.filename}"

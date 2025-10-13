@@ -46,6 +46,29 @@ const DataExportSection = () => {
     fetchExports();
   }, []);
 
+  // Auto-polling effect: refresh exports list when there are pending/processing exports
+  useEffect(() => {
+    const hasPendingExports = exports.some(
+      exp => exp.status === 'pending' || exp.status === 'processing'
+    );
+
+    if (hasPendingExports) {
+      console.log('[DataExportSection] Detected pending/processing exports, starting auto-polling...');
+
+      // Poll every 5 seconds
+      const pollInterval = setInterval(() => {
+        console.log('[DataExportSection] Auto-polling for export status updates...');
+        fetchExports();
+      }, 5000);
+
+      // Clean up interval on unmount or when exports change
+      return () => {
+        console.log('[DataExportSection] Stopping auto-polling');
+        clearInterval(pollInterval);
+      };
+    }
+  }, [exports]);
+
   const fetchExports = async () => {
     setRefreshing(true);
     const result = await userService.listDataExports();

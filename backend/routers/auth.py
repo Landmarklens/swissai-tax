@@ -553,11 +553,14 @@ async def migrate_to_cookie(
     }
 
 
-@router.post("/register", response_model=UserProfile)
+@router.post("/register")
 @rate_limit("1000/hour")
 async def register(request: Request, user: UserCreate, db=Depends(get_db)):
     """
     Registration endpoint for SwissAI Tax users
+
+    Returns:
+        User profile data with requires_subscription flag
 
     language: de, en, fr, it
     """
@@ -566,10 +569,41 @@ async def register(request: Request, user: UserCreate, db=Depends(get_db)):
 
         if exists_user and exists_user.is_active:
             raise HTTPException(status_code=400, detail="Email already registered")
+
         if exists_user:
-            return update_user(db, exists_user, user)
+            updated_user = update_user(db, exists_user, user)
+            # Check if subscription is required for updated user
+            requires_subscription = should_require_subscription(updated_user, db)
+
+            # Convert to dict and add requires_subscription
+            user_dict = {
+                "id": str(updated_user.id),
+                "email": updated_user.email,
+                "first_name": updated_user.first_name,
+                "last_name": updated_user.last_name,
+                "preferred_language": updated_user.preferred_language,
+                "is_active": updated_user.is_active,
+                "requires_subscription": requires_subscription
+            }
+            return user_dict
+
         new_user = authService.create_user(db, user)
-        return new_user
+
+        # Check if subscription is required for new user
+        requires_subscription = should_require_subscription(new_user, db)
+
+        # Convert to dict and add requires_subscription
+        user_dict = {
+            "id": str(new_user.id),
+            "email": new_user.email,
+            "first_name": new_user.first_name,
+            "last_name": new_user.last_name,
+            "preferred_language": new_user.preferred_language,
+            "is_active": new_user.is_active,
+            "requires_subscription": requires_subscription
+        }
+        return user_dict
+
     except HTTPException:
         raise
     except Exception as e:

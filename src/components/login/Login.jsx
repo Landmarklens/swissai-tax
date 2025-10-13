@@ -142,7 +142,7 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
         return;
       }
 
-      // Cookie-based auth returns {success: true, user: {...}}
+      // Cookie-based auth returns {success: true, user: {...}, requires_subscription: bool}
       // Legacy token-based auth returns {access_token: "..."}
       if (login.success || login.access_token) {
         const profileAction = await dispatch(fetchUserProfile());
@@ -151,11 +151,18 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
           // Only close and navigate if not skipped (e.g., when showing 2FA setup)
           if (!skipCloseAndNavigate) {
             onClose();
-            // Use callback if provided, otherwise default to /filings
-            if (onAuthSuccess) {
-              onAuthSuccess();
+
+            // Check if user needs to subscribe
+            if (login.requires_subscription) {
+              // Redirect to subscription plans page
+              navigate('/subscription/plans');
             } else {
-              navigate('/filings');
+              // Use callback if provided, otherwise default to /filings
+              if (onAuthSuccess) {
+                onAuthSuccess();
+              } else {
+                navigate('/filings');
+              }
             }
           }
         } else if (fetchUserProfile.rejected.match(profileAction)) {
@@ -182,11 +189,17 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
       if (fetchUserProfile.fulfilled.match(profileAction)) {
         toast.success(t('Login successful!'));
         onClose();
-        // Use callback if provided, otherwise default to /filings
-        if (onAuthSuccess) {
-          onAuthSuccess();
+
+        // Check if user needs subscription (from 2FA response)
+        if (data?.requires_subscription) {
+          navigate('/subscription/plans');
         } else {
-          navigate('/filings');
+          // Use callback if provided, otherwise default to /filings
+          if (onAuthSuccess) {
+            onAuthSuccess();
+          } else {
+            navigate('/filings');
+          }
         }
       } else {
         toast.error(t('Failed to load profile'));
@@ -207,6 +220,16 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
         // Show success message
         toast.success(t('Registration successful! Logging you in...'));
 
+        // Check if user needs subscription before auto-login
+        if (register.requires_subscription && !userData.enable_2fa) {
+          // If subscription is required and no 2FA, redirect directly to plans
+          // Auto-login first
+          await handleLoginSubmit(userData, true); // Skip navigation
+          onClose();
+          navigate('/subscription/plans');
+          return;
+        }
+
         // Auto-login with the credentials just used for registration
         // Skip close/navigate if 2FA setup will be shown
         const skipCloseAndNavigate = userData.enable_2fa;
@@ -217,6 +240,7 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
           setShow2FASetup(true);
         }
         // Note: If enable_2fa is false, handleLoginSubmit already handled close/navigate
+        // and will redirect to plans if requires_subscription is true
       }
     } catch (error) {
       // Extract error message from response

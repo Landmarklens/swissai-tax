@@ -33,14 +33,16 @@ const GoogleCallback = () => {
       const profileAction = await dispatch(fetchUserProfile());
 
       if (fetchUserProfile.fulfilled.match(profileAction)) {
-        console.log('[GoogleCallback] Login successful, redirecting to filings');
+        console.log('[GoogleCallback] Login successful');
 
         // Check if subscription is required
         if (requires_subscription === 'true') {
-          // Redirect to subscription page
-          navigate('/billing');
+          // Redirect to subscription plans page for plan selection
+          console.log('[GoogleCallback] Subscription required, redirecting to plans');
+          navigate('/subscription/plans');
         } else {
           // Redirect to filings page
+          console.log('[GoogleCallback] Redirecting to filings');
           navigate('/filings');
         }
       } else {

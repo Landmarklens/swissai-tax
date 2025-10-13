@@ -12,6 +12,10 @@ import { documentAPI } from '../../services/api';
 
 // Mock modules
 jest.mock('../../services/api');
+jest.mock('../../services/authService', () => ({
+  isAuthenticated: jest.fn(() => true),
+  logout: jest.fn()
+}));
 jest.mock('../../components/header/Header', () => () => <div data-testid="header">Header</div>);
 jest.mock('../../components/footer/Footer', () => () => <div data-testid="footer">Footer</div>);
 jest.mock('../../pages/Settings/components/DocumentManagementSection', () => {
@@ -26,6 +30,12 @@ jest.mock('react-i18next', () => ({
     t: (key) => key
   })
 }));
+
+// Mock window.cookieConsent
+global.cookieConsent = {
+  getCookie: jest.fn(() => null),
+  setCookie: jest.fn()
+};
 
 const mockDocuments = [
   {

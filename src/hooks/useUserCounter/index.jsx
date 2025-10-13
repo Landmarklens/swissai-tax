@@ -14,7 +14,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.swissai.
  * - Fallback to simulated count if API fails
  */
 export const useUserCounter = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(null);  // null = loading state
   const [isAnimating, setIsAnimating] = useState(true);
   const lastApiCountRef = useRef(145);  // Fallback to 145 daily users like HomeAI
   const intervalIdRef = useRef(null);
@@ -51,14 +51,17 @@ export const useUserCounter = () => {
     }
   }, [isAnimating]);
 
-  // Initial animation from 0 to current count
+  // Initial animation from 1 to current count
   useEffect(() => {
     let currentStep = 0;
     const steps = 40;
 
     // Fetch initial count
     fetchCount().then(targetCount => {
-      const increment = Math.ceil(targetCount / steps);
+      // Start from 1, not 0
+      setCount(1);
+
+      const increment = Math.ceil((targetCount - 1) / steps);
 
       animationIntervalRef.current = setInterval(() => {
         currentStep++;

@@ -113,7 +113,7 @@ const Homepage = () => {
   ];
 
   const stats = [
-    { value: userCount.toLocaleString(), label: t('homepage.stats.users') },
+    { value: userCount === null ? 'Loading...' : userCount.toLocaleString(), label: t('homepage.stats.users') },
     { value: "26", label: t('homepage.stats.cantons') },
     { value: "20 Min", label: t('homepage.stats.time') }
   ];

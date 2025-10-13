@@ -434,8 +434,12 @@ class TestEmailService:
             assert result["status"] == "success"
             assert result["message_id"] == "test-12345"
 
-            # Verify SNS was called
-            mock_boto_client.assert_called_once_with('sns', region_name='us-east-1')
+            # Verify SNS was called (with or without aws credentials)
+            assert mock_boto_client.called
+            call_args = mock_boto_client.call_args
+            assert call_args[0] == ('sns',)  # First positional arg
+            assert call_args[1]['region_name'] == 'us-east-1'  # Keyword arg
+
             mock_sns.publish.assert_called_once()
 
             # Verify the SNS publish call

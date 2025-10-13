@@ -149,13 +149,17 @@ class TestSessionRouter:
         assert response.status_code == 404
 
     # Test POST /sessions/revoke-all
+    @patch('routers.sessions.get_session_id_from_request')
     @patch('routers.sessions.session_service')
     def test_revoke_all_other_sessions_success(
-        self, mock_session_service, client, test_user
+        self, mock_session_service, mock_get_session_id, client, test_user
     ):
         """Test revoking all other sessions successfully."""
         app.dependency_overrides[get_current_user] = lambda: test_user
         app.dependency_overrides[get_db] = lambda: MagicMock()
+
+        # Mock session ID from request
+        mock_get_session_id.return_value = str(uuid.uuid4())
         mock_session_service.revoke_all_other_sessions.return_value = 3
 
         response = client.post("/api/sessions/revoke-all")

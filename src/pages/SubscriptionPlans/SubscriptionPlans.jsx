@@ -22,7 +22,7 @@ import subscriptionService from '../../services/subscriptionService';
 import authService from '../../services/authService';
 import './SubscriptionPlans.scss';
 
-const SubscriptionPlans = ({ referralCode = '' }) => {
+const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -49,18 +49,29 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
   };
 
   const handleSelectPlan = async (planType) => {
+    console.log('[SubscriptionPlans] Button clicked, planType:', planType);
     try {
       if (!authService.isAuthenticated()) {
-        // Redirect to login/signup
+        console.log('[SubscriptionPlans] User not authenticated');
+        // If parent provides onRequestAuth callback (when embedded in homepage), use it
+        if (onRequestAuth) {
+          console.log('[SubscriptionPlans] Calling parent onRequestAuth callback');
+          onRequestAuth(planType);
+          return;
+        }
+        // Otherwise navigate to home
+        console.log('[SubscriptionPlans] Navigating to home with auth state');
         navigate('/', { state: { showAuth: true, selectedPlan: planType } });
         return;
       }
 
+      console.log('[SubscriptionPlans] User authenticated, processing plan selection');
       setLoading(true);
       setError(null);
 
       // Free plan: Create subscription directly (no Stripe checkout)
       if (planType === 'free') {
+        console.log('[SubscriptionPlans] Creating free subscription');
         await subscriptionService.createFreeSubscription();
         // Refresh subscription data
         await checkCurrentSubscription();
@@ -72,6 +83,7 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
       const checkoutPath = referralCode
         ? `/subscription/checkout/${planType}?ref=${referralCode}`
         : `/subscription/checkout/${planType}`;
+      console.log('[SubscriptionPlans] Navigating to:', checkoutPath);
       navigate(checkoutPath);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to start subscription process');
@@ -218,49 +230,48 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
         )}
 
         {/* Plan Cards */}
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={3} justifyContent="center" alignItems="stretch" sx={{ mt: 6 }}>
           {plans.map((plan) => (
-            <Grid item xs={12} sm={6} md={3} key={plan.id}>
+            <Grid item xs={12} sm={6} md={3} key={plan.id} sx={{ display: 'flex' }}>
+              <Box sx={{ position: 'relative', pt: 5, width: '100%', display: 'flex', flexDirection: 'column' }}>
+                {(plan.popular || plan.badge) && (
+                  <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 10 }}>
+                    <Chip
+                      label={plan.badge || t('subscription.most_popular', 'Most Popular')}
+                      color="primary"
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '0.75rem',
+                        height: 32
+                      }}
+                    />
+                  </Box>
+                )}
               <Card
                 className={`plan-card ${plan.popular ? 'popular' : ''} ${plan.isFree ? 'free' : ''}`}
                 sx={{
-                  height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
+                  flexGrow: 1,
                   position: 'relative',
                   border: plan.popular ? '6px solid #1976d2' : plan.isFree ? '1px solid #e0e0e0' : '2px solid #e0e0e0',
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   bgcolor: plan.popular ? '#f5f9ff' : 'white',
-                  transform: plan.popular ? 'scale(1.05)' : 'scale(1)',
-                  my: plan.popular ? 2 : 0,
+                  overflow: 'visible',
                   '&:hover': {
-                    transform: plan.popular ? 'scale(1.05) translateY(-8px)' : 'translateY(-8px)',
+                    transform: 'translateY(-8px)',
                     boxShadow: plan.popular ? '0 16px 32px rgba(25,118,210,0.25)' : '0 12px 24px rgba(0,0,0,0.15)'
                   }
                 }}>
-                {(plan.popular || plan.badge) && (
-                  <Chip
-                    label={plan.badge || t('subscription.most_popular', 'Most Popular')}
-                    color="primary"
-                    sx={{
-                      position: 'absolute',
-                      top: -20,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      fontWeight: 'bold',
-                      fontSize: '0.75rem',
-                      height: 32,
-                      zIndex: 1
-                    }}
-                  />
-                )}
 
                 <CardContent sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
                   flexGrow: 1,
                   p: 4,
-                  pt: plan.popular ? 6 : 4,
-                  pb: plan.popular ? 5 : 4,
-                  px: plan.popular ? 5 : 4
+                  '&:last-child': {
+                    pb: 4
+                  }
                 }}>
                   {/* Plan Header */}
                   <Typography variant="h4" component="h2" gutterBottom>
@@ -324,29 +335,33 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
                   )}
 
                   {/* Action Button */}
-                  <Button
-                    variant={plan.popular ? 'contained' : plan.isFree ? 'outlined' : 'outlined'}
-                    size="large"
-                    fullWidth
-                    disabled={loading || (currentSubscription && currentSubscription.plan_type === plan.id)}
-                    onClick={() => handleSelectPlan(plan.id)}
-                    sx={{
-                      py: 1.5,
-                      fontSize: '1rem',
-                      fontWeight: plan.popular ? 600 : 500
-                    }}>
-                    {loading ? (
-                      <CircularProgress size={24} />
-                    ) : currentSubscription && currentSubscription.plan_type === plan.id ? (
-                      t('subscription.current_plan', 'Current Plan')
-                    ) : plan.isFree ? (
-                      t('subscription.start_free', 'Start Free')
-                    ) : (
-                      t('subscription.start_trial', 'Start 30-Day Trial')
-                    )}
-                  </Button>
+                  <Box sx={{ mt: 'auto' }}>
+                    <Button
+                      variant={plan.popular ? 'contained' : plan.isFree ? 'outlined' : 'outlined'}
+                      color={plan.popular ? 'primary' : plan.isFree ? 'error' : 'primary'}
+                      size="large"
+                      fullWidth
+                      disabled={loading || (currentSubscription && currentSubscription.plan_type === plan.id)}
+                      onClick={() => handleSelectPlan(plan.id)}
+                      sx={{
+                        py: 1.5,
+                        fontSize: '1rem',
+                        fontWeight: plan.popular ? 600 : 500
+                      }}>
+                      {loading ? (
+                        <CircularProgress size={24} />
+                      ) : currentSubscription && currentSubscription.plan_type === plan.id ? (
+                        t('subscription.current_plan', 'Current Plan')
+                      ) : plan.isFree ? (
+                        t('subscription.start_free', 'Start Free')
+                      ) : (
+                        t('subscription.start_trial', 'Start 30-Day Trial')
+                      )}
+                    </Button>
+                  </Box>
                 </CardContent>
               </Card>
+              </Box>
             </Grid>
           ))}
         </Grid>

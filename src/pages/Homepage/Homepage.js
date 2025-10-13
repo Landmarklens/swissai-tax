@@ -478,7 +478,12 @@ const Homepage = () => {
 
       {/* Pricing Section - New Subscription Plans */}
       <Box sx={{ bgcolor: 'background.paper' }}>
-        <SubscriptionPlans />
+        <SubscriptionPlans
+          onRequestAuth={(planType) => {
+            setSelectedPlan(planType);
+            setLoginModalOpen(true);
+          }}
+        />
       </Box>
 
       {/* Footer */}

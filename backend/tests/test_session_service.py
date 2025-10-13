@@ -119,11 +119,20 @@ class TestSessionService:
 
     def test_create_session_duplicate(self, mock_db, test_user_id, test_session_id, mock_request, mock_session):
         """Test creating a session that already exists (should update existing)."""
-        # Mock query to return existing session
-        mock_query = MagicMock()
-        mock_db.query.return_value = mock_query
-        mock_query.filter.return_value = mock_query
-        mock_query.first.return_value = mock_session
+        # First query returns existing session
+        mock_query_existing = MagicMock()
+        mock_query_existing.filter.return_value = mock_query_existing
+        mock_query_existing.first.return_value = mock_session
+
+        # Second query for updating is_current flag
+        mock_query_update = MagicMock()
+        mock_query_update.filter.return_value = mock_query_update
+        mock_query_update.update.return_value = 0
+
+        mock_db.query.side_effect = [
+            mock_query_existing,  # Check existing session
+            mock_query_update      # Update is_current for other sessions
+        ]
 
         result = SessionService.create_session(
             db=mock_db,
@@ -220,16 +229,26 @@ class TestSessionService:
 
         mock_db.commit.side_effect = Exception("Database error")
 
-        with pytest.raises(Exception):
-            SessionService.create_session(
-                db=mock_db,
-                user_id=str(test_user_id),
-                session_id=test_session_id,
-                request=mock_request,
-                is_current=True
-            )
+        with patch('services.session_service.DeviceParser') as mock_parser:
+            mock_parser.parse_user_agent.return_value = {
+                "device_name": "Chrome on MacOS",
+                "device_type": "desktop",
+                "browser": "Chrome",
+                "browser_version": "91.0",
+                "os": "MacOS",
+                "os_version": "10.15.7"
+            }
 
-        assert mock_db.rollback.called
+            with pytest.raises(Exception):
+                SessionService.create_session(
+                    db=mock_db,
+                    user_id=str(test_user_id),
+                    session_id=test_session_id,
+                    request=mock_request,
+                    is_current=True
+                )
+
+            assert mock_db.rollback.called
 
     # Test get_user_sessions
     def test_get_user_sessions(self, mock_db, test_user_id, mock_session):

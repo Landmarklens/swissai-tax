@@ -10,22 +10,33 @@ from botocore.exceptions import ClientError
 
 from database.connection import execute_insert, execute_one, execute_query
 
-# Initialize AWS clients
-s3_client = boto3.client('s3', region_name='us-east-1')
+# Get configuration from Parameter Store
 ssm_client = boto3.client('ssm', region_name='us-east-1')
-textract_client = boto3.client('textract', region_name='us-east-1')
 
-# Get S3 bucket name from Parameter Store
-def get_s3_bucket_name() -> str:
-    """Get S3 bucket name from Parameter Store"""
+def get_s3_config() -> tuple:
+    """Get S3 bucket name and region from Parameter Store"""
     try:
-        response = ssm_client.get_parameter(Name='/swissai-tax/s3/documents-bucket')
-        return response['Parameter']['Value']
-    except Exception as e:
-        print(f"Error getting S3 bucket name: {e}")
-        return 'swissai-tax-documents'
+        # Get bucket name
+        bucket_response = ssm_client.get_parameter(Name='/swissai-tax/s3/documents-bucket')
+        bucket_name = bucket_response['Parameter']['Value']
 
-S3_BUCKET = get_s3_bucket_name()
+        # Get S3 region
+        try:
+            region_response = ssm_client.get_parameter(Name='/swissai-tax/s3/region')
+            region = region_response['Parameter']['Value']
+        except:
+            region = 'eu-central-2'  # Default to bucket's actual region
+
+        return bucket_name, region
+    except Exception as e:
+        print(f"Error getting S3 config: {e}")
+        return 'swissai-tax-documents', 'eu-central-2'
+
+S3_BUCKET, S3_REGION = get_s3_config()
+
+# Initialize AWS clients with correct regions
+s3_client = boto3.client('s3', region_name=S3_REGION)
+textract_client = boto3.client('textract', region_name='us-east-1')  # Textract in us-east-1
 
 
 class DocumentService:

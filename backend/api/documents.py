@@ -171,13 +171,14 @@ async def upload_document_directly(
 
         # Upload to S3 directly
         import boto3
-        s3_client = boto3.client('s3')
+        from config import settings
+        s3_client = boto3.client('s3', region_name=settings.AWS_S3_REGION)
 
         file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'pdf'
         s3_key = f"documents/{session_id}/{document_type}/{file.filename}"
 
         s3_client.put_object(
-            Bucket=os.environ.get('S3_BUCKET_NAME', 'swissai-tax-documents-1758721021'),
+            Bucket=settings.AWS_S3_BUCKET_NAME,
             Key=s3_key,
             Body=content,
             ContentType=file.content_type,

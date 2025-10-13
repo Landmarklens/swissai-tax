@@ -229,6 +229,11 @@ describe('ForgotPassword Component', () => {
       expect(toast.error).toHaveBeenCalled();
     });
 
+    // Wait for the submit button to be enabled again after submission completes
+    await waitFor(() => {
+      expect(submitButton).not.toBeDisabled();
+    });
+
     // Clear mocks
     toast.error.mockClear();
 

@@ -54,8 +54,12 @@ const ManageSubscription = () => {
   const fetchSubscription = async () => {
     try {
       setLoading(true);
-      const data = await subscriptionService.getCurrentSubscription();
-      setSubscription(data);
+      const result = await subscriptionService.getCurrentSubscription();
+      if (result.success) {
+        setSubscription(result.data);
+      } else {
+        setError(result.error || t('subscription.error.fetch_failed', 'Failed to load subscription'));
+      }
     } catch (err) {
       console.error('Error fetching subscription:', err);
       setError(
@@ -70,7 +74,12 @@ const ManageSubscription = () => {
   const handleCancelSubscription = async () => {
     try {
       setActionLoading(true);
-      await subscriptionService.cancelSubscription(cancelReason);
+      const result = await subscriptionService.cancelSubscription(cancelReason);
+
+      if (!result.success) {
+        setError(result.error || t('subscription.error.cancel_failed', 'Failed to cancel subscription'));
+        return;
+      }
 
       // Refresh subscription data
       await fetchSubscription();
@@ -93,7 +102,12 @@ const ManageSubscription = () => {
   const handleSwitchPlan = async () => {
     try {
       setActionLoading(true);
-      await subscriptionService.switchPlan(targetPlan, 'User requested plan switch');
+      const result = await subscriptionService.switchPlan(targetPlan, 'User requested plan switch');
+
+      if (!result.success) {
+        setError(result.error || t('subscription.error.switch_failed', 'Failed to switch plan'));
+        return;
+      }
 
       // Refresh subscription data
       await fetchSubscription();
@@ -137,6 +151,21 @@ const ManageSubscription = () => {
       <Container maxWidth="lg" className="manage-subscription-page">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
           <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error && !subscription) {
+    return (
+      <Container maxWidth="lg" className="manage-subscription-page">
+        <Box sx={{ py: 8 }}>
+          <Typography variant="h4" gutterBottom>
+            {t('subscription.manage.title', 'Manage Subscription')}
+          </Typography>
+          <Alert severity="error" sx={{ mt: 4 }} onClose={() => setError(null)}>
+            {error}
+          </Alert>
         </Box>
       </Container>
     );

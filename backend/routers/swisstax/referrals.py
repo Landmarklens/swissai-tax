@@ -34,7 +34,7 @@ router = APIRouter(prefix="/referrals", tags=["referrals"])
 # USER REFERRAL ENDPOINTS
 # ============================================================================
 
-@router.get("/my-code", response_model=ReferralCodeResponse)
+@router.get("/my-code")
 def get_my_referral_code(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -44,7 +44,8 @@ def get_my_referral_code(
 
     try:
         referral_code = referral_service.generate_user_referral_code(str(current_user.id))
-        return referral_code
+        # Return in format expected by frontend: { referral_code: "CODE" }
+        return {"referral_code": referral_code.code}
     except Exception as e:
         logger.error(f"Error getting referral code: {e}")
         raise HTTPException(
@@ -86,7 +87,7 @@ def get_my_referral_stats(
         )
 
 
-@router.get("/my-credits", response_model=List[AccountCreditResponse])
+@router.get("/my-credits")
 def get_my_account_credits(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -100,7 +101,14 @@ def get_my_account_credits(
             UserAccountCredit.created_at.desc()
         ).limit(limit).all()
 
-        return [AccountCreditResponse.from_orm(c) for c in credits]
+        # Calculate current balance from the most recent transaction
+        total_balance_chf = float(credits[0].balance_after) if credits else 0
+
+        # Return in format expected by frontend: { credits: [...], total_balance_chf: X }
+        return {
+            "credits": [AccountCreditResponse.from_orm(c).model_dump(by_alias=True) for c in credits],
+            "total_balance_chf": total_balance_chf
+        }
     except Exception as e:
         logger.error(f"Error getting account credits: {e}")
         raise HTTPException(

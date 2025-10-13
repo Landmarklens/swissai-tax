@@ -145,7 +145,17 @@ describe('Header Component', () => {
     });
   });
 
-  describe.skip('Mobile View', () => {
+  describe('Mobile View', () => {
+    beforeEach(() => {
+      // Enable mobile view for these tests
+      useMediaQuery.default.mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      // Reset to desktop view
+      useMediaQuery.default.mockReturnValue(false);
+    });
+
     it('should render mobile menu button', () => {
       authService.isAuthenticated.mockReturnValue(false);
 

@@ -68,7 +68,7 @@ describe('ManageSubscription', () => {
 
   describe('No Subscription State', () => {
     it('should show no subscription message when user has no subscription', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(null);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: null });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -81,7 +81,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should show "View Plans" button when no subscription', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(null);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: null });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -99,7 +99,7 @@ describe('ManageSubscription', () => {
 
   describe('Active Subscription Display', () => {
     it('should display subscription details', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -115,7 +115,7 @@ describe('ManageSubscription', () => {
 
     it('should show commitment years for 5-year plan', async () => {
       const fiveYearSub = { ...mockActiveSubscription, plan_commitment_years: 5 };
-      subscriptionService.getCurrentSubscription.mockResolvedValue(fiveYearSub);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: fiveYearSub });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -127,7 +127,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should display billing history component', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -141,7 +141,7 @@ describe('ManageSubscription', () => {
 
   describe('Trial Period', () => {
     it('should show trial notice during trial', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockTrialSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockTrialSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -154,7 +154,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should show switch plan button during trial', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockTrialSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockTrialSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -166,7 +166,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should allow immediate cancellation during trial', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockTrialSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockTrialSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -180,7 +180,7 @@ describe('ManageSubscription', () => {
 
   describe('Cancellation', () => {
     it('should open cancel dialog when cancel button clicked', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -196,7 +196,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should call cancelSubscription when confirmed', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
       subscriptionService.cancelSubscription.mockResolvedValue({ success: true });
 
       await act(async () => {
@@ -219,7 +219,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should include cancellation reason when provided', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
       subscriptionService.cancelSubscription.mockResolvedValue({ success: true });
 
       await act(async () => {
@@ -246,7 +246,7 @@ describe('ManageSubscription', () => {
 
     it('should show canceled notice when cancel_at_period_end is true', async () => {
       const canceledSub = { ...mockActiveSubscription, cancel_at_period_end: true };
-      subscriptionService.getCurrentSubscription.mockResolvedValue(canceledSub);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: canceledSub });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -259,7 +259,7 @@ describe('ManageSubscription', () => {
 
     it('should not show cancel button if already canceled', async () => {
       const canceledSub = { ...mockActiveSubscription, status: 'canceled' };
-      subscriptionService.getCurrentSubscription.mockResolvedValue(canceledSub);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: canceledSub });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -273,7 +273,7 @@ describe('ManageSubscription', () => {
 
   describe('Plan Switching', () => {
     it('should open switch dialog when switch button clicked', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockTrialSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockTrialSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -295,7 +295,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should call switchPlan when confirmed', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockTrialSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockTrialSubscription });
       subscriptionService.switchPlan.mockResolvedValue({ success: true });
 
       await act(async () => {
@@ -331,7 +331,7 @@ describe('ManageSubscription', () => {
     });
 
     it('should not show switch plan button after trial', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -344,29 +344,32 @@ describe('ManageSubscription', () => {
   });
 
   describe('Error Handling', () => {
-    it.skip('should display error when fetching subscription fails', async () => {
+    it('should display error when fetching subscription fails', async () => {
+      jest.setTimeout(15000);
       const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-      subscriptionService.getCurrentSubscription.mockRejectedValue(
-        new Error('Network error')
-      );
+      subscriptionService.getCurrentSubscription.mockResolvedValue({
+        success: false,
+        error: 'Network error'
+      });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/Failed to load subscription/)).toBeInTheDocument();
-      });
+        expect(screen.getByText(/Network error/)).toBeInTheDocument();
+      }, { timeout: 10000 });
 
       consoleError.mockRestore();
     });
 
     it('should show error when cancellation fails', async () => {
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
-      subscriptionService.cancelSubscription.mockRejectedValue(
-        { response: { data: { detail: 'Cancellation failed' } } }
-      );
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
+      subscriptionService.cancelSubscription.mockResolvedValue({
+        success: false,
+        error: 'Cancellation failed'
+      });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -391,7 +394,7 @@ describe('ManageSubscription', () => {
   describe('Commitment Warning', () => {
     it('should show commitment notice for 5-year plan after trial', async () => {
       const committedSub = { ...mockActiveSubscription, plan_commitment_years: 5 };
-      subscriptionService.getCurrentSubscription.mockResolvedValue(committedSub);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: committedSub });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);
@@ -409,7 +412,7 @@ describe('ManageSubscription', () => {
       const scrollIntoViewMock = jest.fn();
       Element.prototype.scrollIntoView = scrollIntoViewMock;
 
-      subscriptionService.getCurrentSubscription.mockResolvedValue(mockActiveSubscription);
+      subscriptionService.getCurrentSubscription.mockResolvedValue({ success: true, data: mockActiveSubscription });
 
       await act(async () => {
         renderWithRouter(<ManageSubscription />);

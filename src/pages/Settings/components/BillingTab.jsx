@@ -64,7 +64,13 @@ const BillingTab = () => {
   const handleCancelPlan = async () => {
     setCanceling(true);
     try {
-      await subscriptionService.cancelSubscription('User requested cancellation from billing page');
+      const result = await subscriptionService.cancelSubscription('User requested cancellation from billing page');
+
+      if (!result.success) {
+        setError(result.error || 'Failed to cancel subscription');
+        setCancelDialogOpen(false);
+        return;
+      }
 
       // Refresh subscription data
       await fetchSubscriptionData();
@@ -72,6 +78,7 @@ const BillingTab = () => {
     } catch (err) {
       setError('Failed to cancel subscription');
       console.error('Error canceling subscription:', err);
+      setCancelDialogOpen(false);
     } finally {
       setCanceling(false);
     }
@@ -101,14 +108,6 @@ const BillingTab = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Alert severity="error" sx={{ mb: 2 }}>
-        {error}
-      </Alert>
-    );
-  }
-
   // No subscription state
   if (!subscription) {
     return (
@@ -117,6 +116,11 @@ const BillingTab = () => {
           <Typography variant="h6" fontWeight={600} mb={2}>
             {t('Current Plan')}
           </Typography>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+              {error}
+            </Alert>
+          )}
           <Alert severity="info" sx={{ mb: 2 }}>
             {t('You do not have an active subscription')}
           </Alert>
@@ -138,6 +142,12 @@ const BillingTab = () => {
           <Typography variant="h6" fontWeight={600} mb={3}>
             {t('Current Plan')}
           </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+              {error}
+            </Alert>
+          )}
 
           <Box
             sx={{

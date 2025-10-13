@@ -49,15 +49,20 @@ const SessionManagement = () => {
     try {
       const result = await sessionService.getSessions();
 
-      if (result.success) {
+      if (result && result.success) {
         setSessions(result.data.sessions || []);
+        if (showLoading) {
+          setLoading(false);
+        }
       } else {
-        setError(result.error || t('sessions.error.loadFailed'));
+        setError((result && result.error) || t('sessions.error.loadFailed'));
+        if (showLoading) {
+          setLoading(false);
+        }
       }
     } catch (err) {
       console.error('[Sessions] Load error:', err);
       setError(t('sessions.error.loadFailed'));
-    } finally {
       if (showLoading) {
         setLoading(false);
       }

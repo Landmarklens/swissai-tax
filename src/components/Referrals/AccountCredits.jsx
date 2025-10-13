@@ -50,9 +50,15 @@ const AccountCredits = ({ showHistory = true, limit = 5 }) => {
 
       const result = await referralService.getMyCredits();
 
-      if (result.success && result.data) {
-        setCredits(result.data.credits || []);
-        setBalance(result.data.total_balance_chf || 0);
+      if (result.success) {
+        // Handle null data gracefully
+        if (result.data === null) {
+          setCredits([]);
+          setBalance(0);
+        } else {
+          setCredits(result.data.credits || []);
+          setBalance(result.data.total_balance_chf || 0);
+        }
       } else {
         setError(result.error || t('Failed to load credits'));
       }

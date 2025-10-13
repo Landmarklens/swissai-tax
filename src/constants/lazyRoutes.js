@@ -37,6 +37,7 @@ const Policy = withSuspense(lazy(() => import('../pages/Policy/Policy')));
 const CookiePolicy = withSuspense(lazy(() => import('../pages/Policy/CookiePolicy')));
 const StatusPage = withSuspense(lazy(() => import('../pages/Status/StatusPage')));
 const Security = withSuspense(lazy(() => import('../pages/Security/Security')));
+const SubscriptionPlans = withSuspense(lazy(() => import('../pages/SubscriptionPlans/SubscriptionPlans')));
 
 // Dashboard and account pages
 const Dashboard = withSuspense(lazy(() => import('../pages/Dashboard/Dashboard')));
@@ -265,6 +266,7 @@ export const LAZY_NAVIGATION_ROUTE = [
   { path: '/contact-us', element: <Contact /> },
   { path: '/faq', element: <FAQ /> },
   { path: '/plan', element: <Plan /> },
+  { path: '/subscription-plans', element: <SubscriptionPlans /> },
 
   // Blog
   { path: '/blog-list', element: <BlogList /> },

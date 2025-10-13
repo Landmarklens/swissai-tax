@@ -167,13 +167,14 @@ class AccountCreditResponse(BaseModel):
     amount_chf: Decimal
     transaction_type: str
     source_type: Optional[str]
-    balance_before: Decimal
-    balance_after: Decimal
+    balance_before_chf: Decimal = Field(..., alias='balance_before')
+    balance_after_chf: Decimal = Field(..., alias='balance_after')
     description: Optional[str]
     created_at: datetime
 
     class Config:
         from_attributes = True
+        populate_by_name = True
 
 
 class AccountCreditSummary(BaseModel):

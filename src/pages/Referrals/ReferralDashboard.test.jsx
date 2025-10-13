@@ -45,7 +45,7 @@ const renderWithTheme = (component) => {
   );
 };
 
-describe.skip('ReferralDashboard', () => {
+describe('ReferralDashboard', () => {
   const mockReferralData = {
     code: 'TESTCODE123',
     stats: {
@@ -221,9 +221,8 @@ describe.skip('ReferralDashboard', () => {
 
       await waitFor(() => {
         // When stats are null, should display default zero values
-        const zeroText = screen.queryByText('0');
-        const zeroAmount = screen.queryByText('CHF 0.00');
-        expect(zeroText || zeroAmount).toBeTruthy();
+        expect(screen.getByText('Total Referrals')).toBeInTheDocument();
+        expect(screen.getByText('0')).toBeInTheDocument();
       });
     });
   });

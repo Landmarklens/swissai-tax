@@ -410,6 +410,9 @@ describe('BillingTab', () => {
   // CANCEL SUBSCRIPTION FLOW
   // ========================================================================
 
+  describe('Cancel Subscription Flow', () => {
+    jest.setTimeout(10000);
+
   it('should show cancel plan button for active subscription', async () => {
     subscriptionService.getCurrentSubscription.mockResolvedValue({
       success: true,
@@ -510,8 +513,7 @@ describe('BillingTab', () => {
     });
   });
 
-  it.skip('should cancel subscription successfully', async () => {
-    jest.setTimeout(10000);
+  it('should cancel subscription successfully', async () => {
     const updatedSubscription = {
       ...mockSubscription,
       cancel_at_period_end: true
@@ -536,7 +538,9 @@ describe('BillingTab', () => {
         data: []
       });
     subscriptionService.cancelSubscription.mockResolvedValue({
-      success: true
+      success: true,
+      data: updatedSubscription,
+      message: 'Subscription canceled successfully'
     });
 
     render(<BillingTab />);
@@ -554,23 +558,29 @@ describe('BillingTab', () => {
     });
 
     // Confirm cancellation
-    const confirmButtons = screen.getAllByText('Cancel Plan');
-    // The second "Cancel Plan" button is the confirm button in the dialog
-    const confirmButton = confirmButtons[1];
+    // Wait for the dialog buttons to be ready
+    let confirmButton;
+    await waitFor(() => {
+      const buttons = screen.getAllByRole('button', { name: 'Cancel Plan' });
+      expect(buttons.length).toBeGreaterThanOrEqual(1);
+      // Find the button that's in the dialog (the contained error button)
+      confirmButton = buttons.find(btn => btn.classList.contains('MuiButton-contained'));
+      expect(confirmButton).toBeDefined();
+      expect(confirmButton).not.toBeDisabled();
+    });
 
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
       expect(subscriptionService.cancelSubscription).toHaveBeenCalledWith('User requested cancellation from billing page');
-    });
+    }, { timeout: 10000 });
 
     await waitFor(() => {
       expect(screen.getByText('Canceling')).toBeInTheDocument();
     });
   });
 
-  it.skip('should handle cancel subscription error', async () => {
-    jest.setTimeout(10000);
+  it('should handle cancel subscription error', async () => {
     subscriptionService.getCurrentSubscription.mockResolvedValue({
       success: true,
       data: mockSubscription
@@ -579,7 +589,10 @@ describe('BillingTab', () => {
       success: true,
       data: []
     });
-    subscriptionService.cancelSubscription.mockRejectedValue(new Error('Failed to cancel'));
+    subscriptionService.cancelSubscription.mockResolvedValue({
+      success: false,
+      error: 'Failed to cancel'
+    });
 
     render(<BillingTab />);
 
@@ -595,15 +608,24 @@ describe('BillingTab', () => {
       expect(screen.getByText('Are you sure you want to cancel your plan?')).toBeInTheDocument();
     });
 
-    const confirmButtons = screen.getAllByText('Cancel Plan');
-    // The second "Cancel Plan" button is the confirm button in the dialog
-    const confirmButton = confirmButtons[1];
+    // Wait for the dialog buttons to be ready
+    let confirmButton;
+    await waitFor(() => {
+      const buttons = screen.getAllByRole('button', { name: 'Cancel Plan' });
+      expect(buttons.length).toBeGreaterThanOrEqual(1);
+      // Find the button that's in the dialog (the contained error button)
+      confirmButton = buttons.find(btn => btn.classList.contains('MuiButton-contained'));
+      expect(confirmButton).toBeDefined();
+      expect(confirmButton).not.toBeDisabled();
+    });
 
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to cancel subscription')).toBeInTheDocument();
-    });
+      expect(screen.getByText('Failed to cancel')).toBeInTheDocument();
+    }, { timeout: 10000 });
+  });
+
   });
 
   // ========================================================================

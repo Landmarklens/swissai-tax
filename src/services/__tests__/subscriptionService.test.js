@@ -8,7 +8,7 @@ import { api } from '../api';
 // Mock api service
 jest.mock('../api');
 
-describe.skip('Subscription Service', () => {
+describe('Subscription Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -49,7 +49,9 @@ describe.skip('Subscription Service', () => {
 
       api.get.mockRejectedValue(mockError);
 
-      await expect(subscriptionService.getCurrentSubscription()).rejects.toThrow();
+      const result = await subscriptionService.getCurrentSubscription();
+
+      expect(result).toEqual({ success: false, error: 'Unauthorized' });
     });
   });
 
@@ -67,7 +69,7 @@ describe.skip('Subscription Service', () => {
       expect(api.post).toHaveBeenCalledWith('/api/subscription/setup-intent', {
         plan_type: 'basic'
       });
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({ success: true, data: mockResponse });
     });
 
     it('should handle setup intent creation error', async () => {
@@ -81,17 +83,17 @@ describe.skip('Subscription Service', () => {
 
       api.post.mockRejectedValue(mockError);
 
-      await expect(
-        subscriptionService.createSetupIntent('invalid_plan')
-      ).rejects.toThrow('Invalid plan type');
+      const result = await subscriptionService.createSetupIntent('invalid_plan');
+
+      expect(result).toEqual({ success: false, error: 'Invalid plan type' });
     });
 
     it('should handle error without detail', async () => {
       api.post.mockRejectedValue(new Error('Network error'));
 
-      await expect(
-        subscriptionService.createSetupIntent('basic')
-      ).rejects.toThrow('Failed to create setup intent');
+      const result = await subscriptionService.createSetupIntent('basic');
+
+      expect(result).toEqual({ success: false, error: 'Failed to create setup intent' });
     });
   });
 
@@ -112,7 +114,7 @@ describe.skip('Subscription Service', () => {
         plan_type: 'pro',
         payment_method_id: 'pm_123'
       });
-      expect(result).toEqual(mockSubscription);
+      expect(result).toEqual({ success: true, data: mockSubscription });
     });
 
     it('should create subscription without payment method', async () => {
@@ -130,7 +132,7 @@ describe.skip('Subscription Service', () => {
         plan_type: 'basic',
         payment_method_id: null
       });
-      expect(result).toEqual(mockSubscription);
+      expect(result).toEqual({ success: true, data: mockSubscription });
     });
 
     it('should handle subscription creation error', async () => {
@@ -144,9 +146,9 @@ describe.skip('Subscription Service', () => {
 
       api.post.mockRejectedValue(mockError);
 
-      await expect(
-        subscriptionService.createSubscription('basic', 'pm_123')
-      ).rejects.toThrow('User already has an active subscription');
+      const result = await subscriptionService.createSubscription('basic', 'pm_123');
+
+      expect(result).toEqual({ success: false, error: 'User already has an active subscription' });
     });
   });
 
@@ -199,10 +201,8 @@ describe.skip('Subscription Service', () => {
 
       const result = await subscriptionService.cancelSubscription('Too expensive');
 
-      expect(api.post).toHaveBeenCalledWith('/api/subscription/cancel', {
-        reason: 'Too expensive'
-      });
-      expect(result).toEqual(mockResponse);
+      expect(api.post).toHaveBeenCalledWith('/api/subscription/cancel', { reason: 'Too expensive' });
+      expect(result).toEqual({ success: true, data: mockResponse, message: 'Subscription canceled successfully' });
     });
 
     it('should cancel subscription without reason', async () => {
@@ -215,10 +215,8 @@ describe.skip('Subscription Service', () => {
 
       const result = await subscriptionService.cancelSubscription();
 
-      expect(api.post).toHaveBeenCalledWith('/api/subscription/cancel', {
-        reason: null
-      });
-      expect(result).toEqual(mockResponse);
+      expect(api.post).toHaveBeenCalledWith('/api/subscription/cancel', { reason: null });
+      expect(result).toEqual({ success: true, data: mockResponse, message: 'Subscription canceled successfully' });
     });
 
     it('should handle cancellation error', async () => {
@@ -232,9 +230,9 @@ describe.skip('Subscription Service', () => {
 
       api.post.mockRejectedValue(mockError);
 
-      await expect(
-        subscriptionService.cancelSubscription('Test')
-      ).rejects.toThrow('Cannot cancel 5-year plan after trial');
+      const result = await subscriptionService.cancelSubscription('Test');
+
+      expect(result).toEqual({ success: false, error: 'Cannot cancel 5-year plan after trial' });
     });
   });
 
@@ -254,7 +252,7 @@ describe.skip('Subscription Service', () => {
         new_plan_type: 'premium',
         reason: 'Need more features'
       });
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({ success: true, data: mockResponse, message: 'Plan switched successfully' });
     });
 
     it('should switch plan without reason', async () => {
@@ -271,7 +269,7 @@ describe.skip('Subscription Service', () => {
         new_plan_type: 'basic',
         reason: null
       });
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({ success: true, data: mockResponse, message: 'Plan switched successfully' });
     });
 
     it('should handle switch plan error', async () => {
@@ -285,9 +283,9 @@ describe.skip('Subscription Service', () => {
 
       api.post.mockRejectedValue(mockError);
 
-      await expect(
-        subscriptionService.switchPlan('pro')
-      ).rejects.toThrow('Plan switching only allowed during trial');
+      const result = await subscriptionService.switchPlan('pro');
+
+      expect(result).toEqual({ success: false, error: 'Plan switching only allowed during trial' });
     });
   });
 
@@ -299,18 +297,19 @@ describe.skip('Subscription Service', () => {
         pause_reason: 'Financial difficulty'
       };
 
+      const resumeDate = new Date('2026-01-01');
       api.post.mockResolvedValue({ data: mockResponse });
 
       const result = await subscriptionService.pauseSubscription(
         'Financial difficulty',
-        '2026-01-01'
+        resumeDate
       );
 
       expect(api.post).toHaveBeenCalledWith('/api/subscription/pause', {
         reason: 'Financial difficulty',
-        resume_date: '2026-01-01'
+        resume_date: resumeDate.toISOString()
       });
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({ success: true, data: mockResponse, message: 'Pause request submitted successfully' });
     });
 
     it('should pause subscription without resume date', async () => {
@@ -327,7 +326,7 @@ describe.skip('Subscription Service', () => {
         reason: 'Taking a break',
         resume_date: null
       });
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({ success: true, data: mockResponse, message: 'Pause request submitted successfully' });
     });
 
     it('should handle pause error', async () => {
@@ -341,9 +340,9 @@ describe.skip('Subscription Service', () => {
 
       api.post.mockRejectedValue(mockError);
 
-      await expect(
-        subscriptionService.pauseSubscription('Test')
-      ).rejects.toThrow('No active subscription to pause');
+      const result = await subscriptionService.pauseSubscription('Test');
+
+      expect(result).toEqual({ success: false, error: 'No active subscription to pause' });
     });
   });
 
@@ -358,8 +357,8 @@ describe.skip('Subscription Service', () => {
 
       const result = await subscriptionService.getInvoices();
 
-      expect(api.get).toHaveBeenCalledWith('/api/subscription/invoices');
-      expect(result).toEqual(mockInvoices);
+      expect(api.get).toHaveBeenCalledWith('/api/subscription/invoices', { params: { limit: 50 } });
+      expect(result).toEqual({ success: true, data: mockInvoices });
     });
 
     it('should return empty array when no invoices', async () => {
@@ -367,7 +366,7 @@ describe.skip('Subscription Service', () => {
 
       const result = await subscriptionService.getInvoices();
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({ success: true, data: [] });
     });
 
     it('should handle invoices fetch error', async () => {
@@ -381,67 +380,44 @@ describe.skip('Subscription Service', () => {
 
       api.get.mockRejectedValue(mockError);
 
-      await expect(subscriptionService.getInvoices()).rejects.toThrow(
-        'No Stripe customer ID'
-      );
+      const result = await subscriptionService.getInvoices();
+
+      expect(result).toEqual({ success: false, error: 'No Stripe customer ID' });
     });
   });
 
   describe('getPlanDetails', () => {
-    it('should return free plan details', () => {
-      const result = subscriptionService.getPlanDetails('free');
+    it('should return annual_flex plan details', () => {
+      const result = subscriptionService.getPlanDetails('annual_flex');
 
       expect(result).toEqual({
-        name: 'Free',
-        price: 0,
-        currency: 'CHF',
-        commitment: 0,
-        features: ['1 basic tax filing per year', 'Community support']
-      });
-    });
-
-    it('should return basic plan details', () => {
-      const result = subscriptionService.getPlanDetails('basic');
-
-      expect(result).toEqual({
-        name: 'Basic',
-        price: 49,
-        currency: 'CHF',
+        name: 'Annual Flex',
+        price: 129,
         commitment: 1,
-        features: ['1 complete tax filing', 'Email support', 'Swiss data encryption']
-      });
-    });
-
-    it('should return pro plan details', () => {
-      const result = subscriptionService.getPlanDetails('pro');
-
-      expect(result).toEqual({
-        name: 'Pro',
-        price: 99,
-        currency: 'CHF',
-        commitment: 1,
+        description: 'Cancel anytime, pay annually',
         features: [
-          'Everything in Basic',
-          'AI optimization',
-          'Multi-canton comparison',
-          'Priority support'
+          'All tax filing features',
+          'Document management',
+          'Tax optimization insights',
+          'Cancel anytime'
         ]
       });
     });
 
-    it('should return premium plan details', () => {
-      const result = subscriptionService.getPlanDetails('premium');
+    it('should return 5_year_lock plan details', () => {
+      const result = subscriptionService.getPlanDetails('5_year_lock');
 
       expect(result).toEqual({
-        name: 'Premium',
-        price: 149,
-        currency: 'CHF',
-        commitment: 1,
+        name: '5-Year Price Lock',
+        price: 89,
+        commitment: 5,
+        description: 'Lock in lowest price for 5 years',
         features: [
-          'Everything in Pro',
-          'Tax expert review',
-          'Phone/video consultation',
-          'Audit assistance'
+          'All tax filing features',
+          'Document management',
+          'Tax optimization insights',
+          'Price locked for 5 years',
+          'Save CHF 200/year'
         ]
       });
     });
@@ -454,39 +430,13 @@ describe.skip('Subscription Service', () => {
   });
 
   describe('calculateSavings', () => {
-    it('should calculate savings correctly', () => {
-      const result = subscriptionService.calculateSavings('pro', 'premium');
+    it('should calculate savings for 5-year plan correctly', () => {
+      const result = subscriptionService.calculateSavings();
 
       expect(result).toEqual({
-        monthly: 4.17,
-        annual: 50,
-        percentage: 33.6
-      });
-    });
-
-    it('should return null for invalid plan types', () => {
-      const result = subscriptionService.calculateSavings('invalid', 'premium');
-
-      expect(result).toBeNull();
-    });
-
-    it('should handle same plan comparison', () => {
-      const result = subscriptionService.calculateSavings('basic', 'basic');
-
-      expect(result).toEqual({
-        monthly: 0,
-        annual: 0,
-        percentage: 0
-      });
-    });
-
-    it('should handle downgrade (negative savings)', () => {
-      const result = subscriptionService.calculateSavings('premium', 'basic');
-
-      expect(result).toEqual({
-        monthly: -8.33,
-        annual: -100,
-        percentage: -67.1
+        savingsPerYear: 40,
+        totalSavings: 200,
+        percentSavings: 31
       });
     });
   });
@@ -511,12 +461,12 @@ describe.skip('Subscription Service', () => {
       expect(result).toBe('pk_test_123');
     });
 
-    it('should return null if key not set', () => {
+    it('should return undefined if key not set', () => {
       delete process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
       const result = subscriptionService.getStripePublishableKey();
 
-      expect(result).toBeNull();
+      expect(result).toBeUndefined();
     });
   });
 
@@ -524,7 +474,9 @@ describe.skip('Subscription Service', () => {
     it('should handle network errors gracefully', async () => {
       api.get.mockRejectedValue(new Error('Network error'));
 
-      await expect(subscriptionService.getCurrentSubscription()).rejects.toThrow();
+      const result = await subscriptionService.getCurrentSubscription();
+
+      expect(result).toEqual({ success: false, error: 'Failed to fetch subscription' });
     });
 
     it('should handle 500 server errors', async () => {
@@ -539,7 +491,9 @@ describe.skip('Subscription Service', () => {
 
       api.get.mockRejectedValue(mockError);
 
-      await expect(subscriptionService.getCurrentSubscription()).rejects.toThrow();
+      const result = await subscriptionService.getCurrentSubscription();
+
+      expect(result).toEqual({ success: false, error: 'Internal server error' });
     });
 
     it('should handle 401 unauthorized errors', async () => {
@@ -554,9 +508,9 @@ describe.skip('Subscription Service', () => {
 
       api.post.mockRejectedValue(mockError);
 
-      await expect(
-        subscriptionService.createSubscription('basic', 'pm_123')
-      ).rejects.toThrow('Unauthorized');
+      const result = await subscriptionService.createSubscription('basic', 'pm_123');
+
+      expect(result).toEqual({ success: false, error: 'Unauthorized' });
     });
   });
 });

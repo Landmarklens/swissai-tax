@@ -430,7 +430,7 @@ describe('AccountCredits', () => {
       });
     });
 
-    it.skip('should handle null data gracefully', async () => {
+    it('should handle null data gracefully', async () => {
       referralService.getMyCredits.mockResolvedValue({
         success: true,
         data: null

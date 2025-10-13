@@ -7,6 +7,7 @@ from .base import Base
 from .data_export import DataExport
 from .deletion_request import DeletionRequest
 from .document import DocumentType, RequiredDocument
+from .feature_usage import FeatureUsage
 from .filing import Filing
 from .interview import InterviewAnswer, Question
 from .settings import UserSettings
@@ -40,4 +41,5 @@ __all__ = [
     'ReferralUsage',
     'ReferralReward',
     'UserAccountCredit',
+    'FeatureUsage',
 ]

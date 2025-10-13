@@ -69,11 +69,30 @@ class TestSessionService:
     # Test create_session
     def test_create_session_success(self, mock_db, test_user_id, test_session_id, mock_request):
         """Test creating a new session successfully."""
-        # Mock query to return no existing session
-        mock_query = MagicMock()
-        mock_db.query.return_value = mock_query
-        mock_query.filter.return_value = mock_query
-        mock_query.first.return_value = None
+        # Create separate mock queries for multiple query calls
+        mock_query_existing = MagicMock()
+        mock_query_existing.filter.return_value = mock_query_existing
+        mock_query_existing.first.return_value = None  # No existing session
+
+        mock_query_update = MagicMock()
+        mock_query_update.filter.return_value = mock_query_update
+        mock_query_update.update.return_value = 0
+
+        mock_query_duplicates = MagicMock()
+        mock_query_duplicates.filter.return_value = mock_query_duplicates
+        mock_query_duplicates.all.return_value = []  # No duplicates
+
+        mock_query_stale = MagicMock()
+        mock_query_stale.filter.return_value = mock_query_stale
+        mock_query_stale.all.return_value = []  # No stale sessions
+
+        # Mock db.query() to return different mock queries for each call
+        mock_db.query.side_effect = [
+            mock_query_existing,  # Check existing session
+            mock_query_update,     # Update is_current
+            mock_query_duplicates, # Query exact duplicates
+            mock_query_stale       # Query stale sessions
+        ]
 
         with patch('services.session_service.DeviceParser') as mock_parser:
             mock_parser.parse_user_agent.return_value = {
@@ -129,10 +148,29 @@ class TestSessionService:
         request.client = Mock()
         request.client.host = "192.168.1.1"
 
-        mock_query = MagicMock()
-        mock_db.query.return_value = mock_query
-        mock_query.filter.return_value = mock_query
-        mock_query.first.return_value = None
+        # Create separate mock queries for multiple query calls
+        mock_query_existing = MagicMock()
+        mock_query_existing.filter.return_value = mock_query_existing
+        mock_query_existing.first.return_value = None
+
+        mock_query_update = MagicMock()
+        mock_query_update.filter.return_value = mock_query_update
+        mock_query_update.update.return_value = 0
+
+        mock_query_duplicates = MagicMock()
+        mock_query_duplicates.filter.return_value = mock_query_duplicates
+        mock_query_duplicates.all.return_value = []
+
+        mock_query_stale = MagicMock()
+        mock_query_stale.filter.return_value = mock_query_stale
+        mock_query_stale.all.return_value = []
+
+        mock_db.query.side_effect = [
+            mock_query_existing,
+            mock_query_update,
+            mock_query_duplicates,
+            mock_query_stale
+        ]
 
         with patch('services.session_service.DeviceParser') as mock_parser:
             mock_parser.parse_user_agent.return_value = {
@@ -156,6 +194,30 @@ class TestSessionService:
 
     def test_create_session_error_handling(self, mock_db, test_user_id, test_session_id, mock_request):
         """Test that session creation errors are handled properly."""
+        # Mock queries properly before error occurs
+        mock_query_existing = MagicMock()
+        mock_query_existing.filter.return_value = mock_query_existing
+        mock_query_existing.first.return_value = None
+
+        mock_query_update = MagicMock()
+        mock_query_update.filter.return_value = mock_query_update
+        mock_query_update.update.return_value = 0
+
+        mock_query_duplicates = MagicMock()
+        mock_query_duplicates.filter.return_value = mock_query_duplicates
+        mock_query_duplicates.all.return_value = []
+
+        mock_query_stale = MagicMock()
+        mock_query_stale.filter.return_value = mock_query_stale
+        mock_query_stale.all.return_value = []
+
+        mock_db.query.side_effect = [
+            mock_query_existing,
+            mock_query_update,
+            mock_query_duplicates,
+            mock_query_stale
+        ]
+
         mock_db.commit.side_effect = Exception("Database error")
 
         with pytest.raises(Exception):

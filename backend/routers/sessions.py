@@ -55,6 +55,7 @@ async def list_sessions(
         # DEBUG: Log session data being returned
         for s in session_list:
             logger.info(f"[DEBUG] Returning session {s['session_id']}: is_current={s['is_current']}, is_active={s['is_active']}, last_active={s['last_active']}")
+            logger.info(f"[DEBUG] last_active type: {type(s['last_active'])}, repr: {repr(s['last_active'])}, ends with Z: {str(s['last_active']).endswith('Z')}")
 
         return {
             "success": True,

@@ -19,23 +19,28 @@ def get_s3_config() -> tuple:
         # Get bucket name
         bucket_response = ssm_client.get_parameter(Name='/swissai-tax/s3/documents-bucket')
         bucket_name = bucket_response['Parameter']['Value']
+        print(f"[S3 Config] Loaded bucket from Parameter Store: {bucket_name}")
 
         # Get S3 region
         try:
             region_response = ssm_client.get_parameter(Name='/swissai-tax/s3/region')
             region = region_response['Parameter']['Value']
-        except:
+            print(f"[S3 Config] Loaded region from Parameter Store: {region}")
+        except Exception as e:
             region = 'eu-central-2'  # Default to bucket's actual region
+            print(f"[S3 Config] Failed to load region from Parameter Store ({e}), using default: {region}")
 
         return bucket_name, region
     except Exception as e:
-        print(f"Error getting S3 config: {e}")
+        print(f"[S3 Config] Error getting S3 config: {e}")
         return 'swissai-tax-documents', 'eu-central-2'
 
 S3_BUCKET, S3_REGION = get_s3_config()
+print(f"[S3 Config] Final config - Bucket: {S3_BUCKET}, Region: {S3_REGION}")
 
 # Initialize AWS clients with correct regions
 s3_client = boto3.client('s3', region_name=S3_REGION)
+print(f"[S3 Config] S3 client initialized with region: {s3_client.meta.region_name}")
 textract_client = boto3.client('textract', region_name='us-east-1')  # Textract in us-east-1
 
 

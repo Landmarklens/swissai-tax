@@ -98,9 +98,9 @@ class UserSession(Base):
             "location": self.location,
             "is_active": self.is_active,
             "is_current": self.is_current,
-            "last_active": self.last_active.isoformat() if self.last_active else None,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "expires_at": self.expires_at.isoformat() if self.expires_at else None,
+            "last_active": self.last_active.isoformat() + 'Z' if self.last_active else None,
+            "created_at": self.created_at.isoformat() + 'Z' if self.created_at else None,
+            "expires_at": self.expires_at.isoformat() + 'Z' if self.expires_at else None,
         }
 
     def __repr__(self):

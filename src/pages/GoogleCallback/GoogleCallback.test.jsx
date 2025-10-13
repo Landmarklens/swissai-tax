@@ -129,7 +129,7 @@ describe('GoogleCallback Component', () => {
     }, { timeout: 3000 });
   });
 
-  it('should redirect to billing when subscription is required', async () => {
+  it('should redirect to subscription plans when subscription is required', async () => {
     mockSearchParams.set('requires_subscription', 'true');
 
     const store = createMockStore();
@@ -140,7 +140,7 @@ describe('GoogleCallback Component', () => {
     });
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/billing');
+      expect(mockNavigate).toHaveBeenCalledWith('/subscription/plans');
     }, { timeout: 3000 });
   });
 

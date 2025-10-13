@@ -134,6 +134,13 @@ class Settings(BaseSettings):
                 self.POSTGRES_USER = "test_user"
             if not self.POSTGRES_PASSWORD:
                 self.POSTGRES_PASSWORD = "test_password"
+            # Enable subscriptions in test mode for webhook tests
+            self.ENABLE_SUBSCRIPTIONS = True
+            # Set test Stripe keys if not provided
+            if not self.STRIPE_SECRET_KEY:
+                self.STRIPE_SECRET_KEY = "sk_test_fake_key_for_testing"
+            if not self.STRIPE_WEBHOOK_SECRET:
+                self.STRIPE_WEBHOOK_SECRET = "whsec_test_fake_webhook_secret"
         else:
             # Production: load from Parameter Store
             self._load_from_parameter_store()

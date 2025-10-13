@@ -20,6 +20,14 @@ from routers.contact import rate_limit_store, check_rate_limit
 client = TestClient(app)
 
 
+@pytest.fixture(autouse=True)
+def clear_rate_limit_store():
+    """Fixture to clear rate limit store before each test"""
+    rate_limit_store.clear()
+    yield
+    rate_limit_store.clear()
+
+
 class TestContactFormValidation:
     """Test Pydantic validation for contact form"""
 

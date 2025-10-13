@@ -738,7 +738,7 @@ class TestJobSchedulingConfiguration(unittest.TestCase):
         # Verify configuration
         self.assertEqual(exports_call[1]['func'], scheduler.process_pending_exports)
         self.assertEqual(exports_call[1]['max_instances'], 1)
-        self.assertEqual(exports_call[1]['misfire_grace_time'], 60)
+        self.assertEqual(exports_call[1]['misfire_grace_time'], 30)
         self.assertTrue(exports_call[1]['replace_existing'])
 
     @patch('services.background_jobs.BackgroundScheduler')

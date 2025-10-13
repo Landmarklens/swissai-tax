@@ -532,7 +532,7 @@ describe('SessionManagement', () => {
         success: true,
         data: { sessions: mockSessions }
       })
-      .mockResolvedValue({
+      .mockResolvedValueOnce({
         success: true,
         data: { sessions: [mockSessions[0]] }
       });

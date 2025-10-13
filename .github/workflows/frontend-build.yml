@@ -42,6 +42,7 @@ jobs:
 
     - name: Run tests
       run: |
+        npm test -- --coverage --watchAll=false --passWithNoTests=false --clearCache
         npm test -- --coverage --watchAll=false --passWithNoTests=false
 
     - name: Build application

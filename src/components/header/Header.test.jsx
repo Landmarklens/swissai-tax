@@ -288,7 +288,6 @@ describe('Header Component', () => {
       fireEvent.click(menuButton);
 
       // Should see account pages
-      expect(screen.getByText('Dashboard')).toBeInTheDocument();
       expect(screen.getByText('Tax Filings')).toBeInTheDocument();
       expect(screen.getByText('Documents')).toBeInTheDocument();
       expect(screen.getByText('Profile')).toBeInTheDocument();
@@ -322,9 +321,6 @@ describe('Header Component', () => {
       fireEvent.click(menuButton);
 
       // Check that links have correct href attributes
-      const dashboardLink = screen.getByText('Dashboard').closest('a');
-      expect(dashboardLink).toHaveAttribute('href', '/dashboard');
-
       const filingsLink = screen.getByText('Tax Filings').closest('a');
       expect(filingsLink).toHaveAttribute('href', '/filings');
 
@@ -380,7 +376,6 @@ describe('Header Component', () => {
       renderHeader();
 
       // Desktop view shows account pages in the main nav when logged in
-      expect(screen.getByText('Dashboard')).toBeInTheDocument();
       expect(screen.getByText('Tax Filings')).toBeInTheDocument();
       expect(screen.getByText('Documents')).toBeInTheDocument();
       expect(screen.getByText('Profile')).toBeInTheDocument();

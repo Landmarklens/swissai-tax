@@ -228,14 +228,13 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
                   display: 'flex',
                   flexDirection: 'column',
                   position: 'relative',
-                  border: plan.popular ? '4px solid #1976d2' : plan.isFree ? '1px solid #e0e0e0' : '2px solid #e0e0e0',
-                  borderRadius: plan.popular ? 3 : 2,
+                  border: plan.popular ? '6px solid #1976d2' : plan.isFree ? '1px solid #e0e0e0' : '2px solid #e0e0e0',
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   bgcolor: plan.popular ? '#f5f9ff' : 'white',
-                  mt: plan.popular ? 2 : 0,
-                  mb: plan.popular ? 2 : 0,
+                  transform: plan.popular ? 'scale(1.05)' : 'scale(1)',
+                  my: plan.popular ? 2 : 0,
                   '&:hover': {
-                    transform: 'translateY(-8px)',
+                    transform: plan.popular ? 'scale(1.05) translateY(-8px)' : 'translateY(-8px)',
                     boxShadow: plan.popular ? '0 16px 32px rgba(25,118,210,0.25)' : '0 12px 24px rgba(0,0,0,0.15)'
                   }
                 }}>
@@ -245,22 +244,23 @@ const SubscriptionPlans = ({ referralCode = '' }) => {
                     color="primary"
                     sx={{
                       position: 'absolute',
-                      top: -16,
+                      top: -20,
                       left: '50%',
                       transform: 'translateX(-50%)',
                       fontWeight: 'bold',
                       fontSize: '0.75rem',
-                      height: 30,
-                      px: 2
+                      height: 32,
+                      zIndex: 1
                     }}
                   />
                 )}
 
                 <CardContent sx={{
                   flexGrow: 1,
-                  p: plan.popular ? 4 : 4,
-                  pt: plan.popular ? 5 : 4,
-                  pb: plan.popular ? 5 : 4
+                  p: 4,
+                  pt: plan.popular ? 6 : 4,
+                  pb: plan.popular ? 5 : 4,
+                  px: plan.popular ? 5 : 4
                 }}>
                   {/* Plan Header */}
                   <Typography variant="h4" component="h2" gutterBottom>

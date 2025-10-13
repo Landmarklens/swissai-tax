@@ -149,7 +149,7 @@ class TestSessionRouter:
         assert response.status_code == 404
 
     # Test POST /sessions/revoke-all
-    @patch('routers.sessions.get_session_id_from_request')
+    @patch('core.security.get_session_id_from_request')
     @patch('routers.sessions.session_service')
     def test_revoke_all_other_sessions_success(
         self, mock_session_service, mock_get_session_id, client, test_user

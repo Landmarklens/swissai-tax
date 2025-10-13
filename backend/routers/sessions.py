@@ -52,6 +52,10 @@ async def list_sessions(
         # Convert to dict for JSON response
         session_list = [session.to_dict() for session in sessions]
 
+        # DEBUG: Log session data being returned
+        for s in session_list:
+            logger.info(f"[DEBUG] Returning session {s['session_id']}: is_current={s['is_current']}, is_active={s['is_active']}, last_active={s['last_active']}")
+
         return {
             "success": True,
             "sessions": session_list,

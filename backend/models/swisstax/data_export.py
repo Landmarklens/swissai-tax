@@ -97,7 +97,7 @@ class DataExport(SwissTaxBase, Base):
     def is_available(self):
         """Check if export is ready to download"""
         try:
-            return self.is_completed and not self.is_expired and self.file_url
+            return bool(self.is_completed and not self.is_expired and self.file_url)
         except Exception:
             return False
 

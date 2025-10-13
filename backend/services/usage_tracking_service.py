@@ -10,10 +10,10 @@ from typing import Optional, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 
-from backend.models.swisstax.user import User
-from backend.models.swisstax.feature_usage import FeatureUsage
-from backend.models.swisstax.subscription import Subscription
-from backend.utils.plan_features import get_feature_limit, get_user_plan_type, is_grandfathered
+from models.swisstax.user import User
+from models.swisstax.feature_usage import FeatureUsage
+from models.swisstax.subscription import Subscription
+from utils.plan_features import get_feature_limit, get_user_plan_type, is_grandfathered
 
 
 class UsageTrackingService:

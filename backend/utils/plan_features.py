@@ -12,8 +12,8 @@ from datetime import datetime
 import logging
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from backend.models.swisstax.subscription import Subscription
-from backend.models.swisstax.user import User
+from models.swisstax.subscription import Subscription
+from models.swisstax.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -325,6 +325,10 @@ def get_feature_limit(user: User, db: Session, feature_name: str) -> Optional[in
 
     feature_value = features.get(feature_name)
 
+    # Boolean features have no limit concept (check before numeric, since bool is subclass of int)
+    if isinstance(feature_value, bool):
+        return None
+
     # Return numeric limits
     if isinstance(feature_value, (int, float)):
         # Return None for "unlimited" values (999+)
@@ -406,10 +410,14 @@ def _is_upgrade(current_value: Any, target_value: Any) -> bool:
     # Numeric: higher is better (None means unlimited)
     if isinstance(current_value, (int, float)) and isinstance(target_value, (int, float)):
         return target_value > current_value
-    if current_value is not None and target_value is None:
+    # Numeric -> Unlimited is upgrade
+    if isinstance(current_value, (int, float)) and target_value is None:
         return True  # Limited -> Unlimited
+    # Unlimited -> Limited is downgrade (only if current is explicitly numeric None context)
+    if current_value is None and isinstance(target_value, (int, float)):
+        return False  # Unlimited -> Limited is downgrade
 
-    # String: any change to non-empty is upgrade
+    # String: any change to non-empty is upgrade (None or '' to something)
     if not current_value and target_value:
         return True
 

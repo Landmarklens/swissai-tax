@@ -8,9 +8,9 @@ from datetime import datetime, date, timedelta
 from unittest.mock import MagicMock, Mock, patch
 from sqlalchemy import and_
 
-from backend.services.usage_tracking_service import UsageTrackingService, get_usage_service
-from backend.models.swisstax.user import User
-from backend.models.swisstax.feature_usage import FeatureUsage
+from services.usage_tracking_service import UsageTrackingService, get_usage_service
+from models.swisstax.user import User
+from models.swisstax.feature_usage import FeatureUsage
 
 
 # ============================================================================
@@ -51,7 +51,7 @@ def mock_feature_usage():
 @pytest.mark.unit
 def test_get_current_period_annual(usage_service):
     """Test getting current annual period"""
-    with patch('backend.services.usage_tracking_service.datetime') as mock_datetime:
+    with patch('services.usage_tracking_service.datetime') as mock_datetime:
         mock_datetime.now.return_value.date.return_value = date(2025, 6, 15)
 
         period_start, period_end = usage_service.get_current_period('annual')
@@ -63,7 +63,7 @@ def test_get_current_period_annual(usage_service):
 @pytest.mark.unit
 def test_get_current_period_monthly_mid_year(usage_service):
     """Test getting current monthly period mid-year"""
-    with patch('backend.services.usage_tracking_service.datetime') as mock_datetime:
+    with patch('services.usage_tracking_service.datetime') as mock_datetime:
         mock_datetime.now.return_value.date.return_value = date(2025, 6, 15)
 
         period_start, period_end = usage_service.get_current_period('monthly')
@@ -75,7 +75,7 @@ def test_get_current_period_monthly_mid_year(usage_service):
 @pytest.mark.unit
 def test_get_current_period_monthly_december(usage_service):
     """Test getting monthly period for December"""
-    with patch('backend.services.usage_tracking_service.datetime') as mock_datetime:
+    with patch('services.usage_tracking_service.datetime') as mock_datetime:
         mock_datetime.now.return_value.date.return_value = date(2025, 12, 15)
 
         period_start, period_end = usage_service.get_current_period('monthly')
@@ -87,7 +87,7 @@ def test_get_current_period_monthly_december(usage_service):
 @pytest.mark.unit
 def test_get_current_period_monthly_february_leap_year(usage_service):
     """Test getting monthly period for February in leap year"""
-    with patch('backend.services.usage_tracking_service.datetime') as mock_datetime:
+    with patch('services.usage_tracking_service.datetime') as mock_datetime:
         mock_datetime.now.return_value.date.return_value = date(2024, 2, 15)
 
         period_start, period_end = usage_service.get_current_period('monthly')
@@ -99,7 +99,7 @@ def test_get_current_period_monthly_february_leap_year(usage_service):
 @pytest.mark.unit
 def test_get_current_period_monthly_february_non_leap_year(usage_service):
     """Test getting monthly period for February in non-leap year"""
-    with patch('backend.services.usage_tracking_service.datetime') as mock_datetime:
+    with patch('services.usage_tracking_service.datetime') as mock_datetime:
         mock_datetime.now.return_value.date.return_value = date(2025, 2, 15)
 
         period_start, period_end = usage_service.get_current_period('monthly')
@@ -130,7 +130,7 @@ def test_get_or_create_usage_creates_new(mock_user, usage_service):
     from tests.conftest import create_mock_query_result
     usage_service.db.query.return_value = create_mock_query_result(None)
 
-    with patch('backend.services.usage_tracking_service.FeatureUsage') as MockFeatureUsage:
+    with patch('services.usage_tracking_service.FeatureUsage') as MockFeatureUsage:
         mock_new_usage = Mock(spec=FeatureUsage)
         MockFeatureUsage.return_value = mock_new_usage
 
@@ -202,7 +202,7 @@ def test_increment_usage_negative_raises_error(mock_user, usage_service):
 # ============================================================================
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.is_grandfathered', return_value=True)
+@patch('services.usage_tracking_service.is_grandfathered', return_value=True)
 def test_check_limit_grandfathered_user(mock_is_grandfathered, mock_user, usage_service):
     """Test grandfathered user has unlimited access"""
     result = usage_service.check_limit(mock_user, 'filings_per_year')
@@ -214,7 +214,7 @@ def test_check_limit_grandfathered_user(mock_is_grandfathered, mock_user, usage_
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=None)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=None)
 def test_check_limit_unlimited(mock_get_limit, mock_user, usage_service):
     """Test unlimited feature returns allowed=True"""
     result = usage_service.check_limit(mock_user, 'document_uploads')
@@ -225,7 +225,7 @@ def test_check_limit_unlimited(mock_get_limit, mock_user, usage_service):
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=10)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=10)
 def test_check_limit_within_limit(mock_get_limit, mock_user, usage_service):
     """Test usage within limit is allowed"""
     with patch.object(usage_service, 'get_usage_count', return_value=5):
@@ -238,7 +238,7 @@ def test_check_limit_within_limit(mock_get_limit, mock_user, usage_service):
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=10)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=10)
 def test_check_limit_at_limit(mock_get_limit, mock_user, usage_service):
     """Test usage at limit is not allowed"""
     with patch.object(usage_service, 'get_usage_count', return_value=10):
@@ -251,7 +251,7 @@ def test_check_limit_at_limit(mock_get_limit, mock_user, usage_service):
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=10)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=10)
 def test_check_limit_exceeds_limit(mock_get_limit, mock_user, usage_service):
     """Test usage exceeding limit is not allowed"""
     with patch.object(usage_service, 'get_usage_count', return_value=8):
@@ -268,7 +268,7 @@ def test_check_limit_exceeds_limit(mock_get_limit, mock_user, usage_service):
 # ============================================================================
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=10)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=10)
 def test_track_and_check_allowed_with_increment(mock_get_limit, mock_user, usage_service):
     """Test track_and_check increments when allowed"""
     with patch.object(usage_service, 'get_usage_count', return_value=5):
@@ -287,7 +287,7 @@ def test_track_and_check_allowed_with_increment(mock_get_limit, mock_user, usage
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=10)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=10)
 def test_track_and_check_not_allowed_no_increment(mock_get_limit, mock_user, usage_service):
     """Test track_and_check doesn't increment when not allowed"""
     with patch.object(usage_service, 'get_usage_count', return_value=10):
@@ -303,7 +303,7 @@ def test_track_and_check_not_allowed_no_increment(mock_get_limit, mock_user, usa
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=10)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=10)
 def test_track_and_check_allowed_no_increment_requested(mock_get_limit, mock_user, usage_service):
     """Test track_and_check doesn't increment when increment=False"""
     with patch.object(usage_service, 'get_usage_count', return_value=5):
@@ -337,7 +337,7 @@ def test_get_all_usage_for_user(mock_user, usage_service, mock_feature_usage):
     mock_query.all.return_value = [mock_feature_usage, mock_usage_2]
     usage_service.db.query.return_value = mock_query
 
-    with patch('backend.services.usage_tracking_service.get_feature_limit') as mock_get_limit:
+    with patch('services.usage_tracking_service.get_feature_limit') as mock_get_limit:
         mock_get_limit.side_effect = [10, None]  # First feature has limit, second unlimited
 
         result = usage_service.get_all_usage_for_user(mock_user)
@@ -427,7 +427,7 @@ def test_get_current_period_invalid_reset_type(usage_service):
 
 
 @pytest.mark.unit
-@patch('backend.services.usage_tracking_service.get_feature_limit', return_value=0)
+@patch('services.usage_tracking_service.get_feature_limit', return_value=0)
 def test_check_limit_zero_limit(mock_get_limit, mock_user, usage_service):
     """Test feature with zero limit"""
     with patch.object(usage_service, 'get_usage_count', return_value=0):

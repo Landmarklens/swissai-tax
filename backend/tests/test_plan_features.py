@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, Mock, patch
 from fastapi import HTTPException
 
-from backend.utils.plan_features import (
+from utils.plan_features import (
     PLAN_FEATURES,
     FEATURE_GATING_ROLLOUT_DATE,
     is_grandfathered,
@@ -24,8 +24,8 @@ from backend.utils.plan_features import (
     _get_required_plan,
     _is_upgrade,
 )
-from backend.models.swisstax.user import User
-from backend.models.swisstax.subscription import Subscription
+from models.swisstax.user import User
+from models.swisstax.subscription import Subscription
 
 
 # ============================================================================
@@ -44,7 +44,7 @@ def test_is_grandfathered_disabled():
 
 
 @pytest.mark.unit
-@patch('backend.utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1))
+@patch('utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1))
 def test_is_grandfathered_before_date():
     """Test user created before rollout date is grandfathered"""
     user = Mock(spec=User)
@@ -55,7 +55,7 @@ def test_is_grandfathered_before_date():
 
 
 @pytest.mark.unit
-@patch('backend.utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1))
+@patch('utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1))
 def test_is_grandfathered_after_date():
     """Test user created after rollout date is not grandfathered"""
     user = Mock(spec=User)
@@ -66,7 +66,7 @@ def test_is_grandfathered_after_date():
 
 
 @pytest.mark.unit
-@patch('backend.utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1, tzinfo=timezone.utc))
+@patch('utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1, tzinfo=timezone.utc))
 def test_is_grandfathered_timezone_aware_user():
     """Test timezone-aware comparison"""
     user = Mock(spec=User)
@@ -77,7 +77,7 @@ def test_is_grandfathered_timezone_aware_user():
 
 
 @pytest.mark.unit
-@patch('backend.utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1))
+@patch('utils.plan_features.FEATURE_GATING_ROLLOUT_DATE', datetime(2025, 11, 1))
 def test_is_grandfathered_naive_user_datetime():
     """Test naive user datetime with aware rollout date"""
     user = Mock(spec=User)
@@ -141,7 +141,7 @@ def test_get_user_plan_type_invalid_plan_type(mock_user, mock_db_session):
     from tests.conftest import create_mock_query_result
     mock_db_session.query.return_value = create_mock_query_result(mock_subscription)
 
-    with patch('backend.utils.plan_features.logger') as mock_logger:
+    with patch('utils.plan_features.logger') as mock_logger:
         result = get_user_plan_type(mock_user, mock_db_session)
 
         assert result == 'free'
@@ -245,7 +245,7 @@ def test_has_feature_undefined_feature(mock_user, mock_db_session):
 
 
 @pytest.mark.unit
-@patch('backend.utils.plan_features.is_grandfathered', return_value=True)
+@patch('utils.plan_features.is_grandfathered', return_value=True)
 def test_has_feature_grandfathered_user(mock_is_grandfathered, mock_user, mock_db_session):
     """Test grandfathered user has all features"""
     result = has_feature(mock_user, mock_db_session, 'any_feature')
@@ -297,7 +297,7 @@ def test_get_feature_limit_boolean_returns_none(mock_user, mock_db_session):
 
 
 @pytest.mark.unit
-@patch('backend.utils.plan_features.is_grandfathered', return_value=True)
+@patch('utils.plan_features.is_grandfathered', return_value=True)
 def test_get_feature_limit_grandfathered(mock_is_grandfathered, mock_user, mock_db_session):
     """Test grandfathered user gets unlimited"""
     result = get_feature_limit(mock_user, mock_db_session, 'filings_per_year')
@@ -428,9 +428,9 @@ async def test_require_feature_decorator_denied():
     mock_db = MagicMock()
 
     # Setup mock to return free plan with feature disabled
-    with patch('backend.utils.plan_features.has_feature', return_value=False):
-        with patch('backend.utils.plan_features.get_active_subscription', return_value=None):
-            with patch('backend.utils.plan_features._get_required_plan', return_value='pro'):
+    with patch('utils.plan_features.has_feature', return_value=False):
+        with patch('utils.plan_features.get_active_subscription', return_value=None):
+            with patch('utils.plan_features._get_required_plan', return_value='pro'):
                 @require_feature('premium_feature')
                 async def test_endpoint(db, current_user):
                     return {"status": "success"}

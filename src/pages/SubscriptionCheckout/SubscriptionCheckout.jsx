@@ -61,7 +61,8 @@ const SubscriptionCheckout = () => {
 
       // Create SetupIntent for payment method collection
       const intent = await subscriptionService.createSetupIntent(planType);
-      setSetupIntent(intent);
+      // Unwrap the response to get the actual SetupIntent data
+      setSetupIntent(intent.data);
 
       setActiveStep(1); // Move to payment step
     } catch (err) {

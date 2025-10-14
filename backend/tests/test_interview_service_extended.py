@@ -244,6 +244,7 @@ class TestInterviewServiceSubmitAnswer(unittest.TestCase):
         # Setup question with validation
         question = Mock(spec=Question)
         question.id = 'Q01'
+        question.type = QuestionType.SINGLE_CHOICE
         question.validate_answer.return_value = (False, 'Invalid value')
 
         self.mock_question_loader.get_question.return_value = question
@@ -276,6 +277,7 @@ class TestInterviewServiceSubmitAnswer(unittest.TestCase):
         # Setup current question (Q01 - single answer)
         current_question = Mock(spec=Question)
         current_question.id = 'Q01'
+        current_question.type = QuestionType.SINGLE_CHOICE
         current_question.validate_answer.return_value = (True, '')
         current_question.auto_lookup = False
 
@@ -333,7 +335,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
         self.service = InterviewService(db=None)
 
     def test_married_flow_adds_spouse_questions(self):
-        """Test Q01 = 'married' adds spouse questions Q01a-d"""
+        """Test Q01 = 'married' adds spouse questions Q01a, Q01c, Q01d (Q01b removed)"""
         # Setup session
         session_id = 'test-session'
         self.service.sessions[session_id] = {
@@ -350,14 +352,15 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
         # Setup question
         question = Mock(spec=Question)
         question.id = 'Q01'
+        question.type = QuestionType.SINGLE_CHOICE
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
-        # Setup next question (Q01a - spouse first name)
+        # Setup next question (Q01a - spouse AHV number)
         next_question = Mock(spec=Question)
         next_question.id = 'Q01a'
-        next_question.text = {'en': "Spouse's first name"}
-        next_question.type = QuestionType.TEXT
+        next_question.text = {'en': "Spouse's AHV number"}
+        next_question.type = QuestionType.AHV_NUMBER
         next_question.required = True
         next_question.options = []
         next_question.validation = {}
@@ -373,11 +376,11 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
         self.assertEqual(session['answers']['Q01'], 'married')
         self.assertIn('Q01', session['completed_questions'])
 
-        # Verify spouse questions were added to pending
-        self.assertIn('Q01a', session['pending_questions'])
-        self.assertIn('Q01b', session['pending_questions'])
-        self.assertIn('Q01c', session['pending_questions'])
-        self.assertIn('Q01d', session['pending_questions'])
+        # Verify spouse questions were added to pending (Q01b removed in new design)
+        self.assertIn('Q01a', session['pending_questions'])  # AHV number
+        self.assertIn('Q01c', session['pending_questions'])  # DOB
+        self.assertIn('Q01d', session['pending_questions'])  # Employed
+        # Q01b (spouse last name) no longer exists
 
         # Verify next question is Q01a
         self.assertEqual(result['current_question']['id'], 'Q01a')
@@ -399,13 +402,14 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q03'
+        question.type = QuestionType.YES_NO
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
         next_question = Mock(spec=Question)
         next_question.id = 'Q03a'
         next_question.text = {'en': 'How many children?'}
-        next_question.type = QuestionType.NUMBER
+        next_question.type = QuestionType.DROPDOWN
         next_question.required = True
         next_question.options = []
         next_question.validation = {}
@@ -438,6 +442,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q03a'
+        question.type = QuestionType.DROPDOWN
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -483,6 +488,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q03b'
+        question.type = QuestionType.GROUP
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -525,6 +531,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q03b'
+        question.type = QuestionType.GROUP
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -565,6 +572,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q06'
+        question.type = QuestionType.YES_NO
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -605,6 +613,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q06a'
+        question.type = QuestionType.TEXT
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -677,16 +686,18 @@ class TestInterviewServiceEncryption(unittest.TestCase):
 
     def test_is_question_sensitive(self):
         """Test _is_question_sensitive identifies sensitive questions"""
-        # Sensitive questions
-        self.assertTrue(self.service._is_question_sensitive('Q01a'))  # Spouse first name
-        self.assertTrue(self.service._is_question_sensitive('Q01b'))  # Spouse last name
+        # Sensitive questions (NEW: Only 4 questions remain sensitive)
+        self.assertTrue(self.service._is_question_sensitive('Q01a'))  # Spouse AHV number
         self.assertTrue(self.service._is_question_sensitive('Q01c'))  # Spouse DOB
         self.assertTrue(self.service._is_question_sensitive('Q02a'))  # Municipality
         self.assertTrue(self.service._is_question_sensitive('Q03b'))  # Child details
-        self.assertTrue(self.service._is_question_sensitive('Q08a'))  # Pillar 3a amount
-        self.assertTrue(self.service._is_question_sensitive('Q11a'))  # Donation amount
-        self.assertTrue(self.service._is_question_sensitive('Q12a'))  # Alimony amount
-        self.assertTrue(self.service._is_question_sensitive('Q13a'))  # Medical expenses
+
+        # No longer sensitive (document uploads now, not manual entry)
+        self.assertFalse(self.service._is_question_sensitive('Q01b'))  # Removed
+        self.assertFalse(self.service._is_question_sensitive('Q08a'))  # Document upload
+        self.assertFalse(self.service._is_question_sensitive('Q11a'))  # Document upload
+        self.assertFalse(self.service._is_question_sensitive('Q12a'))  # Document upload
+        self.assertFalse(self.service._is_question_sensitive('Q13a'))  # Document upload
 
         # Non-sensitive questions
         self.assertFalse(self.service._is_question_sensitive('Q01'))   # Civil status
@@ -705,20 +716,21 @@ class TestInterviewServiceEncryption(unittest.TestCase):
             'current_question_id': 'Q01a',
             'answers': {},
             'completed_questions': [],
-            'pending_questions': ['Q01b', 'Q01c', 'Q01d'],
+            'pending_questions': ['Q01c', 'Q01d'],  # Changed: removed Q01b
             'language': 'en'
         }
 
-        # Setup sensitive question (spouse first name)
+        # Setup sensitive question (spouse AHV number - changed from first name)
         question = Mock(spec=Question)
         question.id = 'Q01a'
+        question.type = QuestionType.AHV_NUMBER
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
         next_question = Mock(spec=Question)
-        next_question.id = 'Q01b'
-        next_question.text = {'en': "Spouse's last name"}
-        next_question.type = QuestionType.TEXT
+        next_question.id = 'Q01c'  # Changed: Q01b no longer exists, go to Q01c
+        next_question.text = {'en': "Spouse's date of birth"}
+        next_question.type = QuestionType.DATE
         next_question.required = True
         next_question.options = []
         next_question.validation = {}
@@ -726,18 +738,19 @@ class TestInterviewServiceEncryption(unittest.TestCase):
 
         self.mock_question_loader.get_question.side_effect = [question, next_question]
 
-        # Execute
-        result = self.service.submit_answer(session_id, 'Q01a', 'John')
+        # Execute - submit valid AHV number
+        ahv_number = '756.1234.5678.97'
+        result = self.service.submit_answer(session_id, 'Q01a', ahv_number)
 
         # Assert
         session = self.service.sessions[session_id]
 
-        # Verify encryption was called
-        self.mock_encryption.encrypt.assert_called_with('John')
+        # Verify encryption was called with AHV number
+        self.mock_encryption.encrypt.assert_called_with(ahv_number)
 
         # Verify encrypted value was stored (not plain text)
         self.assertEqual(session['answers']['Q01a'], 'encrypted_value_xyz')
-        self.assertNotEqual(session['answers']['Q01a'], 'John')
+        self.assertNotEqual(session['answers']['Q01a'], ahv_number)
 
     def test_no_encryption_for_non_sensitive(self):
         """Test that non-sensitive answers are not encrypted"""
@@ -756,6 +769,7 @@ class TestInterviewServiceEncryption(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q01'
+        question.type = QuestionType.SINGLE_CHOICE
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -788,16 +802,16 @@ class TestInterviewServiceEncryption(unittest.TestCase):
         # Setup answers with mix of encrypted and plain
         answers = {
             'Q01': 'married',  # Non-sensitive (plain)
-            'Q01a': 'encrypted_firstname',  # Sensitive (encrypted)
-            'Q01b': 'encrypted_lastname',   # Sensitive (encrypted)
+            'Q01a': 'encrypted_ahv',  # Sensitive (encrypted) - Changed: now AHV number
+            'Q01c': 'encrypted_dob',  # Sensitive (encrypted) - Spouse DOB
             'Q02': '8000',  # Non-sensitive (plain)
-            'Q08a': 'encrypted_amount'  # Sensitive (encrypted)
+            'Q02a': 'encrypted_municipality'  # Sensitive (encrypted)
         }
 
         self.mock_encryption.decrypt.side_effect = [
-            'John',      # Decrypted Q01a
-            'Doe',       # Decrypted Q01b
-            '7056.00'    # Decrypted Q08a
+            '756.1234.5678.97',  # Decrypted Q01a (AHV)
+            '1980-05-15',        # Decrypted Q01c (DOB)
+            'Zurich'             # Decrypted Q02a (municipality)
         ]
 
         # Execute
@@ -805,10 +819,10 @@ class TestInterviewServiceEncryption(unittest.TestCase):
 
         # Assert
         self.assertEqual(decrypted['Q01'], 'married')  # Plain stays plain
-        self.assertEqual(decrypted['Q01a'], 'John')    # Encrypted was decrypted
-        self.assertEqual(decrypted['Q01b'], 'Doe')     # Encrypted was decrypted
+        self.assertEqual(decrypted['Q01a'], '756.1234.5678.97')  # AHV decrypted
+        self.assertEqual(decrypted['Q01c'], '1980-05-15')  # DOB decrypted
         self.assertEqual(decrypted['Q02'], '8000')     # Plain stays plain
-        self.assertEqual(decrypted['Q08a'], '7056.00') # Encrypted was decrypted
+        self.assertEqual(decrypted['Q02a'], 'Zurich')  # Municipality decrypted
 
 
 class TestInterviewServiceProfileGeneration(unittest.TestCase):
@@ -869,8 +883,7 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
         """Test profile generation for married person with spouse details"""
         answers = {
             'Q01': 'married',
-            'Q01a': 'encrypted_john',
-            'Q01b': 'encrypted_smith',
+            'Q01a': 'encrypted_ahv',  # Changed: AHV number instead of first name
             'Q01c': 'encrypted_1980-05-15',
             'Q01d': 'yes',
             'Q02': 'GE',
@@ -878,12 +891,11 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
             'Q03': 'no'
         }
 
-        # Mock decryption - called in dict iteration order: Q01a, Q01b, Q01c, Q02a
+        # Mock decryption - called in dict iteration order: Q01a, Q01c, Q02a
         self.mock_encryption.decrypt.side_effect = [
-            'John',         # Q01a first name
-            'Smith',        # Q01b last name
-            '1980-05-15',   # Q01c DOB
-            'Geneva',       # Q02a municipality
+            '756.1234.5678.97',  # Q01a AHV
+            '1980-05-15',        # Q01c DOB
+            'Geneva',            # Q02a municipality
         ]
 
         # Execute
@@ -893,10 +905,10 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
         self.assertEqual(profile['civil_status'], 'married')
         self.assertEqual(profile['municipality'], 'Geneva')
         self.assertIn('spouse', profile)
-        self.assertEqual(profile['spouse']['first_name'], 'John')
-        self.assertEqual(profile['spouse']['last_name'], 'Smith')
+        self.assertEqual(profile['spouse']['ahv_number'], '756.1234.5678.97')  # NEW
         self.assertEqual(profile['spouse']['date_of_birth'], '1980-05-15')
         self.assertTrue(profile['spouse']['is_employed'])
+        # REMOVED: first_name, last_name no longer exist
 
     def test_generate_profile_with_children(self):
         """Test profile generation with children"""
@@ -914,40 +926,25 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
         self.assertTrue(profile['has_children'])
         self.assertEqual(profile['num_children'], 2)
 
-    def test_generate_profile_with_financial_amounts(self):
-        """Test profile generation with financial amounts"""
+    def test_generate_profile_with_document_flags(self):
+        """Test profile generation with document upload flags (amounts come from documents)"""
         answers = {
             'Q01': 'single',
-            'Q08': 'yes',
-            'Q08a': 'encrypted_7056',
-            'Q11': 'yes',
-            'Q11a': 'encrypted_1000',
-            'Q12': 'yes',
-            'Q12a': 'encrypted_2400',
-            'Q13': 'yes',
-            'Q13a': 'encrypted_500'
+            'Q08': 'yes',  # Has pillar 3a - document will be uploaded
+            'Q11': 'yes',  # Has donations - document will be uploaded
+            'Q12': 'yes',  # Pays alimony - document will be uploaded
+            'Q13': 'yes'   # Has medical expenses - document will be uploaded
         }
-
-        # Mock decryption
-        self.mock_encryption.decrypt.side_effect = [
-            '7056.00',  # Q08a
-            '1000.00',  # Q11a
-            '2400.00',  # Q12a
-            '500.00'    # Q13a
-        ]
 
         # Execute
         profile = self.service._generate_profile(answers)
 
-        # Assert
+        # Assert - flags are set but no amounts (amounts come from AI-extracted documents)
         self.assertTrue(profile['pillar_3a_contribution'])
-        self.assertEqual(profile['pillar_3a_amount'], 7056.00)
         self.assertTrue(profile['charitable_donations'])
-        self.assertEqual(profile['donation_amount'], 1000.00)
         self.assertTrue(profile['pays_alimony'])
-        self.assertEqual(profile['alimony_amount'], 2400.00)
         self.assertTrue(profile['medical_expenses'])
-        self.assertEqual(profile['medical_expense_amount'], 500.00)
+        # No longer in profile: pillar_3a_amount, donation_amount, alimony_amount, medical_expense_amount
 
 
 class TestInterviewServiceCompletion(unittest.TestCase):
@@ -992,6 +989,7 @@ class TestInterviewServiceCompletion(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q14'
+        question.type = QuestionType.SINGLE_CHOICE
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -1234,6 +1232,7 @@ class TestInterviewServicePostalCodeLookup(unittest.TestCase):
         # Setup question with auto_lookup
         question = Mock(spec=Question)
         question.id = 'Q02'
+        question.type = QuestionType.POSTAL_CODE
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = True
 
@@ -1293,6 +1292,7 @@ class TestInterviewServicePostalCodeLookup(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q02b'
+        question.type = QuestionType.POSTAL_CODE
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = True
 
@@ -1374,6 +1374,7 @@ class TestInterviewServiceProgressCalculation(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q04'
+        question.type = QuestionType.DROPDOWN
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -1417,6 +1418,7 @@ class TestInterviewServiceProgressCalculation(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q04'
+        question.type = QuestionType.DROPDOWN
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 
@@ -1493,6 +1495,7 @@ class TestInterviewServiceEdgeCases(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q03a'
+        question.type = QuestionType.DROPDOWN
         question.validate_answer.return_value = (True, '')  # Passes validation
         question.auto_lookup = False
 
@@ -1523,6 +1526,7 @@ class TestInterviewServiceEdgeCases(unittest.TestCase):
 
         question = Mock(spec=Question)
         question.id = 'Q06a'
+        question.type = QuestionType.TEXT
         question.validate_answer.return_value = (True, '')
         question.auto_lookup = False
 

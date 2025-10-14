@@ -577,6 +577,9 @@ async def register(
     logger = logging.getLogger(__name__)
 
     try:
+        logger.info(f"[register] Received registration request for email: {user.email}")
+        logger.info(f"[register] User data: first_name={user.first_name}, last_name={user.last_name}, lang={user.preferred_language}, enable_2fa={user.enable_2fa}")
+
         exists_user = userService.get_user_by_email(db, user.email)
 
         if exists_user and exists_user.is_active:
@@ -704,10 +707,12 @@ async def register(
         }
         return user_dict
 
-    except HTTPException:
+    except HTTPException as he:
+        logger.error(f"[register] HTTPException: {he.status_code} - {he.detail}")
         raise
     except Exception as e:
-        logger.error(f"Registration error: {str(e)}", exc_info=True)
+        logger.error(f"[register] Unexpected error: {str(e)}", exc_info=True)
+        logger.error(f"[register] Error type: {type(e).__name__}")
         raise HTTPException(status_code=400, detail=f"Registration failed: {str(e)}")
 
 @router.post("/reset-password/request", response_model=ResetPasswordResponse)

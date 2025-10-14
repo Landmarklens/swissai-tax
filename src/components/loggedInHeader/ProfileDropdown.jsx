@@ -63,6 +63,7 @@ const ProfileDropdown = ({ anchorEl, setAnchorEl, open, handleMouseLeave }) => {
       id="profile-menu"
       open={open}
       onClose={() => setAnchorEl(null)}
+      disableRestoreFocus
       MenuListProps={{
         onMouseLeave: handleMouseLeave
       }}

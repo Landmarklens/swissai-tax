@@ -154,9 +154,20 @@ const authService = {
     // Clear local state FIRST for instant UI response
     authServiceInstance.setCurrentUser(null);
 
-    // Clear only known auth-related keys (faster than iteration)
-    const authKeys = ['user', 'token', 'filings', 'profile', 'activeSession', 'subscriptionData'];
-    authKeys.forEach(key => localStorage.removeItem(key));
+    // Clear ALL localStorage except user preferences
+    const preservedKeys = ['swissai_cookie_consent', 'i18nextLng'];
+    const keysToRemove = [];
+
+    // Collect all keys except preserved ones
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && !preservedKeys.includes(key)) {
+        keysToRemove.push(key);
+      }
+    }
+
+    // Remove collected keys
+    keysToRemove.forEach(key => localStorage.removeItem(key));
 
     // Make backend call in background (fire-and-forget for instant UX)
     // Backend will still revoke session and clear cookie

@@ -45,6 +45,20 @@ const QuestionCard = ({
     // Reset answer when question changes
     if (question.question_type === 'multiselect') {
       setMultiSelectAnswers(previousAnswer || []);
+    } else if (question.question_type === 'date' && previousAnswer) {
+      // Convert timestamp or invalid date to YYYY-MM-DD format
+      const dateValue = new Date(previousAnswer);
+      if (!isNaN(dateValue.getTime())) {
+        const year = dateValue.getFullYear();
+        const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+        const day = String(dateValue.getDate()).padStart(2, '0');
+        setAnswer(`${year}-${month}-${day}`);
+      } else if (typeof previousAnswer === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(previousAnswer)) {
+        // Already in correct format
+        setAnswer(previousAnswer);
+      } else {
+        setAnswer('');
+      }
     } else {
       setAnswer(previousAnswer || '');
     }

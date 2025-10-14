@@ -332,7 +332,7 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
         self.service = InterviewService(db=None)
 
     def test_married_flow_adds_spouse_questions(self):
-        """Test Q01 = 'married' adds spouse questions Q01a, Q01c, Q01d (Q01b removed)"""
+        """Test Q01 = 'married' adds spouse questions Q01a, Q01d (Q01b and Q01c removed)"""
         # Setup session
         session_id = 'test-session'
         self.service.sessions[session_id] = {
@@ -373,11 +373,10 @@ class TestInterviewServiceConditionalFlow(unittest.TestCase):
         self.assertEqual(session['answers']['Q01'], 'married')
         self.assertIn('Q01', session['completed_questions'])
 
-        # Verify spouse questions were added to pending (Q01b removed in new design)
+        # Verify spouse questions were added to pending (only Q01a and Q01d now)
         self.assertIn('Q01a', session['pending_questions'])  # AHV number
-        self.assertIn('Q01c', session['pending_questions'])  # DOB
         self.assertIn('Q01d', session['pending_questions'])  # Employed
-        # Q01b (spouse last name) no longer exists
+        # Q01b (spouse last name) and Q01c (spouse DOB) no longer exist
 
         # Verify next question is Q01a
         self.assertEqual(result['current_question']['id'], 'Q01a')
@@ -683,15 +682,15 @@ class TestInterviewServiceEncryption(unittest.TestCase):
 
     def test_is_question_sensitive(self):
         """Test _is_question_sensitive identifies sensitive questions"""
-        # Sensitive questions (NEW: 5 questions are sensitive)
+        # Sensitive questions (NEW: 4 questions are sensitive - Q01c removed)
         self.assertTrue(self.service._is_question_sensitive('Q00'))   # User's own AHV number
         self.assertTrue(self.service._is_question_sensitive('Q01a'))  # Spouse AHV number
-        self.assertTrue(self.service._is_question_sensitive('Q01c'))  # Spouse DOB
         self.assertTrue(self.service._is_question_sensitive('Q02a'))  # Municipality
         self.assertTrue(self.service._is_question_sensitive('Q03b'))  # Child details
 
         # No longer sensitive (document uploads now, not manual entry)
         self.assertFalse(self.service._is_question_sensitive('Q01b'))  # Removed
+        self.assertFalse(self.service._is_question_sensitive('Q01c'))  # Removed - spouse DOB
         self.assertFalse(self.service._is_question_sensitive('Q08a'))  # Document upload
         self.assertFalse(self.service._is_question_sensitive('Q11a'))  # Document upload
         self.assertFalse(self.service._is_question_sensitive('Q12a'))  # Document upload
@@ -714,11 +713,11 @@ class TestInterviewServiceEncryption(unittest.TestCase):
             'current_question_id': 'Q01a',
             'answers': {},
             'completed_questions': [],
-            'pending_questions': ['Q01c', 'Q01d'],  # Changed: removed Q01b
+            'pending_questions': ['Q01d'],  # Changed: removed Q01b and Q01c
             'language': 'en'
         }
 
-        # Setup sensitive question (spouse AHV number - changed from first name)
+        # Setup sensitive question (spouse AHV number)
         question = Mock(spec=Question)
         question.id = 'Q01a'
         question.type = QuestionType.AHV_NUMBER
@@ -726,9 +725,9 @@ class TestInterviewServiceEncryption(unittest.TestCase):
         question.auto_lookup = False
 
         next_question = Mock(spec=Question)
-        next_question.id = 'Q01c'  # Changed: Q01b no longer exists, go to Q01c
-        next_question.text = {'en': "Spouse's date of birth"}
-        next_question.type = QuestionType.DATE
+        next_question.id = 'Q01d'  # Changed: go directly to Q01d (employment)
+        next_question.text = {'en': "Is your spouse employed?"}
+        next_question.type = QuestionType.YES_NO
         next_question.required = True
         next_question.options = []
         next_question.validation = {}
@@ -800,15 +799,13 @@ class TestInterviewServiceEncryption(unittest.TestCase):
         # Setup answers with mix of encrypted and plain
         answers = {
             'Q01': 'married',  # Non-sensitive (plain)
-            'Q01a': 'encrypted_ahv',  # Sensitive (encrypted) - Changed: now AHV number
-            'Q01c': 'encrypted_dob',  # Sensitive (encrypted) - Spouse DOB
+            'Q01a': 'encrypted_ahv',  # Sensitive (encrypted) - AHV number
             'Q02': '8000',  # Non-sensitive (plain)
             'Q02a': 'encrypted_municipality'  # Sensitive (encrypted)
         }
 
         self.mock_encryption.decrypt.side_effect = [
             '756.1234.5678.97',  # Decrypted Q01a (AHV)
-            '1980-05-15',        # Decrypted Q01c (DOB)
             'Zurich'             # Decrypted Q02a (municipality)
         ]
 
@@ -818,7 +815,6 @@ class TestInterviewServiceEncryption(unittest.TestCase):
         # Assert
         self.assertEqual(decrypted['Q01'], 'married')  # Plain stays plain
         self.assertEqual(decrypted['Q01a'], '756.1234.5678.97')  # AHV decrypted
-        self.assertEqual(decrypted['Q01c'], '1980-05-15')  # DOB decrypted
         self.assertEqual(decrypted['Q02'], '8000')     # Plain stays plain
         self.assertEqual(decrypted['Q02a'], 'Zurich')  # Municipality decrypted
 
@@ -881,18 +877,16 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
         """Test profile generation for married person with spouse details"""
         answers = {
             'Q01': 'married',
-            'Q01a': 'encrypted_ahv',  # Changed: AHV number instead of first name
-            'Q01c': 'encrypted_1980-05-15',
+            'Q01a': 'encrypted_ahv',  # AHV number
             'Q01d': 'yes',
             'Q02': 'GE',
             'Q02a': 'encrypted_Geneva',  # This is also sensitive
             'Q03': 'no'
         }
 
-        # Mock decryption - called in dict iteration order: Q01a, Q01c, Q02a
+        # Mock decryption - called in dict iteration order: Q01a, Q02a
         self.mock_encryption.decrypt.side_effect = [
             '756.1234.5678.97',  # Q01a AHV
-            '1980-05-15',        # Q01c DOB
             'Geneva',            # Q02a municipality
         ]
 
@@ -903,10 +897,9 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
         self.assertEqual(profile['civil_status'], 'married')
         self.assertEqual(profile['municipality'], 'Geneva')
         self.assertIn('spouse', profile)
-        self.assertEqual(profile['spouse']['ahv_number'], '756.1234.5678.97')  # NEW
-        self.assertEqual(profile['spouse']['date_of_birth'], '1980-05-15')
+        self.assertEqual(profile['spouse']['ahv_number'], '756.1234.5678.97')
         self.assertTrue(profile['spouse']['is_employed'])
-        # REMOVED: first_name, last_name no longer exist
+        # REMOVED: first_name, last_name, date_of_birth no longer exist
 
     def test_generate_profile_with_children(self):
         """Test profile generation with children"""
@@ -1396,7 +1389,7 @@ class TestInterviewServiceProgressCalculation(unittest.TestCase):
         self.assertLess(result['progress'], 35)
 
     def test_progress_calculation_married_person(self):
-        """Test progress calculation for married person (18 questions total)"""
+        """Test progress calculation for married person (16 questions total)"""
         # Setup session with married status
         session_id = 'test-session'
         self.service.sessions[session_id] = {
@@ -1405,7 +1398,7 @@ class TestInterviewServiceProgressCalculation(unittest.TestCase):
             'tax_year': 2024,
             'current_question_id': 'Q04',
             'answers': {
-                'Q01': 'married',  # This adds 4 spouse questions
+                'Q01': 'married',  # This adds 2 spouse questions (Q01a, Q01d)
                 'Q02': '8000',
                 'Q03': 'no'
             },
@@ -1435,8 +1428,8 @@ class TestInterviewServiceProgressCalculation(unittest.TestCase):
         # Execute
         result = self.service.submit_answer(session_id, 'Q04', '1')
 
-        # Assert - 4 completed out of 18 (14 + 4 spouse) = ~22%
-        self.assertGreater(result['progress'], 15)
+        # Assert - 4 completed out of 16 (14 + 2 spouse) = 25%
+        self.assertGreater(result['progress'], 20)
         self.assertLess(result['progress'], 30)
 
 

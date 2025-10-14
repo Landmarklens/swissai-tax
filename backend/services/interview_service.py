@@ -153,10 +153,10 @@ class InterviewService:
 
         session['completed_questions'].append(question_id)
 
-        # Handle sub-questions for married status (Q01a-d)
+        # Handle sub-questions for married status (Q01a, Q01d)
         if question_id == 'Q01' and answer == 'married':
             # Add spouse questions to pending
-            spouse_questions = ['Q01a', 'Q01b', 'Q01c', 'Q01d']
+            spouse_questions = ['Q01a', 'Q01d']
             session['pending_questions'].extend(spouse_questions)
             next_question_id = 'Q01a'
         # Handle sub-questions for children
@@ -300,7 +300,7 @@ class InterviewService:
         # Calculate progress
         total_questions = 14  # Base questions
         if session['answers'].get('Q01') == 'married':
-            total_questions += 4  # Add spouse questions
+            total_questions += 2  # Add spouse questions (Q01a, Q01d)
         if session['answers'].get('Q03') == 'yes':
             total_questions += 1  # Add children count question
 
@@ -457,7 +457,6 @@ class InterviewService:
         sensitive_questions = {
             'Q00',   # User's own AHV number
             'Q01a',  # Spouse AHV number
-            'Q01c',  # Spouse date of birth
             'Q02a',  # Municipality (location)
             'Q03b',  # Child details (name, DOB)
         }
@@ -514,8 +513,7 @@ class InterviewService:
         # Add spouse info if married (decrypted sensitive fields)
         if decrypted_answers.get('Q01') == 'married':
             profile['spouse'] = {
-                'ahv_number': decrypted_answers.get('Q01a'),  # Changed: now AHV number
-                'date_of_birth': decrypted_answers.get('Q01c'),
+                'ahv_number': decrypted_answers.get('Q01a'),
                 'is_employed': decrypted_answers.get('Q01d') == 'yes'
             }
 

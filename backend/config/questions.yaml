@@ -56,7 +56,7 @@ questions:
           de: "Verwitwet"
           fr: "Veuf/Veuve"
     branching:
-      married: ["Q01a", "Q01c", "Q01d"]
+      married: ["Q01a", "Q01d"]
       default: "Q02"
     required: true
 
@@ -74,21 +74,6 @@ questions:
       de: "Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)"
       fr: "Format: 756.XXXX.XXXX.XX (13 chiffres avec points)"
     placeholder: "756.1234.5678.97"
-    next: "Q01c"
-    required: true
-    parent: "Q01"
-
-  Q01c:
-    id: "Q01c"
-    text:
-      en: "Spouse's date of birth"
-      de: "Geburtsdatum des Ehepartners"
-      fr: "Date de naissance du conjoint"
-    type: "date"
-    widget: "calendar"
-    validation:
-      minDate: "1920-01-01"
-      maxDate: "2006-12-31"
     next: "Q01d"
     required: true
     parent: "Q01"

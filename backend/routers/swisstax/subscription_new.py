@@ -150,16 +150,14 @@ async def create_subscription(
         )
         .first()
     )
-    if existing_sub:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User already has an active subscription"
-        )
 
     # ========================================================================
     # SPECIAL HANDLING FOR FREE PLAN - No Stripe required
     # ========================================================================
     if sub_data.plan_type == 'free':
+        # If user already has a free subscription, return it (idempotent operation)
+        if existing_sub and existing_sub.plan_type == 'free':
+            return _build_subscription_response(existing_sub)
         plan_config = _get_plan_config('free')
 
         # Create free subscription record in database (no Stripe)
@@ -190,6 +188,13 @@ async def create_subscription(
     # ========================================================================
     # PAID PLANS - Require Stripe integration
     # ========================================================================
+    # Block duplicate subscriptions for paid plans
+    if existing_sub:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User already has an active subscription"
+        )
+
     if not settings.ENABLE_SUBSCRIPTIONS:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

@@ -18,18 +18,20 @@ import SEOHelmet from '../../components/SEO/SEOHelmet';
 const categories = ['All', ...Array.from(new Set(blogPosts.map((post) => post.category)))];
 
 const BlogPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const heading = 'Blog';
   const text = "Stay ahead of the curve with our team's real estate updates.";
+  const currentLang = i18n.language || 'en';
+
   const filteredPosts =
     selectedCategory === 'All'
       ? blogPosts
       : blogPosts.filter((post) => post.category === selectedCategory);
 
-  const handlePostClick = (postId, category) => {
-    navigate(`/blog?id=${postId}&type=${category}`);
+  const handlePostClick = (post) => {
+    navigate(`/${currentLang}/blog/${post.category}/${post.slug}`);
   };
 
   return (
@@ -70,7 +72,7 @@ const BlogPage = () => {
                   sm={6}
                   md={3}
                   key={post.id}
-                  onClick={() => handlePostClick(post.id, post.category)}
+                  onClick={() => handlePostClick(post)}
                 >
                   <Card
                     sx={{

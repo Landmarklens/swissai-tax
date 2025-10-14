@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SwissAI Tax Blog</title>
+    <link>https://swissai.tax/blog</link>
+    <description>Expert insights on Swiss tax regulations, AI-powered solutions, and financial technology</description>
+    <language>en</language>
+    <lastBuildDate>2025-10-14T00:00:00.000Z</lastBuildDate>
+    <atom:link href="https://swissai.tax/feed.xml" rel="self" type="application/rss+xml"/>
+    <copyright>Copyright 2025 LandMarK Lens GMBH. All rights reserved.</copyright>
+    <webMaster>contact@swissai.tax (SwissAI Tax Team)</webMaster>
+    <managingEditor>contact@swissai.tax (SwissAI Tax Team)</managingEditor>
+    <category>Tax</category>
+    <category>Technology</category>
+    <category>Switzerland</category>
+    <ttl>60</ttl>
+
+    <!-- Blog posts will be dynamically added here -->
+    <!-- Example item structure:
+    <item>
+      <title>Post Title</title>
+      <link>https://swissai.tax/blog/post-slug</link>
+      <description>Brief description of the blog post</description>
+      <pubDate>Mon, 14 Oct 2025 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://swissai.tax/blog/post-slug</guid>
+      <author>contact@swissai.tax (Author Name)</author>
+      <category>Category Name</category>
+    </item>
+    -->
+
+  </channel>
+</rss>

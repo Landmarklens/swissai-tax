@@ -3,9 +3,13 @@ export const blogPosts = [
 {
 id: 16,
 title: 'Renting in Switzerland: 5 Big Challenges and How to Tackle Them',
+slug: 'renting-in-switzerland-5-big-challenges',
 category: 'Rental',
 image:
 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/BlogImages/Swiss+Rental+Challenges.png',
+datePublished: '2025-01-15T10:00:00+01:00',
+dateModified: '2025-01-15T10:00:00+01:00',
+excerpt: 'Discover the 5 biggest challenges when renting in Switzerland and learn practical strategies to overcome them. From fierce competition to high costs and strict paperwork.',
 subTitle:
 '',
 contentList: [
@@ -34,9 +38,13 @@ Renting a home in Switzerland can feel like an extreme sport – especially if y
 {
 id: 17,
 title: 'Apartment Hunting Made Easy: How AI Is Changing the Swiss Rental Game',
+slug: 'apartment-hunting-ai-changing-swiss-rental-game',
 category: 'Trends',
 image:
 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/BlogImages/AI+Transforms+Swiss+Rentals.png',
+datePublished: '2025-01-20T09:00:00+01:00',
+dateModified: '2025-01-20T09:00:00+01:00',
+excerpt: 'Explore how artificial intelligence is revolutionizing the Swiss rental market. From real-time alerts to personalized matchmaking and language translation.',
 subTitle:
 '',
 contentList: [
@@ -67,10 +75,14 @@ In summary, AI is infusing the Swiss rental process with speed, personalization,
 
 {
 id: 18,
-title: 'The Expat’s Guide to Renting in Switzerland: 5 Essential Tips',
+title: 'The Expat's Guide to Renting in Switzerland: 5 Essential Tips',
+slug: 'expat-guide-renting-switzerland-5-essential-tips',
 category: 'Expat Life',
 image:
 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/BlogImages/Renting+in+Switzerland+Tips.png',
+datePublished: '2025-01-25T11:00:00+01:00',
+dateModified: '2025-01-25T11:00:00+01:00',
+excerpt: 'Essential tips for expats navigating the Swiss rental market. Learn about rental applications, local networks, and your rights as a tenant in Switzerland.',
 subTitle:
 '',
 contentList: [
@@ -99,9 +111,13 @@ Moving to Switzerland as an expat is an adventure – new job, new culture, and 
 {
 id: 19,
 title: 'Where to Live in Zurich: A Neighborhood Guide for Every Lifestyle',
+slug: 'where-to-live-zurich-neighborhood-guide',
 category: 'Neighborhoods',
 image:
 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/BlogImages/Zurich+Neighborhood+Collage.png',
+datePublished: '2025-02-01T14:00:00+01:00',
+dateModified: '2025-02-01T14:00:00+01:00',
+excerpt: 'Complete neighborhood guide to Zurich districts. Find the perfect area for your lifestyle, from trendy Kreis 5 to family-friendly Höngg and luxurious Seefeld.',
 subTitle:
 '',
 contentList: [
@@ -135,10 +151,14 @@ If you have kids (or just prefer a peaceful atmosphere), Zurich offers wonderful
 
 {
 id: 20,
-title: 'Surviving “Moving Season” in Switzerland: 5 Tips for a Smooth Summer Move',
+title: 'Surviving "Moving Season" in Switzerland: 5 Tips for a Smooth Summer Move',
+slug: 'surviving-moving-season-switzerland-5-tips',
 category: 'Moving',
 image:
 'https://s3.us-east-1.amazonaws.com/homepage-of-homeai.ch/BlogImages/Summer+Move+in+Switzerland.png',
+datePublished: '2025-02-10T08:30:00+01:00',
+dateModified: '2025-02-10T08:30:00+01:00',
+excerpt: 'Navigate Swiss moving season like a pro. Five essential tips for planning, decluttering, coordinating dates, deep cleaning, and handling administrative tasks.',
 subTitle:
 '',
 contentList: [

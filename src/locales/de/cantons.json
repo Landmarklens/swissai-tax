@@ -1,0 +1,244 @@
+{
+  "cantons": {
+    "breadcrumbs": {
+      "home": "Startseite"
+    },
+    "zurich": {
+      "name": "Zürich",
+      "heading": "Steuererklärung Zürich - Einfach, Schnell, Sicher",
+      "intro": "Erstellen Sie Ihre Zürcher Steuererklärung mit KI-Unterstützung. Sparen Sie Zeit und maximieren Sie Ihre Abzüge mit SwissAI Tax - optimiert für Einwohner des Kantons Zürich.",
+      "cta": "Jetzt Steuererklärung starten",
+      "meta": {
+        "title": "Steuererklärung Zürich - SwissAI Tax | KI-gestützte Einreichung",
+        "description": "Erstellen Sie Ihre Zürcher Steuererklärung online mit SwissAI Tax. KI-gestützt, sicher und optimiert für den Kanton Zürich. Erledigen Sie Ihre Erklärung in 20 Minuten!",
+        "keywords": "Steuererklärung Zürich, Zürich Steuern, Online Steuern Zürich, Steuererkl��rung online Zürich, SwissAI Tax Zürich"
+      },
+      "stats": {
+        "latitude": 47.3769,
+        "longitude": 8.5417,
+        "cards": [
+          {
+            "value": "1.5 Mio",
+            "label": "Einwohner Zürich"
+          },
+          {
+            "value": "20 Min",
+            "label": "Durchschn. Bearbeitungszeit"
+          },
+          {
+            "value": "CHF 2'400",
+            "label": "Durchschn. Steuerersparnis"
+          },
+          {
+            "value": "99.8%",
+            "label": "Genauigkeitsrate"
+          }
+        ]
+      },
+      "aboutHeading": "Steuererklärung im Kanton Zürich",
+      "aboutText": "Zürich ist das Wirtschaftszentrum der Schweiz mit der höchsten Bevölkerungsdichte. Die Steuererklärung in Zürich erfordert Kenntnisse sowohl der Bundes- als auch der kantonalen Steuervorschriften. SwissAI Tax vereinfacht diesen Prozess, indem es automatisch Ihre Bundes-, Kantons- und Gemeindesteuern basierend auf Ihrem genauen Standort in Zürich berechnet. Ob Sie in der Stadt Zürich, Winterthur oder einer anderen Gemeinde leben - unsere KI passt sich Ihrer spezifischen Steuersituation an.",
+      "benefitsHeading": "Wie SwissAI Tax Zürchern hilft",
+      "benefits": [
+        {
+          "title": "Automatische Zürcher Steuerberechnung",
+          "description": "Unsere KI berechnet automatisch Bundes-, Kantons- und Gemeindesteuern basierend auf Ihrer genauen Zürcher Gemeinde. Sie müssen keine Steuersätze nachschlagen - wir übernehmen alles."
+        },
+        {
+          "title": "Sichere Schweizer Datenspeicherung",
+          "description": "Alle Ihre Dokumente und Daten werden auf Schweizer Servern mit Banken-Verschlüsselung gespeichert. Ihr Datenschutz ist gemäss Schweizer Datenschutzgesetzen und DSGVO gewährleistet."
+        },
+        {
+          "title": "Maximieren Sie Ihre Abzüge",
+          "description": "Unser intelligentes System identifiziert alle verfügbaren Abzüge für Zürcher Einwohner: Pendlerkosten, Versicherungsprämien, Säule 3a-Beiträge und mehr. Verpassen Sie keine Sparmöglichkeit."
+        },
+        {
+          "title": "Mehrsprachige Unterstützung",
+          "description": "Erstellen Sie Ihre Zürcher Steuererklärung auf Deutsch, Englisch, Französisch oder Italienisch. Unsere Plattform passt sich Ihrer bevorzugten Sprache an."
+        }
+      ],
+      "faqHeading": "Häufig gestellte Fragen - Zürich",
+      "faq": [
+        {
+          "question": "Wann ist die Frist für die Steuererklärung in Zürich?",
+          "answer": "Für den Kanton Zürich ist die Standardfrist für die Einreichung Ihrer Steuererklärung der 31. März des Folgejahres. Bei elektronischer Einreichung oder Verwendung einer Steuersoftware wie SwissAI Tax erhalten Sie möglicherweise eine automatische Verlängerung bis zum 30. September. Wir empfehlen, die spezifischen Fristen bei Ihrem örtlichen Steueramt zu überprüfen."
+        },
+        {
+          "question": "Wie hoch sind die Steuersätze in Zürich?",
+          "answer": "Zürich hat progressive Steuersätze, die je nach Einkommensniveau und Gemeinde variieren. Der Kanton verwendet ein Steuerfuss-System, bei dem jede Gemeinde ihren eigenen Multiplikator auf die kantonale Basissteuer anwendet. SwissAI Tax berechnet automatisch den genauen Steuerbetrag basierend auf Ihrer Gemeinde und Ihrem Einkommen."
+        },
+        {
+          "question": "Kann ich meine Pendlerkosten in Zürich abziehen?",
+          "answer": "Ja, Zürcher Einwohner können arbeitsbezogene Pendlerkosten abziehen. Dies umfasst Kosten für öffentliche Verkehrsmittel (GA, Halbtax oder Einzelfahrkarten) und in einigen Fällen Autokosten, wenn öffentliche Verkehrsmittel nicht zumutbar sind. Unsere KI führt Sie durch die Berechnung zulässiger Abzüge."
+        },
+        {
+          "question": "Wie handhabt SwissAI Tax Stadt Zürich vs. andere Gemeinden?",
+          "answer": "Jede Gemeinde im Kanton Zürich hat unterschiedliche Steuersätze. SwissAI Tax erkennt automatisch Ihre Gemeinde anhand Ihrer Postleitzahl und wendet den korrekten Steuerfuss an. Ob Sie in der Stadt Zürich, Winterthur, Uster oder einer anderen Gemeinde wohnen - wir garantieren präzise Berechnungen."
+        },
+        {
+          "question": "Welche Dokumente brauche ich für meine Zürcher Steuererklärung?",
+          "answer": "Übliche Dokumente sind Ihr Lohnausweis, Versicherungsbestätigungen, Bankauszüge, Hypothekarzins-Bescheinigungen (falls zutreffend), Säule 3a-Beitragszertifikate und Belege für abzugsfähige Ausgaben. Unser Interview-Prozess sagt Ihnen genau, welche Dokumente Sie benötigen."
+        }
+      ],
+      "ctaHeading": "Bereit für Ihre Zürcher Steuererklärung?",
+      "ctaText": "Schliessen Sie sich Tausenden von Zürchern an, die SwissAI Tax für ihre jährliche Steuererklärung vertrauen. Starten Sie jetzt und erledigen Sie Ihre Erklärung in nur 20 Minuten."
+    },
+    "aargau": {
+      "name": "Aargau",
+      "heading": "Steuererklärung Aargau - KI-gestützte Einreichung",
+      "intro": "Erstellen Sie Ihre Aargauer Steuererklärung effizient mit KI-Unterstützung. SwissAI Tax bietet präzise Berechnungen und maximale Abzüge für alle Aargauer Einwohner.",
+      "cta": "Jetzt Steuererklärung starten",
+      "meta": {
+        "title": "Steuererklärung Aargau - SwissAI Tax | Online Steuererklärung",
+        "description": "Erstellen Sie Ihre Aargauer Steuererklärung online mit SwissAI Tax. Sicher, präzise und optimiert für den Kanton Aargau. KI-gestützte Steuererklärung in 20 Minuten!",
+        "keywords": "Steuererklärung Aargau, Aargau Steuern, Online Steuern Aargau, Steuererklärung online Aargau, SwissAI Tax Aargau"
+      },
+      "stats": {
+        "latitude": 47.3903,
+        "longitude": 8.0458,
+        "cards": [
+          {
+            "value": "685'000",
+            "label": "Einwohner Aargau"
+          },
+          {
+            "value": "20 Min",
+            "label": "Durchschn. Bearbeitungszeit"
+          },
+          {
+            "value": "CHF 2'100",
+            "label": "Durchschn. Steuerersparnis"
+          },
+          {
+            "value": "99.8%",
+            "label": "Genauigkeitsrate"
+          }
+        ]
+      },
+      "aboutHeading": "Steuererklärung im Kanton Aargau",
+      "aboutText": "Der Aargau, bekannt für seine zentrale Lage und vielfältige Wirtschaft, hat sein eigenes kantonales Steuersystem. Die Steuererklärung im Aargau erfordert Kenntnisse sowohl der Bundes- als auch der kantonalen Vorschriften Ihrer Gemeinde. SwissAI Tax vereinfacht diesen Prozess durch automatische Berechnung Ihrer Bundes-, Kantons- und Gemeindesteuern. Ob Sie in Aarau, Baden, Wohlen oder einer anderen Aargauer Gemeinde wohnen - unsere Plattform gewährleistet eine genaue und konforme Steuererklärung.",
+      "benefitsHeading": "Wie SwissAI Tax Aargauern hilft",
+      "benefits": [
+        {
+          "title": "Aargau-spezifische Steuerberechnungen",
+          "description": "Unsere KI wendet automatisch die Steuersätze und Gemeinde-Multiplikatoren des Aargaus basierend auf Ihrem genauen Standort an. Erhalten Sie präzise Berechnungen für Bundes-, Kantons- und Gemeindesteuern ohne manuelle Recherche."
+        },
+        {
+          "title": "Schweizer Datenschutz",
+          "description": "Ihre sensiblen Steuerdaten werden sicher auf Schweizer Servern mit militärischer Verschlüsselung gespeichert. Wir erfüllen die Schweizer Datenschutzgesetze und DSGVO-Anforderungen."
+        },
+        {
+          "title": "Intelligenter Abzugs-Finder",
+          "description": "Unser System identifiziert alle anwendbaren Abzüge für Aargauer Einwohner: Berufsauslagen, Versicherungsprämien, Pensionsbeiträge und mehr. Stellen Sie sicher, dass Sie jeden Franken geltend machen, der Ihnen zusteht."
+        },
+        {
+          "title": "Einfacher Dokumenten-Upload",
+          "description": "Laden Sie einfach Ihre Dokumente hoch, und unsere OCR-Technologie extrahiert automatisch relevante Daten. Überprüfen und bestätigen Sie - so einfach ist das. Funktioniert mit allen gängigen Dokumentformaten."
+        }
+      ],
+      "faqHeading": "Häufig gestellte Fragen - Aargau",
+      "faq": [
+        {
+          "question": "Wann ist die Frist für die Steuererklärung im Aargau?",
+          "answer": "Die Standardfrist für Aargauer Steuererklärungen ist der 31. März des Jahres nach dem Steuerjahr. Elektronische Einreichung über zugelassene Software wie SwissAI Tax gewährt in der Regel eine automatische Verlängerung bis zum 30. September. Überprüfen Sie immer die spezifischen Fristen bei Ihrem örtlichen Steueramt."
+        },
+        {
+          "question": "Wie werden Steuern im Aargau berechnet?",
+          "answer": "Der Aargau verwendet ein progressives Steuersystem mit kantonalen und kommunalen Komponenten. Jede Gemeinde wendet ihren eigenen Steuerfuss auf den kantonalen Basissatz an. SwissAI Tax ermittelt automatisch Ihre Gemeinde und berechnet die genaue Steuerbelastung einschliesslich der Bundessteuern."
+        },
+        {
+          "question": "Kann ich meine Säule 3a-Beiträge im Aargau abziehen?",
+          "answer": "Ja, Säule 3a-Beiträge sind im Aargau vollständig vom steuerbaren Einkommen abzugsfähig (bis zum jährlichen Maximum von CHF 7'056 für Angestellte oder CHF 35'280 für Selbständige ohne Pensionskasse). SwissAI Tax berücksichtigt diese Abzüge automatisch in Ihrer Berechnung."
+        },
+        {
+          "question": "Was unterscheidet Aargauer Steuern von anderen Kantonen?",
+          "answer": "Während der Aargau denselben bundessteuerlichen Grundsätzen wie andere Kantone folgt, hat er seine eigenen kantonalen Steuersätze und Vorschriften. Der Kanton ist für relativ moderate Steuersätze bekannt. Jede der 210 Aargauer Gemeinden hat ihren eigenen Steuerfuss, der den endgültigen geschuldeten Betrag beeinflusst."
+        },
+        {
+          "question": "Unterstützt SwissAI Tax alle Aargauer Gemeinden?",
+          "answer": "Ja, SwissAI Tax unterstützt alle 210 Gemeinden im Kanton Aargau. Geben Sie einfach Ihre Postleitzahl ein, und unser System identifiziert automatisch Ihre Gemeinde und wendet die korrekten Steuersätze und Multiplikatoren an."
+        }
+      ],
+      "ctaHeading": "Bereit für Ihre Aargauer Steuererklärung?",
+      "ctaText": "Erleben Sie stressfreie Steuererklärung speziell für Aargauer Einwohner. Starten Sie jetzt Ihre Erklärung und entdecken Sie, wie einfach Steuern sein können."
+    },
+    "bern": {
+      "name": "Bern",
+      "heading": "Steuererklärung Bern - Effiziente KI-gestützte Einreichung",
+      "intro": "Erstellen Sie Ihre Berner Steuererklärung mit Vertrauen dank KI-Technologie. SwissAI Tax gewährleistet präzise Berechnungen und umfassende Abzugserkennung für alle Einwohner des Kantons Bern.",
+      "cta": "Jetzt Steuererklärung starten",
+      "meta": {
+        "title": "Steuererklärung Bern - SwissAI Tax | KI Steuererklärung",
+        "description": "Erstellen Sie Ihre Berner Steuererklärung online mit SwissAI Tax. KI-gestützt, sicher und optimiert für den Kanton Bern. Erledigen Sie Ihre Erklärung in 20 Minuten mit maximalen Abzügen!",
+        "keywords": "Steuererklärung Bern, Bern Steuern, Online Steuern Bern, Steuererklärung online Bern, SwissAI Tax Bern"
+      },
+      "stats": {
+        "latitude": 46.9480,
+        "longitude": 7.4474,
+        "cards": [
+          {
+            "value": "1.04 Mio",
+            "label": "Einwohner Bern"
+          },
+          {
+            "value": "20 Min",
+            "label": "Durchschn. Bearbeitungszeit"
+          },
+          {
+            "value": "CHF 2'200",
+            "label": "Durchschn. Steuerersparnis"
+          },
+          {
+            "value": "99.8%",
+            "label": "Genauigkeitsrate"
+          }
+        ]
+      },
+      "aboutHeading": "Steuererklärung im Kanton Bern",
+      "aboutText": "Bern ist der zweitgrösste Kanton der Schweiz nach Bevölkerung und Hauptstadt. Der Kanton hat einen einzigartigen zweisprachigen Charakter (Deutsch und Französisch) und eine vielfältige Wirtschaftslandschaft. Die Steuererklärung in Bern umfasst Bundes-, Kantons- und Gemeindesteuern. SwissAI Tax rationalisiert diesen Prozess durch automatische Ermittlung Ihrer Steuerverpflichtungen basierend auf Ihrer spezifischen Gemeinde. Ob Sie in der Stadt Bern, Biel/Bienne, Thun oder einer anderen Gemeinde leben - wir gewährleisten eine genaue und konforme Einreichung.",
+      "benefitsHeading": "Wie SwissAI Tax Bernern hilft",
+      "benefits": [
+        {
+          "title": "Zweisprachige Unterstützung für Bern",
+          "description": "Erstellen Sie Ihre Berner Steuererklärung auf Deutsch, Französisch, Englisch oder Italienisch. Unsere Plattform respektiert den zweisprachigen Charakter Berns und passt sich nahtlos Ihrer Sprachpräferenz an."
+        },
+        {
+          "title": "Präzise Gemeindeberechnungen",
+          "description": "Bern hat über 340 Gemeinden, jede mit unterschiedlichen Steuersätzen. Unsere KI identifiziert automatisch Ihre Gemeinde und wendet die korrekten Steuermultiplikatoren für genaue Berechnungen an."
+        },
+        {
+          "title": "Umfassende Abzugsanalyse",
+          "description": "Unser intelligentes System analysiert Ihre Situation und identifiziert alle anwendbaren Abzüge: Berufsauslagen, Versicherungen, Pensionsbeiträge, Kinderbetreuungskosten, Ausbildungskosten und mehr gemäss Berner Vorschriften."
+        },
+        {
+          "title": "Banken-Sicherheit",
+          "description": "Ihre Daten werden verschlüsselt und auf Schweizer Servern gespeichert. Wir erfüllen strenge Schweizer Bankgeheimnis-Standards, Datenschutzgesetze und DSGVO-Anforderungen für Ihre Sicherheit."
+        }
+      ],
+      "faqHeading": "Häufig gestellte Fragen - Bern",
+      "faq": [
+        {
+          "question": "Wann ist die Frist für die Steuererklärung in Bern?",
+          "answer": "Im Kanton Bern ist die Standardfrist für die Einreichung Ihrer Steuererklärung der 31. März nach dem Steuerjahr. Elektronische Einreichung über zugelassene Software verlängert diese Frist in der Regel auf den 30. September oder sogar später. Überprüfen Sie bei Ihrem örtlichen Steueramt die spezifischen Fristen, da diese je nach Gemeinde variieren können."
+        },
+        {
+          "question": "Wie vergleichen sich Berns Steuersätze mit anderen Kantonen?",
+          "answer": "Bern hat moderate Steuersätze im Vergleich zu anderen Schweizer Kantonen. Der Kanton verwendet ein progressives Steuersystem mit Sätzen, die je nach Einkommensniveau und Gemeinde variieren. Jede der über 340 Berner Gemeinden wendet ihren eigenen Multiplikator auf den kantonalen Basissatz an, was zu Variationen im ganzen Kanton führt."
+        },
+        {
+          "question": "Kann ich auf Französisch für die französischsprachigen Teile Berns einreichen?",
+          "answer": "Ja, SwissAI Tax unterstützt sowohl Deutsch als auch Französisch sowie Englisch und Italienisch. Sie können Ihre gesamte Steuererklärung in Ihrer bevorzugten Sprache erstellen, unabhängig davon, in welchem Teil des Kantons Bern Sie leben."
+        },
+        {
+          "question": "Welche Abzüge sind für Berner Einwohner üblich?",
+          "answer": "Übliche Abzüge umfassen arbeitsbezogene Ausgaben (Pendeln, Verpflegung, berufliche Weiterbildung), obligatorische Versicherungsprämien (AHV, IV, ALV), Krankenversicherungsprämien, Säule 3a-Beiträge, Kinderbetreuungskosten, Ausbildungskosten und Spenden an anerkannte Wohltätigkeitsorganisationen. SwissAI Tax hilft Ihnen, alle anwendbaren Abzüge zu identifizieren."
+        },
+        {
+          "question": "Wie handhabt SwissAI Tax verschiedene Berner Gemeinden?",
+          "answer": "Geben Sie einfach Ihre Postleitzahl bei der Registrierung ein. Unser System identifiziert automatisch Ihre spezifische Gemeinde (ob Stadt Bern, Biel, Thun oder eine der über 340 Gemeinden) und wendet die korrekten Steuersätze und Multiplikatoren an. Keine manuelle Recherche erforderlich."
+        }
+      ],
+      "ctaHeading": "Bereit für Ihre Berner Steuererklärung?",
+      "ctaText": "Schliessen Sie sich Berner Einwohnern an, die SwissAI Tax für effiziente, präzise Steuererklärungen vertrauen. Starten Sie jetzt Ihre Erklärung und erleben Sie eine problemlose Steuersaison."
+    }
+  }
+}

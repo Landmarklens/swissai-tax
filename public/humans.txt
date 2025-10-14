@@ -1,0 +1,9 @@
+/* TEAM */
+  Company: LandMarK Lens GMBH
+  Contact: contact@swissai.tax
+  Location: Schneisingen, Switzerland
+
+/* SITE */
+  Standards: HTML5, CSS3, React
+  Components: Material-UI, i18next, React Router
+  Software: React, Node.js

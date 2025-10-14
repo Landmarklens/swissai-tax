@@ -100,7 +100,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://api.homeai.ch",
+  "proxy": "https://api.swissai.tax",
   "devDependencies": {
     "ajv": "^8.17.1",
     "eslint": "^8.57.1",

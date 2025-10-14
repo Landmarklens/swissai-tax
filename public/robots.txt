@@ -3,11 +3,11 @@ User-agent: *
 Disallow:
 
 # Sitemaps
-Sitemap: https://homeai.ch/sitemap.xml
-Sitemap: https://homeai.ch/sitemap-en.xml
-Sitemap: https://homeai.ch/sitemap-de.xml
-Sitemap: https://homeai.ch/sitemap-fr.xml
-Sitemap: https://homeai.ch/sitemap-it.xml
+Sitemap: https://swissai.tax/sitemap.xml
+Sitemap: https://swissai.tax/sitemap-en.xml
+Sitemap: https://swissai.tax/sitemap-de.xml
+Sitemap: https://swissai.tax/sitemap-fr.xml
+Sitemap: https://swissai.tax/sitemap-it.xml
 
 # Crawl-delay for responsible crawling
 Crawl-delay: 1

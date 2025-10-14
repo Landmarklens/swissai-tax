@@ -7,24 +7,24 @@ const FAQSchema = ({ faqs }) => {
   // Default FAQs if not provided
   const defaultFAQs = [
     {
-      question: "How does HomeAI's AI property matching work?",
-      answer: "HomeAI uses advanced AI algorithms to analyze your preferences, budget, and requirements to find the 4 best properties that match your needs. Instead of scrolling through hundreds of listings, you get personalized recommendations."
+      question: "How does SwissAI Tax's AI tax filing work?",
+      answer: "SwissAI Tax uses advanced AI algorithms to analyze your financial documents and guide you through the Swiss tax filing process. Our intelligent system helps you maximize deductions and ensures accuracy."
     },
     {
-      question: "Is HomeAI available throughout Switzerland?",
-      answer: "Yes, HomeAI covers properties across all of Switzerland, including major cities like Zürich, Geneva, Basel, Bern, and Lausanne, as well as smaller towns and rural areas."
+      question: "Is SwissAI Tax available throughout Switzerland?",
+      answer: "Yes, SwissAI Tax supports tax filing for all Swiss cantons, including Zürich, Geneva, Basel, Bern, and Lausanne, ensuring compliance with both federal and cantonal tax regulations."
     },
     {
-      question: "What languages does HomeAI support?",
-      answer: "HomeAI is available in English, German (Deutsch), French (Français), and Italian (Italiano) to serve all regions of Switzerland."
+      question: "What languages does SwissAI Tax support?",
+      answer: "SwissAI Tax is available in English, German (Deutsch), French (Français), and Italian (Italiano) to serve all regions of Switzerland."
     },
     {
-      question: "How much does HomeAI cost?",
-      answer: "HomeAI offers various subscription plans starting from free basic searches to premium features for frequent users and property owners. Check our pricing page for current plans."
+      question: "How much does SwissAI Tax cost?",
+      answer: "SwissAI Tax offers various pricing plans tailored to individuals and businesses. Check our pricing page for current plans and features."
     },
     {
-      question: "How quickly can I find a property with HomeAI?",
-      answer: "Most users receive their personalized property matches within minutes of completing their preferences. The AI continuously updates recommendations as new properties become available."
+      question: "How quickly can I complete my tax filing with SwissAI Tax?",
+      answer: "Most users complete their tax filing within minutes using our AI-powered platform. The system guides you step-by-step and automatically fills in information from your uploaded documents."
     }
   ];
 

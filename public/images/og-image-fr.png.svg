@@ -1,0 +1,26 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#DC0018"/>
+
+  <!-- White cross (Swiss flag) -->
+  <rect x="500" y="265" width="200" height="100" fill="white"/>
+  <rect x="550" y="215" width="100" height="200" fill="white"/>
+
+  <!-- Text Background -->
+  <rect x="50" y="380" width="1100" height="200" fill="rgba(255,255,255,0.95)" rx="10"/>
+
+  <!-- Title -->
+  <text x="600" y="465" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#DC0018" text-anchor="middle">
+    SwissAI Tax
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="530" font-family="Arial, sans-serif" font-size="32" fill="#333" text-anchor="middle">
+    Complétez votre déclaration d'impôts en 20 minutes
+  </text>
+
+  <!-- Domain -->
+  <text x="600" y="100" font-family="Arial, sans-serif" font-size="32" fill="white" text-anchor="middle">
+    swissai.tax
+  </text>
+</svg>

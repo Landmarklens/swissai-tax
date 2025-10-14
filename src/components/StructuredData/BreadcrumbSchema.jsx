@@ -7,7 +7,7 @@ const BreadcrumbSchema = ({ items }) => {
   const { i18n, t } = useTranslation();
   const location = useLocation();
   const currentLang = i18n.language;
-  const baseUrl = 'https://homeai.ch';
+  const baseUrl = 'https://swissai.tax';
 
   // Default breadcrumb based on current path if items not provided
   const generateDefaultBreadcrumbs = () => {

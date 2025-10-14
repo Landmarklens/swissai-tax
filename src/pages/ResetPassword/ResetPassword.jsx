@@ -90,6 +90,7 @@ export const ResetPassword = () => {
       <SEOHelmet
         title="Reset Password - SwissAI Tax"
         description="Create a new password for your SwissAI Tax account"
+        noindex={true}
       />
       <Box
         sx={{

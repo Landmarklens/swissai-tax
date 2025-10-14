@@ -20,6 +20,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import PersonalInfoSection from './components/PersonalInfoSection';
 import SecuritySection from './components/SecuritySection';
+import SEOHelmet from '../../components/SEO/SEOHelmet';
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -31,8 +32,14 @@ const Profile = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+    <>
+      <SEOHelmet
+        title="My Profile - SwissAI Tax"
+        description="Manage your SwissAI Tax account settings and personal information"
+        noindex={true}
+      />
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
 
       <Container maxWidth="lg" sx={{ py: 6, flex: 1 }}>
         {/* Breadcrumbs */}
@@ -82,7 +89,8 @@ const Profile = () => {
       </Container>
 
       <Footer />
-    </Box>
+      </Box>
+    </>
   );
 };
 

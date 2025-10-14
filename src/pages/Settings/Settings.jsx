@@ -28,6 +28,7 @@ import AuditLogsTab from './components/AuditLogsTab';
 import AccountDeletionSection from './components/AccountDeletionSection';
 import DataExportSection from './components/DataExportSection';
 import CookiePreferencesSettings from '../../components/CookieConsent/CookiePreferencesSettings';
+import SEOHelmet from '../../components/SEO/SEOHelmet';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -38,8 +39,14 @@ const Settings = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+    <>
+      <SEOHelmet
+        title="Settings - SwissAI Tax"
+        description="Configure your SwissAI Tax preferences, security, and privacy settings"
+        noindex={true}
+      />
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
 
       <Container maxWidth="lg" sx={{ py: 6, flex: 1 }}>
         {/* Breadcrumbs */}
@@ -134,7 +141,8 @@ const Settings = () => {
       </Container>
 
       <Footer />
-    </Box>
+      </Box>
+    </>
   );
 };
 

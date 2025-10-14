@@ -1,0 +1,244 @@
+{
+  "cantons": {
+    "breadcrumbs": {
+      "home": "Accueil"
+    },
+    "zurich": {
+      "name": "Zurich",
+      "heading": "Déclaration d'impôts Zurich - Simple, Rapide, Sécurisée",
+      "intro": "Remplissez votre déclaration d'impôts zurichoise avec l'assistance de l'IA. Économisez du temps et maximisez vos déductions avec SwissAI Tax - optimisé pour les résidents du canton de Zurich.",
+      "cta": "Commencer la déclaration maintenant",
+      "meta": {
+        "title": "Déclaration d'impôts Zurich - SwissAI Tax | Déclaration assistée par IA",
+        "description": "Remplissez votre déclaration d'impôts zurichoise en ligne avec SwissAI Tax. Assistée par IA, sécurisée et optimisée pour le canton de Zurich. Complétez votre déclaration en 20 minutes!",
+        "keywords": "déclaration impôts Zurich, déclaration fiscale Zurich, impôts Zurich, impôts en ligne Zurich, SwissAI Tax Zurich"
+      },
+      "stats": {
+        "latitude": 47.3769,
+        "longitude": 8.5417,
+        "cards": [
+          {
+            "value": "1.5M",
+            "label": "Habitants de Zurich"
+          },
+          {
+            "value": "20 min",
+            "label": "Temps moyen de traitement"
+          },
+          {
+            "value": "CHF 2'400",
+            "label": "Économie fiscale moyenne"
+          },
+          {
+            "value": "99.8%",
+            "label": "Taux de précision"
+          }
+        ]
+      },
+      "aboutHeading": "Déclaration d'impôts dans le canton de Zurich",
+      "aboutText": "Zurich est le centre économique de la Suisse avec la plus haute densité de population. La déclaration d'impôts à Zurich nécessite de comprendre les réglementations fiscales fédérales et cantonales. SwissAI Tax simplifie ce processus en calculant automatiquement vos impôts fédéraux, cantonaux et communaux en fonction de votre emplacement exact à Zurich. Que vous viviez dans la ville de Zurich, à Winterthour ou dans toute autre commune, notre IA s'adapte à votre situation fiscale spécifique.",
+      "benefitsHeading": "Comment SwissAI Tax aide les résidents de Zurich",
+      "benefits": [
+        {
+          "title": "Calcul automatique des impôts zurichois",
+          "description": "Notre IA calcule automatiquement les impôts fédéraux, cantonaux et communaux en fonction de votre commune zurichoise exacte. Pas besoin de rechercher les taux d'imposition - nous gérons tout."
+        },
+        {
+          "title": "Stockage sécurisé des données en Suisse",
+          "description": "Tous vos documents et données sont stockés sur des serveurs suisses avec un cryptage de niveau bancaire. Votre vie privée est protégée conformément aux lois suisses sur la protection des données et au RGPD."
+        },
+        {
+          "title": "Maximisez vos déductions",
+          "description": "Notre système intelligent identifie toutes les déductions disponibles pour les résidents zurichois: frais de déplacement, primes d'assurance, cotisations pilier 3a et plus. Ne manquez jamais une opportunité d'économie."
+        },
+        {
+          "title": "Support multilingue",
+          "description": "Remplissez votre déclaration d'impôts zurichoise en allemand, anglais, français ou italien. Notre plateforme s'adapte à votre langue préférée pour une expérience fluide."
+        }
+      ],
+      "faqHeading": "Questions fréquemment posées - Zurich",
+      "faq": [
+        {
+          "question": "Quelle est la date limite pour la déclaration d'impôts à Zurich?",
+          "answer": "Pour le canton de Zurich, la date limite standard pour soumettre votre déclaration d'impôts est le 31 mars de l'année suivante. Cependant, si vous déposez électroniquement ou utilisez un logiciel fiscal comme SwissAI Tax, vous pouvez recevoir une prolongation automatique jusqu'au 30 septembre. Nous recommandons de vérifier auprès de votre office fiscal local pour les dates limites spécifiques."
+        },
+        {
+          "question": "Quels sont les taux d'imposition à Zurich?",
+          "answer": "Zurich a des taux d'imposition progressifs qui varient selon le niveau de revenu et la commune. Le canton utilise un système de multiplicateur fiscal où chaque commune applique son propre multiplicateur à l'impôt cantonal de base. SwissAI Tax calcule automatiquement le montant d'impôt exact en fonction de votre commune et de votre niveau de revenu."
+        },
+        {
+          "question": "Puis-je déduire mes frais de déplacement à Zurich?",
+          "answer": "Oui, les résidents de Zurich peuvent déduire les frais de déplacement liés au travail. Cela inclut les dépenses de transport public (AG, demi-tarif ou billets individuels) et, dans certains cas, les frais de voiture si les transports publics ne sont pas raisonnables. Notre IA vous guide dans le calcul des déductions éligibles."
+        },
+        {
+          "question": "Comment SwissAI Tax gère-t-il la ville de Zurich par rapport aux autres communes?",
+          "answer": "Chaque commune du canton de Zurich a des taux d'imposition différents. SwissAI Tax détecte automatiquement votre commune en fonction de votre code postal et applique le multiplicateur fiscal correct. Que vous soyez dans la ville de Zurich, à Winterthour, à Uster ou dans toute autre commune, nous garantissons des calculs précis."
+        },
+        {
+          "question": "Quels documents ai-je besoin pour ma déclaration d'impôts zurichoise?",
+          "answer": "Les documents courants incluent votre certificat de salaire, les confirmations d'assurance, les relevés bancaires, les attestations d'intérêts hypothécaires (si applicable), les certificats de cotisations pilier 3a et les reçus pour les dépenses déductibles. Notre processus d'entretien vous indique exactement quels documents vous avez besoin."
+        }
+      ],
+      "ctaHeading": "Prêt à remplir votre déclaration d'impôts zurichoise?",
+      "ctaText": "Rejoignez des milliers de résidents zurichois qui font confiance à SwissAI Tax pour leur déclaration fiscale annuelle. Commencez maintenant et complétez votre déclaration en seulement 20 minutes."
+    },
+    "aargau": {
+      "name": "Argovie",
+      "heading": "Déclaration d'impôts Argovie - Déclaration assistée par IA",
+      "intro": "Remplissez efficacement votre déclaration d'impôts argovienne avec l'assistance de l'IA. SwissAI Tax fournit des calculs précis et des déductions maximales pour tous les résidents d'Argovie.",
+      "cta": "Commencer la déclaration maintenant",
+      "meta": {
+        "title": "Déclaration d'impôts Argovie - SwissAI Tax | Déclaration en ligne",
+        "description": "Complétez votre déclaration d'impôts argovienne en ligne avec SwissAI Tax. Sécurisée, précise et optimisée pour le canton d'Argovie. Déclaration assistée par IA en 20 minutes!",
+        "keywords": "déclaration impôts Argovie, déclaration fiscale Argovie, impôts Argovie, impôts en ligne Argovie, SwissAI Tax Argovie"
+      },
+      "stats": {
+        "latitude": 47.3903,
+        "longitude": 8.0458,
+        "cards": [
+          {
+            "value": "685'000",
+            "label": "Habitants d'Argovie"
+          },
+          {
+            "value": "20 min",
+            "label": "Temps moyen de traitement"
+          },
+          {
+            "value": "CHF 2'100",
+            "label": "Économie fiscale moyenne"
+          },
+          {
+            "value": "99.8%",
+            "label": "Taux de précision"
+          }
+        ]
+      },
+      "aboutHeading": "Déclaration d'impôts dans le canton d'Argovie",
+      "aboutText": "L'Argovie, connue pour son emplacement central et son économie diversifiée, a son propre système fiscal cantonal. La déclaration d'impôts en Argovie nécessite de comprendre les réglementations fédérales et cantonales spécifiques à votre commune. SwissAI Tax simplifie ce processus en calculant automatiquement vos impôts fédéraux, cantonaux et communaux. Que vous résidiez à Aarau, Baden, Wohlen ou dans toute autre commune argovienne, notre plateforme assure une déclaration précise et conforme.",
+      "benefitsHeading": "Comment SwissAI Tax aide les résidents d'Argovie",
+      "benefits": [
+        {
+          "title": "Calculs fiscaux spécifiques à l'Argovie",
+          "description": "Notre IA applique automatiquement les taux d'imposition et les multiplicateurs communaux de l'Argovie en fonction de votre emplacement exact. Obtenez des calculs précis pour les impôts fédéraux, cantonaux et communaux sans recherche manuelle."
+        },
+        {
+          "title": "Protection des données suisse",
+          "description": "Vos informations fiscales sensibles sont stockées en toute sécurité sur des serveurs suisses avec un cryptage de niveau militaire. Nous respectons les lois suisses sur la protection des données et les exigences du RGPD."
+        },
+        {
+          "title": "Détecteur de déductions intelligent",
+          "description": "Notre système identifie toutes les déductions applicables pour les résidents argoviens: frais professionnels, primes d'assurance, cotisations de retraite et plus. Assurez-vous de réclamer chaque franc auquel vous avez droit."
+        },
+        {
+          "title": "Téléchargement de documents facile",
+          "description": "Téléchargez simplement vos documents et notre technologie OCR extrait automatiquement les données pertinentes. Vérifiez et confirmez - c'est aussi simple que ça. Fonctionne avec tous les formats de documents courants."
+        }
+      ],
+      "faqHeading": "Questions fréquemment posées - Argovie",
+      "faq": [
+        {
+          "question": "Quelle est la date limite pour la déclaration d'impôts en Argovie?",
+          "answer": "La date limite standard pour les déclarations d'impôts argoviennes est le 31 mars de l'année suivant l'année fiscale. La déclaration électronique via un logiciel approuvé comme SwissAI Tax accorde généralement une prolongation automatique jusqu'au 30 septembre. Vérifiez toujours les dates limites spécifiques auprès de votre office fiscal local."
+        },
+        {
+          "question": "Comment les impôts sont-ils calculés en Argovie?",
+          "answer": "L'Argovie utilise un système fiscal progressif avec des composantes cantonales et communales. Chaque commune applique son propre multiplicateur fiscal au taux cantonal de base. SwissAI Tax détermine automatiquement votre commune et calcule le fardeau fiscal exact, y compris les impôts fédéraux."
+        },
+        {
+          "question": "Puis-je déduire mes cotisations pilier 3a en Argovie?",
+          "answer": "Oui, les cotisations pilier 3a sont entièrement déductibles de votre revenu imposable en Argovie (jusqu'au maximum annuel de CHF 7'056 pour les employés ou CHF 35'280 pour les indépendants sans caisse de pension). SwissAI Tax inclut automatiquement ces déductions dans votre calcul."
+        },
+        {
+          "question": "Qu'est-ce qui rend les impôts argoviens différents des autres cantons?",
+          "answer": "Bien que l'Argovie suive les mêmes principes fiscaux fédéraux que les autres cantons, il a ses propres taux d'imposition et réglementations cantonales. Le canton est connu pour des taux d'imposition relativement modérés. Chacune des 210 communes argoviennes a son propre multiplicateur fiscal, affectant le montant final dû."
+        },
+        {
+          "question": "SwissAI Tax prend-il en charge toutes les communes argoviennes?",
+          "answer": "Oui, SwissAI Tax prend en charge les 210 communes du canton d'Argovie. Entrez simplement votre code postal et notre système identifie automatiquement votre commune et applique les taux d'imposition et les multiplicateurs corrects."
+        }
+      ],
+      "ctaHeading": "Prêt à remplir votre déclaration d'impôts argovienne?",
+      "ctaText": "Découvrez une déclaration d'impôts sans stress conçue spécifiquement pour les résidents argoviens. Commencez votre déclaration maintenant et découvrez à quel point la déclaration d'impôts peut être facile."
+    },
+    "bern": {
+      "name": "Berne",
+      "heading": "Déclaration d'impôts Berne - Déclaration efficace assistée par IA",
+      "intro": "Remplissez votre déclaration d'impôts bernoise en toute confiance grâce à la technologie IA. SwissAI Tax garantit des calculs précis et une découverte complète des déductions pour tous les résidents du canton de Berne.",
+      "cta": "Commencer la déclaration maintenant",
+      "meta": {
+        "title": "Déclaration d'impôts Berne - SwissAI Tax | Déclaration IA",
+        "description": "Remplissez votre déclaration d'impôts bernoise en ligne avec SwissAI Tax. Assistée par IA, sécurisée et optimisée pour le canton de Berne. Complétez votre déclaration en 20 minutes avec déductions maximales!",
+        "keywords": "déclaration impôts Berne, déclaration fiscale Berne, impôts Berne, impôts en ligne Berne, SwissAI Tax Berne"
+      },
+      "stats": {
+        "latitude": 46.9480,
+        "longitude": 7.4474,
+        "cards": [
+          {
+            "value": "1.04M",
+            "label": "Habitants de Berne"
+          },
+          {
+            "value": "20 min",
+            "label": "Temps moyen de traitement"
+          },
+          {
+            "value": "CHF 2'200",
+            "label": "Économie fiscale moyenne"
+          },
+          {
+            "value": "99.8%",
+            "label": "Taux de précision"
+          }
+        ]
+      },
+      "aboutHeading": "Déclaration d'impôts dans le canton de Berne",
+      "aboutText": "Berne est le deuxième plus grand canton de Suisse par population et ville capitale. Le canton a un caractère bilingue unique (allemand et français) et un paysage économique diversifié. La déclaration d'impôts à Berne implique des calculs fiscaux fédéraux, cantonaux et communaux. SwissAI Tax rationalise ce processus en déterminant automatiquement vos obligations fiscales en fonction de votre commune spécifique. Que vous viviez dans la ville de Berne, à Bienne, à Thoune ou dans toute autre commune, nous assurons une déclaration précise et conforme.",
+      "benefitsHeading": "Comment SwissAI Tax aide les résidents bernois",
+      "benefits": [
+        {
+          "title": "Support bilingue pour Berne",
+          "description": "Remplissez votre déclaration d'impôts bernoise en allemand, français, anglais ou italien. Notre plateforme respecte le caractère bilingue de Berne et s'adapte de manière transparente à votre préférence linguistique."
+        },
+        {
+          "title": "Calculs communaux précis",
+          "description": "Berne compte plus de 340 communes, chacune avec des taux d'imposition différents. Notre IA identifie automatiquement votre commune et applique les multiplicateurs fiscaux corrects pour des calculs précis."
+        },
+        {
+          "title": "Analyse complète des déductions",
+          "description": "Notre système intelligent analyse votre situation et identifie toutes les déductions applicables: frais professionnels, assurances, cotisations de retraite, frais de garde d'enfants, dépenses d'éducation et plus spécifiques aux réglementations bernoises."
+        },
+        {
+          "title": "Sécurité de niveau bancaire",
+          "description": "Vos données sont cryptées et stockées sur des serveurs suisses. Nous respectons les normes strictes du secret bancaire suisse, les lois sur la protection des données et les exigences du RGPD pour votre tranquillité d'esprit."
+        }
+      ],
+      "faqHeading": "Questions fréquemment posées - Berne",
+      "faq": [
+        {
+          "question": "Quelle est la date limite pour la déclaration d'impôts à Berne?",
+          "answer": "Dans le canton de Berne, la date limite standard pour soumettre votre déclaration d'impôts est le 31 mars suivant l'année fiscale. La déclaration électronique via un logiciel approuvé prolonge généralement cette date limite au 30 septembre ou même plus tard. Vérifiez auprès de votre office fiscal local les dates limites spécifiques car elles peuvent varier selon la commune."
+        },
+        {
+          "question": "Comment se comparent les taux d'imposition de Berne aux autres cantons?",
+          "answer": "Berne a des taux d'imposition modérés par rapport aux autres cantons suisses. Le canton utilise un système fiscal progressif avec des taux variant selon le niveau de revenu et la commune. Chacune des plus de 340 communes bernoises applique son propre multiplicateur au taux cantonal de base, entraînant des variations dans tout le canton."
+        },
+        {
+          "question": "Puis-je déposer en français pour les parties francophones de Berne?",
+          "answer": "Oui, SwissAI Tax prend en charge l'allemand et le français, ainsi que l'anglais et l'italien. Vous pouvez remplir toute votre déclaration d'impôts dans votre langue préférée, quelle que soit la partie du canton de Berne où vous vivez."
+        },
+        {
+          "question": "Quelles sont les déductions courantes pour les résidents bernois?",
+          "answer": "Les déductions courantes incluent les dépenses liées au travail (déplacement, repas, développement professionnel), les primes d'assurance obligatoires (AVS, AI, AC), les primes d'assurance maladie, les cotisations pilier 3a, les frais de garde d'enfants, les dépenses d'éducation et les dons aux organisations caritatives reconnues. SwissAI Tax vous aide à identifier toutes les déductions applicables."
+        },
+        {
+          "question": "Comment SwissAI Tax gère-t-il les différentes communes bernoises?",
+          "answer": "Entrez simplement votre code postal lors de l'inscription. Notre système identifie automatiquement votre commune spécifique (que ce soit la ville de Berne, Bienne, Thoune ou l'une des plus de 340 communes) et applique les taux d'imposition et les multiplicateurs corrects. Aucune recherche manuelle nécessaire."
+        }
+      ],
+      "ctaHeading": "Prêt à remplir votre déclaration d'impôts bernoise?",
+      "ctaText": "Rejoignez les résidents bernois qui font confiance à SwissAI Tax pour une déclaration fiscale efficace et précise. Commencez votre déclaration maintenant et découvrez une saison fiscale sans tracas."
+    }
+  }
+}

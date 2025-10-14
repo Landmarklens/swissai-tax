@@ -74,6 +74,7 @@ export const ForgotPassword = () => {
       <SEOHelmet
         title={t("filing.reset_password_swissai_tax")}
         description="Reset your SwissAI Tax account password"
+        noindex={true}
       />
       <Box
         sx={{

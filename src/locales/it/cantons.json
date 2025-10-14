@@ -1,0 +1,244 @@
+{
+  "cantons": {
+    "breadcrumbs": {
+      "home": "Pagina iniziale"
+    },
+    "zurich": {
+      "name": "Zurigo",
+      "heading": "Dichiarazione fiscale Zurigo - Semplice, Veloce, Sicura",
+      "intro": "Completi la Sua dichiarazione fiscale zurighese con l'assistenza dell'IA. Risparmi tempo e massimizzi le Sue deduzioni con SwissAI Tax - ottimizzato per i residenti del canton Zurigo.",
+      "cta": "Inizia ora la dichiarazione",
+      "meta": {
+        "title": "Dichiarazione fiscale Zurigo - SwissAI Tax | Dichiarazione assistita dall'IA",
+        "description": "Completi la Sua dichiarazione fiscale zurighese online con SwissAI Tax. Assistita dall'IA, sicura e ottimizzata per il canton Zurigo. Completi la Sua dichiarazione in 20 minuti!",
+        "keywords": "dichiarazione fiscale Zurigo, dichiarazione imposte Zurigo, tasse Zurigo, imposte online Zurigo, SwissAI Tax Zurigo"
+      },
+      "stats": {
+        "latitude": 47.3769,
+        "longitude": 8.5417,
+        "cards": [
+          {
+            "value": "1.5M",
+            "label": "Abitanti di Zurigo"
+          },
+          {
+            "value": "20 min",
+            "label": "Tempo medio di elaborazione"
+          },
+          {
+            "value": "CHF 2'400",
+            "label": "Risparmio fiscale medio"
+          },
+          {
+            "value": "99.8%",
+            "label": "Tasso di precisione"
+          }
+        ]
+      },
+      "aboutHeading": "Dichiarazione fiscale nel canton Zurigo",
+      "aboutText": "Zurigo è il centro economico della Svizzera con la più alta densità di popolazione. La dichiarazione fiscale a Zurigo richiede la comprensione sia delle normative fiscali federali che cantonali. SwissAI Tax semplifica questo processo calcolando automaticamente le Sue imposte federali, cantonali e comunali in base alla Sua esatta posizione a Zurigo. Che Lei viva nella città di Zurigo, a Winterthur o in qualsiasi altro comune, la nostra IA si adatta alla Sua situazione fiscale specifica.",
+      "benefitsHeading": "Come SwissAI Tax aiuta i residenti di Zurigo",
+      "benefits": [
+        {
+          "title": "Calcolo automatico delle imposte zurighesi",
+          "description": "La nostra IA calcola automaticamente le imposte federali, cantonali e comunali in base al Suo comune zurighese esatto. Non c'è bisogno di cercare le aliquote fiscali - gestiamo tutto noi."
+        },
+        {
+          "title": "Archiviazione sicura dei dati in Svizzera",
+          "description": "Tutti i Suoi documenti e dati sono archiviati su server svizzeri con crittografia di livello bancario. La Sua privacy è protetta secondo le leggi svizzere sulla protezione dei dati e la conformità GDPR."
+        },
+        {
+          "title": "Massimizzi le Sue deduzioni",
+          "description": "Il nostro sistema intelligente identifica tutte le deduzioni disponibili per i residenti zurighesi: spese di pendolarismo, premi assicurativi, contributi pilastro 3a e altro. Non perda mai un'opportunità di risparmio."
+        },
+        {
+          "title": "Supporto multilingue",
+          "description": "Completi la Sua dichiarazione fiscale zurighese in tedesco, inglese, francese o italiano. La nostra piattaforma si adatta alla Sua lingua preferita per un'esperienza fluida."
+        }
+      ],
+      "faqHeading": "Domande frequenti - Zurigo",
+      "faq": [
+        {
+          "question": "Qual è la scadenza per la dichiarazione fiscale a Zurigo?",
+          "answer": "Per il canton Zurigo, la scadenza standard per presentare la dichiarazione fiscale è il 31 marzo dell'anno successivo. Tuttavia, se presenta elettronicamente o utilizza un software fiscale come SwissAI Tax, può ricevere una proroga automatica fino al 30 settembre. Consigliamo di verificare le scadenze specifiche presso il Suo ufficio fiscale locale."
+        },
+        {
+          "question": "Quali sono le aliquote fiscali a Zurigo?",
+          "answer": "Zurigo ha aliquote fiscali progressive che variano in base al livello di reddito e al comune. Il cantone utilizza un sistema di moltiplicatore fiscale dove ogni comune applica il proprio moltiplicatore all'imposta cantonale di base. SwissAI Tax calcola automaticamente l'importo fiscale esatto in base al Suo comune e al Suo livello di reddito."
+        },
+        {
+          "question": "Posso dedurre le mie spese di pendolarismo a Zurigo?",
+          "answer": "Sì, i residenti di Zurigo possono dedurre le spese di pendolarismo legate al lavoro. Questo include le spese di trasporto pubblico (AG, metà prezzo o biglietti individuali) e, in alcuni casi, le spese automobilistiche se il trasporto pubblico non è ragionevole. La nostra IA La guida nel calcolo delle deduzioni ammissibili."
+        },
+        {
+          "question": "Come gestisce SwissAI Tax la città di Zurigo rispetto agli altri comuni?",
+          "answer": "Ogni comune nel canton Zurigo ha aliquote fiscali diverse. SwissAI Tax rileva automaticamente il Suo comune in base al Suo codice postale e applica il moltiplicatore fiscale corretto. Che Lei sia nella città di Zurigo, a Winterthur, a Uster o in qualsiasi altro comune, garantiamo calcoli precisi."
+        },
+        {
+          "question": "Quali documenti mi servono per la mia dichiarazione fiscale zurighese?",
+          "answer": "I documenti comuni includono il Suo certificato di salario, le conferme assicurative, gli estratti bancari, le attestazioni degli interessi ipotecari (se applicabile), i certificati dei contributi pilastro 3a e le ricevute per le spese deducibili. Il nostro processo di colloquio Le dice esattamente quali documenti Le servono."
+        }
+      ],
+      "ctaHeading": "Pronto a compilare la Sua dichiarazione fiscale zurighese?",
+      "ctaText": "Si unisca a migliaia di residenti zurighesi che si fidano di SwissAI Tax per la loro dichiarazione fiscale annuale. Inizi ora e completi la Sua dichiarazione in soli 20 minuti."
+    },
+    "aargau": {
+      "name": "Argovia",
+      "heading": "Dichiarazione fiscale Argovia - Dichiarazione assistita dall'IA",
+      "intro": "Completi efficacemente la Sua dichiarazione fiscale argoviese con l'assistenza dell'IA. SwissAI Tax fornisce calcoli precisi e deduzioni massime per tutti i residenti di Argovia.",
+      "cta": "Inizia ora la dichiarazione",
+      "meta": {
+        "title": "Dichiarazione fiscale Argovia - SwissAI Tax | Dichiarazione online",
+        "description": "Completi la Sua dichiarazione fiscale argoviese online con SwissAI Tax. Sicura, precisa e ottimizzata per il canton Argovia. Dichiarazione assistita dall'IA in 20 minuti!",
+        "keywords": "dichiarazione fiscale Argovia, dichiarazione imposte Argovia, tasse Argovia, imposte online Argovia, SwissAI Tax Argovia"
+      },
+      "stats": {
+        "latitude": 47.3903,
+        "longitude": 8.0458,
+        "cards": [
+          {
+            "value": "685'000",
+            "label": "Abitanti di Argovia"
+          },
+          {
+            "value": "20 min",
+            "label": "Tempo medio di elaborazione"
+          },
+          {
+            "value": "CHF 2'100",
+            "label": "Risparmio fiscale medio"
+          },
+          {
+            "value": "99.8%",
+            "label": "Tasso di precisione"
+          }
+        ]
+      },
+      "aboutHeading": "Dichiarazione fiscale nel canton Argovia",
+      "aboutText": "L'Argovia, nota per la sua posizione centrale e l'economia diversificata, ha il proprio sistema fiscale cantonale. La dichiarazione fiscale in Argovia richiede la comprensione sia delle normative federali che cantonali specifiche del Suo comune. SwissAI Tax semplifica questo processo calcolando automaticamente le Sue imposte federali, cantonali e comunali. Che Lei risieda ad Aarau, Baden, Wohlen o in qualsiasi altro comune argoviese, la nostra piattaforma assicura una dichiarazione precisa e conforme.",
+      "benefitsHeading": "Come SwissAI Tax aiuta i residenti di Argovia",
+      "benefits": [
+        {
+          "title": "Calcoli fiscali specifici per l'Argovia",
+          "description": "La nostra IA applica automaticamente le aliquote fiscali e i moltiplicatori comunali dell'Argovia in base alla Sua posizione esatta. Ottenga calcoli precisi per le imposte federali, cantonali e comunali senza ricerca manuale."
+        },
+        {
+          "title": "Protezione dei dati svizzera",
+          "description": "Le Sue informazioni fiscali sensibili sono archiviate in modo sicuro su server svizzeri con crittografia di livello militare. Rispettiamo le leggi svizzere sulla protezione dei dati e i requisiti GDPR."
+        },
+        {
+          "title": "Rilevatore intelligente di deduzioni",
+          "description": "Il nostro sistema identifica tutte le deduzioni applicabili per i residenti argoviesi: spese professionali, premi assicurativi, contributi pensionistici e altro. Si assicuri di reclamare ogni franco a cui ha diritto."
+        },
+        {
+          "title": "Caricamento documenti facile",
+          "description": "Carichi semplicemente i Suoi documenti e la nostra tecnologia OCR estrae automaticamente i dati rilevanti. Verifichi e confermi - è così semplice. Funziona con tutti i formati di documento comuni."
+        }
+      ],
+      "faqHeading": "Domande frequenti - Argovia",
+      "faq": [
+        {
+          "question": "Qual è la scadenza per la dichiarazione fiscale in Argovia?",
+          "answer": "La scadenza standard per le dichiarazioni fiscali argoviesi è il 31 marzo dell'anno successivo all'anno fiscale. La dichiarazione elettronica tramite software approvato come SwissAI Tax concede generalmente una proroga automatica fino al 30 settembre. Verifichi sempre le scadenze specifiche presso il Suo ufficio fiscale locale."
+        },
+        {
+          "question": "Come vengono calcolate le imposte in Argovia?",
+          "answer": "L'Argovia utilizza un sistema fiscale progressivo con componenti cantonali e comunali. Ogni comune applica il proprio moltiplicatore fiscale all'aliquota cantonale di base. SwissAI Tax determina automaticamente il Suo comune e calcola l'onere fiscale esatto, comprese le imposte federali."
+        },
+        {
+          "question": "Posso dedurre i miei contributi pilastro 3a in Argovia?",
+          "answer": "Sì, i contributi pilastro 3a sono completamente deducibili dal Suo reddito imponibile in Argovia (fino al massimo annuale di CHF 7'056 per i dipendenti o CHF 35'280 per gli indipendenti senza cassa pensioni). SwissAI Tax include automaticamente queste deduzioni nel Suo calcolo."
+        },
+        {
+          "question": "Cosa rende le imposte argoviesi diverse dagli altri cantoni?",
+          "answer": "Mentre l'Argovia segue gli stessi principi fiscali federali degli altri cantoni, ha le proprie aliquote fiscali e normative cantonali. Il cantone è noto per aliquote fiscali relativamente moderate. Ognuno dei 210 comuni argoviesi ha il proprio moltiplicatore fiscale, che influisce sull'importo finale dovuto."
+        },
+        {
+          "question": "SwissAI Tax supporta tutti i comuni argoviesi?",
+          "answer": "Sì, SwissAI Tax supporta tutti i 210 comuni nel canton Argovia. Inserisca semplicemente il Suo codice postale e il nostro sistema identifica automaticamente il Suo comune e applica le aliquote fiscali e i moltiplicatori corretti."
+        }
+      ],
+      "ctaHeading": "Pronto a compilare la Sua dichiarazione fiscale argoviese?",
+      "ctaText": "Sperimenti una dichiarazione fiscale senza stress progettata specificamente per i residenti argoviesi. Inizi ora la Sua dichiarazione e scopra quanto può essere facile la dichiarazione fiscale."
+    },
+    "bern": {
+      "name": "Berna",
+      "heading": "Dichiarazione fiscale Berna - Dichiarazione efficiente assistita dall'IA",
+      "intro": "Completi la Sua dichiarazione fiscale bernese con fiducia grazie alla tecnologia IA. SwissAI Tax garantisce calcoli precisi e scoperta completa delle deduzioni per tutti i residenti del canton Berna.",
+      "cta": "Inizia ora la dichiarazione",
+      "meta": {
+        "title": "Dichiarazione fiscale Berna - SwissAI Tax | Dichiarazione IA",
+        "description": "Completi la Sua dichiarazione fiscale bernese online con SwissAI Tax. Assistita dall'IA, sicura e ottimizzata per il canton Berna. Completi la Sua dichiarazione in 20 minuti con deduzioni massime!",
+        "keywords": "dichiarazione fiscale Berna, dichiarazione imposte Berna, tasse Berna, imposte online Berna, SwissAI Tax Berna"
+      },
+      "stats": {
+        "latitude": 46.9480,
+        "longitude": 7.4474,
+        "cards": [
+          {
+            "value": "1.04M",
+            "label": "Abitanti di Berna"
+          },
+          {
+            "value": "20 min",
+            "label": "Tempo medio di elaborazione"
+          },
+          {
+            "value": "CHF 2'200",
+            "label": "Risparmio fiscale medio"
+          },
+          {
+            "value": "99.8%",
+            "label": "Tasso di precisione"
+          }
+        ]
+      },
+      "aboutHeading": "Dichiarazione fiscale nel canton Berna",
+      "aboutText": "Berna è il secondo cantone più grande della Svizzera per popolazione e città capitale. Il cantone ha un carattere bilingue unico (tedesco e francese) e un paesaggio economico diversificato. La dichiarazione fiscale a Berna coinvolge calcoli fiscali federali, cantonali e comunali. SwissAI Tax semplifica questo processo determinando automaticamente i Suoi obblighi fiscali in base al Suo comune specifico. Che Lei viva nella città di Berna, a Bienne, a Thun o in qualsiasi altro comune, garantiamo una dichiarazione precisa e conforme.",
+      "benefitsHeading": "Come SwissAI Tax aiuta i residenti bernesi",
+      "benefits": [
+        {
+          "title": "Supporto bilingue per Berna",
+          "description": "Completi la Sua dichiarazione fiscale bernese in tedesco, francese, inglese o italiano. La nostra piattaforma rispetta il carattere bilingue di Berna e si adatta perfettamente alla Sua preferenza linguistica."
+        },
+        {
+          "title": "Calcoli comunali precisi",
+          "description": "Berna ha oltre 340 comuni, ognuno con aliquote fiscali diverse. La nostra IA identifica automaticamente il Suo comune e applica i moltiplicatori fiscali corretti per calcoli precisi."
+        },
+        {
+          "title": "Analisi completa delle deduzioni",
+          "description": "Il nostro sistema intelligente analizza la Sua situazione e identifica tutte le deduzioni applicabili: spese professionali, assicurazioni, contributi pensionistici, spese di custodia dei bambini, spese di formazione e altro specifico alle normative bernesi."
+        },
+        {
+          "title": "Sicurezza di livello bancario",
+          "description": "I Suoi dati sono crittografati e archiviati su server svizzeri. Rispettiamo gli standard rigorosi del segreto bancario svizzero, le leggi sulla protezione dei dati e i requisiti GDPR per la Sua tranquillità."
+        }
+      ],
+      "faqHeading": "Domande frequenti - Berna",
+      "faq": [
+        {
+          "question": "Qual è la scadenza per la dichiarazione fiscale a Berna?",
+          "answer": "Nel canton Berna, la scadenza standard per presentare la dichiarazione fiscale è il 31 marzo successivo all'anno fiscale. La dichiarazione elettronica tramite software approvato estende generalmente questa scadenza al 30 settembre o anche oltre. Verifichi presso il Suo ufficio fiscale locale le scadenze specifiche poiché possono variare a seconda del comune."
+        },
+        {
+          "question": "Come si confrontano le aliquote fiscali di Berna con gli altri cantoni?",
+          "answer": "Berna ha aliquote fiscali moderate rispetto ad altri cantoni svizzeri. Il cantone utilizza un sistema fiscale progressivo con aliquote che variano in base al livello di reddito e al comune. Ognuno degli oltre 340 comuni bernesi applica il proprio moltiplicatore all'aliquota cantonale di base, risultando in variazioni in tutto il cantone."
+        },
+        {
+          "question": "Posso presentare in francese per le parti francofone di Berna?",
+          "answer": "Sì, SwissAI Tax supporta sia il tedesco che il francese, oltre all'inglese e all'italiano. Può compilare tutta la Sua dichiarazione fiscale nella Sua lingua preferita, indipendentemente dalla parte del canton Berna in cui vive."
+        },
+        {
+          "question": "Quali sono le deduzioni comuni per i residenti bernesi?",
+          "answer": "Le deduzioni comuni includono spese legate al lavoro (pendolarismo, pasti, sviluppo professionale), premi assicurativi obbligatori (AVS, AI, AD), premi dell'assicurazione malattia, contributi pilastro 3a, spese di custodia dei bambini, spese di formazione e donazioni a organizzazioni di beneficenza riconosciute. SwissAI Tax La aiuta a identificare tutte le deduzioni applicabili."
+        },
+        {
+          "question": "Come gestisce SwissAI Tax i diversi comuni bernesi?",
+          "answer": "Inserisca semplicemente il Suo codice postale durante la registrazione. Il nostro sistema identifica automaticamente il Suo comune specifico (che sia la città di Berna, Bienne, Thun o uno degli oltre 340 comuni) e applica le aliquote fiscali e i moltiplicatori corretti. Nessuna ricerca manuale necessaria."
+        }
+      ],
+      "ctaHeading": "Pronto a compilare la Sua dichiarazione fiscale bernese?",
+      "ctaText": "Si unisca ai residenti bernesi che si fidano di SwissAI Tax per una dichiarazione fiscale efficiente e precisa. Inizi ora la Sua dichiarazione e sperimenti una stagione fiscale senza problemi."
+    }
+  }
+}

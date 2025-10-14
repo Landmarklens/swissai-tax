@@ -1,0 +1,244 @@
+{
+  "cantons": {
+    "breadcrumbs": {
+      "home": "Home"
+    },
+    "zurich": {
+      "name": "Zürich",
+      "heading": "Tax Declaration Zürich - Simple, Fast, Secure",
+      "intro": "File your Zürich tax return with AI-powered assistance. Save time and maximize your deductions with SwissAI Tax - optimized for Zürich canton residents.",
+      "cta": "Start Tax Filing Now",
+      "meta": {
+        "title": "Tax Declaration Zürich - SwissAI Tax | AI-Powered Filing",
+        "description": "File your Zürich tax return online with SwissAI Tax. AI-powered, secure, and optimized for Zürich canton. Complete your declaration in 20 minutes. Start now!",
+        "keywords": "Zürich tax declaration, Steuererklärung Zürich, tax filing Zürich, Zürich taxes, Swiss tax Zürich, online tax Zürich"
+      },
+      "stats": {
+        "latitude": 47.3769,
+        "longitude": 8.5417,
+        "cards": [
+          {
+            "value": "1.5M",
+            "label": "Zürich Residents"
+          },
+          {
+            "value": "20 min",
+            "label": "Average Filing Time"
+          },
+          {
+            "value": "CHF 2,400",
+            "label": "Average Tax Savings"
+          },
+          {
+            "value": "99.8%",
+            "label": "Accuracy Rate"
+          }
+        ]
+      },
+      "aboutHeading": "Tax Filing in Zürich Canton",
+      "aboutText": "Zürich is Switzerland's economic hub with the highest population density. Filing taxes in Zürich requires understanding both federal and cantonal tax regulations. SwissAI Tax simplifies this process by automatically calculating your federal, cantonal, and municipal taxes based on your exact location in Zürich. Whether you live in the city of Zürich, Winterthur, or any other municipality, our AI adapts to your specific tax situation.",
+      "benefitsHeading": "How SwissAI Tax Helps Zürich Residents",
+      "benefits": [
+        {
+          "title": "Automatic Zürich Tax Calculation",
+          "description": "Our AI automatically calculates federal, cantonal, and municipal taxes based on your exact Zürich municipality. No need to look up tax rates - we handle it all."
+        },
+        {
+          "title": "Secure Swiss Data Storage",
+          "description": "All your documents and data are stored on Swiss servers with bank-level encryption. Your privacy is protected according to Swiss data protection laws and GDPR compliance."
+        },
+        {
+          "title": "Maximize Your Deductions",
+          "description": "Our intelligent system identifies all available deductions for Zürich residents: commuting costs, insurance premiums, pillar 3a contributions, and more. Never miss a saving opportunity."
+        },
+        {
+          "title": "Multilingual Support",
+          "description": "File your Zürich tax return in German, English, French, or Italian. Our platform adapts to your preferred language for a seamless experience."
+        }
+      ],
+      "faqHeading": "Frequently Asked Questions - Zürich",
+      "faq": [
+        {
+          "question": "When is the tax filing deadline in Zürich?",
+          "answer": "For Zürich canton, the standard deadline for filing your tax return is March 31st of the following year. However, if you file electronically or use a tax software like SwissAI Tax, you may receive an automatic extension until September 30th. We recommend checking with your local tax office for specific deadlines."
+        },
+        {
+          "question": "What are the tax rates in Zürich?",
+          "answer": "Zürich has progressive tax rates that vary by income level and municipality. The canton uses a tax multiplier system where each municipality applies its own multiplier to the base cantonal tax. SwissAI Tax automatically calculates the exact tax amount based on your municipality and income level."
+        },
+        {
+          "question": "Can I deduct my commuting costs in Zürich?",
+          "answer": "Yes, Zürich residents can deduct work-related commuting costs. This includes public transportation expenses (GA, half-fare card, or individual tickets) and, in some cases, car expenses if public transport is not reasonable. Our AI guides you through calculating eligible deductions."
+        },
+        {
+          "question": "How does SwissAI Tax handle Zürich city vs. other municipalities?",
+          "answer": "Each municipality in Zürich canton has different tax rates. SwissAI Tax automatically detects your municipality based on your postal code and applies the correct tax multiplier. Whether you're in Zürich city, Winterthur, Uster, or any other municipality, we ensure accurate calculations."
+        },
+        {
+          "question": "What documents do I need for my Zürich tax return?",
+          "answer": "Common documents include your salary certificate (Lohnausweis), insurance confirmations, bank statements, mortgage interest statements (if applicable), pillar 3a contribution certificates, and receipts for deductible expenses. Our interview process tells you exactly which documents you need."
+        }
+      ],
+      "ctaHeading": "Ready to File Your Zürich Tax Return?",
+      "ctaText": "Join thousands of Zürich residents who trust SwissAI Tax for their annual tax filing. Start now and complete your declaration in just 20 minutes."
+    },
+    "aargau": {
+      "name": "Aargau",
+      "heading": "Tax Declaration Aargau - AI-Powered Filing",
+      "intro": "File your Aargau tax return efficiently with AI assistance. SwissAI Tax provides accurate calculations and maximum deductions for all Aargau residents.",
+      "cta": "Start Tax Filing Now",
+      "meta": {
+        "title": "Tax Declaration Aargau - SwissAI Tax | Online Tax Filing",
+        "description": "Complete your Aargau tax return online with SwissAI Tax. Secure, accurate, and optimized for Aargau canton. AI-powered tax filing in 20 minutes. Start today!",
+        "keywords": "Aargau tax declaration, Steuererklärung Aargau, tax filing Aargau, Aargau taxes, Swiss tax Aargau, online tax Aargau"
+      },
+      "stats": {
+        "latitude": 47.3903,
+        "longitude": 8.0458,
+        "cards": [
+          {
+            "value": "685K",
+            "label": "Aargau Residents"
+          },
+          {
+            "value": "20 min",
+            "label": "Average Filing Time"
+          },
+          {
+            "value": "CHF 2,100",
+            "label": "Average Tax Savings"
+          },
+          {
+            "value": "99.8%",
+            "label": "Accuracy Rate"
+          }
+        ]
+      },
+      "aboutHeading": "Tax Filing in Aargau Canton",
+      "aboutText": "Aargau, known for its central location and diverse economy, has its own cantonal tax system. Filing taxes in Aargau requires understanding both federal and cantonal regulations specific to your municipality. SwissAI Tax simplifies this process by automatically calculating your federal, cantonal, and municipal taxes. Whether you reside in Aarau, Baden, Wohlen, or any other Aargau municipality, our platform ensures accurate and compliant tax filing.",
+      "benefitsHeading": "How SwissAI Tax Helps Aargau Residents",
+      "benefits": [
+        {
+          "title": "Aargau-Specific Tax Calculations",
+          "description": "Our AI automatically applies Aargau's tax rates and municipal multipliers based on your exact location. Get precise calculations for federal, cantonal, and municipal taxes without manual research."
+        },
+        {
+          "title": "Swiss Data Protection",
+          "description": "Your sensitive tax information is stored securely on Swiss servers with military-grade encryption. We comply with Swiss data protection laws and GDPR requirements."
+        },
+        {
+          "title": "Intelligent Deduction Finder",
+          "description": "Our system identifies all applicable deductions for Aargau residents: work expenses, insurance premiums, pension contributions, and more. Ensure you claim every franc you're entitled to."
+        },
+        {
+          "title": "Easy Document Upload",
+          "description": "Simply upload your documents, and our OCR technology extracts relevant data automatically. Review and confirm - it's that simple. Works with all common document formats."
+        }
+      ],
+      "faqHeading": "Frequently Asked Questions - Aargau",
+      "faq": [
+        {
+          "question": "When is the tax filing deadline in Aargau?",
+          "answer": "The standard deadline for Aargau tax returns is March 31st of the year following the tax year. Electronic filing through approved software like SwissAI Tax typically grants an automatic extension to September 30th. Always verify specific deadlines with your local tax office."
+        },
+        {
+          "question": "How are taxes calculated in Aargau?",
+          "answer": "Aargau uses a progressive tax system with both cantonal and municipal components. Each municipality applies its own tax multiplier to the base cantonal rate. SwissAI Tax automatically determines your municipality and calculates the exact tax burden, including federal taxes."
+        },
+        {
+          "question": "Can I deduct my pillar 3a contributions in Aargau?",
+          "answer": "Yes, pillar 3a contributions are fully deductible from your taxable income in Aargau (up to the annual maximum of CHF 7,056 for employees or CHF 35,280 for self-employed without a pension fund). SwissAI Tax automatically includes these deductions in your calculation."
+        },
+        {
+          "question": "What makes Aargau taxes different from other cantons?",
+          "answer": "While Aargau follows the same federal tax principles as other cantons, it has its own cantonal tax rates and regulations. The canton is known for relatively moderate tax rates. Each of Aargau's 210 municipalities has its own tax multiplier, affecting the final amount owed."
+        },
+        {
+          "question": "Does SwissAI Tax support all Aargau municipalities?",
+          "answer": "Yes, SwissAI Tax supports all 210 municipalities in Aargau canton. Simply enter your postal code, and our system automatically identifies your municipality and applies the correct tax rates and multipliers."
+        }
+      ],
+      "ctaHeading": "Ready to File Your Aargau Tax Return?",
+      "ctaText": "Experience stress-free tax filing designed specifically for Aargau residents. Start your declaration now and discover how easy tax filing can be."
+    },
+    "bern": {
+      "name": "Bern",
+      "heading": "Tax Declaration Bern - Efficient AI-Assisted Filing",
+      "intro": "File your Bern tax return with confidence using AI technology. SwissAI Tax ensures accurate calculations and comprehensive deduction discovery for all Bern canton residents.",
+      "cta": "Start Tax Filing Now",
+      "meta": {
+        "title": "Tax Declaration Bern - SwissAI Tax | AI Tax Filing",
+        "description": "File your Bern tax return online with SwissAI Tax. AI-powered, secure, and optimized for Bern canton. Complete your declaration in 20 minutes with maximum deductions!",
+        "keywords": "Bern tax declaration, Steuererklärung Bern, tax filing Bern, Bern taxes, Swiss tax Bern, online tax Bern"
+      },
+      "stats": {
+        "latitude": 46.9480,
+        "longitude": 7.4474,
+        "cards": [
+          {
+            "value": "1.04M",
+            "label": "Bern Residents"
+          },
+          {
+            "value": "20 min",
+            "label": "Average Filing Time"
+          },
+          {
+            "value": "CHF 2,200",
+            "label": "Average Tax Savings"
+          },
+          {
+            "value": "99.8%",
+            "label": "Accuracy Rate"
+          }
+        ]
+      },
+      "aboutHeading": "Tax Filing in Bern Canton",
+      "aboutText": "Bern is Switzerland's second-largest canton by population and capital city. The canton has a unique bilingual character (German and French) and diverse economic landscape. Tax filing in Bern involves federal, cantonal, and municipal tax calculations. SwissAI Tax streamlines this process by automatically determining your tax obligations based on your specific municipality. Whether you live in Bern city, Biel/Bienne, Thun, or any other municipality, we ensure accurate and compliant filing.",
+      "benefitsHeading": "How SwissAI Tax Helps Bern Residents",
+      "benefits": [
+        {
+          "title": "Bilingual Support for Bern",
+          "description": "File your Bern tax return in German, French, English, or Italian. Our platform respects Bern's bilingual nature and adapts to your language preference seamlessly."
+        },
+        {
+          "title": "Precise Municipal Calculations",
+          "description": "Bern has over 340 municipalities, each with different tax rates. Our AI automatically identifies your municipality and applies the correct tax multipliers for accurate calculations."
+        },
+        {
+          "title": "Comprehensive Deduction Analysis",
+          "description": "Our intelligent system analyzes your situation and identifies all applicable deductions: work expenses, insurance, pension contributions, childcare costs, education expenses, and more specific to Bern regulations."
+        },
+        {
+          "title": "Bank-Level Security",
+          "description": "Your data is encrypted and stored on Swiss servers. We comply with strict Swiss banking secrecy standards, data protection laws, and GDPR requirements for your peace of mind."
+        }
+      ],
+      "faqHeading": "Frequently Asked Questions - Bern",
+      "faq": [
+        {
+          "question": "When is the tax filing deadline in Bern?",
+          "answer": "In Bern canton, the standard deadline for filing your tax return is March 31st following the tax year. Electronic filing through approved software typically extends this deadline to September 30th or even later. Check with your local tax office for specific deadlines as they may vary by municipality."
+        },
+        {
+          "question": "How do Bern's tax rates compare to other cantons?",
+          "answer": "Bern has moderate tax rates compared to other Swiss cantons. The canton uses a progressive tax system with rates varying by income level and municipality. Each of Bern's 340+ municipalities applies its own multiplier to the base cantonal rate, resulting in variations across the canton."
+        },
+        {
+          "question": "Can I file in French for the French-speaking parts of Bern?",
+          "answer": "Yes, SwissAI Tax supports both German and French, as well as English and Italian. You can file your entire tax return in your preferred language, regardless of which part of Bern canton you live in."
+        },
+        {
+          "question": "What deductions are common for Bern residents?",
+          "answer": "Common deductions include work-related expenses (commuting, meals, professional development), mandatory insurance premiums (AHV, IV, ALV), health insurance premiums, pillar 3a contributions, childcare costs, education expenses, and donations to recognized charities. SwissAI Tax helps you identify all applicable deductions."
+        },
+        {
+          "question": "How does SwissAI Tax handle different Bern municipalities?",
+          "answer": "Simply enter your postal code during registration. Our system automatically identifies your specific municipality (whether it's Bern city, Biel, Thun, or any of the 340+ municipalities) and applies the correct tax rates and multipliers. No manual research needed."
+        }
+      ],
+      "ctaHeading": "Ready to File Your Bern Tax Return?",
+      "ctaText": "Join Bern residents who trust SwissAI Tax for efficient, accurate tax filing. Start your declaration now and experience hassle-free tax season."
+    }
+  }
+}

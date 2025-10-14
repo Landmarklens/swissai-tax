@@ -2,30 +2,47 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * OrganizationSchema - Main organization structured data for SwissAI Tax
+ *
+ * This component generates Schema.org Organization structured data to help search engines
+ * understand the company behind SwissAI Tax, including legal information, contact details,
+ * and business information.
+ *
+ * @component
+ * @example
+ * return <OrganizationSchema />
+ */
 const OrganizationSchema = () => {
   const { t } = useTranslation();
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "HomeAI",
-    "alternateName": "HomeAI Switzerland",
-    "url": "https://homeai.ch",
-    "logo": "https://homeai.ch/logo.png",
-    "description": "AI-powered property search platform for Switzerland. Stop scrolling through 100+ listings — let AI send the 4 homes that actually fit.",
+    "name": "SwissAI Tax",
+    "legalName": "LandMarK Lens GMBH",
+    "alternateName": "SwissAI Tax Switzerland",
+    "url": "https://swissai.tax",
+    "logo": "https://swissai.tax/logo.png",
+    "description": "AI-powered Swiss tax filing platform. Simplify your Swiss tax return with intelligent automation and expert guidance for individuals and businesses.",
     "foundingDate": "2023",
+    "email": "contact@swissai.tax",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "Sandbuckstrasse 24",
+      "addressLocality": "Schneisingen",
+      "postalCode": "5425",
       "addressCountry": "CH",
-      "addressRegion": "Switzerland"
+      "addressRegion": "Aargau"
     },
-    "sameAs": [
-      "https://www.linkedin.com/company/homeai-ch",
-      "https://twitter.com/homeai_ch",
-      "https://www.facebook.com/homeaich"
-    ],
+    // TODO: Add social media links when available
+    // "sameAs": [
+    //   "https://www.linkedin.com/company/swissai-tax",
+    //   "https://twitter.com/swissaitax",
+    //   "https://www.facebook.com/swissaitax"
+    // ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+41-XX-XXX-XXXX",
+      "email": "contact@swissai.tax",
       "contactType": "customer service",
       "areaServed": "CH",
       "availableLanguage": ["English", "German", "French", "Italian"]

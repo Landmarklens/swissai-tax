@@ -2,146 +2,179 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://homeai.ch/de</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/how-it-works</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/how-it-works"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/how-it-works"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/how-it-works"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/how-it-works"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/how-it-works"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/how-it-works</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/how-it-works"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/how-it-works"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/how-it-works"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/how-it-works"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/how-it-works"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/tenants</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/tenants"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/tenants"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/tenants"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/tenants"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/tenants"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/tenants</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/tenants"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/tenants"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/tenants"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/tenants"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/tenants"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/owners</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/owners"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/owners"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/owners"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/owners"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/owners"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/owners</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/owners"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/owners"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/owners"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/owners"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/owners"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/features</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/features"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/features"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/features"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/features"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/features"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/features</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/features"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/features"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/features"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/features"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/features"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/about</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/about"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/about"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/about"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/about"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/about"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/about"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/about"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/about"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/contact</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/contact"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/contact"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/contact"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/contact"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/contact"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/contact"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/faq</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/faq"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/faq"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/faq"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/faq"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/faq"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/faq"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/faq"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/faq"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/faq"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/blog</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/blog"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/blog"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/blog"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/blog"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/blog"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/blog"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/blog"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/blog"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/blog"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/blog"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/plan</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/plan"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/plan"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/plan"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/plan"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/plan"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/plan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/plan"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/plan"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/plan"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/plan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/plan"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/support</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/support"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/support"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/support"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/support"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/support"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/support</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/support"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/support"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/support"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/support"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/support"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/terms"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/terms"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/terms"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/terms"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/terms"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/terms"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://homeai.ch/de/policy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://homeai.ch/en/policy"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://homeai.ch/de/policy"/>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://homeai.ch/fr/policy"/>
-    <xhtml:link rel="alternate" hreflang="it-CH" href="https://homeai.ch/it/policy"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://homeai.ch/en/policy"/>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://swissai.tax/de/policy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/policy"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/policy"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/policy"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/policy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/policy"/>
+    <lastmod>2025-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://swissai.tax/de/zurich</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/zurich"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/zurich"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/zurich"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/zurich"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/zurich"/>
+    <lastmod>2025-10-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://swissai.tax/de/aargau</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/aargau"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/aargau"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/aargau"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/aargau"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/aargau"/>
+    <lastmod>2025-10-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://swissai.tax/de/bern</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swissai.tax/en/bern"/>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://swissai.tax/de/bern"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://swissai.tax/fr/bern"/>
+    <xhtml:link rel="alternate" hreflang="it-CH" href="https://swissai.tax/it/bern"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://swissai.tax/en/bern"/>
+    <lastmod>2025-10-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

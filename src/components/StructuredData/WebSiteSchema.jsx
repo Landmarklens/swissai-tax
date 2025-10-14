@@ -10,20 +10,20 @@ const WebSiteSchema = () => {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "HomeAI",
-    "alternateName": "HomeAI Switzerland - AI Property Search",
-    "url": `https://homeai.ch/${currentLang}`,
-    "description": "AI-powered property search platform for Switzerland",
+    "name": "SwissAI Tax",
+    "alternateName": "SwissAI Tax Switzerland - AI Tax Filing",
+    "url": `https://swissai.tax/${currentLang}`,
+    "description": "AI-powered Swiss tax filing platform for individuals and businesses",
     "publisher": {
       "@type": "Organization",
-      "name": "HomeAI",
-      "url": "https://homeai.ch"
+      "name": "SwissAI Tax",
+      "url": "https://swissai.tax"
     },
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": `https://homeai.ch/${currentLang}/search?q={search_term_string}`
+        "urlTemplate": `https://swissai.tax/${currentLang}/search?q={search_term_string}`
       },
       "query-input": "required name=search_term_string"
     },

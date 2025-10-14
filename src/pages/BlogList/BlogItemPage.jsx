@@ -17,65 +17,91 @@ import {
 import Layout from '../Layout/Layout';
 import { theme } from '../../theme/theme';
 import { blogPosts } from '../../blogData';
-import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, useLocation, useParams, Navigate, Link as RouterLink } from 'react-router-dom';
 import { Link as MuiLink } from '@mui/material';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useTranslation } from 'react-i18next';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
+import ArticleSchema from '../../components/StructuredData/ArticleSchema';
+import { Helmet } from 'react-helmet-async';
 
 const BlogItemPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [blogPost, setBlogPost] = useState(null);
   const [popularPosts, setPopularPosts] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
+  const [redirectTo, setRedirectTo] = useState(null);
 
   const text = 'Managing Rental Properties: Tips and Best Practices';
   const navigate = useNavigate();
   const location = useLocation();
+  const params = useParams();
+  const currentLang = i18n.language || 'en';
 
   useEffect(() => {
-    const urlParts = location.search.split('id=');
-    const urlParts2 = location.search.split('type=');
-    const id = urlParts[1] ? parseInt(urlParts[1]) : null;
-    const category = urlParts2[1] ? urlParts2[1] : null;
+    // Check if we're using the new URL format (/blog/:category/:slug)
+    if (params.category && params.slug) {
+      // New URL format - find post by category and slug
+      const post = blogPosts.find(
+        (p) => p.category === params.category && p.slug === params.slug
+      );
 
-    if (id) {
-      const index = blogPosts.findIndex((post) => post.id === id);
-      if (index !== -1) {
-        setBlogPost(blogPosts[index]);
-        // setCurrentIndex(index);
+      if (post) {
+        setBlogPost(post);
+        const filteredPosts = blogPosts.filter((p) => p.category === post.category);
+        const index = filteredPosts.findIndex((p) => p.id === post.id);
+        setCurrentIndex(index);
+        setPopularPosts(filteredPosts.slice(0, 4));
       }
+    } else {
+      // Old URL format - handle query parameters and redirect to new format
+      const urlParams = new URLSearchParams(location.search);
+      const id = urlParams.get('id') ? parseInt(urlParams.get('id')) : null;
+      const category = urlParams.get('type');
+
+      if (id) {
+        const post = blogPosts.find((p) => p.id === id);
+        if (post) {
+          // Redirect to new SEO-friendly URL format (301 redirect)
+          const newUrl = `/${currentLang}/blog/${post.category}/${post.slug}`;
+          setRedirectTo(newUrl);
+          return;
+        }
+      }
+
+      // If no id in query params, try to find by category alone (shouldn't happen normally)
+      const filteredPosts = category
+        ? blogPosts.filter((post) => post.category === category)
+        : blogPosts;
+
+      setPopularPosts(filteredPosts.slice(0, 4));
     }
-    const filteredPosts = category
-      ? blogPosts.filter((post) => post.category === category)
-      : blogPosts;
-    const index = filteredPosts.findIndex((post) => post.id === id);
-    if (index !== -1) {
-      setCurrentIndex(index);
-    }
-    setPopularPosts(filteredPosts.slice(0, 4));
-  }, [location]);
+  }, [location, params, currentLang]);
 
   // const popularPosts = blogPosts.slice(0, 4);
 
   const handleBack = () => {
-    navigate('/blog-list');
+    navigate(`/${currentLang}/blog-list`);
   };
 
   const handlePrevious = () => {
+    if (!popularPosts || popularPosts.length === 0) return;
     const prevIndex = (currentIndex - 1 + popularPosts.length) % popularPosts.length;
-    navigate(`/blog?id=${popularPosts[prevIndex].id}&type=${popularPosts[prevIndex].category}`);
+    const prevPost = popularPosts[prevIndex];
+    navigate(`/${currentLang}/blog/${prevPost.category}/${prevPost.slug}`);
   };
 
   const handleNext = () => {
+    if (!popularPosts || popularPosts.length === 0) return;
     const nextIndex = (currentIndex + 1) % popularPosts.length;
-    navigate(`/blog?id=${popularPosts[nextIndex].id}&type=${popularPosts[nextIndex].category}`);
+    const nextPost = popularPosts[nextIndex];
+    navigate(`/${currentLang}/blog/${nextPost.category}/${nextPost.slug}`);
   };
 
-  const handlePostClick = (postId) => {
-    navigate(`/blog?id=${postId}`);
+  const handlePostClick = (post) => {
+    navigate(`/${currentLang}/blog/${post.category}/${post.slug}`);
   };
 
   const shareTo = (platform) => {
@@ -106,13 +132,44 @@ const BlogItemPage = () => {
     window.open(shareLink, '_blank', 'noopener,noreferrer');
   };
 
+  // Handle 301 redirect to new URL format
+  if (redirectTo) {
+    return <Navigate to={redirectTo} replace />;
+  }
+
+  // Generate canonical URL for the blog post
+  const canonicalUrl = blogPost
+    ? `https://swissai.tax/${currentLang}/blog/${blogPost.category}/${blogPost.slug}`
+    : null;
+
   return (
     <>
-      {/* TODO: Implement dynamic SEO based on content - Dynamic title based on blog post */}
+      {/* Enhanced SEO with dynamic content */}
       <SEOHelmet
-        title={blogPost?.title || "Blog Post - HomeAI"}
-        description={blogPost?.excerpt || "Read the latest insights and updates from HomeAI"}
+        title={blogPost?.title || "Blog Post - SwissAI Tax"}
+        description={blogPost?.excerpt || "Read the latest insights and updates from SwissAI Tax"}
       />
+
+      {/* Canonical URL */}
+      {canonicalUrl && (
+        <Helmet>
+          <link rel="canonical" href={canonicalUrl} />
+        </Helmet>
+      )}
+
+      {/* Article Structured Data */}
+      {blogPost && (
+        <ArticleSchema
+          title={blogPost.title}
+          description={blogPost.excerpt || blogPost.title}
+          image={blogPost.image}
+          datePublished={blogPost.datePublished}
+          dateModified={blogPost.dateModified}
+          url={canonicalUrl}
+          category={blogPost.category}
+        />
+      )}
+
       <Layout id="BlogItemPage" text={text}>
       <Box
         sx={{
@@ -409,7 +466,7 @@ const BlogItemPage = () => {
                   {popularPosts.map((post) => (
                     <Grid item xs={12} sm={6} md={3} key={post.id}>
                       <RouterLink
-                        to={`/blog?id=${post.id}&type=${post.category}`}
+                        to={`/${currentLang}/blog/${post.category}/${post.slug}`}
                         style={{ textDecoration: 'none' }}
                       >
                         <Card

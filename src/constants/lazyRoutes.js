@@ -39,6 +39,12 @@ const StatusPage = withSuspense(lazy(() => import('../pages/Status/StatusPage'))
 const Security = withSuspense(lazy(() => import('../pages/Security/Security')));
 const SubscriptionPlans = withSuspense(lazy(() => import('../pages/SubscriptionPlans/SubscriptionPlans')));
 
+// Canton-specific landing pages
+const CantonPage = lazy(() => import('../pages/Canton/CantonPage'));
+const ZurichPage = withSuspense(() => <CantonPage canton="zurich" />);
+const AargauPage = withSuspense(() => <CantonPage canton="aargau" />);
+const BernPage = withSuspense(() => <CantonPage canton="bern" />);
+
 // Dashboard and account pages
 const Profile = withSuspense(lazy(() => import('../pages/Profile/Profile')));
 const Settings = withSuspense(lazy(() => import('../pages/Settings/Settings')));
@@ -259,8 +265,18 @@ export const LAZY_NAVIGATION_ROUTE = [
   { path: '/plan', element: <Plan /> },
   { path: '/subscription-plans', element: <SubscriptionPlans /> },
 
-  // Blog
+  // Canton landing pages (SEO)
+  { path: '/zurich', element: <ZurichPage /> },
+  { path: '/aargau', element: <AargauPage /> },
+  { path: '/bern', element: <BernPage /> },
+
+  // Blog - List page
   { path: '/blog-list', element: <BlogList /> },
+
+  // Blog - New SEO-friendly routes (must be before old routes for priority)
+  { path: '/blog/:category/:slug', element: <BlogItemPage /> },
+
+  // Blog - Old routes (kept for backward compatibility with redirects)
   { path: '/blog', element: <BlogItemPage /> },
   { path: '/blog/:id', element: <BlogItemPage /> },
 

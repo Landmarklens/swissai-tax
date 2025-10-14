@@ -1,0 +1,4 @@
+Contact: mailto:contact@swissai.tax
+Expires: 2026-10-14T23:59:59.000Z
+Preferred-Languages: en, de, fr, it
+Canonical: https://swissai.tax/.well-known/security.txt

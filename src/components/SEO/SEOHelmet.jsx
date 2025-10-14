@@ -23,15 +23,15 @@ const SEOHelmet = ({
   const pathWithoutLang = '/' + pathSegments.slice(1).join('/');
 
   // Resolve title and description
-  const pageTitle = title || (titleKey ? t(titleKey) : 'HomeAI - AI-Powered Property Search Switzerland');
-  const pageDescription = description || (descriptionKey ? t(descriptionKey) : t('meta.defaultDescription'));
+  const pageTitle = title || (titleKey ? t(titleKey) : 'SwissAI Tax - AI-Powered Swiss Tax Filing');
+  const pageDescription = description || (descriptionKey ? t(descriptionKey) : 'Simplify your Swiss tax filing with AI. Complete your tax declaration in 20 minutes. Swiss tax software for all cantons - secure, accurate, and multilingual.');
 
   // Build canonical URL
-  const baseUrl = 'https://homeai.ch';
+  const baseUrl = 'https://swissai.tax';
   const canonicalUrl = `${baseUrl}/${currentLang}${pathWithoutLang}`;
 
   // Default image for social sharing
-  const ogImage = image || `${baseUrl}/og-image.png`;
+  const ogImage = image || `${baseUrl}/images/og-image.png`;
 
   // Language mappings for hreflang
   const languageLocales = {
@@ -69,7 +69,7 @@ const SEOHelmet = ({
       <meta property="og:description" content={pageDescription} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:locale" content={languageLocales[currentLang] || 'en_US'} />
-      <meta property="og:site_name" content="HomeAI" />
+      <meta property="og:site_name" content="SwissAI Tax" />
 
       {/* Alternate locales for Open Graph */}
       <meta property="og:locale:alternate" content="de_CH" />
@@ -78,6 +78,7 @@ const SEOHelmet = ({
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@swissaitax" />
       <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={pageDescription} />
@@ -86,9 +87,18 @@ const SEOHelmet = ({
       {/* Robots */}
       {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-      {/* Geographic targeting */}
+      {/* Geographic targeting - Switzerland */}
       <meta name="geo.region" content="CH" />
       <meta name="geo.placename" content="Switzerland" />
+      <meta name="geo.position" content="46.8182;8.2275" />
+      <meta name="ICBM" content="46.8182, 8.2275" />
+
+      {/* Additional geographic and language targeting */}
+      <meta name="language" content={i18n.language} />
+      <meta name="target" content="all" />
+      <meta name="audience" content="all" />
+      <meta name="distribution" content="global" />
+      <meta name="country" content="Switzerland" />
 
       {/* Additional children elements */}
       {children}

@@ -60,10 +60,21 @@ jest.mock('../ErrorBoundary', () => {
   };
 });
 
-// Mock Redux slice with proper action creator
-const mockFetchUserProfile = jest.fn();
+// Mock Redux slice with proper async thunk behavior
 jest.mock('../../store/slices/accountSlice', () => ({
-  fetchUserProfile: () => mockFetchUserProfile()
+  fetchUserProfile: jest.fn(() => {
+    // Return a thunk (function) that returns a Promise
+    return (dispatch) => {
+      return Promise.resolve({
+        type: 'account/fetchUserProfile/fulfilled',
+        payload: {
+          id: 1,
+          email: 'test@example.com',
+          has_2fa_enabled: true
+        }
+      });
+    };
+  })
 }));
 
 const theme = createTheme();
@@ -87,11 +98,7 @@ describe('Signup with 2FA - Integration Tests', () => {
       }
     });
 
-    // Mock fetchUserProfile to return fulfilled action
-    mockFetchUserProfile.mockReturnValue({
-      type: 'account/fetchUserProfile/fulfilled',
-      payload: { id: 1, email: 'test@example.com', has_2fa_enabled: true }
-    });
+    // fetchUserProfile is now properly mocked above to return a thunk that resolves with a Promise
   });
 
   const renderLoginModal = (open = true) => {

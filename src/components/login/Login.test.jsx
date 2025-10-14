@@ -187,7 +187,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
 
   describe('2FA Setup Modal Display', () => {
     it('should show 2FA setup modal when user opts for 2FA during signup', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -215,7 +219,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
     });
 
     it('should NOT show 2FA setup modal when user does not opt for 2FA', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -246,7 +254,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
     });
 
     it('should render TwoFactorSetup component in 2FA setup modal', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -276,7 +288,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
 
   describe('2FA Setup Completion', () => {
     it('should handle 2FA setup completion successfully', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -314,7 +330,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
     });
 
     it('should navigate to filings after 2FA setup complete', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -348,7 +368,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
     });
 
     it('should close 2FA setup modal after completion', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -384,7 +408,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
 
   describe('2FA Setup Cancellation', () => {
     it('should handle 2FA setup cancellation', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -421,7 +449,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
     });
 
     it('should navigate to filings after 2FA setup cancel', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }
@@ -457,7 +489,11 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
 
   describe('Signup Flow Integration', () => {
     it('should auto-login after successful registration', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
+      authService.register.mockResolvedValue({
+        success: true,
+        user: { id: 1, email: 'test@example.com' },
+        requires_subscription: false
+      });
       authService.login.mockResolvedValue({
         success: true,
         user: { id: 1, email: 'test@example.com' }

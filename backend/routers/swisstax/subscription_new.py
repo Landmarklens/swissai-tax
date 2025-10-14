@@ -78,10 +78,19 @@ async def create_setup_intent(
                 name=f"{current_user.first_name} {current_user.last_name}".strip(),
                 metadata={'user_id': str(current_user.id)}
             )
-            # Save customer ID to user
-            current_user.stripe_customer_id = customer.id
+
+            # Query the user from the current session to avoid detached instance error
+            user_in_session = db.query(User).filter(User.id == current_user.id).first()
+            if not user_in_session:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="User not found"
+                )
+
+            # Save customer ID to user in session
+            user_in_session.stripe_customer_id = customer.id
             db.commit()
-            db.refresh(current_user)  # Refresh to ensure customer_id is set
+            db.refresh(user_in_session)
             customer_id = customer.id
             logger.info(f"Created Stripe customer: {customer_id}")
         else:

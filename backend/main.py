@@ -5,10 +5,46 @@ Imports the FastAPI app from app.py and adds auth routers
 """
 
 import logging
+from fastapi import Request
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app import app
+from middleware.rate_limiter import rate_limit_middleware
 
 logger = logging.getLogger(__name__)
+
+# Add request size limit middleware
+class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
+    """Middleware to limit request body size"""
+
+    def __init__(self, app, max_size: int = 50 * 1024 * 1024):  # 50MB default
+        super().__init__(app)
+        self.max_size = max_size
+
+    async def dispatch(self, request: Request, call_next):
+        # Check content length header
+        content_length = request.headers.get('content-length')
+        if content_length:
+            content_length = int(content_length)
+            if content_length > self.max_size:
+                from fastapi.responses import JSONResponse
+                return JSONResponse(
+                    status_code=413,
+                    content={"detail": f"Request body too large. Maximum size is {self.max_size / 1024 / 1024:.1f}MB"}
+                )
+
+        # For multipart uploads, check each file
+        if request.headers.get('content-type', '').startswith('multipart/form-data'):
+            # Limit individual file sizes in multipart uploads
+            # This is handled by the file validation service
+            pass
+
+        return await call_next(request)
+
+# Add middleware to app
+app.add_middleware(RequestSizeLimitMiddleware, max_size=50 * 1024 * 1024)  # 50MB max request size
+app.add_middleware(BaseHTTPMiddleware, dispatch=rate_limit_middleware)  # Rate limiting
 
 # Import and include all routers
 # NOTE: app.py already includes: auth, user, user_counter, dashboard, profile, settings, filing, payment

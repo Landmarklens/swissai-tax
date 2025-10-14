@@ -25,7 +25,8 @@ from config import settings as app_settings
 
 # Import routers
 from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions, contact
-from routers.swisstax import filing, payment, profile, settings, subscription, referrals, webhooks
+from routers.swisstax import filing, payment, profile, settings, referrals, webhooks
+from routers.swisstax import subscription_new as subscription
 from services.document_service import DocumentService
 from services.interview_service import interview_service
 from services.tax_calculation_service import TaxCalculationService

@@ -156,18 +156,22 @@ const authService = {
 
     // Clear ALL localStorage except user preferences
     const preservedKeys = ['swissai_cookie_consent', 'i18nextLng'];
-    const keysToRemove = [];
 
-    // Collect all keys except preserved ones
+    // Collect all keys using localStorage.key() method (works with Jest mock)
+    const allKeys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && !preservedKeys.includes(key)) {
-        keysToRemove.push(key);
+      if (key) {
+        allKeys.push(key);
       }
     }
 
-    // Remove collected keys
-    keysToRemove.forEach(key => localStorage.removeItem(key));
+    // Remove all keys except preserved ones
+    allKeys.forEach(key => {
+      if (!preservedKeys.includes(key)) {
+        localStorage.removeItem(key);
+      }
+    });
 
     // Make backend call in background (fire-and-forget for instant UX)
     // Backend will still revoke session and clear cookie

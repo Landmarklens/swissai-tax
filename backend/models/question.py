@@ -152,7 +152,7 @@ class QuestionLoader:
 
     def get_first_question(self) -> Question:
         """Get the first question in the interview"""
-        return self.questions['Q01']
+        return self.questions['Q00']
 
     def get_next_questions(self, current_id: str, answer: Any) -> List[str]:
         """Get next question(s) based on current answer"""

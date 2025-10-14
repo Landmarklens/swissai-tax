@@ -40,16 +40,13 @@ class TestInterviewServiceCreate(unittest.TestCase):
 
     def test_create_session_success(self):
         """Test creating a new interview session successfully"""
-        # Setup - mock first question
+        # Setup - mock first question (Q00 - user's AHV number)
         first_question = Mock(spec=Question)
-        first_question.id = 'Q01'
-        first_question.text = {'en': 'What is your civil status?', 'de': 'Was ist Ihr Zivilstand?'}
-        first_question.type = QuestionType.SINGLE_CHOICE
+        first_question.id = 'Q00'
+        first_question.text = {'en': 'What is your AHV number?', 'de': 'Was ist Ihre AHV-Nummer?'}
+        first_question.type = QuestionType.AHV_NUMBER
         first_question.required = True
-        first_question.options = [
-            {'value': 'single', 'label': {'en': 'Single'}},
-            {'value': 'married', 'label': {'en': 'Married'}}
-        ]
+        first_question.options = []
         first_question.validation = {}
         first_question.fields = None
 
@@ -77,7 +74,7 @@ class TestInterviewServiceCreate(unittest.TestCase):
         self.assertEqual(session['tax_year'], 2024)
         self.assertEqual(session['language'], 'en')
         self.assertEqual(session['status'], 'in_progress')
-        self.assertEqual(session['current_question_id'], 'Q01')
+        self.assertEqual(session['current_question_id'], 'Q00')
         self.assertEqual(session['progress'], 0)
         self.assertIsInstance(session['answers'], dict)
         self.assertIsInstance(session['completed_questions'], list)
@@ -86,13 +83,13 @@ class TestInterviewServiceCreate(unittest.TestCase):
     def test_create_session_different_languages(self):
         """Test creating sessions with different languages"""
         first_question = Mock(spec=Question)
-        first_question.id = 'Q01'
+        first_question.id = 'Q00'
         first_question.text = {
-            'en': 'What is your civil status?',
-            'de': 'Was ist Ihr Zivilstand?',
-            'fr': 'Quel est votre état civil?'
+            'en': 'What is your AHV number?',
+            'de': 'Was ist Ihre AHV-Nummer?',
+            'fr': 'Quel est votre numéro AVS?'
         }
-        first_question.type = QuestionType.SINGLE_CHOICE
+        first_question.type = QuestionType.AHV_NUMBER
         first_question.required = True
         first_question.options = []
         first_question.validation = {}
@@ -102,15 +99,15 @@ class TestInterviewServiceCreate(unittest.TestCase):
 
         # Test German
         result_de = self.service.create_session('user-1', 2024, 'de')
-        self.assertEqual(result_de['current_question']['text'], 'Was ist Ihr Zivilstand?')
+        self.assertEqual(result_de['current_question']['text'], 'Was ist Ihre AHV-Nummer?')
 
         # Test French
         result_fr = self.service.create_session('user-2', 2024, 'fr')
-        self.assertEqual(result_fr['current_question']['text'], 'Quel est votre état civil?')
+        self.assertEqual(result_fr['current_question']['text'], 'Quel est votre numéro AVS?')
 
         # Test English (default)
         result_en = self.service.create_session('user-3', 2024, 'en')
-        self.assertEqual(result_en['current_question']['text'], 'What is your civil status?')
+        self.assertEqual(result_en['current_question']['text'], 'What is your AHV number?')
 
 
 class TestInterviewServiceGetSession(unittest.TestCase):
@@ -686,7 +683,8 @@ class TestInterviewServiceEncryption(unittest.TestCase):
 
     def test_is_question_sensitive(self):
         """Test _is_question_sensitive identifies sensitive questions"""
-        # Sensitive questions (NEW: Only 4 questions remain sensitive)
+        # Sensitive questions (NEW: 5 questions are sensitive)
+        self.assertTrue(self.service._is_question_sensitive('Q00'))   # User's own AHV number
         self.assertTrue(self.service._is_question_sensitive('Q01a'))  # Spouse AHV number
         self.assertTrue(self.service._is_question_sensitive('Q01c'))  # Spouse DOB
         self.assertTrue(self.service._is_question_sensitive('Q02a'))  # Municipality

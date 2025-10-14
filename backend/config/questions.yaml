@@ -1,7 +1,32 @@
 # Swiss Tax Interview Questions Configuration
-# Q01-Q14 as per requirements
+# Q00: User's AHV number (first question)
+# Q01-Q14: Main tax interview questions
 
 questions:
+  Q00:
+    id: "Q00"
+    text:
+      en: "What is your AHV number?"
+      de: "Was ist Ihre AHV-Nummer?"
+      fr: "Quel est votre numéro AVS?"
+      it: "Qual è il suo numero AVS?"
+    type: "ahv_number"
+    validation:
+      pattern: "^756\\.[0-9]{4}\\.[0-9]{4}\\.[0-9]{2}$"
+    help_text:
+      en: "Your Swiss social security number (AHV/AVS/AVS). Format: 756.XXXX.XXXX.XX (13 digits with dots)"
+      de: "Ihre Schweizer Sozialversicherungsnummer (AHV). Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)"
+      fr: "Votre numéro de sécurité sociale suisse (AVS). Format: 756.XXXX.XXXX.XX (13 chiffres avec points)"
+      it: "Il suo numero di previdenza sociale svizzero (AVS). Formato: 756.XXXX.XXXX.XX (13 cifre con punti)"
+    explanation:
+      en: "We need your AHV number to file your tax declaration. This is your unique identification number in Switzerland."
+      de: "Wir benötigen Ihre AHV-Nummer, um Ihre Steuererklärung einzureichen. Dies ist Ihre eindeutige Identifikationsnummer in der Schweiz."
+      fr: "Nous avons besoin de votre numéro AVS pour déposer votre déclaration d'impôts. C'est votre numéro d'identification unique en Suisse."
+      it: "Abbiamo bisogno del suo numero AVS per presentare la sua dichiarazione fiscale. Questo è il suo numero di identificazione unico in Svizzera."
+    placeholder: "756.1234.5678.97"
+    next: "Q01"
+    required: true
+
   Q01:
     id: "Q01"
     text:

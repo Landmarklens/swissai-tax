@@ -87,6 +87,10 @@ class InterviewService:
             # Store the formatted AHV number
             answer = result  # result contains formatted AHV number
 
+            # Special case: Q00 is the user's own AHV number - save to User table
+            if question_id == 'Q00' and self.db:
+                self._save_user_ahv_number(session['user_id'], answer)
+
         # Special handling for document upload questions
         elif question.type == QuestionType.DOCUMENT_UPLOAD:
             # Document upload questions don't require an answer value at submission
@@ -418,7 +422,7 @@ class InterviewService:
         Determine if a question contains sensitive information requiring encryption
 
         Sensitive questions include:
-        - Personal identifying information (names, dates of birth)
+        - Personal identifying information (AHV numbers, names, dates of birth)
         - Financial amounts (income, deductions, donations)
         - Location data (municipality, address)
 
@@ -430,7 +434,8 @@ class InterviewService:
         """
         # Define sensitive question IDs
         sensitive_questions = {
-            'Q01a',  # Spouse AHV number (changed from first/last name)
+            'Q00',   # User's own AHV number
+            'Q01a',  # Spouse AHV number
             'Q01c',  # Spouse date of birth
             'Q02a',  # Municipality (location)
             'Q03b',  # Child details (name, DOB)
@@ -466,6 +471,7 @@ class InterviewService:
         decrypted_answers = self._decrypt_answers_for_profile(answers)
 
         profile = {
+            'ahv_number': decrypted_answers.get('Q00'),  # User's own AHV number
             'civil_status': decrypted_answers.get('Q01'),
             'canton': decrypted_answers.get('Q02'),
             'municipality': decrypted_answers.get('Q02a'),
@@ -536,6 +542,42 @@ class InterviewService:
 
         except Exception as e:
             logger.error(f"Failed to create pending document: {e}")
+            self.db.rollback()
+
+    def _save_user_ahv_number(self, user_id: str, ahv_number: str) -> None:
+        """
+        Save user's AHV number to the User table
+
+        Args:
+            user_id: User UUID
+            ahv_number: Formatted AHV number (756.XXXX.XXXX.XX)
+        """
+        if not self.db:
+            logger.warning(f"Cannot save AHV number: database session not available")
+            return
+
+        try:
+            from models.swisstax.user import User
+            from sqlalchemy import UUID as SQLUUID
+
+            # Convert string UUID to UUID object
+            try:
+                user_uuid = SQLUUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(user_id)
+            except:
+                # If conversion fails, use string directly
+                user_uuid = user_id
+
+            # Get user and update AHV number
+            user = self.db.query(User).filter(User.id == user_uuid).first()
+            if user:
+                user.ahv_number = ahv_number
+                self.db.commit()
+                logger.info(f"Saved AHV number for user {user_id}")
+            else:
+                logger.warning(f"User {user_id} not found, cannot save AHV number")
+
+        except Exception as e:
+            logger.error(f"Failed to save AHV number for user {user_id}: {e}")
             self.db.rollback()
 
     def save_session(self, session_id: str, answers: Dict[str, Any], progress: int) -> Optional[Dict[str, Any]]:

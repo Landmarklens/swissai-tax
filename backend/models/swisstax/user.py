@@ -35,6 +35,7 @@ class User(SwissTaxBase, Base):
     first_name = Column(String(100))
     last_name = Column(String(100))
     preferred_language = Column(String(2), server_default='DE')  # DE, FR, IT, EN
+    ahv_number = Column(String(20), nullable=True, index=True)  # Swiss social security number (AHV/AVS)
 
     # Address Information (for tax purposes)
     address = Column(String(255))

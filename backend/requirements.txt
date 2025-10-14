@@ -136,7 +136,6 @@ regex==2024.11.6
 reportlab==4.0.7
 pdfplumber==0.11.0
 python-magic==0.4.27
-Pillow==10.2.0
 requests==2.32.3
 requests-oauthlib==2.0.0
 rich==13.9.4

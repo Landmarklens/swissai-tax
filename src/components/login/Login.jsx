@@ -192,7 +192,7 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
 
         // Check if user needs subscription (from 2FA response)
         if (data?.requires_subscription) {
-          navigate('/subscription/plans');
+          navigate('/subscription-plans');
         } else {
           // Use callback if provided, otherwise default to /filings
           if (onAuthSuccess) {

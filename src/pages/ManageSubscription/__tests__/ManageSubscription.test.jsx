@@ -92,7 +92,7 @@ describe('ManageSubscription', () => {
         expect(viewPlansButton).toBeInTheDocument();
 
         fireEvent.click(viewPlansButton);
-        expect(mockNavigate).toHaveBeenCalledWith('/subscription/plans');
+        expect(mockNavigate).toHaveBeenCalledWith('/subscription-plans');
       });
     });
   });

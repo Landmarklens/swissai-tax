@@ -113,7 +113,7 @@ const AHVNumberInput = ({
       setRawValue(value || '');
       setIsValid(validateAHV(value || ''));
     }
-  }, [value]);
+  }, [value, rawValue]);
 
   /**
    * Determine if should show error

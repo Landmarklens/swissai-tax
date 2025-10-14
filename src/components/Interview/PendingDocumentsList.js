@@ -126,7 +126,12 @@ const PendingDocumentsList = ({
   const handleUploadComplete = async (response) => {
     setUploadDialogOpen(false);
     setSelectedDoc(null);
-    await onDocumentUploaded(selectedDoc?.id);
+    try {
+      await onDocumentUploaded(selectedDoc?.id);
+    } catch (error) {
+      console.error('Error reloading pending documents:', error);
+      // Still close dialog, user can manually refresh
+    }
   };
 
   /**

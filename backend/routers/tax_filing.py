@@ -13,7 +13,15 @@ from sqlalchemy.orm import Session
 from db.session import get_db
 from services.tax_filing_service import TaxFilingService
 from services.postal_code_service import get_postal_code_service
-from services.audit_log_service import AuditLogService
+from services.audit_log_service import (
+    AuditLogService,
+    log_tax_filing_created,
+    log_tax_filing_copied,
+    log_tax_filing_deleted,
+    log_tax_filing_restored,
+    log_tax_filing_submitted,
+    log_tax_filing_updated,
+)
 from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -147,7 +155,7 @@ async def create_filing(
         logger.info(f"User {current_user.id} created filing {filing.id}")
 
         # Log audit event
-        AuditLogService.log_tax_filing_created(
+        log_tax_filing_created(
             db=db,
             user_id=current_user.id,
             filing_id=str(filing.id),
@@ -206,7 +214,7 @@ async def copy_filing(
         logger.info(f"User {current_user.id} copied filing {request.source_filing_id} to year {request.new_year}")
 
         # Log audit event
-        AuditLogService.log_tax_filing_copied(
+        log_tax_filing_copied(
             db=db,
             user_id=current_user.id,
             source_filing_id=request.source_filing_id,
@@ -316,7 +324,7 @@ async def update_filing(
         # Log audit event - check if status changed to "submitted"
         if request.status == "submitted" and old_status != "submitted":
             # This is a new submission (status transition)
-            AuditLogService.log_tax_filing_submitted(
+            log_tax_filing_submitted(
                 db=db,
                 user_id=current_user.id,
                 filing_id=str(filing.id),
@@ -327,7 +335,7 @@ async def update_filing(
             )
         else:
             # Regular update (not a new submission)
-            AuditLogService.log_tax_filing_updated(
+            log_tax_filing_updated(
                 db=db,
                 user_id=current_user.id,
                 filing_id=str(filing.id),
@@ -385,7 +393,7 @@ async def delete_filing(
         logger.info(f"User {current_user.id} {'hard' if hard_delete else 'soft'} deleted filing {filing_id}")
 
         # Log audit event
-        AuditLogService.log_tax_filing_deleted(
+        log_tax_filing_deleted(
             db=db,
             user_id=current_user.id,
             filing_id=filing_id,
@@ -434,7 +442,7 @@ async def restore_filing(
         logger.info(f"User {current_user.id} restored filing {filing_id}")
 
         # Log audit event
-        AuditLogService.log_tax_filing_restored(
+        log_tax_filing_restored(
             db=db,
             user_id=current_user.id,
             filing_id=filing_id,

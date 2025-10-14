@@ -163,6 +163,7 @@ describe('SubscriptionPlans', () => {
 
       await waitFor(() => {
         expect(subscriptionService.createFreeSubscription).toHaveBeenCalledTimes(1);
+        expect(mockNavigate).toHaveBeenCalledWith('/filings');
       });
     });
 

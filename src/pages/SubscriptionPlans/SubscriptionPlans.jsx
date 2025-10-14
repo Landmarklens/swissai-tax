@@ -76,6 +76,9 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
         // Refresh subscription data
         await checkCurrentSubscription();
         setLoading(false);
+        // Navigate to filings page
+        console.log('[SubscriptionPlans] Navigating to /filings');
+        navigate('/filings');
         return;
       }
 

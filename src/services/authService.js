@@ -45,22 +45,11 @@ const authServiceInstance = new AuthService();
 const authService = {
   initiateGoogleLogin: async (userType) => {
     try {
-      // Get redirect URL - where the backend should redirect after Google OAuth
-      let redirect_url = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
-
-      // If no redirect URL is set, construct one based on current location
-      if (!redirect_url || redirect_url.includes('localhost') && !window.location.href.includes('localhost')) {
-        // Use the actual current domain for production
-        const currentLang = window.location.pathname.split('/')[1] || 'en';
-        const baseUrl = window.location.origin;
-        redirect_url = `${baseUrl}/${currentLang}/google-redirect`;
-      }
-
-      // For local development, ensure we use the correct localhost URL
-      if (window.location.hostname === 'localhost') {
-        const currentLang = window.location.pathname.split('/')[1] || 'en';
-        redirect_url = `http://localhost:3000/${currentLang}/google-redirect`;
-      }
+      // Always construct redirect URL based on current location for proper domain handling
+      // This ensures backend receives full URL like https://swissai.tax/en/google-redirect
+      const currentLang = window.location.pathname.split('/')[1] || 'en';
+      const baseUrl = window.location.origin;
+      const redirect_url = `${baseUrl}/${currentLang}/google-redirect`;
 
       const fullUrl = `${API_URL}/api/auth/login/google`;
       const params = { user_type: userType, redirect_url };

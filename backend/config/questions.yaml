@@ -74,6 +74,7 @@ questions:
       de: "Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)"
       fr: "Format: 756.XXXX.XXXX.XX (13 chiffres avec points)"
     placeholder: "756.1234.5678.97"
+    next: "Q01c"
     required: true
     parent: "Q01"
 
@@ -88,6 +89,7 @@ questions:
     validation:
       minDate: "1920-01-01"
       maxDate: "2006-12-31"
+    next: "Q01d"
     required: true
     parent: "Q01"
 
@@ -98,6 +100,7 @@ questions:
       de: "Ist Ihr Ehepartner erwerbstätig?"
       fr: "Votre conjoint est-il employé?"
     type: "yes_no"
+    next: "Q02"
     required: true
     parent: "Q01"
 

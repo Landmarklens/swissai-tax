@@ -274,6 +274,27 @@ class InterviewService:
 
         # Get next question
         next_question = self.question_loader.get_question(next_question_id)
+
+        # Check if question exists
+        if next_question is None:
+            logger.error(f"Question {next_question_id} not found in configuration. "
+                        f"Session: {session_id}, Last completed: {question_id}")
+            # Mark interview as complete to prevent further errors
+            session['status'] = 'completed'
+            session['current_question_id'] = None
+
+            # Generate profile and document requirements with existing answers
+            profile = self._generate_profile(session['answers'])
+            document_requirements = self.question_loader.get_document_requirements(session['answers'])
+
+            return {
+                'complete': True,
+                'profile': profile,
+                'document_requirements': document_requirements,
+                'progress': 100,
+                'warning': f'Interview completed early due to missing question: {next_question_id}'
+            }
+
         session['current_question_id'] = next_question_id
 
         # Calculate progress

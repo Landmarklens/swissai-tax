@@ -55,36 +55,62 @@ async def create_setup_intent(
     Create a SetupIntent for collecting payment method before subscription starts
     This is used during the signup flow to capture card details without charging
     """
-    if not settings.ENABLE_SUBSCRIPTIONS:
+    import logging
+    logger = logging.getLogger(__name__)
+
+    try:
+        logger.info(f"Creating setup intent for user {current_user.id}, plan: {setup_data.plan_type}")
+
+        if not settings.ENABLE_SUBSCRIPTIONS:
+            logger.warning("Subscriptions not enabled")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Subscriptions are not enabled yet"
+            )
+
+        stripe_service = get_stripe_service()
+
+        # Create or get Stripe customer
+        if not current_user.stripe_customer_id:
+            logger.info(f"Creating Stripe customer for user {current_user.email}")
+            customer = stripe_service.create_customer(
+                email=current_user.email,
+                name=f"{current_user.first_name} {current_user.last_name}".strip(),
+                metadata={'user_id': str(current_user.id)}
+            )
+            # Save customer ID to user
+            current_user.stripe_customer_id = customer.id
+            db.commit()
+            db.refresh(current_user)  # Refresh to ensure customer_id is set
+            customer_id = customer.id
+            logger.info(f"Created Stripe customer: {customer_id}")
+        else:
+            customer_id = current_user.stripe_customer_id
+            logger.info(f"Using existing Stripe customer: {customer_id}")
+
+        # Create SetupIntent
+        logger.info(f"Creating SetupIntent for customer {customer_id}")
+        setup_intent = stripe_service.create_setup_intent(customer_id)
+        logger.info(f"Created SetupIntent: {setup_intent.id}")
+
+        return SetupIntentResponse(
+            client_secret=setup_intent.client_secret,
+            setup_intent_id=setup_intent.id
+        )
+    except stripe.error.StripeError as e:
+        logger.error(f"Stripe error creating setup intent: {e}", exc_info=True)
         raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Subscriptions are not enabled yet"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Stripe error: {str(e)}"
         )
-
-    stripe_service = get_stripe_service()
-
-    # Create or get Stripe customer
-    if not current_user.stripe_customer_id:
-        customer = stripe_service.create_customer(
-            email=current_user.email,
-            name=f"{current_user.first_name} {current_user.last_name}".strip(),
-            metadata={'user_id': str(current_user.id)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error creating setup intent: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create setup intent: {str(e)}"
         )
-        # Save customer ID to user
-        current_user.stripe_customer_id = customer.id
-        db.commit()
-        db.refresh(current_user)  # Refresh to ensure customer_id is set
-        customer_id = customer.id
-    else:
-        customer_id = current_user.stripe_customer_id
-
-    # Create SetupIntent
-    setup_intent = stripe_service.create_setup_intent(customer_id)
-
-    return SetupIntentResponse(
-        client_secret=setup_intent.client_secret,
-        setup_intent_id=setup_intent.id
-    )
 
 
 # ============================================================================

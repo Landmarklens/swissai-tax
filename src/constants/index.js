@@ -204,7 +204,7 @@ export const NAVIGATION_ROUTE = [
   },
   // Subscription routes
   {
-    path: '/subscription/plans',
+    path: '/subscription-plans',
     element: <SubscriptionPlans />
   },
   {

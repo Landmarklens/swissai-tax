@@ -71,6 +71,12 @@ class Subscription(SwissTaxBase, Base):
     price_chf = Column(Numeric(10, 2), nullable=False)
     currency = Column(String(3), default='CHF')
 
+    # Discount/Referral tracking
+    discount_code_used = Column(String(50), nullable=True)  # Code that was applied
+    original_price_chf = Column(Numeric(10, 2), nullable=True)  # Price before discount
+    discount_amount_chf = Column(Numeric(10, 2), nullable=True)  # Amount saved
+    referral_code_id = Column(UUID(as_uuid=True), nullable=True)  # FK to referral_codes table
+
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

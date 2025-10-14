@@ -61,7 +61,7 @@ const UpgradePrompt = ({
   const featureDisplayName = getFeatureDisplayName(feature);
 
   const handleUpgrade = () => {
-    navigate('/subscription/plans', {
+    navigate('/subscription-plans', {
       state: {
         from: window.location.pathname,
         highlightPlan: requiredPlan,
@@ -162,7 +162,7 @@ const UpgradePrompt = ({
           color="primary"
           size="small"
           fullWidth
-          onClick={() => navigate('/subscription/plans')}
+          onClick={() => navigate('/subscription-plans')}
           sx={{ textTransform: 'none' }}>
           {t('Compare All Plans')}
         </Button>

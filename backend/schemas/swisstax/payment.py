@@ -25,6 +25,7 @@ class SubscriptionCreate(BaseModel):
     """Create a new subscription"""
     plan_type: str = Field(..., pattern="^(free|basic|pro|premium|annual_flex|5_year_lock)$")
     payment_method_id: Optional[str] = None  # Can be None if using SetupIntent
+    discount_code: Optional[str] = None  # Referral or promotional code
 
 
 class SetupIntentCreate(BaseModel):

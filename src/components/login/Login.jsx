@@ -155,7 +155,7 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
             // Check if user needs to subscribe
             if (login.requires_subscription) {
               // Redirect to subscription plans page
-              navigate('/subscription/plans');
+              navigate('/subscription-plans');
             } else {
               // Use callback if provided, otherwise default to /filings
               if (onAuthSuccess) {
@@ -226,7 +226,7 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
           // Auto-login first
           await handleLoginSubmit(userData, true); // Skip navigation
           onClose();
-          navigate('/subscription/plans');
+          navigate('/subscription-plans');
           return;
         }
 

@@ -181,7 +181,7 @@ const ManageSubscription = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
             {t('subscription.no_subscription_message', 'You don\'t have an active subscription yet.')}
           </Typography>
-          <Button variant="contained" size="large" onClick={() => navigate('/subscription/plans')}>
+          <Button variant="contained" size="large" onClick={() => navigate('/subscription-plans')}>
             {t('subscription.view_plans', 'View Plans')}
           </Button>
         </Box>

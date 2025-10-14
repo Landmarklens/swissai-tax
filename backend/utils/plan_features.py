@@ -480,7 +480,7 @@ def require_feature(feature_name: str):
                         "feature": feature_name,
                         "current_plan": current_plan,
                         "required_plan": required_plan,
-                        "upgrade_url": "/subscription/plans"
+                        "upgrade_url": "/subscription-plans"
                     }
                 )
 
@@ -542,7 +542,7 @@ def require_plan(min_plan: str):
                         "message": f"This feature requires a {min_plan} plan or higher",
                         "current_plan": current_plan,
                         "required_plan": min_plan,
-                        "upgrade_url": "/subscription/plans"
+                        "upgrade_url": "/subscription-plans"
                     }
                 )
 

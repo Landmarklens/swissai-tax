@@ -5,7 +5,7 @@ Handles subscription creation, management, and billing with Stripe
 from datetime import datetime, timedelta
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 import stripe
@@ -26,6 +26,8 @@ from schemas.swisstax.payment import (
 )
 from services.stripe_service import get_stripe_service
 from services.stripe_mock_service import get_stripe_service as get_mock_stripe_service
+from services.referral_service import ReferralService
+from services.discount_service import DiscountService
 
 router = APIRouter()
 
@@ -129,6 +131,7 @@ async def create_setup_intent(
 @router.post("/create", response_model=SubscriptionResponse)
 async def create_subscription(
     sub_data: SubscriptionCreate,
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -136,6 +139,7 @@ async def create_subscription(
     Create a new subscription with 30-day trial (for paid plans) or free subscription
     Free plan: No Stripe required, database-only subscription
     Paid plans: Requires payment method to be already attached to customer (via SetupIntent)
+    Supports optional discount codes for promotional or referral discounts
     """
     # Check if user already has an active subscription
     existing_sub = (
@@ -213,6 +217,53 @@ async def create_subscription(
     plan_config = _get_plan_config(sub_data.plan_type)
     commitment_years = plan_config['commitment_years']
 
+    # ========================================================================
+    # DISCOUNT CODE HANDLING
+    # ========================================================================
+    discount_info = None
+    referral_code = None
+
+    if sub_data.discount_code:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Processing discount code: {sub_data.discount_code} for user {current_user.id}")
+
+        # Initialize services
+        referral_service = ReferralService(db)
+        discount_service = DiscountService(db)
+
+        # Build request metadata for fraud detection
+        request_metadata = {
+            'ip_address': request.client.host if request.client else None,
+            'user_agent': request.headers.get('user-agent'),
+        }
+
+        # Validate discount code
+        is_valid, referral_code, error_message = referral_service.validate_code(
+            code=sub_data.discount_code,
+            user_id=str(current_user.id),
+            plan_type=sub_data.plan_type,
+            request_metadata=request_metadata
+        )
+
+        if not is_valid:
+            logger.warning(f"Invalid discount code {sub_data.discount_code}: {error_message}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Discount code invalid: {error_message}"
+            )
+
+        # Calculate discount
+        from decimal import Decimal
+        original_price = Decimal(str(plan_config['price_chf']))
+        discount_info = discount_service.calculate_discount(
+            referral_code=referral_code,
+            plan_type=sub_data.plan_type,
+            original_price=original_price
+        )
+
+        logger.info(f"Discount applied: {discount_info['discount_amount_chf']} CHF off {discount_info['original_price_chf']} CHF")
+
     # Create Stripe subscription with trial
     try:
         stripe_sub = stripe_service.create_subscription_with_trial(
@@ -237,8 +288,10 @@ async def create_subscription(
     commitment_start = trial_end
     commitment_end = commitment_start + timedelta(days=365 * commitment_years)
 
-    # Get price from plan config
+    # Get price from plan config (use discounted price if applicable)
     price_chf = plan_config['price_chf']
+    if discount_info:
+        price_chf = discount_info['final_price_chf']
 
     # Create subscription record in database
     subscription = Subscription(
@@ -256,12 +309,57 @@ async def create_subscription(
         trial_end=trial_end,
         commitment_start_date=commitment_start,
         commitment_end_date=commitment_end,
-        cancel_at_period_end=False
+        cancel_at_period_end=False,
+        # Discount tracking
+        discount_code_used=sub_data.discount_code if discount_info else None,
+        original_price_chf=discount_info['original_price_chf'] if discount_info else None,
+        discount_amount_chf=discount_info['discount_amount_chf'] if discount_info else None,
+        referral_code_id=referral_code.id if referral_code else None
     )
 
     db.add(subscription)
     db.commit()
     db.refresh(subscription)
+
+    # ========================================================================
+    # RECORD REFERRAL USAGE AND ISSUE REWARDS
+    # ========================================================================
+    if discount_info and referral_code:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Recording referral usage for code {sub_data.discount_code}")
+
+        referral_service = ReferralService(db)
+
+        # Build request metadata again
+        request_metadata = {
+            'ip_address': request.client.host if request.client else None,
+            'user_agent': request.headers.get('user-agent'),
+        }
+
+        try:
+            # Record usage
+            from decimal import Decimal
+            usage = referral_service.record_code_usage(
+                code=sub_data.discount_code,
+                user_id=str(current_user.id),
+                subscription_id=str(subscription.id),
+                discount_applied=Decimal(str(discount_info['discount_amount_chf'])),
+                original_price=Decimal(str(discount_info['original_price_chf'])),
+                final_price=Decimal(str(discount_info['final_price_chf'])),
+                request_metadata=request_metadata,
+                stripe_coupon_id=None  # We're not using Stripe coupons for now
+            )
+
+            # Create reward if this is a user referral code
+            if referral_code.code_type == 'user_referral':
+                reward = referral_service.create_reward(str(usage.id))
+                if reward:
+                    logger.info(f"Created reward {reward.id} for referral code {sub_data.discount_code}")
+        except Exception as e:
+            logger.error(f"Error recording referral usage: {e}", exc_info=True)
+            # Don't fail the subscription creation if referral tracking fails
+            # The subscription is already created successfully
 
     return _build_subscription_response(subscription)
 

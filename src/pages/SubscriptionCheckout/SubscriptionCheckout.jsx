@@ -129,7 +129,7 @@ const SubscriptionCheckout = () => {
   };
 
   const handleCancel = () => {
-    navigate('/subscription/plans');
+    navigate('/subscription-plans');
   };
 
   const handleDiscountApplied = (discount) => {

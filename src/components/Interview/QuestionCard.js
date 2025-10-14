@@ -21,12 +21,17 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useTranslation } from 'react-i18next';
+import AHVNumberInput from './AHVNumberInput';
+import DocumentUploadQuestion from './DocumentUploadQuestion';
+import DocumentExtractionPreview from './DocumentExtractionPreview';
 
-const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer }) => {
+const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, sessionId, onUpload }) => {
   const { t } = useTranslation();
   const [answer, setAnswer] = useState('');
   const [groupAnswers, setGroupAnswers] = useState({});
   const [error, setError] = useState('');
+  const [extractedData, setExtractedData] = useState(null);
+  const [showExtraction, setShowExtraction] = useState(false);
 
   useEffect(() => {
     // Set previous answer if exists
@@ -242,6 +247,68 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer }) =
               </Typography>
             )}
           </Stack>
+        );
+
+      case 'ahv_number':
+        return (
+          <AHVNumberInput
+            value={answer}
+            onChange={(value) => setAnswer(value)}
+            error={error}
+            label={t('interview.ahv_number')}
+            required={question.required}
+          />
+        );
+
+      case 'document_upload':
+        // Show extraction preview if data was extracted
+        if (showExtraction && extractedData) {
+          return (
+            <DocumentExtractionPreview
+              extractedData={extractedData}
+              confidence={extractedData.confidence || 0.95}
+              onConfirm={(data) => {
+                setShowExtraction(false);
+                onAnswer({
+                  answer: 'uploaded',
+                  extracted_data: data
+                });
+              }}
+              onEdit={(editedData) => {
+                setExtractedData(editedData);
+              }}
+              onReject={() => {
+                setShowExtraction(false);
+                setExtractedData(null);
+                setError(t('interview.extraction_rejected'));
+              }}
+            />
+          );
+        }
+
+        // Show upload component
+        return (
+          <DocumentUploadQuestion
+            question={question}
+            sessionId={sessionId}
+            onUploadComplete={(response) => {
+              if (response.extracted_data) {
+                setExtractedData(response.extracted_data);
+                setShowExtraction(true);
+              } else {
+                onAnswer({
+                  answer: 'uploaded',
+                  document_id: response.document_id
+                });
+              }
+            }}
+            onBringLater={() => {
+              onAnswer({
+                answer: 'bring_later'
+              });
+            }}
+            onUpload={onUpload}
+          />
         );
 
       default:

@@ -87,13 +87,11 @@ describe('ManageSubscription', () => {
         renderWithRouter(<ManageSubscription />);
       });
 
-      await waitFor(() => {
-        const viewPlansButton = screen.getByText('View Plans');
-        expect(viewPlansButton).toBeInTheDocument();
+      const viewPlansButton = await screen.findByText('View Plans');
+      expect(viewPlansButton).toBeInTheDocument();
 
-        fireEvent.click(viewPlansButton);
-        expect(mockNavigate).toHaveBeenCalledWith('/subscription-plans');
-      });
+      fireEvent.click(viewPlansButton);
+      expect(mockNavigate).toHaveBeenCalledWith('/subscription-plans');
     });
   });
 

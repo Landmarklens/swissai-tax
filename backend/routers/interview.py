@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Initialize interview service
-interview_service = InterviewService()
+# NOTE: Do not create singleton interview_service here
+# Each endpoint will create its own instance with proper database injection
 
 
 # Pydantic models for request/response
@@ -179,10 +179,14 @@ async def start_interview(
                     detail="Filing session not found or access denied"
                 )
 
+        # Create interview service with database session
+        interview_service = InterviewService(db=db)
+
         result = interview_service.create_session(
             user_id=current_user.id,
             tax_year=request.tax_year,
-            language=request.language
+            language=request.language,
+            filing_id=filing_session_id
         )
 
         # Update filing session with interview session ID
@@ -239,7 +243,10 @@ async def submit_answer(
                 detail="Filing session not found or access denied"
             )
 
-        # Submit answer to interview service (in-memory validation and flow control)
+        # Create interview service with database session
+        interview_service = InterviewService(db=db)
+
+        # Submit answer to interview service (database-backed validation and flow control)
         result = interview_service.submit_answer(
             session_id=session_id,
             question_id=request.question_id,
@@ -324,6 +331,9 @@ async def get_session(
     - Returns session details, current question, and progress
     """
     try:
+        # Create interview service with database session
+        interview_service = InterviewService(db=db)
+
         session_state = interview_service.get_session(session_id)
 
         if not session_state:
@@ -356,6 +366,9 @@ async def get_current_question(
     - Returns the current question details
     """
     try:
+        # Create interview service with database session
+        interview_service = InterviewService(db=db)
+
         session = interview_service.get_session(session_id)
 
         if not session:
@@ -405,6 +418,9 @@ async def save_session(
     - Can be called at any time during the interview
     """
     try:
+        # Create interview service with database session
+        interview_service = InterviewService(db=db)
+
         result = interview_service.save_session(
             session_id=session_id,
             answers=request.answers,
@@ -462,7 +478,7 @@ async def calculate_taxes_for_session(
 
         if not filing_session_id:
             # Try to get from session data as fallback
-            from services.interview_service import interview_service
+            interview_service = InterviewService(db=db)
             session_data = interview_service.get_session(session_id)
 
             if not session_data:

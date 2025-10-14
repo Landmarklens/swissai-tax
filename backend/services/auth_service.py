@@ -26,7 +26,8 @@ def create_user(db: Session, user: UserCreate):
         last_name=user_data.get('last_name'),
         preferred_language=user.preferred_language if hasattr(user, 'preferred_language') else 'en',
         provider='local',
-        is_active=True
+        is_active=True,
+        two_factor_enabled=user.enable_2fa if hasattr(user, 'enable_2fa') else False
     )
     db.add(user_obj)
     db.commit()

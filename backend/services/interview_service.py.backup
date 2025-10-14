@@ -146,20 +146,20 @@ class InterviewService:
             if location_data:
                 # Store location data in session
                 location_key = f"{question_id}_location"
-                session_context[location_key] = location_data
+                session[location_key] = location_data
 
                 # For primary residence (Q02), store as primary location
                 if question_id == 'Q02':
-                    session_context['primary_canton'] = location_data['canton']
-                    session_context['primary_municipality'] = location_data['municipality']
-                    session_context['primary_postal_code'] = location_data['postal_code']
+                    session['primary_canton'] = location_data['canton']
+                    session['primary_municipality'] = location_data['municipality']
+                    session['primary_postal_code'] = location_data['postal_code']
                     logger.info(f"Auto-detected primary residence: {location_data['canton']}, {location_data['municipality']}")
 
                 # For secondary location (Q02b), store as secondary location
                 elif question_id == 'Q02b':
-                    session_context['secondary_canton'] = location_data['canton']
-                    session_context['secondary_municipality'] = location_data['municipality']
-                    session_context['secondary_postal_code'] = location_data['postal_code']
+                    session['secondary_canton'] = location_data['canton']
+                    session['secondary_municipality'] = location_data['municipality']
+                    session['secondary_postal_code'] = location_data['postal_code']
                     logger.info(f"Auto-detected secondary location: {location_data['canton']}, {location_data['municipality']}")
             else:
                 logger.warning(f"Could not auto-lookup location for postal code: {answer}")
@@ -182,17 +182,17 @@ class InterviewService:
                 num_children = int(answer)
             except (ValueError, TypeError):
                 return {'error': 'Invalid number provided. Please enter a valid number.'}
-            session_context['num_children'] = num_children
-            session_context['child_index'] = 0
+            session['num_children'] = num_children
+            session['child_index'] = 0
             next_question_id = 'Q03b' if num_children > 0 else 'Q04'
         elif question_id == 'Q03b':
             # Handle child loop
             if 'child_index' not in session:
-                session_context['child_index'] = 0
+                session['child_index'] = 0
 
-            session_context['child_index'] += 1
+            session['child_index'] += 1
 
-            if session_context['child_index'] < session_context.get('num_children', 0):
+            if session['child_index'] < session.get('num_children', 0):
                 # More children to process
                 next_question_id = 'Q03b'
             else:
@@ -211,7 +211,7 @@ class InterviewService:
             property_cantons = answer if isinstance(answer, list) else [answer]
 
             # Store property cantons in session
-            session_context['property_cantons'] = property_cantons
+            session['property_cantons'] = property_cantons
 
             # Auto-create secondary filings for other cantons
             # Get primary filing ID from session (should be set when creating interview)
@@ -226,7 +226,7 @@ class InterviewService:
                     )
 
                     # Store secondary filing IDs in session
-                    session_context['secondary_filing_ids'] = [f.id for f in secondary_filings]
+                    session['secondary_filing_ids'] = [f.id for f in secondary_filings]
 
                     logger.info(
                         f"Auto-created {len(secondary_filings)} secondary filings "
@@ -234,7 +234,7 @@ class InterviewService:
                     )
 
                     # Store info for response message
-                    session_context['multi_canton_created'] = {
+                    session['multi_canton_created'] = {
                         'count': len(secondary_filings),
                         'cantons': [f.canton for f in secondary_filings],
                         'filing_ids': [f.id for f in secondary_filings]
@@ -266,29 +266,13 @@ class InterviewService:
                 else:
                     next_question_id = None
 
-        # Update session context back into session dict
-        session['session_context'] = session_context
-
-        # Save changes to database
-        db_session.status = session['status']
-        db_session.current_question_id = session['current_question_id']
-        db_session.answers = session['answers']
-        db_session.completed_questions = session['completed_questions']
-        db_session.pending_questions = session['pending_questions']
-        db_session.progress = session['progress']
-        db_session.session_context = session['session_context']
-        db_session.updated_at = datetime.utcnow()
+        # Update session
+        session['updated_at'] = datetime.utcnow().isoformat()
 
         # Check if interview is complete
         if next_question_id == 'complete' or next_question_id is None:
             session['status'] = 'completed'
             session['current_question_id'] = None
-            db_session.status = 'completed'
-            db_session.current_question_id = None
-            db_session.completed_at = datetime.utcnow()
-
-            # Commit changes to database
-            self.db.commit()
 
             # Generate profile and document requirements
             profile = self._generate_profile(session['answers'])
@@ -311,12 +295,6 @@ class InterviewService:
             # Mark interview as complete to prevent further errors
             session['status'] = 'completed'
             session['current_question_id'] = None
-            db_session.status = 'completed'
-            db_session.current_question_id = None
-            db_session.completed_at = datetime.utcnow()
-
-            # Commit changes to database
-            self.db.commit()
 
             # Generate profile and document requirements with existing answers
             profile = self._generate_profile(session['answers'])
@@ -343,14 +321,6 @@ class InterviewService:
         progress = min(int((completed / max(total_questions, 1)) * 100), 99)
         session['progress'] = progress
 
-        # Update database session with final values
-        db_session.current_question_id = session['current_question_id']
-        db_session.progress = progress
-        db_session.session_context = session_context
-
-        # Commit changes to database
-        self.db.commit()
-
         response = {
             'current_question': self._format_question(next_question, session['language']),
             'progress': progress,
@@ -358,43 +328,22 @@ class InterviewService:
         }
 
         # Add multi-canton filing info if secondary filings were created
-        if 'multi_canton_created' in session_context:
-            response['multi_canton_filings'] = session_context['multi_canton_created']
+        if 'multi_canton_created' in session:
+            response['multi_canton_filings'] = session['multi_canton_created']
             # Clear the flag so it's only sent once
-            del session_context['multi_canton_created']
-            # Update DB with cleared flag
-            db_session.session_context = session_context
-            self.db.commit()
+            del session['multi_canton_created']
 
         return response
 
     def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
         """Get session details"""
-        if not self.db:
-            raise RuntimeError("Database session is required for InterviewService")
-
-        from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
-
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
-        if not db_session:
-            return None
-
-        return db_session.to_dict()
+        return self.sessions.get(session_id)
 
     def resume_session(self, session_id: str) -> Dict[str, Any]:
         """Resume an existing session"""
-        if not self.db:
-            raise RuntimeError("Database session is required for InterviewService")
-
-        from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
-
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
-        if not db_session:
+        session = self.sessions.get(session_id)
+        if not session:
             raise ValueError(f"Session {session_id} not found")
-
-        session = db_session.to_dict()
 
         if session['status'] == 'completed':
             return {
@@ -500,8 +449,17 @@ class InterviewService:
                     field_data['widget'] = field['widget']
                 formatted['fields'].append(field_data)
 
-        # Note: Context for loops (like Q03b) is now passed separately when needed
-        # since we don't have access to session state in this method anymore
+        # Add context for loops
+        if question.id == 'Q03b':
+            session = next((s for s in self.sessions.values()
+                          if s.get('current_question_id') == question.id), None)
+            if session:
+                child_index = session.get('child_index', 0)
+                num_children = session.get('num_children', 0)
+                formatted['context'] = {
+                    'current': child_index + 1,
+                    'total': num_children
+                }
 
         return formatted
 
@@ -599,16 +557,13 @@ class InterviewService:
             logger.warning(f"Cannot create pending document: database session not available")
             return
 
-        # Get filing session ID from database
-        from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
-
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
-        if not db_session:
+        # Get filing session ID from interview session
+        session = self.sessions.get(session_id)
+        if not session:
             logger.error(f"Session {session_id} not found")
             return
 
-        filing_session_id = db_session.filing_id
+        filing_session_id = session.get('filing_id')
         if not filing_session_id:
             logger.warning(f"No filing_id in session {session_id}, cannot create pending document")
             return
@@ -681,40 +636,30 @@ class InterviewService:
         Returns:
             Dictionary with save confirmation or None if session not found
         """
-        if not self.db:
-            raise RuntimeError("Database session is required for InterviewService")
+        with self._lock:
+            session = self.sessions.get(session_id)
+            if not session:
+                return None
 
-        from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
+            # Update session with provided data
+            if answers:
+                session['answers'].update(answers)
 
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
-        if not db_session:
-            return None
+            if progress is not None:
+                session['progress'] = progress
 
-        # Update session with provided data
-        if answers:
-            if db_session.answers is None:
-                db_session.answers = {}
-            db_session.answers.update(answers)
+            # Update timestamp
+            saved_at = datetime.utcnow().isoformat()
+            session['updated_at'] = saved_at
 
-        if progress is not None:
-            db_session.progress = progress
+            logger.info(f"Saved session {session_id} with {len(answers)} answers and {progress}% progress")
 
-        # Update timestamp
-        saved_at = datetime.utcnow()
-        db_session.updated_at = saved_at
+            return {
+                'session_id': session_id,
+                'saved_at': saved_at,
+                'answers_count': len(session['answers']),
+                'progress': session['progress']
+            }
 
-        self.db.commit()
-
-        logger.info(f"Saved session {session_id} with {len(answers) if answers else 0} answers and {progress}% progress")
-
-        return {
-            'session_id': session_id,
-            'saved_at': saved_at.isoformat(),
-            'answers_count': len(db_session.answers or {}),
-            'progress': db_session.progress
-        }
-
-# NOTE: Do not create a singleton instance without a database session
-# Each router will create its own instance with proper database injection
-# interview_service = InterviewService()
+# Create singleton instance
+interview_service = InterviewService()

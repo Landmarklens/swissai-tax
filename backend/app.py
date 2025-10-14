@@ -28,7 +28,6 @@ from routers import auth, user, user_counter, audit_logs, user_data, interview, 
 from routers.swisstax import filing, payment, profile, settings, referrals, webhooks
 from routers.swisstax import subscription_new as subscription
 from services.document_service import DocumentService
-from services.interview_service import interview_service
 from services.tax_calculation_service import TaxCalculationService
 from services.background_jobs import start_background_jobs, stop_background_jobs
 from utils.validators import validate_session_id, validate_tax_year
@@ -47,7 +46,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Services are initialized in their modules
-# interview_service is imported from services.interview_service
 document_service = DocumentService()
 tax_service = TaxCalculationService()
 

@@ -15,6 +15,7 @@ class UserCreate(BaseModel):
     first_name: str
     last_name: str
     preferred_language: str = "en"  # de, en, fr, it
+    enable_2fa: bool = False  # Optional 2FA enrollment during signup
 
 
 class UserProfile(BaseModel):

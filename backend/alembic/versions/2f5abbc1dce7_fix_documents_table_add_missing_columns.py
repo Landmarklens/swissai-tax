@@ -33,8 +33,15 @@ def upgrade() -> None:
             ) THEN
                 ALTER TABLE swisstax.documents
                 ADD COLUMN user_id VARCHAR(255);
+            END IF;
 
-                -- Create index on user_id
+            -- Create index on user_id (idempotent)
+            IF NOT EXISTS (
+                SELECT 1 FROM pg_indexes
+                WHERE schemaname = 'swisstax'
+                AND tablename = 'documents'
+                AND indexname = 'idx_documents_user_id'
+            ) THEN
                 CREATE INDEX idx_documents_user_id ON swisstax.documents(user_id);
             END IF;
         END $$;

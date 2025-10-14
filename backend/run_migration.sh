@@ -8,7 +8,8 @@ echo "========================================"
 echo ""
 
 # Set database URL for localhost connection (via SSH tunnel)
-export DATABASE_URL="postgresql://webscrapinguser:IXq3IC0Uw6StMkBhb4mb@localhost:5432/homeai_db"
+# Using port 5433 to avoid conflicts with local PostgreSQL
+export DATABASE_URL="postgresql://webscrapinguser:IXq3IC0Uw6StMkBhb4mb@localhost:5433/swissai_tax"
 
 cd "$(dirname "$0")" || exit
 
@@ -20,7 +21,7 @@ if [ $? -ne 0 ]; then
     echo "❌ ERROR: Cannot connect to database"
     echo ""
     echo "Please ensure SSH tunnel is running:"
-    echo "ssh -i ~/Desktop/HomeAiCode/id_rsa -L 5432:webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com:5432 ubuntu@3.221.26.92 -N -f"
+    echo "ssh -i ~/Desktop/HomeAiCode/id_rsa -L 5433:webscraping-database.cluster-c9y2u088elix.us-east-1.rds.amazonaws.com:5432 ubuntu@3.221.26.92 -N -f"
     echo ""
     exit 1
 fi
@@ -37,10 +38,20 @@ echo "Pending migrations:"
 python -m alembic heads
 
 echo ""
-read -p "Apply migrations? (y/n) " -n 1 -r
-echo ""
+# Auto-apply if --auto flag is passed
+if [ "$1" = "--auto" ]; then
+    AUTO_APPLY=true
+else
+    read -p "Apply migrations? (y/n) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        AUTO_APPLY=true
+    else
+        AUTO_APPLY=false
+    fi
+fi
 
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [ "$AUTO_APPLY" = true ]; then
     echo "Applying migrations..."
     python -m alembic upgrade head
 

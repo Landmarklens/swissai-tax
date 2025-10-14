@@ -39,7 +39,7 @@ const GoogleCallback = () => {
         if (requires_subscription === 'true') {
           // Redirect to subscription plans page for plan selection
           console.log('[GoogleCallback] Subscription required, redirecting to plans');
-          navigate('/subscription/plans');
+          navigate('/subscription-plans');
         } else {
           // Redirect to filings page
           console.log('[GoogleCallback] Redirecting to filings');

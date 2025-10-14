@@ -140,7 +140,7 @@ describe('GoogleCallback Component', () => {
     });
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/subscription/plans');
+      expect(mockNavigate).toHaveBeenCalledWith('/subscription-plans');
     }, { timeout: 3000 });
   });
 

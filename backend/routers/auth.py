@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 from urllib.parse import urlencode
 
-from fastapi import Body, Depends, HTTPException, Query, Request, Response
+from fastapi import BackgroundTasks, Body, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import RedirectResponse
 from googleapiclient.discovery import build
 
@@ -112,7 +112,7 @@ async def login_or_registration_google(user_type: str = Query("taxpayer"),
 
 
 @router.get("/login/google/callback", include_in_schema=False)
-async def callback(request: Request, response: Response, db=Depends(get_db)):
+async def callback(request: Request, response: Response, background_tasks: BackgroundTasks, db=Depends(get_db)):
     # Get fresh flow instance
     oauth_flow = get_flow()
     oauth_flow.fetch_token(code=request.query_params["code"])
@@ -183,17 +183,15 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
     except Exception:
         pass  # Session creation is optional
 
-    # Log successful login with session ID
-    try:
-        log_login_success(
-            db,
-            user.id,
-            request.client.host if request.client else "unknown",
-            request.headers.get("user-agent", ""),
-            session_id=session_id
-        )
-    except Exception:
-        pass  # Audit logging is optional
+    # Log successful login in background (non-blocking)
+    background_tasks.add_task(
+        log_login_success,
+        db,
+        user.id,
+        request.client.host if request.client else "unknown",
+        request.headers.get("user-agent", ""),
+        session_id
+    )
 
     # Check if user requires subscription
     requires_subscription = should_require_subscription(user, db)
@@ -224,6 +222,7 @@ async def callback(request: Request, response: Response, db=Depends(get_db)):
 async def user_login(
     request: Request,
     response: Response,
+    background_tasks: BackgroundTasks,
     user: UserLoginSchema = Body(...),
     db=Depends(get_db),
     use_cookie: bool = Query(True, description="Set to true to use cookie-based auth (recommended)")
@@ -281,17 +280,15 @@ async def user_login(
             # Check if user requires subscription
             requires_subscription = should_require_subscription(db_user, db)
 
-            # Log successful login with session ID
-            try:
-                log_login_success(
-                    db,
-                    db_user.id,
-                    request.client.host if request.client else "unknown",
-                    request.headers.get("user-agent", ""),
-                    session_id=session_id
-                )
-            except Exception:
-                pass  # Audit logging is optional
+            # Log successful login in background (non-blocking)
+            background_tasks.add_task(
+                log_login_success,
+                db,
+                db_user.id,
+                request.client.host if request.client else "unknown",
+                request.headers.get("user-agent", ""),
+                session_id
+            )
 
             # Set httpOnly cookie (new secure method)
             if use_cookie:
@@ -329,6 +326,7 @@ async def user_login(
 async def verify_two_factor_login(
     request: Request,
     response: Response,
+    background_tasks: BackgroundTasks,
     temp_token: str = Body(...),
     code: str = Body(...),
     use_cookie: bool = Query(True, description="Set to true to use cookie-based auth"),
@@ -424,17 +422,15 @@ async def verify_two_factor_login(
 
         logger.info(f"[2FA] Login successful for user: {db_user.email}")
 
-        # Log successful 2FA login with session ID
-        try:
-            log_login_success(
-                db,
-                db_user.id,
-                request.client.host if request.client else "unknown",
-                request.headers.get("user-agent", ""),
-                session_id=session_id
-            )
-        except Exception as e:
-            logger.warning(f"Failed to log audit event: {e}")
+        # Log successful 2FA login in background (non-blocking)
+        background_tasks.add_task(
+            log_login_success,
+            db,
+            db_user.id,
+            request.client.host if request.client else "unknown",
+            request.headers.get("user-agent", ""),
+            session_id
+        )
 
         # Set httpOnly cookie if requested
         if use_cookie:
@@ -485,6 +481,7 @@ async def verify_two_factor_login(
 async def logout(
     request: Request,
     response: Response,
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db=Depends(get_db)
 ):
@@ -498,25 +495,27 @@ async def logout(
     from core.security import get_session_id_from_request
     session_id = get_session_id_from_request(request)
 
-    # Revoke session in database
+    # Clear cookie immediately for fast response
+    response.delete_cookie(key="access_token")
+
+    # Revoke session in background (non-blocking)
     if session_id:
         from services.session_service import session_service
-        session_service.revoke_session_by_session_id(db, session_id)
+        background_tasks.add_task(
+            session_service.revoke_session_by_session_id,
+            db,
+            session_id
+        )
 
-        # Log logout
-        try:
-            log_logout(
-                db,
-                current_user.id,
-                request.client.host if request.client else "unknown",
-                request.headers.get("user-agent", ""),
-                session_id=session_id
-            )
-        except Exception as e:
-            logger.warning(f"Failed to log logout: {e}")
-
-    # Clear cookie
-    response.delete_cookie(key="access_token")
+        # Log logout in background (non-blocking)
+        background_tasks.add_task(
+            log_logout,
+            db,
+            current_user.id,
+            request.client.host if request.client else "unknown",
+            request.headers.get("user-agent", ""),
+            session_id
+        )
 
     return {"success": True, "message": "Logged out successfully"}
 

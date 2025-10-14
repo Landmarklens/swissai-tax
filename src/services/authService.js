@@ -151,30 +151,23 @@ const authService = {
 
   // Logout (now clears cookie on server)
   logout: async () => {
-    try {
-      // Call backend to clear cookie
-      await axios.post(`${API_URL}/api/auth/logout`, {}, {
-        withCredentials: true
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Continue with local cleanup even if server request fails
-    } finally {
-      // Clear local state
-      authServiceInstance.setCurrentUser(null);
+    // Clear local state FIRST for instant UI response
+    authServiceInstance.setCurrentUser(null);
 
-      // Selectively clear auth-related items while preserving user preferences
-      const itemsToPreserve = ['swissai_cookie_consent', 'i18nextLng'];
-      const allKeys = Object.keys(localStorage);
+    // Clear only known auth-related keys (faster than iteration)
+    const authKeys = ['user', 'token', 'filings', 'profile', 'activeSession', 'subscriptionData'];
+    authKeys.forEach(key => localStorage.removeItem(key));
 
-      allKeys.forEach(key => {
-        if (!itemsToPreserve.includes(key)) {
-          localStorage.removeItem(key);
-        }
-      });
+    // Make backend call in background (fire-and-forget for instant UX)
+    // Backend will still revoke session and clear cookie
+    axios.post(`${API_URL}/api/auth/logout`, {}, {
+      withCredentials: true
+    }).catch(error => {
+      console.error('Logout error (non-blocking):', error);
+      // User already logged out locally, this is just cleanup
+    });
 
-      // Don't redirect here - let the calling code handle navigation
-    }
+    // Don't redirect here - let the calling code handle navigation
   },
 
   // Get current user - from localStorage (non-sensitive data only)

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import {
@@ -12,8 +13,10 @@ import {
   CircularProgress,
   Stepper,
   Step,
-  StepLabel
+  StepLabel,
+  Chip
 } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PaymentForm from '../../components/subscription/PaymentForm';
 import DiscountCodeInput from '../../components/Referrals/DiscountCodeInput';
 import subscriptionService from '../../services/subscriptionService';
@@ -25,8 +28,9 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ||
 const SubscriptionCheckout = () => {
   const { planType } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
+  const user = useSelector((state) => state.account.data);
 
   const [setupIntent, setSetupIntent] = useState(null);
   const [planDetails, setPlanDetails] = useState(null);
@@ -49,6 +53,17 @@ const SubscriptionCheckout = () => {
     initializeCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planType]);
+
+  // Sync language with user preference on mount
+  useEffect(() => {
+    if (user?.preferred_language) {
+      const langMap = { 'DE': 'de', 'EN': 'en', 'FR': 'fr', 'IT': 'it' };
+      const userLang = langMap[user.preferred_language] || user.preferred_language.toLowerCase();
+      if (i18n.language !== userLang) {
+        i18n.changeLanguage(userLang);
+      }
+    }
+  }, [user, i18n]);
 
   const initializeCheckout = async () => {
     try {
@@ -174,36 +189,91 @@ const SubscriptionCheckout = () => {
           </Alert>
         )}
 
+        {/* Free Trial Highlight Banner */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            mb: 4,
+            bgcolor: 'success.light',
+            border: '2px solid',
+            borderColor: 'success.main',
+            borderRadius: 2,
+            textAlign: 'center'
+          }}
+        >
+          <Chip
+            icon={<CheckCircleIcon />}
+            label={t('subscription.checkout.free_trial_badge', '30-Day Free Trial')}
+            color="success"
+            sx={{ mb: 2, fontWeight: 'bold', fontSize: '1rem', py: 2.5 }}
+          />
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: 'success.dark' }}>
+            {t('subscription.checkout.no_charge_today', 'CHF 0 Today')}
+          </Typography>
+          <Typography variant="h6" sx={{ mb: 1, color: 'text.primary' }}>
+            {t('subscription.checkout.trial_headline', 'Start your free 30-day trial - no charge today')}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            {t(
+              'subscription.checkout.trial_description',
+              'Try all premium features risk-free. Cancel anytime during the trial period without being charged.'
+            )}
+          </Typography>
+        </Paper>
+
         {/* Plan Summary */}
         {planDetails && (
-          <Paper sx={{ p: 3, mb: 4, bgcolor: 'primary.light' }}>
-            <Typography variant="h5" gutterBottom>
-              {planDetails.name}
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 2 }}>
-              <Typography variant="h4" component="span" sx={{ fontWeight: 'bold' }}>
-                CHF {finalPrice !== null ? finalPrice : planDetails.price}
+          <Paper sx={{ p: 3, mb: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                {planDetails.name}
               </Typography>
+              <Chip
+                label={t('subscription.checkout.selected_plan', 'Selected')}
+                color="primary"
+                size="small"
+              />
+            </Box>
+
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              {planDetails.description}
+            </Typography>
+
+            {/* Pricing after trial */}
+            <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1, mb: 2 }}>
+              <Typography variant="caption" color="text.secondary" gutterBottom display="block">
+                {t('subscription.checkout.after_trial', 'After 30-day trial')}:
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+                <Typography variant="h5" component="span" sx={{ fontWeight: 'bold' }}>
+                  CHF {finalPrice !== null ? finalPrice : planDetails.price}
+                </Typography>
+                {discountInfo && (
+                  <Typography variant="body1" component="span" color="text.secondary" sx={{ ml: 1, textDecoration: 'line-through' }}>
+                    CHF {planDetails.price}
+                  </Typography>
+                )}
+                <Typography variant="body1" component="span" color="text.secondary" sx={{ ml: 1 }}>
+                  {t('subscription.billing.annual', '/ year')}
+                </Typography>
+              </Box>
               {discountInfo && (
-                <Typography variant="h6" component="span" color="text.secondary" sx={{ ml: 1, textDecoration: 'line-through' }}>
-                  CHF {planDetails.price}
+                <Typography variant="body2" color="success.main" sx={{ mt: 1, fontWeight: 'bold' }}>
+                  {t('subscription.checkout.discount_applied', 'Discount applied!')} 🎉
                 </Typography>
               )}
-              <Typography variant="h6" component="span" color="text.secondary" sx={{ ml: 1 }}>
-                {t('subscription.billing.annual', '/ year')}
-              </Typography>
             </Box>
-            <Alert severity="success" sx={{ mb: 2 }}>
+
+            <Alert severity="info" icon={<CheckCircleIcon />}>
               <Typography variant="body2">
                 {t(
-                  'subscription.checkout.trial_reminder',
-                  '30-day free trial starts today. You won\'t be charged until the trial ends.'
+                  'subscription.checkout.trial_terms',
+                  'Your first payment will be processed on {date}. You can cancel anytime before then.',
+                  { date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString() }
                 )}
               </Typography>
             </Alert>
-            <Typography variant="body2" color="text.secondary">
-              {planDetails.description}
-            </Typography>
           </Paper>
         )}
 

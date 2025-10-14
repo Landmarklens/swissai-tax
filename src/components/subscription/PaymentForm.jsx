@@ -140,11 +140,11 @@ const PaymentForm = ({ setupIntent, planType, planDetails, onSuccess, onCancel, 
           }
           label={
             <Typography variant="body2">
-              {t('subscription.payment.agree_to')}{' '}
+              {t('subscription.payment.agree_to', 'I agree to the')}{' '}
               <Link href="/terms-and-conditions" target="_blank">
                 {t('subscription.payment.terms', 'Terms and Conditions')}
               </Link>
-              {' '}{t('subscription.payment.and')}{' '}
+              {' '}{t('subscription.payment.and', 'and')}{' '}
               <Link href="/privacy-policy" target="_blank">
                 {t('subscription.payment.privacy', 'Privacy Policy')}
               </Link>

@@ -26,5 +26,50 @@
         "keepButton": "Keep My Subscription"
       }
     }
+  },
+  "subscription": {
+    "checkout": {
+      "title": "Complete Your Subscription",
+      "step_plan": "Select Plan",
+      "step_payment": "Payment Method",
+      "step_confirm": "Confirm",
+      "free_trial_badge": "30-Day Free Trial",
+      "no_charge_today": "CHF 0 Today",
+      "trial_headline": "Start your free 30-day trial - no charge today",
+      "trial_description": "Try all premium features risk-free. Cancel anytime during the trial period without being charged.",
+      "selected_plan": "Selected",
+      "after_trial": "After 30-day trial",
+      "discount_applied": "Discount applied!",
+      "trial_terms": "Your first payment will be processed on {{date}}. You can cancel anytime before then.",
+      "discount_code": "Have a Discount Code?",
+      "trial_reminder": "30-day free trial starts today. You won't be charged until the trial ends."
+    },
+    "payment": {
+      "secure": "Secure payment powered by Stripe",
+      "trial_notice": "Your card will not be charged today. After your 30-day free trial ends, you will be charged the subscription amount.",
+      "billing_details": "Billing Details",
+      "trial_start": "Trial starts today",
+      "trial_end": "Trial ends in 30 days",
+      "first_charge": "First charge: CHF {{price}} on",
+      "commitment_note": "5-year commitment - special price locked in",
+      "agree_to": "I agree to the",
+      "terms": "Terms and Conditions",
+      "and": "and",
+      "privacy": "Privacy Policy",
+      "processing": "Processing...",
+      "start_trial": "Start Free Trial",
+      "cancel_info": "You can cancel anytime during the trial period without being charged."
+    },
+    "billing": {
+      "annual": "/ year"
+    },
+    "error": {
+      "stripe_not_configured": "Stripe is not configured. Please contact support.",
+      "initialization": "Failed to initialize checkout",
+      "creation": "Failed to create subscription",
+      "terms_required": "Please agree to the terms and conditions",
+      "setup_failed": "Payment setup failed. Please try again.",
+      "payment_failed": "Payment failed. Please try again."
+    }
   }
 }

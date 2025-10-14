@@ -120,12 +120,7 @@ const authService = {
   // User registration
   register: async (userData) => {
     try {
-      console.log('[AuthService.register] Sending registration request with data:', JSON.stringify(userData, null, 2));
-      console.log('[AuthService.register] API URL:', `${API_URL}/api/auth/register`);
-
       const response = await axios.post(`${API_URL}/api/auth/register`, userData);
-
-      console.log('[AuthService.register] Registration successful:', response.data);
       if (response.data) {
         // Registration successful
         // authService.login(userData.email, userData.password);
@@ -133,12 +128,6 @@ const authService = {
       }
       return response.data;
     } catch (error) {
-      console.error('[AuthService.register] Registration failed');
-      console.error('[AuthService.register] Error response:', error.response);
-      console.error('[AuthService.register] Error data:', error.response?.data);
-      console.error('[AuthService.register] Error status:', error.response?.status);
-      console.error('[AuthService.register] Full error:', error);
-
       // Return error object instead of throwing to maintain existing behavior
       return { error: error.response?.data?.detail || error.response?.data?.error || 'Registration failed' };
     }

@@ -111,7 +111,7 @@ class TaxFilingSession(Base):
         """Convert model to dictionary"""
         result = {
             'id': self.id,
-            'user_id': self.user_id,
+            'user_id': str(self.user_id),  # Convert UUID to string for JSON serialization
             'name': self.name,
             'tax_year': self.tax_year,
             'profile': self.profile,

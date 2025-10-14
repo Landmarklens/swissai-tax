@@ -259,11 +259,13 @@ async def get_user_storage(
     - Includes document count
     """
     try:
-        storage_info = doc_service.get_user_storage_info(current_user.id)
+        # Convert UUID to string for database query
+        user_id_str = str(current_user.id)
+        storage_info = doc_service.get_user_storage_info(user_id_str)
         return storage_info
 
     except Exception as e:
-        logger.error(f"Error getting user storage: {e}")
+        logger.error(f"Error getting user storage for user {current_user.id}: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get storage info: {str(e)}"
@@ -282,11 +284,13 @@ async def list_all_user_documents(
     - Includes all sessions
     """
     try:
-        documents = doc_service.list_all_user_documents(current_user.id)
+        # Convert UUID to string for database query
+        user_id_str = str(current_user.id)
+        documents = doc_service.list_all_user_documents(user_id_str)
         return documents
 
     except Exception as e:
-        logger.error(f"Error listing user documents: {e}")
+        logger.error(f"Error listing user documents for user {current_user.id}: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to list documents: {str(e)}"
@@ -305,11 +309,13 @@ async def download_all_documents(
     - Returns presigned download URL
     """
     try:
-        result = doc_service.create_documents_zip(current_user.id)
+        # Convert UUID to string for database query
+        user_id_str = str(current_user.id)
+        result = doc_service.create_documents_zip(user_id_str)
         return result
 
     except Exception as e:
-        logger.error(f"Error creating document archive: {e}")
+        logger.error(f"Error creating document archive for user {current_user.id}: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create document archive: {str(e)}"
@@ -328,11 +334,13 @@ async def delete_old_documents(
     - Returns count of deleted documents
     """
     try:
-        result = doc_service.delete_old_documents(current_user.id, years=7)
+        # Convert UUID to string for database query
+        user_id_str = str(current_user.id)
+        result = doc_service.delete_old_documents(user_id_str, years=7)
         return result
 
     except Exception as e:
-        logger.error(f"Error deleting old documents: {e}")
+        logger.error(f"Error deleting old documents for user {current_user.id}: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to delete old documents: {str(e)}"

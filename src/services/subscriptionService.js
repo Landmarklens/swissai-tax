@@ -218,11 +218,66 @@ const subscriptionService = {
 
   /**
    * Get plan details
-   * @param {string} planType - 'annual_flex' or '5_year_lock'
+   * @param {string} planType - 'free', 'basic', 'pro', 'premium', 'annual_flex', or '5_year_lock'
    * @returns {Object} Plan details
    */
   getPlanDetails: (planType) => {
     const plans = {
+      // New 4-tier model
+      free: {
+        name: 'Free',
+        price: 0,
+        commitment: 0,
+        description: 'Basic tax filing features',
+        features: [
+          'Single tax return',
+          'Basic calculations',
+          'Email support'
+        ]
+      },
+      basic: {
+        name: 'Basic',
+        price: 49,
+        commitment: 1,
+        description: 'Essential tax filing with document upload',
+        features: [
+          'Up to 3 tax returns',
+          'Document upload & OCR',
+          'Basic deductions',
+          'Email support',
+          'Cancel anytime'
+        ]
+      },
+      pro: {
+        name: 'Pro',
+        price: 99,
+        commitment: 1,
+        description: 'Advanced features for complex filings',
+        features: [
+          'Unlimited tax returns',
+          'All deductions & optimizations',
+          'Document upload & OCR',
+          'Priority email support',
+          'Multiple cantons support',
+          'Cancel anytime'
+        ]
+      },
+      premium: {
+        name: 'Premium',
+        price: 149,
+        commitment: 1,
+        description: 'Complete tax solution with expert support',
+        features: [
+          'Everything in Pro',
+          'Tax expert review',
+          'Phone & email support',
+          'Audit protection',
+          'Tax planning advice',
+          'Priority processing',
+          'Cancel anytime'
+        ]
+      },
+      // Legacy plans (for backward compatibility)
       annual_flex: {
         name: 'Annual Flex',
         price: 129,

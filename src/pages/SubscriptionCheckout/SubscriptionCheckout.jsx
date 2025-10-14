@@ -278,7 +278,7 @@ const SubscriptionCheckout = () => {
               <Typography variant="body2">
                 {t(
                   'subscription.checkout.trial_terms',
-                  'Your first payment will be processed on {date}. You can cancel anytime before then.',
+                  'Your first payment will be processed on {{date}}. You can cancel anytime before then.',
                   { date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString() }
                 )}
               </Typography>

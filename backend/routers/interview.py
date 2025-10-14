@@ -450,10 +450,10 @@ async def calculate_taxes_for_session(
     - Returns calculation results
     """
     try:
-        # Import tax calculation service
-        from services.tax_calculation_service import TaxCalculationService
+        # Import enhanced tax calculation service
+        from services.enhanced_tax_calculation_service import EnhancedTaxCalculationService
 
-        tax_service = TaxCalculationService()
+        tax_service = EnhancedTaxCalculationService(db=db)
 
         # Get filing_session_id from request body first, then fall back to session data
         filing_session_id = request.filing_session_id
@@ -489,15 +489,12 @@ async def calculate_taxes_for_session(
                 detail="Filing session not found or access denied"
             )
 
-        # Calculate taxes
-        calculation = tax_service.calculate_tax(
-            db=db,
-            filing_session_id=filing_session_id
-        )
+        # Calculate taxes using enhanced service
+        calculation = tax_service.calculate_single_filing(filing_session)
 
         return {
             "success": True,
-            "calculation": calculation.to_dict() if hasattr(calculation, 'to_dict') else calculation
+            "calculation": calculation
         }
 
     except HTTPException:

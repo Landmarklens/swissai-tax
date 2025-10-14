@@ -155,10 +155,18 @@ async def create_subscription(
     # SPECIAL HANDLING FOR FREE PLAN - No Stripe required
     # ========================================================================
     if sub_data.plan_type == 'free':
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"[create_subscription] FREE PLAN requested by user_id: {current_user.id}, email: {current_user.email}")
+        logger.info(f"[create_subscription] Existing subscription check: {existing_sub}")
+
         # If user already has a free subscription, return it (idempotent operation)
         if existing_sub and existing_sub.plan_type == 'free':
+            logger.info(f"[create_subscription] User {current_user.id} already has free subscription, returning existing (idempotent)")
             return _build_subscription_response(existing_sub)
+
         plan_config = _get_plan_config('free')
+        logger.info(f"[create_subscription] Creating new free subscription for user_id: {current_user.id}")
 
         # Create free subscription record in database (no Stripe)
         subscription = Subscription(
@@ -183,6 +191,7 @@ async def create_subscription(
         db.commit()
         db.refresh(subscription)
 
+        logger.info(f"[create_subscription] Successfully created free subscription for user_id: {current_user.id}, subscription_id: {subscription.id}")
         return _build_subscription_response(subscription)
 
     # ========================================================================
@@ -382,6 +391,11 @@ async def get_current_subscription(
     Get user's current active subscription
     Returns None if user has no active subscription
     """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"[get_current_subscription] Called for user_id: {current_user.id}, email: {current_user.email}")
+
     subscription = (
         db.query(Subscription)
         .filter(
@@ -392,8 +406,10 @@ async def get_current_subscription(
     )
 
     if not subscription:
+        logger.info(f"[get_current_subscription] No active subscription found for user_id: {current_user.id}")
         return None
 
+    logger.info(f"[get_current_subscription] Found subscription for user_id: {current_user.id}, plan_type: {subscription.plan_type}, status: {subscription.status}")
     return _build_subscription_response(subscription)
 
 

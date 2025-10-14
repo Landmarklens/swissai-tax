@@ -29,22 +29,47 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
   const [error, setError] = useState(null);
   const [currentSubscription, setCurrentSubscription] = useState(null);
 
+  console.log('[SubscriptionPlans] Component mounted/rendered');
+  console.log('[SubscriptionPlans] Current state:', {
+    loading,
+    error,
+    currentSubscription,
+    referralCode,
+    isAuthenticated: authService.isAuthenticated()
+  });
+
   useEffect(() => {
+    console.log('[SubscriptionPlans] useEffect triggered - checking subscription');
     checkCurrentSubscription();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkCurrentSubscription = async () => {
+    console.log('[SubscriptionPlans] checkCurrentSubscription called');
     try {
-      if (!authService.isAuthenticated()) {
+      const isAuth = authService.isAuthenticated();
+      console.log('[SubscriptionPlans] User authenticated:', isAuth);
+
+      if (!isAuth) {
+        console.log('[SubscriptionPlans] User not authenticated, skipping subscription check');
         return;
       }
+
+      console.log('[SubscriptionPlans] Fetching current subscription from API...');
       const result = await subscriptionService.getCurrentSubscription();
+      console.log('[SubscriptionPlans] API result:', result);
+
       if (result.success && result.data) {
+        console.log('[SubscriptionPlans] Setting current subscription:', result.data);
         setCurrentSubscription(result.data);
+      } else if (result.success && !result.data) {
+        console.log('[SubscriptionPlans] API returned success but no data (user has no subscription)');
+        setCurrentSubscription(null);
+      } else {
+        console.log('[SubscriptionPlans] API call failed:', result.error);
       }
     } catch (err) {
-      console.error('Error fetching subscription:', err);
+      console.error('[SubscriptionPlans] Error fetching subscription:', err);
     }
   };
 
@@ -93,6 +118,8 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
       setLoading(false);
     }
   };
+
+  console.log('[SubscriptionPlans] Building plans list...');
 
   const plans = [
     {
@@ -232,7 +259,22 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
 
         {/* Plan Cards */}
         <Grid container spacing={3} justifyContent="center" alignItems="stretch" sx={{ mt: 6 }}>
-          {plans.map((plan) => (
+          {plans.map((plan) => {
+            const isCurrentPlan = currentSubscription && currentSubscription.plan_type === plan.id;
+            const isButtonDisabled = loading || isCurrentPlan;
+            const canClickCard = !loading && !isCurrentPlan;
+
+            console.log(`[SubscriptionPlans] Rendering plan: ${plan.id}`, {
+              planId: plan.id,
+              currentSubscription,
+              currentPlanType: currentSubscription?.plan_type,
+              isCurrentPlan,
+              loading,
+              isButtonDisabled,
+              canClickCard
+            });
+
+            return (
             <Grid item xs={12} sm={6} md={3} key={plan.id} sx={{ display: 'flex' }}>
               <Box sx={{ position: 'relative', pt: 5, width: '100%', display: 'flex', flexDirection: 'column' }}>
                 {(plan.popular || plan.badge) && (
@@ -250,7 +292,18 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                 )}
               <Card
                 className={`plan-card ${plan.popular ? 'popular' : ''} ${plan.isFree ? 'free' : ''}`}
-                onClick={() => !loading && !(currentSubscription && currentSubscription.plan_type === plan.id) && handleSelectPlan(plan.id)}
+                onClick={() => {
+                  console.log(`[SubscriptionPlans] Card clicked for plan: ${plan.id}`, {
+                    canClickCard,
+                    loading,
+                    isCurrentPlan
+                  });
+                  if (canClickCard) {
+                    handleSelectPlan(plan.id);
+                  } else {
+                    console.log(`[SubscriptionPlans] Card click blocked for ${plan.id} - canClickCard is false`);
+                  }
+                }}
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -260,7 +313,7 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   bgcolor: plan.popular ? '#f5f9ff' : 'white',
                   overflow: 'visible',
-                  cursor: (loading || (currentSubscription && currentSubscription.plan_type === plan.id)) ? 'default' : 'pointer',
+                  cursor: !canClickCard ? 'default' : 'pointer',
                   '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: plan.popular ? '0 16px 32px rgba(25,118,210,0.25)' : '0 12px 24px rgba(0,0,0,0.15)'
@@ -344,10 +397,20 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                       color={plan.popular ? 'primary' : plan.isFree ? 'error' : 'primary'}
                       size="large"
                       fullWidth
-                      disabled={loading || (currentSubscription && currentSubscription.plan_type === plan.id)}
+                      disabled={isButtonDisabled}
                       onClick={(e) => {
+                        console.log(`[SubscriptionPlans] Button clicked for plan: ${plan.id}`, {
+                          isButtonDisabled,
+                          loading,
+                          isCurrentPlan,
+                          currentSubscription
+                        });
                         e.stopPropagation();
-                        handleSelectPlan(plan.id);
+                        if (!isButtonDisabled) {
+                          handleSelectPlan(plan.id);
+                        } else {
+                          console.log(`[SubscriptionPlans] Button click blocked for ${plan.id} - button is disabled`);
+                        }
                       }}
                       sx={{
                         py: 1.5,
@@ -356,7 +419,7 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                       }}>
                       {loading ? (
                         <CircularProgress size={24} />
-                      ) : currentSubscription && currentSubscription.plan_type === plan.id ? (
+                      ) : isCurrentPlan ? (
                         t('subscription.current_plan', 'Current Plan')
                       ) : plan.isFree ? (
                         t('subscription.start_free', 'Start Free')
@@ -369,7 +432,8 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
               </Card>
               </Box>
             </Grid>
-          ))}
+            );
+          })}
         </Grid>
 
         {/* Additional Info */}

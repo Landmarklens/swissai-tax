@@ -217,9 +217,6 @@ const LoginSignupModal = ({ open, onClose, onAuthSuccess }) => {
         return;
       }
       if (register.id) {
-        // Show success message
-        toast.success(t('Registration successful! Logging you in...'));
-
         // Check if user needs subscription before auto-login
         if (register.requires_subscription && !userData.enable_2fa) {
           // If subscription is required and no 2FA, redirect directly to plans

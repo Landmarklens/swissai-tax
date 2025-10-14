@@ -249,6 +249,7 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                 )}
               <Card
                 className={`plan-card ${plan.popular ? 'popular' : ''} ${plan.isFree ? 'free' : ''}`}
+                onClick={() => !loading && !(currentSubscription && currentSubscription.plan_type === plan.id) && handleSelectPlan(plan.id)}
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -258,6 +259,7 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   bgcolor: plan.popular ? '#f5f9ff' : 'white',
                   overflow: 'visible',
+                  cursor: (loading || (currentSubscription && currentSubscription.plan_type === plan.id)) ? 'default' : 'pointer',
                   '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: plan.popular ? '0 16px 32px rgba(25,118,210,0.25)' : '0 12px 24px rgba(0,0,0,0.15)'
@@ -342,7 +344,10 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                       size="large"
                       fullWidth
                       disabled={loading || (currentSubscription && currentSubscription.plan_type === plan.id)}
-                      onClick={() => handleSelectPlan(plan.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectPlan(plan.id);
+                      }}
                       sx={{
                         py: 1.5,
                         fontSize: '1rem',

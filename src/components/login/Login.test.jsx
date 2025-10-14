@@ -483,32 +483,5 @@ describe('LoginSignupModal Component - 2FA Signup Flow', () => {
         expect(authService.login).toHaveBeenCalled();
       });
     });
-
-    it('should show success message after registration', async () => {
-      authService.register.mockResolvedValue({ id: 1, email: 'test@example.com' });
-      authService.login.mockResolvedValue({
-        success: true,
-        user: { id: 1, email: 'test@example.com' }
-      });
-
-      renderLoginModal();
-
-      // Navigate to signup
-      const signupButton = screen.getByRole('button', { name: /Sign Up/i });
-      fireEvent.click(signupButton);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('signup-form')).toBeInTheDocument();
-      });
-
-      // Submit signup
-      const submitNo2FA = screen.getByTestId('signup-submit-no-2fa');
-      fireEvent.click(submitNo2FA);
-
-      // Verify success toast
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('Registration successful! Logging you in...');
-      });
-    });
   });
 });

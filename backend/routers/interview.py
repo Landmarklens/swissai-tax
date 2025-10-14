@@ -14,8 +14,10 @@ from sqlalchemy.orm import Session
 from db.session import get_db
 from models.tax_answer import TaxAnswer
 from models.tax_filing_session import FilingStatus, TaxFilingSession
+from models.pending_document import PendingDocument, DocumentStatus
 from services.interview_service import InterviewService
 from services.tax_insight_service import TaxInsightService
+from services.pending_document_service import PendingDocumentService
 from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -489,6 +491,20 @@ async def calculate_taxes_for_session(
                 detail="Filing session not found or access denied"
             )
 
+        # Check for pending documents - block calculation if any exist
+        pending_doc_service = PendingDocumentService(db=db)
+        if pending_doc_service.has_pending_documents(filing_session_id):
+            pending_docs = pending_doc_service.get_pending_documents(filing_session_id)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "error": "cannot_calculate_with_pending_documents",
+                    "message": "Cannot calculate taxes while documents are pending. Please upload all required documents or remove them from your checklist.",
+                    "pending_count": len(pending_docs),
+                    "pending_documents": [doc.to_dict() for doc in pending_docs]
+                }
+            )
+
         # Calculate taxes using enhanced service
         calculation = tax_service.calculate_single_filing(filing_session)
 
@@ -504,4 +520,221 @@ async def calculate_taxes_for_session(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to calculate taxes: {str(e)}"
+        )
+
+
+# ==================== Pending Documents Endpoints ====================
+
+@router.get("/filings/{filing_id}/pending-documents", response_model=dict)
+async def get_pending_documents(
+    filing_id: str,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get list of pending documents for a filing
+
+    - Returns all documents marked as "bring later"
+    - Includes document type, label, and status
+    """
+    try:
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Get pending documents
+        pending_doc_service = PendingDocumentService(db=db)
+        pending_docs = pending_doc_service.get_pending_documents(filing_id)
+
+        return {
+            "filing_id": filing_id,
+            "pending_count": len(pending_docs),
+            "documents": [doc.to_dict() for doc in pending_docs]
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching pending documents: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch pending documents: {str(e)}"
+        )
+
+
+@router.get("/filings/{filing_id}/documents/all", response_model=dict)
+async def get_all_documents(
+    filing_id: str,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all documents (pending, uploaded, verified) for a filing
+
+    - Returns complete document checklist
+    """
+    try:
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Get all documents
+        pending_doc_service = PendingDocumentService(db=db)
+        all_docs = pending_doc_service.get_all_documents(filing_id)
+
+        # Group by status
+        pending = [doc for doc in all_docs if doc.status == DocumentStatus.PENDING]
+        uploaded = [doc for doc in all_docs if doc.status == DocumentStatus.UPLOADED]
+        verified = [doc for doc in all_docs if doc.status == DocumentStatus.VERIFIED]
+        failed = [doc for doc in all_docs if doc.status == DocumentStatus.FAILED]
+
+        return {
+            "filing_id": filing_id,
+            "total_count": len(all_docs),
+            "pending_count": len(pending),
+            "uploaded_count": len(uploaded),
+            "verified_count": len(verified),
+            "failed_count": len(failed),
+            "documents": {
+                "pending": [doc.to_dict() for doc in pending],
+                "uploaded": [doc.to_dict() for doc in uploaded],
+                "verified": [doc.to_dict() for doc in verified],
+                "failed": [doc.to_dict() for doc in failed]
+            }
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching documents: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch documents: {str(e)}"
+        )
+
+
+class MarkDocumentUploadedRequest(BaseModel):
+    document_id: str = Field(..., description="ID of the uploaded document from documents table")
+
+
+@router.post("/filings/{filing_id}/pending-documents/{doc_id}/upload", response_model=dict)
+async def upload_pending_document(
+    filing_id: str,
+    doc_id: str,
+    request: MarkDocumentUploadedRequest,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Mark a previously pending document as uploaded
+
+    - Updates status from PENDING to UPLOADED
+    - Links to the uploaded document in documents table
+    """
+    try:
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Mark as uploaded
+        pending_doc_service = PendingDocumentService(db=db)
+        updated_doc = pending_doc_service.mark_as_uploaded(
+            document_id=doc_id,
+            uploaded_document_id=request.document_id
+        )
+
+        if not updated_doc:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Pending document not found"
+            )
+
+        return {
+            "success": True,
+            "message": "Document marked as uploaded",
+            "document": updated_doc.to_dict()
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error marking document as uploaded: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to mark document as uploaded: {str(e)}"
+        )
+
+
+@router.delete("/filings/{filing_id}/pending-documents/{doc_id}", response_model=dict)
+async def remove_pending_document(
+    filing_id: str,
+    doc_id: str,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Remove a pending document from the list (mark as "not needed")
+
+    - Deletes the pending document record
+    - Use when document is no longer required
+    """
+    try:
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Delete pending document
+        pending_doc_service = PendingDocumentService(db=db)
+        success = pending_doc_service.delete_pending_document(document_id=doc_id)
+
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Pending document not found"
+            )
+
+        return {
+            "success": True,
+            "message": "Pending document removed"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error removing pending document: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to remove pending document: {str(e)}"
         )

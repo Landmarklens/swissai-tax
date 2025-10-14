@@ -16,6 +16,9 @@ class QuestionType(Enum):
     SINGLE_CHOICE = "single_choice"
     DROPDOWN = "dropdown"
     GROUP = "group"
+    AHV_NUMBER = "ahv_number"  # NEW: Swiss AHV number with validation
+    DOCUMENT_UPLOAD = "document_upload"  # NEW: Document upload field
+    POSTAL_CODE = "postal_code"  # NEW: Swiss postal code with auto-lookup
 
 class Question:
     def __init__(self, data: Dict[str, Any]):
@@ -31,10 +34,20 @@ class Question:
         self.triggers_loop = data.get('triggers_loop')
         self.loop = data.get('loop', False)
         self.fields = data.get('fields', [])
-        # New attributes for enhanced functionality
+        # Enhanced functionality attributes
         self.format = data.get('format')  # e.g., 'postal_code', 'count'
         self.auto_lookup = data.get('auto_lookup', False)  # For postal code auto-detection
         self.help_text = data.get('help_text', {})
+        # NEW: Document upload specific attributes
+        self.document_type = data.get('document_type')  # e.g., 'childcare_costs', 'pillar_3a_certificate'
+        self.accepted_formats = data.get('accepted_formats', ['pdf', 'jpg', 'jpeg', 'png'])
+        self.max_size_mb = data.get('max_size_mb', 10)
+        self.bring_later = data.get('bring_later', False)  # Allow "I'll bring this later"
+        # NEW: UI enhancement attributes
+        self.widget = data.get('widget')  # e.g., 'calendar' for date picker
+        self.explanation = data.get('explanation', {})  # Explanation text for why question is asked
+        self.placeholder = data.get('placeholder')  # Placeholder text for input fields
+        self.allow_multiple = data.get('allow_multiple', False)  # Allow multiple values (e.g., multiple cantons)
 
     def get_next_question(self, answer: Any) -> Optional[str]:
         """Determine next question based on answer"""
@@ -79,6 +92,36 @@ class Question:
         elif self.type == QuestionType.YES_NO:
             if answer not in ['yes', 'no', True, False]:
                 return False, "Please select yes or no"
+
+        elif self.type == QuestionType.AHV_NUMBER:
+            # Validate AHV number using validator
+            from utils.ahv_validator import validate_ahv_number
+            is_valid, result = validate_ahv_number(answer, strict=False)
+            if not is_valid:
+                return False, result  # result contains error message
+            # Replace answer with formatted version
+            # Note: caller should update answer to formatted version
+
+        elif self.type == QuestionType.POSTAL_CODE:
+            # Validate Swiss postal code (4 digits, 1000-9999)
+            if 'pattern' in self.validation:
+                import re
+                pattern = self.validation['pattern']
+                if not re.match(pattern, str(answer)):
+                    return False, "Please enter a valid 4-digit postal code"
+            try:
+                postal_int = int(answer)
+                min_val = self.validation.get('min', 1000)
+                max_val = self.validation.get('max', 9999)
+                if postal_int < min_val or postal_int > max_val:
+                    return False, f"Postal code must be between {min_val} and {max_val}"
+            except (TypeError, ValueError):
+                return False, "Please enter a valid postal code"
+
+        elif self.type == QuestionType.DOCUMENT_UPLOAD:
+            # Document upload questions are handled differently (file upload, not text answer)
+            # Validation happens at upload time, not answer submission
+            pass
 
         return True, ""
 

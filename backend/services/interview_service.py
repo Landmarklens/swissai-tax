@@ -7,9 +7,11 @@ from typing import Any, Dict, List, Optional
 from uuid import UUID, uuid4
 
 from models.question import QuestionLoader, QuestionType
+from models.pending_document import PendingDocument, DocumentStatus, get_document_label
 from services.filing_orchestration_service import FilingOrchestrationService
 from services.postal_code_service import get_postal_code_service
 from utils.encryption import get_encryption_service
+from utils.ahv_validator import validate_ahv_number
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +28,8 @@ class InterviewService:
         self.encryption_service = get_encryption_service()
         # Multi-canton filing support
         self.filing_service = FilingOrchestrationService(db=db)
+        # Database session for pending documents
+        self.db = db
 
     def create_session(self, user_id: str, tax_year: int, language: str = 'en') -> Dict[str, Any]:
         """Create a new interview session"""
@@ -71,6 +75,33 @@ class InterviewService:
         question = self.question_loader.get_question(question_id)
         if not question:
             raise ValueError(f"Question {question_id} not found")
+
+        # Special handling for AHV number validation
+        if question.type == QuestionType.AHV_NUMBER:
+            is_valid, result = validate_ahv_number(answer, strict=False)
+            if not is_valid:
+                return {
+                    'error': result,  # result contains error message
+                    'valid': False
+                }
+            # Store the formatted AHV number
+            answer = result  # result contains formatted AHV number
+
+        # Special handling for document upload questions
+        elif question.type == QuestionType.DOCUMENT_UPLOAD:
+            # Document upload questions don't require an answer value at submission
+            # User can choose to upload now, bring later, or skip (if not required)
+            bring_later = answer.get('bring_later', False) if isinstance(answer, dict) else False
+
+            if bring_later:
+                # Create pending document record
+                self._create_pending_document(session_id, question_id, question)
+                answer = 'bring_later'
+            elif isinstance(answer, dict) and answer.get('skip', False):
+                answer = 'skipped'
+            else:
+                # Document was uploaded - answer should be document_id
+                answer = answer if isinstance(answer, str) else answer.get('document_id', 'uploaded')
 
         # Validate answer
         is_valid, error_message = question.validate_answer(answer)
@@ -315,16 +346,58 @@ class InterviewService:
         if question.validation:
             formatted['validation'] = question.validation
 
+        # Add help text if available
+        if hasattr(question, 'help_text') and question.help_text:
+            formatted['help_text'] = question.help_text.get(language, question.help_text.get('en'))
+
+        # Add explanation if available
+        if hasattr(question, 'explanation') and question.explanation:
+            formatted['explanation'] = question.explanation.get(language, question.explanation.get('en'))
+
+        # Add placeholder if available
+        if hasattr(question, 'placeholder') and question.placeholder:
+            formatted['placeholder'] = question.placeholder
+
+        # Add widget if available (e.g., calendar for dates)
+        if hasattr(question, 'widget') and question.widget:
+            formatted['widget'] = question.widget
+
+        # Add document upload specific attributes
+        if question.type == QuestionType.DOCUMENT_UPLOAD:
+            if hasattr(question, 'document_type') and question.document_type:
+                formatted['document_type'] = question.document_type
+                formatted['document_label'] = get_document_label(question.document_type)
+            if hasattr(question, 'accepted_formats') and question.accepted_formats:
+                formatted['accepted_formats'] = question.accepted_formats
+            if hasattr(question, 'max_size_mb') and question.max_size_mb:
+                formatted['max_size_mb'] = question.max_size_mb
+            if hasattr(question, 'bring_later') and question.bring_later:
+                formatted['bring_later'] = question.bring_later
+            if hasattr(question, 'allow_multiple') and question.allow_multiple:
+                formatted['allow_multiple'] = question.allow_multiple
+
+        # Add auto_lookup flag for postal codes
+        if hasattr(question, 'auto_lookup') and question.auto_lookup:
+            formatted['auto_lookup'] = question.auto_lookup
+
+        # Add allow_multiple flag
+        if hasattr(question, 'allow_multiple') and question.allow_multiple:
+            formatted['allow_multiple'] = question.allow_multiple
+
         # Add fields for group questions
         if question.fields:
             formatted['fields'] = []
             for field in question.fields:
-                formatted['fields'].append({
+                field_data = {
                     'id': field['id'],
                     'text': field['text'].get(language, field['text'].get('en')),
                     'type': field['type'],
                     'required': field.get('required', True)
-                })
+                }
+                # Add widget for date fields in groups
+                if field.get('widget'):
+                    field_data['widget'] = field['widget']
+                formatted['fields'].append(field_data)
 
         # Add context for loops
         if question.id == 'Q03b':
@@ -357,15 +430,10 @@ class InterviewService:
         """
         # Define sensitive question IDs
         sensitive_questions = {
-            'Q01a',  # Spouse first name
-            'Q01b',  # Spouse last name
+            'Q01a',  # Spouse AHV number (changed from first/last name)
             'Q01c',  # Spouse date of birth
             'Q02a',  # Municipality (location)
             'Q03b',  # Child details (name, DOB)
-            'Q08a',  # Pillar 3a contribution amount
-            'Q11a',  # Charitable donation amount
-            'Q12a',  # Alimony payment amount
-            'Q13a',  # Medical expense amount
         }
 
         return question_id in sensitive_questions
@@ -419,23 +487,56 @@ class InterviewService:
         # Add spouse info if married (decrypted sensitive fields)
         if decrypted_answers.get('Q01') == 'married':
             profile['spouse'] = {
-                'first_name': decrypted_answers.get('Q01a'),
-                'last_name': decrypted_answers.get('Q01b'),
+                'ahv_number': decrypted_answers.get('Q01a'),  # Changed: now AHV number
                 'date_of_birth': decrypted_answers.get('Q01c'),
                 'is_employed': decrypted_answers.get('Q01d') == 'yes'
             }
 
-        # Add financial details if available (decrypted sensitive amounts)
-        if decrypted_answers.get('Q08a'):
-            profile['pillar_3a_amount'] = float(decrypted_answers.get('Q08a'))
-        if decrypted_answers.get('Q11a'):
-            profile['donation_amount'] = float(decrypted_answers.get('Q11a'))
-        if decrypted_answers.get('Q12a'):
-            profile['alimony_amount'] = float(decrypted_answers.get('Q12a'))
-        if decrypted_answers.get('Q13a'):
-            profile['medical_expense_amount'] = float(decrypted_answers.get('Q13a'))
-
         return profile
+
+    def _create_pending_document(self, session_id: str, question_id: str, question) -> None:
+        """
+        Create a pending document record when user chooses "bring later"
+
+        Args:
+            session_id: Interview session ID
+            question_id: Question ID for the document upload
+            question: Question object with document metadata
+        """
+        if not self.db:
+            logger.warning(f"Cannot create pending document: database session not available")
+            return
+
+        # Get filing session ID from interview session
+        session = self.sessions.get(session_id)
+        if not session:
+            logger.error(f"Session {session_id} not found")
+            return
+
+        filing_session_id = session.get('filing_id')
+        if not filing_session_id:
+            logger.warning(f"No filing_id in session {session_id}, cannot create pending document")
+            return
+
+        try:
+            # Create pending document record
+            pending_doc = PendingDocument(
+                filing_session_id=filing_session_id,
+                question_id=question_id,
+                document_type=getattr(question, 'document_type', 'unknown'),
+                status=DocumentStatus.PENDING,
+                document_label=get_document_label(getattr(question, 'document_type', 'unknown')),
+                help_text=question.help_text.get('en') if hasattr(question, 'help_text') and question.help_text else None
+            )
+
+            self.db.add(pending_doc)
+            self.db.commit()
+
+            logger.info(f"Created pending document for question {question_id} in filing {filing_session_id}")
+
+        except Exception as e:
+            logger.error(f"Failed to create pending document: {e}")
+            self.db.rollback()
 
     def save_session(self, session_id: str, answers: Dict[str, Any], progress: int) -> Optional[Dict[str, Any]]:
         """

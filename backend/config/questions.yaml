@@ -1,990 +1,1531 @@
-# Swiss Tax Interview Questions Configuration
-# Q00: User's AHV number (first question)
-# Q01-Q14: Main tax interview questions
-
 questions:
   Q00:
-    id: "Q00"
+    id: Q00
     text:
-      en: "What is your AHV number?"
-      de: "Was ist Ihre AHV-Nummer?"
-      fr: "Quel est votre numéro AVS?"
-      it: "Qual è il suo numero AVS?"
-    type: "ahv_number"
+      en: What is your AHV number?
+      de: Was ist Ihre AHV-Nummer?
+      fr: Quel est votre numéro AVS?
+      it: Qual è il suo numero AVS?
+    type: ahv_number
     validation:
-      pattern: "^756\\.[0-9]{4}\\.[0-9]{4}\\.[0-9]{2}$"
+      pattern: ^756\.[0-9]{4}\.[0-9]{4}\.[0-9]{2}$
     help_text:
-      en: "Your Swiss social security number (AHV/AVS/AVS). Format: 756.XXXX.XXXX.XX (13 digits with dots)"
-      de: "Ihre Schweizer Sozialversicherungsnummer (AHV). Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)"
-      fr: "Votre numéro de sécurité sociale suisse (AVS). Format: 756.XXXX.XXXX.XX (13 chiffres avec points)"
-      it: "Il suo numero di previdenza sociale svizzero (AVS). Formato: 756.XXXX.XXXX.XX (13 cifre con punti)"
+      en: 'Your Swiss social security number (AHV/AVS/AVS). Format: 756.XXXX.XXXX.XX
+        (13 digits with dots)'
+      de: 'Ihre Schweizer Sozialversicherungsnummer (AHV). Format: 756.XXXX.XXXX.XX
+        (13 Ziffern mit Punkten)'
+      fr: 'Votre numéro de sécurité sociale suisse (AVS). Format: 756.XXXX.XXXX.XX
+        (13 chiffres avec points)'
+      it: 'Il suo numero di previdenza sociale svizzero (AVS). Formato: 756.XXXX.XXXX.XX
+        (13 cifre con punti)'
     explanation:
-      en: "We need your AHV number to file your tax declaration. This is your unique identification number in Switzerland."
-      de: "Wir benötigen Ihre AHV-Nummer, um Ihre Steuererklärung einzureichen. Dies ist Ihre eindeutige Identifikationsnummer in der Schweiz."
-      fr: "Nous avons besoin de votre numéro AVS pour déposer votre déclaration d'impôts. C'est votre numéro d'identification unique en Suisse."
-      it: "Abbiamo bisogno del suo numero AVS per presentare la sua dichiarazione fiscale. Questo è il suo numero di identificazione unico in Svizzera."
-    placeholder: "756.1234.5678.97"
-    next: "Q01"
+      en: We need your AHV number to file your tax declaration. This is your unique
+        identification number in Switzerland.
+      de: Wir benötigen Ihre AHV-Nummer, um Ihre Steuererklärung einzureichen. Dies
+        ist Ihre eindeutige Identifikationsnummer in der Schweiz.
+      fr: Nous avons besoin de votre numéro AVS pour déposer votre déclaration d'impôts.
+        C'est votre numéro d'identification unique en Suisse.
+      it: Abbiamo bisogno del suo numero AVS per presentare la sua dichiarazione fiscale.
+        Questo è il suo numero di identificazione unico in Svizzera.
+    placeholder: 756.1234.5678.97
+    next: Q01
     required: true
-
   Q01:
-    id: "Q01"
+    id: Q01
     text:
-      en: "What is your civil status on 31 Dec?"
-      de: "Welchen Zivilstand hatten Sie am 31.12.?"
-      fr: "Quel est votre état civil au 31 déc?"
-    type: "single_choice"
+      en: What is your civil status on 31 Dec?
+      de: Welchen Zivilstand hatten Sie am 31.12.?
+      fr: Quel est votre état civil au 31 déc?
+    type: single_choice
     options:
-      - value: "single"
-        label:
-          en: "Single"
-          de: "Ledig"
-          fr: "Célibataire"
-      - value: "married"
-        label:
-          en: "Married"
-          de: "Verheiratet"
-          fr: "Marié(e)"
-      - value: "divorced"
-        label:
-          en: "Divorced"
-          de: "Geschieden"
-          fr: "Divorcé(e)"
-      - value: "widowed"
-        label:
-          en: "Widowed"
-          de: "Verwitwet"
-          fr: "Veuf/Veuve"
+    - value: single
+      label:
+        en: Single
+        de: Ledig
+        fr: Célibataire
+    - value: married
+      label:
+        en: Married
+        de: Verheiratet
+        fr: Marié(e)
+    - value: divorced
+      label:
+        en: Divorced
+        de: Geschieden
+        fr: Divorcé(e)
+    - value: widowed
+      label:
+        en: Widowed
+        de: Verwitwet
+        fr: Veuf/Veuve
     branching:
-      married: ["Q01a", "Q01d"]
-      default: "Q02"
+      married:
+      - Q01a
+      - Q01d
+      default: Q02
     required: true
-
   Q01a:
-    id: "Q01a"
+    id: Q01a
     text:
-      en: "Spouse's AHV number"
-      de: "AHV-Nummer des Ehepartners"
-      fr: "Numéro AVS du conjoint"
-    type: "ahv_number"
+      en: Spouse's AHV number
+      de: AHV-Nummer des Ehepartners
+      fr: Numéro AVS du conjoint
+    type: ahv_number
     validation:
-      pattern: "^756\\.[0-9]{4}\\.[0-9]{4}\\.[0-9]{2}$"
+      pattern: ^756\.[0-9]{4}\.[0-9]{4}\.[0-9]{2}$
     help_text:
-      en: "Format: 756.XXXX.XXXX.XX (13 digits with dots)"
-      de: "Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)"
-      fr: "Format: 756.XXXX.XXXX.XX (13 chiffres avec points)"
-    placeholder: "756.1234.5678.97"
-    next: "Q01d"
+      en: 'Format: 756.XXXX.XXXX.XX (13 digits with dots)'
+      de: 'Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)'
+      fr: 'Format: 756.XXXX.XXXX.XX (13 chiffres avec points)'
+    placeholder: 756.1234.5678.97
+    next: Q01d
     required: true
-    parent: "Q01"
-
+    parent: Q01
   Q01d:
-    id: "Q01d"
+    id: Q01d
     text:
-      en: "Is your spouse employed?"
-      de: "Ist Ihr Ehepartner erwerbstätig?"
-      fr: "Votre conjoint est-il employé?"
-    type: "yes_no"
-    next: "Q02"
+      en: Is your spouse employed?
+      de: Ist Ihr Ehepartner erwerbstätig?
+      fr: Votre conjoint est-il employé?
+    type: yes_no
+    next: Q02
     required: true
-    parent: "Q01"
-
+    parent: Q01
   Q02:
-    id: "Q02"
+    id: Q02
     text:
-      en: "What was your postal code of residence on 31 Dec 2024?"
-      de: "Was war Ihre Postleitzahl des Wohnsitzes am 31.12.2024?"
-      fr: "Quel était votre code postal de résidence au 31 déc 2024?"
-    type: "postal_code"
+      en: What was your postal code of residence on 31 Dec 2024?
+      de: Was war Ihre Postleitzahl des Wohnsitzes am 31.12.2024?
+      fr: Quel était votre code postal de résidence au 31 déc 2024?
+    type: postal_code
     validation:
-      pattern: "^\\d{4}$"
+      pattern: ^\d{4}$
       min: 1000
       max: 9999
     help_text:
-      en: "Enter your 4-digit Swiss postal code where you lived at the end of 2024"
-      de: "Geben Sie Ihre 4-stellige Schweizer Postleitzahl ein, wo Sie Ende 2024 wohnten"
-      fr: "Entrez votre code postal suisse à 4 chiffres où vous viviez fin 2024"
-    placeholder: "8001"
-    next: "Q02a"
+      en: Enter your 4-digit Swiss postal code where you lived at the end of 2024
+      de: Geben Sie Ihre 4-stellige Schweizer Postleitzahl ein, wo Sie Ende 2024 wohnten
+      fr: Entrez votre code postal suisse à 4 chiffres où vous viviez fin 2024
+    placeholder: '8001'
+    next: Q02a
     required: true
     auto_lookup: true
-
   Q02a:
-    id: "Q02a"
+    id: Q02a
     text:
-      en: "Did you have income or assets in a canton other than your residence?"
-      de: "Hatten Sie Einkommen oder Vermögen in einem anderen Kanton als Ihrem Wohnsitzkanton?"
-      fr: "Avez-vous eu des revenus ou des actifs dans un canton autre que votre résidence?"
-    type: "yes_no"
+      en: Did you have income or assets in a canton other than your residence?
+      de: Hatten Sie Einkommen oder Vermögen in einem anderen Kanton als Ihrem Wohnsitzkanton?
+      fr: Avez-vous eu des revenus ou des actifs dans un canton autre que votre résidence?
+    type: yes_no
     help_text:
-      en: "Select yes if you worked in a different canton or owned property outside your residence canton"
-      de: "Wählen Sie Ja, wenn Sie in einem anderen Kanton gearbeitet oder Eigentum außerhalb Ihres Wohnsitzkantons besessen haben"
-      fr: "Sélectionnez oui si vous avez travaillé dans un autre canton ou possédé des biens en dehors de votre canton de résidence"
+      en: Select yes if you worked in a different canton or owned property outside
+        your residence canton
+      de: Wählen Sie Ja, wenn Sie in einem anderen Kanton gearbeitet oder Eigentum
+        außerhalb Ihres Wohnsitzkantons besessen haben
+      fr: Sélectionnez oui si vous avez travaillé dans un autre canton ou possédé
+        des biens en dehors de votre canton de résidence
     branching:
-      yes: "Q02b"
-      no: "Q03"
+      true: Q02b
+      false: Q03
     required: true
-
   Q02b:
-    id: "Q02b"
+    id: Q02b
     text:
-      en: "Postal code of the other canton"
-      de: "Postleitzahl des anderen Kantons"
-      fr: "Code postal de l'autre canton"
-    type: "postal_code"
+      en: Postal code of the other canton
+      de: Postleitzahl des anderen Kantons
+      fr: Code postal de l'autre canton
+    type: postal_code
     validation:
-      pattern: "^\\d{4}$"
+      pattern: ^\d{4}$
       min: 1000
       max: 9999
     help_text:
-      en: "Enter the postal code where you worked or had assets. You can add multiple cantons."
-      de: "Geben Sie die Postleitzahl ein, wo Sie gearbeitet oder Vermögen hatten. Sie können mehrere Kantone hinzufügen."
-      fr: "Entrez le code postal où vous avez travaillé ou eu des actifs. Vous pouvez ajouter plusieurs cantons."
-    placeholder: "1000"
+      en: Enter the postal code where you worked or had assets. You can add multiple
+        cantons.
+      de: Geben Sie die Postleitzahl ein, wo Sie gearbeitet oder Vermögen hatten.
+        Sie können mehrere Kantone hinzufügen.
+      fr: Entrez le code postal où vous avez travaillé ou eu des actifs. Vous pouvez
+        ajouter plusieurs cantons.
+    placeholder: '1000'
     allow_multiple: true
-    next: "Q02c"
+    next: Q02c
     required: true
     auto_lookup: true
-    parent: "Q02a"
-
+    parent: Q02a
   Q02c:
-    id: "Q02c"
+    id: Q02c
     text:
-      en: "Add another canton?"
-      de: "Weiteren Kanton hinzufügen?"
-      fr: "Ajouter un autre canton?"
-    type: "yes_no"
+      en: Add another canton?
+      de: Weiteren Kanton hinzufügen?
+      fr: Ajouter un autre canton?
+    type: yes_no
     help_text:
-      en: "Select yes if you had income or assets in additional cantons"
-      de: "Wählen Sie Ja, wenn Sie Einkommen oder Vermögen in weiteren Kantonen hatten"
-      fr: "Sélectionnez oui si vous avez eu des revenus ou des actifs dans d'autres cantons"
+      en: Select yes if you had income or assets in additional cantons
+      de: Wählen Sie Ja, wenn Sie Einkommen oder Vermögen in weiteren Kantonen hatten
+      fr: Sélectionnez oui si vous avez eu des revenus ou des actifs dans d'autres
+        cantons
     branching:
-      yes: "Q02b"
-      no: "Q03"
+      true: Q02b
+      false: Q03
     required: true
-    parent: "Q02a"
-
+    parent: Q02a
   Q03:
-    id: "Q03"
+    id: Q03
     text:
-      en: "Do you have children?"
-      de: "Haben Sie Kinder?"
-      fr: "Avez-vous des enfants?"
-    type: "yes_no"
+      en: Do you have children?
+      de: Haben Sie Kinder?
+      fr: Avez-vous des enfants?
+    type: yes_no
     branching:
-      yes: "Q03a"
-      no: "Q04"
+      true: Q03a
+      false: Q04
     required: true
-
   Q03a:
-    id: "Q03a"
+    id: Q03a
     text:
-      en: "Number of children"
-      de: "Anzahl der Kinder"
-      fr: "Nombre d'enfants"
-    type: "dropdown"
+      en: Number of children
+      de: Anzahl der Kinder
+      fr: Nombre d'enfants
+    type: dropdown
     options:
-      - value: "1"
-        label:
-          en: "1 child"
-          de: "1 Kind"
-          fr: "1 enfant"
-      - value: "2"
-        label:
-          en: "2 children"
-          de: "2 Kinder"
-          fr: "2 enfants"
-      - value: "3"
-        label:
-          en: "3 children"
-          de: "3 Kinder"
-          fr: "3 enfants"
-      - value: "4"
-        label:
-          en: "4 children"
-          de: "4 Kinder"
-          fr: "4 enfants"
-      - value: "5"
-        label:
-          en: "5 children"
-          de: "5 Kinder"
-          fr: "5 enfants"
-      - value: "6+"
-        label:
-          en: "6 or more children"
-          de: "6 oder mehr Kinder"
-          fr: "6 enfants ou plus"
-    triggers_loop: "Q03b"
-    next: "Q03c"
+    - value: '1'
+      label:
+        en: 1 child
+        de: 1 Kind
+        fr: 1 enfant
+    - value: '2'
+      label:
+        en: 2 children
+        de: 2 Kinder
+        fr: 2 enfants
+    - value: '3'
+      label:
+        en: 3 children
+        de: 3 Kinder
+        fr: 3 enfants
+    - value: '4'
+      label:
+        en: 4 children
+        de: 4 Kinder
+        fr: 4 enfants
+    - value: '5'
+      label:
+        en: 5 children
+        de: 5 Kinder
+        fr: 5 enfants
+    - value: 6+
+      label:
+        en: 6 or more children
+        de: 6 oder mehr Kinder
+        fr: 6 enfants ou plus
+    triggers_loop: Q03b
+    next: Q03c
     required: true
-    parent: "Q03"
-
+    parent: Q03
   Q03b:
-    id: "Q03b"
+    id: Q03b
     text:
-      en: "Child information"
-      de: "Kinderinformationen"
-      fr: "Informations sur l'enfant"
-    type: "group"
+      en: Child information
+      de: Kinderinformationen
+      fr: Informations sur l'enfant
+    type: group
     loop: true
     explanation:
-      en: "We need this information to calculate child deductions and determine tax rates. Children under 18 or in education qualify for deductions."
-      de: "Wir benötigen diese Informationen, um Kinderabzüge zu berechnen und Steuersätze zu bestimmen. Kinder unter 18 Jahren oder in Ausbildung qualifizieren sich für Abzüge."
-      fr: "Nous avons besoin de ces informations pour calculer les déductions pour enfants et déterminer les taux d'imposition. Les enfants de moins de 18 ans ou en formation sont admissibles aux déductions."
+      en: We need this information to calculate child deductions and determine tax
+        rates. Children under 18 or in education qualify for deductions.
+      de: Wir benötigen diese Informationen, um Kinderabzüge zu berechnen und Steuersätze
+        zu bestimmen. Kinder unter 18 Jahren oder in Ausbildung qualifizieren sich
+        für Abzüge.
+      fr: Nous avons besoin de ces informations pour calculer les déductions pour
+        enfants et déterminer les taux d'imposition. Les enfants de moins de 18 ans
+        ou en formation sont admissibles aux déductions.
     fields:
-      - id: "child_name"
-        text:
-          en: "Child's name"
-          de: "Name des Kindes"
-          fr: "Nom de l'enfant"
-        type: "text"
-        required: true
-      - id: "child_dob"
-        text:
-          en: "Date of birth"
-          de: "Geburtsdatum"
-          fr: "Date de naissance"
-        type: "date"
-        widget: "calendar"
-        required: true
-      - id: "child_in_education"
-        text:
-          en: "In education/training?"
-          de: "In Ausbildung?"
-          fr: "En formation?"
-        type: "yes_no"
-        required: true
-    parent: "Q03a"
-
+    - id: child_name
+      text:
+        en: Child's name
+        de: Name des Kindes
+        fr: Nom de l'enfant
+      type: text
+      required: true
+    - id: child_dob
+      text:
+        en: Date of birth
+        de: Geburtsdatum
+        fr: Date de naissance
+      type: date
+      widget: calendar
+      required: true
+    - id: child_in_education
+      text:
+        en: In education/training?
+        de: In Ausbildung?
+        fr: En formation?
+      type: yes_no
+      required: true
+    parent: Q03a
   Q03c:
-    id: "Q03c"
+    id: Q03c
     text:
-      en: "Did you have childcare costs?"
-      de: "Hatten Sie Kinderbetreuungskosten?"
-      fr: "Avez-vous eu des frais de garde d'enfants?"
-    type: "yes_no"
+      en: Did you have childcare costs?
+      de: Hatten Sie Kinderbetreuungskosten?
+      fr: Avez-vous eu des frais de garde d'enfants?
+    type: yes_no
     explanation:
-      en: "Third-party childcare costs (daycare, nanny, etc.) up to CHF 25,500 are deductible (2024 limit; CHF 25,800 from 2025)"
-      de: "Fremdbetreuungskosten (Kita, Tagesmutter, etc.) bis CHF 25'500 sind abzugsfähig (2024 Grenze; ab 2025: CHF 25'800)"
-      fr: "Les frais de garde d'enfants par des tiers (crèche, nourrice, etc.) jusqu'à CHF 25'500 sont déductibles (limite 2024; dès 2025: CHF 25'800)"
+      en: Third-party childcare costs (daycare, nanny, etc.) up to CHF 25,500 are
+        deductible (2024 limit; CHF 25,800 from 2025)
+      de: 'Fremdbetreuungskosten (Kita, Tagesmutter, etc.) bis CHF 25''500 sind abzugsfähig
+        (2024 Grenze; ab 2025: CHF 25''800)'
+      fr: 'Les frais de garde d''enfants par des tiers (crèche, nourrice, etc.) jusqu''à
+        CHF 25''500 sont déductibles (limite 2024; dès 2025: CHF 25''800)'
+    inline_document_upload:
+      document_type: childcare_costs
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload childcare cost documents (invoices, receipts, contracts)
+        de: Kinderbetreuungskostenbelege hochladen (Rechnungen, Quittungen, Verträge)
+        fr: Télécharger les documents de frais de garde (factures, reçus, contrats)
+      help_text:
+        en: Upload invoices, receipts, or contracts from your childcare provider
+        de: Laden Sie Rechnungen, Quittungen oder Verträge Ihres Kinderbetreuungsanbieters
+          hoch
+        fr: Téléchargez les factures, reçus ou contrats de votre fournisseur de garde
+          d'enfants
     branching:
-      yes: "Q03c_upload"
-      no: "Q04"
+      true: Q04
+      false: Q04
     required: true
-    parent: "Q03a"
-
-  Q03c_upload:
-    id: "Q03c_upload"
-    text:
-      en: "Upload childcare cost documents (invoices, receipts, contracts)"
-      de: "Kinderbetreuungskostenbelege hochladen (Rechnungen, Quittungen, Verträge)"
-      fr: "Télécharger les documents de frais de garde (factures, reçus, contrats)"
-    type: "document_upload"
-    document_type: "childcare_costs"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload invoices, receipts, or contracts from your childcare provider"
-      de: "Laden Sie Rechnungen, Quittungen oder Verträge Ihres Kinderbetreuungsanbieters hoch"
-      fr: "Téléchargez les factures, reçus ou contrats de votre fournisseur de garde d'enfants"
-    next: "Q04"
-    required: false
-    parent: "Q03c"
-
+    parent: Q03a
   Q04:
-    id: "Q04"
+    id: Q04
     text:
-      en: "Number of employers (including yourself if self-employed)"
-      de: "Anzahl der Arbeitgeber (inkl. Selbstständigkeit)"
-      fr: "Nombre d'employeurs (y compris indépendant)"
-    type: "dropdown"
+      en: Number of employers (including yourself if self-employed)
+      de: Anzahl der Arbeitgeber (inkl. Selbstständigkeit)
+      fr: Nombre d'employeurs (y compris indépendant)
+    type: dropdown
     options:
-      - value: "0"
-        label:
-          en: "No employment"
-          de: "Keine Anstellung"
-          fr: "Aucun emploi"
-      - value: "1"
-        label:
-          en: "1 employer"
-          de: "1 Arbeitgeber"
-          fr: "1 employeur"
-      - value: "2"
-        label:
-          en: "2 employers"
-          de: "2 Arbeitgeber"
-          fr: "2 employeurs"
-      - value: "3"
-        label:
-          en: "3 employers"
-          de: "3 Arbeitgeber"
-          fr: "3 employeurs"
-      - value: "4+"
-        label:
-          en: "4 or more employers"
-          de: "4 oder mehr Arbeitgeber"
-          fr: "4 employeurs ou plus"
+    - value: '0'
+      label:
+        en: No employment
+        de: Keine Anstellung
+        fr: Aucun emploi
+    - value: '1'
+      label:
+        en: 1 employer
+        de: 1 Arbeitgeber
+        fr: 1 employeur
+    - value: '2'
+      label:
+        en: 2 employers
+        de: 2 Arbeitgeber
+        fr: 2 employeurs
+    - value: '3'
+      label:
+        en: 3 employers
+        de: 3 Arbeitgeber
+        fr: 3 employeurs
+    - value: 4+
+      label:
+        en: 4 or more employers
+        de: 4 oder mehr Arbeitgeber
+        fr: 4 employeurs ou plus
     branching:
-      "0": "Q05"
-      default: "Q04a"
+      '0': Q05
+      default: Q04a
     required: true
-
   Q04a:
-    id: "Q04a"
+    id: Q04a
     text:
-      en: "Employer information"
-      de: "Arbeitgeberinformationen"
-      fr: "Informations sur l'employeur"
-    type: "group"
+      en: Are you self-employed or employed by a company?
+      de: Sind Sie selbstständig oder bei einem Unternehmen angestellt?
+      fr: Êtes-vous indépendant ou employé par une entreprise?
+    type: single_choice
+    options:
+    - value: employed
+      label:
+        en: Employed by company
+        de: Bei Unternehmen angestellt
+        fr: Employé par une entreprise
+    - value: self_employed
+      label:
+        en: Self-employed
+        de: Selbstständig
+        fr: Indépendant
+    - value: both
+      label:
+        en: Both employed and self-employed
+        de: Beides
+        fr: Les deux
+    branching:
+      self_employed: Q04a_type
+      both: Q04a_type
+      employed: Q04a_employer
+    required: true
+    parent: Q04
+  Q04a_type:
+    id: Q04a_type
+    text:
+      en: What type of self-employment?
+      de: Welche Art von Selbstständigkeit?
+      fr: Quel type d'activité indépendante?
+    type: single_choice
+    options:
+    - value: freelancer
+      label:
+        en: Freelancer/Independent contractor
+        de: Freiberufler/Selbstständiger
+        fr: Freelance/Indépendant
+    - value: sole_proprietor
+      label:
+        en: Sole proprietor
+        de: Einzelunternehmer
+        fr: Entrepreneur individuel
+    - value: partnership
+      label:
+        en: Partner in partnership
+        de: Partner in Personengesellschaft
+        fr: Associé dans une société
+    - value: agricultural
+      label:
+        en: Agricultural
+        de: Landwirtschaftlich
+        fr: Agricole
+    explanation:
+      en: We need to understand your business structure for proper tax treatment and
+        deduction calculations
+      de: Wir müssen Ihre Unternehmensstruktur verstehen, um die richtige steuerliche
+        Behandlung und Abzugsberechnung vorzunehmen
+      fr: Nous devons comprendre la structure de votre entreprise pour un traitement
+        fiscal et des calculs de déductions appropriés
+    next: Q04a_self_upload
+    required: true
+    parent: Q04a
+  Q04a_self_upload:
+    id: Q04a_self_upload
+    text:
+      en: Upload self-employment documents (business accounts, tax statement)
+      de: Selbstständigkeitsdokumente hochladen (Geschäftsabrechnung, Steuernachweis)
+      fr: Télécharger documents d'activité indépendante (comptes commerciaux, attestation
+        fiscale)
+    type: document_upload
+    document_type: self_employment_documents
+    accepted_formats:
+    - pdf
+    - jpg
+    - jpeg
+    - png
+    max_size_mb: 10
+    bring_later: true
+    help_text:
+      en: Upload your business accounts, profit/loss statements, and tax documents
+      de: Laden Sie Ihre Geschäftsabrechnung, Gewinn-/Verlustrechnung und Steuerunterlagen
+        hoch
+      fr: Téléchargez vos comptes d'entreprise, bilans de profits/pertes et documents
+        fiscaux
+    next: Q04a_employer
+    required: false
+    parent: Q04a_type
+  Q04a_employer:
+    id: Q04a_employer
+    text:
+      en: Employer information
+      de: Arbeitgeberinformationen
+      fr: Informations sur l'employeur
+    type: group
     loop: true
     fields:
-      - id: "employer_name"
-        text:
-          en: "Employer name"
-          de: "Name des Arbeitgebers"
-          fr: "Nom de l'employeur"
-        type: "text"
-        required: true
-      - id: "employment_percentage"
-        text:
-          en: "Employment percentage"
-          de: "Beschäftigungsgrad %"
-          fr: "Pourcentage d'emploi"
-        type: "number"
-        validation:
-          min: 1
-          max: 100
-        required: true
-    next: "Q04b"
-    parent: "Q04"
-
+    - id: employer_name
+      text:
+        en: Employer name
+        de: Name des Arbeitgebers
+        fr: Nom de l'employeur
+      type: text
+      required: true
+    - id: employment_percentage
+      text:
+        en: Employment percentage
+        de: Beschäftigungsgrad %
+        fr: Pourcentage d'emploi
+      type: number
+      validation:
+        min: 1
+        max: 100
+      required: true
+    next: Q04b
+    parent: Q04
   Q04b:
-    id: "Q04b"
+    id: Q04b
     text:
-      en: "Did you have commuting expenses?"
-      de: "Hatten Sie Pendlerkosten?"
-      fr: "Avez-vous eu des frais de déplacement?"
-    type: "yes_no"
+      en: Did you have commuting expenses?
+      de: Hatten Sie Pendlerkosten?
+      fr: Avez-vous eu des frais de déplacement?
+    type: yes_no
     explanation:
-      en: "Public transport costs for commuting to work up to CHF 3,200 are deductible"
-      de: "Kosten für öffentliche Verkehrsmittel zur Arbeit bis CHF 3'200 sind abzugsfähig"
-      fr: "Les frais de transport public pour le trajet domicile-travail jusqu'à CHF 3'200 sont déductibles"
+      en: Public transport costs for commuting to work up to CHF 3,200 are deductible
+      de: Kosten für öffentliche Verkehrsmittel zur Arbeit bis CHF 3'200 sind abzugsfähig
+      fr: Les frais de transport public pour le trajet domicile-travail jusqu'à CHF
+        3'200 sont déductibles
     branching:
-      yes: "Q04b_upload"
-      no: "Q04c"
+      true: Q04c
+      false: Q04c
     required: true
-    parent: "Q04"
-
-  Q04b_upload:
-    id: "Q04b_upload"
+    parent: Q04
+    inline_document_upload:
+      document_type: commuting_costs
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload commuting documents (transport passes, tickets, receipts)
+        de: Pendlerdokumente hochladen (ÖV-Abos, Billette, Quittungen)
+        fr: Télécharger documents de déplacement (abonnements, billets, reçus)
+      help_text:
+        en: Upload your public transport passes, tickets, or receipts
+        de: Laden Sie Ihre ÖV-Abonnemente, Billette oder Quittungen hoch
+        fr: Téléchargez vos abonnements de transport, billets ou reçus
+  Q04b1:
+    id: Q04b1
     text:
-      en: "Upload commuting documents (transport passes, tickets, receipts)"
-      de: "Pendlerdokumente hochladen (ÖV-Abos, Billette, Quittungen)"
-      fr: "Télécharger documents de déplacement (abonnements, billets, reçus)"
-    type: "document_upload"
-    document_type: "commuting_costs"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload your public transport passes, tickets, or receipts"
-      de: "Laden Sie Ihre ÖV-Abonnemente, Billette oder Quittungen hoch"
-      fr: "Téléchargez vos abonnements de transport, billets ou reçus"
-    next: "Q04c"
-    required: false
-    parent: "Q04b"
-
+      en: Did you have meal expenses while working away from home?
+      de: Hatten Sie Verpflegungskosten bei auswärtiger Beschäftigung?
+      fr: Avez-vous eu des frais de repas lors de travail hors domicile?
+    type: yes_no
+    explanation:
+      en: If you work away from home and your main residence, meal expenses up to
+        CHF 15 per day for lunch and CHF 30 for dinner are deductible
+      de: Wenn Sie auswärtig vom Wohnort und Hauptarbeitsort arbeiten, sind Verpflegungskosten
+        bis CHF 15 pro Tag für Mittagessen und CHF 30 für Abendessen abzugsfähig
+      fr: Si vous travaillez en dehors de votre domicile et lieu de travail principal,
+        les frais de repas jusqu'à CHF 15 par jour pour le déjeuner et CHF 30 pour
+        le dîner sont déductibles
+    branching:
+      true: Q04c
+      false: Q04c
+    required: true
+    parent: Q04b
+    inline_document_upload:
+      document_type: meal_expenses
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload meal expense receipts
+        de: Verpflegungskostenbelege hochladen
+        fr: Télécharger les reçus de frais de repas
+      help_text:
+        en: Upload receipts for meals when working away from your regular workplace
+        de: Laden Sie Belege für Mahlzeiten hoch, wenn Sie auswärts vom regulären
+          Arbeitsort arbeiten
+        fr: Téléchargez les reçus des repas lors de travail en dehors de votre lieu
+          de travail habituel
   Q04c:
-    id: "Q04c"
+    id: Q04c
     text:
-      en: "Did you have professional expenses?"
-      de: "Hatten Sie Berufskosten?"
-      fr: "Avez-vous eu des frais professionnels?"
-    type: "yes_no"
+      en: Did you have professional expenses?
+      de: Hatten Sie Berufskosten?
+      fr: Avez-vous eu des frais professionnels?
+    type: yes_no
     explanation:
-      en: "Work-related expenses such as professional tools, continuing education, work clothing, etc. are deductible"
-      de: "Berufsbedingte Ausgaben wie Berufswerkzeuge, Weiterbildung, Berufskleidung, etc. sind abzugsfähig"
-      fr: "Les dépenses liées au travail telles qu'outils professionnels, formation continue, vêtements de travail, etc. sont déductibles"
+      en: Work-related expenses such as professional tools, continuing education,
+        work clothing, etc. are deductible
+      de: Berufsbedingte Ausgaben wie Berufswerkzeuge, Weiterbildung, Berufskleidung,
+        etc. sind abzugsfähig
+      fr: Les dépenses liées au travail telles qu'outils professionnels, formation
+        continue, vêtements de travail, etc. sont déductibles
     branching:
-      yes: "Q04c_upload"
-      no: "Q05"
+      true: Q05
+      false: Q05
     required: true
-    parent: "Q04"
-
-  Q04c_upload:
-    id: "Q04c_upload"
+    parent: Q04
+    inline_document_upload:
+      document_type: professional_expenses
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload professional expense documents (invoices, receipts)
+        de: Berufskostenbelege hochladen (Rechnungen, Quittungen)
+        fr: Télécharger documents de frais professionnels (factures, reçus)
+      help_text:
+        en: Upload receipts for tools, training, work materials, clothing, etc.
+        de: Laden Sie Quittungen für Werkzeuge, Ausbildung, Arbeitsmaterialien, Kleidung
+          usw. hoch
+        fr: Téléchargez les reçus pour outils, formation, matériel de travail, vêtements,
+          etc.
+  Q04d:
+    id: Q04d
     text:
-      en: "Upload professional expense documents (invoices, receipts)"
-      de: "Berufskostenbelege hochladen (Rechnungen, Quittungen)"
-      fr: "Télécharger documents de frais professionnels (factures, reçus)"
-    type: "document_upload"
-    document_type: "professional_expenses"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload receipts for tools, training, work materials, clothing, etc."
-      de: "Laden Sie Quittungen für Werkzeuge, Ausbildung, Arbeitsmaterialien, Kleidung usw. hoch"
-      fr: "Téléchargez les reçus pour outils, formation, matériel de travail, vêtements, etc."
-    next: "Q05"
-    required: false
-    parent: "Q04c"
-
+      en: Do you work from home regularly?
+      de: Arbeiten Sie regelmäßig von zu Hause aus?
+      fr: Travaillez-vous régulièrement depuis votre domicile?
+    type: yes_no
+    explanation:
+      en: If you have a dedicated home office that you use exclusively for work, you
+        may deduct a portion of rent, utilities, and maintenance costs
+      de: Wenn Sie ein dediziertes Arbeitszimmer haben, das Sie ausschließlich beruflich
+        nutzen, können Sie einen Anteil der Miete, Nebenkosten und Unterhaltskosten
+        abziehen
+      fr: Si vous avez un bureau à domicile dédié que vous utilisez exclusivement
+        pour le travail, vous pouvez déduire une partie du loyer, des charges et des
+        frais d'entretien
+    branching:
+      true: Q04d_details
+      false: Q05
+    required: true
+    parent: Q04c
+    inline_document_upload:
+      document_type: home_office_expenses
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload home office expense documents (rent, utilities, etc.)
+        de: Homeoffice-Kostenbelege hochladen (Miete, Nebenkosten usw.)
+        fr: Télécharger documents de frais de bureau à domicile (loyer, charges, etc.)
+      help_text:
+        en: Upload rent receipts, utility bills, and maintenance costs
+        de: Laden Sie Mietbelege, Nebenkostenabrechnungen und Unterhaltskosten hoch
+        fr: Téléchargez les reçus de loyer, factures de services publics et frais
+          d'entretien
+  Q04d_details:
+    id: Q04d_details
+    text:
+      en: Home office details
+      de: Details zum Homeoffice
+      fr: Détails du bureau à domicile
+    type: group
+    fields:
+    - id: home_office_percentage
+      text:
+        en: Percentage of home used for office
+        de: Prozentsatz der Wohnung als Büro
+        fr: Pourcentage du domicile utilisé pour le bureau
+      type: number
+      validation:
+        min: 1
+        max: 100
+      help_text:
+        en: Estimate what percentage of your home is dedicated office space
+        de: Schätzen Sie, wie viel Prozent Ihrer Wohnung dedizierter Büroraum ist
+        fr: Estimez quel pourcentage de votre domicile est un espace de bureau dédié
+      required: true
+    - id: home_office_days_per_week
+      text:
+        en: Days per week working from home
+        de: Tage pro Woche im Homeoffice
+        fr: Jours par semaine en télétravail
+      type: number
+      validation:
+        min: 1
+        max: 7
+      required: true
+    next: Q04d_upload
+    parent: Q04d
   Q05:
-    id: "Q05"
+    id: Q05
     text:
-      en: "Did you receive unemployment benefits?"
-      de: "Haben Sie Arbeitslosengeld erhalten?"
-      fr: "Avez-vous perçu des allocations chômage?"
-    type: "yes_no"
+      en: Did you receive unemployment benefits?
+      de: Haben Sie Arbeitslosengeld erhalten?
+      fr: Avez-vous perçu des allocations chômage?
+    type: yes_no
     branching:
-      yes: "Q05_upload"
-      no: "Q06"
+      true: Q06
+      false: Q06
     required: true
-
-  Q05_upload:
-    id: "Q05_upload"
-    text:
-      en: "Upload unemployment benefits statement"
-      de: "Arbeitslosengeldnachweis hochladen"
-      fr: "Télécharger l'attestation d'allocations chômage"
-    type: "document_upload"
-    document_type: "unemployment_statement"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload your unemployment benefits statement from the RAV/ORP"
-      de: "Laden Sie Ihren Arbeitslosengeldnachweis vom RAV hoch"
-      fr: "Téléchargez votre attestation d'allocations chômage de l'ORP"
-    next: "Q06"
-    required: false
-    parent: "Q05"
-
+    inline_document_upload:
+      document_type: unemployment_statement
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload unemployment benefits statement
+        de: Arbeitslosengeldnachweis hochladen
+        fr: Télécharger l'attestation d'allocations chômage
+      help_text:
+        en: Upload your unemployment benefits statement from the RAV/ORP
+        de: Laden Sie Ihren Arbeitslosengeldnachweis vom RAV hoch
+        fr: Téléchargez votre attestation d'allocations chômage de l'ORP
   Q06:
-    id: "Q06"
+    id: Q06
     text:
-      en: "Did you receive disability/accident insurance benefits?"
-      de: "Haben Sie IV/Unfallversicherungsleistungen erhalten?"
-      fr: "Avez-vous perçu des prestations AI/accident?"
-    type: "yes_no"
+      en: Did you receive disability/accident insurance benefits?
+      de: Haben Sie IV/Unfallversicherungsleistungen erhalten?
+      fr: Avez-vous perçu des prestations AI/accident?
+    type: yes_no
     branching:
-      yes: "Q06_upload"
-      no: "Q07"
+      true: Q07
+      false: Q07
     required: true
-
-  Q06_upload:
-    id: "Q06_upload"
-    text:
-      en: "Upload insurance benefits statement"
-      de: "Versicherungsleistungsnachweis hochladen"
-      fr: "Télécharger l'attestation de prestations d'assurance"
-    type: "document_upload"
-    document_type: "insurance_benefits"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload your disability or accident insurance benefits statement"
-      de: "Laden Sie Ihren IV- oder Unfallversicherungsleistungsnachweis hoch"
-      fr: "Téléchargez votre attestation de prestations AI ou d'assurance accident"
-    next: "Q07"
-    required: false
-    parent: "Q06"
-
+    inline_document_upload:
+      document_type: insurance_benefits
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload insurance benefits statement
+        de: Versicherungsleistungsnachweis hochladen
+        fr: Télécharger l'attestation de prestations d'assurance
+      help_text:
+        en: Upload your disability or accident insurance benefits statement
+        de: Laden Sie Ihren IV- oder Unfallversicherungsleistungsnachweis hoch
+        fr: Téléchargez votre attestation de prestations AI ou d'assurance accident
   Q07:
-    id: "Q07"
+    id: Q07
     text:
-      en: "Do you have a pension fund (2nd pillar)?"
-      de: "Haben Sie eine Pensionskasse (2. Säule)?"
-      fr: "Avez-vous une caisse de pension (2e pilier)?"
-    type: "yes_no"
+      en: Do you have a pension fund (2nd pillar)?
+      de: Haben Sie eine Pensionskasse (2. Säule)?
+      fr: Avez-vous une caisse de pension (2e pilier)?
+    type: yes_no
     branching:
-      yes: "Q07_upload"
-      no: "Q08"
+      true: Q08
+      false: Q08
     required: true
-
-  Q07_upload:
-    id: "Q07_upload"
-    text:
-      en: "Upload pension fund certificate"
-      de: "Pensionskassenzertifikat hochladen"
-      fr: "Télécharger le certificat de caisse de pension"
-    type: "document_upload"
-    document_type: "pension_certificate"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload your 2nd pillar pension fund certificate"
-      de: "Laden Sie Ihr 2. Säule Pensionskassenzertifikat hoch"
-      fr: "Téléchargez votre certificat de caisse de pension du 2e pilier"
-    next: "Q08"
-    required: false
-    parent: "Q07"
-
+    inline_document_upload:
+      document_type: pension_certificate
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload pension fund certificate
+        de: Pensionskassenzertifikat hochladen
+        fr: Télécharger le certificat de caisse de pension
+      help_text:
+        en: Upload your 2nd pillar pension fund certificate
+        de: Laden Sie Ihr 2. Säule Pensionskassenzertifikat hoch
+        fr: Téléchargez votre certificat de caisse de pension du 2e pilier
   Q08:
-    id: "Q08"
+    id: Q08
     text:
-      en: "Did you contribute to Pillar 3a?"
-      de: "Haben Sie in die Säule 3a eingezahlt?"
-      fr: "Avez-vous cotisé au pilier 3a?"
-    type: "yes_no"
+      en: Did you contribute to Pillar 3a?
+      de: Haben Sie in die Säule 3a eingezahlt?
+      fr: Avez-vous cotisé au pilier 3a?
+    type: yes_no
     explanation:
-      en: "Pillar 3a contributions up to CHF 7,056 are fully deductible for employed persons (2024 limit)"
-      de: "Säule 3a Einzahlungen bis CHF 7'056 sind für Arbeitnehmende vollständig abzugsfähig (2024 Grenze)"
-      fr: "Les cotisations au pilier 3a jusqu'à CHF 7'056 sont entièrement déductibles pour les salariés (limite 2024)"
+      en: Pillar 3a contributions up to CHF 7,056 are fully deductible for employed
+        persons (2024 limit)
+      de: Säule 3a Einzahlungen bis CHF 7'056 sind für Arbeitnehmende vollständig
+        abzugsfähig (2024 Grenze)
+      fr: Les cotisations au pilier 3a jusqu'à CHF 7'056 sont entièrement déductibles
+        pour les salariés (limite 2024)
     branching:
-      yes: "Q08_upload"
-      no: "Q09"
+      true: Q09
+      false: Q09
     required: true
-
-  Q08_upload:
-    id: "Q08_upload"
-    text:
-      en: "Upload Pillar 3a contribution certificate"
-      de: "Säule 3a Einzahlungsbescheinigung hochladen"
-      fr: "Télécharger le certificat de cotisation pilier 3a"
-    type: "document_upload"
-    document_type: "pillar_3a_certificate"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload your Pillar 3a contribution certificate from your bank or insurance"
-      de: "Laden Sie Ihre Säule 3a Einzahlungsbescheinigung von Ihrer Bank oder Versicherung hoch"
-      fr: "Téléchargez votre certificat de cotisation pilier 3a de votre banque ou assurance"
-    next: "Q09"
-    required: false
-    parent: "Q08"
-
+    inline_document_upload:
+      document_type: pillar_3a_certificate
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload Pillar 3a contribution certificate
+        de: Säule 3a Einzahlungsbescheinigung hochladen
+        fr: Télécharger le certificat de cotisation pilier 3a
+      help_text:
+        en: Upload your Pillar 3a contribution certificate from your bank or insurance
+        de: Laden Sie Ihre Säule 3a Einzahlungsbescheinigung von Ihrer Bank oder Versicherung
+          hoch
+        fr: Téléchargez votre certificat de cotisation pilier 3a de votre banque ou
+          assurance
   Q09:
-    id: "Q09"
+    id: Q09
     text:
-      en: "Do you own real estate?"
-      de: "Besitzen Sie Immobilien?"
-      fr: "Possédez-vous des biens immobiliers?"
-    type: "yes_no"
+      en: Do you own real estate?
+      de: Besitzen Sie Immobilien?
+      fr: Possédez-vous des biens immobiliers?
+    type: yes_no
     branching:
-      yes: "Q09a"
-      no: "Q10"
+      true: Q09a
+      false: Q10
     required: true
-
   Q09a:
-    id: "Q09a"
+    id: Q09a
     text:
-      en: "Number of properties"
-      de: "Anzahl der Immobilien"
-      fr: "Nombre de propriétés"
-    type: "dropdown"
+      en: Number of properties
+      de: Anzahl der Immobilien
+      fr: Nombre de propriétés
+    type: dropdown
     options:
-      - value: "1"
-        label:
-          en: "1 property"
-          de: "1 Immobilie"
-          fr: "1 propriété"
-      - value: "2"
-        label:
-          en: "2 properties"
-          de: "2 Immobilien"
-          fr: "2 propriétés"
-      - value: "3"
-        label:
-          en: "3 properties"
-          de: "3 Immobilien"
-          fr: "3 propriétés"
-      - value: "4+"
-        label:
-          en: "4 or more properties"
-          de: "4 oder mehr Immobilien"
-          fr: "4 propriétés ou plus"
-    triggers_loop: "Q09b"
-    next: "Q10"
+    - value: '1'
+      label:
+        en: 1 property
+        de: 1 Immobilie
+        fr: 1 propriété
+    - value: '2'
+      label:
+        en: 2 properties
+        de: 2 Immobilien
+        fr: 2 propriétés
+    - value: '3'
+      label:
+        en: 3 properties
+        de: 3 Immobilien
+        fr: 3 propriétés
+    - value: 4+
+      label:
+        en: 4 or more properties
+        de: 4 oder mehr Immobilien
+        fr: 4 propriétés ou plus
+    triggers_loop: Q09b
+    next: Q10
     required: true
-    parent: "Q09"
-
+    parent: Q09
   Q09b:
-    id: "Q09b"
+    id: Q09b
     text:
-      en: "Property details"
-      de: "Immobiliendetails"
-      fr: "Détails de la propriété"
-    type: "group"
+      en: Property details
+      de: Immobiliendetails
+      fr: Détails de la propriété
+    type: group
     loop: true
     fields:
-      - id: "property_type"
-        text:
-          en: "Property type"
-          de: "Immobilientyp"
-          fr: "Type de propriété"
-        type: "single_choice"
-        options:
-          - value: "primary_residence"
-            label:
-              en: "Primary residence"
-              de: "Hauptwohnsitz"
-              fr: "Résidence principale"
-          - value: "secondary_residence"
-            label:
-              en: "Secondary residence"
-              de: "Zweitwohnsitz"
-              fr: "Résidence secondaire"
-          - value: "rental_property"
-            label:
-              en: "Rental property"
-              de: "Mietobjekt"
-              fr: "Propriété locative"
-        required: true
-      - id: "property_postal_code"
-        text:
-          en: "Property postal code"
-          de: "Postleitzahl der Immobilie"
-          fr: "Code postal de la propriété"
-        type: "postal_code"
-        validation:
-          pattern: "^\\d{4}$"
-          min: 1000
-          max: 9999
-        placeholder: "8001"
-        auto_lookup: true
-        required: true
-    next: "Q09b_upload"
-    parent: "Q09a"
-
+    - id: property_type
+      text:
+        en: Property type
+        de: Immobilientyp
+        fr: Type de propriété
+      type: single_choice
+      options:
+      - value: primary_residence
+        label:
+          en: Primary residence
+          de: Hauptwohnsitz
+          fr: Résidence principale
+      - value: secondary_residence
+        label:
+          en: Secondary residence
+          de: Zweitwohnsitz
+          fr: Résidence secondaire
+      - value: rental_property
+        label:
+          en: Rental property
+          de: Mietobjekt
+          fr: Propriété locative
+      required: true
+    - id: property_postal_code
+      text:
+        en: Property postal code
+        de: Postleitzahl der Immobilie
+        fr: Code postal de la propriété
+      type: postal_code
+      validation:
+        pattern: ^\d{4}$
+        min: 1000
+        max: 9999
+      placeholder: '8001'
+      auto_lookup: true
+      required: true
+    next: Q09b_upload
+    parent: Q09a
   Q09b_upload:
-    id: "Q09b_upload"
+    id: Q09b_upload
     text:
-      en: "Upload property documents (tax statement, mortgage statement)"
-      de: "Immobiliendokumente hochladen (Steuerbescheinigung, Hypothekenabrechnung)"
-      fr: "Télécharger documents de propriété (attestation fiscale, relevé hypothécaire)"
-    type: "document_upload"
-    document_type: "property_documents"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
+      en: Upload property documents (tax statement, mortgage statement)
+      de: Immobiliendokumente hochladen (Steuerbescheinigung, Hypothekenabrechnung)
+      fr: Télécharger documents de propriété (attestation fiscale, relevé hypothécaire)
+    type: document_upload
+    document_type: property_documents
+    accepted_formats:
+    - pdf
+    - jpg
+    - jpeg
+    - png
     max_size_mb: 10
     bring_later: true
     allow_multiple: true
     help_text:
-      en: "Upload property tax statements, mortgage statements, and other relevant documents"
-      de: "Laden Sie Immobiliensteuerbescheinigungen, Hypothekenbelege und andere relevante Dokumente hoch"
-      fr: "Téléchargez les attestations fiscales immobilières, relevés hypothécaires et autres documents pertinents"
-    next: "Q10"
+      en: Upload property tax statements, mortgage statements, and other relevant
+        documents
+      de: Laden Sie Immobiliensteuerbescheinigungen, Hypothekenbelege und andere relevante
+        Dokumente hoch
+      fr: Téléchargez les attestations fiscales immobilières, relevés hypothécaires
+        et autres documents pertinents
+    next: Q09c
     required: false
-    parent: "Q09b"
-
+    parent: Q09b
+  Q09c:
+    id: Q09c
+    text:
+      en: Did you receive rental income from any property?
+      de: Haben Sie Mieteinnahmen aus einer Immobilie erhalten?
+      fr: Avez-vous reçu des revenus locatifs d'une propriété?
+    type: yes_no
+    explanation:
+      en: Rental income from properties must be declared. You can deduct expenses
+        like maintenance, insurance, and mortgage interest.
+      de: Mieteinnahmen aus Immobilien müssen deklariert werden. Sie können Kosten
+        wie Unterhalt, Versicherung und Hypothekarzinsen abziehen.
+      fr: Les revenus locatifs des propriétés doivent être déclarés. Vous pouvez déduire
+        les dépenses comme l'entretien, l'assurance et les intérêts hypothécaires.
+    branching:
+      true: Q09c_amount
+      false: Q10
+    required: true
+    parent: Q09b
+    inline_document_upload:
+      document_type: rental_income_documents
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload rental income documents (rental contracts, payment records)
+        de: Mieteinnahmendokumente hochladen (Mietverträge, Zahlungsnachweise)
+        fr: Télécharger documents de revenus locatifs (contrats de location, preuves
+          de paiement)
+      help_text:
+        en: Upload rental contracts, payment records, and expense receipts
+        de: Laden Sie Mietverträge, Zahlungsnachweise und Kostenbelege hoch
+        fr: Téléchargez les contrats de location, preuves de paiement et reçus de
+          dépenses
+  Q09c_amount:
+    id: Q09c_amount
+    text:
+      en: Annual rental income amount (CHF)
+      de: Jährliche Mieteinnahmen (CHF)
+      fr: Montant annuel des revenus locatifs (CHF)
+    type: currency
+    validation:
+      min: 0
+    placeholder: '24000'
+    help_text:
+      en: Enter total rental income for the year
+      de: Geben Sie die gesamten Mieteinnahmen für das Jahr ein
+      fr: Entrez le total des revenus locatifs pour l'année
+    next: Q09c_upload
+    required: true
+    parent: Q09c
   Q10:
-    id: "Q10"
+    id: Q10
     text:
-      en: "Do you have securities/investments?"
-      de: "Haben Sie Wertschriften/Anlagen?"
-      fr: "Avez-vous des titres/investissements?"
-    type: "yes_no"
+      en: Do you have securities/investments?
+      de: Haben Sie Wertschriften/Anlagen?
+      fr: Avez-vous des titres/investissements?
+    type: yes_no
     branching:
-      yes: "Q10_upload"
-      no: "Q11"
+      true: Q10a
+      false: Q11
     required: true
-
-  Q10_upload:
-    id: "Q10_upload"
+    inline_document_upload:
+      document_type: securities_statement
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload securities statement
+        de: Wertschriftenbescheinigung hochladen
+        fr: Télécharger l'attestation de titres
+      help_text:
+        en: Upload your securities/investment account statement
+        de: Laden Sie Ihren Wertschriften-/Anlagenkontoauszug hoch
+        fr: Téléchargez votre relevé de compte de titres/investissements
+  Q10a:
+    id: Q10a
     text:
-      en: "Upload securities statement"
-      de: "Wertschriftenbescheinigung hochladen"
-      fr: "Télécharger l'attestation de titres"
-    type: "document_upload"
-    document_type: "securities_statement"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
+      en: Did you receive dividend or interest income?
+      de: Haben Sie Dividenden- oder Zinseinkommen erhalten?
+      fr: Avez-vous reçu des revenus de dividendes ou d'intérêts?
+    type: yes_no
+    explanation:
+      en: Dividends and interest from Swiss sources are subject to withholding tax
+        (35%) which can be reclaimed. Foreign dividends may also be taxable.
+      de: Dividenden und Zinsen aus Schweizer Quellen unterliegen der Verrechnungssteuer
+        (35%), die zurückgefordert werden kann. Ausländische Dividenden können ebenfalls
+        steuerpflichtig sein.
+      fr: Les dividendes et intérêts de sources suisses sont soumis à l'impôt anticipé
+        (35%) qui peut être réclamé. Les dividendes étrangers peuvent également être
+        imposables.
+    branching:
+      true: Q10a_amount
+      false: Q10_upload
+    required: true
+    parent: Q10
+  Q10a_amount:
+    id: Q10a_amount
+    text:
+      en: Annual dividend/interest income (CHF)
+      de: Jährliche Dividenden-/Zinseinkommen (CHF)
+      fr: Revenus annuels de dividendes/intérêts (CHF)
+    type: currency
+    validation:
+      min: 0
+    placeholder: '5000'
     help_text:
-      en: "Upload your securities/investment account statement"
-      de: "Laden Sie Ihren Wertschriften-/Anlagenkontoauszug hoch"
-      fr: "Téléchargez votre relevé de compte de titres/investissements"
-    next: "Q11"
-    required: false
-    parent: "Q10"
-
+      en: Enter total dividend and interest income for the year
+      de: Geben Sie die gesamten Dividenden- und Zinseinkommen für das Jahr ein
+      fr: Entrez le total des revenus de dividendes et d'intérêts pour l'année
+    next: Q10_upload
+    required: true
+    parent: Q10a
   Q11:
-    id: "Q11"
+    id: Q11
     text:
-      en: "Did you make charitable donations over CHF 100?"
-      de: "Haben Sie Spenden über CHF 100 getätigt?"
-      fr: "Avez-vous fait des dons de plus de CHF 100?"
-    type: "yes_no"
+      en: Did you make charitable donations over CHF 100?
+      de: Haben Sie Spenden über CHF 100 getätigt?
+      fr: Avez-vous fait des dons de plus de CHF 100?
+    type: yes_no
     explanation:
-      en: "Donations to registered charities are deductible. Minimum CHF 100 per donation."
-      de: "Spenden an registrierte Wohltätigkeitsorganisationen sind abzugsfähig. Mindestens CHF 100 pro Spende."
-      fr: "Les dons aux organisations caritatives enregistrées sont déductibles. Minimum CHF 100 par don."
+      en: Donations to registered charities are deductible. Minimum CHF 100 per donation.
+      de: Spenden an registrierte Wohltätigkeitsorganisationen sind abzugsfähig. Mindestens
+        CHF 100 pro Spende.
+      fr: Les dons aux organisations caritatives enregistrées sont déductibles. Minimum
+        CHF 100 par don.
     branching:
-      yes: "Q11_upload"
-      no: "Q12"
+      true: Q12
+      false: Q12
     required: true
-
-  Q11_upload:
-    id: "Q11_upload"
-    text:
-      en: "Upload donation receipts"
-      de: "Spendenquittungen hochladen"
-      fr: "Télécharger les reçus de dons"
-    type: "document_upload"
-    document_type: "donation_receipts"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    allow_multiple: true
-    help_text:
-      en: "Upload receipts from registered charities (minimum CHF 100 per donation)"
-      de: "Laden Sie Quittungen von registrierten Wohltätigkeitsorganisationen hoch (mindestens CHF 100 pro Spende)"
-      fr: "Téléchargez les reçus d'organisations caritatives enregistrées (minimum CHF 100 par don)"
-    next: "Q12"
-    required: false
-    parent: "Q11"
-
+    inline_document_upload:
+      document_type: donation_receipts
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload donation receipts
+        de: Spendenquittungen hochladen
+        fr: Télécharger les reçus de dons
+      help_text:
+        en: Upload receipts from registered charities (minimum CHF 100 per donation)
+        de: Laden Sie Quittungen von registrierten Wohltätigkeitsorganisationen hoch
+          (mindestens CHF 100 pro Spende)
+        fr: Téléchargez les reçus d'organisations caritatives enregistrées (minimum
+          CHF 100 par don)
   Q12:
-    id: "Q12"
+    id: Q12
     text:
-      en: "Did you pay alimony?"
-      de: "Haben Sie Unterhalt gezahlt?"
-      fr: "Avez-vous payé une pension alimentaire?"
-    type: "yes_no"
+      en: Did you pay alimony?
+      de: Haben Sie Unterhalt gezahlt?
+      fr: Avez-vous payé une pension alimentaire?
+    type: yes_no
     explanation:
-      en: "Alimony payments to former spouses are fully deductible"
-      de: "Unterhaltszahlungen an frühere Ehepartner sind vollständig abzugsfähig"
-      fr: "Les pensions alimentaires payées aux anciens conjoints sont entièrement déductibles"
+      en: Alimony payments to former spouses are fully deductible
+      de: Unterhaltszahlungen an frühere Ehepartner sind vollständig abzugsfähig
+      fr: Les pensions alimentaires payées aux anciens conjoints sont entièrement
+        déductibles
     branching:
-      yes: "Q12_upload"
-      no: "Q13"
+      true: Q13
+      false: Q13
     required: true
-
-  Q12_upload:
-    id: "Q12_upload"
-    text:
-      en: "Upload alimony payment documents"
-      de: "Unterhaltszahlungsbelege hochladen"
-      fr: "Télécharger les documents de pension alimentaire"
-    type: "document_upload"
-    document_type: "alimony_documents"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    help_text:
-      en: "Upload divorce decree, payment records, or bank statements"
-      de: "Laden Sie Scheidungsurteil, Zahlungsnachweise oder Kontoauszüge hoch"
-      fr: "Téléchargez le jugement de divorce, les preuves de paiement ou les relevés bancaires"
-    next: "Q13"
-    required: false
-    parent: "Q12"
-
+    inline_document_upload:
+      document_type: alimony_documents
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload alimony payment documents
+        de: Unterhaltszahlungsbelege hochladen
+        fr: Télécharger les documents de pension alimentaire
+      help_text:
+        en: Upload divorce decree, payment records, or bank statements
+        de: Laden Sie Scheidungsurteil, Zahlungsnachweise oder Kontoauszüge hoch
+        fr: Téléchargez le jugement de divorce, les preuves de paiement ou les relevés
+          bancaires
   Q13:
-    id: "Q13"
+    id: Q13
     text:
-      en: "Did you have medical expenses over CHF 2000?"
-      de: "Hatten Sie Krankheitskosten über CHF 2000?"
-      fr: "Avez-vous eu des frais médicaux de plus de CHF 2000?"
-    type: "yes_no"
+      en: Did you have medical expenses over CHF 2000?
+      de: Hatten Sie Krankheitskosten über CHF 2000?
+      fr: Avez-vous eu des frais médicaux de plus de CHF 2000?
+    type: yes_no
     explanation:
-      en: "Medical expenses exceeding 5% of net income are deductible (minimum CHF 2000)"
-      de: "Krankheitskosten über 5% des Nettoeinkommens sind abzugsfähig (mindestens CHF 2000)"
-      fr: "Les frais médicaux dépassant 5% du revenu net sont déductibles (minimum CHF 2000)"
+      en: Medical expenses exceeding 5% of net income are deductible (minimum CHF
+        2000)
+      de: Krankheitskosten über 5% des Nettoeinkommens sind abzugsfähig (mindestens
+        CHF 2000)
+      fr: Les frais médicaux dépassant 5% du revenu net sont déductibles (minimum
+        CHF 2000)
     branching:
-      yes: "Q13_upload"
-      no: "Q13b"
+      true: Q13b
+      false: Q13b
     required: true
-
-  Q13_upload:
-    id: "Q13_upload"
-    text:
-      en: "Upload medical expense receipts"
-      de: "Krankheitskostenbelege hochladen"
-      fr: "Télécharger les reçus de frais médicaux"
-    type: "document_upload"
-    document_type: "medical_receipts"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
-    allow_multiple: true
-    help_text:
-      en: "Upload receipts for medical treatments, medications, therapies, etc."
-      de: "Laden Sie Quittungen für medizinische Behandlungen, Medikamente, Therapien usw. hoch"
-      fr: "Téléchargez les reçus pour traitements médicaux, médicaments, thérapies, etc."
-    next: "Q13b"
-    required: false
-    parent: "Q13"
-
+    inline_document_upload:
+      document_type: medical_receipts
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload medical expense receipts
+        de: Krankheitskostenbelege hochladen
+        fr: Télécharger les reçus de frais médicaux
+      help_text:
+        en: Upload receipts for medical treatments, medications, therapies, etc.
+        de: Laden Sie Quittungen für medizinische Behandlungen, Medikamente, Therapien
+          usw. hoch
+        fr: Téléchargez les reçus pour traitements médicaux, médicaments, thérapies,
+          etc.
   Q13b:
-    id: "Q13b"
+    id: Q13b
     text:
-      en: "Did you pay health insurance premiums?"
-      de: "Haben Sie Krankenkassenprämien bezahlt?"
-      fr: "Avez-vous payé des primes d'assurance maladie?"
-    type: "yes_no"
+      en: Did you pay health insurance premiums?
+      de: Haben Sie Krankenkassenprämien bezahlt?
+      fr: Avez-vous payé des primes d'assurance maladie?
+    type: yes_no
     explanation:
-      en: "Health insurance premiums (basic and supplementary) are fully deductible. This is mandatory in Switzerland."
-      de: "Krankenkassenprämien (Grund- und Zusatzversicherung) sind vollständig abzugsfähig. Dies ist in der Schweiz obligatorisch."
-      fr: "Les primes d'assurance maladie (base et complémentaire) sont entièrement déductibles. Ceci est obligatoire en Suisse."
+      en: Health insurance premiums (basic and supplementary) are fully deductible.
+        This is mandatory in Switzerland.
+      de: Krankenkassenprämien (Grund- und Zusatzversicherung) sind vollständig abzugsfähig.
+        Dies ist in der Schweiz obligatorisch.
+      fr: Les primes d'assurance maladie (base et complémentaire) sont entièrement
+        déductibles. Ceci est obligatoire en Suisse.
     branching:
-      yes: "Q13b_upload"
-      no: "Q14"
+      true: Q13b_basic
+      false: Q14
     required: true
-
-  Q13b_upload:
-    id: "Q13b_upload"
+    inline_document_upload:
+      document_type: health_insurance_premiums
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload health insurance premium statement
+        de: Krankenkassenprämiennachweis hochladen
+        fr: Télécharger l'attestation de primes d'assurance maladie
+      help_text:
+        en: Upload your annual health insurance premium statement
+        de: Laden Sie Ihren jährlichen Krankenkassenprämiennachweis hoch
+        fr: Téléchargez votre attestation annuelle de primes d'assurance maladie
+  Q13b_basic:
+    id: Q13b_basic
     text:
-      en: "Upload health insurance premium statement"
-      de: "Krankenkassenprämiennachweis hochladen"
-      fr: "Télécharger l'attestation de primes d'assurance maladie"
-    type: "document_upload"
-    document_type: "health_insurance_premiums"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: true
+      en: Basic health insurance premium (CHF per year)
+      de: Grundversicherungsprämie (CHF pro Jahr)
+      fr: Prime d'assurance de base (CHF par an)
+    type: currency
+    validation:
+      min: 0
+    placeholder: '4800'
     help_text:
-      en: "Upload your annual health insurance premium statement"
-      de: "Laden Sie Ihren jährlichen Krankenkassenprämiennachweis hoch"
-      fr: "Téléchargez votre attestation annuelle de primes d'assurance maladie"
-    next: "Q14"
-    required: false
-    parent: "Q13b"
-
+      en: Enter your annual basic (obligatory) health insurance premium
+      de: Geben Sie Ihre jährliche Grundversicherungsprämie (obligatorisch) ein
+      fr: Entrez votre prime annuelle d'assurance de base (obligatoire)
+    next: Q13b_supplementary
+    required: true
+    parent: Q13b
+  Q13b_supplementary:
+    id: Q13b_supplementary
+    text:
+      en: Do you have supplementary health insurance?
+      de: Haben Sie eine Zusatzversicherung?
+      fr: Avez-vous une assurance complémentaire?
+    type: yes_no
+    explanation:
+      en: Supplementary insurance premiums (dental, hospital, etc.) are also deductible
+      de: Zusatzversicherungsprämien (Dental, Spital usw.) sind ebenfalls abzugsfähig
+      fr: Les primes d'assurance complémentaire (dentaire, hospitalisation, etc.)
+        sont également déductibles
+    branching:
+      true: Q13b_supplementary_amount
+      false: Q13b_upload
+    required: true
+    parent: Q13b_basic
+  Q13b_supplementary_amount:
+    id: Q13b_supplementary_amount
+    text:
+      en: Supplementary insurance premium (CHF per year)
+      de: Zusatzversicherungsprämie (CHF pro Jahr)
+      fr: Prime d'assurance complémentaire (CHF par an)
+    type: currency
+    validation:
+      min: 0
+    placeholder: '1200'
+    help_text:
+      en: Enter your annual supplementary insurance premium
+      de: Geben Sie Ihre jährliche Zusatzversicherungsprämie ein
+      fr: Entrez votre prime annuelle d'assurance complémentaire
+    next: Q13b_upload
+    required: true
+    parent: Q13b_supplementary
   Q14:
-    id: "Q14"
+    id: Q14
     text:
-      en: "Are you a member of a state-recognized church?"
-      de: "Sind Sie Mitglied einer staatlich anerkannten Kirche?"
-      fr: "Êtes-vous membre d'une église reconnue par l'État?"
-    type: "yes_no"
+      en: Did you receive pension or annuity income?
+      de: Haben Sie Renten- oder Leibrenteneinkommen erhalten?
+      fr: Avez-vous reçu des revenus de pension ou de rente?
+    type: yes_no
     explanation:
-      en: "Church tax is automatically deducted for members of recognized churches (Protestant, Catholic, Christian Catholic)"
-      de: "Kirchensteuer wird automatisch für Mitglieder anerkannter Kirchen (Evangelisch, Katholisch, Christkatholisch) abgezogen"
-      fr: "L'impôt ecclésiastique est automatiquement déduit pour les membres des églises reconnues (Protestant, Catholique, Catholique-Chrétien)"
+      en: This includes Swiss AHV/IV pensions, foreign pensions, employer pensions
+        (BVG), and annuities
+      de: Dies umfasst Schweizer AHV/IV-Renten, ausländische Renten, Arbeitgeberrenten
+        (BVG) und Leibrenten
+      fr: Cela inclut les pensions AVS/AI suisses, les pensions étrangères, les pensions
+        d'employeur (LPP) et les rentes
     branching:
-      yes: "Q14a"
-      no: "Q14b"
+      true: Q15
+      false: Q15
     required: true
-
-  Q14a:
-    id: "Q14a"
+    inline_document_upload:
+      document_type: pension_annuity_income
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload pension/annuity statements
+        de: Renten-/Leibrentenbescheinigungen hochladen
+        fr: Télécharger les attestations de pension/rente
+      help_text:
+        en: Upload statements from AHV, pension funds, or annuity providers
+        de: Laden Sie Bescheinigungen von AHV, Pensionskassen oder Leibrentenanbietern
+          hoch
+        fr: Téléchargez les attestations de l'AVS, caisses de pension ou fournisseurs
+          de rentes
+  Q15:
+    id: Q15
     text:
-      en: "Which church?"
-      de: "Welche Kirche?"
-      fr: "Quelle église?"
-    type: "single_choice"
+      en: Do you have foreign income or assets?
+      de: Haben Sie ausländisches Einkommen oder Vermögen?
+      fr: Avez-vous des revenus ou des actifs étrangers?
+    type: yes_no
+    explanation:
+      en: This includes foreign employment, rental income abroad, foreign bank accounts,
+        foreign investments, or foreign pensions. Switzerland taxes worldwide income.
+      de: Dies umfasst ausländische Anstellung, Mieteinnahmen im Ausland, ausländische
+        Bankkonten, ausländische Investitionen oder ausländische Renten. Die Schweiz
+        besteuert das weltweite Einkommen.
+      fr: Cela inclut l'emploi à l'étranger, les revenus locatifs à l'étranger, les
+        comptes bancaires étrangers, les investissements étrangers ou les pensions
+        étrangères. La Suisse impose les revenus mondiaux.
+    branching:
+      true: Q15_details
+      false: Q16
+    required: true
+    inline_document_upload:
+      document_type: foreign_income_assets
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload foreign income/asset documents
+        de: Dokumente zu ausländischem Einkommen/Vermögen hochladen
+        fr: Télécharger documents de revenus/actifs étrangers
+      help_text:
+        en: Upload foreign tax certificates, bank statements, employment contracts,
+          or other relevant documents
+        de: Laden Sie ausländische Steuerbescheinigungen, Kontoauszüge, Arbeitsverträge
+          oder andere relevante Dokumente hoch
+        fr: Téléchargez les certificats fiscaux étrangers, relevés bancaires, contrats
+          de travail ou autres documents pertinents
+  Q15_details:
+    id: Q15_details
+    text:
+      en: Foreign income/asset details
+      de: Details zu ausländischem Einkommen/Vermögen
+      fr: Détails des revenus/actifs étrangers
+    type: group
+    fields:
+    - id: foreign_income_type
+      text:
+        en: Type of foreign income/assets
+        de: Art des ausländischen Einkommens/Vermögens
+        fr: Type de revenus/actifs étrangers
+      type: single_choice
+      options:
+      - value: employment
+        label:
+          en: Employment income
+          de: Einkommen aus Beschäftigung
+          fr: Revenus d'emploi
+      - value: rental
+        label:
+          en: Rental income
+          de: Mieteinnahmen
+          fr: Revenus locatifs
+      - value: bank_accounts
+        label:
+          en: Foreign bank accounts
+          de: Ausländische Bankkonten
+          fr: Comptes bancaires étrangers
+      - value: investments
+        label:
+          en: Foreign investments
+          de: Ausländische Investitionen
+          fr: Investissements étrangers
+      - value: pension
+        label:
+          en: Foreign pension
+          de: Ausländische Rente
+          fr: Pension étrangère
+      required: true
+    - id: foreign_country
+      text:
+        en: Country
+        de: Land
+        fr: Pays
+      type: text
+      required: true
+    next: Q15_upload
+    parent: Q15
+  Q16:
+    id: Q16
+    text:
+      en: Do you own cryptocurrency or digital assets?
+      de: Besitzen Sie Kryptowährungen oder digitale Vermögenswerte?
+      fr: Possédez-vous des cryptomonnaies ou des actifs numériques?
+    type: yes_no
+    explanation:
+      en: Cryptocurrencies (Bitcoin, Ethereum, etc.) are considered assets and must
+        be declared at their value on December 31. Trading profits may be taxable.
+      de: Kryptowährungen (Bitcoin, Ethereum usw.) gelten als Vermögenswerte und müssen
+        mit ihrem Wert am 31. Dezember deklariert werden. Handelsgewinne können steuerpflichtig
+        sein.
+      fr: Les cryptomonnaies (Bitcoin, Ethereum, etc.) sont considérées comme des
+        actifs et doivent être déclarées à leur valeur au 31 décembre. Les bénéfices
+        commerciaux peuvent être imposables.
+    branching:
+      true: Q17
+      false: Q17
+    required: true
+    inline_document_upload:
+      document_type: cryptocurrency_statement
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload cryptocurrency holdings statement
+        de: Kryptowährungsbestände hochladen
+        fr: Télécharger le relevé des avoirs en cryptomonnaies
+      help_text:
+        en: Upload statements from exchanges or wallets showing your holdings as of
+          December 31
+        de: Laden Sie Auszüge von Börsen oder Wallets hoch, die Ihre Bestände zum
+          31. Dezember zeigen
+        fr: Téléchargez les relevés des bourses ou portefeuilles montrant vos avoirs
+          au 31 décembre
+  Q17:
+    id: Q17
+    text:
+      en: Are you a member of a state-recognized church?
+      de: Sind Sie Mitglied einer staatlich anerkannten Kirche?
+      fr: Êtes-vous membre d'une église reconnue par l'État?
+    type: yes_no
+    explanation:
+      en: Church tax is automatically deducted for members of recognized churches
+        (Protestant, Catholic, Christian Catholic)
+      de: Kirchensteuer wird automatisch für Mitglieder anerkannter Kirchen (Evangelisch,
+        Katholisch, Christkatholisch) abgezogen
+      fr: L'impôt ecclésiastique est automatiquement déduit pour les membres des églises
+        reconnues (Protestant, Catholique, Catholique-Chrétien)
+    branching:
+      true: Q17a
+      false: Q17c
+    required: true
+  Q17a:
+    id: Q17a
+    text:
+      en: Which church?
+      de: Welche Kirche?
+      fr: Quelle église?
+    type: single_choice
     options:
-      - value: "protestant"
-        label:
-          en: "Protestant (Reformed)"
-          de: "Evangelisch (Reformiert)"
-          fr: "Protestant (Réformé)"
-      - value: "catholic"
-        label:
-          en: "Roman Catholic"
-          de: "Römisch-Katholisch"
-          fr: "Catholique Romain"
-      - value: "christian_catholic"
-        label:
-          en: "Christian Catholic"
-          de: "Christkatholisch"
-          fr: "Catholique-Chrétien"
-      - value: "other"
-        label:
-          en: "Other recognized church"
-          de: "Andere anerkannte Kirche"
-          fr: "Autre église reconnue"
-    next: "Q14b"
+    - value: protestant
+      label:
+        en: Protestant (Reformed)
+        de: Evangelisch (Reformiert)
+        fr: Protestant (Réformé)
+    - value: catholic
+      label:
+        en: Roman Catholic
+        de: Römisch-Katholisch
+        fr: Catholique Romain
+    - value: christian_catholic
+      label:
+        en: Christian Catholic
+        de: Christkatholisch
+        fr: Catholique-Chrétien
+    - value: other
+      label:
+        en: Other recognized church
+        de: Andere anerkannte Kirche
+        fr: Autre église reconnue
+    next: Q17c
     required: true
-    parent: "Q14"
-
-  Q14b:
-    id: "Q14b"
+    parent: Q17
+  Q17c:
+    id: Q17c
     text:
-      en: "Would you like to upload any additional documents?"
-      de: "Möchten Sie weitere Dokumente hochladen?"
-      fr: "Souhaitez-vous télécharger des documents supplémentaires?"
-    type: "yes_no"
-    help_text:
-      en: "You can upload any other tax-relevant documents (e.g., other deductions, special circumstances)"
-      de: "Sie können weitere steuerrelevante Dokumente hochladen (z.B. andere Abzüge, besondere Umstände)"
-      fr: "Vous pouvez télécharger tout autre document fiscal pertinent (par exemple, autres déductions, circonstances particulières)"
+      en: Are you a member of a political party?
+      de: Sind Sie Mitglied einer politischen Partei?
+      fr: Êtes-vous membre d'un parti politique?
+    type: yes_no
+    explanation:
+      en: Political party membership fees are deductible up to certain limits (varies
+        by canton)
+      de: Mitgliederbeiträge an politische Parteien sind bis zu bestimmten Grenzen
+        abzugsfähig (variiert je nach Kanton)
+      fr: Les cotisations aux partis politiques sont déductibles jusqu'à certaines
+        limites (varie selon le canton)
     branching:
-      yes: "Q14b_upload"
-      no: "complete"
+      true: Q17b
+      false: Q17b
     required: true
-
-  Q14b_upload:
-    id: "Q14b_upload"
+    inline_document_upload:
+      document_type: political_party_membership
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload political party membership receipt
+        de: Parteimitgliedschaftsbeleg hochladen
+        fr: Télécharger le reçu de cotisation au parti politique
+      help_text:
+        en: Upload your political party membership fee receipt
+        de: Laden Sie Ihren Beleg für Parteimitgliedschaftsbeiträge hoch
+        fr: Téléchargez votre reçu de cotisation au parti politique
+  Q17b:
+    id: Q17b
     text:
-      en: "Upload additional documents"
-      de: "Zusätzliche Dokumente hochladen"
-      fr: "Télécharger des documents supplémentaires"
-    type: "document_upload"
-    document_type: "other_documents"
-    accepted_formats: ["pdf", "jpg", "jpeg", "png"]
-    max_size_mb: 10
-    bring_later: false
-    allow_multiple: true
+      en: Would you like to upload any additional documents?
+      de: Möchten Sie weitere Dokumente hochladen?
+      fr: Souhaitez-vous télécharger des documents supplémentaires?
+    type: yes_no
     help_text:
-      en: "Upload any other tax-relevant documents"
-      de: "Laden Sie alle anderen steuerrelevanten Dokumente hoch"
-      fr: "Téléchargez tout autre document fiscal pertinent"
-    next: "complete"
-    required: false
-    parent: "Q14b"
-
-# Document requirement rules
+      en: You can upload any other tax-relevant documents (e.g., other deductions,
+        special circumstances)
+      de: Sie können weitere steuerrelevante Dokumente hochladen (z.B. andere Abzüge,
+        besondere Umstände)
+      fr: Vous pouvez télécharger tout autre document fiscal pertinent (par exemple,
+        autres déductions, circonstances particulières)
+    branching:
+      true: complete
+      false: complete
+    required: true
+    inline_document_upload:
+      document_type: other_documents
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: false
+      upload_text:
+        en: Upload additional documents
+        de: Zusätzliche Dokumente hochladen
+        fr: Télécharger des documents supplémentaires
+      help_text:
+        en: Upload any other tax-relevant documents
+        de: Laden Sie alle anderen steuerrelevanten Dokumente hoch
+        fr: Téléchargez tout autre document fiscal pertinents
 document_rules:
   R1:
-    description: "Lohnausweis for each employer"
-    condition: "Q04 > 0"
+    description: Lohnausweis for each employer
+    condition: Q04 > 0
     documents:
-      - type: "lohnausweis"
-        quantity: "per_employer"
-
+    - type: lohnausweis
+      quantity: per_employer
   R2:
-    description: "Unemployment statement if benefits received"
-    condition: "Q05 == yes"
+    description: Unemployment statement if benefits received
+    condition: Q05 == yes
     documents:
-      - type: "unemployment_statement"
-
+    - type: unemployment_statement
   R3:
-    description: "Insurance benefits statement"
-    condition: "Q06 == yes"
+    description: Insurance benefits statement
+    condition: Q06 == yes
     documents:
-      - type: "insurance_benefits"
-
+    - type: insurance_benefits
   R4:
-    description: "Pension fund certificate"
-    condition: "Q07 == yes"
+    description: Pension fund certificate
+    condition: Q07 == yes
     documents:
-      - type: "pension_certificate"
-
+    - type: pension_certificate
   R5:
-    description: "Pillar 3a certificate"
-    condition: "Q08 == yes"
+    description: Pillar 3a certificate
+    condition: Q08 == yes
     documents:
-      - type: "pillar_3a_certificate"
-
+    - type: pillar_3a_certificate
   R6:
-    description: "Property tax statements"
-    condition: "Q09 == yes"
+    description: Property tax statements
+    condition: Q09 == yes
     documents:
-      - type: "property_tax_statement"
-        quantity: "per_property"
-      - type: "mortgage_statement"
-        quantity: "per_property"
-
+    - type: property_tax_statement
+      quantity: per_property
+    - type: mortgage_statement
+      quantity: per_property
   R7:
-    description: "Securities account statement"
-    condition: "Q10 == yes"
+    description: Securities account statement
+    condition: Q10 == yes
     documents:
-      - type: "securities_statement"
-
+    - type: securities_statement
   R8:
-    description: "Donation receipts"
-    condition: "Q11 == yes"
+    description: Donation receipts
+    condition: Q11 == yes
     documents:
-      - type: "donation_receipts"
-
+    - type: donation_receipts
   R9:
-    description: "Medical expense receipts"
-    condition: "Q13 == yes"
+    description: Medical expense receipts
+    condition: Q13 == yes
     documents:
-      - type: "medical_receipts"
+    - type: medical_receipts

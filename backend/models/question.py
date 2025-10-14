@@ -48,6 +48,8 @@ class Question:
         self.explanation = data.get('explanation', {})  # Explanation text for why question is asked
         self.placeholder = data.get('placeholder')  # Placeholder text for input fields
         self.allow_multiple = data.get('allow_multiple', False)  # Allow multiple values (e.g., multiple cantons)
+        # NEW: Inline document upload for yes/no questions
+        self.inline_document_upload = data.get('inline_document_upload')  # Upload config shown when user selects "yes"
 
     def get_next_question(self, answer: Any) -> Optional[str]:
         """Determine next question based on answer"""

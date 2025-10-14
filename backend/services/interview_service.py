@@ -409,6 +409,18 @@ class InterviewService:
         if hasattr(question, 'allow_multiple') and question.allow_multiple:
             formatted['allow_multiple'] = question.allow_multiple
 
+        # Add inline document upload configuration for yes/no questions
+        if hasattr(question, 'inline_document_upload') and question.inline_document_upload:
+            upload_config = question.inline_document_upload
+            formatted['inline_document_upload'] = {
+                'document_type': upload_config.get('document_type'),
+                'accepted_formats': upload_config.get('accepted_formats', ['pdf', 'jpg', 'jpeg', 'png']),
+                'max_size_mb': upload_config.get('max_size_mb', 10),
+                'bring_later': upload_config.get('bring_later', True),
+                'upload_text': upload_config.get('upload_text', {}).get(language, upload_config.get('upload_text', {}).get('en')),
+                'help_text': upload_config.get('help_text', {}).get(language, upload_config.get('help_text', {}).get('en'))
+            }
+
         # Add fields for group questions
         if question.fields:
             formatted['fields'] = []

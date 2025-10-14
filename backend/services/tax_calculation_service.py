@@ -1,7 +1,8 @@
 """Tax calculation service for Swiss federal, cantonal, and municipal taxes"""
 
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
+import decimal
 from typing import Any, Dict, List, Optional
 
 from database.connection import execute_insert, execute_one, execute_query
@@ -90,12 +91,14 @@ class TaxCalculationService:
     def _calculate_income(self, answers: Dict[str, Any]) -> Dict[str, Any]:
         """Calculate total income from various sources"""
         income = {
-            'employment': 0,
-            'self_employment': 0,
-            'capital': 0,
-            'rental': 0,
-            'other': 0,
-            'total_income': 0
+            'employment': Decimal('0'),
+            'self_employment': Decimal('0'),
+            'capital': Decimal('0'),
+            'rental': Decimal('0'),
+            'pension': Decimal('0'),
+            'foreign': Decimal('0'),
+            'other': Decimal('0'),
+            'total_income': Decimal('0')
         }
 
         # Employment income - based on number of employers (Q04)
@@ -103,21 +106,54 @@ class TaxCalculationService:
             num_employers = int(answers.get('Q04', 0))
         except (ValueError, TypeError):
             num_employers = 0
+
         if num_employers > 0:
-            income['employment'] = Decimal(str(answers.get('income_employment', 0)))
-            # Check for self-employment (if marked as self-employed in Q04 loop)
-            if answers.get('self_employed', False):
-                income['self_employment'] = Decimal(str(answers.get('income_self_employment', 0)))
+            # Check if self-employed or employed (Q04a)
+            employment_type = answers.get('Q04a', 'employed')
 
-        # Capital income (Q05)
-        if answers.get('Q05') == True:
-            income['capital'] = Decimal(str(answers.get('income_capital', 0)))
+            # Get employment income from answers or use default for testing
+            employment_income = Decimal(str(answers.get('income_employment', 0)))
 
-        # Rental income (Q06)
-        if answers.get('Q06') == True:
-            property_types = answers.get('Q06a', [])
-            if 'rental_property' in property_types:
-                income['rental'] = Decimal(str(answers.get('income_rental', 0)))
+            if employment_type in ['self_employed', 'both']:
+                # Self-employment income
+                self_employment_income = Decimal(str(answers.get('income_self_employment', 0)))
+                income['self_employment'] = self_employment_income
+
+            if employment_type in ['employed', 'both']:
+                # Regular employment income
+                income['employment'] = employment_income
+
+        # Dividend/Interest income (Q10a)
+        if answers.get('Q10a') == 'yes':
+            try:
+                capital_income = Decimal(str(answers.get('Q10a_amount', 0)))
+                income['capital'] = capital_income
+            except (ValueError, TypeError, decimal.InvalidOperation):
+                income['capital'] = Decimal('0')
+
+        # Rental income (Q09c)
+        if answers.get('Q09c') == 'yes':
+            try:
+                rental_income = Decimal(str(answers.get('Q09c_amount', 0)))
+                income['rental'] = rental_income
+            except (ValueError, TypeError, decimal.InvalidOperation):
+                income['rental'] = Decimal('0')
+
+        # Pension/annuity income (Q14)
+        if answers.get('Q14') == 'yes':
+            try:
+                pension_income = Decimal(str(answers.get('pension_income', 0)))
+                income['pension'] = pension_income
+            except (ValueError, TypeError, decimal.InvalidOperation):
+                income['pension'] = Decimal('0')
+
+        # Foreign income (Q15)
+        if answers.get('Q15') == 'yes':
+            try:
+                foreign_income = Decimal(str(answers.get('foreign_income', 0)))
+                income['foreign'] = foreign_income
+            except (ValueError, TypeError, decimal.InvalidOperation):
+                income['foreign'] = Decimal('0')
 
         # Calculate total
         income['total_income'] = sum([
@@ -125,6 +161,8 @@ class TaxCalculationService:
             income['self_employment'],
             income['capital'],
             income['rental'],
+            income['pension'],
+            income['foreign'],
             income['other']
         ])
 
@@ -155,36 +193,64 @@ class TaxCalculationService:
             # Max 7056 CHF for employees with pension fund (2024)
             deductions['pillar_3a'] = min(Decimal(str(answers.get('pillar_3a_amount', 0))), 7056)
 
-        # Insurance premiums (standard deduction)
-        marital_status = answers.get('Q01', 'single')
-        if marital_status == 'married':
-            deductions['insurance_premiums'] = 3500
-        else:
-            deductions['insurance_premiums'] = 1750
+        # Health insurance premiums (Q13b_basic + Q13b_supplementary_amount)
+        if answers.get('Q13b') == 'yes':
+            try:
+                basic_premium = Decimal(str(answers.get('Q13b_basic', 0)))
+                deductions['insurance_premiums'] = float(basic_premium)
 
-        # Child deductions (Q03)
-        if answers.get('Q03') == True:
+                # Add supplementary insurance if exists
+                if answers.get('Q13b_supplementary') == 'yes':
+                    supplementary = Decimal(str(answers.get('Q13b_supplementary_amount', 0)))
+                    deductions['insurance_premiums'] += float(supplementary)
+            except (ValueError, TypeError, decimal.InvalidOperation):
+                # Fallback to standard deduction
+                marital_status = answers.get('Q01', 'single')
+                if marital_status == 'married':
+                    deductions['insurance_premiums'] = 3500
+                else:
+                    deductions['insurance_premiums'] = 1750
+        else:
+            # Standard insurance deduction if not provided
+            marital_status = answers.get('Q01', 'single')
+            if marital_status == 'married':
+                deductions['insurance_premiums'] = 3500
+            else:
+                deductions['insurance_premiums'] = 1750
+
+        # Child deductions (Q03) - 6600 CHF per child for federal tax
+        if answers.get('Q03') == 'yes':
             try:
                 num_children = int(answers.get('Q03a', 0))
+                deductions['child_deduction'] = num_children * 6600
             except (ValueError, TypeError):
-                num_children = 0
-            # 6600 CHF per child for federal tax
-            deductions['child_deduction'] = num_children * 6600
+                pass
 
-        # Training expenses (Q08)
-        if answers.get('Q08') == True:
-            deductions['training_expenses'] = min(Decimal(str(answers.get('training_expenses', 0))), 12000)
+        # Pillar 3a contributions (Q08) - Max 7056 CHF for employees (2024)
+        if answers.get('Q08') == 'yes':
+            try:
+                pillar_3a = Decimal(str(answers.get('pillar_3a_amount', 7056)))
+                deductions['pillar_3a'] = min(pillar_3a, Decimal('7056'))
+            except (ValueError, TypeError):
+                deductions['pillar_3a'] = Decimal('7056')
 
-        # Medical expenses (Q09) - only if exceeds 5% of income
-        if answers.get('Q09') == True:
-            medical = Decimal(str(answers.get('medical_expenses', 0)))
-            threshold = employment_income * Decimal('0.05')
-            if medical > threshold:
-                deductions['medical_expenses'] = medical - threshold
+        # Medical expenses (Q13) - only if exceeds 5% of income
+        if answers.get('Q13') == 'yes':
+            try:
+                medical = Decimal(str(answers.get('medical_expenses', 0)))
+                threshold = employment_income * Decimal('0.05')
+                if medical > threshold:
+                    deductions['medical_expenses'] = medical - threshold
+            except (ValueError, TypeError):
+                pass
 
-        # Alimony payments (Q10)
-        if answers.get('Q10') == True:
-            deductions['alimony'] = Decimal(str(answers.get('alimony_amount', 0)))
+        # Alimony payments (Q12)
+        if answers.get('Q12') == 'yes':
+            try:
+                alimony = Decimal(str(answers.get('alimony_amount', 0)))
+                deductions['alimony'] = alimony
+            except (ValueError, TypeError):
+                pass
 
         # Standard deduction
         deductions['standard_deduction'] = 3000

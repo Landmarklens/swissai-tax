@@ -98,6 +98,9 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
       }
 
       onAnswer(groupAnswers);
+    } else if (question.type === 'yes_no' && question.inline_document_upload && Object.keys(groupAnswers).length > 0) {
+      // For yes/no with inline upload, submit the combined answer
+      onAnswer(groupAnswers);
     } else {
       onAnswer(answer);
     }
@@ -178,16 +181,63 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
 
       case 'yes_no':
         return (
-          <FormControl error={!!error}>
-            <RadioGroup
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-            >
-              <FormControlLabel value="yes" control={<Radio />} label={t("interview.yes")} />
-              <FormControlLabel value="no" control={<Radio />} label={t("interview.no")} />
-            </RadioGroup>
-            {error && <FormHelperText>{error}</FormHelperText>}
-          </FormControl>
+          <>
+            <FormControl error={!!error}>
+              <RadioGroup
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+              >
+                <FormControlLabel value="yes" control={<Radio />} label={t("interview.yes")} />
+                <FormControlLabel value="no" control={<Radio />} label={t("interview.no")} />
+              </RadioGroup>
+              {error && <FormHelperText>{error}</FormHelperText>}
+            </FormControl>
+
+            {/* Inline Document Upload - shown when user selects "yes" */}
+            {answer === 'yes' && question.inline_document_upload && (
+              <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'grey.300' }}>
+                <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
+                  {question.inline_document_upload.upload_text}
+                </Typography>
+                {question.inline_document_upload.help_text && (
+                  <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 2 }}>
+                    {question.inline_document_upload.help_text}
+                  </Typography>
+                )}
+                <DocumentUploadQuestion
+                  question={{
+                    ...question,
+                    type: 'document_upload',
+                    document_type: question.inline_document_upload.document_type,
+                    accepted_formats: question.inline_document_upload.accepted_formats,
+                    max_size_mb: question.inline_document_upload.max_size_mb,
+                    bring_later: question.inline_document_upload.bring_later
+                  }}
+                  sessionId={sessionId}
+                  onUploadComplete={(response) => {
+                    // Store document upload response but don't advance question yet
+                    setAnswer('yes'); // Keep answer as 'yes'
+                    // Store upload metadata for submission
+                    setGroupAnswers({
+                      answer: 'yes',
+                      document_id: response.document_id,
+                      extracted_data: response.extracted_data
+                    });
+                  }}
+                  onBringLater={() => {
+                    // Mark as bring later but keep answer as 'yes'
+                    setAnswer('yes');
+                    setGroupAnswers({
+                      answer: 'yes',
+                      bring_later: true
+                    });
+                  }}
+                  onUpload={onUpload}
+                  inline={true}
+                />
+              </Box>
+            )}
+          </>
         );
 
       case 'single_choice':

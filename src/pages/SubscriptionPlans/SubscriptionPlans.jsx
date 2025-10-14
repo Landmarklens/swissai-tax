@@ -73,8 +73,6 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
       if (planType === 'free') {
         console.log('[SubscriptionPlans] Creating free subscription');
         await subscriptionService.createFreeSubscription();
-        // Refresh subscription data
-        await checkCurrentSubscription();
         setLoading(false);
         // Navigate to filings page
         console.log('[SubscriptionPlans] Navigating to /filings');

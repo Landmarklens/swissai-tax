@@ -37,6 +37,7 @@
       "no_charge_today": "CHF 0 Today",
       "trial_headline": "Start your free 30-day trial - no charge today",
       "trial_description": "Try all premium features risk-free. Cancel anytime during the trial period without being charged.",
+      "then_price": "Then CHF {{price}}/year after trial",
       "selected_plan": "Selected",
       "after_trial": "After 30-day trial",
       "discount_applied": "Discount applied!",

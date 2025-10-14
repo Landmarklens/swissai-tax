@@ -220,6 +220,15 @@ const SubscriptionCheckout = () => {
               'Try all premium features risk-free. Cancel anytime during the trial period without being charged.'
             )}
           </Typography>
+          {planDetails && (
+            <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary', fontStyle: 'italic' }}>
+              {t(
+                'subscription.checkout.then_price',
+                'Then CHF {{price}}/year after trial',
+                { price: finalPrice !== null ? finalPrice : planDetails.price }
+              )}
+            </Typography>
+          )}
         </Paper>
 
         {/* Plan Summary */}

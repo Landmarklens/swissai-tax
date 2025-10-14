@@ -66,8 +66,11 @@ def mock_filing_session():
 @pytest.fixture
 def mock_interview_service():
     """Mock interview service"""
-    with patch('routers.interview.interview_service') as mock:
-        yield mock
+    # Patch the InterviewService class where it's used in the router
+    with patch('routers.interview.InterviewService') as MockInterviewService:
+        mock_instance = MagicMock()
+        MockInterviewService.return_value = mock_instance
+        yield mock_instance
 
 
 class TestInterviewRouter:

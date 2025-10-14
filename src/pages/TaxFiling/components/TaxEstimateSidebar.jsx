@@ -47,8 +47,12 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
     );
   }
 
-  const isRefund = calculation.refund > 0;
-  const amount = Math.abs(calculation.refund);
+  // Calculate refund/payment based on total tax and tax paid
+  const totalTax = calculation.total_tax || 0;
+  const taxPaid = calculation.paid || 0;
+  const refund = taxPaid - totalTax;
+  const isRefund = refund > 0;
+  const amount = Math.abs(refund);
 
   return (
     <Card sx={{ position: 'sticky', top: 24, height: 'fit-content' }}>
@@ -100,7 +104,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Total Income')}
               </Typography>
               <Typography variant="body2" fontWeight={600}>
-                CHF {(calculation.income || 0).toLocaleString('de-CH')}
+                CHF {(calculation.income?.total_income || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -109,7 +113,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Total Deductions')}
               </Typography>
               <Typography variant="body2" fontWeight={600} color="success.main">
-                -CHF {(calculation.deductions?.total || 0).toLocaleString('de-CH')}
+                -CHF {(calculation.deductions?.total_deductions || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -120,7 +124,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Taxable Income')}
               </Typography>
               <Typography variant="body2" fontWeight={600}>
-                CHF {(calculation.taxableIncome || 0).toLocaleString('de-CH')}
+                CHF {(calculation.taxable_income || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -131,7 +135,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Federal Tax')}
               </Typography>
               <Typography variant="body2">
-                CHF {(calculation.taxes?.federal || 0).toLocaleString('de-CH')}
+                CHF {(calculation.federal_tax || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -140,7 +144,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Cantonal Tax')}
               </Typography>
               <Typography variant="body2">
-                CHF {(calculation.taxes?.cantonal || 0).toLocaleString('de-CH')}
+                CHF {(calculation.cantonal_tax || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -149,7 +153,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Municipal Tax')}
               </Typography>
               <Typography variant="body2">
-                CHF {(calculation.taxes?.municipal || 0).toLocaleString('de-CH')}
+                CHF {(calculation.municipal_tax || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -160,7 +164,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Total Tax Due')}
               </Typography>
               <Typography variant="body2" fontWeight={600}>
-                CHF {(calculation.taxes?.total || 0).toLocaleString('de-CH')}
+                CHF {(calculation.total_tax || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
 
@@ -169,7 +173,7 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
                 {t('Tax Paid')}
               </Typography>
               <Typography variant="body2">
-                CHF {(calculation.paid || 0).toLocaleString('de-CH')}
+                CHF {(taxPaid || 0).toLocaleString('de-CH')}
               </Typography>
             </Box>
           </Box>
@@ -189,19 +193,24 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
 
 TaxEstimateSidebar.propTypes = {
   calculation: PropTypes.shape({
-    income: PropTypes.number,
+    income: PropTypes.shape({
+      total_income: PropTypes.number,
+      employment: PropTypes.number,
+      capital: PropTypes.number,
+      rental: PropTypes.number
+    }),
     deductions: PropTypes.shape({
-      total: PropTypes.number
+      total_deductions: PropTypes.number,
+      pillar_3a: PropTypes.number,
+      insurance_premiums: PropTypes.number
     }),
-    taxableIncome: PropTypes.number,
-    taxes: PropTypes.shape({
-      federal: PropTypes.number,
-      cantonal: PropTypes.number,
-      municipal: PropTypes.number,
-      total: PropTypes.number
-    }),
-    paid: PropTypes.number,
-    refund: PropTypes.number
+    taxable_income: PropTypes.number,
+    federal_tax: PropTypes.number,
+    cantonal_tax: PropTypes.number,
+    municipal_tax: PropTypes.number,
+    church_tax: PropTypes.number,
+    total_tax: PropTypes.number,
+    paid: PropTypes.number
   }),
   loading: PropTypes.bool
 };

@@ -554,15 +554,28 @@ async def migrate_to_cookie(
 
 @router.post("/register")
 @rate_limit("1000/hour")
-async def register(request: Request, user: UserCreate, db=Depends(get_db)):
+async def register(
+    request: Request,
+    response: Response,
+    background_tasks: BackgroundTasks,
+    user: UserCreate,
+    db=Depends(get_db),
+    use_cookie: bool = Query(True, description="Set to true to use cookie-based auth (recommended)")
+):
     """
     Registration endpoint for SwissAI Tax users
+    Automatically logs in the user after successful registration
 
     Returns:
         User profile data with requires_subscription flag
+        Sets authentication cookie for automatic login
 
     language: de, en, fr, it
     """
+    import logging
+    import uuid
+    logger = logging.getLogger(__name__)
+
     try:
         exists_user = userService.get_user_by_email(db, user.email)
 
@@ -574,14 +587,58 @@ async def register(request: Request, user: UserCreate, db=Depends(get_db)):
             # Check if subscription is required for updated user
             requires_subscription = should_require_subscription(updated_user, db)
 
+            # Generate session ID for tracking
+            session_id = str(uuid.uuid4())
+
+            # Generate JWT token with session ID
+            token_response = sign_jwt(updated_user.email, session_id=session_id)
+            access_token = token_response["access_token"]
+
+            # Create session record
+            from services.session_service import session_service
+            try:
+                session_service.create_session(
+                    db=db,
+                    user_id=str(updated_user.id),
+                    session_id=session_id,
+                    request=request,
+                    is_current=True
+                )
+            except Exception:
+                pass  # Session creation is optional
+
+            # Log successful registration/login in background
+            background_tasks.add_task(
+                log_login_success,
+                db,
+                updated_user.id,
+                request.client.host if request.client else "unknown",
+                request.headers.get("user-agent", ""),
+                session_id
+            )
+
+            # Set httpOnly cookie
+            if use_cookie:
+                cookie_settings = get_cookie_settings_for_request(request)
+                response.set_cookie(
+                    key="access_token",
+                    value=f"Bearer {access_token}",
+                    **cookie_settings
+                )
+
+            logger.info(f"[register] User re-activated and logged in: {updated_user.email}")
+
             # Convert to dict and add requires_subscription
             user_dict = {
-                "id": str(updated_user.id),
-                "email": updated_user.email,
-                "first_name": updated_user.first_name,
-                "last_name": updated_user.last_name,
-                "preferred_language": updated_user.preferred_language,
-                "is_active": updated_user.is_active,
+                "success": True,
+                "user": {
+                    "id": str(updated_user.id),
+                    "email": updated_user.email,
+                    "first_name": updated_user.first_name,
+                    "last_name": updated_user.last_name,
+                    "preferred_language": updated_user.preferred_language,
+                    "is_active": updated_user.is_active,
+                },
                 "requires_subscription": requires_subscription
             }
             return user_dict
@@ -591,14 +648,58 @@ async def register(request: Request, user: UserCreate, db=Depends(get_db)):
         # Check if subscription is required for new user
         requires_subscription = should_require_subscription(new_user, db)
 
+        # Generate session ID for tracking
+        session_id = str(uuid.uuid4())
+
+        # Generate JWT token with session ID
+        token_response = sign_jwt(new_user.email, session_id=session_id)
+        access_token = token_response["access_token"]
+
+        # Create session record
+        from services.session_service import session_service
+        try:
+            session_service.create_session(
+                db=db,
+                user_id=str(new_user.id),
+                session_id=session_id,
+                request=request,
+                is_current=True
+            )
+        except Exception:
+            pass  # Session creation is optional
+
+        # Log successful registration/login in background
+        background_tasks.add_task(
+            log_login_success,
+            db,
+            new_user.id,
+            request.client.host if request.client else "unknown",
+            request.headers.get("user-agent", ""),
+            session_id
+        )
+
+        # Set httpOnly cookie for automatic login
+        if use_cookie:
+            cookie_settings = get_cookie_settings_for_request(request)
+            response.set_cookie(
+                key="access_token",
+                value=f"Bearer {access_token}",
+                **cookie_settings
+            )
+
+        logger.info(f"[register] New user registered and logged in: {new_user.email}")
+
         # Convert to dict and add requires_subscription
         user_dict = {
-            "id": str(new_user.id),
-            "email": new_user.email,
-            "first_name": new_user.first_name,
-            "last_name": new_user.last_name,
-            "preferred_language": new_user.preferred_language,
-            "is_active": new_user.is_active,
+            "success": True,
+            "user": {
+                "id": str(new_user.id),
+                "email": new_user.email,
+                "first_name": new_user.first_name,
+                "last_name": new_user.last_name,
+                "preferred_language": new_user.preferred_language,
+                "is_active": new_user.is_active,
+            },
             "requires_subscription": requires_subscription
         }
         return user_dict
@@ -606,8 +707,6 @@ async def register(request: Request, user: UserCreate, db=Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        import logging
-        logger = logging.getLogger(__name__)
         logger.error(f"Registration error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=400, detail=f"Registration failed: {str(e)}")
 

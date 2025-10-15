@@ -19,7 +19,6 @@ import {
   Delete,
   Edit,
   CheckCircle,
-  ArrowForward,
   ArrowBack
 } from '@mui/icons-material';
 
@@ -51,7 +50,7 @@ const GroupQuestionInput = ({
     if (JSON.stringify(entries) !== JSON.stringify(value)) {
       onChange(entries);
     }
-  }, [entries]);
+  }, [entries, onChange, value]);
 
   /**
    * Update internal state when external value changes
@@ -60,7 +59,7 @@ const GroupQuestionInput = ({
     if (JSON.stringify(value) !== JSON.stringify(entries)) {
       setEntries(value || []);
     }
-  }, [value]);
+  }, [value, entries]);
 
   /**
    * Initialize current entry with empty fields

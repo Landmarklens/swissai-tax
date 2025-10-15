@@ -196,23 +196,28 @@ async def callback(request: Request, response: Response, background_tasks: Backg
     # Check if user requires subscription
     requires_subscription = should_require_subscription(user, db)
 
-    # Build redirect URL (frontend will use cookie for auth, not URL params)
-    final_redirect_url = redirect_url
-    if requires_subscription:
-        final_redirect_url = f"{final_redirect_url}?requires_subscription=true"
+    # Create exchange token for secure cookie setting
+    from utils.exchange_token import exchange_token_store
+    exchange_token_str = exchange_token_store.create_token(
+        access_token=access_token,
+        session_id=session_id,
+        ttl=60  # 60 seconds to exchange
+    )
 
-    # Get cookie settings based on request
-    cookie_settings = get_cookie_settings_for_request(request)
+    # Build redirect URL with exchange token
+    # Frontend will exchange this token for a cookie
+    final_redirect_url = redirect_url
+    params = []
+    params.append(f"exchange_token={exchange_token_str}")
+    if requires_subscription:
+        params.append("requires_subscription=true")
+
+    if params:
+        separator = "&" if "?" in final_redirect_url else "?"
+        final_redirect_url = f"{final_redirect_url}{separator}{'&'.join(params)}"
 
     # Create redirect response with 302 status code
     redirect_response = RedirectResponse(url=final_redirect_url, status_code=302)
-
-    # Set httpOnly cookie on the redirect response
-    redirect_response.set_cookie(
-        key="access_token",
-        value=f"Bearer {access_token}",
-        **cookie_settings
-    )
 
     return redirect_response
 
@@ -518,6 +523,60 @@ async def logout(
         )
 
     return {"success": True, "message": "Logged out successfully"}
+
+
+@router.post("/exchange-token")
+@rate_limit("100/minute")
+async def exchange_token(
+    request: Request,
+    response: Response,
+    exchange_token: str = Body(..., embed=True),
+):
+    """
+    Exchange a one-time token for a session cookie.
+
+    This endpoint is used after OAuth redirects to securely set cookies.
+    The exchange token is short-lived (60s) and can only be used once.
+
+    Args:
+        exchange_token: One-time exchange token from OAuth callback
+
+    Returns:
+        Success response with user data (cookie set in response)
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    from utils.exchange_token import exchange_token_store
+
+    # Consume the exchange token (one-time use)
+    token_data = exchange_token_store.consume_token(exchange_token)
+
+    if not token_data:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired exchange token"
+        )
+
+    access_token = token_data["access_token"]
+    session_id = token_data["session_id"]
+
+    # Get cookie settings
+    cookie_settings = get_cookie_settings_for_request(request)
+
+    # Set httpOnly cookie on DIRECT response (reliable!)
+    response.set_cookie(
+        key="access_token",
+        value=f"Bearer {access_token}",
+        **cookie_settings
+    )
+
+    logger.info(f"Exchange token consumed, cookie set for session {session_id}")
+
+    return {
+        "success": True,
+        "message": "Authentication cookie set successfully"
+    }
 
 
 @router.post("/migrate-to-cookie")

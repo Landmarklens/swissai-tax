@@ -6,6 +6,7 @@ import { fetchUserProfile } from '../../store/slices/accountSlice';
 import SEOHelmet from '../../components/SEO/SEOHelmet';
 import { CircularProgress, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 const GoogleCallback = () => {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ const GoogleCallback = () => {
     const handleCallback = async () => {
       const error = searchParams.get('error');
       const error_description = searchParams.get('error_description');
+      const exchange_token = searchParams.get('exchange_token');
       const requires_subscription = searchParams.get('requires_subscription');
 
       if (error) {
@@ -27,7 +29,24 @@ const GoogleCallback = () => {
         return;
       }
 
-      // Backend now sets httpOnly cookie with auth token
+      // Exchange the token for a secure httpOnly cookie
+      if (exchange_token) {
+        try {
+          console.log('[GoogleCallback] Exchanging token for cookie...');
+          await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/exchange-token`, {
+            exchange_token
+          });
+          console.log('[GoogleCallback] Cookie set successfully');
+
+          // Clear URL parameters after successful exchange
+          window.history.replaceState({}, '', window.location.pathname);
+        } catch (error) {
+          console.error('[GoogleCallback] Failed to exchange token:', error);
+          navigate('/');
+          return;
+        }
+      }
+
       // Fetch user profile to populate Redux store and localStorage
       console.log('[GoogleCallback] Fetching user profile...');
       const profileAction = await dispatch(fetchUserProfile());

@@ -1459,8 +1459,8 @@ questions:
       fr: Vous pouvez télécharger tout autre document fiscal pertinent (par exemple,
         autres déductions, circonstances particulières)
     branching:
-      true: complete
-      false: complete
+      true: Q_complexity_screen
+      false: Q_complexity_screen
     required: true
     inline_document_upload:
       document_type: other_documents
@@ -1479,6 +1479,767 @@ questions:
         en: Upload any other tax-relevant documents
         de: Laden Sie alle anderen steuerrelevanten Dokumente hoch
         fr: Téléchargez tout autre document fiscal pertinents
+  Q_complexity_screen:
+    id: Q_complexity_screen
+    text:
+      en: Do any of these special situations apply to you?
+      de: Treffen eine dieser besonderen Situationen auf Sie zu?
+      fr: L'une de ces situations spéciales s'applique-t-elle à vous?
+    type: multi_select
+    explanation:
+      en: Most taxpayers don't need these sections. Select all that apply, or choose "None of the above" to skip to completion.
+      de: Die meisten Steuerzahler benötigen diese Abschnitte nicht. Wählen Sie alle zutreffenden aus oder wählen Sie "Nichts davon", um fortzufahren.
+      fr: La plupart des contribuables n'ont pas besoin de ces sections. Sélectionnez tous ceux qui s'appliquent, ou choisissez "Aucune" pour continuer.
+    options:
+      - value: detailed_securities
+        label:
+          en: I have securities/investments that need detailed reporting
+          de: Ich habe Wertschriften/Anlagen, die detailliert gemeldet werden müssen
+          fr: J'ai des titres/investissements nécessitant un rapport détaillé
+      - value: bank_accounts
+        label:
+          en: I have multiple bank accounts (Swiss or foreign)
+          de: Ich habe mehrere Bankkonten (Schweiz oder Ausland)
+          fr: J'ai plusieurs comptes bancaires (suisses ou étrangers)
+      - value: rental_property_expenses
+        label:
+          en: I have rental income with deductible expenses
+          de: Ich habe Mieteinnahmen mit abzugsfähigen Kosten
+          fr: J'ai des revenus locatifs avec des dépenses déductibles
+      - value: capital_gains_professional
+        label:
+          en: Professional securities trading / capital gains
+          de: Professioneller Wertschriftenhandel / Kapitalgewinne
+          fr: Négoce professionnel de titres / gains en capital
+      - value: energy_renovation
+        label:
+          en: Energy-saving home renovations in 2024
+          de: Energiesparende Renovierungen in 2024
+          fr: Rénovations éconergétiques en 2024
+      - value: pillar_2_buyback
+        label:
+          en: Pension fund buyback (Einkauf 2. Säule)
+          de: Pensionskassen-Einkauf (2. Säule)
+          fr: Rachat caisse de pension (2e pilier)
+      - value: trust_foundation_income
+        label:
+          en: Income from trust or foundation
+          de: Einkommen aus Trust oder Stiftung
+          fr: Revenus de trust ou fondation
+      - value: inheritance_2024
+        label:
+          en: Received inheritance or gift in 2024
+          de: Erbschaft oder Schenkung in 2024 erhalten
+          fr: Héritage ou donation reçu(e) en 2024
+      - value: military_civil_service
+        label:
+          en: Military or civil service pay in 2024
+          de: Militär- oder Zivildienstsold in 2024
+          fr: Solde militaire ou service civil en 2024
+      - value: foreign_tax_credit
+        label:
+          en: Need to claim foreign tax credits
+          de: Muss ausländische Steuergutschriften geltend machen
+          fr: Besoin de réclamer des crédits d'impôt étrangers
+      - value: none_of_above
+        label:
+          en: None of the above applies to me
+          de: Nichts davon trifft auf mich zu
+          fr: Aucune de ces situations ne s'applique
+    branching:
+      none_of_above: complete
+      detailed_securities: Q10b
+      bank_accounts: Q10_bank_accounts
+      rental_property_expenses: Q09c_expenses
+      capital_gains_professional: Q_capital_gains
+      energy_renovation: Q_energy_renovation
+      pillar_2_buyback: Q_pension_buyback
+      trust_foundation_income: Q_trust_foundation
+      inheritance_2024: Q_inheritance
+      military_civil_service: Q_military_service
+      foreign_tax_credit: Q15_tax_credits
+      default: complete
+    required: true
+    help_text:
+      en: These additional sections help ensure 100% accuracy for complex tax situations. Skip if not applicable.
+      de: Diese zusätzlichen Abschnitte helfen, 100% Genauigkeit für komplexe Steuersituationen zu gewährleisten.
+      fr: Ces sections supplémentaires garantissent une précision de 100% pour les situations fiscales complexes.
+  Q10b:
+    id: Q10b
+    text:
+      en: Upload your year-end securities statement for AI extraction
+      de: Laden Sie Ihren Jahresend-Wertschriftenbestand für KI-Extraktion hoch
+      fr: Téléchargez votre relevé de titres de fin d'année pour extraction IA
+    type: document_upload
+    document_type: broker_statement_detailed
+    accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+    max_size_mb: 15
+    bring_later: false
+    explanation:
+      en: Our AI will automatically extract all securities details (ISIN, quantities, values, income) from your broker or bank statement dated December 31, 2024. This replaces manual entry of each security.
+      de: Unsere KI extrahiert automatisch alle Wertschriftendetails (ISIN, Mengen, Werte, Einkommen) aus Ihrem Makler- oder Bankauszug vom 31. Dezember 2024. Dies ersetzt die manuelle Eingabe jeder Wertschrift.
+      fr: Notre IA extraira automatiquement tous les détails des titres (ISIN, quantités, valeurs, revenus) de votre relevé de courtier ou banque daté du 31 décembre 2024. Cela remplace la saisie manuelle.
+    help_text:
+      en: Upload your December 31, 2024 securities/portfolio statement showing all holdings, values, and income received in 2024
+      de: Laden Sie Ihren Wertschriften-/Portfolio-Auszug vom 31.12.2024 mit allen Beständen, Werten und erhaltenen Einkommen 2024 hoch
+      fr: Téléchargez votre relevé de titres/portefeuille du 31.12.2024 montrant tous les avoirs, valeurs et revenus reçus en 2024
+    next: complete
+    required: true
+    parent: Q_complexity_screen
+  Q10_bank_accounts:
+    id: Q10_bank_accounts
+    text:
+      en: Upload your year-end bank statement(s) for AI extraction
+      de: Laden Sie Ihre Jahresend-Bankauszüge für KI-Extraktion hoch
+      fr: Téléchargez vos relevés bancaires de fin d'année pour extraction IA
+    type: document_upload
+    document_type: bank_statement_yearend
+    accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+    max_size_mb: 15
+    bring_later: false
+    allow_multiple: true
+    explanation:
+      en: Our AI will extract account details (IBAN, balance on Dec 31, interest earned) from your bank statements. Upload statements for all Swiss and foreign accounts.
+      de: Unsere KI extrahiert Kontodetails (IBAN, Saldo am 31.12., Zinsen) aus Ihren Bankauszügen. Laden Sie Auszüge für alle Schweizer und ausländischen Konten hoch.
+      fr: Notre IA extraira les détails du compte (IBAN, solde au 31 déc, intérêts) de vos relevés bancaires. Téléchargez les relevés de tous les comptes suisses et étrangers.
+    help_text:
+      en: Upload December 31, 2024 statements for checking, savings, and investment accounts
+      de: Laden Sie Auszüge vom 31.12.2024 für Giro-, Spar- und Anlagekonten hoch
+      fr: Téléchargez les relevés du 31.12.2024 pour comptes courants, d'épargne et d'investissement
+    next: complete
+    required: true
+    parent: Q_complexity_screen
+  Q09c_expenses:
+    id: Q09c_expenses
+    text:
+      en: Upload rental property expense documents for AI extraction
+      de: Laden Sie Mietimmobilien-Kostenbelege für KI-Extraktion hoch
+      fr: Téléchargez les documents de dépenses locatives pour extraction IA
+    type: document_upload
+    document_type: rental_expense_documents
+    accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+    max_size_mb: 20
+    bring_later: false
+    allow_multiple: true
+    explanation:
+      en: Our AI will extract rental expenses (maintenance, insurance, mortgage interest, management fees) from your invoices and statements. Upload all relevant expense documents for 2024.
+      de: Unsere KI extrahiert Mietausgaben (Unterhalt, Versicherung, Hypothekarzinsen, Verwaltung) aus Ihren Rechnungen. Laden Sie alle relevanten Kostenbelege für 2024 hoch.
+      fr: Notre IA extraira les dépenses locatives (entretien, assurance, intérêts hypothécaires, gestion) de vos factures. Téléchargez tous les documents pertinents pour 2024.
+    help_text:
+      en: Include mortgage statements, insurance bills, maintenance invoices, property management fees, utility bills
+      de: Einschließlich Hypothekenauszüge, Versicherungsrechnungen, Unterhaltsrechnungen, Verwaltungsgebühren, Nebenkostenabrechnungen
+      fr: Incluez relevés hypothécaires, factures d'assurance, factures d'entretien, frais de gestion, factures de services publics
+    next: complete
+    required: true
+    parent: Q_complexity_screen
+  Q_capital_gains:
+    id: Q_capital_gains
+    text:
+      en: Capital gains and losses (professional traders)
+      de: Kapitalgewinne und -verluste (professionelle Händler)
+      fr: Gains et pertes en capital (traders professionnels)
+    type: group
+    explanation:
+      en: Only complete this section if you are classified as a professional securities trader (gewerbsmässiger Wertschriftenhändler). Upload trading statements and enter details.
+      de: Füllen Sie diesen Abschnitt nur aus, wenn Sie als gewerbsmässiger Wertschriftenhändler eingestuft sind. Laden Sie Handelsauszüge hoch.
+      fr: Ne complétez cette section que si vous êtes classé comme trader professionnel. Téléchargez les relevés de transactions.
+    fields:
+      - id: is_professional_trader
+        text:
+          en: Are you officially classified as professional trader?
+          de: Sind Sie offiziell als gewerbsmässiger Händler eingestuft?
+          fr: Êtes-vous officiellement classé comme trader professionnel?
+        type: yes_no
+        required: true
+      - id: capital_gains_2024
+        text:
+          en: Total capital gains in 2024 (CHF)
+          de: Gesamte Kapitalgewinne in 2024 (CHF)
+          fr: Total des gains en capital en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: capital_losses_2024
+        text:
+          en: Total capital losses in 2024 (CHF)
+          de: Gesamte Kapitalverluste in 2024 (CHF)
+          fr: Total des pertes en capital en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: loss_carryforward
+        text:
+          en: Loss carryforward from previous years (CHF)
+          de: Verlustvortrag aus Vorjahren (CHF)
+          fr: Report de pertes des années précédentes (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: false
+        help_text:
+          en: Losses from 2017-2023 can be carried forward for up to 7 years
+          de: Verluste aus 2017-2023 können bis zu 7 Jahre vorgetragen werden
+          fr: Les pertes de 2017-2023 peuvent être reportées jusqu'à 7 ans
+    next: complete
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: trading_statements
+      accepted_formats:
+        - pdf
+        - csv
+        - xlsx
+      max_size_mb: 20
+      bring_later: false
+      upload_text:
+        en: Upload trading statements and tax certificates
+        de: Handelsauszüge und Steuerbescheinigungen hochladen
+        fr: Télécharger relevés de transactions et certificats fiscaux
+      help_text:
+        en: Upload annual trading summaries showing all buy/sell transactions and realized gains/losses
+        de: Laden Sie jährliche Handelszusammenfassungen mit allen Kauf-/Verkaufstransaktionen und realisierten Gewinnen/Verlusten hoch
+        fr: Téléchargez les résumés annuels de transactions montrant tous les achats/ventes et gains/pertes réalisés
+  Q_energy_renovation:
+    id: Q_energy_renovation
+    text:
+      en: Energy-saving renovations and environmental deductions
+      de: Energiesparende Renovierungen und Umweltabzüge
+      fr: Rénovations éconergétiques et déductions environnementales
+    type: group
+    explanation:
+      en: Energy-saving renovations may be deductible at 100-120% of cost depending on canton. Upload invoices for AI extraction.
+      de: Energiesparende Renovierungen können je nach Kanton zu 100-120% abzugsfähig sein. Laden Sie Rechnungen für KI-Extraktion hoch.
+      fr: Les rénovations éconergétiques peuvent être déductibles à 100-120% du coût selon le canton. Téléchargez les factures.
+    fields:
+      - id: renovation_type
+        text:
+          en: Type of energy renovation
+          de: Art der Energierenovierung
+          fr: Type de rénovation énergétique
+        type: multi_select
+        options:
+          - value: solar_panels
+            label:
+              en: Solar panels / photovoltaic
+              de: Solarpanels / Photovoltaik
+              fr: Panneaux solaires / photovoltaïque
+          - value: heat_pump
+            label:
+              en: Heat pump installation
+              de: Wärmepumpeninstallation
+              fr: Installation pompe à chaleur
+          - value: insulation
+            label:
+              en: Thermal insulation
+              de: Wärmedämmung
+              fr: Isolation thermique
+          - value: windows
+            label:
+              en: Energy-efficient windows/doors
+              de: Energieeffiziente Fenster/Türen
+              fr: Fenêtres/portes éconergétiques
+          - value: heating_system
+            label:
+              en: Efficient heating system
+              de: Effizientes Heizsystem
+              fr: Système de chauffage efficace
+        required: true
+      - id: renovation_total_cost
+        text:
+          en: Total renovation costs (CHF)
+          de: Gesamte Renovierungskosten (CHF)
+          fr: Coûts totaux de rénovation (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: renovation_completion_date
+        text:
+          en: Completion date
+          de: Fertigstellungsdatum
+          fr: Date d'achèvement
+        type: date
+        widget: calendar
+        required: true
+    next: complete
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: renovation_invoices
+      accepted_formats:
+        - pdf
+        - jpg
+        - jpeg
+        - png
+      max_size_mb: 20
+      bring_later: false
+      allow_multiple: true
+      upload_text:
+        en: Upload renovation invoices and energy certificates
+        de: Renovierungsrechnungen und Energiezertifikate hochladen
+        fr: Télécharger factures de rénovation et certificats énergétiques
+      help_text:
+        en: Upload all invoices from contractors, suppliers, and energy certificates (GEAK if available)
+        de: Laden Sie alle Rechnungen von Handwerkern, Lieferanten und Energiezertifikate (GEAK falls vorhanden) hoch
+        fr: Téléchargez toutes les factures des entrepreneurs, fournisseurs et certificats énergétiques (CECB si disponible)
+  Q_pension_buyback:
+    id: Q_pension_buyback
+    text:
+      en: Pension fund buybacks (Einkauf 2. Säule)
+      de: Pensionskassen-Einkauf (2. Säule)
+      fr: Rachat caisse de pension (2e pilier)
+    type: group
+    explanation:
+      en: Voluntary contributions to fill pension gaps (Einkauf) are fully tax-deductible. Upload confirmation from your pension fund.
+      de: Freiwillige Beiträge zum Schliessen von Vorsorgelücken (Einkauf) sind vollständig steuerabzugsfähig. Laden Sie Bestätigung Ihrer Pensionskasse hoch.
+      fr: Les cotisations volontaires pour combler les lacunes de prévoyance sont entièrement déductibles. Téléchargez la confirmation de votre caisse.
+    fields:
+      - id: buyback_amount_2024
+        text:
+          en: Buyback amount in 2024 (CHF)
+          de: Einkaufsbetrag in 2024 (CHF)
+          fr: Montant du rachat en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: buyback_before_retirement
+        text:
+          en: Will you retire within 3 years?
+          de: Werden Sie innerhalb von 3 Jahren in Rente gehen?
+          fr: Prendrez-vous votre retraite dans les 3 ans?
+        type: yes_no
+        required: true
+        help_text:
+          en: Buybacks within 3 years of retirement may have tax limitations
+          de: Einkäufe innerhalb von 3 Jahren vor der Pensionierung können steuerliche Einschränkungen haben
+          fr: Les rachats dans les 3 ans précédant la retraite peuvent avoir des limitations fiscales
+      - id: voluntary_ahv
+        text:
+          en: Voluntary AHV/IV contributions for coverage gaps (CHF)
+          de: Freiwillige AHV/IV-Beiträge für Beitragslücken (CHF)
+          fr: Cotisations AVS/AI volontaires pour lacunes (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: false
+    next: complete
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: pension_buyback_confirmation
+      accepted_formats:
+        - pdf
+        - jpg
+        - jpeg
+        - png
+      max_size_mb: 10
+      bring_later: false
+      upload_text:
+        en: Upload pension fund buyback confirmation
+        de: Pensionskassen-Einkaufsbestätigung hochladen
+        fr: Télécharger confirmation de rachat
+      help_text:
+        en: Upload confirmation letter from your pension fund showing the buyback amount and date
+        de: Laden Sie Bestätigungsschreiben Ihrer Pensionskasse mit Einkaufsbetrag und Datum hoch
+        fr: Téléchargez la lettre de confirmation de votre caisse montrant le montant et la date du rachat
+  Q_trust_foundation:
+    id: Q_trust_foundation
+    text:
+      en: Trust, foundation, and usufruct income
+      de: Trust-, Stiftungs- und Nutzniessungseinkommen
+      fr: Revenus de trust, fondation et usufruit
+    type: group
+    explanation:
+      en: Income from trusts, foundations, or usufruct rights must be declared. These are complex structures - upload all relevant documents.
+      de: Einkommen aus Trusts, Stiftungen oder Nutzniessungsrechten muss deklariert werden. Dies sind komplexe Strukturen - laden Sie alle relevanten Dokumente hoch.
+      fr: Les revenus de trusts, fondations ou droits d'usufruit doivent être déclarés. Ce sont des structures complexes - téléchargez tous les documents pertinents.
+    fields:
+      - id: structure_type
+        text:
+          en: Type of structure
+          de: Art der Struktur
+          fr: Type de structure
+        type: single_choice
+        options:
+          - value: trust
+            label:
+              en: Trust
+              de: Trust
+              fr: Trust
+          - value: foundation
+            label:
+              en: Foundation (Stiftung)
+              de: Stiftung
+              fr: Fondation
+          - value: usufruct_property
+            label:
+              en: Usufruct on property
+              de: Nutzniessung an Immobilie
+              fr: Usufruit sur propriété
+          - value: usufruct_assets
+            label:
+              en: Usufruct on financial assets
+              de: Nutzniessung an Finanzvermögen
+              fr: Usufruit sur actifs financiers
+        required: true
+      - id: income_received_2024
+        text:
+          en: Income/distributions received in 2024 (CHF)
+          de: Erhaltene Einkommen/Ausschüttungen in 2024 (CHF)
+          fr: Revenus/distributions reçus en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: asset_value_dec_31
+        text:
+          en: Total asset value on December 31 (CHF)
+          de: Gesamtvermögenswert am 31. Dezember (CHF)
+          fr: Valeur totale des actifs au 31 décembre (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+        help_text:
+          en: For wealth tax purposes
+          de: Für Vermögenssteuerzwecke
+          fr: Aux fins de l'impôt sur la fortune
+    next: complete
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: trust_foundation_documents
+      accepted_formats:
+        - pdf
+      max_size_mb: 15
+      bring_later: false
+      allow_multiple: true
+      upload_text:
+        en: Upload trust/foundation documents
+        de: Trust-/Stiftungsdokumente hochladen
+        fr: Télécharger documents trust/fondation
+      help_text:
+        en: Upload trust deeds, foundation statutes, distribution statements, and valuation reports
+        de: Laden Sie Trusturkunden, Stiftungsstatuten, Ausschüttungsnachweise und Bewertungsberichte hoch
+        fr: Téléchargez actes de trust, statuts de fondation, relevés de distribution et rapports d'évaluation
+  Q_inheritance:
+    id: Q_inheritance
+    text:
+      en: Inheritance and gifts received in 2024
+      de: Erbschaften und Schenkungen erhalten in 2024
+      fr: Héritages et donations reçus en 2024
+    type: group
+    explanation:
+      en: Inheritances and gifts affect your wealth tax even if income tax doesn't apply. Declare all inheritances and gifts received in 2024.
+      de: Erbschaften und Schenkungen beeinflussen Ihre Vermögenssteuer, auch wenn keine Einkommenssteuer anfällt. Deklarieren Sie alle 2024 erhaltenen Erbschaften und Schenkungen.
+      fr: Les héritages et donations affectent votre impôt sur la fortune même si l'impôt sur le revenu ne s'applique pas. Déclarez tous les héritages et donations reçus en 2024.
+    fields:
+      - id: inheritance_type
+        text:
+          en: Type
+          de: Art
+          fr: Type
+        type: single_choice
+        options:
+          - value: inheritance
+            label:
+              en: Inheritance (Erbschaft)
+              de: Erbschaft
+              fr: Héritage
+          - value: gift
+            label:
+              en: Gift (Schenkung)
+              de: Schenkung
+              fr: Donation
+          - value: advance_inheritance
+            label:
+              en: Advance on inheritance (Erbvorbezug)
+              de: Erbvorbezug
+              fr: Avance sur héritage
+        required: true
+      - id: inheritance_date
+        text:
+          en: Date received
+          de: Erhaltungsdatum
+          fr: Date de réception
+        type: date
+        widget: calendar
+        required: true
+      - id: relationship
+        text:
+          en: Relationship to deceased/donor
+          de: Verwandtschaft zum Verstorbenen/Schenker
+          fr: Relation avec le défunt/donateur
+        type: single_choice
+        options:
+          - value: spouse
+            label:
+              en: Spouse
+              de: Ehepartner
+              fr: Conjoint
+          - value: parent
+            label:
+              en: Parent
+              de: Elternteil
+              fr: Parent
+          - value: child
+            label:
+              en: Child
+              de: Kind
+              fr: Enfant
+          - value: sibling
+            label:
+              en: Sibling
+              de: Geschwister
+              fr: Frère/Sœur
+          - value: other
+            label:
+              en: Other
+              de: Andere
+              fr: Autre
+        required: true
+      - id: total_value
+        text:
+          en: Total value received (CHF)
+          de: Gesamtwert erhalten (CHF)
+          fr: Valeur totale reçue (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+    next: complete
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: inheritance_documents
+      accepted_formats:
+        - pdf
+      max_size_mb: 15
+      bring_later: false
+      allow_multiple: true
+      upload_text:
+        en: Upload inheritance/gift documents
+        de: Erbschafts-/Schenkungsdokumente hochladen
+        fr: Télécharger documents héritage/donation
+      help_text:
+        en: Upload estate inventory, gift deed, valuation reports, and inheritance certificates
+        de: Laden Sie Nachlassinventar, Schenkungsurkunde, Bewertungsberichte und Erbscheine hoch
+        fr: Téléchargez inventaire successoral, acte de donation, rapports d'évaluation et certificats d'héritage
+  Q_military_service:
+    id: Q_military_service
+    text:
+      en: Military or civil service pay in 2024
+      de: Militär- oder Zivildienstsold in 2024
+      fr: Solde militaire ou service civil en 2024
+    type: group
+    explanation:
+      en: Military and civil service pay (Sold) is taxable income. You may also deduct or claim exemption tax paid.
+      de: Militär- und Zivildienstsold ist steuerpflichtiges Einkommen. Sie können auch bezahlte Wehrpflichtersatzsteuer abziehen oder geltend machen.
+      fr: La solde militaire et du service civil est un revenu imposable. Vous pouvez également déduire ou réclamer la taxe d'exemption payée.
+    fields:
+      - id: service_type
+        text:
+          en: Type of service
+          de: Art des Dienstes
+          fr: Type de service
+        type: single_choice
+        options:
+          - value: military
+            label:
+              en: Military service
+              de: Militärdienst
+              fr: Service militaire
+          - value: civil_service
+            label:
+              en: Civil service
+              de: Zivildienst
+              fr: Service civil
+          - value: civil_protection
+            label:
+              en: Civil protection
+              de: Zivilschutz
+              fr: Protection civile
+        required: true
+      - id: days_served
+        text:
+          en: Number of days served in 2024
+          de: Anzahl geleistete Tage in 2024
+          fr: Nombre de jours servis en 2024
+        type: number
+        validation:
+          min: 1
+          max: 365
+        required: true
+      - id: pay_received
+        text:
+          en: Total pay received (CHF)
+          de: Erhaltener Sold (CHF)
+          fr: Solde total reçue (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: exemption_tax_paid
+        text:
+          en: Military exemption tax paid (Wehrpflichtersatz) - if applicable
+          de: Bezahlte Wehrpflichtersatzsteuer - falls zutreffend
+          fr: Taxe d'exemption militaire payée - le cas échéant
+        type: currency
+        validation:
+          min: 0
+        required: false
+        help_text:
+          en: Swiss males who don't serve pay annual exemption tax - this can be deducted
+          de: Schweizer Männer, die nicht dienen, zahlen jährliche Ersatzsteuer - diese ist abzugsfähig
+          fr: Les hommes suisses qui ne servent pas paient une taxe d'exemption annuelle - elle est déductible
+    next: complete
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: military_service_documents
+      accepted_formats:
+        - pdf
+        - jpg
+        - jpeg
+        - png
+      max_size_mb: 10
+      bring_later: false
+      upload_text:
+        en: Upload military/civil service pay statement
+        de: Militär-/Zivildienstsoldabrechnung hochladen
+        fr: Télécharger relevé de solde militaire/civile
+      help_text:
+        en: Upload pay statement (Soldabrechnung) or exemption tax bill
+        de: Laden Sie Soldabrechnung oder Wehrpflichtersatzrechnung hoch
+        fr: Téléchargez relevé de solde ou facture de taxe d'exemption
+  Q15_tax_credits:
+    id: Q15_tax_credits
+    text:
+      en: Foreign tax credits - detailed breakdown
+      de: Ausländische Steuergutschriften - detaillierte Aufschlüsselung
+      fr: Crédits d'impôt étrangers - ventilation détaillée
+    type: group
+    loop: true
+    explanation:
+      en: If you paid taxes abroad, you may claim foreign tax credits to avoid double taxation. Upload foreign tax certificates for each country.
+      de: Wenn Sie im Ausland Steuern bezahlt haben, können Sie ausländische Steuergutschriften geltend machen, um Doppelbesteuerung zu vermeiden. Laden Sie ausländische Steuerbescheinigungen für jedes Land hoch.
+      fr: Si vous avez payé des impôts à l'étranger, vous pouvez réclamer des crédits d'impôt pour éviter la double imposition. Téléchargez les certificats fiscaux étrangers pour chaque pays.
+    fields:
+      - id: foreign_country
+        text:
+          en: Country where tax was paid
+          de: Land, in dem Steuer bezahlt wurde
+          fr: Pays où l'impôt a été payé
+        type: text
+        required: true
+      - id: foreign_income_type
+        text:
+          en: Type of foreign income
+          de: Art des ausländischen Einkommens
+          fr: Type de revenu étranger
+        type: single_choice
+        options:
+          - value: employment
+            label:
+              en: Employment income
+              de: Erwerbseinkommen
+              fr: Revenus d'emploi
+          - value: pension
+            label:
+              en: Pension
+              de: Rente
+              fr: Pension
+          - value: rental
+            label:
+              en: Rental income
+              de: Mieteinnahmen
+              fr: Revenus locatifs
+          - value: dividends
+            label:
+              en: Dividends/Interest
+              de: Dividenden/Zinsen
+              fr: Dividendes/Intérêts
+        required: true
+      - id: gross_income_foreign
+        text:
+          en: Gross income in foreign currency
+          de: Bruttoeinkommen in Fremdwährung
+          fr: Revenu brut en devise étrangère
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: foreign_currency
+        text:
+          en: Currency
+          de: Währung
+          fr: Devise
+        type: text
+        placeholder: EUR, USD, GBP
+        required: true
+      - id: gross_income_chf
+        text:
+          en: Gross income converted to CHF
+          de: Bruttoeinkommen in CHF umgerechnet
+          fr: Revenu brut converti en CHF
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: foreign_tax_paid
+        text:
+          en: Tax paid in foreign country (CHF)
+          de: Im Ausland bezahlte Steuer (CHF)
+          fr: Impôt payé à l'étranger (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+    next: Q15_tax_credits_another
+    required: false
+    parent: Q_complexity_screen
+    inline_document_upload:
+      document_type: foreign_tax_certificates
+      accepted_formats:
+        - pdf
+      max_size_mb: 10
+      bring_later: false
+      allow_multiple: true
+      upload_text:
+        en: Upload foreign tax certificate
+        de: Ausländische Steuerbescheinigung hochladen
+        fr: Télécharger certificat fiscal étranger
+      help_text:
+        en: Upload official tax certificate from the foreign country showing income and taxes paid
+        de: Laden Sie offizielle Steuerbescheinigung aus dem Ausland mit Einkommen und bezahlten Steuern hoch
+        fr: Téléchargez le certificat fiscal officiel du pays étranger montrant les revenus et impôts payés
+  Q15_tax_credits_another:
+    id: Q15_tax_credits_another
+    text:
+      en: Add foreign tax credit for another country?
+      de: Ausländische Steuergutschrift für weiteres Land hinzufügen?
+      fr: Ajouter crédit d'impôt étranger pour un autre pays?
+    type: yes_no
+    branching:
+      true: Q15_tax_credits
+      false: complete
+    required: true
+    parent: Q15_tax_credits
 document_rules:
   R1:
     description: Lohnausweis for each employer

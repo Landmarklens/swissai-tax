@@ -101,7 +101,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://api.swissai.tax",
+  "proxy": "http://localhost:8000",
   "devDependencies": {
     "ajv": "^8.17.1",
     "eslint": "^8.57.1",

@@ -32,7 +32,8 @@ const QuestionCard = ({
   onAnswer,
   onBack,
   isSubmitting,
-  previousAnswer
+  previousAnswer,
+  canGoBack = false
 }) => {
   const { t } = useTranslation();
   const [answer, setAnswer] = useState(previousAnswer || '');
@@ -115,26 +116,53 @@ const QuestionCard = ({
         );
 
       case 'multiselect':
+        const hasNoneOption = question.options?.options?.some(opt =>
+          (typeof opt === 'string' ? opt : opt.value) === 'none_of_above'
+        );
+
+        const handleMultiSelectChange = (optionValue, checked) => {
+          if (optionValue === 'none_of_above' && checked) {
+            // Selecting "none of above" clears all other selections
+            setMultiSelectAnswers(['none_of_above']);
+          } else if (checked) {
+            // Selecting any other option removes "none of above"
+            const filtered = multiSelectAnswers.filter(a => a !== 'none_of_above');
+            setMultiSelectAnswers([...filtered, optionValue]);
+          } else {
+            // Unchecking
+            setMultiSelectAnswers(multiSelectAnswers.filter(a => a !== optionValue));
+          }
+        };
+
         return (
           <FormGroup>
-            {question.options?.options?.map((option) => (
-              <FormControlLabel
-                key={option}
-                control={
-                  <Checkbox
-                    checked={multiSelectAnswers.includes(option)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setMultiSelectAnswers([...multiSelectAnswers, option]);
-                      } else {
-                        setMultiSelectAnswers(multiSelectAnswers.filter(a => a !== option));
-                      }
-                    }}
-                  />
-                }
-                label={option.replace('_', ' ').charAt(0).toUpperCase() + option.slice(1).replace('_', ' ')}
-              />
-            ))}
+            {question.options?.options?.map((option) => {
+              // Handle both string and object formats
+              const optionValue = typeof option === 'string' ? option : option.value;
+              const optionLabel = typeof option === 'string'
+                ? option.replace('_', ' ').charAt(0).toUpperCase() + option.slice(1).replace('_', ' ')
+                : option.label;
+
+              const isNoneOption = optionValue === 'none_of_above';
+              const isDisabled = hasNoneOption && (
+                (isNoneOption && multiSelectAnswers.length > 0 && !multiSelectAnswers.includes('none_of_above')) ||
+                (!isNoneOption && multiSelectAnswers.includes('none_of_above'))
+              );
+
+              return (
+                <FormControlLabel
+                  key={optionValue}
+                  control={
+                    <Checkbox
+                      checked={multiSelectAnswers.includes(optionValue)}
+                      onChange={(e) => handleMultiSelectChange(optionValue, e.target.checked)}
+                      disabled={isDisabled}
+                    />
+                  }
+                  label={optionLabel}
+                />
+              );
+            })}
           </FormGroup>
         );
 
@@ -271,7 +299,7 @@ const QuestionCard = ({
         <Button
           startIcon={<ArrowBack />}
           onClick={onBack}
-          disabled={isSubmitting || question.id === 'Q01'}
+          disabled={isSubmitting || !canGoBack}
         >
           Previous
         </Button>

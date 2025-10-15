@@ -142,9 +142,13 @@ class Settings(BaseSettings):
                 self.STRIPE_SECRET_KEY = "sk_test_fake_key_for_testing"
             if not self.STRIPE_WEBHOOK_SECRET:
                 self.STRIPE_WEBHOOK_SECRET = "whsec_test_fake_webhook_secret"
-        else:
+        elif self.ENVIRONMENT == "production":
             # Production: load from Parameter Store
+            logger.info("Production environment detected, loading from Parameter Store")
             self._load_from_parameter_store()
+        else:
+            # Development: use .env file (skip Parameter Store)
+            logger.info(f"Development environment detected (ENVIRONMENT={self.ENVIRONMENT}), using .env file")
 
         self._validate_critical_secrets()
     

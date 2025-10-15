@@ -14,6 +14,7 @@ class QuestionType(Enum):
     DATE = "date"
     YES_NO = "yes_no"
     SINGLE_CHOICE = "single_choice"
+    MULTI_SELECT = "multi_select"  # NEW: Multiple choice selection
     DROPDOWN = "dropdown"
     GROUP = "group"
     AHV_NUMBER = "ahv_number"  # NEW: Swiss AHV number with validation
@@ -90,6 +91,18 @@ class Question:
             valid_values = [opt['value'] for opt in self.options]
             if answer not in valid_values:
                 return False, "Please select a valid option"
+
+        elif self.type == QuestionType.MULTI_SELECT:
+            # Answer should be a list of selected values
+            if not isinstance(answer, list):
+                return False, "Please select at least one option"
+            if len(answer) == 0:
+                return False, "Please select at least one option"
+
+            valid_values = [opt['value'] for opt in self.options]
+            for selected in answer:
+                if selected not in valid_values:
+                    return False, f"Invalid option selected: {selected}"
 
         elif self.type == QuestionType.YES_NO:
             if answer not in ['yes', 'no', True, False]:

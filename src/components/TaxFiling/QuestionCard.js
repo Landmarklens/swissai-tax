@@ -30,6 +30,7 @@ import AHVNumberInput from '../Interview/AHVNumberInput';
 import PostalCodeInput from '../Interview/PostalCodeInput';
 import MultiCantonSelector from '../Interview/MultiCantonSelector';
 import GroupQuestionInput from '../Interview/GroupQuestionInput';
+import DocumentUploadQuestion from '../Interview/DocumentUploadQuestion';
 
 const QuestionCard = ({
   question,
@@ -106,6 +107,10 @@ const QuestionCard = ({
       // If not required, always valid (can skip with 0 entries)
       return true;
     }
+    if (question.question_type === 'document_upload') {
+      // Document upload is valid if user uploaded something or selected "bring later"
+      return answer && (answer.bring_later === true || answer.document_id || answer.file_name);
+    }
     return answer !== '';
   };
 
@@ -124,13 +129,41 @@ const QuestionCard = ({
 
       case 'boolean':
         return (
-          <RadioGroup
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          >
-            <FormControlLabel value="yes" control={<Radio />} label={t("filing.yes")} />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
+          <>
+            <RadioGroup
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            >
+              <FormControlLabel value="yes" control={<Radio />} label={t("filing.yes")} />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            {/* Show inline document upload when user selects "yes" */}
+            {answer === 'yes' && question.inline_document_upload && (
+              <Box sx={{ mt: 3, p: 2, bgcolor: 'background.default', borderRadius: 1 }}>
+                <DocumentUploadQuestion
+                  question={{
+                    ...question,
+                    document_type: question.inline_document_upload.document_type,
+                    accepted_formats: question.inline_document_upload.accepted_formats,
+                    max_size_mb: question.inline_document_upload.max_size_mb,
+                    bring_later: question.inline_document_upload.bring_later,
+                    question_text: question.inline_document_upload.upload_text?.en ||
+                                   question.inline_document_upload.upload_text,
+                    help_text: question.inline_document_upload.help_text?.en ||
+                               question.inline_document_upload.help_text
+                  }}
+                  onUploadComplete={(uploadData) => {
+                    // Store upload data with the answer
+                    console.log('[QuestionCard] Document uploaded:', uploadData);
+                  }}
+                  onBringLater={() => {
+                    console.log('[QuestionCard] User will bring document later');
+                  }}
+                />
+              </Box>
+            )}
+          </>
         );
 
       case 'select':
@@ -263,6 +296,21 @@ const QuestionCard = ({
             value={groupAnswers}
             onChange={(entries) => setGroupAnswers(entries)}
             disabled={isSubmitting}
+          />
+        );
+
+      case 'document_upload':
+        return (
+          <DocumentUploadQuestion
+            question={question}
+            onUploadComplete={(uploadData) => {
+              // Store the uploaded document data
+              setAnswer(uploadData);
+            }}
+            onBringLater={() => {
+              // Mark as "bring later"
+              setAnswer({ bring_later: true });
+            }}
           />
         );
 

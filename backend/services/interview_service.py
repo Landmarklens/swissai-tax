@@ -32,6 +32,7 @@ class InterviewService:
             raise RuntimeError("Database session is required for InterviewService")
 
         from models.interview_session import InterviewSession
+        from models.tax_filing_session import TaxFilingSession
 
         # Check if session already exists for this user + year
         existing_session = self.db.query(InterviewSession).filter(
@@ -40,21 +41,46 @@ class InterviewService:
         ).first()
 
         if existing_session:
-            # Return existing session
-            session_id = str(existing_session.id)
-            logger.info(f"Returning existing interview session {session_id} for user {user_id}, year {tax_year}")
+            # Validate that the filing_id referenced by this session still exists
+            if existing_session.filing_id:
+                filing_exists = self.db.query(TaxFilingSession).filter(
+                    TaxFilingSession.id == existing_session.filing_id
+                ).first()
 
-            # Get current question or first question if not set
-            if existing_session.current_question_id:
-                current_question = self.question_loader.get_question(existing_session.current_question_id)
+                if not filing_exists:
+                    # Zombie session detected - filing was deleted
+                    logger.warning(
+                        f"Interview session {existing_session.id} references deleted filing {existing_session.filing_id}. "
+                        f"Deleting zombie session and creating new one."
+                    )
+                    self.db.delete(existing_session)
+                    self.db.commit()
+                    # Continue to create new session below
+                else:
+                    # Valid existing session - return it
+                    session_id = str(existing_session.id)
+                    logger.info(f"Returning existing interview session {session_id} for user {user_id}, year {tax_year}")
+
+                    # Get current question or first question if not set
+                    if existing_session.current_question_id:
+                        current_question = self.question_loader.get_question(existing_session.current_question_id)
+                    else:
+                        current_question = self.question_loader.get_first_question()
+
+                    return {
+                        'session_id': session_id,
+                        'current_question': self._format_question(current_question, language),
+                        'progress': existing_session.progress or 0
+                    }
             else:
-                current_question = self.question_loader.get_first_question()
-
-            return {
-                'session_id': session_id,
-                'current_question': self._format_question(current_question, language),
-                'progress': existing_session.progress or 0
-            }
+                # Session has no filing_id (shouldn't happen, but handle gracefully)
+                logger.warning(
+                    f"Interview session {existing_session.id} has no filing_id. "
+                    f"Deleting invalid session and creating new one."
+                )
+                self.db.delete(existing_session)
+                self.db.commit()
+                # Continue to create new session below
 
         # Get first question
         first_question = self.question_loader.get_first_question()

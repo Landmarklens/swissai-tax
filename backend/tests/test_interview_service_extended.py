@@ -155,12 +155,31 @@ class TestInterviewServiceCreate(unittest.TestCase):
         mock_existing_session.progress = 15
         mock_existing_session.answers = {'Q00': 'encrypted_ahv', 'Q01': 'single'}
 
-        # Mock database query to return existing session
-        mock_query = MagicMock()
-        mock_filter = MagicMock()
-        mock_filter.first.return_value = mock_existing_session  # Existing session found!
-        mock_query.filter.return_value = mock_filter
-        self.mock_db.query.return_value = mock_query
+        # Mock filing session (valid)
+        from models.tax_filing_session import TaxFilingSession
+        mock_filing_session = Mock(spec=TaxFilingSession)
+        mock_filing_session.id = 'filing-123'
+
+        mock_existing_session.filing_id = 'filing-123'
+
+        # Mock database queries - first for InterviewSession, second for TaxFilingSession validation
+        def mock_query_side_effect(model):
+            mock_query = MagicMock()
+            mock_filter = MagicMock()
+
+            if model == InterviewSession:
+                # Return existing interview session
+                mock_filter.first.return_value = mock_existing_session
+            elif model == TaxFilingSession:
+                # Return valid filing session
+                mock_filter.first.return_value = mock_filing_session
+            else:
+                mock_filter.first.return_value = None
+
+            mock_query.filter.return_value = mock_filter
+            return mock_query
+
+        self.mock_db.query.side_effect = mock_query_side_effect
 
         # Setup current question (Q02)
         current_question = Mock(spec=Question)
@@ -190,8 +209,8 @@ class TestInterviewServiceCreate(unittest.TestCase):
         self.mock_db.add.assert_not_called()
         self.mock_db.commit.assert_not_called()
 
-        # Verify query was called to check for existing session
-        self.mock_db.query.assert_called_once()
+        # Verify query was called twice: once for InterviewSession, once for TaxFilingSession validation
+        self.assertEqual(self.mock_db.query.call_count, 2)
 
 
 class TestInterviewServiceGetSession(unittest.TestCase):

@@ -1,4 +1,24 @@
 questions:
+  Q00_name:
+    id: Q00_name
+    text:
+      en: What is your full name?
+      de: Wie ist Ihr vollständiger Name?
+      fr: Quel est votre nom complet?
+      it: Qual è il suo nome completo?
+    type: text
+    help_text:
+      en: Please enter your first and last name as it appears on official documents
+      de: Bitte geben Sie Ihren Vor- und Nachnamen wie auf offiziellen Dokumenten ein
+      fr: Veuillez entrer votre prénom et nom de famille comme sur les documents officiels
+      it: Inserisca il suo nome e cognome come appare sui documenti ufficiali
+    placeholder:
+      en: John Doe
+      de: Max Mustermann
+      fr: Jean Dupont
+      it: Mario Rossi
+    next: Q00
+    required: true
   Q00:
     id: Q00
     text:
@@ -60,10 +80,32 @@ questions:
         fr: Veuf/Veuve
     branching:
       married:
+      - Q01a_name
       - Q01a
       - Q01d
       default: Q02
     required: true
+  Q01a_name:
+    id: Q01a_name
+    text:
+      en: What is your spouse's full name?
+      de: Wie ist der vollständige Name Ihres Ehepartners?
+      fr: Quel est le nom complet de votre conjoint?
+      it: Qual è il nome completo del suo coniuge?
+    type: text
+    help_text:
+      en: Please enter your spouse's first and last name
+      de: Bitte geben Sie den Vor- und Nachnamen Ihres Ehepartners ein
+      fr: Veuillez entrer le prénom et nom de famille de votre conjoint
+      it: Inserisca il nome e cognome del suo coniuge
+    placeholder:
+      en: Jane Doe
+      de: Maria Mustermann
+      fr: Marie Dupont
+      it: Maria Rossi
+    next: Q01a
+    required: true
+    parent: Q01
   Q01a:
     id: Q01a
     text:

@@ -26,6 +26,8 @@ import {
   ArrowForward,
   CheckCircle
 } from '@mui/icons-material';
+import AHVNumberInput from '../Interview/AHVNumberInput';
+import PostalCodeInput from '../Interview/PostalCodeInput';
 
 const QuestionCard = ({
   question,
@@ -86,6 +88,17 @@ const QuestionCard = ({
 
   const renderQuestionInput = () => {
     switch (question.question_type) {
+      case 'ahv_number':
+        return (
+          <AHVNumberInput
+            value={answer}
+            onChange={(val) => setAnswer(val)}
+            label={question.question_text}
+            required={question.validation_rules?.required}
+            helperText={question.help_text}
+          />
+        );
+
       case 'boolean':
         return (
           <RadioGroup
@@ -194,8 +207,23 @@ const QuestionCard = ({
           />
         );
 
+      case 'postal_code':
+        return (
+          <PostalCodeInput
+            value={answer}
+            onChange={(val) => setAnswer(val)}
+            onLookup={(data) => {
+              // Store location data for later use
+              console.log('[QuestionCard] Postal code lookup result:', data);
+            }}
+            label={question.question_text}
+            required={question.validation_rules?.required}
+            helperText={question.help_text}
+          />
+        );
+
       case 'text':
-        // Handle postal code format with special validation
+        // Handle postal code format with special validation (fallback for legacy)
         const isPostalCode = question.format === 'postal_code';
         return (
           <TextField

@@ -163,6 +163,8 @@ const InterviewPage = () => {
         question_type: question.type === 'single_choice' ? 'select' :
                       question.type === 'multi_select' ? 'multiselect' :
                       question.type === 'multiple_choice' ? 'multiselect' :
+                      question.type === 'ahv_number' ? 'ahv_number' :
+                      question.type === 'postal_code' ? 'postal_code' :
                       question.type || question.question_type,
         question_text: question.text || question.question_text,
         help_text: question.help_text,
@@ -264,6 +266,8 @@ const InterviewPage = () => {
                         nextQuestion.type === 'multiple_choice' ? 'multiselect' :
                         nextQuestion.type === 'yes_no' ? 'boolean' :
                         nextQuestion.type === 'dropdown' ? 'select' :
+                        nextQuestion.type === 'ahv_number' ? 'ahv_number' :
+                        nextQuestion.type === 'postal_code' ? 'postal_code' :
                         nextQuestion.type || nextQuestion.question_type,
           question_text: nextQuestion.text || nextQuestion.question_text,
           help_text: nextQuestion.help_text,

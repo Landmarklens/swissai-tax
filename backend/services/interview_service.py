@@ -27,11 +27,34 @@ class InterviewService:
         self.db = db
 
     def create_session(self, user_id: str, tax_year: int, language: str = 'en', filing_id: str = None) -> Dict[str, Any]:
-        """Create a new interview session"""
+        """Create a new interview session or return existing one"""
         if not self.db:
             raise RuntimeError("Database session is required for InterviewService")
 
         from models.interview_session import InterviewSession
+
+        # Check if session already exists for this user + year
+        existing_session = self.db.query(InterviewSession).filter(
+            InterviewSession.user_id == user_id,
+            InterviewSession.tax_year == tax_year
+        ).first()
+
+        if existing_session:
+            # Return existing session
+            session_id = str(existing_session.id)
+            logger.info(f"Returning existing interview session {session_id} for user {user_id}, year {tax_year}")
+
+            # Get current question or first question if not set
+            if existing_session.current_question_id:
+                current_question = self.question_loader.get_question(existing_session.current_question_id)
+            else:
+                current_question = self.question_loader.get_first_question()
+
+            return {
+                'session_id': session_id,
+                'current_question': self._format_question(current_question, language),
+                'progress': existing_session.progress or 0
+            }
 
         # Get first question
         first_question = self.question_loader.get_first_question()

@@ -29,6 +29,7 @@ import {
 import AHVNumberInput from '../Interview/AHVNumberInput';
 import PostalCodeInput from '../Interview/PostalCodeInput';
 import MultiCantonSelector from '../Interview/MultiCantonSelector';
+import GroupQuestionInput from '../Interview/GroupQuestionInput';
 
 const QuestionCard = ({
   question,
@@ -42,6 +43,7 @@ const QuestionCard = ({
   const [answer, setAnswer] = useState(previousAnswer || '');
   const [multiSelectAnswers, setMultiSelectAnswers] = useState(previousAnswer || []);
   const [multiCantonAnswers, setMultiCantonAnswers] = useState(previousAnswer || []);
+  const [groupAnswers, setGroupAnswers] = useState(previousAnswer || []);
   const [showHelp, setShowHelp] = useState(false);
 
   // Debug logging
@@ -52,6 +54,8 @@ const QuestionCard = ({
       setMultiSelectAnswers(previousAnswer || []);
     } else if (question.question_type === 'multi_canton') {
       setMultiCantonAnswers(previousAnswer || []);
+    } else if (question.question_type === 'group') {
+      setGroupAnswers(previousAnswer || []);
     } else if (question.question_type === 'date' && previousAnswer) {
       // Convert timestamp or invalid date to YYYY-MM-DD format
       const dateValue = new Date(previousAnswer);
@@ -76,6 +80,8 @@ const QuestionCard = ({
       onAnswer(multiSelectAnswers);
     } else if (question.question_type === 'multi_canton') {
       onAnswer(multiCantonAnswers);
+    } else if (question.question_type === 'group') {
+      onAnswer(groupAnswers);
     } else if (question.question_type === 'boolean') {
       onAnswer(answer === 'yes');
     } else if (question.question_type === 'number') {
@@ -91,6 +97,14 @@ const QuestionCard = ({
     }
     if (question.question_type === 'multi_canton') {
       return multiCantonAnswers.length > 0;
+    }
+    if (question.question_type === 'group') {
+      // Group questions can be optional (0 entries) or required (at least 1 entry)
+      if (question.validation_rules?.required) {
+        return groupAnswers.length > 0;
+      }
+      // If not required, always valid (can skip with 0 entries)
+      return true;
     }
     return answer !== '';
   };
@@ -239,6 +253,16 @@ const QuestionCard = ({
             label={question.question_text}
             required={question.validation_rules?.required}
             helperText={question.help_text}
+          />
+        );
+
+      case 'group':
+        return (
+          <GroupQuestionInput
+            question={question}
+            value={groupAnswers}
+            onChange={(entries) => setGroupAnswers(entries)}
+            disabled={isSubmitting}
           />
         );
 

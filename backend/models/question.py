@@ -15,6 +15,7 @@ class QuestionType(Enum):
     YES_NO = "yes_no"
     SINGLE_CHOICE = "single_choice"
     MULTI_SELECT = "multi_select"  # NEW: Multiple choice selection
+    MULTI_CANTON = "multi_canton"  # NEW: Multiple canton selector
     DROPDOWN = "dropdown"
     GROUP = "group"
     AHV_NUMBER = "ahv_number"  # NEW: Swiss AHV number with validation
@@ -103,6 +104,17 @@ class Question:
             for selected in answer:
                 if selected not in valid_values:
                     return False, f"Invalid option selected: {selected}"
+
+        elif self.type == QuestionType.MULTI_CANTON:
+            # Answer should be a list of selected canton codes
+            if not isinstance(answer, list):
+                return False, "Please select at least one canton"
+            if len(answer) == 0:
+                return False, "Please select at least one canton"
+            # Canton codes should be 2 uppercase letters (ZH, GE, etc.)
+            for canton in answer:
+                if not isinstance(canton, str) or len(canton) != 2:
+                    return False, f"Invalid canton code: {canton}"
 
         elif self.type == QuestionType.YES_NO:
             if answer not in ['yes', 'no', True, False]:

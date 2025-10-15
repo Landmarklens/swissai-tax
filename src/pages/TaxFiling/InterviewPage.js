@@ -166,10 +166,12 @@ const InterviewPage = () => {
                       question.type === 'ahv_number' ? 'ahv_number' :
                       question.type === 'postal_code' ? 'postal_code' :
                       question.type === 'multi_canton' ? 'multi_canton' :
+                      question.type === 'group' ? 'group' :
                       question.type || question.question_type,
         question_text: question.text || question.question_text,
         help_text: question.help_text,
         validation_rules: question.validation_rules,
+        fields: question.fields, // Preserve fields array for group questions
         // Handle both array of strings and array of objects
         options: question.options?.map(opt => {
           if (typeof opt === 'string') return opt;
@@ -283,10 +285,12 @@ const InterviewPage = () => {
                         nextQuestion.type === 'ahv_number' ? 'ahv_number' :
                         nextQuestion.type === 'postal_code' ? 'postal_code' :
                         nextQuestion.type === 'multi_canton' ? 'multi_canton' :
+                        nextQuestion.type === 'group' ? 'group' :
                         nextQuestion.type || nextQuestion.question_type,
           question_text: nextQuestion.text || nextQuestion.question_text,
           help_text: nextQuestion.help_text,
           validation_rules: nextQuestion.validation || nextQuestion.validation_rules,
+          fields: nextQuestion.fields, // Preserve fields array for group questions
           // Handle both array of strings and array of objects
           options: nextQuestion.options?.map(opt => {
             if (typeof opt === 'string') return opt;

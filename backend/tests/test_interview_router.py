@@ -453,3 +453,111 @@ class TestSaveAnswerToDB:
         assert existing_answer.answer_value == 'single'
         mock_db_session.commit.assert_called_once()
         mock_db_session.add.assert_not_called()  # Should update, not add new
+
+
+class TestGetFilingAnswers:
+    """Test suite for get_filing_answers endpoint"""
+
+    def test_get_filing_answers_success(self, client, mock_db_session, mock_filing_session):
+        """Test GET /api/interview/filings/{filing_session_id}/answers - success"""
+        from models.tax_answer import TaxAnswer
+
+        # Setup - mock filing session
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
+
+        # Setup - mock answers
+        mock_answer1 = MagicMock(spec=TaxAnswer)
+        mock_answer1.question_id = 'Q01'
+        mock_answer1.answer_value = 'married'
+
+        mock_answer2 = MagicMock(spec=TaxAnswer)
+        mock_answer2.question_id = 'Q02'
+        mock_answer2.answer_value = '30'
+
+        mock_answer3 = MagicMock(spec=TaxAnswer)
+        mock_answer3.question_id = 'Q03'
+        mock_answer3.answer_value = '["income_from_employment", "rental_income"]'
+
+        # Mock the query chain for answers
+        mock_query = MagicMock()
+        mock_query.filter.return_value.all.return_value = [mock_answer1, mock_answer2, mock_answer3]
+
+        # Setup mock_db_session to return filing_session first, then answers
+        call_count = [0]
+
+        def query_side_effect(*args):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                # First call: query for TaxFilingSession
+                return mock_db_session.query.return_value
+            else:
+                # Second call: query for TaxAnswer
+                return mock_query
+
+        mock_db_session.query.side_effect = query_side_effect
+
+        # Execute
+        response = client.get(
+            '/api/interview/filings/filing-session-123/answers',
+            headers={'Authorization': 'Bearer fake-token'}
+        )
+
+        # Assert
+        assert response.status_code == 200
+        data = response.json()
+        assert data['filing_session_id'] == 'filing-session-123'
+        assert data['count'] == 3
+        assert data['answers']['Q01'] == 'married'
+        assert data['answers']['Q02'] == '30'
+        assert data['answers']['Q03'] == ["income_from_employment", "rental_income"]
+
+    def test_get_filing_answers_filing_not_found(self, client, mock_db_session):
+        """Test GET /api/interview/filings/{filing_session_id}/answers - filing not found"""
+        # Setup - filing session doesn't exist
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None
+
+        # Execute
+        response = client.get(
+            '/api/interview/filings/non-existent-filing/answers',
+            headers={'Authorization': 'Bearer fake-token'}
+        )
+
+        # Assert
+        assert response.status_code == 404
+        assert 'Filing session not found' in response.json()['detail']
+
+    def test_get_filing_answers_no_answers(self, client, mock_db_session, mock_filing_session):
+        """Test GET /api/interview/filings/{filing_session_id}/answers - no answers yet"""
+        # Setup - filing session exists but no answers
+        mock_db_session.query.return_value.filter.return_value.first.return_value = mock_filing_session
+
+        # Mock the query chain for answers to return empty list
+        mock_query = MagicMock()
+        mock_query.filter.return_value.all.return_value = []
+
+        # Setup mock_db_session to return filing_session first, then empty answers
+        call_count = [0]
+
+        def query_side_effect(*args):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                # First call: query for TaxFilingSession
+                return mock_db_session.query.return_value
+            else:
+                # Second call: query for TaxAnswer
+                return mock_query
+
+        mock_db_session.query.side_effect = query_side_effect
+
+        # Execute
+        response = client.get(
+            '/api/interview/filings/filing-session-123/answers',
+            headers={'Authorization': 'Bearer fake-token'}
+        )
+
+        # Assert
+        assert response.status_code == 200
+        data = response.json()
+        assert data['filing_session_id'] == 'filing-session-123'
+        assert data['count'] == 0
+        assert data['answers'] == {}

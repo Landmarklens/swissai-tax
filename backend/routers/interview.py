@@ -319,6 +319,67 @@ async def submit_answer(
         )
 
 
+@router.get("/filings/{filing_session_id}/answers", response_model=dict)
+async def get_filing_answers(
+    filing_session_id: str,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all saved answers for a filing session
+
+    - Returns all answers from the TaxAnswer table
+    - Used to restore state when resuming interview or going back
+    """
+    try:
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_session_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Get all answers for this filing session
+        answers = db.query(TaxAnswer).filter(
+            TaxAnswer.filing_session_id == filing_session_id
+        ).all()
+
+        # Convert to dictionary keyed by question_id
+        answers_dict = {}
+        for answer in answers:
+            # Decrypt answer_value (happens automatically via EncryptedText)
+            answer_value = answer.answer_value
+
+            # Try to parse JSON if it looks like JSON
+            try:
+                if answer_value and (answer_value.startswith('[') or answer_value.startswith('{')):
+                    answers_dict[answer.question_id] = json.loads(answer_value)
+                else:
+                    answers_dict[answer.question_id] = answer_value
+            except (json.JSONDecodeError, AttributeError):
+                answers_dict[answer.question_id] = answer_value
+
+        return {
+            "filing_session_id": filing_session_id,
+            "answers": answers_dict,
+            "count": len(answers_dict)
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting filing answers: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get filing answers: {str(e)}"
+        )
+
+
 @router.get("/{session_id}", response_model=dict)
 async def get_session(
     session_id: str,

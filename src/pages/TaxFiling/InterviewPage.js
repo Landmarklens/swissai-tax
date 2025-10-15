@@ -43,6 +43,7 @@ const InterviewPage = () => {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [questionHistory, setQuestionHistory] = useState([]); // Track question history for back button
 
   const autoSaveTimer = useRef(null);
 
@@ -156,9 +157,11 @@ const InterviewPage = () => {
 
 
       // Transform API response to match QuestionCard expected format
+      const language = 'en'; // TODO: Get from i18n context
       const transformedQuestion = question ? {
         ...question,
         question_type: question.type === 'single_choice' ? 'select' :
+                      question.type === 'multi_select' ? 'multiselect' :
                       question.type === 'multiple_choice' ? 'multiselect' :
                       question.type || question.question_type,
         question_text: question.text || question.question_text,
@@ -166,7 +169,13 @@ const InterviewPage = () => {
         validation_rules: question.validation_rules,
         options: {
           // Handle both array of strings and array of objects
-          options: question.options?.map(opt => typeof opt === 'string' ? opt : opt.value) || []
+          options: question.options?.map(opt => {
+            if (typeof opt === 'string') return opt;
+            return {
+              value: opt.value,
+              label: opt.label?.[language] || opt.label?.en || opt.value
+            };
+          }) || []
         }
       } : null;
 
@@ -177,9 +186,19 @@ const InterviewPage = () => {
       setProgress(response.data.progress || 0);
       setError(null);
     } catch (err) {
-      setError(t('interview.error_start_failed'));
       console.error('Interview start error:', err);
       console.error('Error details:', err.response?.data);
+
+      // Handle specific error cases
+      if (err.response?.status === 404 && filingId) {
+        // Filing session not found - redirect back to filings list
+        setError(t('interview.error_filing_not_found') || 'This filing session was not found. Please create a new filing or select an existing one.');
+        setTimeout(() => {
+          navigate('/en/filings');
+        }, 3000);
+      } else {
+        setError(t('interview.error_start_failed') || 'Failed to start interview. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -229,12 +248,21 @@ const InterviewPage = () => {
           }
         });
       } else {
+        // Save current question to history before moving to next one
+        setQuestionHistory(prevHistory => [...prevHistory, {
+          question: currentQuestion,
+          questionNumber: currentQuestionNumber,
+          answer: answer
+        }]);
+
         // Transform next question format
         const nextQuestion = response.data.current_question;
+        const language = 'en'; // TODO: Get from i18n context
 
         const transformedNextQuestion = nextQuestion ? {
           ...nextQuestion,
           question_type: nextQuestion.type === 'single_choice' ? 'select' :
+                        nextQuestion.type === 'multi_select' ? 'multiselect' :
                         nextQuestion.type === 'multiple_choice' ? 'multiselect' :
                         nextQuestion.type === 'yes_no' ? 'boolean' :
                         nextQuestion.type === 'dropdown' ? 'select' :
@@ -244,7 +272,13 @@ const InterviewPage = () => {
           validation_rules: nextQuestion.validation || nextQuestion.validation_rules,
           options: {
             // Handle both array of strings and array of objects
-            options: nextQuestion.options?.map(opt => typeof opt === 'string' ? opt : opt.value) || []
+            options: nextQuestion.options?.map(opt => {
+              if (typeof opt === 'string') return opt;
+              return {
+                value: opt.value,
+                label: opt.label?.[language] || opt.label?.en || opt.value
+              };
+            }) || []
           }
         } : null;
 
@@ -263,9 +297,26 @@ const InterviewPage = () => {
   };
 
   const handleBack = () => {
-    // TODO: Implement going back to previous question
-    if (process.env.NODE_ENV === 'development') {
+    // Can't go back if no history
+    if (questionHistory.length === 0) {
+      return;
     }
+
+    // Get the last question from history
+    const previousEntry = questionHistory[questionHistory.length - 1];
+
+    // Remove the last entry from history
+    setQuestionHistory(prevHistory => prevHistory.slice(0, -1));
+
+    // Restore the previous question and state
+    setCurrentQuestion(previousEntry.question);
+    setCurrentQuestionNumber(previousEntry.questionNumber);
+
+    // Clear any errors
+    setError(null);
+
+    // Recalculate progress (go back one step)
+    setProgress(prev => Math.max(0, prev - (100 / totalQuestions)));
   };
 
   if (loading) {
@@ -339,6 +390,7 @@ const InterviewPage = () => {
                 onBack={handleBack}
                 isSubmitting={submitting}
                 previousAnswer={answers[currentQuestion.id]}
+                canGoBack={questionHistory.length > 0}
               />
             </Paper>
           )}

@@ -51,7 +51,7 @@ class TestInterviewServiceDatabaseMocked(unittest.TestCase):
     def test_create_session_requires_database(self):
         """Test that create_session requires database"""
         from models.interview_session import InterviewSession
-        
+
         # Setup mock question
         first_question = Mock(spec=Question)
         first_question.id = 'Q00'
@@ -63,6 +63,13 @@ class TestInterviewServiceDatabaseMocked(unittest.TestCase):
         first_question.fields = None
 
         self.mock_question_loader.get_first_question.return_value = first_question
+
+        # Mock database query to check for existing session - return None (no existing session)
+        mock_query = MagicMock()
+        mock_filter = MagicMock()
+        mock_filter.first.return_value = None  # No existing session
+        mock_query.filter.return_value = mock_filter
+        self.mock_db.query.return_value = mock_query
 
         # Mock database session creation
         mock_db_session = Mock(spec=InterviewSession)

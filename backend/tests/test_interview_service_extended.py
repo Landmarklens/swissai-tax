@@ -57,6 +57,13 @@ class TestInterviewServiceCreate(unittest.TestCase):
 
         self.mock_question_loader.get_first_question.return_value = first_question
 
+        # Mock database query to check for existing session - return None (no existing session)
+        mock_query = MagicMock()
+        mock_filter = MagicMock()
+        mock_filter.first.return_value = None  # No existing session
+        mock_query.filter.return_value = mock_filter
+        self.mock_db.query.return_value = mock_query
+
         # Mock database session
         mock_db_session = Mock(spec=InterviewSession)
         mock_db_session.id = uuid4()
@@ -96,6 +103,8 @@ class TestInterviewServiceCreate(unittest.TestCase):
 
     def test_create_session_different_languages(self):
         """Test creating sessions with different languages"""
+        from models.interview_session import InterviewSession
+
         first_question = Mock(spec=Question)
         first_question.id = 'Q00'
         first_question.text = {
@@ -111,6 +120,13 @@ class TestInterviewServiceCreate(unittest.TestCase):
 
         self.mock_question_loader.get_first_question.return_value = first_question
 
+        # Mock database query to check for existing session - return None (no existing session)
+        mock_query = MagicMock()
+        mock_filter = MagicMock()
+        mock_filter.first.return_value = None  # No existing session
+        mock_query.filter.return_value = mock_filter
+        self.mock_db.query.return_value = mock_query
+
         # Test German
         result_de = self.service.create_session('user-1', 2024, 'de')
         self.assertEqual(result_de['current_question']['text'], 'Was ist Ihre AHV-Nummer?')
@@ -122,6 +138,60 @@ class TestInterviewServiceCreate(unittest.TestCase):
         # Test English (default)
         result_en = self.service.create_session('user-3', 2024, 'en')
         self.assertEqual(result_en['current_question']['text'], 'What is your AHV number?')
+
+    def test_create_session_returns_existing_session(self):
+        """Test that create_session returns existing session instead of creating duplicate"""
+        from models.interview_session import InterviewSession
+
+        # Setup - existing session in database
+        existing_session_id = uuid4()
+        mock_existing_session = Mock(spec=InterviewSession)
+        mock_existing_session.id = existing_session_id
+        mock_existing_session.user_id = 'user-123'
+        mock_existing_session.tax_year = 2024
+        mock_existing_session.language = 'en'
+        mock_existing_session.status = 'in_progress'
+        mock_existing_session.current_question_id = 'Q02'  # User was on Q02
+        mock_existing_session.progress = 15
+        mock_existing_session.answers = {'Q00': 'encrypted_ahv', 'Q01': 'single'}
+
+        # Mock database query to return existing session
+        mock_query = MagicMock()
+        mock_filter = MagicMock()
+        mock_filter.first.return_value = mock_existing_session  # Existing session found!
+        mock_query.filter.return_value = mock_filter
+        self.mock_db.query.return_value = mock_query
+
+        # Setup current question (Q02)
+        current_question = Mock(spec=Question)
+        current_question.id = 'Q02'
+        current_question.text = {'en': 'What is your postal code?'}
+        current_question.type = QuestionType.TEXT
+        current_question.required = True
+        current_question.options = []
+        current_question.validation = {}
+        current_question.fields = None
+
+        self.mock_question_loader.get_question.return_value = current_question
+
+        # Execute - try to create session for same user+year
+        result = self.service.create_session(
+            user_id='user-123',
+            tax_year=2024,
+            language='en'
+        )
+
+        # Assert - should return existing session
+        self.assertEqual(result['session_id'], str(existing_session_id))
+        self.assertEqual(result['current_question']['id'], 'Q02')
+        self.assertEqual(result['progress'], 15)
+
+        # Verify NO new session was created (add/commit should NOT be called)
+        self.mock_db.add.assert_not_called()
+        self.mock_db.commit.assert_not_called()
+
+        # Verify query was called to check for existing session
+        self.mock_db.query.assert_called_once()
 
 
 class TestInterviewServiceGetSession(unittest.TestCase):

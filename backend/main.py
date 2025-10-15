@@ -51,13 +51,13 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=rate_limit_middleware)  # Rate l
 # We only add the NEW routers here to avoid duplicates
 try:
     from routers import (debug_device, documents, faq, health, insights, interview, multi_canton_filing,
-                         pdf_generation, sessions, status, tax_calculation, tax_filing, two_factor)
+                         pdf_generation, sessions, status, tax_calculation, two_factor)
 
     # Tax-specific routers (not in app.py)
     app.include_router(interview.router, prefix="/api/interview", tags=["Interview"])
     app.include_router(tax_calculation.router, prefix="/api/tax-calculations", tags=["Tax Calculations"])
     app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
-    app.include_router(tax_filing.router, prefix="/api/tax-filing", tags=["Tax Filing"])
+    # NOTE: tax_filing router already included in app.py as routers.swisstax.filing
     app.include_router(insights.router, prefix="/api/insights", tags=["Insights"])
 
     # FAQ router (public - no authentication required)

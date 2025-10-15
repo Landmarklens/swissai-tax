@@ -70,10 +70,16 @@ class InterviewService:
             raise RuntimeError("Database session is required for InterviewService")
 
         from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
+        from uuid import UUID as PyUUID
+
+        # Validate UUID format
+        try:
+            session_uuid = PyUUID(session_id)
+        except (ValueError, AttributeError):
+            raise ValueError(f"Session {session_id} not found")
 
         # Load session from database
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
+        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == session_uuid).first()
         if not db_session:
             raise ValueError(f"Session {session_id} not found")
 
@@ -251,6 +257,30 @@ class InterviewService:
             # For now, move to next question
             next_question_id = 'Q07'
 
+        # NEW: Handle multi-select questions (e.g., Q_complexity_screen)
+        elif question.type == QuestionType.MULTI_SELECT:
+            # Answer is a list of selected values
+            # Handle special case: "none_of_above" goes straight to complete
+            if 'none_of_above' in answer:
+                next_question_id = 'complete'
+            else:
+                # Get branching targets for all selected options
+                branching_targets = []
+                for selected_value in answer:
+                    if selected_value in question.branching:
+                        target = question.branching[selected_value]
+                        if target and target not in branching_targets:
+                            branching_targets.append(target)
+
+                # Route to first target, add rest to pending
+                if branching_targets:
+                    next_question_id = branching_targets[0]
+                    if len(branching_targets) > 1:
+                        session['pending_questions'].extend(branching_targets[1:])
+                else:
+                    # No valid branching targets, use default or fallback to complete
+                    next_question_id = question.branching.get('default', 'complete')
+
         else:
             # Get next question based on answer
             next_questions = self.question_loader.get_next_questions(question_id, answer)
@@ -374,9 +404,16 @@ class InterviewService:
             raise RuntimeError("Database session is required for InterviewService")
 
         from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
+        from uuid import UUID as PyUUID
 
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
+        # Validate UUID format
+        try:
+            session_uuid = PyUUID(session_id)
+        except (ValueError, AttributeError):
+            logger.warning(f"Invalid session ID format: {session_id}")
+            return None
+
+        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == session_uuid).first()
         if not db_session:
             return None
 
@@ -388,9 +425,15 @@ class InterviewService:
             raise RuntimeError("Database session is required for InterviewService")
 
         from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
+        from uuid import UUID as PyUUID
 
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
+        # Validate UUID format
+        try:
+            session_uuid = PyUUID(session_id)
+        except (ValueError, AttributeError):
+            raise ValueError(f"Session {session_id} not found")
+
+        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == session_uuid).first()
         if not db_session:
             raise ValueError(f"Session {session_id} not found")
 
@@ -601,9 +644,16 @@ class InterviewService:
 
         # Get filing session ID from database
         from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
+        from uuid import UUID as PyUUID
 
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
+        # Validate UUID format
+        try:
+            session_uuid = PyUUID(session_id)
+        except (ValueError, AttributeError):
+            logger.error(f"Invalid session ID format: {session_id}")
+            return
+
+        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == session_uuid).first()
         if not db_session:
             logger.error(f"Session {session_id} not found")
             return
@@ -647,11 +697,11 @@ class InterviewService:
 
         try:
             from models.swisstax.user import User
-            from sqlalchemy import UUID as SQLUUID
+            from uuid import UUID as PyUUID
 
             # Convert string UUID to UUID object
             try:
-                user_uuid = SQLUUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(user_id)
+                user_uuid = PyUUID(user_id)
             except:
                 # If conversion fails, use string directly
                 user_uuid = user_id
@@ -685,9 +735,16 @@ class InterviewService:
             raise RuntimeError("Database session is required for InterviewService")
 
         from models.interview_session import InterviewSession
-        from sqlalchemy.dialects.postgresql import UUID
+        from uuid import UUID as PyUUID
 
-        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == UUID(as_uuid=True).literal_processor(dialect=self.db.bind.dialect)(session_id)).first()
+        # Validate UUID format
+        try:
+            session_uuid = PyUUID(session_id)
+        except (ValueError, AttributeError):
+            logger.warning(f"Invalid session ID format: {session_id}")
+            return None
+
+        db_session = self.db.query(InterviewSession).filter(InterviewSession.id == session_uuid).first()
         if not db_session:
             return None
 

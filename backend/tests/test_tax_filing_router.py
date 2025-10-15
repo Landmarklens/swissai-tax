@@ -1,9 +1,17 @@
 """
-Unit tests for Tax Filing Router
+Integration tests for Tax Filing Router
 Tests API endpoints for filing management
+
+NOTE: These tests require database access and are marked as integration tests.
+They are skipped by default. To run them, use:
+    pytest -m integration
+or set environment variable:
+    RUN_INTEGRATION_TESTS=1 pytest
 """
+import os
 from datetime import datetime
 from unittest.mock import MagicMock, Mock, patch
+from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
@@ -12,11 +20,14 @@ from main import app
 from models.tax_filing_session import FilingStatus, TaxFilingSession
 from models.swisstax import User
 
+# Mark all tests in this module as integration tests
+pytestmark = pytest.mark.integration
+
 
 def mock_user():
-    """Create a mock user object"""
+    """Create a mock user object with valid UUID"""
     user = User(
-        id='user-456',
+        id=str(uuid4()),  # Use valid UUID
         email='test@example.com',
         is_active=True
     )
@@ -41,7 +52,7 @@ def client():
 @pytest.fixture
 def mock_db():
     """Mock database session"""
-    with patch('routers.tax_filing.get_db') as mock:
+    with patch('routers.swisstax.filing.get_db') as mock:
         db = MagicMock()
         mock.return_value = db
         yield db
@@ -53,8 +64,8 @@ class TestTaxFilingRouter:
     def test_list_filings_success(self, client, mock_db):
         """Test GET /api/tax-filing/filings"""
         # Setup
-        with patch('routers.tax_filing.TaxFilingService.list_user_filings') as mock_list:
-            with patch('routers.tax_filing.TaxFilingService.get_filing_statistics') as mock_stats:
+        with patch('routers.swisstax.filing.list_user_filings') as mock_list:
+            with patch('routers.swisstax.filing.get_filing_statistics') as mock_stats:
                 mock_list.return_value = {
                     2024: [{'id': 'f1', 'name': '2024 Tax Return'}]
                 }
@@ -68,13 +79,13 @@ class TestTaxFilingRouter:
                 data = response.json()
                 assert 'filings' in data
                 assert 'statistics' in data
-                assert data['total_count'] == 1
+                assert data['total_filings'] == 1
 
     def test_list_filings_with_filters(self, client, mock_db):
         """Test GET /api/tax-filing/filings with filters"""
         # Setup
-        with patch('routers.tax_filing.TaxFilingService.list_user_filings') as mock_list:
-            with patch('routers.tax_filing.TaxFilingService.get_filing_statistics') as mock_stats:
+        with patch('routers.swisstax.filing.list_user_filings') as mock_list:
+            with patch('routers.swisstax.filing.get_filing_statistics') as mock_stats:
                 mock_list.return_value = {2024: []}
                 mock_stats.return_value = {}
 
@@ -93,14 +104,14 @@ class TestTaxFilingRouter:
         # Setup
         mock_filing = TaxFilingSession(
             id='new-filing',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2024,
             canton='ZH',
             status=FilingStatus.DRAFT
         )
 
-        with patch('routers.tax_filing.TaxFilingService.create_filing') as mock_create:
-            with patch('routers.tax_filing.AuditLogService.log_tax_filing_created', create=True) as mock_audit:
+        with patch('routers.swisstax.filing.create_filing') as mock_create:
+            with patch('routers.swisstax.filing.AuditLogService.log_tax_filing_created', create=True) as mock_audit:
                 mock_create.return_value = mock_filing
 
                 # Execute
@@ -136,7 +147,7 @@ class TestTaxFilingRouter:
     def test_create_filing_duplicate_error(self, client, mock_db):
         """Test POST /api/tax-filing/filings with duplicate"""
         # Setup
-        with patch('routers.tax_filing.TaxFilingService.create_filing') as mock_create:
+        with patch('routers.swisstax.filing.create_filing') as mock_create:
             mock_create.side_effect = ValueError("Filing already exists")
 
             # Execute
@@ -158,7 +169,7 @@ class TestTaxFilingRouter:
         # Setup
         mock_filing = TaxFilingSession(
             id='copied-filing',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2025,
             canton='ZH',
             source_filing_id='source-filing'
@@ -167,14 +178,14 @@ class TestTaxFilingRouter:
         # Mock the get_filing call that happens before copying
         source_filing = TaxFilingSession(
             id='source-filing',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2024,
             canton='ZH'
         )
 
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
-            with patch('routers.tax_filing.TaxFilingService.copy_from_previous_year') as mock_copy:
-                with patch('routers.tax_filing.AuditLogService.log_tax_filing_copied', create=True) as mock_audit:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
+            with patch('routers.swisstax.filing.copy_from_previous_year') as mock_copy:
+                with patch('routers.swisstax.filing.AuditLogService.log_tax_filing_copied', create=True) as mock_audit:
                     mock_get.return_value = source_filing
                     mock_copy.return_value = mock_filing
 
@@ -198,7 +209,7 @@ class TestTaxFilingRouter:
         # Setup
         mock_filing = TaxFilingSession(
             id='filing-123',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2024,
             canton='ZH'
         )
@@ -207,7 +218,7 @@ class TestTaxFilingRouter:
         mock_filing.answers = []
         mock_filing.calculations = []
 
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
             mock_get.return_value = mock_filing
 
             # Execute
@@ -221,7 +232,7 @@ class TestTaxFilingRouter:
     def test_get_filing_not_found(self, client, mock_db):
         """Test GET /api/tax-filing/filings/{filing_id} not found"""
         # Setup
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
             mock_get.side_effect = ValueError("Filing not found")
 
             # Execute
@@ -233,9 +244,10 @@ class TestTaxFilingRouter:
     def test_update_filing_success(self, client, mock_db):
         """Test PATCH /api/tax-filing/filings/{filing_id}"""
         # Setup
+        user_id = str(uuid4())
         old_filing = TaxFilingSession(
             id='filing-123',
-            user_id='user-456',
+            user_id=user_id,
             tax_year=2024,
             canton='ZH',
             status='draft'
@@ -243,7 +255,7 @@ class TestTaxFilingRouter:
 
         updated_filing = TaxFilingSession(
             id='filing-123',
-            user_id='user-456',
+            user_id=user_id,
             tax_year=2024,
             canton='ZH',
             name='Updated Name',
@@ -251,9 +263,9 @@ class TestTaxFilingRouter:
             status='draft'
         )
 
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
-            with patch('routers.tax_filing.TaxFilingService.update_filing') as mock_update:
-                with patch('routers.tax_filing.AuditLogService.log_tax_filing_updated', create=True) as mock_audit:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
+            with patch('routers.swisstax.filing.update_filing') as mock_update:
+                with patch('routers.swisstax.filing.AuditLogService.log_tax_filing_updated', create=True) as mock_audit:
                     mock_get.return_value = old_filing
                     mock_update.return_value = updated_filing
 
@@ -275,7 +287,7 @@ class TestTaxFilingRouter:
     def test_update_filing_no_fields(self, client, mock_db):
         """Test PATCH with no fields to update"""
         # Execute
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
             response = client.patch(
                 '/api/tax-filing/filings/filing-123',
                 json={}
@@ -290,14 +302,14 @@ class TestTaxFilingRouter:
         # Setup
         filing = TaxFilingSession(
             id='filing-123',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2024,
             canton='ZH'
         )
 
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
-            with patch('routers.tax_filing.TaxFilingService.delete_filing') as mock_delete:
-                with patch('routers.tax_filing.AuditLogService.log_tax_filing_deleted', create=True) as mock_audit:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
+            with patch('routers.swisstax.filing.delete_filing') as mock_delete:
+                with patch('routers.swisstax.filing.AuditLogService.log_tax_filing_deleted', create=True) as mock_audit:
                     mock_get.return_value = filing
                     mock_delete.return_value = True
 
@@ -315,14 +327,14 @@ class TestTaxFilingRouter:
         # Setup
         filing = TaxFilingSession(
             id='filing-123',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2024,
             canton='ZH'
         )
 
-        with patch('routers.tax_filing.TaxFilingService.get_filing') as mock_get:
-            with patch('routers.tax_filing.TaxFilingService.delete_filing') as mock_delete:
-                with patch('routers.tax_filing.AuditLogService.log_tax_filing_deleted', create=True) as mock_audit:
+        with patch('routers.swisstax.filing.get_filing') as mock_get:
+            with patch('routers.swisstax.filing.delete_filing') as mock_delete:
+                with patch('routers.swisstax.filing.AuditLogService.log_tax_filing_deleted', create=True) as mock_audit:
                     mock_get.return_value = filing
                     mock_delete.return_value = True
 
@@ -339,14 +351,14 @@ class TestTaxFilingRouter:
         # Setup
         mock_filing = TaxFilingSession(
             id='filing-123',
-            user_id='user-456',
+            user_id=str(uuid4()),
             tax_year=2024,
             canton='ZH',
             deleted_at=None
         )
 
-        with patch('routers.tax_filing.TaxFilingService.restore_filing') as mock_restore:
-            with patch('routers.tax_filing.AuditLogService.log_tax_filing_restored', create=True) as mock_audit:
+        with patch('routers.swisstax.filing.restore_filing') as mock_restore:
+            with patch('routers.swisstax.filing.AuditLogService.log_tax_filing_restored', create=True) as mock_audit:
                 mock_restore.return_value = mock_filing
 
                 # Execute
@@ -361,7 +373,7 @@ class TestTaxFilingRouter:
     def test_get_statistics(self, client, mock_db):
         """Test GET /api/tax-filing/statistics"""
         # Setup
-        with patch('routers.tax_filing.TaxFilingService.get_filing_statistics') as mock_stats:
+        with patch('routers.swisstax.filing.get_filing_statistics') as mock_stats:
             mock_stats.return_value = {
                 'total_filings': 5,
                 'by_year': {2024: 2, 2023: 3},

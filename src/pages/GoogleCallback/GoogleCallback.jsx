@@ -33,7 +33,8 @@ const GoogleCallback = () => {
       if (exchange_token) {
         try {
           console.log('[GoogleCallback] Exchanging token for cookie...');
-          await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/exchange-token`, {
+          const apiUrl = process.env.REACT_APP_API_URL || 'https://api.swissai.tax';
+          await axios.post(`${apiUrl}/api/auth/exchange-token`, {
             exchange_token
           });
           console.log('[GoogleCallback] Cookie set successfully');

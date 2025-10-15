@@ -165,6 +165,7 @@ const InterviewPage = () => {
                       question.type === 'multiple_choice' ? 'multiselect' :
                       question.type === 'ahv_number' ? 'ahv_number' :
                       question.type === 'postal_code' ? 'postal_code' :
+                      question.type === 'multi_canton' ? 'multi_canton' :
                       question.type || question.question_type,
         question_text: question.text || question.question_text,
         help_text: question.help_text,
@@ -185,6 +186,19 @@ const InterviewPage = () => {
       setCurrentQuestion(transformedQuestion);
       setProgress(response.data.progress || 0);
       setError(null);
+
+      // Fetch existing answers from database if resuming a filing
+      if (filing_session_id) {
+        try {
+          const answersResponse = await api.get(`/api/interview/filings/${filing_session_id}/answers`);
+          if (answersResponse.data && answersResponse.data.answers) {
+            setAnswers(answersResponse.data.answers);
+          }
+        } catch (answerErr) {
+          // Non-critical - just log and continue (user can still answer questions)
+          console.error('Failed to load existing answers:', answerErr);
+        }
+      }
     } catch (err) {
       console.error('Interview start error:', err);
       console.error('Error details:', err.response?.data);
@@ -268,6 +282,7 @@ const InterviewPage = () => {
                         nextQuestion.type === 'dropdown' ? 'select' :
                         nextQuestion.type === 'ahv_number' ? 'ahv_number' :
                         nextQuestion.type === 'postal_code' ? 'postal_code' :
+                        nextQuestion.type === 'multi_canton' ? 'multi_canton' :
                         nextQuestion.type || nextQuestion.question_type,
           question_text: nextQuestion.text || nextQuestion.question_text,
           help_text: nextQuestion.help_text,

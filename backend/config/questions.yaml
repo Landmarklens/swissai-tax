@@ -173,42 +173,17 @@ questions:
   Q02b:
     id: Q02b
     text:
-      en: Postal code of the other canton
-      de: Postleitzahl des anderen Kantons
-      fr: Code postal de l'autre canton
-    type: postal_code
-    validation:
-      pattern: ^\d{4}$
-      min: 1000
-      max: 9999
+      en: Which canton(s) did you have income or assets in?
+      de: In welchem Kanton (Kantonen) hatten Sie Einkommen oder Vermögen?
+      fr: Dans quel(s) canton(s) avez-vous eu des revenus ou des actifs?
+      it: In quale(i) cantone(i) ha avuto redditi o patrimoni?
+    type: multi_canton
     help_text:
-      en: Enter the postal code where you worked or had assets. You can add multiple
-        cantons.
-      de: Geben Sie die Postleitzahl ein, wo Sie gearbeitet oder Vermögen hatten.
-        Sie können mehrere Kantone hinzufügen.
-      fr: Entrez le code postal où vous avez travaillé ou eu des actifs. Vous pouvez
-        ajouter plusieurs cantons.
-    placeholder: '1000'
-    allow_multiple: true
-    next: Q02c
-    required: true
-    auto_lookup: true
-    parent: Q02a
-  Q02c:
-    id: Q02c
-    text:
-      en: Add another canton?
-      de: Weiteren Kanton hinzufügen?
-      fr: Ajouter un autre canton?
-    type: yes_no
-    help_text:
-      en: Select yes if you had income or assets in additional cantons
-      de: Wählen Sie Ja, wenn Sie Einkommen oder Vermögen in weiteren Kantonen hatten
-      fr: Sélectionnez oui si vous avez eu des revenus ou des actifs dans d'autres
-        cantons
-    branching:
-      true: Q02b
-      false: Q03
+      en: Select the canton from the dropdown and click Add. You can add multiple cantons.
+      de: Wählen Sie den Kanton aus der Dropdown-Liste und klicken Sie auf Hinzufügen. Sie können mehrere Kantone hinzufügen.
+      fr: Sélectionnez le canton dans la liste déroulante et cliquez sur Ajouter. Vous pouvez ajouter plusieurs cantons.
+      it: Seleziona il cantone dal menu a tendina e clicca su Aggiungi. Puoi aggiungere più cantoni.
+    next: Q03
     required: true
     parent: Q02a
   Q03:

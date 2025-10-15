@@ -28,6 +28,7 @@ import {
 } from '@mui/icons-material';
 import AHVNumberInput from '../Interview/AHVNumberInput';
 import PostalCodeInput from '../Interview/PostalCodeInput';
+import MultiCantonSelector from '../Interview/MultiCantonSelector';
 
 const QuestionCard = ({
   question,
@@ -40,6 +41,7 @@ const QuestionCard = ({
   const { t } = useTranslation();
   const [answer, setAnswer] = useState(previousAnswer || '');
   const [multiSelectAnswers, setMultiSelectAnswers] = useState(previousAnswer || []);
+  const [multiCantonAnswers, setMultiCantonAnswers] = useState(previousAnswer || []);
   const [showHelp, setShowHelp] = useState(false);
 
   // Debug logging
@@ -48,6 +50,8 @@ const QuestionCard = ({
     // Reset answer when question changes
     if (question.question_type === 'multiselect') {
       setMultiSelectAnswers(previousAnswer || []);
+    } else if (question.question_type === 'multi_canton') {
+      setMultiCantonAnswers(previousAnswer || []);
     } else if (question.question_type === 'date' && previousAnswer) {
       // Convert timestamp or invalid date to YYYY-MM-DD format
       const dateValue = new Date(previousAnswer);
@@ -70,6 +74,8 @@ const QuestionCard = ({
   const handleSubmit = () => {
     if (question.question_type === 'multiselect') {
       onAnswer(multiSelectAnswers);
+    } else if (question.question_type === 'multi_canton') {
+      onAnswer(multiCantonAnswers);
     } else if (question.question_type === 'boolean') {
       onAnswer(answer === 'yes');
     } else if (question.question_type === 'number') {
@@ -82,6 +88,9 @@ const QuestionCard = ({
   const isAnswerValid = () => {
     if (question.question_type === 'multiselect') {
       return multiSelectAnswers.length > 0;
+    }
+    if (question.question_type === 'multi_canton') {
+      return multiCantonAnswers.length > 0;
     }
     return answer !== '';
   };
@@ -204,6 +213,17 @@ const QuestionCard = ({
               min: question.validation_rules?.min || 0,
               max: question.validation_rules?.max
             }}
+          />
+        );
+
+      case 'multi_canton':
+        return (
+          <MultiCantonSelector
+            value={multiCantonAnswers}
+            onChange={(cantons) => setMultiCantonAnswers(cantons)}
+            label={t("filing.select_canton") || "Select Canton"}
+            required={question.validation_rules?.required}
+            helperText={question.help_text}
           />
         );
 

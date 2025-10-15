@@ -252,8 +252,10 @@ export const LAZY_NAVIGATION_ROUTE = [
     )
   },
 
-  // OAuth callback
+  // OAuth callback (language-aware routes + fallbacks)
+  { path: '/:lang/google-redirect', element: <GoogleCallback /> },
   { path: '/google-redirect', element: <GoogleCallback /> },
+  { path: '/:lang/auth/google/callback', element: <GoogleCallback /> },
   { path: '/auth/google/callback', element: <GoogleCallback /> },
 
   // Information pages

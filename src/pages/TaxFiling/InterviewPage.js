@@ -167,16 +167,14 @@ const InterviewPage = () => {
         question_text: question.text || question.question_text,
         help_text: question.help_text,
         validation_rules: question.validation_rules,
-        options: {
-          // Handle both array of strings and array of objects
-          options: question.options?.map(opt => {
-            if (typeof opt === 'string') return opt;
-            return {
-              value: opt.value,
-              label: opt.label?.[language] || opt.label?.en || opt.value
-            };
-          }) || []
-        }
+        // Handle both array of strings and array of objects
+        options: question.options?.map(opt => {
+          if (typeof opt === 'string') return opt;
+          return {
+            value: opt.value,
+            label: opt.label?.[language] || opt.label?.en || opt.value
+          };
+        }) || []
       } : null;
 
 
@@ -270,16 +268,14 @@ const InterviewPage = () => {
           question_text: nextQuestion.text || nextQuestion.question_text,
           help_text: nextQuestion.help_text,
           validation_rules: nextQuestion.validation || nextQuestion.validation_rules,
-          options: {
-            // Handle both array of strings and array of objects
-            options: nextQuestion.options?.map(opt => {
-              if (typeof opt === 'string') return opt;
-              return {
-                value: opt.value,
-                label: opt.label?.[language] || opt.label?.en || opt.value
-              };
-            }) || []
-          }
+          // Handle both array of strings and array of objects
+          options: nextQuestion.options?.map(opt => {
+            if (typeof opt === 'string') return opt;
+            return {
+              value: opt.value,
+              label: opt.label?.[language] || opt.label?.en || opt.value
+            };
+          }) || []
         } : null;
 
 

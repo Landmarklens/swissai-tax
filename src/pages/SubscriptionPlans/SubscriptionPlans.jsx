@@ -29,44 +29,25 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
   const [error, setError] = useState(null);
   const [currentSubscription, setCurrentSubscription] = useState(null);
 
-  console.log('[SubscriptionPlans] Component mounted/rendered');
-  console.log('[SubscriptionPlans] Current state:', {
-    loading,
-    error,
-    currentSubscription,
-    referralCode,
-    isAuthenticated: authService.isAuthenticated()
-  });
-
   useEffect(() => {
-    console.log('[SubscriptionPlans] useEffect triggered - checking subscription');
     checkCurrentSubscription();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkCurrentSubscription = async () => {
-    console.log('[SubscriptionPlans] checkCurrentSubscription called');
     try {
       const isAuth = authService.isAuthenticated();
-      console.log('[SubscriptionPlans] User authenticated:', isAuth);
 
       if (!isAuth) {
-        console.log('[SubscriptionPlans] User not authenticated, skipping subscription check');
         return;
       }
 
-      console.log('[SubscriptionPlans] Fetching current subscription from API...');
       const result = await subscriptionService.getCurrentSubscription();
-      console.log('[SubscriptionPlans] API result:', result);
 
       if (result.success && result.data) {
-        console.log('[SubscriptionPlans] Setting current subscription:', result.data);
         setCurrentSubscription(result.data);
       } else if (result.success && !result.data) {
-        console.log('[SubscriptionPlans] API returned success but no data (user has no subscription)');
         setCurrentSubscription(null);
-      } else {
-        console.log('[SubscriptionPlans] API call failed:', result.error);
       }
     } catch (err) {
       console.error('[SubscriptionPlans] Error fetching subscription:', err);
@@ -74,33 +55,26 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
   };
 
   const handleSelectPlan = async (planType) => {
-    console.log('[SubscriptionPlans] Button clicked, planType:', planType);
     try {
       if (!authService.isAuthenticated()) {
-        console.log('[SubscriptionPlans] User not authenticated');
         // If parent provides onRequestAuth callback (when embedded in homepage), use it
         if (onRequestAuth) {
-          console.log('[SubscriptionPlans] Calling parent onRequestAuth callback');
           onRequestAuth(planType);
           return;
         }
         // Otherwise navigate to home
-        console.log('[SubscriptionPlans] Navigating to home with auth state');
         navigate('/', { state: { showAuth: true, selectedPlan: planType } });
         return;
       }
 
-      console.log('[SubscriptionPlans] User authenticated, processing plan selection');
       setLoading(true);
       setError(null);
 
       // Free plan: Create subscription directly (no Stripe checkout)
       if (planType === 'free') {
-        console.log('[SubscriptionPlans] Creating free subscription');
         await subscriptionService.createFreeSubscription();
         setLoading(false);
         // Navigate to filings page
-        console.log('[SubscriptionPlans] Navigating to /filings');
         navigate('/filings');
         return;
       }
@@ -109,7 +83,6 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
       const checkoutPath = referralCode
         ? `/subscription/checkout/${planType}?ref=${referralCode}`
         : `/subscription/checkout/${planType}`;
-      console.log('[SubscriptionPlans] Navigating to:', checkoutPath);
       navigate(checkoutPath);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to start subscription process');
@@ -118,8 +91,6 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
       setLoading(false);
     }
   };
-
-  console.log('[SubscriptionPlans] Building plans list...');
 
   const plans = [
     {
@@ -264,16 +235,6 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
             const isButtonDisabled = loading || isCurrentPlan;
             const canClickCard = !loading && !isCurrentPlan;
 
-            console.log(`[SubscriptionPlans] Rendering plan: ${plan.id}`, {
-              planId: plan.id,
-              currentSubscription,
-              currentPlanType: currentSubscription?.plan_type,
-              isCurrentPlan,
-              loading,
-              isButtonDisabled,
-              canClickCard
-            });
-
             return (
             <Grid item xs={12} sm={6} md={3} key={plan.id} sx={{ display: 'flex' }}>
               <Box sx={{ position: 'relative', pt: 5, width: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -293,15 +254,8 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
               <Card
                 className={`plan-card ${plan.popular ? 'popular' : ''} ${plan.isFree ? 'free' : ''}`}
                 onClick={() => {
-                  console.log(`[SubscriptionPlans] Card clicked for plan: ${plan.id}`, {
-                    canClickCard,
-                    loading,
-                    isCurrentPlan
-                  });
                   if (canClickCard) {
                     handleSelectPlan(plan.id);
-                  } else {
-                    console.log(`[SubscriptionPlans] Card click blocked for ${plan.id} - canClickCard is false`);
                   }
                 }}
                 sx={{
@@ -399,17 +353,9 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
                       fullWidth
                       disabled={isButtonDisabled}
                       onClick={(e) => {
-                        console.log(`[SubscriptionPlans] Button clicked for plan: ${plan.id}`, {
-                          isButtonDisabled,
-                          loading,
-                          isCurrentPlan,
-                          currentSubscription
-                        });
                         e.stopPropagation();
                         if (!isButtonDisabled) {
                           handleSelectPlan(plan.id);
-                        } else {
-                          console.log(`[SubscriptionPlans] Button click blocked for ${plan.id} - button is disabled`);
                         }
                       }}
                       sx={{

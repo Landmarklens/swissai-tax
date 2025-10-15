@@ -106,17 +106,25 @@ const QuestionCard = ({
               onChange={(e) => setAnswer(e.target.value)}
               label={question.question_text}
             >
-              {question.options?.options?.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option.replace('_', ' ').charAt(0).toUpperCase() + option.slice(1).replace('_', ' ')}
-                </MenuItem>
-              ))}
+              {question.options?.map((option) => {
+                // Handle both string and object formats
+                const optionValue = typeof option === 'string' ? option : option.value;
+                const optionLabel = typeof option === 'string'
+                  ? option.replace('_', ' ').charAt(0).toUpperCase() + option.slice(1).replace('_', ' ')
+                  : option.label;
+
+                return (
+                  <MenuItem key={optionValue} value={optionValue}>
+                    {optionLabel}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         );
 
       case 'multiselect':
-        const hasNoneOption = question.options?.options?.some(opt =>
+        const hasNoneOption = question.options?.some(opt =>
           (typeof opt === 'string' ? opt : opt.value) === 'none_of_above'
         );
 
@@ -136,7 +144,7 @@ const QuestionCard = ({
 
         return (
           <FormGroup>
-            {question.options?.options?.map((option) => {
+            {question.options?.map((option) => {
               // Handle both string and object formats
               const optionValue = typeof option === 'string' ? option : option.value;
               const optionLabel = typeof option === 'string'

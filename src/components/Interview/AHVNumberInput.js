@@ -134,6 +134,12 @@ const AHVNumberInput = ({
     // This prevents the useEffect from fighting with user input
     const formattedValue = value || '';
 
+    console.log('[AHVNumberInput] useEffect triggered:', {
+      parentValue: value,
+      formattedValue: formattedValue,
+      currentRawValue: rawValue
+    });
+
     // FIX: Always clear rawValue when parent sends empty string
     // This handles question transitions where previous text needs to be cleared
     if (formattedValue === '' && rawValue !== '') {

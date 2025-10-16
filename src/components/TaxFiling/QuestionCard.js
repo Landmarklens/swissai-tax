@@ -47,10 +47,19 @@ const QuestionCard = ({
   const [groupAnswers, setGroupAnswers] = useState(previousAnswer || []);
   const [showHelp, setShowHelp] = useState(false);
 
-  // Debug logging
+  // Debug logging to identify answer leakage bug
+  useEffect(() => {
+    console.log('[QuestionCard] Question changed:', {
+      questionId: question.id,
+      questionType: question.question_type,
+      previousAnswer: previousAnswer,
+      previousAnswerType: typeof previousAnswer
+    });
+  }, [question.id]);
 
   useEffect(() => {
-    // Reset answer when question changes
+    // IMPORTANT: Reset answer when question changes
+    // Clear any previous values to prevent leakage between questions
     if (question.question_type === 'multiselect') {
       setMultiSelectAnswers(previousAnswer || []);
     } else if (question.question_type === 'multi_canton') {
@@ -72,9 +81,11 @@ const QuestionCard = ({
         setAnswer('');
       }
     } else {
-      setAnswer(previousAnswer || '');
+      // FIXED: Explicitly check if previousAnswer is undefined/null/empty
+      // This prevents showing stale values from previous questions
+      setAnswer(previousAnswer !== undefined && previousAnswer !== null ? previousAnswer : '');
     }
-  }, [question, previousAnswer]);
+  }, [question.id, previousAnswer]);
 
   const handleSubmit = () => {
     if (question.question_type === 'multiselect') {

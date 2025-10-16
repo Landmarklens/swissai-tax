@@ -129,15 +129,15 @@ class TestInterviewServiceCreate(unittest.TestCase):
 
         # Test German
         result_de = self.service.create_session('user-1', 2024, 'de')
-        self.assertEqual(result_de['current_question']['text'], 'Was ist Ihre AHV-Nummer?')
+        self.assertEqual(result_de['current_question']['question_text'], 'Was ist Ihre AHV-Nummer?')
 
         # Test French
         result_fr = self.service.create_session('user-2', 2024, 'fr')
-        self.assertEqual(result_fr['current_question']['text'], 'Quel est votre numéro AVS?')
+        self.assertEqual(result_fr['current_question']['question_text'], 'Quel est votre numéro AVS?')
 
         # Test English (default)
         result_en = self.service.create_session('user-3', 2024, 'en')
-        self.assertEqual(result_en['current_question']['text'], 'What is your AHV number?')
+        self.assertEqual(result_en['current_question']['question_text'], 'What is your AHV number?')
 
     def test_create_session_returns_existing_session(self):
         """Test that create_session returns existing session instead of creating duplicate"""

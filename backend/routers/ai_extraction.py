@@ -373,6 +373,21 @@ async def save_minimal_answers(
 
     # Save answers
     for answer in answers:
+        # VALIDATION: Validate answer value matches question type
+        from ..models.swisstax.interview import Question
+        question = db.query(Question).filter(Question.id == answer.question_key).first()
+
+        # Skip invalid answers for AHV number fields
+        if question and question.question_type == 'ahv_number':
+            if not answer.is_skip and answer.answer_value != "skip":
+                # AHV numbers must start with '756.' and have correct format
+                if not answer.answer_value.startswith('756.'):
+                    logger.warning(
+                        f"Invalid AHV number format for {answer.question_key}: {answer.answer_value}. "
+                        f"Skipping save to prevent data corruption."
+                    )
+                    continue  # Skip saving this invalid answer
+
         # Check if answer exists
         existing = db.query(MinimalQuestionnaireResponse).filter(
             MinimalQuestionnaireResponse.session_id == filing_session.id,

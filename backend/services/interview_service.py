@@ -221,12 +221,12 @@ class InterviewService:
 
         session['completed_questions'].append(question_id)
 
-        # Handle sub-questions for married status (Q01a, Q01d)
+        # Handle sub-questions for married status (Q01a_name, Q01a, Q01d)
         if question_id == 'Q01' and answer == 'married':
-            # Add spouse questions to pending
-            spouse_questions = ['Q01a', 'Q01d']
+            # Add spouse questions to pending - matches questions.yaml branching
+            spouse_questions = ['Q01a_name', 'Q01a', 'Q01d']
             session['pending_questions'].extend(spouse_questions)
-            next_question_id = 'Q01a'
+            next_question_id = 'Q01a_name'
         # Handle sub-questions for children
         elif question_id == 'Q03' and answer == 'yes':
             session['pending_questions'].append('Q03a')
@@ -414,7 +414,7 @@ class InterviewService:
         # Calculate progress
         total_questions = 14  # Base questions
         if session['answers'].get('Q01') == 'married':
-            total_questions += 2  # Add spouse questions (Q01a, Q01d)
+            total_questions += 3  # Add spouse questions (Q01a_name, Q01a, Q01d)
         if session['answers'].get('Q03') == 'yes':
             total_questions += 1  # Add children count question
 
@@ -509,7 +509,7 @@ class InterviewService:
         """Format question for API response"""
         formatted = {
             'id': question.id,
-            'text': question.text.get(language, question.text.get('en')),
+            'question_text': question.text.get(language, question.text.get('en')),
             'type': question.type.value,
             'required': question.required
         }

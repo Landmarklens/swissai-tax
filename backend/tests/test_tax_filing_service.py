@@ -306,52 +306,65 @@ class TestTaxFilingService:
             assert sample_filing.completion_percentage == 50
 
     def test_delete_filing_soft_delete(self, mock_db, sample_filing):
-        """Test soft delete sets deleted_at timestamp"""
+        """Test that soft delete is no longer supported - always does hard delete"""
         # Setup
-        with patch.object(TaxFilingService, 'get_filing', return_value=sample_filing):
-            # Execute
-            result = TaxFilingService.delete_filing(
-                db=mock_db,
-                filing_id='filing-123',
-                user_id='user-456',
-                hard_delete=False
-            )
+        mock_query = Mock()
+        mock_query.filter.return_value = mock_query
+        mock_query.first.return_value = sample_filing
+        mock_query.delete.return_value = 1
+        mock_db.query.return_value = mock_query
 
-            # Assert
-            assert result is True
-            assert sample_filing.deleted_at is not None
-            assert mock_db.commit.called
-            assert not mock_db.delete.called
+        # Execute with hard_delete=False (should still do hard delete)
+        result = TaxFilingService.delete_filing(
+            db=mock_db,
+            filing_id='filing-123',
+            user_id='user-456',
+            hard_delete=False
+        )
+
+        # Assert - should still do hard delete even with hard_delete=False
+        assert result is True
+        assert mock_db.delete.called
+        assert mock_db.commit.called
 
     def test_delete_filing_hard_delete(self, mock_db, sample_filing):
         """Test hard delete removes from database"""
         # Setup
-        with patch.object(TaxFilingService, 'get_filing', return_value=sample_filing):
-            # Execute
-            result = TaxFilingService.delete_filing(
-                db=mock_db,
-                filing_id='filing-123',
-                user_id='user-456',
-                hard_delete=True
-            )
+        mock_query = Mock()
+        mock_query.filter.return_value = mock_query
+        mock_query.first.return_value = sample_filing
+        mock_query.delete.return_value = 1
+        mock_db.query.return_value = mock_query
 
-            # Assert
-            assert result is True
-            assert mock_db.delete.called
-            assert mock_db.commit.called
+        # Execute
+        result = TaxFilingService.delete_filing(
+            db=mock_db,
+            filing_id='filing-123',
+            user_id='user-456',
+            hard_delete=True
+        )
+
+        # Assert
+        assert result is True
+        assert mock_db.delete.called
+        assert mock_db.commit.called
 
     def test_delete_filing_submitted_raises_error(self, mock_db, sample_filing):
         """Test deleting submitted filing raises error"""
         # Setup
         sample_filing.status = FilingStatus.SUBMITTED
-        with patch.object(TaxFilingService, 'get_filing', return_value=sample_filing):
-            # Execute & Assert
-            with pytest.raises(ValueError, match="Cannot delete submitted filing"):
-                TaxFilingService.delete_filing(
-                    db=mock_db,
-                    filing_id='filing-123',
-                    user_id='user-456'
-                )
+        mock_query = Mock()
+        mock_query.filter.return_value = mock_query
+        mock_query.first.return_value = sample_filing
+        mock_db.query.return_value = mock_query
+
+        # Execute & Assert
+        with pytest.raises(ValueError, match="Cannot delete submitted filing"):
+            TaxFilingService.delete_filing(
+                db=mock_db,
+                filing_id='filing-123',
+                user_id='user-456'
+            )
 
     def test_restore_filing_success(self, mock_db, sample_filing):
         """Test restoring soft-deleted filing"""

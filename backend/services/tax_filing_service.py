@@ -369,7 +369,7 @@ class TaxFilingService:
         # Delete related data first (cascade should handle this, but being explicit)
         db.query(TaxAnswer).filter(TaxAnswer.filing_session_id == filing_id).delete()
         db.query(TaxInsight).filter(TaxInsight.filing_session_id == filing_id).delete()
-        db.query(TaxCalculation).filter(TaxCalculation.filing_id == filing_id).delete()
+        db.query(TaxCalculation).filter(TaxCalculation.filing_session_id == filing_id).delete()
 
         # Delete the filing itself
         db.delete(filing)

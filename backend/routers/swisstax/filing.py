@@ -26,7 +26,6 @@ from schemas.swisstax.filing import (
     FilingListItem,
     FilingResponse,
     FilingsListResponse,
-    PostalCodeLookup,
 )
 
 logger = logging.getLogger(__name__)
@@ -44,150 +43,6 @@ CANTONS = {
     'VS': 'Valais', 'NE': 'Neuchâtel', 'GE': 'Geneva', 'JU': 'Jura'
 }
 
-# Swiss postal code to canton/municipality mapping (expanded data)
-# In production, this should be replaced with a complete database table with all Swiss postal codes
-# or use the official Swiss Post API
-POSTAL_CODE_MAP = {
-    # Zürich (ZH)
-    '8000': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8001': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8002': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8003': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8004': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8005': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8006': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8008': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8032': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8050': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8092': {'municipality': 'Zürich', 'canton': 'ZH'},
-    '8102': {'municipality': 'Oberengstringen', 'canton': 'ZH'},
-    '8134': {'municipality': 'Adliswil', 'canton': 'ZH'},
-    '8152': {'municipality': 'Glattbrugg', 'canton': 'ZH'},
-    '8400': {'municipality': 'Winterthur', 'canton': 'ZH'},
-    '8610': {'municipality': 'Uster', 'canton': 'ZH'},
-
-    # Bern (BE)
-    '3000': {'municipality': 'Bern', 'canton': 'BE'},
-    '3001': {'municipality': 'Bern', 'canton': 'BE'},
-    '3002': {'municipality': 'Bern', 'canton': 'BE'},
-    '3003': {'municipality': 'Bern', 'canton': 'BE'},
-    '3004': {'municipality': 'Bern', 'canton': 'BE'},
-    '3005': {'municipality': 'Bern', 'canton': 'BE'},
-    '3006': {'municipality': 'Bern', 'canton': 'BE'},
-    '3007': {'municipality': 'Bern', 'canton': 'BE'},
-    '3008': {'municipality': 'Bern', 'canton': 'BE'},
-    '3010': {'municipality': 'Bern', 'canton': 'BE'},
-    '3011': {'municipality': 'Bern', 'canton': 'BE'},
-    '3012': {'municipality': 'Bern', 'canton': 'BE'},
-    '3013': {'municipality': 'Bern', 'canton': 'BE'},
-    '3014': {'municipality': 'Bern', 'canton': 'BE'},
-    '3015': {'municipality': 'Bern', 'canton': 'BE'},
-    '3027': {'municipality': 'Bern', 'canton': 'BE'},
-    '3032': {'municipality': 'Hinterkappelen', 'canton': 'BE'},
-    '3600': {'municipality': 'Thun', 'canton': 'BE'},
-    '2500': {'municipality': 'Biel', 'canton': 'BE'},
-
-    # Geneva (GE)
-    '1200': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1201': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1202': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1203': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1204': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1205': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1206': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1207': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1208': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1209': {'municipality': 'Geneva', 'canton': 'GE'},
-    '1212': {'municipality': 'Grand-Lancy', 'canton': 'GE'},
-    '1227': {'municipality': 'Carouge', 'canton': 'GE'},
-
-    # Vaud (VD)
-    '1000': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1003': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1004': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1005': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1006': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1007': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1010': {'municipality': 'Lausanne', 'canton': 'VD'},
-    '1020': {'municipality': 'Renens', 'canton': 'VD'},
-    '1110': {'municipality': 'Morges', 'canton': 'VD'},
-    '1800': {'municipality': 'Vevey', 'canton': 'VD'},
-    '1820': {'municipality': 'Montreux', 'canton': 'VD'},
-    '1400': {'municipality': 'Yverdon-les-Bains', 'canton': 'VD'},
-
-    # Basel-Stadt (BS)
-    '4000': {'municipality': 'Basel', 'canton': 'BS'},
-    '4001': {'municipality': 'Basel', 'canton': 'BS'},
-    '4002': {'municipality': 'Basel', 'canton': 'BS'},
-    '4003': {'municipality': 'Basel', 'canton': 'BS'},
-    '4051': {'municipality': 'Basel', 'canton': 'BS'},
-    '4052': {'municipality': 'Basel', 'canton': 'BS'},
-    '4053': {'municipality': 'Basel', 'canton': 'BS'},
-    '4054': {'municipality': 'Basel', 'canton': 'BS'},
-    '4055': {'municipality': 'Basel', 'canton': 'BS'},
-    '4056': {'municipality': 'Basel', 'canton': 'BS'},
-    '4057': {'municipality': 'Basel', 'canton': 'BS'},
-    '4058': {'municipality': 'Basel', 'canton': 'BS'},
-
-    # Ticino (TI)
-    '6900': {'municipality': 'Lugano', 'canton': 'TI'},
-    '6901': {'municipality': 'Lugano', 'canton': 'TI'},
-    '6902': {'municipality': 'Lugano', 'canton': 'TI'},
-    '6903': {'municipality': 'Lugano', 'canton': 'TI'},
-    '6500': {'municipality': 'Bellinzona', 'canton': 'TI'},
-    '6600': {'municipality': 'Locarno', 'canton': 'TI'},
-
-    # Lucerne (LU)
-    '6000': {'municipality': 'Luzern', 'canton': 'LU'},
-    '6003': {'municipality': 'Luzern', 'canton': 'LU'},
-    '6004': {'municipality': 'Luzern', 'canton': 'LU'},
-    '6005': {'municipality': 'Luzern', 'canton': 'LU'},
-
-    # St. Gallen (SG)
-    '9000': {'municipality': 'St. Gallen', 'canton': 'SG'},
-    '9001': {'municipality': 'St. Gallen', 'canton': 'SG'},
-    '9004': {'municipality': 'St. Gallen', 'canton': 'SG'},
-    '9500': {'municipality': 'Wil', 'canton': 'SG'},
-
-    # Aargau (AG)
-    '5000': {'municipality': 'Aarau', 'canton': 'AG'},
-    '5001': {'municipality': 'Aarau', 'canton': 'AG'},
-    '5400': {'municipality': 'Baden', 'canton': 'AG'},
-    '5425': {'municipality': 'Schneisingen', 'canton': 'AG'},
-
-    # Zug (ZG)
-    '6300': {'municipality': 'Zug', 'canton': 'ZG'},
-    '6301': {'municipality': 'Zug', 'canton': 'ZG'},
-    '6340': {'municipality': 'Baar', 'canton': 'ZG'},
-
-    # Neuchâtel (NE)
-    '2000': {'municipality': 'Neuchâtel', 'canton': 'NE'},
-    '2001': {'municipality': 'Neuchâtel', 'canton': 'NE'},
-    '2300': {'municipality': 'La Chaux-de-Fonds', 'canton': 'NE'},
-
-    # Fribourg (FR)
-    '1700': {'municipality': 'Fribourg', 'canton': 'FR'},
-    '1701': {'municipality': 'Fribourg', 'canton': 'FR'},
-
-    # Valais (VS)
-    '1950': {'municipality': 'Sion', 'canton': 'VS'},
-    '3900': {'municipality': 'Brig', 'canton': 'VS'},
-
-    # Thurgau (TG)
-    '8500': {'municipality': 'Frauenfeld', 'canton': 'TG'},
-    '8280': {'municipality': 'Kreuzlingen', 'canton': 'TG'},
-
-    # Schaffhausen (SH)
-    '8200': {'municipality': 'Schaffhausen', 'canton': 'SH'},
-
-    # Graubünden (GR)
-    '7000': {'municipality': 'Chur', 'canton': 'GR'},
-    '7500': {'municipality': 'St. Moritz', 'canton': 'GR'},
-
-    # Basel-Landschaft (BL)
-    '4410': {'municipality': 'Liestal', 'canton': 'BL'},
-    '4132': {'municipality': 'Muttenz', 'canton': 'BL'},
-}
 
 
 @router.get("/filings")
@@ -451,49 +306,6 @@ async def delete_filing(
         db.rollback()
         logger.error(f"Error deleting filing {filing_id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to delete filing: {str(e)}")
-
-
-@router.get("/postal-code/{postal_code}")
-async def lookup_postal_code(
-    postal_code: str,
-    db: Session = Depends(get_db)
-) -> PostalCodeLookup:
-    """
-    Look up canton and municipality by postal code
-    Returns municipality and canton information
-    """
-    try:
-        # Validate postal code format
-        if not postal_code.isdigit() or len(postal_code) != 4:
-            raise HTTPException(
-                status_code=400,
-                detail="Postal code must be exactly 4 digits"
-            )
-
-        # Look up in our mapping
-        # TODO: Replace with database lookup or external API
-        if postal_code not in POSTAL_CODE_MAP:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Postal code {postal_code} not found. Please enter municipality and canton manually."
-            )
-
-        data = POSTAL_CODE_MAP[postal_code]
-        canton_code = data['canton']
-        canton_name = CANTONS.get(canton_code, canton_code)
-
-        return PostalCodeLookup(
-            postal_code=postal_code,
-            municipality=data['municipality'],
-            canton=canton_code,
-            canton_name=canton_name
-        )
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error looking up postal code {postal_code}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Failed to lookup postal code: {str(e)}")
 
 
 # Keep original endpoints for backward compatibility

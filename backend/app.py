@@ -24,7 +24,7 @@ sys.path.append(os.path.dirname(__file__))
 from config import settings as app_settings
 
 # Import routers
-from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions, contact
+from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions, contact, tax_filing
 from routers.swisstax import filing, payment, profile, settings, referrals, webhooks
 from routers.swisstax import subscription_new as subscription
 from services.document_service import DocumentService
@@ -248,6 +248,7 @@ app.include_router(sessions.router, prefix="/api", tags=["sessions"])
 app.include_router(interview.router, prefix="/api/interview", tags=["interview"])
 app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
+app.include_router(tax_filing.router, prefix="/api/tax-filing", tags=["tax-filing"])  # Modern postal code endpoint
 app.include_router(filing.router, prefix="/api/tax-filing", tags=["filing"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(subscription.router, prefix="/api/subscription", tags=["subscription"])

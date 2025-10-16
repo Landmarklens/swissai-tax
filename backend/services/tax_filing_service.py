@@ -28,7 +28,7 @@ class TaxFilingService:
         user_id: str,
         year: Optional[int] = None,
         canton: Optional[str] = None,
-        include_deleted: bool = False
+        include_deleted: bool = False  # Kept for compatibility but ignored
     ) -> Dict[int, List[Dict]]:
         """
         Get all filings for a user, optionally filtered by year or canton
@@ -39,7 +39,7 @@ class TaxFilingService:
             user_id: User ID
             year: Optional filter by tax year
             canton: Optional filter by canton
-            include_deleted: Include soft-deleted filings
+            include_deleted: Ignored (no soft delete anymore)
 
         Returns:
             Dictionary with year as key, list of filings as value
@@ -49,8 +49,7 @@ class TaxFilingService:
             TaxFilingSession.user_id == user_id
         )
 
-        if not include_deleted:
-            query = query.filter(TaxFilingSession.deleted_at.is_(None))
+        # No soft delete check needed anymore
 
         if year:
             query = query.filter(TaxFilingSession.tax_year == year)
@@ -107,13 +106,12 @@ class TaxFilingService:
         Raises:
             ValueError: If filing already exists for this user/year/canton
         """
-        # Check if filing already exists
+        # Check if filing already exists (no soft delete check needed)
         existing = db.query(TaxFilingSession).filter(
             and_(
                 TaxFilingSession.user_id == user_id,
                 TaxFilingSession.tax_year == tax_year,
-                TaxFilingSession.canton == canton,
-                TaxFilingSession.deleted_at.is_(None)
+                TaxFilingSession.canton == canton
             )
         ).first()
 
@@ -186,13 +184,12 @@ class TaxFilingService:
         if not source:
             raise ValueError("Source filing not found or access denied")
 
-        # Check if filing already exists for new year
+        # Check if filing already exists for new year (no soft delete check)
         existing = db.query(TaxFilingSession).filter(
             and_(
                 TaxFilingSession.user_id == user_id,
                 TaxFilingSession.tax_year == new_year,
-                TaxFilingSession.canton == source.canton,
-                TaxFilingSession.deleted_at.is_(None)
+                TaxFilingSession.canton == source.canton
             )
         ).first()
 
@@ -278,8 +275,7 @@ class TaxFilingService:
         filing = db.query(TaxFilingSession).filter(
             and_(
                 TaxFilingSession.id == filing_id,
-                TaxFilingSession.user_id == user_id,
-                TaxFilingSession.deleted_at.is_(None)
+                TaxFilingSession.user_id == user_id
             )
         ).first()
 
@@ -337,17 +333,17 @@ class TaxFilingService:
         db: Session,
         filing_id: str,
         user_id: str,
-        hard_delete: bool = False
+        hard_delete: bool = True  # Changed default to True - always hard delete
     ) -> bool:
         """
-        Delete a filing (soft delete by default)
+        Delete a filing (ALWAYS hard delete - permanent removal)
         Cannot delete if already submitted
 
         Args:
             db: Database session
             filing_id: Filing ID
             user_id: User ID (for security)
-            hard_delete: If True, permanently delete (use with caution!)
+            hard_delete: Always True - permanently deletes filing
 
         Returns:
             True if deleted
@@ -355,19 +351,29 @@ class TaxFilingService:
         Raises:
             ValueError: If filing not found or cannot be deleted
         """
-        filing = TaxFilingService.get_filing(db, filing_id, user_id, include_relationships=False)
+        # Get filing without checking deleted_at since we're doing hard delete
+        filing = db.query(TaxFilingSession).filter(
+            and_(
+                TaxFilingSession.id == filing_id,
+                TaxFilingSession.user_id == user_id
+            )
+        ).first()
+
+        if not filing:
+            raise ValueError("Filing not found or access denied")
 
         if filing.status == FilingStatus.SUBMITTED:
             raise ValueError("Cannot delete submitted filing")
 
-        if hard_delete:
-            # Permanent deletion (use with extreme caution)
-            db.delete(filing)
-            logger.warning(f"Hard deleted filing {filing_id}")
-        else:
-            # Soft delete
-            filing.deleted_at = datetime.utcnow()
-            logger.info(f"Soft deleted filing {filing_id}")
+        # ALWAYS do permanent deletion
+        # Delete related data first (cascade should handle this, but being explicit)
+        db.query(TaxAnswer).filter(TaxAnswer.filing_session_id == filing_id).delete()
+        db.query(TaxInsight).filter(TaxInsight.filing_session_id == filing_id).delete()
+        db.query(TaxCalculation).filter(TaxCalculation.filing_id == filing_id).delete()
+
+        # Delete the filing itself
+        db.delete(filing)
+        logger.warning(f"Hard deleted filing {filing_id} and all related data")
 
         db.commit()
         return True
@@ -426,10 +432,7 @@ class TaxFilingService:
             Dictionary with stats (total filings, by year, by status, etc.)
         """
         filings = db.query(TaxFilingSession).filter(
-            and_(
-                TaxFilingSession.user_id == user_id,
-                TaxFilingSession.deleted_at.is_(None)
-            )
+            TaxFilingSession.user_id == user_id
         ).all()
 
         stats = {

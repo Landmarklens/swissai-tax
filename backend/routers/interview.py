@@ -170,8 +170,7 @@ async def start_interview(
             # Verify filing session exists and belongs to user
             filing_session = db.query(TaxFilingSession).filter(
                 TaxFilingSession.id == filing_session_id,
-                TaxFilingSession.user_id == current_user.id,
-                TaxFilingSession.deleted_at.is_(None)
+                TaxFilingSession.user_id == current_user.id
             ).first()
 
             if not filing_session:
@@ -235,8 +234,7 @@ async def submit_answer(
         # Verify filing session belongs to user
         filing_session = db.query(TaxFilingSession).filter(
             TaxFilingSession.id == request.filing_session_id,
-            TaxFilingSession.user_id == current_user.id,
-            TaxFilingSession.deleted_at.is_(None)
+            TaxFilingSession.user_id == current_user.id
         ).first()
 
         if not filing_session:
@@ -337,8 +335,7 @@ async def get_filing_answers(
         # Verify filing session belongs to user
         filing_session = db.query(TaxFilingSession).filter(
             TaxFilingSession.id == filing_session_id,
-            TaxFilingSession.user_id == current_user.id,
-            TaxFilingSession.deleted_at.is_(None)
+            TaxFilingSession.user_id == current_user.id
         ).first()
 
         if not filing_session:
@@ -562,8 +559,7 @@ async def calculate_taxes_for_session(
         # Verify filing session belongs to user
         filing_session = db.query(TaxFilingSession).filter(
             TaxFilingSession.id == filing_session_id,
-            TaxFilingSession.user_id == current_user.id,
-            TaxFilingSession.deleted_at.is_(None)
+            TaxFilingSession.user_id == current_user.id
         ).first()
 
         if not filing_session:

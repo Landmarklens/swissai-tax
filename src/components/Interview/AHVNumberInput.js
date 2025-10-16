@@ -33,7 +33,7 @@ const AHVNumberInput = ({
   helperText
 }) => {
   const [rawValue, setRawValue] = useState(value || '');
-  const [isValid, setIsValid] = useState(false);
+  const [validationResult, setValidationResult] = useState({ isValid: false, errorKey: null });
   const [isTouched, setIsTouched] = useState(false);
 
   /**
@@ -58,18 +58,35 @@ const AHVNumberInput = ({
   };
 
   /**
-   * Validate AHV number format
+   * Validate AHV number format and return detailed error
    * @param {string} ahv - AHV number to validate
-   * @returns {boolean} Whether AHV is valid
+   * @returns {Object} { isValid: boolean, errorKey: string|null }
    */
   const validateAHV = (ahv) => {
+    if (!ahv) return { isValid: false, errorKey: null };
+
+    // Check if we have any digits
+    const digits = ahv.replace(/\D/g, '');
+
+    // Check length first
+    if (digits.length < 13) {
+      return { isValid: false, errorKey: 'incomplete' };
+    }
+
+    if (digits.length !== 13) {
+      return { isValid: false, errorKey: 'length' };
+    }
+
+    // Check country code (must be 756 for Switzerland)
+    if (!digits.startsWith('756')) {
+      return { isValid: false, errorKey: 'country_code' };
+    }
+
     // Basic format validation: 756.XXXX.XXXX.XX
     const pattern = /^756\.\d{4}\.\d{4}\.\d{2}$/;
-    if (!pattern.test(ahv)) return false;
-
-    // Extract digits for EAN-13 checksum validation
-    const digits = ahv.replace(/\D/g, '');
-    if (digits.length !== 13) return false;
+    if (!pattern.test(ahv)) {
+      return { isValid: false, errorKey: 'format' };
+    }
 
     // EAN-13 checksum algorithm
     let sum = 0;
@@ -79,7 +96,11 @@ const AHVNumberInput = ({
     }
     const checkDigit = (10 - (sum % 10)) % 10;
 
-    return checkDigit === parseInt(digits[12], 10);
+    if (checkDigit !== parseInt(digits[12], 10)) {
+      return { isValid: false, errorKey: 'checksum' };
+    }
+
+    return { isValid: true, errorKey: null };
   };
 
   /**
@@ -89,8 +110,8 @@ const AHVNumberInput = ({
     const formatted = formatAHV(e.target.value);
     setRawValue(formatted);
 
-    const valid = validateAHV(formatted);
-    setIsValid(valid);
+    const result = validateAHV(formatted);
+    setValidationResult(result);
 
     // Always call onChange to update parent state
     // Validation is shown to user but doesn't block state updates
@@ -114,22 +135,44 @@ const AHVNumberInput = ({
     const formattedValue = value || '';
     if (formattedValue !== rawValue && formattedValue !== formatAHV(rawValue)) {
       setRawValue(formattedValue);
-      setIsValid(validateAHV(formattedValue));
+      setValidationResult(validateAHV(formattedValue));
     }
   }, [value]);
 
   /**
    * Determine if should show error
    */
-  const showError = isTouched && rawValue && !isValid;
+  const showError = isTouched && rawValue && !validationResult.isValid;
   const hasError = !!error || showError;
+
+  /**
+   * Get specific error message based on validation result
+   */
+  const getErrorMessage = (errorKey) => {
+    switch (errorKey) {
+      case 'country_code':
+        return 'Swiss AHV numbers must start with 756 (not 755 or other codes)';
+      case 'incomplete':
+        return 'Please complete the AHV number (13 digits required)';
+      case 'length':
+        return 'AHV number must be exactly 13 digits';
+      case 'format':
+        return 'Invalid format. Expected: 756.XXXX.XXXX.XX';
+      case 'checksum':
+        return 'Invalid AHV number - checksum validation failed';
+      default:
+        return 'Invalid AHV format. Expected: 756.XXXX.XXXX.XX';
+    }
+  };
 
   /**
    * Get helper text
    */
   const getHelperText = () => {
     if (error) return error;
-    if (showError) return 'Invalid AHV format. Expected: 756.XXXX.XXXX.XX';
+    if (showError && validationResult.errorKey) {
+      return getErrorMessage(validationResult.errorKey);
+    }
     if (helperText) return helperText;
     return 'Format: 756.XXXX.XXXX.XX';
   };
@@ -140,7 +183,7 @@ const AHVNumberInput = ({
   const getEndAdornment = () => {
     if (!rawValue) return null;
 
-    if (isValid) {
+    if (validationResult.isValid) {
       return (
         <InputAdornment position="end">
           <CheckCircle color="success" />
@@ -148,7 +191,7 @@ const AHVNumberInput = ({
       );
     }
 
-    if (isTouched && !isValid) {
+    if (isTouched && !validationResult.isValid) {
       return (
         <InputAdornment position="end">
           <ErrorIcon color="error" />
@@ -196,7 +239,7 @@ const AHVNumberInput = ({
           '& .MuiOutlinedInput-root': {
             '&.Mui-focused': {
               '& fieldset': {
-                borderColor: isValid ? 'success.main' : undefined
+                borderColor: validationResult.isValid ? 'success.main' : undefined
               }
             }
           }

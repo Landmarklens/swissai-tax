@@ -281,7 +281,7 @@ const PendingDocumentsList = ({
                 document_type: selectedDoc.document_type,
                 accepted_formats: ['pdf', 'jpg', 'jpeg', 'png'],
                 max_size_mb: 10,
-                allow_bring_later: false
+                bring_later: false
               }}
               sessionId={sessionId}
               onUploadComplete={handleUploadComplete}

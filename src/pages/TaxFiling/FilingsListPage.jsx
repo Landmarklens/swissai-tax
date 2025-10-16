@@ -203,7 +203,7 @@ const FilingsListPage = () => {
       loadFilings();
 
       // Navigate to interview page
-      navigate(`/tax-filing/interview/${response.data.id}`);
+      navigate(`/${i18n.language}/tax-filing/interview/${response.data.id}`);
     } catch (err) {
       console.error('Error creating filing:', err);
       alert(err.response?.data?.detail || 'Failed to create filing');
@@ -459,14 +459,14 @@ const FilingsListPage = () => {
                             <Button
                               size="small"
                               startIcon={<ContinueIcon />}
-                              onClick={() => navigate(`/tax-filing/interview/${filing.id}`)}
+                              onClick={() => navigate(`/${i18n.language}/tax-filing/interview/${filing.id}`)}
                             >
                               {t('filings.continue')}
                             </Button>
                           )}
                           <Button
                             size="small"
-                            onClick={() => navigate(`/tax-filing/review/${filing.id}`)}
+                            onClick={() => navigate(`/${i18n.language}/tax-filing/review/${filing.id}`)}
                           >
                             {t('filings.viewDetails')}
                           </Button>
@@ -488,7 +488,7 @@ const FilingsListPage = () => {
       >
         <MenuItem
           onClick={() => {
-            navigate(`/tax-filing/interview/${menuFiling?.id}`);
+            navigate(`/${i18n.language}/tax-filing/interview/${menuFiling?.id}`);
             handleMenuClose();
           }}
         >

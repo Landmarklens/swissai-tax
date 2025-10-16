@@ -9,14 +9,17 @@ import {
   Link,
   Paper,
   Chip,
-  Stack
+  Stack,
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
 import {
   CloudUpload,
   InsertDriveFile,
   CheckCircle,
   Error as ErrorIcon,
-  Info as InfoIcon
+  Info as InfoIcon,
+  AccessTime
 } from '@mui/icons-material';
 
 /**
@@ -322,25 +325,34 @@ const DocumentUploadQuestion = ({
         )}
       </Paper>
 
-      {/* Bring Later Button */}
-      {question.allow_bring_later && !uploadSuccess && (
-        <Box sx={{ mt: 3, textAlign: 'center' }}>
-          <Button
-            variant="outlined"
-            onClick={handleBringLater}
-            disabled={uploading}
-            sx={{ minWidth: 200 }}
-          >
-            I'll bring this document later
-          </Button>
-          <Typography
-            variant="caption"
-            display="block"
-            color="text.secondary"
-            sx={{ mt: 1 }}
-          >
-            You can upload it before calculating your taxes
-          </Typography>
+      {/* Bring Later Checkbox */}
+      {question.bring_later && !uploadSuccess && (
+        <Box
+          sx={{
+            mt: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    handleBringLater();
+                  }
+                }}
+                disabled={uploading}
+                color="primary"
+              />
+            }
+            label={
+              <Typography variant="body2" color="text.secondary">
+                I'll bring this document later
+              </Typography>
+            }
+          />
         </Box>
       )}
     </Box>

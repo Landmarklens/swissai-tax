@@ -124,12 +124,12 @@ class TaxCalculationService:
                 income['employment'] = employment_income
 
         # Dividend/Interest income (Q10a)
+        # Note: Q10a now uses document upload instead of numeric input
+        # The actual amount will be extracted from uploaded documents
+        # For now, we set capital income to 0 when Q10a is 'yes'
         if answers.get('Q10a') == 'yes':
-            try:
-                capital_income = Decimal(str(answers.get('Q10a_amount', 0)))
-                income['capital'] = capital_income
-            except (ValueError, TypeError, decimal.InvalidOperation):
-                income['capital'] = Decimal('0')
+            # TODO: Extract capital income from uploaded documents
+            income['capital'] = Decimal('0')
 
         # Rental income (Q09c)
         if answers.get('Q09c') == 'yes':

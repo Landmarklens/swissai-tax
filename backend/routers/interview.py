@@ -819,3 +819,58 @@ async def remove_pending_document(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to remove pending document: {str(e)}"
         )
+
+
+# ==================== Review Data Endpoint ====================
+
+@router.get("/filings/{filing_id}/review", response_model=dict)
+async def get_review_data(
+    filing_id: str,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get structured review data for a filing session
+
+    - Returns all interview answers organized by category
+    - Used by the review page to display comprehensive filing information
+    - Includes personal info, employment, property, deductions, etc.
+    """
+    try:
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_id,
+            TaxFilingSession.user_id == current_user.id,
+            TaxFilingSession.deleted_at.is_(None)
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Use ReviewDataService to get structured data
+        from services.review_data_service import ReviewDataService
+
+        review_service = ReviewDataService(db=db)
+        review_data = review_service.get_review_data(filing_id)
+
+        return {
+            "success": True,
+            "review_data": review_data
+        }
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting review data: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get review data: {str(e)}"
+        )

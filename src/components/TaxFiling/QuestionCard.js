@@ -38,7 +38,9 @@ const QuestionCard = ({
   onBack,
   isSubmitting,
   previousAnswer,
-  canGoBack = false
+  canGoBack = false,
+  sessionId,
+  onUpload
 }) => {
   const { t } = useTranslation();
   const [answer, setAnswer] = useState(previousAnswer || '');
@@ -64,11 +66,11 @@ const QuestionCard = ({
     // IMPORTANT: Reset answer when question changes
     // Clear any previous values to prevent leakage between questions
     if (question.question_type === 'multiselect') {
-      setMultiSelectAnswers(previousAnswer || []);
+      setMultiSelectAnswers(Array.isArray(previousAnswer) ? previousAnswer : []);
     } else if (question.question_type === 'multi_canton') {
-      setMultiCantonAnswers(previousAnswer || []);
+      setMultiCantonAnswers(Array.isArray(previousAnswer) ? previousAnswer : []);
     } else if (question.question_type === 'group') {
-      setGroupAnswers(previousAnswer || []);
+      setGroupAnswers(Array.isArray(previousAnswer) ? previousAnswer : []);
     } else if (question.question_type === 'date' && previousAnswer) {
       // Convert timestamp or invalid date to YYYY-MM-DD format
       const dateValue = new Date(previousAnswer);
@@ -83,13 +85,42 @@ const QuestionCard = ({
       } else {
         setAnswer('');
       }
+    } else if (question.question_type === 'boolean') {
+      // FIXED: Boolean questions should only accept 'yes' or 'no', not other answer types
+      const newValue = (previousAnswer === 'yes' || previousAnswer === 'no' || previousAnswer === true || previousAnswer === false)
+        ? (previousAnswer === true || previousAnswer === 'yes' ? 'yes' : 'no')
+        : '';
+      console.log('[QuestionCard] Setting boolean answer:', {
+        questionId: question.id,
+        previousAnswer: previousAnswer,
+        newValue: newValue
+      });
+      setAnswer(newValue);
+    } else if (question.question_type === 'select') {
+      // FIXED: Select questions should validate that previousAnswer is in options
+      const isValidOption = question.options?.some(opt => {
+        const optValue = typeof opt === 'string' ? opt : opt.value;
+        return optValue === previousAnswer;
+      });
+      const newValue = isValidOption ? previousAnswer : '';
+      console.log('[QuestionCard] Setting select answer:', {
+        questionId: question.id,
+        previousAnswer: previousAnswer,
+        newValue: newValue,
+        isValidOption: isValidOption
+      });
+      setAnswer(newValue);
     } else {
       // FIXED: Explicitly check if previousAnswer is undefined/null/empty
       // This prevents showing stale values from previous questions
-      const newValue = previousAnswer !== undefined && previousAnswer !== null ? previousAnswer : '';
+      const newValue = (previousAnswer !== undefined && previousAnswer !== null && previousAnswer !== '')
+        ? String(previousAnswer)
+        : '';
       console.log('[QuestionCard] Setting answer state:', {
         questionId: question.id,
+        questionType: question.question_type,
         previousAnswer: previousAnswer,
+        previousAnswerType: typeof previousAnswer,
         newValue: newValue,
         currentAnswer: answer
       });
@@ -322,6 +353,8 @@ const QuestionCard = ({
             value={groupAnswers}
             onChange={(entries) => setGroupAnswers(entries)}
             disabled={isSubmitting}
+            sessionId={sessionId}
+            onUpload={onUpload}
           />
         );
 

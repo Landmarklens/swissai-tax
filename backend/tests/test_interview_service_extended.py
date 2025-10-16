@@ -1024,7 +1024,7 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
 
         # Assert
         self.assertEqual(profile['civil_status'], 'single')
-        self.assertEqual(profile['canton'], 'ZH')
+        # NOTE: canton, municipality, postal_code are NOT in profile anymore - they come from filing.profile
         self.assertFalse(profile['has_children'])
         self.assertEqual(profile['num_children'], 0)
         self.assertEqual(profile['num_employers'], 1)
@@ -1054,7 +1054,7 @@ class TestInterviewServiceProfileGeneration(unittest.TestCase):
 
         # Assert
         self.assertEqual(profile['civil_status'], 'married')
-        self.assertEqual(profile['municipality'], 'Geneva')
+        # NOTE: canton, municipality, postal_code are NOT in profile anymore - they come from filing.profile
         self.assertIn('spouse', profile)
         self.assertEqual(profile['spouse']['ahv_number'], '756.1234.5678.97')
         self.assertTrue(profile['spouse']['is_employed'])

@@ -41,6 +41,39 @@ class InterviewService:
         ).first()
 
         if existing_session:
+            # If session is completed, reset it to allow restarting the interview
+            if existing_session.status == 'completed':
+                logger.info(f"Resetting completed session {existing_session.id} for user {user_id}, year {tax_year}")
+
+                # Reset session to initial state
+                first_question = self.question_loader.get_first_question()
+                existing_session.status = 'in_progress'
+                existing_session.current_question_id = first_question.id
+                existing_session.answers = {}
+                existing_session.completed_questions = []
+                existing_session.pending_questions = [first_question.id]
+                existing_session.progress = 0
+                existing_session.session_context = {}
+                existing_session.completed_at = None
+                existing_session.submitted_at = None
+                existing_session.updated_at = datetime.utcnow()
+
+                # Update filing_id if a new one was provided
+                if filing_id:
+                    existing_session.filing_id = filing_id
+
+                self.db.commit()
+                self.db.refresh(existing_session)
+
+                session_id = str(existing_session.id)
+                logger.info(f"Reset completed. Returning session {session_id} with first question")
+
+                return {
+                    'session_id': session_id,
+                    'current_question': self._format_question(first_question, language),
+                    'progress': 0
+                }
+
             # Validate that the filing_id referenced by this session still exists
             if existing_session.filing_id:
                 filing_exists = self.db.query(TaxFilingSession).filter(
@@ -203,15 +236,8 @@ class InterviewService:
                 location_key = f"{question_id}_location"
                 session_context[location_key] = location_data
 
-                # For primary residence (Q02), store as primary location
-                if question_id == 'Q02':
-                    session_context['primary_canton'] = location_data['canton']
-                    session_context['primary_municipality'] = location_data['municipality']
-                    session_context['primary_postal_code'] = location_data['postal_code']
-                    logger.info(f"Auto-detected primary residence: {location_data['canton']}, {location_data['municipality']}")
-
                 # For secondary location (Q02b), store as secondary location
-                elif question_id == 'Q02b':
+                if question_id == 'Q02b':
                     session_context['secondary_canton'] = location_data['canton']
                     session_context['secondary_municipality'] = location_data['municipality']
                     session_context['secondary_postal_code'] = location_data['postal_code']
@@ -652,8 +678,8 @@ class InterviewService:
         profile = {
             'ahv_number': decrypted_answers.get('Q00'),  # User's own AHV number
             'civil_status': decrypted_answers.get('Q01'),
-            'canton': decrypted_answers.get('Q02'),
-            'municipality': decrypted_answers.get('Q02a'),
+            # NOTE: canton, municipality, and postal_code come from filing.profile, not interview answers
+            # They are set when the filing is created
             'has_children': decrypted_answers.get('Q03') == 'yes',
             'num_children': int(decrypted_answers.get('Q03a', 0)) if decrypted_answers.get('Q03') == 'yes' else 0,
             'num_employers': int(decrypted_answers.get('Q04', 0)),

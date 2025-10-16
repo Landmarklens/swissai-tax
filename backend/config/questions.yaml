@@ -83,7 +83,7 @@ questions:
       - Q01a_name
       - Q01a
       - Q01d
-      default: Q02
+      default: Q02a
     required: true
   Q01a_name:
     id: Q01a_name
@@ -130,28 +130,9 @@ questions:
       de: Ist Ihr Ehepartner erwerbstätig?
       fr: Votre conjoint est-il employé?
     type: yes_no
-    next: Q02
-    required: true
-    parent: Q01
-  Q02:
-    id: Q02
-    text:
-      en: What was your postal code of residence on 31 Dec 2024?
-      de: Was war Ihre Postleitzahl des Wohnsitzes am 31.12.2024?
-      fr: Quel était votre code postal de résidence au 31 déc 2024?
-    type: postal_code
-    validation:
-      pattern: ^\d{4}$
-      min: 1000
-      max: 9999
-    help_text:
-      en: Enter your 4-digit Swiss postal code where you lived at the end of 2024
-      de: Geben Sie Ihre 4-stellige Schweizer Postleitzahl ein, wo Sie Ende 2024 wohnten
-      fr: Entrez votre code postal suisse à 4 chiffres où vous viviez fin 2024
-    placeholder: '8001'
     next: Q02a
     required: true
-    auto_lookup: true
+    parent: Q01
   Q02a:
     id: Q02a
     text:
@@ -473,27 +454,13 @@ questions:
         min: 1
         max: 100
       required: true
-    next: Q04b
-    parent: Q04
-  Q04b:
-    id: Q04b
-    text:
-      en: Did you have commuting expenses?
-      de: Hatten Sie Pendlerkosten?
-      fr: Avez-vous eu des frais de déplacement?
-    type: yes_no
-    explanation:
-      en: Public transport costs for commuting to work up to CHF 3,200 are deductible
-      de: Kosten für öffentliche Verkehrsmittel zur Arbeit bis CHF 3'200 sind abzugsfähig
-      fr: Les frais de transport public pour le trajet domicile-travail jusqu'à CHF
-        3'200 sont déductibles
-    branching:
-      true: Q04c
-      false: Q04c
-    required: true
-    parent: Q04
-    inline_document_upload:
-      document_type: commuting_costs
+    - id: transport_documents
+      text:
+        en: Upload your public transport passes, tickets, or receipts
+        de: Laden Sie Ihre öffentlichen Verkehrsmittel-Abonnemente, Tickets oder Belege hoch
+        fr: Téléchargez vos abonnements de transport public, billets ou reçus
+      type: document_upload
+      document_type: transport_documents
       accepted_formats:
       - pdf
       - jpg
@@ -501,14 +468,40 @@ questions:
       - png
       max_size_mb: 10
       bring_later: true
-      upload_text:
-        en: Upload commuting documents (transport passes, tickets, receipts)
-        de: Pendlerdokumente hochladen (ÖV-Abos, Billette, Quittungen)
-        fr: Télécharger documents de déplacement (abonnements, billets, reçus)
+      required: false
       help_text:
-        en: Upload your public transport passes, tickets, or receipts
-        de: Laden Sie Ihre ÖV-Abonnemente, Billette oder Quittungen hoch
-        fr: Téléchargez vos abonnements de transport, billets ou reçus
+        en: Upload proof of your commuting costs such as GA, Half-Fare, or monthly passes
+        de: Laden Sie Nachweise Ihrer Pendlerkosten wie GA, Halbtax oder Monatsabonnemente hoch
+        fr: Téléchargez les justificatifs de vos frais de déplacement comme AG, Demi-tarif ou abonnements mensuels
+    next: Q04b
+    parent: Q04
+  Q04b:
+    id: Q04b
+    text:
+      en: Upload your employment certificate (Lohnausweis)
+      de: Laden Sie Ihren Lohnausweis hoch
+      fr: Téléchargez votre certificat de salaire
+    type: document_upload
+    document_type: employment_certificate
+    accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+    max_size_mb: 10
+    allow_multiple: true
+    bring_later: true
+    explanation:
+      en: Your employment certificate (Lohnausweis) is mandatory. It shows your annual income, tax withholdings, and benefits. Upload one certificate for each employer.
+      de: Ihr Lohnausweis ist obligatorisch. Er zeigt Ihr Jahreseinkommen, Steuerabzüge und Leistungen. Laden Sie einen Ausweis pro Arbeitgeber hoch.
+      fr: Votre certificat de salaire est obligatoire. Il indique votre revenu annuel, les retenues fiscales et les prestations. Téléchargez un certificat par employeur.
+    help_text:
+      en: You need one Lohnausweis for each employer listed. You can bring these documents later if not available now.
+      de: Sie benötigen einen Lohnausweis für jeden aufgeführten Arbeitgeber. Sie können diese Dokumente später mitbringen, falls sie jetzt nicht verfügbar sind.
+      fr: Vous avez besoin d'un certificat de salaire pour chaque employeur listé. Vous pouvez apporter ces documents plus tard s'ils ne sont pas disponibles maintenant.
+    next: Q04c
+    required: true
+    parent: Q04
   Q04b1:
     id: Q04b1
     text:
@@ -996,27 +989,27 @@ questions:
         (35%) qui peut être réclamé. Les dividendes étrangers peuvent également être
         imposables.
     branching:
-      true: Q10a_amount
+      true: Q10_upload
       false: Q10_upload
     required: true
     parent: Q10
-  Q10a_amount:
-    id: Q10a_amount
-    text:
-      en: Annual dividend/interest income (CHF)
-      de: Jährliche Dividenden-/Zinseinkommen (CHF)
-      fr: Revenus annuels de dividendes/intérêts (CHF)
-    type: currency
-    validation:
-      min: 0
-    placeholder: '5000'
-    help_text:
-      en: Enter total dividend and interest income for the year
-      de: Geben Sie die gesamten Dividenden- und Zinseinkommen für das Jahr ein
-      fr: Entrez le total des revenus de dividendes et d'intérêts pour l'année
-    next: Q10_upload
-    required: true
-    parent: Q10a
+    inline_document_upload:
+      document_type: dividend_interest_documents
+      accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+      max_size_mb: 10
+      bring_later: true
+      upload_text:
+        en: Upload your dividend/interest statements or bank documents
+        de: Laden Sie Ihre Dividenden-/Zinsabrechnungen oder Bankdokumente hoch
+        fr: Téléchargez vos relevés de dividendes/intérêts ou documents bancaires
+      help_text:
+        en: Upload statements showing dividend income, interest income, or withholding tax certificates
+        de: Laden Sie Abrechnungen hoch, die Dividendeneinkommen, Zinseinkommen oder Verrechnungssteuerbescheinigungen zeigen
+        fr: Téléchargez les relevés montrant les revenus de dividendes, les revenus d'intérêts ou les certificats d'impôt anticipé
   Q11:
     id: Q11
     text:
@@ -1127,38 +1120,28 @@ questions:
   Q13b:
     id: Q13b
     text:
-      en: Did you pay health insurance premiums?
-      de: Haben Sie Krankenkassenprämien bezahlt?
-      fr: Avez-vous payé des primes d'assurance maladie?
-    type: yes_no
-    explanation:
-      en: Health insurance premiums (basic and supplementary) are fully deductible.
-        This is mandatory in Switzerland.
-      de: Krankenkassenprämien (Grund- und Zusatzversicherung) sind vollständig abzugsfähig.
-        Dies ist in der Schweiz obligatorisch.
-      fr: Les primes d'assurance maladie (base et complémentaire) sont entièrement
-        déductibles. Ceci est obligatoire en Suisse.
-    branching:
-      true: Q13b_basic
-      false: Q14
-    required: true
-    inline_document_upload:
-      document_type: health_insurance_premiums
-      accepted_formats:
+      en: Upload your health insurance premium statement
+      de: Laden Sie Ihren Krankenkassenprämiennachweis hoch
+      fr: Téléchargez votre attestation de primes d'assurance maladie
+    type: document_upload
+    document_type: health_insurance_premiums
+    accepted_formats:
       - pdf
       - jpg
       - jpeg
       - png
-      max_size_mb: 10
-      bring_later: true
-      upload_text:
-        en: Upload health insurance premium statement
-        de: Krankenkassenprämiennachweis hochladen
-        fr: Télécharger l'attestation de primes d'assurance maladie
-      help_text:
-        en: Upload your annual health insurance premium statement
-        de: Laden Sie Ihren jährlichen Krankenkassenprämiennachweis hoch
-        fr: Téléchargez votre attestation annuelle de primes d'assurance maladie
+    max_size_mb: 10
+    bring_later: true
+    explanation:
+      en: Health insurance is mandatory in Switzerland. Your annual premium statement from your health insurance provider (Krankenkasse) is required for tax deductions.
+      de: Die Krankenversicherung ist in der Schweiz obligatorisch. Ihre jährliche Prämienabrechnung Ihrer Krankenkasse ist für Steuerabzüge erforderlich.
+      fr: L'assurance maladie est obligatoire en Suisse. Votre attestation annuelle de primes de votre caisse maladie est requise pour les déductions fiscales.
+    help_text:
+      en: Upload your annual health insurance premium statement. You can bring this document later if not available now.
+      de: Laden Sie Ihre jährliche Krankenkassenprämienabrechnung hoch. Sie können dieses Dokument später mitbringen, falls es jetzt nicht verfügbar ist.
+      fr: Téléchargez votre attestation annuelle de primes d'assurance maladie. Vous pouvez apporter ce document plus tard s'il n'est pas disponible maintenant.
+    next: Q13b_basic
+    required: true
   Q13b_basic:
     id: Q13b_basic
     text:
@@ -1476,8 +1459,8 @@ questions:
       fr: Vous pouvez télécharger tout autre document fiscal pertinent (par exemple,
         autres déductions, circonstances particulières)
     branching:
-      true: Q_complexity_screen
-      false: Q_complexity_screen
+      true: Q18_bank_statements
+      false: Q18_bank_statements
     required: true
     inline_document_upload:
       document_type: other_documents
@@ -1486,16 +1469,32 @@ questions:
       - jpg
       - jpeg
       - png
-      max_size_mb: 10
-      bring_later: false
-      upload_text:
-        en: Upload additional documents
-        de: Zusätzliche Dokumente hochladen
-        fr: Télécharger des documents supplémentaires
-      help_text:
-        en: Upload any other tax-relevant documents
-        de: Laden Sie alle anderen steuerrelevanten Dokumente hoch
-        fr: Téléchargez tout autre document fiscal pertinents
+  Q18_bank_statements:
+    id: Q18_bank_statements
+    text:
+      en: Upload ALL your bank statements (year-end statements)
+      de: Laden Sie ALLE Ihre Bankauszüge hoch (Jahresendauszüge)
+      fr: Téléchargez TOUS vos relevés bancaires (relevés de fin d'année)
+    type: document_upload
+    document_type: bank_statements_yearend
+    accepted_formats:
+      - pdf
+      - jpg
+      - jpeg
+      - png
+    max_size_mb: 15
+    allow_multiple: true
+    bring_later: true
+    explanation:
+      en: Bank statements for December 31, 2024 are mandatory. Our AI will extract your IBAN, account balances, and interest income for wealth and income tax declarations. Upload statements for ALL Swiss and foreign accounts (checking, savings, investment accounts).
+      de: Bankauszüge vom 31.12.2024 sind obligatorisch. Unsere KI extrahiert Ihre IBAN, Kontostände und Zinseinkommen für die Vermögens- und Einkommenssteuererklärung. Laden Sie Auszüge für ALLE Schweizer und ausländischen Konten hoch (Giro-, Spar-, Anlagekonten).
+      fr: Les relevés bancaires du 31.12.2024 sont obligatoires. Notre IA extraira votre IBAN, soldes de comptes et revenus d'intérêts pour les déclarations d'impôt sur la fortune et le revenu. Téléchargez les relevés de TOUS les comptes suisses et étrangers (courants, d'épargne, d'investissement).
+    help_text:
+      en: Upload year-end bank statements showing balances on December 31, 2024. This is needed for wealth tax and to receive your tax refund via IBAN. You can bring these documents later if not available now.
+      de: Laden Sie Jahresendauszüge mit Saldo am 31.12.2024 hoch. Dies ist für die Vermögenssteuer und zum Erhalt Ihrer Steuerrückerstattung per IBAN erforderlich. Sie können diese Dokumente später mitbringen, falls sie jetzt nicht verfügbar sind.
+      fr: Téléchargez les relevés de fin d'année montrant les soldes au 31.12.2024. Ceci est nécessaire pour l'impôt sur la fortune et pour recevoir votre remboursement fiscal via IBAN. Vous pouvez apporter ces documents plus tard s'ils ne sont pas disponibles maintenant.
+    next: Q_complexity_screen
+    required: true
   Q_complexity_screen:
     id: Q_complexity_screen
     text:
@@ -1595,7 +1594,7 @@ questions:
       - jpeg
       - png
     max_size_mb: 15
-    bring_later: false
+    bring_later: true
     explanation:
       en: Our AI will automatically extract all securities details (ISIN, quantities, values, income) from your broker or bank statement dated December 31, 2024. This replaces manual entry of each security.
       de: Unsere KI extrahiert automatisch alle Wertschriftendetails (ISIN, Mengen, Werte, Einkommen) aus Ihrem Makler- oder Bankauszug vom 31. Dezember 2024. Dies ersetzt die manuelle Eingabe jeder Wertschrift.
@@ -1621,7 +1620,7 @@ questions:
       - jpeg
       - png
     max_size_mb: 15
-    bring_later: false
+    bring_later: true
     allow_multiple: true
     explanation:
       en: Our AI will extract account details (IBAN, balance on Dec 31, interest earned) from your bank statements. Upload statements for all Swiss and foreign accounts.
@@ -1648,7 +1647,7 @@ questions:
       - jpeg
       - png
     max_size_mb: 20
-    bring_later: false
+    bring_later: true
     allow_multiple: true
     explanation:
       en: Our AI will extract rental expenses (maintenance, insurance, mortgage interest, management fees) from your invoices and statements. Upload all relevant expense documents for 2024.
@@ -1721,7 +1720,7 @@ questions:
         - csv
         - xlsx
       max_size_mb: 20
-      bring_later: false
+      bring_later: true
       upload_text:
         en: Upload trading statements and tax certificates
         de: Handelsauszüge und Steuerbescheinigungen hochladen
@@ -1803,7 +1802,7 @@ questions:
         - jpeg
         - png
       max_size_mb: 20
-      bring_later: false
+      bring_later: true
       allow_multiple: true
       upload_text:
         en: Upload renovation invoices and energy certificates
@@ -1865,7 +1864,7 @@ questions:
         - jpeg
         - png
       max_size_mb: 10
-      bring_later: false
+      bring_later: true
       upload_text:
         en: Upload pension fund buyback confirmation
         de: Pensionskassen-Einkaufsbestätigung hochladen
@@ -1944,7 +1943,7 @@ questions:
       accepted_formats:
         - pdf
       max_size_mb: 15
-      bring_later: false
+      bring_later: true
       allow_multiple: true
       upload_text:
         en: Upload trust/foundation documents
@@ -2047,7 +2046,7 @@ questions:
       accepted_formats:
         - pdf
       max_size_mb: 15
-      bring_later: false
+      bring_later: true
       allow_multiple: true
       upload_text:
         en: Upload inheritance/gift documents
@@ -2135,7 +2134,7 @@ questions:
         - jpeg
         - png
       max_size_mb: 10
-      bring_later: false
+      bring_later: true
       upload_text:
         en: Upload military/civil service pay statement
         de: Militär-/Zivildienstsoldabrechnung hochladen
@@ -2235,7 +2234,7 @@ questions:
       accepted_formats:
         - pdf
       max_size_mb: 10
-      bring_later: false
+      bring_later: true
       allow_multiple: true
       upload_text:
         en: Upload foreign tax certificate

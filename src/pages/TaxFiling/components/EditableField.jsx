@@ -112,10 +112,4 @@ EditableField.propTypes = {
   suffix: PropTypes.string
 };
 
-EditableField.defaultProps = {
-  type: 'text',
-  prefix: '',
-  suffix: ''
-};
-
 export default EditableField;

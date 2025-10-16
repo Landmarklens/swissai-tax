@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Card, CardContent, Typography, Divider, Chip, CircularProgress } from '@mui/material';
+import { Box, Card, CardContent, Typography, Divider, Chip, CircularProgress, Alert } from '@mui/material';
 import {
   TrendingDown as TrendingDownIcon,
   TrendingUp as TrendingUpIcon,
-  Calculate as CalculateIcon
+  Calculate as CalculateIcon,
+  UploadFile as UploadFileIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
-const TaxEstimateSidebar = ({ calculation, loading = false }) => {
+const TaxEstimateSidebar = ({ calculation, loading = false, pendingDocumentsError = null }) => {
   const { t } = useTranslation();
 
   if (loading) {
@@ -23,6 +24,35 @@ const TaxEstimateSidebar = ({ calculation, loading = false }) => {
           </Box>
           <Box display="flex" justifyContent="center" py={4}>
             <CircularProgress />
+          </Box>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Show pending documents message if calculation was blocked
+  if (pendingDocumentsError) {
+    return (
+      <Card sx={{ position: 'sticky', top: 24, height: 'fit-content' }}>
+        <CardContent>
+          <Box display="flex" alignItems="center" gap={1} mb={2}>
+            <CalculateIcon sx={{ color: '#003DA5' }} />
+            <Typography variant="h6" fontWeight={600}>
+              {t('Tax Estimate')}
+            </Typography>
+          </Box>
+          <Alert severity="info" icon={<UploadFileIcon />} sx={{ mb: 2 }}>
+            <Typography variant="body2" fontWeight={600} mb={1}>
+              Documents Pending
+            </Typography>
+            <Typography variant="caption">
+              Tax calculation will be available after you upload all required documents or complete the interview.
+            </Typography>
+          </Alert>
+          <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'background.default' }}>
+            <Typography variant="caption" color="text.secondary">
+              <strong>{pendingDocumentsError.pendingCount}</strong> {pendingDocumentsError.pendingCount === 1 ? 'document' : 'documents'} marked as "bring later"
+            </Typography>
           </Box>
         </CardContent>
       </Card>
@@ -212,7 +242,12 @@ TaxEstimateSidebar.propTypes = {
     total_tax: PropTypes.number,
     paid: PropTypes.number
   }),
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  pendingDocumentsError: PropTypes.shape({
+    message: PropTypes.string,
+    pendingCount: PropTypes.number,
+    pendingDocuments: PropTypes.array
+  })
 };
 
 export default TaxEstimateSidebar;

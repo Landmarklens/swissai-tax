@@ -21,6 +21,7 @@ import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
 import TaxEstimateSidebar from './components/TaxEstimateSidebar';
 import { api } from '../../services/api';
+import { uploadDocument } from '../../api/interview';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
@@ -40,6 +41,7 @@ const InterviewPage = () => {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [taxCalculation, setTaxCalculation] = useState(null);
+  const [pendingDocumentsError, setPendingDocumentsError] = useState(null);
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -127,9 +129,23 @@ const InterviewPage = () => {
         answers: updatedAnswers
       });
       setTaxCalculation(response.data.calculation);
+      setPendingDocumentsError(null); // Clear any previous pending documents error
     } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Tax calculation failed:', err);
+      // Check if error is due to pending documents
+      if (err.response?.status === 400 && err.response?.data?.detail?.error === 'cannot_calculate_with_pending_documents') {
+        // Gracefully handle pending documents error - store it for display in sidebar
+        setPendingDocumentsError({
+          message: err.response.data.detail.message,
+          pendingCount: err.response.data.detail.pending_count,
+          pendingDocuments: err.response.data.detail.pending_documents
+        });
+        setTaxCalculation(null); // Clear any previous calculation
+      } else {
+        // Other errors - just log in development mode
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Tax calculation failed:', err);
+        }
+        setPendingDocumentsError(null);
       }
     }
   }, [session, filingSessionId]);
@@ -426,6 +442,8 @@ const InterviewPage = () => {
                 isSubmitting={submitting}
                 previousAnswer={answers[currentQuestion.id]}
                 canGoBack={questionHistory.length > 0}
+                sessionId={session}
+                onUpload={uploadDocument}
               />
             </Paper>
           )}
@@ -436,6 +454,7 @@ const InterviewPage = () => {
           <TaxEstimateSidebar
             calculation={taxCalculation}
             loading={loading}
+            pendingDocumentsError={pendingDocumentsError}
           />
         </Grid>
       </Grid>

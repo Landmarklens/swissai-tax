@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Typography,
@@ -21,6 +21,7 @@ import {
   CheckCircle,
   ArrowBack
 } from '@mui/icons-material';
+import DocumentUploadQuestion from './DocumentUploadQuestion';
 
 /**
  * Group Question Input Component
@@ -36,30 +37,55 @@ const GroupQuestionInput = ({
   question,
   value = [],
   onChange,
-  disabled = false
+  disabled = false,
+  sessionId,
+  onUpload
 }) => {
   const [entries, setEntries] = useState(value || []);
   const [currentEntry, setCurrentEntry] = useState({});
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
 
-  /**
-   * Update parent when entries change
-   */
-  useEffect(() => {
-    if (JSON.stringify(entries) !== JSON.stringify(value)) {
-      onChange(entries);
-    }
-  }, [entries, onChange, value]);
+  // Use ref to track if we're in the middle of an update to prevent loops
+  const isUpdatingRef = useRef(false);
+  const previousValueRef = useRef(value);
 
   /**
    * Update internal state when external value changes
+   * FIXED: Only sync when prop value changes, not when internal state changes
    */
   useEffect(() => {
+    // Skip if we're currently updating or value hasn't changed
+    if (isUpdatingRef.current || JSON.stringify(value) === JSON.stringify(previousValueRef.current)) {
+      return;
+    }
+
+    // Update entries only if external value is different
     if (JSON.stringify(value) !== JSON.stringify(entries)) {
+      previousValueRef.current = value;
       setEntries(value || []);
     }
-  }, [value, entries]);
+  }, [value]);
+
+  /**
+   * Update parent when entries change
+   * FIXED: Use ref to prevent infinite loop
+   */
+  useEffect(() => {
+    // Skip if entries match the current value (no real change)
+    if (JSON.stringify(entries) === JSON.stringify(value)) {
+      return;
+    }
+
+    // Mark that we're updating to prevent the other useEffect from running
+    isUpdatingRef.current = true;
+    onChange(entries);
+
+    // Reset flag after a tick to allow future updates
+    setTimeout(() => {
+      isUpdatingRef.current = false;
+    }, 0);
+  }, [entries]);
 
   /**
    * Initialize current entry with empty fields
@@ -138,8 +164,16 @@ const GroupQuestionInput = ({
 
     // Check all required fields are filled
     return question.fields.every(field => {
-      if (field.validation?.required) {
+      if (field.validation?.required || field.required) {
         const value = currentEntry[field.id];
+
+        // Special validation for document upload fields
+        if (field.type === 'document_upload') {
+          // Valid if: uploaded a document OR selected "bring later"
+          return value && (value.bring_later === true || value.document_id || value.file_name);
+        }
+
+        // Standard validation for other field types
         return value !== '' && value !== null && value !== undefined;
       }
       return true;
@@ -231,6 +265,40 @@ const GroupQuestionInput = ({
           />
         );
 
+      case 'document_upload':
+        return (
+          <Box key={field.id} sx={{ mb: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              {fieldLabel}
+              {field.required && ' *'}
+            </Typography>
+            {field.help_text?.[language] && (
+              <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
+                {field.help_text[language]}
+              </Typography>
+            )}
+            <DocumentUploadQuestion
+              question={{
+                ...field,
+                question_text: fieldLabel,
+                document_type: field.document_type,
+                accepted_formats: field.accepted_formats,
+                max_size_mb: field.max_size_mb,
+                bring_later: field.bring_later,
+                help_text: field.help_text?.[language] || field.help_text
+              }}
+              sessionId={sessionId}
+              onUpload={onUpload}
+              onUploadComplete={(uploadData) => {
+                handleChange(uploadData);
+              }}
+              onBringLater={() => {
+                handleChange({ bring_later: true });
+              }}
+            />
+          </Box>
+        );
+
       default:
         return (
           <TextField
@@ -287,6 +355,17 @@ const GroupQuestionInput = ({
               displayValue = fieldValue ? 'Yes' : 'No';
             } else if (field.type === 'date' && fieldValue) {
               displayValue = new Date(fieldValue).toLocaleDateString();
+            } else if (field.type === 'document_upload' && fieldValue) {
+              // Handle document upload display
+              if (fieldValue.bring_later) {
+                displayValue = 'Will bring later';
+              } else if (fieldValue.file_name) {
+                displayValue = `✓ ${fieldValue.file_name}`;
+              } else if (fieldValue.document_id) {
+                displayValue = '✓ Document uploaded';
+              } else {
+                displayValue = '—';
+              }
             }
 
             return (
@@ -347,21 +426,32 @@ const GroupQuestionInput = ({
           {question.fields?.map(field => renderField(field))}
 
           {/* Action Buttons */}
-          <Box display="flex" gap={2} justifyContent="flex-end" mt={2}>
+          <Box display="flex" gap={2} justifyContent="space-between" mt={3}>
             <Button
-              variant="outlined"
+              variant="text"
+              size="small"
               onClick={handleCancel}
               startIcon={<ArrowBack />}
+              sx={{ color: 'text.secondary' }}
             >
               Cancel
             </Button>
             <Button
               variant="contained"
+              color="error"
+              size="large"
               onClick={handleSave}
               disabled={!isEntryValid()}
               startIcon={<CheckCircle />}
+              sx={{
+                minWidth: 180,
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                textTransform: 'none'
+              }}
             >
-              {editingIndex !== null ? 'Update' : 'Add'}
+              {editingIndex !== null ? 'Update Entry' : 'Add Entry'}
             </Button>
           </Box>
         </Paper>

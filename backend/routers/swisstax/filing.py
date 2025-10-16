@@ -199,12 +199,16 @@ async def list_filings(
     Returns statistics and filings organized by tax year
     """
     try:
-        # Get all interview sessions for the user
-        sessions = db.query(InterviewSession).filter(
-            InterviewSession.user_id == current_user.id
-        ).order_by(InterviewSession.tax_year.desc(), InterviewSession.started_at.desc()).all()
+        # Use TaxFilingService to get all filings
+        from services.tax_filing_service import TaxFilingService
 
-        if not sessions:
+        # Get filings grouped by year
+        filings_by_year = TaxFilingService.list_user_filings(
+            db=db,
+            user_id=str(current_user.id)
+        )
+
+        if not filings_by_year:
             return FilingsListResponse(
                 filings={},
                 statistics={
@@ -215,66 +219,43 @@ async def list_filings(
                 }
             )
 
-        # Group sessions by year and convert to FilingListItem
-        filings_by_year = defaultdict(list)
+        # Convert to FilingListItem format and calculate statistics
+        formatted_filings = defaultdict(list)
         total = 0
         completed = 0
         in_progress = 0
         draft = 0
 
-        for session in sessions:
-            # Extract canton and municipality from session answers
-            answers = session.answers or {}
-            canton = answers.get('canton', answers.get('Q02', None))
-            municipality = answers.get('municipality', None)
+        for year, filings_list in filings_by_year.items():
+            for filing_dict in filings_list:
+                # Count statistics
+                total += 1
+                status = filing_dict.get('status', 'draft')
+                if status in ['completed', 'submitted']:
+                    completed += 1
+                elif status == 'in_progress':
+                    in_progress += 1
+                else:
+                    draft += 1
 
-            # Determine if primary based on answers or context
-            is_primary = True  # Default to primary
-            if session.session_context:
-                is_primary = session.session_context.get('is_primary', True)
+                # Create FilingListItem
+                filing_item = FilingListItem(
+                    id=filing_dict['id'],
+                    name=filing_dict.get('name', f"{year} Tax Return"),
+                    tax_year=filing_dict['tax_year'],
+                    canton=filing_dict.get('canton'),
+                    municipality=filing_dict.get('municipality'),
+                    status=status,
+                    completion_percentage=filing_dict.get('completion_percentage', 0),
+                    is_primary=filing_dict.get('is_primary', True),
+                    created_at=filing_dict.get('created_at'),
+                    updated_at=filing_dict.get('updated_at')
+                )
 
-            # Create filing name
-            filing_name = f"{session.tax_year} Tax Return"
-            if canton:
-                filing_name = f"{session.tax_year} - {canton}"
-                if municipality:
-                    filing_name = f"{session.tax_year} - {municipality}, {canton}"
-
-            # Map status
-            status_map = {
-                'in_progress': 'in_progress',
-                'completed': 'completed',
-                'submitted': 'submitted',
-                'draft': 'draft'
-            }
-            filing_status = status_map.get(session.status, 'draft')
-
-            # Count statistics
-            total += 1
-            if filing_status in ['completed', 'submitted']:
-                completed += 1
-            elif filing_status == 'in_progress':
-                in_progress += 1
-            else:
-                draft += 1
-
-            filing_item = FilingListItem(
-                id=str(session.id),
-                name=filing_name,
-                tax_year=session.tax_year,
-                canton=canton,
-                municipality=municipality,
-                status=filing_status,
-                completion_percentage=session.completion_percentage or 0,
-                is_primary=is_primary,
-                created_at=session.started_at,
-                updated_at=session.updated_at or session.started_at
-            )
-
-            filings_by_year[str(session.tax_year)].append(filing_item)
+                formatted_filings[str(year)].append(filing_item)
 
         return FilingsListResponse(
-            filings=dict(filings_by_year),
+            filings=dict(formatted_filings),
             statistics={
                 'total_filings': total,
                 'completed_filings': completed,
@@ -447,32 +428,25 @@ async def delete_filing(
     This will cascade delete all associated data (answers, documents, calculations)
     """
     try:
-        # Get session
-        session = db.query(InterviewSession).filter(
-            InterviewSession.id == UUID(filing_id),
-            InterviewSession.user_id == current_user.id
-        ).first()
+        # Use TaxFilingService to delete the filing properly
+        from services.tax_filing_service import TaxFilingService
 
-        if not session:
-            raise HTTPException(status_code=404, detail="Filing not found")
+        # This will handle proper deletion including related records
+        deleted = TaxFilingService.delete_filing(
+            db=db,
+            filing_id=filing_id,
+            user_id=str(current_user.id),
+            hard_delete=True  # Always hard delete
+        )
 
-        # Check if filing is submitted - might want to prevent deletion
-        if session.status == 'submitted':
-            raise HTTPException(
-                status_code=400,
-                detail="Cannot delete submitted filing. Please contact support."
-            )
-
-        # Delete the session (cascade will handle related records)
-        db.delete(session)
-        db.commit()
-
-        logger.info(f"Deleted filing {filing_id} for user {current_user.id}")
-
-        return {
-            'success': True,
-            'message': 'Filing deleted successfully'
-        }
+        if deleted:
+            logger.info(f"Successfully deleted filing {filing_id} for user {current_user.id}")
+            return {
+                'success': True,
+                'message': 'Filing deleted successfully'
+            }
+        else:
+            raise HTTPException(status_code=500, detail="Failed to delete filing")
 
     except HTTPException:
         raise

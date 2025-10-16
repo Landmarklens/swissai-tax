@@ -243,6 +243,14 @@ const InterviewPage = () => {
         ...answers,
         [currentQuestion.id]: answer
       };
+
+      // DEBUG: Log answer updates to trace Q01a_name -> Q01a issue
+      console.log('[InterviewPage] Answer saved:', {
+        questionId: currentQuestion.id,
+        answer: answer,
+        updatedAnswers: updatedAnswers
+      });
+
       setAnswers(updatedAnswers);
       setHasUnsavedChanges(true);
 
@@ -301,6 +309,14 @@ const InterviewPage = () => {
           }) || []
         } : null;
 
+
+        // DEBUG: Log next question transition
+        console.log('[InterviewPage] Moving to next question:', {
+          previousQuestionId: currentQuestion.id,
+          nextQuestionId: transformedNextQuestion?.id,
+          answersState: updatedAnswers,
+          previousAnswerForNextQuestion: updatedAnswers[transformedNextQuestion?.id]
+        });
 
         setCurrentQuestion(transformedNextQuestion);
         setCurrentQuestionNumber(prev => prev + 1);

@@ -52,6 +52,9 @@ const QuestionCard = ({
     console.log('[QuestionCard] Question changed:', {
       questionId: question.id,
       questionType: question.question_type,
+      questionText: question.question_text,
+      questionTextType: typeof question.question_text,
+      fullQuestion: question,
       previousAnswer: previousAnswer,
       previousAnswerType: typeof previousAnswer
     });

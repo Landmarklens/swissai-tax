@@ -291,7 +291,7 @@ const QuestionCard = ({
           <MultiCantonSelector
             value={multiCantonAnswers}
             onChange={(cantons) => setMultiCantonAnswers(cantons)}
-            label={t("filing.select_canton") || "Select Canton"}
+            label={question.question_text}
             required={question.validation_rules?.required}
             helperText={question.help_text}
           />

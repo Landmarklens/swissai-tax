@@ -133,7 +133,18 @@ const AHVNumberInput = ({
     // Only update if parent's value is different AND not caused by user typing
     // This prevents the useEffect from fighting with user input
     const formattedValue = value || '';
+
+    // FIX: Always clear rawValue when parent sends empty string
+    // This handles question transitions where previous text needs to be cleared
+    if (formattedValue === '' && rawValue !== '') {
+      console.log('[AHVNumberInput] Clearing rawValue:', {oldValue: rawValue, newValue: ''});
+      setRawValue('');
+      setValidationResult({ isValid: false, errorKey: null });
+      return;
+    }
+
     if (formattedValue !== rawValue && formattedValue !== formatAHV(rawValue)) {
+      console.log('[AHVNumberInput] Updating rawValue:', {oldValue: rawValue, newValue: formattedValue});
       setRawValue(formattedValue);
       setValidationResult(validateAHV(formattedValue));
     }

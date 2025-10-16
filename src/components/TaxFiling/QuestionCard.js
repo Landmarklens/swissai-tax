@@ -83,7 +83,14 @@ const QuestionCard = ({
     } else {
       // FIXED: Explicitly check if previousAnswer is undefined/null/empty
       // This prevents showing stale values from previous questions
-      setAnswer(previousAnswer !== undefined && previousAnswer !== null ? previousAnswer : '');
+      const newValue = previousAnswer !== undefined && previousAnswer !== null ? previousAnswer : '';
+      console.log('[QuestionCard] Setting answer state:', {
+        questionId: question.id,
+        previousAnswer: previousAnswer,
+        newValue: newValue,
+        currentAnswer: answer
+      });
+      setAnswer(newValue);
     }
   }, [question.id, previousAnswer]);
 

@@ -92,10 +92,9 @@ const AHVNumberInput = ({
     const valid = validateAHV(formatted);
     setIsValid(valid);
 
-    // Only call onChange if valid or empty (for clearing)
-    if (valid || formatted === '') {
-      onChange(formatted);
-    }
+    // Always call onChange to update parent state
+    // Validation is shown to user but doesn't block state updates
+    onChange(formatted);
   };
 
   /**
@@ -107,13 +106,17 @@ const AHVNumberInput = ({
 
   /**
    * Update internal state when external value changes
+   * Only sync when value prop changes from parent (not from user input)
    */
   useEffect(() => {
-    if (value !== rawValue) {
-      setRawValue(value || '');
-      setIsValid(validateAHV(value || ''));
+    // Only update if parent's value is different AND not caused by user typing
+    // This prevents the useEffect from fighting with user input
+    const formattedValue = value || '';
+    if (formattedValue !== rawValue && formattedValue !== formatAHV(rawValue)) {
+      setRawValue(formattedValue);
+      setIsValid(validateAHV(formattedValue));
     }
-  }, [value, rawValue]);
+  }, [value]);
 
   /**
    * Determine if should show error

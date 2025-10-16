@@ -111,6 +111,11 @@ const QuestionCard = ({
       // Document upload is valid if user uploaded something or selected "bring later"
       return answer && (answer.bring_later === true || answer.document_id || answer.file_name);
     }
+    if (question.question_type === 'ahv_number') {
+      // AHV number must be complete and valid: 756.XXXX.XXXX.XX (13 digits)
+      const pattern = /^756\.\d{4}\.\d{4}\.\d{2}$/;
+      return pattern.test(answer);
+    }
     return answer !== '';
   };
 

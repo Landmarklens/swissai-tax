@@ -68,7 +68,7 @@ const PostalCodeInput = ({
       setIsLoading(true);
       setLookupError(null);
 
-      const response = await api.get(`/api/postal-code/lookup/${code}`);
+      const response = await api.get(`/api/tax-filing/postal-code/${code}`);
 
       if (response.data) {
         setLocationData(response.data);
@@ -78,7 +78,15 @@ const PostalCodeInput = ({
       }
     } catch (err) {
       console.error('Postal code lookup failed:', err);
-      setLookupError('Could not find location for this postal code');
+
+      // Distinguish between "not found" and other errors
+      if (err.response?.status === 404) {
+        setLookupError('This postal code is not valid or does not exist in Switzerland. Please check and try again.');
+      } else if (err.response?.status === 400) {
+        setLookupError(err.response?.data?.detail || 'Invalid postal code format');
+      } else {
+        setLookupError('Unable to verify postal code. Please try again or enter manually.');
+      }
       setLocationData(null);
     } finally {
       setIsLoading(false);
@@ -125,9 +133,12 @@ const PostalCodeInput = ({
       const valid = validatePostalCode(value || '');
       setIsValid(valid);
 
-      // Auto-lookup if value is valid
-      if (valid && value) {
-        lookupPostalCode(value);
+      // Auto-lookup if value is valid (debounced to prevent redundant calls)
+      if (valid && value && !locationData) {
+        const timeoutId = setTimeout(() => {
+          lookupPostalCode(value);
+        }, 300);
+        return () => clearTimeout(timeoutId);
       }
     }
   }, [value]);

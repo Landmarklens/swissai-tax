@@ -173,9 +173,20 @@ const FilingsListPage = () => {
       }));
     } catch (err) {
       console.error('Error looking up postal code:', err);
+
+      // Distinguish between "not found" and other errors
+      let errorMessage = 'Postal code not found';
+      if (err.response?.status === 404) {
+        errorMessage = 'This postal code is not valid or does not exist in Switzerland. Please check and try again.';
+      } else if (err.response?.status === 400) {
+        errorMessage = err.response?.data?.detail || 'Invalid postal code format';
+      } else if (err.response?.data?.detail) {
+        errorMessage = err.response.data.detail;
+      }
+
       setPostalCodeLookup({
         loading: false,
-        error: err.response?.data?.detail || 'Postal code not found',
+        error: errorMessage,
         result: null
       });
     }

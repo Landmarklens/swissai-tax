@@ -51,8 +51,6 @@ import axios from 'axios';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || process.env.REACT_APP_API_URL || 'https://api.swissai.tax';
-
 // Swiss canton codes
 const CANTONS = [
   { code: 'ZH', name: 'Zürich' },
@@ -136,7 +134,7 @@ const FilingsListPage = () => {
       setError(null);
 
       // Use cookie-based authentication (configured in axiosConfig)
-      const response = await axios.get(`${API_BASE_URL}/api/tax-filing/filings`);
+      const response = await axios.get('/api/tax-filing/filings');
 
       setFilings(response.data.filings || {});
       setStatistics(response.data.statistics || {});
@@ -158,7 +156,7 @@ const FilingsListPage = () => {
 
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/tax-filing/postal-code/${postalCode}`
+        `/api/tax-filing/postal-code/${postalCode}`
       );
 
       setPostalCodeLookup({
@@ -186,7 +184,7 @@ const FilingsListPage = () => {
   const handleCreateFiling = async () => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/tax-filing/filings`,
+        '/api/tax-filing/filings',
         newFiling
       );
 
@@ -204,7 +202,7 @@ const FilingsListPage = () => {
   const handleCopyFiling = async () => {
     try {
       await axios.post(
-        `${API_BASE_URL}/api/tax-filing/filings/copy`,
+        '/api/tax-filing/filings/copy',
         copyForm
       );
 
@@ -217,14 +215,23 @@ const FilingsListPage = () => {
   };
 
   const handleDeleteFiling = async (filingId) => {
-    if (!window.confirm(t('filings.confirmDelete'))) return;
+    console.log('[DELETE] Starting deletion for filing:', filingId);
+
+    if (!window.confirm(t('filings.confirmDelete'))) {
+      console.log('[DELETE] User cancelled deletion');
+      return;
+    }
 
     try {
-      await axios.delete(`${API_BASE_URL}/api/tax-filing/filings/${filingId}`);
+      console.log('[DELETE] Calling API to delete filing:', filingId);
+      const response = await axios.delete(`/api/tax-filing/filings/${filingId}`);
+      console.log('[DELETE] Delete successful, response:', response);
 
-      loadFilings();
+      await loadFilings();
+      console.log('[DELETE] Filings reloaded');
     } catch (err) {
-      console.error('Error deleting filing:', err);
+      console.error('[DELETE] Error deleting filing:', err);
+      console.error('[DELETE] Error details:', err.response);
       alert(err.response?.data?.detail || 'Failed to delete filing');
     }
   };

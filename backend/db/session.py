@@ -45,7 +45,11 @@ except ImportError as e:
             "DATABASE_URL environment variable is required when config module is not available"
         )
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args={"options": "-csearch_path=swisstax,public"}
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():

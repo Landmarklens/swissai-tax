@@ -18,6 +18,7 @@ from db.session import get_db
 from models import InterviewSession
 from models.swisstax import Filing, User
 from models.tax_filing_session import TaxFilingSession, FilingStatus
+from services.tax_filing_service import TaxFilingService
 from schemas.swisstax.filing import (
     FilingCopy,
     FilingCreate,
@@ -200,8 +201,6 @@ async def list_filings(
     """
     try:
         # Use TaxFilingService to get all filings
-        from services.tax_filing_service import TaxFilingService
-
         # Get filings grouped by year
         filings_by_year = TaxFilingService.list_user_filings(
             db=db,
@@ -429,8 +428,6 @@ async def delete_filing(
     """
     try:
         # Use TaxFilingService to delete the filing properly
-        from services.tax_filing_service import TaxFilingService
-
         # This will handle proper deletion including related records
         deleted = TaxFilingService.delete_filing(
             db=db,

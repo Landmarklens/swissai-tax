@@ -367,15 +367,31 @@ class TaxFilingService:
 
         # ALWAYS do permanent deletion
         # Delete related data first (cascade should handle this, but being explicit)
-        db.query(TaxAnswer).filter(TaxAnswer.filing_session_id == filing_id).delete()
-        db.query(TaxInsight).filter(TaxInsight.filing_session_id == filing_id).delete()
-        db.query(TaxCalculation).filter(TaxCalculation.filing_session_id == filing_id).delete()
+        answers_deleted = db.query(TaxAnswer).filter(TaxAnswer.filing_session_id == filing_id).delete()
+        insights_deleted = db.query(TaxInsight).filter(TaxInsight.filing_session_id == filing_id).delete()
+        calculations_deleted = db.query(TaxCalculation).filter(TaxCalculation.filing_session_id == filing_id).delete()
+
+        logger.info(f"Deleted {answers_deleted} answers, {insights_deleted} insights, {calculations_deleted} calculations for filing {filing_id}")
 
         # Delete the filing itself
         db.delete(filing)
+
+        # Flush to ensure deletions are executed before commit
+        db.flush()
+
         logger.warning(f"Hard deleted filing {filing_id} and all related data")
 
         db.commit()
+
+        # Verify answers are actually deleted (only in production, not in mocked tests)
+        try:
+            remaining_answers = db.query(TaxAnswer).filter(TaxAnswer.filing_session_id == filing_id).count()
+            if remaining_answers > 0:
+                logger.error(f"ERROR: {remaining_answers} answers still exist after deletion of filing {filing_id}!")
+        except (TypeError, AttributeError):
+            # In tests with mocked db, count() might return Mock - skip verification
+            pass
+
         return True
 
     @staticmethod

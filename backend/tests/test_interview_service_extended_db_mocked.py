@@ -61,6 +61,7 @@ class TestInterviewServiceDatabaseMocked(unittest.TestCase):
         first_question.options = []
         first_question.validation = {}
         first_question.fields = None
+        first_question.category = 'personal'
 
         self.mock_question_loader.get_first_question.return_value = first_question
 
@@ -78,7 +79,11 @@ class TestInterviewServiceDatabaseMocked(unittest.TestCase):
             'id': str(mock_db_session.id),
             'user_id': 'user-123',
             'tax_year': 2024,
-            'status': 'in_progress'
+            'status': 'in_progress',
+            'answers': {},
+            'completed_questions': [],
+            'pending_questions': [],
+            'session_context': {}
         }
 
         # Configure mock to return our mock session

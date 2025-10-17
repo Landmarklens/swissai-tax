@@ -135,6 +135,7 @@
         "createNew": "Neue Steuererklärung erstellen",
         "taxYear": "Steuerjahr",
         "postalCode": "Postleitzahl (PLZ)",
+        "postalCodeAsOf31Dec": "Postleitzahl (per 31. Dezember)",
         "postalCodePlaceholder": "z.B. 8001",
         "lookingUpPostalCode": "Postleitzahl wird gesucht...",
         "enterPostalCode": "Geben Sie Ihre 4-stellige Postleitzahl ein",

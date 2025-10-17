@@ -24,7 +24,7 @@ sys.path.append(os.path.dirname(__file__))
 from config import settings as app_settings
 
 # Import routers
-from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions, contact, tax_filing
+from routers import auth, user, user_counter, audit_logs, user_data, interview, health, status, sessions, contact, tax_filing, insights
 from routers.swisstax import filing, payment, profile, settings, referrals, webhooks
 from routers.swisstax import subscription_new as subscription
 from services.document_service import DocumentService
@@ -254,6 +254,7 @@ app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(subscription.router, prefix="/api/subscription", tags=["subscription"])
 app.include_router(referrals.router, prefix="/api", tags=["referrals"])
 app.include_router(webhooks.router, prefix="/api/webhooks", tags=["webhooks"])
+app.include_router(insights.router, prefix="/api/insights", tags=["insights"])
 app.include_router(contact.router, tags=["contact"])
 
 # Pydantic models for request/response validation

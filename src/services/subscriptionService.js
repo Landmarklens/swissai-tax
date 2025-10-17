@@ -81,28 +81,17 @@ const subscriptionService = {
    * @returns {Promise} Current subscription or null
    */
   getCurrentSubscription: async () => {
-    console.log('[subscriptionService] getCurrentSubscription called');
     try {
-      console.log('[subscriptionService] Making API call to /api/subscription/current');
       const response = await api.get('/api/subscription/current');
-      console.log('[subscriptionService] API response received:', response);
-      console.log('[subscriptionService] Response data:', response.data);
-
-      const result = {
+      return {
         success: true,
         data: response.data
       };
-      console.log('[subscriptionService] Returning result:', result);
-      return result;
     } catch (error) {
-      console.error('[subscriptionService] Error fetching subscription:', error);
-      console.error('[subscriptionService] Error response:', error.response);
-      const result = {
+      return {
         success: false,
         error: error.response?.data?.detail || 'Failed to fetch subscription'
       };
-      console.log('[subscriptionService] Returning error result:', result);
-      return result;
     }
   },
 

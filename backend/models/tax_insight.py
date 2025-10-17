@@ -14,6 +14,7 @@ from models.swisstax.base import Base
 
 class InsightType(str, enum.Enum):
     """Types of tax insights"""
+    DATA_SUMMARY = "data_summary"  # Shows user's actual data extracted from answers
     DEDUCTION_OPPORTUNITY = "deduction_opportunity"
     TAX_SAVING_TIP = "tax_saving_tip"
     COMPLIANCE_WARNING = "compliance_warning"
@@ -27,6 +28,25 @@ class InsightPriority(str, enum.Enum):
     HIGH = "high"  # Critical - may save significant tax or avoid penalties
     MEDIUM = "medium"  # Important - good to know
     LOW = "low"  # Nice to have - minor optimization
+
+
+class InsightCategory(str, enum.Enum):
+    """Categories for insights based on completion status"""
+    COMPLETED = "completed"  # Insight from answered questions
+    ACTION_REQUIRED = "action_required"  # Insight from skipped questions or pending documents
+
+
+class InsightSubcategory(str, enum.Enum):
+    """Subcategories for organizing insights by topic"""
+    PERSONAL = "personal"  # Personal information (name, AHV, marital status)
+    PARTNER = "partner"  # Partner/spouse information
+    KIDS = "kids"  # Children and family information
+    EMPLOYMENT = "employment"  # Employment, salary, employers
+    LOCATION = "location"  # Canton, municipality
+    PROPERTY_ASSETS = "property_assets"  # Property ownership, securities
+    RETIREMENT_SAVINGS = "retirement_savings"  # Pillar 3a, 2nd pillar
+    DEDUCTIONS = "deductions"  # Donations, medical expenses
+    GENERAL = "general"  # Other insights
 
 
 class TaxInsight(Base):
@@ -45,13 +65,25 @@ class TaxInsight(Base):
 
     # Insight Details
     insight_type = Column(
-        SQLEnum(InsightType),
+        SQLEnum(InsightType, name='insighttype', schema='swisstax', create_constraint=True, native_enum=True, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False,
         index=True
     )
     priority = Column(
-        SQLEnum(InsightPriority),
+        SQLEnum(InsightPriority, name='insightpriority', schema='swisstax', create_constraint=True, native_enum=True, values_callable=lambda obj: [e.value for e in obj]),
         default=InsightPriority.MEDIUM,
+        nullable=False,
+        index=True
+    )
+    category = Column(
+        SQLEnum(InsightCategory, name='insightcategory', schema='swisstax', create_constraint=True, native_enum=True, values_callable=lambda obj: [e.value for e in obj]),
+        default=InsightCategory.COMPLETED,
+        nullable=False,
+        index=True
+    )
+    subcategory = Column(
+        SQLEnum(InsightSubcategory, name='insightsubcategory', schema='swisstax', create_constraint=True, native_enum=True, values_callable=lambda obj: [e.value for e in obj]),
+        default=InsightSubcategory.GENERAL,
         nullable=False,
         index=True
     )
@@ -92,6 +124,8 @@ class TaxInsight(Base):
             'filing_session_id': self.filing_session_id,
             'insight_type': self.insight_type.value if isinstance(self.insight_type, InsightType) else self.insight_type,
             'priority': self.priority.value if isinstance(self.priority, InsightPriority) else self.priority,
+            'category': self.category.value if isinstance(self.category, InsightCategory) else self.category,
+            'subcategory': self.subcategory.value if isinstance(self.subcategory, InsightSubcategory) else self.subcategory,
             'title': self.title,
             'description': self.description,
             'estimated_savings_chf': self.estimated_savings_chf,

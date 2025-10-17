@@ -36,6 +36,8 @@ class Question:
         self.triggers_loop = data.get('triggers_loop')
         self.loop = data.get('loop', False)
         self.fields = data.get('fields', [])
+        # Category for progress tracking (personal_info, income_sources, deductions, property_assets, special_situations)
+        self.category = data.get('category', 'personal_info')
         # Enhanced functionality attributes
         self.format = data.get('format')  # e.g., 'postal_code', 'count'
         self.auto_lookup = data.get('auto_lookup', False)  # For postal code auto-detection
@@ -179,7 +181,7 @@ class QuestionLoader:
 
     def get_first_question(self) -> Question:
         """Get the first question in the interview"""
-        return self.questions['Q00']
+        return self.questions['Q00_name']
 
     def get_next_questions(self, current_id: str, answer: Any) -> List[str]:
         """Get next question(s) based on current answer"""

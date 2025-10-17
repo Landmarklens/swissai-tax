@@ -135,6 +135,7 @@
         "createNew": "Crea nuova dichiarazione fiscale",
         "taxYear": "Anno fiscale",
         "postalCode": "Codice postale (NPA)",
+        "postalCodeAsOf31Dec": "Codice postale (al 31 dicembre)",
         "postalCodePlaceholder": "es. 8001",
         "lookingUpPostalCode": "Ricerca codice postale...",
         "enterPostalCode": "Inserisca il Suo codice postale a 4 cifre",

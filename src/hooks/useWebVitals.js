@@ -7,12 +7,13 @@ import { useTranslation } from 'react-i18next';
  * @param {Function} onReport - Callback function to handle metrics
  * @param {boolean} logToConsole - Whether to log metrics to console
  */
-export const useWebVitals = (onReport, logToConsole = true) => {
+export const useWebVitals = (onReport, logToConsole = false) => {
   const { t } = useTranslation();
   useEffect(() => {
     const handleReport = (metric) => {
-      // Log to console if enabled
-      if (logToConsole) {
+      // PERFORMANCE: Console logging disabled by default to reduce noise
+      // Enable only when explicitly needed for debugging: useWebVitals(null, true)
+      if (logToConsole && process.env.NODE_ENV === 'development') {
         const rating = metric.rating || (metric.value < metric.entries[0]?.target ? 'good' : 'needs-improvement');
         console.log({
           metric: metric.name,
@@ -27,8 +28,8 @@ export const useWebVitals = (onReport, logToConsole = true) => {
         onReport(metric);
       }
 
-      // Send to analytics if available
-      if (window.gtag) {
+      // Send to analytics if available (production only)
+      if (window.gtag && process.env.NODE_ENV === 'production') {
         window.gtag('event', metric.name, {
           event_category: 'Web Vitals',
           event_label: metric.id,

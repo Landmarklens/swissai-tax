@@ -535,7 +535,7 @@ const FilingsListPage = () => {
             />
 
             <TextField
-              label={t('filings.postalCode', 'Postal Code (ZIP)')}
+              label={t('filings.postalCodeAsOf31Dec', 'Postal Code (as of 31 December)')}
               value={newFiling.postal_code}
               onChange={(e) => {
                 const value = e.target.value;

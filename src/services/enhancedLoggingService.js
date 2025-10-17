@@ -21,7 +21,7 @@ class LoggingService {
 
     this.logs = [];
     this.maxLogs = 1000;
-    this.enableConsole = process.env.NODE_ENV === 'development';  // Only enable console logging in development
+    this.enableConsole = false;  // PERFORMANCE: Disabled console logging to reduce noise
     this.enablePersistence = true;
     this.sessionId = this.generateSessionId();
     this.logLevel = this.getLogLevel();

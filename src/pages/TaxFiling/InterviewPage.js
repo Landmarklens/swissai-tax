@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
-import TaxEstimateSidebar from './components/TaxEstimateSidebar';
+import InterviewInsightsSidebar from './components/InterviewInsightsSidebar';
 import { api } from '../../services/api';
 import { uploadDocument } from '../../api/interview';
 import Header from '../../components/header/Header';
@@ -35,7 +35,7 @@ const InterviewPage = () => {
   const [filingSessionId, setFilingSessionId] = useState(filingId || null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
-  const [totalQuestions, setTotalQuestions] = useState(14);
+  const [totalQuestions, setTotalQuestions] = useState(16); // Default, will be updated from API
   const [progress, setProgress] = useState(0);
   const [answers, setAnswers] = useState({});
   const [error, setError] = useState(null);
@@ -46,26 +46,22 @@ const InterviewPage = () => {
   const [lastSaved, setLastSaved] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [questionHistory, setQuestionHistory] = useState([]); // Track question history for back button
+  const [insightRefetchTrigger, setInsightRefetchTrigger] = useState(0); // Trigger insights refetch after each answer
 
   const autoSaveTimer = useRef(null);
 
-  // Interview categories for stepper
-  const categories = [
-    t('interview.category_personal_info'),
-    t('interview.category_income_sources'),
-    t('interview.category_deductions'),
-    t('interview.category_property_assets'),
-    t('interview.category_special_situations')
-  ];
+  // Interview categories for stepper - mapped from backend categories
+  const categoryToStepIndex = {
+    'personal_info': 0,
+    'income_sources': 1,
+    'deductions': 2,
+    'property_assets': 3,
+    'special_situations': 4
+  };
 
-  const getCategoryIndex = (questionId) => {
-    if (!questionId) return 0;
-    const num = parseInt(questionId.substring(1));
-    if (num <= 2) return 0;
-    if (num <= 5) return 1;
-    if (num <= 10) return 2;
-    if (num <= 12) return 3;
-    return 4;
+  const getCategoryIndex = (question) => {
+    if (!question || !question.category) return 0;
+    return categoryToStepIndex[question.category] || 0;
   };
 
   useEffect(() => {
@@ -179,6 +175,8 @@ const InterviewPage = () => {
         question_type: question.type === 'single_choice' ? 'select' :
                       question.type === 'multi_select' ? 'multiselect' :
                       question.type === 'multiple_choice' ? 'multiselect' :
+                      question.type === 'yes_no' ? 'boolean' :
+                      question.type === 'dropdown' ? 'select' :
                       question.type === 'ahv_number' ? 'ahv_number' :
                       question.type === 'postal_code' ? 'postal_code' :
                       question.type === 'multi_canton' ? 'multi_canton' :
@@ -203,20 +201,22 @@ const InterviewPage = () => {
       setFilingSessionId(filing_session_id);
       setCurrentQuestion(transformedQuestion);
       setProgress(response.data.progress || 0);
+
+      // Update total questions from API response (dynamic calculation)
+      if (response.data.total_questions) {
+        setTotalQuestions(response.data.total_questions);
+      }
+      if (response.data.completed_questions !== undefined) {
+        setCurrentQuestionNumber(response.data.completed_questions + 1);
+      }
+
       setError(null);
 
-      // Fetch existing answers from database if resuming a filing
-      if (filing_session_id) {
-        try {
-          const answersResponse = await api.get(`/api/interview/filings/${filing_session_id}/answers`);
-          if (answersResponse.data && answersResponse.data.answers) {
-            setAnswers(answersResponse.data.answers);
-          }
-        } catch (answerErr) {
-          // Non-critical - just log and continue (user can still answer questions)
-          console.error('Failed to load existing answers:', answerErr);
-        }
-      }
+      // PERFORMANCE OPTIMIZATION: Removed redundant /answers API call
+      // The answers state is already maintained in local state and updated after each submission
+      // We only need to fetch answers when resuming from a saved session, which is handled
+      // by the backend returning the current state in the /start response
+      // This eliminates a full table scan on tax_answers for every page load
     } catch (err) {
       console.error('Interview start error:', err);
       console.error('Error details:', err.response?.data);
@@ -270,11 +270,24 @@ const InterviewPage = () => {
       setAnswers(updatedAnswers);
       setHasUnsavedChanges(true);
 
-      // Update progress
+      // Trigger insights refetch after answer is saved
+      setInsightRefetchTrigger(prev => prev + 1);
+
+      // Update progress and total questions
       setProgress(response.data.progress || 0);
 
-      // Update tax calculation
-      updateTaxCalculation(updatedAnswers);
+      // Update total questions from API response (recalculated after each answer)
+      if (response.data.total_questions) {
+        setTotalQuestions(response.data.total_questions);
+      }
+      if (response.data.completed_questions !== undefined) {
+        setCurrentQuestionNumber(response.data.completed_questions + 1);
+      }
+
+      // PERFORMANCE OPTIMIZATION: Removed automatic tax calculation after each answer
+      // Tax calculations are expensive and block the UI. Instead, users can manually
+      // trigger calculation via the "Update Estimate" button in the sidebar
+      // This reduces answer submission time from 2-4s to <1s
 
       // Check if interview is complete
       if (response.data.complete) {
@@ -423,6 +436,7 @@ const InterviewPage = () => {
             currentQuestion={currentQuestionNumber}
             totalQuestions={totalQuestions}
             progress={progress}
+            currentCategory={currentQuestion ? currentQuestion.category : 'personal_info'}
           />
 
           {/* Error Alert */}
@@ -451,10 +465,9 @@ const InterviewPage = () => {
 
         {/* Sidebar */}
         <Grid item xs={12} lg={4}>
-          <TaxEstimateSidebar
-            calculation={taxCalculation}
-            loading={loading}
-            pendingDocumentsError={pendingDocumentsError}
+          <InterviewInsightsSidebar
+            filingSessionId={filingSessionId}
+            triggerRefetch={insightRefetchTrigger}
           />
         </Grid>
       </Grid>

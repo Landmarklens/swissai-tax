@@ -3,25 +3,32 @@ import PropTypes from 'prop-types';
 import { Box, Typography, LinearProgress, Stepper, Step, StepLabel } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-const ProgressBar = ({ currentQuestion, totalQuestions, progress }) => {
+const ProgressBar = ({
+  currentQuestion,
+  totalQuestions,
+  progress,
+  currentCategory = 'personal_info'
+}) => {
   const { t } = useTranslation();
 
   const steps = [
     t('Personal Info'),
     t('Income'),
     t('Deductions'),
-    t('Review')
+    t('Property & Assets'),
+    t('Special Situations')
   ];
 
-  // Calculate which step we're on based on current question
-  const getActiveStep = (currentQ) => {
-    if (currentQ <= 4) return 0; // Questions 1-4: Personal Info
-    if (currentQ <= 9) return 1; // Questions 5-9: Income
-    if (currentQ <= 13) return 2; // Questions 10-13: Deductions
-    return 3; // Question 14+: Review
+  // Map backend category to stepper index
+  const categoryToStepIndex = {
+    'personal_info': 0,
+    'income_sources': 1,
+    'deductions': 2,
+    'property_assets': 3,
+    'special_situations': 4
   };
 
-  const activeStep = getActiveStep(currentQuestion);
+  const activeStep = categoryToStepIndex[currentCategory] || 0;
 
   return (
     <Box sx={{ width: '100%', mb: 4 }}>
@@ -83,7 +90,8 @@ const ProgressBar = ({ currentQuestion, totalQuestions, progress }) => {
 ProgressBar.propTypes = {
   currentQuestion: PropTypes.number.isRequired,
   totalQuestions: PropTypes.number.isRequired,
-  progress: PropTypes.number.isRequired
+  progress: PropTypes.number.isRequired,
+  currentCategory: PropTypes.string
 };
 
 export default ProgressBar;

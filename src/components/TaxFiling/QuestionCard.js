@@ -18,7 +18,11 @@ import {
   IconButton,
   Tooltip,
   Chip,
-  InputAdornment
+  InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import {
   HelpOutline,
@@ -47,19 +51,11 @@ const QuestionCard = ({
   const [multiSelectAnswers, setMultiSelectAnswers] = useState(previousAnswer || []);
   const [multiCantonAnswers, setMultiCantonAnswers] = useState(previousAnswer || []);
   const [groupAnswers, setGroupAnswers] = useState(previousAnswer || []);
-  const [showHelp, setShowHelp] = useState(false);
+  const [showExplanationModal, setShowExplanationModal] = useState(false);
 
-  // Debug logging to identify answer leakage bug
+  // Reset answer when question changes to prevent leakage between questions
   useEffect(() => {
-    console.log('[QuestionCard] Question changed:', {
-      questionId: question.id,
-      questionType: question.question_type,
-      questionText: question.question_text,
-      questionTextType: typeof question.question_text,
-      fullQuestion: question,
-      previousAnswer: previousAnswer,
-      previousAnswerType: typeof previousAnswer
-    });
+    // Question changed - reset state will happen in next useEffect
   }, [question.id]);
 
   useEffect(() => {
@@ -90,11 +86,6 @@ const QuestionCard = ({
       const newValue = (previousAnswer === 'yes' || previousAnswer === 'no' || previousAnswer === true || previousAnswer === false)
         ? (previousAnswer === true || previousAnswer === 'yes' ? 'yes' : 'no')
         : '';
-      console.log('[QuestionCard] Setting boolean answer:', {
-        questionId: question.id,
-        previousAnswer: previousAnswer,
-        newValue: newValue
-      });
       setAnswer(newValue);
     } else if (question.question_type === 'select') {
       // FIXED: Select questions should validate that previousAnswer is in options
@@ -103,12 +94,6 @@ const QuestionCard = ({
         return optValue === previousAnswer;
       });
       const newValue = isValidOption ? previousAnswer : '';
-      console.log('[QuestionCard] Setting select answer:', {
-        questionId: question.id,
-        previousAnswer: previousAnswer,
-        newValue: newValue,
-        isValidOption: isValidOption
-      });
       setAnswer(newValue);
     } else {
       // FIXED: Explicitly check if previousAnswer is undefined/null/empty
@@ -116,14 +101,6 @@ const QuestionCard = ({
       const newValue = (previousAnswer !== undefined && previousAnswer !== null && previousAnswer !== '')
         ? String(previousAnswer)
         : '';
-      console.log('[QuestionCard] Setting answer state:', {
-        questionId: question.id,
-        questionType: question.question_type,
-        previousAnswer: previousAnswer,
-        previousAnswerType: typeof previousAnswer,
-        newValue: newValue,
-        currentAnswer: answer
-      });
       setAnswer(newValue);
     }
   }, [question.id, previousAnswer]);
@@ -171,6 +148,34 @@ const QuestionCard = ({
     return answer !== '';
   };
 
+  // Handle Enter key press to submit answer
+  const handleKeyPress = (event) => {
+    // Only submit on Enter key
+    if (event.key === 'Enter') {
+      // Don't submit if answer is invalid or already submitting
+      if (isAnswerValid() && !isSubmitting) {
+        // Prevent default form submission behavior
+        event.preventDefault();
+        handleSubmit();
+      }
+    }
+  };
+
+  // Add keyboard event listener for Enter key
+  useEffect(() => {
+    // Only add listener for question types that support Enter submission
+    const shouldListenForEnter = [
+      'text', 'number', 'date', 'ahv_number', 'postal_code', 'select', 'boolean'
+    ].includes(question.question_type);
+
+    if (shouldListenForEnter) {
+      document.addEventListener('keydown', handleKeyPress);
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    }
+  }, [answer, multiSelectAnswers, multiCantonAnswers, groupAnswers, isSubmitting, question.question_type]);
+
   const renderQuestionInput = () => {
     switch (question.question_type) {
       case 'ahv_number':
@@ -212,10 +217,9 @@ const QuestionCard = ({
                   }}
                   onUploadComplete={(uploadData) => {
                     // Store upload data with the answer
-                    console.log('[QuestionCard] Document uploaded:', uploadData);
                   }}
                   onBringLater={() => {
-                    console.log('[QuestionCard] User will bring document later');
+                    // Mark as bring later
                   }}
                 />
               </Box>
@@ -338,7 +342,6 @@ const QuestionCard = ({
             onChange={(val) => setAnswer(val)}
             onLookup={(data) => {
               // Store location data for later use
-              console.log('[QuestionCard] Postal code lookup result:', data);
             }}
             label={question.question_text}
             required={question.validation_rules?.required}
@@ -440,32 +443,14 @@ const QuestionCard = ({
             {question.question_text}
           </Typography>
         </Box>
-        {question.help_text && (
-          <Tooltip title={showHelp ? "Hide help" : "Show help"}>
-            <IconButton onClick={() => setShowHelp(!showHelp)}>
+        {(question.explanation || question.help_text) && (
+          <Tooltip title={t("filing.question_help_tooltip") || "Learn more"}>
+            <IconButton onClick={() => setShowExplanationModal(true)} color="primary">
               <HelpOutline />
             </IconButton>
           </Tooltip>
         )}
       </Box>
-
-      {/* Help Text */}
-      {showHelp && question.help_text && (
-        <Box
-          sx={{
-            bgcolor: 'info.lighter',
-            borderRadius: 1,
-            p: 2,
-            mb: 3,
-            borderLeft: 3,
-            borderColor: 'info.main'
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            {question.help_text}
-          </Typography>
-        </Box>
-      )}
 
       {/* Question Input */}
       <Box mb={4}>
@@ -500,6 +485,43 @@ const QuestionCard = ({
           {isSubmitting ? 'Submitting...' : 'Next'}
         </Button>
       </Box>
+
+      {/* Explanation Modal */}
+      <Dialog
+        open={showExplanationModal}
+        onClose={() => setShowExplanationModal(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box display="flex" alignItems="center" gap={1}>
+            <HelpOutline color="primary" />
+            <Typography variant="h6">
+              {t("filing.question_explanation_title") || "Why we ask this"}
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body1" paragraph>
+            {question.explanation || question.help_text || t("filing.no_explanation_available")}
+          </Typography>
+          {question.explanation && question.help_text && (
+            <Box mt={2} p={2} bgcolor="grey.100" borderRadius={1}>
+              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                {t("filing.additional_help") || "Additional Information"}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {question.help_text}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowExplanationModal(false)} color="primary" variant="contained">
+            {t("common.close") || "Close"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -48,6 +48,8 @@ class InterviewSessionResponse(BaseModel):
     current_question: dict
     progress: int
     status: str = "in_progress"
+    total_questions: Optional[int] = None
+    completed_questions: Optional[int] = None
 
 
 class AnswerResponse(BaseModel):
@@ -58,6 +60,8 @@ class AnswerResponse(BaseModel):
     profile: Optional[dict] = None
     document_requirements: Optional[list] = None
     progress: int = 0
+    total_questions: Optional[int] = None
+    completed_questions: Optional[int] = None
 
 
 class SaveSessionRequest(BaseModel):
@@ -203,7 +207,9 @@ async def start_interview(
             filing_session_id=filing_session_id,
             current_question=result["current_question"],
             progress=result["progress"],
-            status="in_progress"
+            status="in_progress",
+            total_questions=result.get("total_questions"),
+            completed_questions=result.get("completed_questions")
         )
     except HTTPException:
         raise
@@ -274,6 +280,18 @@ async def submit_answer(
         filing_session.current_question_id = result.get("current_question", {}).get("id") if result.get("current_question") else None
         db.commit()
 
+        # Generate progressive insights after each answer (don't block response)
+        try:
+            TaxInsightService.generate_progressive_insights(
+                db=db,
+                filing_session_id=request.filing_session_id,
+                interview_session_id=session_id
+            )
+            logger.info(f"Generated progressive insights after answering {request.question_id}")
+        except Exception as e:
+            logger.error(f"Failed to generate progressive insights: {e}", exc_info=True)
+            # Don't fail the answer submission if insights fail
+
         # Check if interview is complete
         if result.get("complete"):
             # Update filing status
@@ -301,7 +319,9 @@ async def submit_answer(
         return AnswerResponse(
             valid=True,
             current_question=result.get("current_question"),
-            progress=result.get("progress", 0)
+            progress=result.get("progress", 0),
+            total_questions=result.get("total_questions"),
+            completed_questions=result.get("completed_questions")
         )
 
     except HTTPException:

@@ -19,7 +19,6 @@ questions:
       it: Mario Rossi
     next: Q00
     required: true
-    category: personal_info
   Q00:
     id: Q00
     text:
@@ -31,32 +30,33 @@ questions:
     validation:
       pattern: ^756\.[0-9]{4}\.[0-9]{4}\.[0-9]{2}$
     help_text:
-      en: 'Your Swiss social security number (AHV/AVS/AVS). Format: 756.XXXX.XXXX.XX (13 digits with dots)'
-      de: 'Ihre Schweizer Sozialversicherungsnummer (AHV). Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)'
-      fr: 'Votre numéro de sécurité sociale suisse (AVS). Format: 756.XXXX.XXXX.XX (13 chiffres avec points)'
-      it: 'Il suo numero di previdenza sociale svizzero (AVS). Formato: 756.XXXX.XXXX.XX (13 cifre con punti)'
+      en: 'Your Swiss social security number (AHV/AVS/AVS). Format: 756.XXXX.XXXX.XX
+        (13 digits with dots)'
+      de: 'Ihre Schweizer Sozialversicherungsnummer (AHV). Format: 756.XXXX.XXXX.XX
+        (13 Ziffern mit Punkten)'
+      fr: 'Votre numéro de sécurité sociale suisse (AVS). Format: 756.XXXX.XXXX.XX
+        (13 chiffres avec points)'
+      it: 'Il suo numero di previdenza sociale svizzero (AVS). Formato: 756.XXXX.XXXX.XX
+        (13 cifre con punti)'
     explanation:
-      en: We need your AHV number to file your tax declaration. This is your unique identification number in Switzerland.
-      de: Wir benötigen Ihre AHV-Nummer, um Ihre Steuererklärung einzureichen. Dies ist Ihre eindeutige Identifikationsnummer in der Schweiz.
-      fr: Nous avons besoin de votre numéro AVS pour déposer votre déclaration d'impôts. C'est votre numéro d'identification unique en Suisse.
-      it: Abbiamo bisogno del suo numero AVS per presentare la sua dichiarazione fiscale. Questo è il suo numero di identificazione unico in Svizzera.
+      en: We need your AHV number to file your tax declaration. This is your unique
+        identification number in Switzerland.
+      de: Wir benötigen Ihre AHV-Nummer, um Ihre Steuererklärung einzureichen. Dies
+        ist Ihre eindeutige Identifikationsnummer in der Schweiz.
+      fr: Nous avons besoin de votre numéro AVS pour déposer votre déclaration d'impôts.
+        C'est votre numéro d'identification unique en Suisse.
+      it: Abbiamo bisogno del suo numero AVS per presentare la sua dichiarazione fiscale.
+        Questo è il suo numero di identificazione unico in Svizzera.
     placeholder: 756.1234.5678.97
     next: Q01
     required: true
-    category: personal_info
   Q01:
     id: Q01
     text:
       en: What is your civil status on 31 Dec?
       de: Welchen Zivilstand hatten Sie am 31.12.?
       fr: Quel est votre état civil au 31 déc?
-      it: Qual è il suo stato civile al 31 dicembre?
     type: single_choice
-    explanation:
-      en: Your civil status on December 31st determines your tax rate and available deductions. Married couples can file jointly for lower rates, while single, divorced, or widowed individuals are taxed at different rates.
-      de: Ihr Zivilstand am 31. Dezember bestimmt Ihren Steuersatz und verfügbare Abzüge. Verheiratete Paare können gemeinsam veranlagen für niedrigere Sätze, während Alleinstehende, Geschiedene oder Verwitwete unterschiedlich besteuert werden.
-      fr: Votre état civil au 31 décembre détermine votre taux d'imposition et les déductions disponibles. Les couples mariés peuvent déposer conjointement pour des taux plus bas, tandis que les célibataires, divorcés ou veufs sont imposés à des taux différents.
-      it: Il suo stato civile al 31 dicembre determina la sua aliquota fiscale e le deduzioni disponibili. Le coppie sposate possono presentare la dichiarazione congiunta per aliquote più basse, mentre i single, divorziati o vedovi sono tassati con aliquote diverse.
     options:
     - value: single
       label:
@@ -85,7 +85,6 @@ questions:
       - Q01d
       default: Q02a
     required: true
-    category: personal_info
   Q01a_name:
     id: Q01a_name
     text:
@@ -107,7 +106,6 @@ questions:
     next: Q01a
     required: true
     parent: Q01
-    category: personal_info
   Q01a:
     id: Q01a
     text:
@@ -125,7 +123,6 @@ questions:
     next: Q01d
     required: true
     parent: Q01
-    category: personal_info
   Q01d:
     id: Q01d
     text:
@@ -136,12 +133,6 @@ questions:
     next: Q02a
     required: true
     parent: Q01
-    category: personal_info
-    explanation:
-      en: We need to know if your spouse is employed to accurately calculate joint income tax rates and determine if you qualify for dual-income deductions.
-      de: Wir müssen wissen, ob Ihr Ehepartner erwerbstätig ist, um die gemeinsamen Einkommensteuersätze genau zu berechnen und festzustellen, ob Sie Anspruch auf Zweiverdienerabzüge haben.
-      fr: Nous devons savoir si votre conjoint est employé pour calculer avec précision les taux d'imposition sur le revenu conjoint et déterminer si vous êtes admissible aux déductions pour double revenu.
-      it: Dobbiamo sapere se il suo coniuge è impiegato per calcolare accuratamente le aliquote fiscali sul reddito congiunto e determinare se lei ha diritto alle deduzioni per doppio reddito.
   Q02a:
     id: Q02a
     text:
@@ -150,14 +141,16 @@ questions:
       fr: Avez-vous eu des revenus ou des actifs dans un canton autre que votre résidence?
     type: yes_no
     help_text:
-      en: Select yes if you worked in a different canton or owned property outside your residence canton
-      de: Wählen Sie Ja, wenn Sie in einem anderen Kanton gearbeitet oder Eigentum außerhalb Ihres Wohnsitzkantons besessen haben
-      fr: Sélectionnez oui si vous avez travaillé dans un autre canton ou possédé des biens en dehors de votre canton de résidence
+      en: Select yes if you worked in a different canton or owned property outside
+        your residence canton
+      de: Wählen Sie Ja, wenn Sie in einem anderen Kanton gearbeitet oder Eigentum
+        außerhalb Ihres Wohnsitzkantons besessen haben
+      fr: Sélectionnez oui si vous avez travaillé dans un autre canton ou possédé
+        des biens en dehors de votre canton de résidence
     branching:
       true: Q02b
       false: Q03
     required: true
-    category: personal_info
   Q02b:
     id: Q02b
     text:
@@ -174,7 +167,6 @@ questions:
     next: Q03
     required: true
     parent: Q02a
-    category: personal_info
   Q03:
     id: Q03
     text:
@@ -186,12 +178,6 @@ questions:
       true: Q03a
       false: Q04
     required: true
-    category: personal_info
-    explanation:
-      en: Children provide significant tax deductions and credits. Swiss tax law offers child allowances, education deductions, and childcare cost deductions that can substantially reduce your tax burden.
-      de: Kinder bieten erhebliche Steuerabzüge und Gutschriften. Das Schweizer Steuerrecht bietet Kinderzulagen, Bildungsabzüge und Kinderbetreuungskostenabzüge, die Ihre Steuerlast erheblich reduzieren können.
-      fr: Les enfants offrent des déductions et crédits d'impôt importants. La loi fiscale suisse propose des allocations familiales, des déductions pour l'éducation et des déductions pour frais de garde d'enfants qui peuvent réduire considérablement votre charge fiscale.
-      it: I figli offrono deduzioni e crediti fiscali significativi. La legge fiscale svizzera offre assegni familiari, deduzioni per l'istruzione e deduzioni per le spese di custodia dei figli che possono ridurre sostanzialmente il suo carico fiscale.
   Q03a:
     id: Q03a
     text:
@@ -234,12 +220,6 @@ questions:
     next: Q03c
     required: true
     parent: Q03
-    category: personal_info
-    explanation:
-      en: The number of children determines the total amount of child deductions you can claim. Each child qualifies for specific deductions including child allowances and education costs.
-      de: Die Anzahl der Kinder bestimmt den Gesamtbetrag der Kinderabzüge, die Sie geltend machen können. Jedes Kind qualifiziert sich für spezifische Abzüge einschließlich Kinderzulagen und Bildungskosten.
-      fr: Le nombre d'enfants détermine le montant total des déductions pour enfants que vous pouvez réclamer. Chaque enfant est admissible à des déductions spécifiques, y compris les allocations familiales et les frais d'éducation.
-      it: Il numero di figli determina l'importo totale delle deduzioni per figli che può richiedere. Ogni figlio ha diritto a deduzioni specifiche, tra cui assegni familiari e costi per l'istruzione.
   Q03b:
     id: Q03b
     text:
@@ -249,9 +229,14 @@ questions:
     type: group
     loop: true
     explanation:
-      en: We need this information to calculate child deductions and determine tax rates. Children under 18 or in education qualify for deductions.
-      de: Wir benötigen diese Informationen, um Kinderabzüge zu berechnen und Steuersätze zu bestimmen. Kinder unter 18 Jahren oder in Ausbildung qualifizieren sich für Abzüge.
-      fr: Nous avons besoin de ces informations pour calculer les déductions pour enfants et déterminer les taux d'imposition. Les enfants de moins de 18 ans ou en formation sont admissibles aux déductions.
+      en: We need this information to calculate child deductions and determine tax
+        rates. Children under 18 or in education qualify for deductions.
+      de: Wir benötigen diese Informationen, um Kinderabzüge zu berechnen und Steuersätze
+        zu bestimmen. Kinder unter 18 Jahren oder in Ausbildung qualifizieren sich
+        für Abzüge.
+      fr: Nous avons besoin de ces informations pour calculer les déductions pour
+        enfants et déterminer les taux d'imposition. Les enfants de moins de 18 ans
+        ou en formation sont admissibles aux déductions.
     fields:
     - id: child_name
       text:
@@ -276,7 +261,6 @@ questions:
       type: yes_no
       required: true
     parent: Q03a
-    category: personal_info
   Q03c:
     id: Q03c
     text:
@@ -285,9 +269,12 @@ questions:
       fr: Avez-vous eu des frais de garde d'enfants?
     type: yes_no
     explanation:
-      en: Third-party childcare costs (daycare, nanny, etc.) up to CHF 25,500 are deductible (2024 limit; CHF 25,800 from 2025)
-      de: 'Fremdbetreuungskosten (Kita, Tagesmutter, etc.) bis CHF 25''500 sind abzugsfähig (2024 Grenze; ab 2025: CHF 25''800)'
-      fr: 'Les frais de garde d''enfants par des tiers (crèche, nourrice, etc.) jusqu''à CHF 25''500 sont déductibles (limite 2024; dès 2025: CHF 25''800)'
+      en: Third-party childcare costs (daycare, nanny, etc.) up to CHF 25,500 are
+        deductible (2024 limit; CHF 25,800 from 2025)
+      de: 'Fremdbetreuungskosten (Kita, Tagesmutter, etc.) bis CHF 25''500 sind abzugsfähig
+        (2024 Grenze; ab 2025: CHF 25''800)'
+      fr: 'Les frais de garde d''enfants par des tiers (crèche, nourrice, etc.) jusqu''à
+        CHF 25''500 sont déductibles (limite 2024; dès 2025: CHF 25''800)'
     inline_document_upload:
       document_type: childcare_costs
       accepted_formats:
@@ -303,14 +290,15 @@ questions:
         fr: Télécharger les documents de frais de garde (factures, reçus, contrats)
       help_text:
         en: Upload invoices, receipts, or contracts from your childcare provider
-        de: Laden Sie Rechnungen, Quittungen oder Verträge Ihres Kinderbetreuungsanbieters hoch
-        fr: Téléchargez les factures, reçus ou contrats de votre fournisseur de garde d'enfants
+        de: Laden Sie Rechnungen, Quittungen oder Verträge Ihres Kinderbetreuungsanbieters
+          hoch
+        fr: Téléchargez les factures, reçus ou contrats de votre fournisseur de garde
+          d'enfants
     branching:
       true: Q04
       false: Q04
     required: true
     parent: Q03a
-    category: personal_info
   Q04:
     id: Q04
     text:
@@ -348,12 +336,6 @@ questions:
       '0': Q05
       default: Q04a
     required: true
-    category: income_sources
-    explanation:
-      en: Each employer must provide a separate salary certificate (Lohnausweis). This information helps us ensure all income is properly declared and the correct amount of tax has been withheld.
-      de: Jeder Arbeitgeber muss einen separaten Lohnausweis vorlegen. Diese Informationen helfen uns sicherzustellen, dass alle Einkommen ordnungsgemäß deklariert sind und der korrekte Steuerbetrag einbehalten wurde.
-      fr: Chaque employeur doit fournir un certificat de salaire séparé. Ces informations nous aident à nous assurer que tous les revenus sont correctement déclarés et que le montant correct d'impôt a été retenu.
-      it: Ogni datore di lavoro deve fornire un certificato di salario separato. Queste informazioni ci aiutano a garantire che tutti i redditi siano correttamente dichiarati e che l'importo corretto di imposta sia stato trattenuto.
   Q04a:
     id: Q04a
     text:
@@ -383,12 +365,6 @@ questions:
       employed: Q04a_employer
     required: true
     parent: Q04
-    category: income_sources
-    explanation:
-      en: Self-employed and employed individuals have different tax obligations and deductions. Self-employed individuals can deduct business expenses, while employees have different withholding tax requirements.
-      de: Selbstständige und Angestellte haben unterschiedliche Steuerpflichten und Abzüge. Selbstständige können Geschäftsausgaben abziehen, während Angestellte unterschiedliche Quellensteueranforderungen haben.
-      fr: Les travailleurs indépendants et les employés ont des obligations fiscales et des déductions différentes. Les indépendants peuvent déduire les dépenses professionnelles, tandis que les employés ont des exigences différentes en matière de retenue à la source.
-      it: I lavoratori autonomi e i dipendenti hanno obblighi fiscali e deduzioni diversi. I lavoratori autonomi possono dedurre le spese aziendali, mentre i dipendenti hanno requisiti diversi per la ritenuta alla fonte.
   Q04a_type:
     id: Q04a_type
     text:
@@ -418,19 +394,22 @@ questions:
         de: Landwirtschaftlich
         fr: Agricole
     explanation:
-      en: We need to understand your business structure for proper tax treatment and deduction calculations
-      de: Wir müssen Ihre Unternehmensstruktur verstehen, um die richtige steuerliche Behandlung und Abzugsberechnung vorzunehmen
-      fr: Nous devons comprendre la structure de votre entreprise pour un traitement fiscal et des calculs de déductions appropriés
+      en: We need to understand your business structure for proper tax treatment and
+        deduction calculations
+      de: Wir müssen Ihre Unternehmensstruktur verstehen, um die richtige steuerliche
+        Behandlung und Abzugsberechnung vorzunehmen
+      fr: Nous devons comprendre la structure de votre entreprise pour un traitement
+        fiscal et des calculs de déductions appropriés
     next: Q04a_self_upload
     required: true
     parent: Q04a
-    category: income_sources
   Q04a_self_upload:
     id: Q04a_self_upload
     text:
       en: Upload self-employment documents (business accounts, tax statement)
       de: Selbstständigkeitsdokumente hochladen (Geschäftsabrechnung, Steuernachweis)
-      fr: Télécharger documents d'activité indépendante (comptes commerciaux, attestation fiscale)
+      fr: Télécharger documents d'activité indépendante (comptes commerciaux, attestation
+        fiscale)
     type: document_upload
     document_type: self_employment_documents
     accepted_formats:
@@ -442,12 +421,13 @@ questions:
     bring_later: true
     help_text:
       en: Upload your business accounts, profit/loss statements, and tax documents
-      de: Laden Sie Ihre Geschäftsabrechnung, Gewinn-/Verlustrechnung und Steuerunterlagen hoch
-      fr: Téléchargez vos comptes d'entreprise, bilans de profits/pertes et documents fiscaux
+      de: Laden Sie Ihre Geschäftsabrechnung, Gewinn-/Verlustrechnung und Steuerunterlagen
+        hoch
+      fr: Téléchargez vos comptes d'entreprise, bilans de profits/pertes et documents
+        fiscaux
     next: Q04a_employer
     required: false
     parent: Q04a_type
-    category: income_sources
   Q04a_employer:
     id: Q04a_employer
     text:
@@ -495,12 +475,6 @@ questions:
         fr: Téléchargez les justificatifs de vos frais de déplacement comme AG, Demi-tarif ou abonnements mensuels
     next: Q04b
     parent: Q04
-    category: income_sources
-    explanation:
-      en: We collect employer details to match them with your salary certificates and ensure all income sources are properly documented for tax purposes.
-      de: Wir sammeln Arbeitgeberdetails, um sie mit Ihren Lohnausweisen abzugleichen und sicherzustellen, dass alle Einkommensquellen für Steuerzwecke ordnungsgemäß dokumentiert sind.
-      fr: Nous recueillons les détails de l'employeur pour les faire correspondre avec vos certificats de salaire et nous assurer que toutes les sources de revenus sont correctement documentées à des fins fiscales.
-      it: Raccogliamo i dettagli del datore di lavoro per farli corrispondere con i suoi certificati di salario e garantire che tutte le fonti di reddito siano correttamente documentate ai fini fiscali.
   Q04b:
     id: Q04b
     text:
@@ -510,10 +484,10 @@ questions:
     type: document_upload
     document_type: employment_certificate
     accepted_formats:
-    - pdf
-    - jpg
-    - jpeg
-    - png
+      - pdf
+      - jpg
+      - jpeg
+      - png
     max_size_mb: 10
     allow_multiple: true
     bring_later: true
@@ -528,7 +502,6 @@ questions:
     next: Q04c
     required: true
     parent: Q04
-    category: income_sources
   Q04b1:
     id: Q04b1
     text:
@@ -537,9 +510,13 @@ questions:
       fr: Avez-vous eu des frais de repas lors de travail hors domicile?
     type: yes_no
     explanation:
-      en: If you work away from home and your main residence, meal expenses up to CHF 15 per day for lunch and CHF 30 for dinner are deductible
-      de: Wenn Sie auswärtig vom Wohnort und Hauptarbeitsort arbeiten, sind Verpflegungskosten bis CHF 15 pro Tag für Mittagessen und CHF 30 für Abendessen abzugsfähig
-      fr: Si vous travaillez en dehors de votre domicile et lieu de travail principal, les frais de repas jusqu'à CHF 15 par jour pour le déjeuner et CHF 30 pour le dîner sont déductibles
+      en: If you work away from home and your main residence, meal expenses up to
+        CHF 15 per day for lunch and CHF 30 for dinner are deductible
+      de: Wenn Sie auswärtig vom Wohnort und Hauptarbeitsort arbeiten, sind Verpflegungskosten
+        bis CHF 15 pro Tag für Mittagessen und CHF 30 für Abendessen abzugsfähig
+      fr: Si vous travaillez en dehors de votre domicile et lieu de travail principal,
+        les frais de repas jusqu'à CHF 15 par jour pour le déjeuner et CHF 30 pour
+        le dîner sont déductibles
     branching:
       true: Q04c
       false: Q04c
@@ -560,9 +537,10 @@ questions:
         fr: Télécharger les reçus de frais de repas
       help_text:
         en: Upload receipts for meals when working away from your regular workplace
-        de: Laden Sie Belege für Mahlzeiten hoch, wenn Sie auswärts vom regulären Arbeitsort arbeiten
-        fr: Téléchargez les reçus des repas lors de travail en dehors de votre lieu de travail habituel
-    category: income_sources
+        de: Laden Sie Belege für Mahlzeiten hoch, wenn Sie auswärts vom regulären
+          Arbeitsort arbeiten
+        fr: Téléchargez les reçus des repas lors de travail en dehors de votre lieu
+          de travail habituel
   Q04c:
     id: Q04c
     text:
@@ -571,9 +549,12 @@ questions:
       fr: Avez-vous eu des frais professionnels?
     type: yes_no
     explanation:
-      en: Work-related expenses such as professional tools, continuing education, work clothing, etc. are deductible
-      de: Berufsbedingte Ausgaben wie Berufswerkzeuge, Weiterbildung, Berufskleidung, etc. sind abzugsfähig
-      fr: Les dépenses liées au travail telles qu'outils professionnels, formation continue, vêtements de travail, etc. sont déductibles
+      en: Work-related expenses such as professional tools, continuing education,
+        work clothing, etc. are deductible
+      de: Berufsbedingte Ausgaben wie Berufswerkzeuge, Weiterbildung, Berufskleidung,
+        etc. sind abzugsfähig
+      fr: Les dépenses liées au travail telles qu'outils professionnels, formation
+        continue, vêtements de travail, etc. sont déductibles
     branching:
       true: Q05
       false: Q05
@@ -594,9 +575,10 @@ questions:
         fr: Télécharger documents de frais professionnels (factures, reçus)
       help_text:
         en: Upload receipts for tools, training, work materials, clothing, etc.
-        de: Laden Sie Quittungen für Werkzeuge, Ausbildung, Arbeitsmaterialien, Kleidung usw. hoch
-        fr: Téléchargez les reçus pour outils, formation, matériel de travail, vêtements, etc.
-    category: income_sources
+        de: Laden Sie Quittungen für Werkzeuge, Ausbildung, Arbeitsmaterialien, Kleidung
+          usw. hoch
+        fr: Téléchargez les reçus pour outils, formation, matériel de travail, vêtements,
+          etc.
   Q04d:
     id: Q04d
     text:
@@ -605,9 +587,14 @@ questions:
       fr: Travaillez-vous régulièrement depuis votre domicile?
     type: yes_no
     explanation:
-      en: If you have a dedicated home office that you use exclusively for work, you may deduct a portion of rent, utilities, and maintenance costs
-      de: Wenn Sie ein dediziertes Arbeitszimmer haben, das Sie ausschließlich beruflich nutzen, können Sie einen Anteil der Miete, Nebenkosten und Unterhaltskosten abziehen
-      fr: Si vous avez un bureau à domicile dédié que vous utilisez exclusivement pour le travail, vous pouvez déduire une partie du loyer, des charges et des frais d'entretien
+      en: If you have a dedicated home office that you use exclusively for work, you
+        may deduct a portion of rent, utilities, and maintenance costs
+      de: Wenn Sie ein dediziertes Arbeitszimmer haben, das Sie ausschließlich beruflich
+        nutzen, können Sie einen Anteil der Miete, Nebenkosten und Unterhaltskosten
+        abziehen
+      fr: Si vous avez un bureau à domicile dédié que vous utilisez exclusivement
+        pour le travail, vous pouvez déduire une partie du loyer, des charges et des
+        frais d'entretien
     branching:
       true: Q04d_details
       false: Q05
@@ -629,8 +616,8 @@ questions:
       help_text:
         en: Upload rent receipts, utility bills, and maintenance costs
         de: Laden Sie Mietbelege, Nebenkostenabrechnungen und Unterhaltskosten hoch
-        fr: Téléchargez les reçus de loyer, factures de services publics et frais d'entretien
-    category: income_sources
+        fr: Téléchargez les reçus de loyer, factures de services publics et frais
+          d'entretien
   Q04d_details:
     id: Q04d_details
     text:
@@ -665,12 +652,6 @@ questions:
       required: true
     next: Q04d_upload
     parent: Q04d
-    category: income_sources
-    explanation:
-      en: Detailed employment information helps us accurately calculate your income tax, verify withholding amounts, and identify any special tax situations related to your employment.
-      de: Detaillierte Beschäftigungsinformationen helfen uns, Ihre Einkommensteuer genau zu berechnen, Quellensteuerbeträge zu überprüfen und besondere Steuersituationen im Zusammenhang mit Ihrer Beschäftigung zu identifizieren.
-      fr: Des informations détaillées sur l'emploi nous aident à calculer avec précision votre impôt sur le revenu, à vérifier les montants retenus à la source et à identifier toute situation fiscale particulière liée à votre emploi.
-      it: Informazioni dettagliate sull'impiego ci aiutano a calcolare accuratamente la sua imposta sul reddito, verificare gli importi delle ritenute e identificare eventuali situazioni fiscali speciali relative al suo impiego.
   Q05:
     id: Q05
     text:
@@ -699,12 +680,6 @@ questions:
         en: Upload your unemployment benefits statement from the RAV/ORP
         de: Laden Sie Ihren Arbeitslosengeldnachweis vom RAV hoch
         fr: Téléchargez votre attestation d'allocations chômage de l'ORP
-    category: income_sources
-    explanation:
-      en: Pension income is taxed at special preferential rates in Switzerland. We need to know if you receive pension income to apply the correct tax calculation and ensure you benefit from these lower rates.
-      de: Renteneinkommen werden in der Schweiz zu speziellen Vorzugssätzen besteuert. Wir müssen wissen, ob Sie Renteneinkommen erhalten, um die korrekte Steuerberechnung anzuwenden und sicherzustellen, dass Sie von diesen niedrigeren Sätzen profitieren.
-      fr: Les revenus de pension sont imposés à des taux préférentiels spéciaux en Suisse. Nous devons savoir si vous recevez des revenus de pension pour appliquer le calcul fiscal correct et vous assurer de bénéficier de ces taux inférieurs.
-      it: Il reddito pensionistico è tassato con aliquote preferenziali speciali in Svizzera. Dobbiamo sapere se riceve reddito pensionistico per applicare il calcolo fiscale corretto e assicurarci che benefici di queste aliquote inferiori.
   Q06:
     id: Q06
     text:
@@ -733,12 +708,6 @@ questions:
         en: Upload your disability or accident insurance benefits statement
         de: Laden Sie Ihren IV- oder Unfallversicherungsleistungsnachweis hoch
         fr: Téléchargez votre attestation de prestations AI ou d'assurance accident
-    category: income_sources
-    explanation:
-      en: Capital income (dividends, interest, capital gains) is taxed separately from employment income in Switzerland. Declaring all capital income ensures accurate tax calculation and compliance with Swiss tax law.
-      de: Kapitaleinkommen (Dividenden, Zinsen, Kapitalgewinne) werden in der Schweiz getrennt vom Erwerbseinkommen besteuert. Die Deklaration aller Kapitaleinkommen gewährleistet eine genaue Steuerberechnung und die Einhaltung des Schweizer Steuerrechts.
-      fr: Les revenus de capitaux (dividendes, intérêts, gains en capital) sont imposés séparément des revenus d'emploi en Suisse. Déclarer tous les revenus de capitaux garantit un calcul fiscal précis et la conformité avec la loi fiscale suisse.
-      it: Il reddito da capitale (dividendi, interessi, plusvalenze) è tassato separatamente dal reddito da lavoro in Svizzera. Dichiarare tutti i redditi da capitale garantisce un calcolo fiscale accurato e la conformità con la legge fiscale svizzera.
   Q07:
     id: Q07
     text:
@@ -767,12 +736,6 @@ questions:
         en: Upload your 2nd pillar pension fund certificate
         de: Laden Sie Ihr 2. Säule Pensionskassenzertifikat hoch
         fr: Téléchargez votre certificat de caisse de pension du 2e pilier
-    category: income_sources
-    explanation:
-      en: Pillar 3a (private pension) contributions are fully tax-deductible up to annual limits. These contributions reduce your taxable income while building retirement savings, making them one of the most valuable tax deductions in Switzerland.
-      de: Säule-3a-Beiträge (private Vorsorge) sind bis zu jährlichen Limits vollständig steuerlich absetzbar. Diese Beiträge reduzieren Ihr steuerbares Einkommen während Sie Altersersparnisse aufbauen, was sie zu einem der wertvollsten Steuerabzüge in der Schweiz macht.
-      fr: Les cotisations au pilier 3a (prévoyance privée) sont entièrement déductibles fiscalement jusqu'aux limites annuelles. Ces cotisations réduisent votre revenu imposable tout en constituant une épargne-retraite, ce qui en fait l'une des déductions fiscales les plus précieuses en Suisse.
-      it: I contributi al pilastro 3a (previdenza privata) sono completamente deducibili fino ai limiti annuali. Questi contributi riducono il suo reddito imponibile mentre costruisce risparmi per la pensione, rendendoli una delle deduzioni fiscali più preziose in Svizzera.
   Q08:
     id: Q08
     text:
@@ -781,9 +744,12 @@ questions:
       fr: Avez-vous cotisé au pilier 3a?
     type: yes_no
     explanation:
-      en: Pillar 3a contributions up to CHF 7,056 are fully deductible for employed persons (2024 limit)
-      de: Säule 3a Einzahlungen bis CHF 7'056 sind für Arbeitnehmende vollständig abzugsfähig (2024 Grenze)
-      fr: Les cotisations au pilier 3a jusqu'à CHF 7'056 sont entièrement déductibles pour les salariés (limite 2024)
+      en: Pillar 3a contributions up to CHF 7,056 are fully deductible for employed
+        persons (2024 limit)
+      de: Säule 3a Einzahlungen bis CHF 7'056 sind für Arbeitnehmende vollständig
+        abzugsfähig (2024 Grenze)
+      fr: Les cotisations au pilier 3a jusqu'à CHF 7'056 sont entièrement déductibles
+        pour les salariés (limite 2024)
     branching:
       true: Q09
       false: Q09
@@ -803,9 +769,10 @@ questions:
         fr: Télécharger le certificat de cotisation pilier 3a
       help_text:
         en: Upload your Pillar 3a contribution certificate from your bank or insurance
-        de: Laden Sie Ihre Säule 3a Einzahlungsbescheinigung von Ihrer Bank oder Versicherung hoch
-        fr: Téléchargez votre certificat de cotisation pilier 3a de votre banque ou assurance
-    category: income_sources
+        de: Laden Sie Ihre Säule 3a Einzahlungsbescheinigung von Ihrer Bank oder Versicherung
+          hoch
+        fr: Téléchargez votre certificat de cotisation pilier 3a de votre banque ou
+          assurance
   Q09:
     id: Q09
     text:
@@ -817,12 +784,6 @@ questions:
       true: Q09a
       false: Q10
     required: true
-    category: property_assets
-    explanation:
-      en: 'Property ownership affects your taxes in multiple ways: you must declare property value as wealth, pay property taxes, but can also deduct mortgage interest and maintenance costs. Accurate property reporting is essential for correct tax calculation.'
-      de: 'Grundeigentum beeinflusst Ihre Steuern auf mehrere Arten: Sie müssen den Immobilienwert als Vermögen deklarieren, Grundsteuern zahlen, können aber auch Hypothekarzinsen und Unterhaltskosten abziehen. Eine genaue Immobilienmeldung ist für die korrekte Steuerberechnung unerlässlich.'
-      fr: 'La propriété immobilière affecte vos impôts de plusieurs façons: vous devez déclarer la valeur de la propriété comme fortune, payer des impôts fonciers, mais pouvez également déduire les intérêts hypothécaires et les frais d''entretien. Une déclaration immobilière précise est essentielle pour un calcul fiscal correct.'
-      it: 'La proprietà immobiliare influisce sulle sue tasse in diversi modi: deve dichiarare il valore della proprietà come patrimonio, pagare le tasse immobiliari, ma può anche dedurre gli interessi ipotecari e i costi di manutenzione. Una dichiarazione immobiliare accurata è essenziale per un calcolo fiscale corretto.'
   Q09a:
     id: Q09a
     text:
@@ -855,12 +816,6 @@ questions:
     next: Q10
     required: true
     parent: Q09
-    category: property_assets
-    explanation:
-      en: Each property requires separate declaration of its value, mortgage interest, and maintenance costs. The number of properties helps us prepare accurate documentation for your tax return.
-      de: Jede Immobilie erfordert eine separate Deklaration ihres Wertes, der Hypothekarzinsen und Unterhaltskosten. Die Anzahl der Immobilien hilft uns, genaue Dokumentation für Ihre Steuererklärung vorzubereiten.
-      fr: Chaque propriété nécessite une déclaration séparée de sa valeur, des intérêts hypothécaires et des frais d'entretien. Le nombre de propriétés nous aide à préparer une documentation précise pour votre déclaration fiscale.
-      it: Ogni proprietà richiede una dichiarazione separata del suo valore, degli interessi ipotecari e dei costi di manutenzione. Il numero di proprietà ci aiuta a preparare una documentazione accurata per la sua dichiarazione fiscale.
   Q09b:
     id: Q09b
     text:
@@ -908,12 +863,6 @@ questions:
       required: true
     next: Q09b_upload
     parent: Q09a
-    category: property_assets
-    explanation:
-      en: Property type determines which deductions and valuations apply. Primary residences, rental properties, and vacation homes have different tax implications for mortgage interest deductions and rental income reporting.
-      de: Die Immobilienart bestimmt, welche Abzüge und Bewertungen gelten. Hauptwohnsitze, Mietobjekte und Ferienhäuser haben unterschiedliche steuerliche Auswirkungen für Hypothekarzinsabzüge und Mieteinkommensmeldung.
-      fr: Le type de propriété détermine quelles déductions et évaluations s'appliquent. Les résidences principales, les propriétés locatives et les maisons de vacances ont des implications fiscales différentes pour les déductions d'intérêts hypothécaires et la déclaration des revenus locatifs.
-      it: Il tipo di proprietà determina quali deduzioni e valutazioni si applicano. Le residenze principali, le proprietà in affitto e le case vacanza hanno implicazioni fiscali diverse per le deduzioni degli interessi ipotecari e la dichiarazione dei redditi da locazione.
   Q09b_upload:
     id: Q09b_upload
     text:
@@ -931,13 +880,15 @@ questions:
     bring_later: true
     allow_multiple: true
     help_text:
-      en: Upload property tax statements, mortgage statements, and other relevant documents
-      de: Laden Sie Immobiliensteuerbescheinigungen, Hypothekenbelege und andere relevante Dokumente hoch
-      fr: Téléchargez les attestations fiscales immobilières, relevés hypothécaires et autres documents pertinents
+      en: Upload property tax statements, mortgage statements, and other relevant
+        documents
+      de: Laden Sie Immobiliensteuerbescheinigungen, Hypothekenbelege und andere relevante
+        Dokumente hoch
+      fr: Téléchargez les attestations fiscales immobilières, relevés hypothécaires
+        et autres documents pertinents
     next: Q09c
     required: false
     parent: Q09b
-    category: property_assets
   Q09c:
     id: Q09c
     text:
@@ -946,9 +897,12 @@ questions:
       fr: Avez-vous reçu des revenus locatifs d'une propriété?
     type: yes_no
     explanation:
-      en: Rental income from properties must be declared. You can deduct expenses like maintenance, insurance, and mortgage interest.
-      de: Mieteinnahmen aus Immobilien müssen deklariert werden. Sie können Kosten wie Unterhalt, Versicherung und Hypothekarzinsen abziehen.
-      fr: Les revenus locatifs des propriétés doivent être déclarés. Vous pouvez déduire les dépenses comme l'entretien, l'assurance et les intérêts hypothécaires.
+      en: Rental income from properties must be declared. You can deduct expenses
+        like maintenance, insurance, and mortgage interest.
+      de: Mieteinnahmen aus Immobilien müssen deklariert werden. Sie können Kosten
+        wie Unterhalt, Versicherung und Hypothekarzinsen abziehen.
+      fr: Les revenus locatifs des propriétés doivent être déclarés. Vous pouvez déduire
+        les dépenses comme l'entretien, l'assurance et les intérêts hypothécaires.
     branching:
       true: Q09c_amount
       false: Q10
@@ -966,12 +920,13 @@ questions:
       upload_text:
         en: Upload rental income documents (rental contracts, payment records)
         de: Mieteinnahmendokumente hochladen (Mietverträge, Zahlungsnachweise)
-        fr: Télécharger documents de revenus locatifs (contrats de location, preuves de paiement)
+        fr: Télécharger documents de revenus locatifs (contrats de location, preuves
+          de paiement)
       help_text:
         en: Upload rental contracts, payment records, and expense receipts
         de: Laden Sie Mietverträge, Zahlungsnachweise und Kostenbelege hoch
-        fr: Téléchargez les contrats de location, preuves de paiement et reçus de dépenses
-    category: property_assets
+        fr: Téléchargez les contrats de location, preuves de paiement et reçus de
+          dépenses
   Q09c_amount:
     id: Q09c_amount
     text:
@@ -989,7 +944,6 @@ questions:
     next: Q09c_upload
     required: true
     parent: Q09c
-    category: property_assets
   Q10:
     id: Q10
     text:
@@ -1018,12 +972,6 @@ questions:
         en: Upload your securities/investment account statement
         de: Laden Sie Ihren Wertschriften-/Anlagenkontoauszug hoch
         fr: Téléchargez votre relevé de compte de titres/investissements
-    category: property_assets
-    explanation:
-      en: Wealth tax is levied on all assets including bank accounts, securities, real estate equity, and personal property. Declaring all assets ensures compliance with Swiss tax law and accurate wealth tax calculation.
-      de: Die Vermögenssteuer wird auf alle Vermögenswerte erhoben, einschließlich Bankkonten, Wertpapiere, Immobilienkapital und persönliches Eigentum. Die Deklaration aller Vermögenswerte gewährleistet die Einhaltung des Schweizer Steuerrechts und eine genaue Vermögenssteuerberechnung.
-      fr: L'impôt sur la fortune est prélevé sur tous les actifs, y compris les comptes bancaires, les titres, les capitaux propres immobiliers et les biens personnels. Déclarer tous les actifs garantit la conformité avec la loi fiscale suisse et un calcul précis de l'impôt sur la fortune.
-      it: L'imposta sul patrimonio viene applicata su tutti gli asset, inclusi conti bancari, titoli, capitale immobiliare e proprietà personali. Dichiarare tutti gli asset garantisce la conformità con la legge fiscale svizzera e un calcolo accurato dell'imposta sul patrimonio.
   Q10a:
     id: Q10a
     text:
@@ -1032,9 +980,14 @@ questions:
       fr: Avez-vous reçu des revenus de dividendes ou d'intérêts?
     type: yes_no
     explanation:
-      en: Dividends and interest from Swiss sources are subject to withholding tax (35%) which can be reclaimed. Foreign dividends may also be taxable.
-      de: Dividenden und Zinsen aus Schweizer Quellen unterliegen der Verrechnungssteuer (35%), die zurückgefordert werden kann. Ausländische Dividenden können ebenfalls steuerpflichtig sein.
-      fr: Les dividendes et intérêts de sources suisses sont soumis à l'impôt anticipé (35%) qui peut être réclamé. Les dividendes étrangers peuvent également être imposables.
+      en: Dividends and interest from Swiss sources are subject to withholding tax
+        (35%) which can be reclaimed. Foreign dividends may also be taxable.
+      de: Dividenden und Zinsen aus Schweizer Quellen unterliegen der Verrechnungssteuer
+        (35%), die zurückgefordert werden kann. Ausländische Dividenden können ebenfalls
+        steuerpflichtig sein.
+      fr: Les dividendes et intérêts de sources suisses sont soumis à l'impôt anticipé
+        (35%) qui peut être réclamé. Les dividendes étrangers peuvent également être
+        imposables.
     branching:
       true: Q10_upload
       false: Q10_upload
@@ -1057,7 +1010,6 @@ questions:
         en: Upload statements showing dividend income, interest income, or withholding tax certificates
         de: Laden Sie Abrechnungen hoch, die Dividendeneinkommen, Zinseinkommen oder Verrechnungssteuerbescheinigungen zeigen
         fr: Téléchargez les relevés montrant les revenus de dividendes, les revenus d'intérêts ou les certificats d'impôt anticipé
-    category: property_assets
   Q11:
     id: Q11
     text:
@@ -1067,8 +1019,10 @@ questions:
     type: yes_no
     explanation:
       en: Donations to registered charities are deductible. Minimum CHF 100 per donation.
-      de: Spenden an registrierte Wohltätigkeitsorganisationen sind abzugsfähig. Mindestens CHF 100 pro Spende.
-      fr: Les dons aux organisations caritatives enregistrées sont déductibles. Minimum CHF 100 par don.
+      de: Spenden an registrierte Wohltätigkeitsorganisationen sind abzugsfähig. Mindestens
+        CHF 100 pro Spende.
+      fr: Les dons aux organisations caritatives enregistrées sont déductibles. Minimum
+        CHF 100 par don.
     branching:
       true: Q12
       false: Q12
@@ -1088,9 +1042,10 @@ questions:
         fr: Télécharger les reçus de dons
       help_text:
         en: Upload receipts from registered charities (minimum CHF 100 per donation)
-        de: Laden Sie Quittungen von registrierten Wohltätigkeitsorganisationen hoch (mindestens CHF 100 pro Spende)
-        fr: Téléchargez les reçus d'organisations caritatives enregistrées (minimum CHF 100 par don)
-    category: deductions
+        de: Laden Sie Quittungen von registrierten Wohltätigkeitsorganisationen hoch
+          (mindestens CHF 100 pro Spende)
+        fr: Téléchargez les reçus d'organisations caritatives enregistrées (minimum
+          CHF 100 par don)
   Q12:
     id: Q12
     text:
@@ -1101,7 +1056,8 @@ questions:
     explanation:
       en: Alimony payments to former spouses are fully deductible
       de: Unterhaltszahlungen an frühere Ehepartner sind vollständig abzugsfähig
-      fr: Les pensions alimentaires payées aux anciens conjoints sont entièrement déductibles
+      fr: Les pensions alimentaires payées aux anciens conjoints sont entièrement
+        déductibles
     branching:
       true: Q13
       false: Q13
@@ -1122,8 +1078,8 @@ questions:
       help_text:
         en: Upload divorce decree, payment records, or bank statements
         de: Laden Sie Scheidungsurteil, Zahlungsnachweise oder Kontoauszüge hoch
-        fr: Téléchargez le jugement de divorce, les preuves de paiement ou les relevés bancaires
-    category: deductions
+        fr: Téléchargez le jugement de divorce, les preuves de paiement ou les relevés
+          bancaires
   Q13:
     id: Q13
     text:
@@ -1132,9 +1088,12 @@ questions:
       fr: Avez-vous eu des frais médicaux de plus de CHF 2000?
     type: yes_no
     explanation:
-      en: Medical expenses exceeding 5% of net income are deductible (minimum CHF 2000)
-      de: Krankheitskosten über 5% des Nettoeinkommens sind abzugsfähig (mindestens CHF 2000)
-      fr: Les frais médicaux dépassant 5% du revenu net sont déductibles (minimum CHF 2000)
+      en: Medical expenses exceeding 5% of net income are deductible (minimum CHF
+        2000)
+      de: Krankheitskosten über 5% des Nettoeinkommens sind abzugsfähig (mindestens
+        CHF 2000)
+      fr: Les frais médicaux dépassant 5% du revenu net sont déductibles (minimum
+        CHF 2000)
     branching:
       true: Q13b
       false: Q13b
@@ -1154,9 +1113,10 @@ questions:
         fr: Télécharger les reçus de frais médicaux
       help_text:
         en: Upload receipts for medical treatments, medications, therapies, etc.
-        de: Laden Sie Quittungen für medizinische Behandlungen, Medikamente, Therapien usw. hoch
-        fr: Téléchargez les reçus pour traitements médicaux, médicaments, thérapies, etc.
-    category: deductions
+        de: Laden Sie Quittungen für medizinische Behandlungen, Medikamente, Therapien
+          usw. hoch
+        fr: Téléchargez les reçus pour traitements médicaux, médicaments, thérapies,
+          etc.
   Q13b:
     id: Q13b
     text:
@@ -1166,10 +1126,10 @@ questions:
     type: document_upload
     document_type: health_insurance_premiums
     accepted_formats:
-    - pdf
-    - jpg
-    - jpeg
-    - png
+      - pdf
+      - jpg
+      - jpeg
+      - png
     max_size_mb: 10
     bring_later: true
     explanation:
@@ -1182,7 +1142,6 @@ questions:
       fr: Téléchargez votre attestation annuelle de primes d'assurance maladie. Vous pouvez apporter ce document plus tard s'il n'est pas disponible maintenant.
     next: Q13b_basic
     required: true
-    category: deductions
   Q13b_basic:
     id: Q13b_basic
     text:
@@ -1200,7 +1159,6 @@ questions:
     next: Q13b_supplementary
     required: true
     parent: Q13b
-    category: deductions
   Q13b_supplementary:
     id: Q13b_supplementary
     text:
@@ -1211,13 +1169,13 @@ questions:
     explanation:
       en: Supplementary insurance premiums (dental, hospital, etc.) are also deductible
       de: Zusatzversicherungsprämien (Dental, Spital usw.) sind ebenfalls abzugsfähig
-      fr: Les primes d'assurance complémentaire (dentaire, hospitalisation, etc.) sont également déductibles
+      fr: Les primes d'assurance complémentaire (dentaire, hospitalisation, etc.)
+        sont également déductibles
     branching:
       true: Q13b_supplementary_amount
       false: Q13b_upload
     required: true
     parent: Q13b_basic
-    category: deductions
   Q13b_supplementary_amount:
     id: Q13b_supplementary_amount
     text:
@@ -1235,7 +1193,6 @@ questions:
     next: Q13b_upload
     required: true
     parent: Q13b_supplementary
-    category: deductions
   Q14:
     id: Q14
     text:
@@ -1244,9 +1201,12 @@ questions:
       fr: Avez-vous reçu des revenus de pension ou de rente?
     type: yes_no
     explanation:
-      en: This includes Swiss AHV/IV pensions, foreign pensions, employer pensions (BVG), and annuities
-      de: Dies umfasst Schweizer AHV/IV-Renten, ausländische Renten, Arbeitgeberrenten (BVG) und Leibrenten
-      fr: Cela inclut les pensions AVS/AI suisses, les pensions étrangères, les pensions d'employeur (LPP) et les rentes
+      en: This includes Swiss AHV/IV pensions, foreign pensions, employer pensions
+        (BVG), and annuities
+      de: Dies umfasst Schweizer AHV/IV-Renten, ausländische Renten, Arbeitgeberrenten
+        (BVG) und Leibrenten
+      fr: Cela inclut les pensions AVS/AI suisses, les pensions étrangères, les pensions
+        d'employeur (LPP) et les rentes
     branching:
       true: Q15
       false: Q15
@@ -1266,9 +1226,10 @@ questions:
         fr: Télécharger les attestations de pension/rente
       help_text:
         en: Upload statements from AHV, pension funds, or annuity providers
-        de: Laden Sie Bescheinigungen von AHV, Pensionskassen oder Leibrentenanbietern hoch
-        fr: Téléchargez les attestations de l'AVS, caisses de pension ou fournisseurs de rentes
-    category: deductions
+        de: Laden Sie Bescheinigungen von AHV, Pensionskassen oder Leibrentenanbietern
+          hoch
+        fr: Téléchargez les attestations de l'AVS, caisses de pension ou fournisseurs
+          de rentes
   Q15:
     id: Q15
     text:
@@ -1277,9 +1238,14 @@ questions:
       fr: Avez-vous des revenus ou des actifs étrangers?
     type: yes_no
     explanation:
-      en: This includes foreign employment, rental income abroad, foreign bank accounts, foreign investments, or foreign pensions. Switzerland taxes worldwide income.
-      de: Dies umfasst ausländische Anstellung, Mieteinnahmen im Ausland, ausländische Bankkonten, ausländische Investitionen oder ausländische Renten. Die Schweiz besteuert das weltweite Einkommen.
-      fr: Cela inclut l'emploi à l'étranger, les revenus locatifs à l'étranger, les comptes bancaires étrangers, les investissements étrangers ou les pensions étrangères. La Suisse impose les revenus mondiaux.
+      en: This includes foreign employment, rental income abroad, foreign bank accounts,
+        foreign investments, or foreign pensions. Switzerland taxes worldwide income.
+      de: Dies umfasst ausländische Anstellung, Mieteinnahmen im Ausland, ausländische
+        Bankkonten, ausländische Investitionen oder ausländische Renten. Die Schweiz
+        besteuert das weltweite Einkommen.
+      fr: Cela inclut l'emploi à l'étranger, les revenus locatifs à l'étranger, les
+        comptes bancaires étrangers, les investissements étrangers ou les pensions
+        étrangères. La Suisse impose les revenus mondiaux.
     branching:
       true: Q15_details
       false: Q16
@@ -1298,10 +1264,12 @@ questions:
         de: Dokumente zu ausländischem Einkommen/Vermögen hochladen
         fr: Télécharger documents de revenus/actifs étrangers
       help_text:
-        en: Upload foreign tax certificates, bank statements, employment contracts, or other relevant documents
-        de: Laden Sie ausländische Steuerbescheinigungen, Kontoauszüge, Arbeitsverträge oder andere relevante Dokumente hoch
-        fr: Téléchargez les certificats fiscaux étrangers, relevés bancaires, contrats de travail ou autres documents pertinents
-    category: special_situations
+        en: Upload foreign tax certificates, bank statements, employment contracts,
+          or other relevant documents
+        de: Laden Sie ausländische Steuerbescheinigungen, Kontoauszüge, Arbeitsverträge
+          oder andere relevante Dokumente hoch
+        fr: Téléchargez les certificats fiscaux étrangers, relevés bancaires, contrats
+          de travail ou autres documents pertinents
   Q15_details:
     id: Q15_details
     text:
@@ -1352,12 +1320,6 @@ questions:
       required: true
     next: Q15_upload
     parent: Q15
-    category: special_situations
-    explanation:
-      en: Additional deductions can significantly reduce your taxable income. These may include professional expenses, education costs, alimony payments, disability-related expenses, and other legally allowed deductions.
-      de: Zusätzliche Abzüge können Ihr steuerbares Einkommen erheblich reduzieren. Dazu gehören berufliche Ausgaben, Bildungskosten, Unterhaltszahlungen, behinderungsbedingte Ausgaben und andere gesetzlich zulässige Abzüge.
-      fr: Les déductions supplémentaires peuvent réduire considérablement votre revenu imposable. Celles-ci peuvent inclure les dépenses professionnelles, les frais d'éducation, les pensions alimentaires, les dépenses liées au handicap et d'autres déductions légalement autorisées.
-      it: Le deduzioni aggiuntive possono ridurre significativamente il suo reddito imponibile. Queste possono includere spese professionali, costi per l'istruzione, pagamenti di alimenti, spese legate alla disabilità e altre deduzioni legalmente consentite.
   Q16:
     id: Q16
     text:
@@ -1366,9 +1328,14 @@ questions:
       fr: Possédez-vous des cryptomonnaies ou des actifs numériques?
     type: yes_no
     explanation:
-      en: Cryptocurrencies (Bitcoin, Ethereum, etc.) are considered assets and must be declared at their value on December 31. Trading profits may be taxable.
-      de: Kryptowährungen (Bitcoin, Ethereum usw.) gelten als Vermögenswerte und müssen mit ihrem Wert am 31. Dezember deklariert werden. Handelsgewinne können steuerpflichtig sein.
-      fr: Les cryptomonnaies (Bitcoin, Ethereum, etc.) sont considérées comme des actifs et doivent être déclarées à leur valeur au 31 décembre. Les bénéfices commerciaux peuvent être imposables.
+      en: Cryptocurrencies (Bitcoin, Ethereum, etc.) are considered assets and must
+        be declared at their value on December 31. Trading profits may be taxable.
+      de: Kryptowährungen (Bitcoin, Ethereum usw.) gelten als Vermögenswerte und müssen
+        mit ihrem Wert am 31. Dezember deklariert werden. Handelsgewinne können steuerpflichtig
+        sein.
+      fr: Les cryptomonnaies (Bitcoin, Ethereum, etc.) sont considérées comme des
+        actifs et doivent être déclarées à leur valeur au 31 décembre. Les bénéfices
+        commerciaux peuvent être imposables.
     branching:
       true: Q17
       false: Q17
@@ -1387,10 +1354,12 @@ questions:
         de: Kryptowährungsbestände hochladen
         fr: Télécharger le relevé des avoirs en cryptomonnaies
       help_text:
-        en: Upload statements from exchanges or wallets showing your holdings as of December 31
-        de: Laden Sie Auszüge von Börsen oder Wallets hoch, die Ihre Bestände zum 31. Dezember zeigen
-        fr: Téléchargez les relevés des bourses ou portefeuilles montrant vos avoirs au 31 décembre
-    category: special_situations
+        en: Upload statements from exchanges or wallets showing your holdings as of
+          December 31
+        de: Laden Sie Auszüge von Börsen oder Wallets hoch, die Ihre Bestände zum
+          31. Dezember zeigen
+        fr: Téléchargez les relevés des bourses ou portefeuilles montrant vos avoirs
+          au 31 décembre
   Q17:
     id: Q17
     text:
@@ -1399,14 +1368,16 @@ questions:
       fr: Êtes-vous membre d'une église reconnue par l'État?
     type: yes_no
     explanation:
-      en: Church tax is automatically deducted for members of recognized churches (Protestant, Catholic, Christian Catholic)
-      de: Kirchensteuer wird automatisch für Mitglieder anerkannter Kirchen (Evangelisch, Katholisch, Christkatholisch) abgezogen
-      fr: L'impôt ecclésiastique est automatiquement déduit pour les membres des églises reconnues (Protestant, Catholique, Catholique-Chrétien)
+      en: Church tax is automatically deducted for members of recognized churches
+        (Protestant, Catholic, Christian Catholic)
+      de: Kirchensteuer wird automatisch für Mitglieder anerkannter Kirchen (Evangelisch,
+        Katholisch, Christkatholisch) abgezogen
+      fr: L'impôt ecclésiastique est automatiquement déduit pour les membres des églises
+        reconnues (Protestant, Catholique, Catholique-Chrétien)
     branching:
       true: Q17a
       false: Q17c
     required: true
-    category: special_situations
   Q17a:
     id: Q17a
     text:
@@ -1438,12 +1409,6 @@ questions:
     next: Q17c
     required: true
     parent: Q17
-    category: special_situations
-    explanation:
-      en: Tax credits directly reduce the amount of tax you owe (unlike deductions which reduce taxable income). Credits may be available for foreign taxes paid, innovation activities, or cantonal-specific programs.
-      de: Steuergutschriften reduzieren direkt den Steuerbetrag, den Sie schulden (im Gegensatz zu Abzügen, die das steuerbare Einkommen reduzieren). Gutschriften können für im Ausland gezahlte Steuern, Innovationsaktivitäten oder kantonsspezifische Programme verfügbar sein.
-      fr: Les crédits d'impôt réduisent directement le montant d'impôt que vous devez (contrairement aux déductions qui réduisent le revenu imposable). Des crédits peuvent être disponibles pour les impôts étrangers payés, les activités d'innovation ou les programmes cantonaux spécifiques.
-      it: I crediti fiscali riducono direttamente l'importo dell'imposta dovuta (a differenza delle deduzioni che riducono il reddito imponibile). I crediti possono essere disponibili per le tasse estere pagate, le attività di innovazione o i programmi specifici cantonali.
   Q17c:
     id: Q17c
     text:
@@ -1452,9 +1417,12 @@ questions:
       fr: Êtes-vous membre d'un parti politique?
     type: yes_no
     explanation:
-      en: Political party membership fees are deductible up to certain limits (varies by canton)
-      de: Mitgliederbeiträge an politische Parteien sind bis zu bestimmten Grenzen abzugsfähig (variiert je nach Kanton)
-      fr: Les cotisations aux partis politiques sont déductibles jusqu'à certaines limites (varie selon le canton)
+      en: Political party membership fees are deductible up to certain limits (varies
+        by canton)
+      de: Mitgliederbeiträge an politische Parteien sind bis zu bestimmten Grenzen
+        abzugsfähig (variiert je nach Kanton)
+      fr: Les cotisations aux partis politiques sont déductibles jusqu'à certaines
+        limites (varie selon le canton)
     branching:
       true: Q17b
       false: Q17b
@@ -1476,7 +1444,6 @@ questions:
         en: Upload your political party membership fee receipt
         de: Laden Sie Ihren Beleg für Parteimitgliedschaftsbeiträge hoch
         fr: Téléchargez votre reçu de cotisation au parti politique
-    category: special_situations
   Q17b:
     id: Q17b
     text:
@@ -1485,9 +1452,12 @@ questions:
       fr: Souhaitez-vous télécharger des documents supplémentaires?
     type: yes_no
     help_text:
-      en: You can upload any other tax-relevant documents (e.g., other deductions, special circumstances)
-      de: Sie können weitere steuerrelevante Dokumente hochladen (z.B. andere Abzüge, besondere Umstände)
-      fr: Vous pouvez télécharger tout autre document fiscal pertinent (par exemple, autres déductions, circonstances particulières)
+      en: You can upload any other tax-relevant documents (e.g., other deductions,
+        special circumstances)
+      de: Sie können weitere steuerrelevante Dokumente hochladen (z.B. andere Abzüge,
+        besondere Umstände)
+      fr: Vous pouvez télécharger tout autre document fiscal pertinent (par exemple,
+        autres déductions, circonstances particulières)
     branching:
       true: Q18_bank_statements
       false: Q18_bank_statements
@@ -1499,7 +1469,6 @@ questions:
       - jpg
       - jpeg
       - png
-    category: special_situations
   Q18_bank_statements:
     id: Q18_bank_statements
     text:
@@ -1509,10 +1478,10 @@ questions:
     type: document_upload
     document_type: bank_statements_yearend
     accepted_formats:
-    - pdf
-    - jpg
-    - jpeg
-    - png
+      - pdf
+      - jpg
+      - jpeg
+      - png
     max_size_mb: 15
     allow_multiple: true
     bring_later: true
@@ -1526,7 +1495,6 @@ questions:
       fr: Téléchargez les relevés de fin d'année montrant les soldes au 31.12.2024. Ceci est nécessaire pour l'impôt sur la fortune et pour recevoir votre remboursement fiscal via IBAN. Vous pouvez apporter ces documents plus tard s'ils ne sont pas disponibles maintenant.
     next: Q_complexity_screen
     required: true
-    category: special_situations
   Q_complexity_screen:
     id: Q_complexity_screen
     text:
@@ -1539,61 +1507,61 @@ questions:
       de: Die meisten Steuerzahler benötigen diese Abschnitte nicht. Wählen Sie alle zutreffenden aus oder wählen Sie "Nichts davon", um fortzufahren.
       fr: La plupart des contribuables n'ont pas besoin de ces sections. Sélectionnez tous ceux qui s'appliquent, ou choisissez "Aucune" pour continuer.
     options:
-    - value: detailed_securities
-      label:
-        en: I have securities/investments that need detailed reporting
-        de: Ich habe Wertschriften/Anlagen, die detailliert gemeldet werden müssen
-        fr: J'ai des titres/investissements nécessitant un rapport détaillé
-    - value: bank_accounts
-      label:
-        en: I have multiple bank accounts (Swiss or foreign)
-        de: Ich habe mehrere Bankkonten (Schweiz oder Ausland)
-        fr: J'ai plusieurs comptes bancaires (suisses ou étrangers)
-    - value: rental_property_expenses
-      label:
-        en: I have rental income with deductible expenses
-        de: Ich habe Mieteinnahmen mit abzugsfähigen Kosten
-        fr: J'ai des revenus locatifs avec des dépenses déductibles
-    - value: capital_gains_professional
-      label:
-        en: Professional securities trading / capital gains
-        de: Professioneller Wertschriftenhandel / Kapitalgewinne
-        fr: Négoce professionnel de titres / gains en capital
-    - value: energy_renovation
-      label:
-        en: Energy-saving home renovations in 2024
-        de: Energiesparende Renovierungen in 2024
-        fr: Rénovations éconergétiques en 2024
-    - value: pillar_2_buyback
-      label:
-        en: Pension fund buyback (Einkauf 2. Säule)
-        de: Pensionskassen-Einkauf (2. Säule)
-        fr: Rachat caisse de pension (2e pilier)
-    - value: trust_foundation_income
-      label:
-        en: Income from trust or foundation
-        de: Einkommen aus Trust oder Stiftung
-        fr: Revenus de trust ou fondation
-    - value: inheritance_2024
-      label:
-        en: Received inheritance or gift in 2024
-        de: Erbschaft oder Schenkung in 2024 erhalten
-        fr: Héritage ou donation reçu(e) en 2024
-    - value: military_civil_service
-      label:
-        en: Military or civil service pay in 2024
-        de: Militär- oder Zivildienstsold in 2024
-        fr: Solde militaire ou service civil en 2024
-    - value: foreign_tax_credit
-      label:
-        en: Need to claim foreign tax credits
-        de: Muss ausländische Steuergutschriften geltend machen
-        fr: Besoin de réclamer des crédits d'impôt étrangers
-    - value: none_of_above
-      label:
-        en: None of the above applies to me
-        de: Nichts davon trifft auf mich zu
-        fr: Aucune de ces situations ne s'applique
+      - value: detailed_securities
+        label:
+          en: I have securities/investments that need detailed reporting
+          de: Ich habe Wertschriften/Anlagen, die detailliert gemeldet werden müssen
+          fr: J'ai des titres/investissements nécessitant un rapport détaillé
+      - value: bank_accounts
+        label:
+          en: I have multiple bank accounts (Swiss or foreign)
+          de: Ich habe mehrere Bankkonten (Schweiz oder Ausland)
+          fr: J'ai plusieurs comptes bancaires (suisses ou étrangers)
+      - value: rental_property_expenses
+        label:
+          en: I have rental income with deductible expenses
+          de: Ich habe Mieteinnahmen mit abzugsfähigen Kosten
+          fr: J'ai des revenus locatifs avec des dépenses déductibles
+      - value: capital_gains_professional
+        label:
+          en: Professional securities trading / capital gains
+          de: Professioneller Wertschriftenhandel / Kapitalgewinne
+          fr: Négoce professionnel de titres / gains en capital
+      - value: energy_renovation
+        label:
+          en: Energy-saving home renovations in 2024
+          de: Energiesparende Renovierungen in 2024
+          fr: Rénovations éconergétiques en 2024
+      - value: pillar_2_buyback
+        label:
+          en: Pension fund buyback (Einkauf 2. Säule)
+          de: Pensionskassen-Einkauf (2. Säule)
+          fr: Rachat caisse de pension (2e pilier)
+      - value: trust_foundation_income
+        label:
+          en: Income from trust or foundation
+          de: Einkommen aus Trust oder Stiftung
+          fr: Revenus de trust ou fondation
+      - value: inheritance_2024
+        label:
+          en: Received inheritance or gift in 2024
+          de: Erbschaft oder Schenkung in 2024 erhalten
+          fr: Héritage ou donation reçu(e) en 2024
+      - value: military_civil_service
+        label:
+          en: Military or civil service pay in 2024
+          de: Militär- oder Zivildienstsold in 2024
+          fr: Solde militaire ou service civil en 2024
+      - value: foreign_tax_credit
+        label:
+          en: Need to claim foreign tax credits
+          de: Muss ausländische Steuergutschriften geltend machen
+          fr: Besoin de réclamer des crédits d'impôt étrangers
+      - value: none_of_above
+        label:
+          en: None of the above applies to me
+          de: Nichts davon trifft auf mich zu
+          fr: Aucune de ces situations ne s'applique
     branching:
       none_of_above: complete
       detailed_securities: Q10b
@@ -1612,7 +1580,6 @@ questions:
       en: These additional sections help ensure 100% accuracy for complex tax situations. Skip if not applicable.
       de: Diese zusätzlichen Abschnitte helfen, 100% Genauigkeit für komplexe Steuersituationen zu gewährleisten.
       fr: Ces sections supplémentaires garantissent une précision de 100% pour les situations fiscales complexes.
-    category: special_situations
   Q10b:
     id: Q10b
     text:
@@ -1622,10 +1589,10 @@ questions:
     type: document_upload
     document_type: broker_statement_detailed
     accepted_formats:
-    - pdf
-    - jpg
-    - jpeg
-    - png
+      - pdf
+      - jpg
+      - jpeg
+      - png
     max_size_mb: 15
     bring_later: true
     explanation:
@@ -1639,7 +1606,6 @@ questions:
     next: complete
     required: true
     parent: Q_complexity_screen
-    category: property_assets
   Q10_bank_accounts:
     id: Q10_bank_accounts
     text:
@@ -1649,10 +1615,10 @@ questions:
     type: document_upload
     document_type: bank_statement_yearend
     accepted_formats:
-    - pdf
-    - jpg
-    - jpeg
-    - png
+      - pdf
+      - jpg
+      - jpeg
+      - png
     max_size_mb: 15
     bring_later: true
     allow_multiple: true
@@ -1667,7 +1633,6 @@ questions:
     next: complete
     required: true
     parent: Q_complexity_screen
-    category: property_assets
   Q09c_expenses:
     id: Q09c_expenses
     text:
@@ -1677,10 +1642,10 @@ questions:
     type: document_upload
     document_type: rental_expense_documents
     accepted_formats:
-    - pdf
-    - jpg
-    - jpeg
-    - png
+      - pdf
+      - jpg
+      - jpeg
+      - png
     max_size_mb: 20
     bring_later: true
     allow_multiple: true
@@ -1695,7 +1660,6 @@ questions:
     next: complete
     required: true
     parent: Q_complexity_screen
-    category: property_assets
   Q_capital_gains:
     id: Q_capital_gains
     text:
@@ -1708,53 +1672,53 @@ questions:
       de: Füllen Sie diesen Abschnitt nur aus, wenn Sie als gewerbsmässiger Wertschriftenhändler eingestuft sind. Laden Sie Handelsauszüge hoch.
       fr: Ne complétez cette section que si vous êtes classé comme trader professionnel. Téléchargez les relevés de transactions.
     fields:
-    - id: is_professional_trader
-      text:
-        en: Are you officially classified as professional trader?
-        de: Sind Sie offiziell als gewerbsmässiger Händler eingestuft?
-        fr: Êtes-vous officiellement classé comme trader professionnel?
-      type: yes_no
-      required: true
-    - id: capital_gains_2024
-      text:
-        en: Total capital gains in 2024 (CHF)
-        de: Gesamte Kapitalgewinne in 2024 (CHF)
-        fr: Total des gains en capital en 2024 (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: capital_losses_2024
-      text:
-        en: Total capital losses in 2024 (CHF)
-        de: Gesamte Kapitalverluste in 2024 (CHF)
-        fr: Total des pertes en capital en 2024 (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: loss_carryforward
-      text:
-        en: Loss carryforward from previous years (CHF)
-        de: Verlustvortrag aus Vorjahren (CHF)
-        fr: Report de pertes des années précédentes (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: false
-      help_text:
-        en: Losses from 2017-2023 can be carried forward for up to 7 years
-        de: Verluste aus 2017-2023 können bis zu 7 Jahre vorgetragen werden
-        fr: Les pertes de 2017-2023 peuvent être reportées jusqu'à 7 ans
+      - id: is_professional_trader
+        text:
+          en: Are you officially classified as professional trader?
+          de: Sind Sie offiziell als gewerbsmässiger Händler eingestuft?
+          fr: Êtes-vous officiellement classé comme trader professionnel?
+        type: yes_no
+        required: true
+      - id: capital_gains_2024
+        text:
+          en: Total capital gains in 2024 (CHF)
+          de: Gesamte Kapitalgewinne in 2024 (CHF)
+          fr: Total des gains en capital en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: capital_losses_2024
+        text:
+          en: Total capital losses in 2024 (CHF)
+          de: Gesamte Kapitalverluste in 2024 (CHF)
+          fr: Total des pertes en capital en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: loss_carryforward
+        text:
+          en: Loss carryforward from previous years (CHF)
+          de: Verlustvortrag aus Vorjahren (CHF)
+          fr: Report de pertes des années précédentes (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: false
+        help_text:
+          en: Losses from 2017-2023 can be carried forward for up to 7 years
+          de: Verluste aus 2017-2023 können bis zu 7 Jahre vorgetragen werden
+          fr: Les pertes de 2017-2023 peuvent être reportées jusqu'à 7 ans
     next: complete
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: trading_statements
       accepted_formats:
-      - pdf
-      - csv
-      - xlsx
+        - pdf
+        - csv
+        - xlsx
       max_size_mb: 20
       bring_later: true
       upload_text:
@@ -1765,7 +1729,6 @@ questions:
         en: Upload annual trading summaries showing all buy/sell transactions and realized gains/losses
         de: Laden Sie jährliche Handelszusammenfassungen mit allen Kauf-/Verkaufstransaktionen und realisierten Gewinnen/Verlusten hoch
         fr: Téléchargez les résumés annuels de transactions montrant tous les achats/ventes et gains/pertes réalisés
-    category: property_assets
   Q_energy_renovation:
     id: Q_energy_renovation
     text:
@@ -1778,66 +1741,66 @@ questions:
       de: Energiesparende Renovierungen können je nach Kanton zu 100-120% abzugsfähig sein. Laden Sie Rechnungen für KI-Extraktion hoch.
       fr: Les rénovations éconergétiques peuvent être déductibles à 100-120% du coût selon le canton. Téléchargez les factures.
     fields:
-    - id: renovation_type
-      text:
-        en: Type of energy renovation
-        de: Art der Energierenovierung
-        fr: Type de rénovation énergétique
-      type: multi_select
-      options:
-      - value: solar_panels
-        label:
-          en: Solar panels / photovoltaic
-          de: Solarpanels / Photovoltaik
-          fr: Panneaux solaires / photovoltaïque
-      - value: heat_pump
-        label:
-          en: Heat pump installation
-          de: Wärmepumpeninstallation
-          fr: Installation pompe à chaleur
-      - value: insulation
-        label:
-          en: Thermal insulation
-          de: Wärmedämmung
-          fr: Isolation thermique
-      - value: windows
-        label:
-          en: Energy-efficient windows/doors
-          de: Energieeffiziente Fenster/Türen
-          fr: Fenêtres/portes éconergétiques
-      - value: heating_system
-        label:
-          en: Efficient heating system
-          de: Effizientes Heizsystem
-          fr: Système de chauffage efficace
-      required: true
-    - id: renovation_total_cost
-      text:
-        en: Total renovation costs (CHF)
-        de: Gesamte Renovierungskosten (CHF)
-        fr: Coûts totaux de rénovation (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: renovation_completion_date
-      text:
-        en: Completion date
-        de: Fertigstellungsdatum
-        fr: Date d'achèvement
-      type: date
-      widget: calendar
-      required: true
+      - id: renovation_type
+        text:
+          en: Type of energy renovation
+          de: Art der Energierenovierung
+          fr: Type de rénovation énergétique
+        type: multi_select
+        options:
+          - value: solar_panels
+            label:
+              en: Solar panels / photovoltaic
+              de: Solarpanels / Photovoltaik
+              fr: Panneaux solaires / photovoltaïque
+          - value: heat_pump
+            label:
+              en: Heat pump installation
+              de: Wärmepumpeninstallation
+              fr: Installation pompe à chaleur
+          - value: insulation
+            label:
+              en: Thermal insulation
+              de: Wärmedämmung
+              fr: Isolation thermique
+          - value: windows
+            label:
+              en: Energy-efficient windows/doors
+              de: Energieeffiziente Fenster/Türen
+              fr: Fenêtres/portes éconergétiques
+          - value: heating_system
+            label:
+              en: Efficient heating system
+              de: Effizientes Heizsystem
+              fr: Système de chauffage efficace
+        required: true
+      - id: renovation_total_cost
+        text:
+          en: Total renovation costs (CHF)
+          de: Gesamte Renovierungskosten (CHF)
+          fr: Coûts totaux de rénovation (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: renovation_completion_date
+        text:
+          en: Completion date
+          de: Fertigstellungsdatum
+          fr: Date d'achèvement
+        type: date
+        widget: calendar
+        required: true
     next: complete
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: renovation_invoices
       accepted_formats:
-      - pdf
-      - jpg
-      - jpeg
-      - png
+        - pdf
+        - jpg
+        - jpeg
+        - png
       max_size_mb: 20
       bring_later: true
       allow_multiple: true
@@ -1849,7 +1812,6 @@ questions:
         en: Upload all invoices from contractors, suppliers, and energy certificates (GEAK if available)
         de: Laden Sie alle Rechnungen von Handwerkern, Lieferanten und Energiezertifikate (GEAK falls vorhanden) hoch
         fr: Téléchargez toutes les factures des entrepreneurs, fournisseurs et certificats énergétiques (CECB si disponible)
-    category: deductions
   Q_pension_buyback:
     id: Q_pension_buyback
     text:
@@ -1862,45 +1824,45 @@ questions:
       de: Freiwillige Beiträge zum Schliessen von Vorsorgelücken (Einkauf) sind vollständig steuerabzugsfähig. Laden Sie Bestätigung Ihrer Pensionskasse hoch.
       fr: Les cotisations volontaires pour combler les lacunes de prévoyance sont entièrement déductibles. Téléchargez la confirmation de votre caisse.
     fields:
-    - id: buyback_amount_2024
-      text:
-        en: Buyback amount in 2024 (CHF)
-        de: Einkaufsbetrag in 2024 (CHF)
-        fr: Montant du rachat en 2024 (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: buyback_before_retirement
-      text:
-        en: Will you retire within 3 years?
-        de: Werden Sie innerhalb von 3 Jahren in Rente gehen?
-        fr: Prendrez-vous votre retraite dans les 3 ans?
-      type: yes_no
-      required: true
-      help_text:
-        en: Buybacks within 3 years of retirement may have tax limitations
-        de: Einkäufe innerhalb von 3 Jahren vor der Pensionierung können steuerliche Einschränkungen haben
-        fr: Les rachats dans les 3 ans précédant la retraite peuvent avoir des limitations fiscales
-    - id: voluntary_ahv
-      text:
-        en: Voluntary AHV/IV contributions for coverage gaps (CHF)
-        de: Freiwillige AHV/IV-Beiträge für Beitragslücken (CHF)
-        fr: Cotisations AVS/AI volontaires pour lacunes (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: false
+      - id: buyback_amount_2024
+        text:
+          en: Buyback amount in 2024 (CHF)
+          de: Einkaufsbetrag in 2024 (CHF)
+          fr: Montant du rachat en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: buyback_before_retirement
+        text:
+          en: Will you retire within 3 years?
+          de: Werden Sie innerhalb von 3 Jahren in Rente gehen?
+          fr: Prendrez-vous votre retraite dans les 3 ans?
+        type: yes_no
+        required: true
+        help_text:
+          en: Buybacks within 3 years of retirement may have tax limitations
+          de: Einkäufe innerhalb von 3 Jahren vor der Pensionierung können steuerliche Einschränkungen haben
+          fr: Les rachats dans les 3 ans précédant la retraite peuvent avoir des limitations fiscales
+      - id: voluntary_ahv
+        text:
+          en: Voluntary AHV/IV contributions for coverage gaps (CHF)
+          de: Freiwillige AHV/IV-Beiträge für Beitragslücken (CHF)
+          fr: Cotisations AVS/AI volontaires pour lacunes (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: false
     next: complete
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: pension_buyback_confirmation
       accepted_formats:
-      - pdf
-      - jpg
-      - jpeg
-      - png
+        - pdf
+        - jpg
+        - jpeg
+        - png
       max_size_mb: 10
       bring_later: true
       upload_text:
@@ -1911,7 +1873,6 @@ questions:
         en: Upload confirmation letter from your pension fund showing the buyback amount and date
         de: Laden Sie Bestätigungsschreiben Ihrer Pensionskasse mit Einkaufsbetrag und Datum hoch
         fr: Téléchargez la lettre de confirmation de votre caisse montrant le montant et la date du rachat
-    category: deductions
   Q_trust_foundation:
     id: Q_trust_foundation
     text:
@@ -1924,63 +1885,63 @@ questions:
       de: Einkommen aus Trusts, Stiftungen oder Nutzniessungsrechten muss deklariert werden. Dies sind komplexe Strukturen - laden Sie alle relevanten Dokumente hoch.
       fr: Les revenus de trusts, fondations ou droits d'usufruit doivent être déclarés. Ce sont des structures complexes - téléchargez tous les documents pertinents.
     fields:
-    - id: structure_type
-      text:
-        en: Type of structure
-        de: Art der Struktur
-        fr: Type de structure
-      type: single_choice
-      options:
-      - value: trust
-        label:
-          en: Trust
-          de: Trust
-          fr: Trust
-      - value: foundation
-        label:
-          en: Foundation (Stiftung)
-          de: Stiftung
-          fr: Fondation
-      - value: usufruct_property
-        label:
-          en: Usufruct on property
-          de: Nutzniessung an Immobilie
-          fr: Usufruit sur propriété
-      - value: usufruct_assets
-        label:
-          en: Usufruct on financial assets
-          de: Nutzniessung an Finanzvermögen
-          fr: Usufruit sur actifs financiers
-      required: true
-    - id: income_received_2024
-      text:
-        en: Income/distributions received in 2024 (CHF)
-        de: Erhaltene Einkommen/Ausschüttungen in 2024 (CHF)
-        fr: Revenus/distributions reçus en 2024 (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: asset_value_dec_31
-      text:
-        en: Total asset value on December 31 (CHF)
-        de: Gesamtvermögenswert am 31. Dezember (CHF)
-        fr: Valeur totale des actifs au 31 décembre (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-      help_text:
-        en: For wealth tax purposes
-        de: Für Vermögenssteuerzwecke
-        fr: Aux fins de l'impôt sur la fortune
+      - id: structure_type
+        text:
+          en: Type of structure
+          de: Art der Struktur
+          fr: Type de structure
+        type: single_choice
+        options:
+          - value: trust
+            label:
+              en: Trust
+              de: Trust
+              fr: Trust
+          - value: foundation
+            label:
+              en: Foundation (Stiftung)
+              de: Stiftung
+              fr: Fondation
+          - value: usufruct_property
+            label:
+              en: Usufruct on property
+              de: Nutzniessung an Immobilie
+              fr: Usufruit sur propriété
+          - value: usufruct_assets
+            label:
+              en: Usufruct on financial assets
+              de: Nutzniessung an Finanzvermögen
+              fr: Usufruit sur actifs financiers
+        required: true
+      - id: income_received_2024
+        text:
+          en: Income/distributions received in 2024 (CHF)
+          de: Erhaltene Einkommen/Ausschüttungen in 2024 (CHF)
+          fr: Revenus/distributions reçus en 2024 (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: asset_value_dec_31
+        text:
+          en: Total asset value on December 31 (CHF)
+          de: Gesamtvermögenswert am 31. Dezember (CHF)
+          fr: Valeur totale des actifs au 31 décembre (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+        help_text:
+          en: For wealth tax purposes
+          de: Für Vermögenssteuerzwecke
+          fr: Aux fins de l'impôt sur la fortune
     next: complete
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: trust_foundation_documents
       accepted_formats:
-      - pdf
+        - pdf
       max_size_mb: 15
       bring_later: true
       allow_multiple: true
@@ -1992,7 +1953,6 @@ questions:
         en: Upload trust deeds, foundation statutes, distribution statements, and valuation reports
         de: Laden Sie Trusturkunden, Stiftungsstatuten, Ausschüttungsnachweise und Bewertungsberichte hoch
         fr: Téléchargez actes de trust, statuts de fondation, relevés de distribution et rapports d'évaluation
-    category: special_situations
   Q_inheritance:
     id: Q_inheritance
     text:
@@ -2005,86 +1965,86 @@ questions:
       de: Erbschaften und Schenkungen beeinflussen Ihre Vermögenssteuer, auch wenn keine Einkommenssteuer anfällt. Deklarieren Sie alle 2024 erhaltenen Erbschaften und Schenkungen.
       fr: Les héritages et donations affectent votre impôt sur la fortune même si l'impôt sur le revenu ne s'applique pas. Déclarez tous les héritages et donations reçus en 2024.
     fields:
-    - id: inheritance_type
-      text:
-        en: Type
-        de: Art
-        fr: Type
-      type: single_choice
-      options:
-      - value: inheritance
-        label:
-          en: Inheritance (Erbschaft)
-          de: Erbschaft
-          fr: Héritage
-      - value: gift
-        label:
-          en: Gift (Schenkung)
-          de: Schenkung
-          fr: Donation
-      - value: advance_inheritance
-        label:
-          en: Advance on inheritance (Erbvorbezug)
-          de: Erbvorbezug
-          fr: Avance sur héritage
-      required: true
-    - id: inheritance_date
-      text:
-        en: Date received
-        de: Erhaltungsdatum
-        fr: Date de réception
-      type: date
-      widget: calendar
-      required: true
-    - id: relationship
-      text:
-        en: Relationship to deceased/donor
-        de: Verwandtschaft zum Verstorbenen/Schenker
-        fr: Relation avec le défunt/donateur
-      type: single_choice
-      options:
-      - value: spouse
-        label:
-          en: Spouse
-          de: Ehepartner
-          fr: Conjoint
-      - value: parent
-        label:
-          en: Parent
-          de: Elternteil
-          fr: Parent
-      - value: child
-        label:
-          en: Child
-          de: Kind
-          fr: Enfant
-      - value: sibling
-        label:
-          en: Sibling
-          de: Geschwister
-          fr: Frère/Sœur
-      - value: other
-        label:
-          en: Other
-          de: Andere
-          fr: Autre
-      required: true
-    - id: total_value
-      text:
-        en: Total value received (CHF)
-        de: Gesamtwert erhalten (CHF)
-        fr: Valeur totale reçue (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
+      - id: inheritance_type
+        text:
+          en: Type
+          de: Art
+          fr: Type
+        type: single_choice
+        options:
+          - value: inheritance
+            label:
+              en: Inheritance (Erbschaft)
+              de: Erbschaft
+              fr: Héritage
+          - value: gift
+            label:
+              en: Gift (Schenkung)
+              de: Schenkung
+              fr: Donation
+          - value: advance_inheritance
+            label:
+              en: Advance on inheritance (Erbvorbezug)
+              de: Erbvorbezug
+              fr: Avance sur héritage
+        required: true
+      - id: inheritance_date
+        text:
+          en: Date received
+          de: Erhaltungsdatum
+          fr: Date de réception
+        type: date
+        widget: calendar
+        required: true
+      - id: relationship
+        text:
+          en: Relationship to deceased/donor
+          de: Verwandtschaft zum Verstorbenen/Schenker
+          fr: Relation avec le défunt/donateur
+        type: single_choice
+        options:
+          - value: spouse
+            label:
+              en: Spouse
+              de: Ehepartner
+              fr: Conjoint
+          - value: parent
+            label:
+              en: Parent
+              de: Elternteil
+              fr: Parent
+          - value: child
+            label:
+              en: Child
+              de: Kind
+              fr: Enfant
+          - value: sibling
+            label:
+              en: Sibling
+              de: Geschwister
+              fr: Frère/Sœur
+          - value: other
+            label:
+              en: Other
+              de: Andere
+              fr: Autre
+        required: true
+      - id: total_value
+        text:
+          en: Total value received (CHF)
+          de: Gesamtwert erhalten (CHF)
+          fr: Valeur totale reçue (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
     next: complete
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: inheritance_documents
       accepted_formats:
-      - pdf
+        - pdf
       max_size_mb: 15
       bring_later: true
       allow_multiple: true
@@ -2096,7 +2056,6 @@ questions:
         en: Upload estate inventory, gift deed, valuation reports, and inheritance certificates
         de: Laden Sie Nachlassinventar, Schenkungsurkunde, Bewertungsberichte und Erbscheine hoch
         fr: Téléchargez inventaire successoral, acte de donation, rapports d'évaluation et certificats d'héritage
-    category: special_situations
   Q_military_service:
     id: Q_military_service
     text:
@@ -2109,71 +2068,71 @@ questions:
       de: Militär- und Zivildienstsold ist steuerpflichtiges Einkommen. Sie können auch bezahlte Wehrpflichtersatzsteuer abziehen oder geltend machen.
       fr: La solde militaire et du service civil est un revenu imposable. Vous pouvez également déduire ou réclamer la taxe d'exemption payée.
     fields:
-    - id: service_type
-      text:
-        en: Type of service
-        de: Art des Dienstes
-        fr: Type de service
-      type: single_choice
-      options:
-      - value: military
-        label:
-          en: Military service
-          de: Militärdienst
-          fr: Service militaire
-      - value: civil_service
-        label:
-          en: Civil service
-          de: Zivildienst
-          fr: Service civil
-      - value: civil_protection
-        label:
-          en: Civil protection
-          de: Zivilschutz
-          fr: Protection civile
-      required: true
-    - id: days_served
-      text:
-        en: Number of days served in 2024
-        de: Anzahl geleistete Tage in 2024
-        fr: Nombre de jours servis en 2024
-      type: number
-      validation:
-        min: 1
-        max: 365
-      required: true
-    - id: pay_received
-      text:
-        en: Total pay received (CHF)
-        de: Erhaltener Sold (CHF)
-        fr: Solde total reçue (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: exemption_tax_paid
-      text:
-        en: Military exemption tax paid (Wehrpflichtersatz) - if applicable
-        de: Bezahlte Wehrpflichtersatzsteuer - falls zutreffend
-        fr: Taxe d'exemption militaire payée - le cas échéant
-      type: currency
-      validation:
-        min: 0
-      required: false
-      help_text:
-        en: Swiss males who don't serve pay annual exemption tax - this can be deducted
-        de: Schweizer Männer, die nicht dienen, zahlen jährliche Ersatzsteuer - diese ist abzugsfähig
-        fr: Les hommes suisses qui ne servent pas paient une taxe d'exemption annuelle - elle est déductible
+      - id: service_type
+        text:
+          en: Type of service
+          de: Art des Dienstes
+          fr: Type de service
+        type: single_choice
+        options:
+          - value: military
+            label:
+              en: Military service
+              de: Militärdienst
+              fr: Service militaire
+          - value: civil_service
+            label:
+              en: Civil service
+              de: Zivildienst
+              fr: Service civil
+          - value: civil_protection
+            label:
+              en: Civil protection
+              de: Zivilschutz
+              fr: Protection civile
+        required: true
+      - id: days_served
+        text:
+          en: Number of days served in 2024
+          de: Anzahl geleistete Tage in 2024
+          fr: Nombre de jours servis en 2024
+        type: number
+        validation:
+          min: 1
+          max: 365
+        required: true
+      - id: pay_received
+        text:
+          en: Total pay received (CHF)
+          de: Erhaltener Sold (CHF)
+          fr: Solde total reçue (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: exemption_tax_paid
+        text:
+          en: Military exemption tax paid (Wehrpflichtersatz) - if applicable
+          de: Bezahlte Wehrpflichtersatzsteuer - falls zutreffend
+          fr: Taxe d'exemption militaire payée - le cas échéant
+        type: currency
+        validation:
+          min: 0
+        required: false
+        help_text:
+          en: Swiss males who don't serve pay annual exemption tax - this can be deducted
+          de: Schweizer Männer, die nicht dienen, zahlen jährliche Ersatzsteuer - diese ist abzugsfähig
+          fr: Les hommes suisses qui ne servent pas paient une taxe d'exemption annuelle - elle est déductible
     next: complete
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: military_service_documents
       accepted_formats:
-      - pdf
-      - jpg
-      - jpeg
-      - png
+        - pdf
+        - jpg
+        - jpeg
+        - png
       max_size_mb: 10
       bring_later: true
       upload_text:
@@ -2184,7 +2143,6 @@ questions:
         en: Upload pay statement (Soldabrechnung) or exemption tax bill
         de: Laden Sie Soldabrechnung oder Wehrpflichtersatzrechnung hoch
         fr: Téléchargez relevé de solde ou facture de taxe d'exemption
-    category: special_situations
   Q15_tax_credits:
     id: Q15_tax_credits
     text:
@@ -2198,83 +2156,83 @@ questions:
       de: Wenn Sie im Ausland Steuern bezahlt haben, können Sie ausländische Steuergutschriften geltend machen, um Doppelbesteuerung zu vermeiden. Laden Sie ausländische Steuerbescheinigungen für jedes Land hoch.
       fr: Si vous avez payé des impôts à l'étranger, vous pouvez réclamer des crédits d'impôt pour éviter la double imposition. Téléchargez les certificats fiscaux étrangers pour chaque pays.
     fields:
-    - id: foreign_country
-      text:
-        en: Country where tax was paid
-        de: Land, in dem Steuer bezahlt wurde
-        fr: Pays où l'impôt a été payé
-      type: text
-      required: true
-    - id: foreign_income_type
-      text:
-        en: Type of foreign income
-        de: Art des ausländischen Einkommens
-        fr: Type de revenu étranger
-      type: single_choice
-      options:
-      - value: employment
-        label:
-          en: Employment income
-          de: Erwerbseinkommen
-          fr: Revenus d'emploi
-      - value: pension
-        label:
-          en: Pension
-          de: Rente
-          fr: Pension
-      - value: rental
-        label:
-          en: Rental income
-          de: Mieteinnahmen
-          fr: Revenus locatifs
-      - value: dividends
-        label:
-          en: Dividends/Interest
-          de: Dividenden/Zinsen
-          fr: Dividendes/Intérêts
-      required: true
-    - id: gross_income_foreign
-      text:
-        en: Gross income in foreign currency
-        de: Bruttoeinkommen in Fremdwährung
-        fr: Revenu brut en devise étrangère
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: foreign_currency
-      text:
-        en: Currency
-        de: Währung
-        fr: Devise
-      type: text
-      placeholder: EUR, USD, GBP
-      required: true
-    - id: gross_income_chf
-      text:
-        en: Gross income converted to CHF
-        de: Bruttoeinkommen in CHF umgerechnet
-        fr: Revenu brut converti en CHF
-      type: currency
-      validation:
-        min: 0
-      required: true
-    - id: foreign_tax_paid
-      text:
-        en: Tax paid in foreign country (CHF)
-        de: Im Ausland bezahlte Steuer (CHF)
-        fr: Impôt payé à l'étranger (CHF)
-      type: currency
-      validation:
-        min: 0
-      required: true
+      - id: foreign_country
+        text:
+          en: Country where tax was paid
+          de: Land, in dem Steuer bezahlt wurde
+          fr: Pays où l'impôt a été payé
+        type: text
+        required: true
+      - id: foreign_income_type
+        text:
+          en: Type of foreign income
+          de: Art des ausländischen Einkommens
+          fr: Type de revenu étranger
+        type: single_choice
+        options:
+          - value: employment
+            label:
+              en: Employment income
+              de: Erwerbseinkommen
+              fr: Revenus d'emploi
+          - value: pension
+            label:
+              en: Pension
+              de: Rente
+              fr: Pension
+          - value: rental
+            label:
+              en: Rental income
+              de: Mieteinnahmen
+              fr: Revenus locatifs
+          - value: dividends
+            label:
+              en: Dividends/Interest
+              de: Dividenden/Zinsen
+              fr: Dividendes/Intérêts
+        required: true
+      - id: gross_income_foreign
+        text:
+          en: Gross income in foreign currency
+          de: Bruttoeinkommen in Fremdwährung
+          fr: Revenu brut en devise étrangère
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: foreign_currency
+        text:
+          en: Currency
+          de: Währung
+          fr: Devise
+        type: text
+        placeholder: EUR, USD, GBP
+        required: true
+      - id: gross_income_chf
+        text:
+          en: Gross income converted to CHF
+          de: Bruttoeinkommen in CHF umgerechnet
+          fr: Revenu brut converti en CHF
+        type: currency
+        validation:
+          min: 0
+        required: true
+      - id: foreign_tax_paid
+        text:
+          en: Tax paid in foreign country (CHF)
+          de: Im Ausland bezahlte Steuer (CHF)
+          fr: Impôt payé à l'étranger (CHF)
+        type: currency
+        validation:
+          min: 0
+        required: true
     next: Q15_tax_credits_another
     required: false
     parent: Q_complexity_screen
     inline_document_upload:
       document_type: foreign_tax_certificates
       accepted_formats:
-      - pdf
+        - pdf
       max_size_mb: 10
       bring_later: true
       allow_multiple: true
@@ -2286,7 +2244,6 @@ questions:
         en: Upload official tax certificate from the foreign country showing income and taxes paid
         de: Laden Sie offizielle Steuerbescheinigung aus dem Ausland mit Einkommen und bezahlten Steuern hoch
         fr: Téléchargez le certificat fiscal officiel du pays étranger montrant les revenus et impôts payés
-    category: special_situations
   Q15_tax_credits_another:
     id: Q15_tax_credits_another
     text:
@@ -2299,12 +2256,6 @@ questions:
       false: complete
     required: true
     parent: Q15_tax_credits
-    category: special_situations
-    explanation:
-      en: Multiple tax credits can be claimed if you qualify for different programs. Each credit requires separate documentation and has specific eligibility criteria.
-      de: Mehrere Steuergutschriften können geltend gemacht werden, wenn Sie sich für verschiedene Programme qualifizieren. Jede Gutschrift erfordert separate Dokumentation und hat spezifische Zulassungskriterien.
-      fr: Plusieurs crédits d'impôt peuvent être réclamés si vous êtes admissible à différents programmes. Chaque crédit nécessite une documentation séparée et a des critères d'admissibilité spécifiques.
-      it: Più crediti fiscali possono essere richiesti se si qualifica per diversi programmi. Ogni credito richiede documentazione separata e ha criteri di ammissibilità specifici.
 document_rules:
   R1:
     description: Lohnausweis for each employer

@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Card, CardContent, Typography, Divider, Chip, CircularProgress, Alert } from '@mui/material';
+import { Box, Card, CardContent, Typography, Divider, Chip, CircularProgress, Alert, Button } from '@mui/material';
 import {
   TrendingDown as TrendingDownIcon,
   TrendingUp as TrendingUpIcon,
   Calculate as CalculateIcon,
-  UploadFile as UploadFileIcon
+  UploadFile as UploadFileIcon,
+  Refresh as RefreshIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
-const TaxEstimateSidebar = ({ calculation, loading = false, pendingDocumentsError = null }) => {
+const TaxEstimateSidebar = ({ calculation, loading = false, pendingDocumentsError = null, onCalculate }) => {
   const { t } = useTranslation();
+  const [calculating, setCalculating] = useState(false);
+
+  const handleCalculate = async () => {
+    if (onCalculate && !calculating) {
+      setCalculating(true);
+      try {
+        await onCalculate();
+      } finally {
+        setCalculating(false);
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -69,9 +82,21 @@ const TaxEstimateSidebar = ({ calculation, loading = false, pendingDocumentsErro
               {t('Tax Estimate')}
             </Typography>
           </Box>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" mb={2}>
             {t('Answer questions to see your estimate')}
           </Typography>
+          {onCalculate && (
+            <Button
+              variant="contained"
+              startIcon={calculating ? <CircularProgress size={16} /> : <CalculateIcon />}
+              onClick={handleCalculate}
+              disabled={calculating}
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              {calculating ? t('Calculating...') : t('Calculate Estimate')}
+            </Button>
+          )}
         </CardContent>
       </Card>
     );
@@ -216,6 +241,19 @@ const TaxEstimateSidebar = ({ calculation, loading = false, pendingDocumentsErro
           color="warning"
           variant="outlined"
         />
+
+        {onCalculate && (
+          <Button
+            variant="outlined"
+            startIcon={calculating ? <CircularProgress size={16} /> : <RefreshIcon />}
+            onClick={handleCalculate}
+            disabled={calculating}
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            {calculating ? t('Updating...') : t('Update Estimate')}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
@@ -247,7 +285,8 @@ TaxEstimateSidebar.propTypes = {
     message: PropTypes.string,
     pendingCount: PropTypes.number,
     pendingDocuments: PropTypes.array
-  })
+  }),
+  onCalculate: PropTypes.func
 };
 
 export default TaxEstimateSidebar;

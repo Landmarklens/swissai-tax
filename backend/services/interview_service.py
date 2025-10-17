@@ -34,11 +34,20 @@ class InterviewService:
         from models.interview_session import InterviewSession
         from models.tax_filing_session import TaxFilingSession
 
-        # Check if session already exists for this user + year
-        existing_session = self.db.query(InterviewSession).filter(
-            InterviewSession.user_id == user_id,
-            InterviewSession.tax_year == tax_year
-        ).first()
+        # Check if session already exists for this user + year + filing
+        # NOTE: Each filing should have its own interview session
+        if filing_id:
+            existing_session = self.db.query(InterviewSession).filter(
+                InterviewSession.user_id == user_id,
+                InterviewSession.tax_year == tax_year,
+                InterviewSession.filing_id == filing_id
+            ).first()
+        else:
+            # No filing_id provided - check for any session for this user + year
+            existing_session = self.db.query(InterviewSession).filter(
+                InterviewSession.user_id == user_id,
+                InterviewSession.tax_year == tax_year
+            ).first()
 
         if existing_session:
             # If session is completed, reset it to allow restarting the interview
@@ -68,10 +77,16 @@ class InterviewService:
                 session_id = str(existing_session.id)
                 logger.info(f"Reset completed. Returning session {session_id} with first question")
 
+                # Calculate total questions for reset session
+                session_dict = existing_session.to_dict()
+                total_questions = self._calculate_total_questions(session_dict)
+
                 return {
                     'session_id': session_id,
                     'current_question': self._format_question(first_question, language),
-                    'progress': 0
+                    'progress': 0,
+                    'total_questions': total_questions,
+                    'completed_questions': 0
                 }
 
             # Validate that the filing_id referenced by this session still exists
@@ -100,10 +115,17 @@ class InterviewService:
                     else:
                         current_question = self.question_loader.get_first_question()
 
+                    # Calculate total questions for existing session
+                    session_dict = existing_session.to_dict()
+                    total_questions = self._calculate_total_questions(session_dict)
+                    completed = len(session_dict.get('completed_questions', []))
+
                     return {
                         'session_id': session_id,
                         'current_question': self._format_question(current_question, language),
-                        'progress': existing_session.progress or 0
+                        'progress': existing_session.progress or 0,
+                        'total_questions': total_questions,
+                        'completed_questions': completed
                     }
             else:
                 # Session has no filing_id (shouldn't happen, but handle gracefully)
@@ -140,10 +162,16 @@ class InterviewService:
         session_id = str(db_session.id)
         logger.info(f"Created interview session {session_id} for user {user_id}")
 
+        # Calculate total questions for new session
+        session_dict = db_session.to_dict()
+        total_questions = self._calculate_total_questions(session_dict)
+
         return {
             'session_id': session_id,
             'current_question': self._format_question(first_question, language),
-            'progress': 0
+            'progress': 0,
+            'total_questions': total_questions,
+            'completed_questions': 0
         }
 
     def submit_answer(self, session_id: str, question_id: str, answer: Any) -> Dict[str, Any]:
@@ -437,13 +465,8 @@ class InterviewService:
 
         session['current_question_id'] = next_question_id
 
-        # Calculate progress
-        total_questions = 14  # Base questions
-        if session['answers'].get('Q01') == 'married':
-            total_questions += 3  # Add spouse questions (Q01a_name, Q01a, Q01d)
-        if session['answers'].get('Q03') == 'yes':
-            total_questions += 1  # Add children count question
-
+        # Calculate progress using dynamic total questions
+        total_questions = self._calculate_total_questions(session)
         completed = len(session['completed_questions'])
         progress = min(int((completed / max(total_questions, 1)) * 100), 99)
         session['progress'] = progress
@@ -459,6 +482,8 @@ class InterviewService:
         response = {
             'current_question': self._format_question(next_question, session['language']),
             'progress': progress,
+            'total_questions': total_questions,
+            'completed_questions': completed,
             'complete': False
         }
 
@@ -537,7 +562,8 @@ class InterviewService:
             'id': question.id,
             'question_text': question.text.get(language, question.text.get('en')),
             'type': question.type.value,
-            'required': question.required
+            'required': question.required,
+            'category': question.category
         }
 
         # Add options for choice questions
@@ -703,6 +729,100 @@ class InterviewService:
             }
 
         return profile
+
+    def _calculate_total_questions(self, session: Dict[str, Any]) -> int:
+        """
+        Dynamically calculate total number of questions based on answers and pending questions
+
+        This accounts for:
+        - Conditional questions (married → spouse questions)
+        - Looping questions (children, employers, properties)
+        - Branching questions (yes/no that trigger additional questions)
+
+        Args:
+            session: Session dictionary containing answers and pending questions
+
+        Returns:
+            Estimated total number of questions for this interview
+        """
+        answers = session.get('answers', {})
+        completed_questions = session.get('completed_questions', [])
+        pending_questions = session.get('pending_questions', [])
+        session_context = session.get('session_context', {})
+
+        # Start with base questions count (questions that everyone gets)
+        # Q00_name, Q00, Q01, Q02a, Q03, Q04, Q05, Q06, Q07, Q08, Q09, Q10, Q11, Q12, Q13, Q14, Q_complexity_screen
+        total = 17
+
+        logger.info(f"[_calculate_total_questions] Starting calculation. Base total: {total}")
+        logger.info(f"[_calculate_total_questions] Current answers: {list(answers.keys())}")
+        logger.info(f"[_calculate_total_questions] Completed questions: {len(completed_questions)}")
+
+        # Add spouse questions if married
+        if answers.get('Q01') == 'married':
+            total += 3  # Q01a_name, Q01a, Q01d
+            logger.info(f"[_calculate_total_questions] Q01=married: Added 3 spouse questions, new total: {total}")
+
+        # Add children questions if has children
+        if answers.get('Q03') == 'yes' or answers.get('Q03') == True:
+            total += 1  # Q03a (how many children)
+            num_children = session_context.get('num_children', 0)
+            if num_children > 0:
+                total += num_children  # Q03b loops for each child
+
+        # Add secondary location question if has income/assets in other canton
+        if answers.get('Q02a') == 'yes' or answers.get('Q02a') == True:
+            total += 1  # Q02b
+
+        # Add employer questions based on number of employers
+        num_employers = int(answers.get('Q04', 0))
+        if num_employers > 0:
+            # Q04a (employer details) loops for each employer
+            # For each employer: Q04a, Q04a_type, Q04a_self_upload (or Q04a_employer)
+            total += num_employers * 2  # Simplified: ~2 questions per employer
+
+        # Add unemployment benefit details if yes
+        if answers.get('Q05') == 'yes' or answers.get('Q05') == True:
+            total += 1  # Unemployment benefit details
+
+        # Add property questions if owns property
+        if answers.get('Q09') == 'yes' or answers.get('Q09') == True:
+            total += 2  # Q09a, Q09b (property details)
+            # If rental property, add rental income questions
+            if answers.get('Q09a') in ['rental', 'mixed']:
+                total += 2  # Q09c, Q09c_amount
+
+        # Add securities/capital income questions
+        if answers.get('Q10') == 'yes' or answers.get('Q10') == True:
+            total += 1  # Q10a (amount)
+
+        # Add pillar 3a questions if yes
+        if answers.get('Q12') == 'yes' or answers.get('Q12') == True:
+            total += 1  # Pillar 3a details
+
+        # Add medical expenses questions if yes
+        if answers.get('Q13') == 'yes' or answers.get('Q13') == True:
+            total += 2  # Q13b (basic insurance), Q13b_supplementary
+
+        # Add complexity screen questions if they haven't completed yet
+        if 'Q_complexity_screen' not in completed_questions:
+            total += 1  # Q_complexity_screen
+
+            # Add estimated questions based on typical selections
+            # (Capital gains, energy renovation, pension buyback, etc.)
+            # Add conservative estimate of 3-5 extra questions
+            total += 3
+
+        # Add any pending questions not yet accounted for
+        unique_pending = set(pending_questions) - set(completed_questions)
+        if len(unique_pending) > 0:
+            logger.info(f"[_calculate_total_questions] Adding {len(unique_pending)} unique pending questions: {list(unique_pending)}")
+        total += len(unique_pending)
+
+        logger.info(f"[_calculate_total_questions] FINAL total: {total}, completed: {len(completed_questions)}")
+
+        # Ensure minimum progress (avoid division by zero)
+        return max(total, 1)
 
     def _create_pending_document(self, session_id: str, question_id: str, question) -> None:
         """

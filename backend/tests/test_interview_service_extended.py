@@ -54,6 +54,7 @@ class TestInterviewServiceCreate(unittest.TestCase):
         first_question.options = []
         first_question.validation = {}
         first_question.fields = None
+        first_question.category = 'personal'
 
         self.mock_question_loader.get_first_question.return_value = first_question
 
@@ -76,6 +77,19 @@ class TestInterviewServiceCreate(unittest.TestCase):
         mock_db_session.answers = {}
         mock_db_session.completed_questions = []
         mock_db_session.pending_questions = []
+        mock_db_session.to_dict.return_value = {
+            'id': str(mock_db_session.id),
+            'user_id': 'user-123',
+            'tax_year': 2024,
+            'language': 'en',
+            'status': 'in_progress',
+            'current_question_id': 'Q00',
+            'progress': 0,
+            'answers': {},
+            'completed_questions': [],
+            'pending_questions': [],
+            'session_context': {}
+        }
 
         self.mock_db.refresh = MagicMock(side_effect=lambda obj: setattr(obj, 'id', mock_db_session.id))
 
@@ -117,6 +131,7 @@ class TestInterviewServiceCreate(unittest.TestCase):
         first_question.options = []
         first_question.validation = {}
         first_question.fields = None
+        first_question.category = 'personal'
 
         self.mock_question_loader.get_first_question.return_value = first_question
 
@@ -127,16 +142,36 @@ class TestInterviewServiceCreate(unittest.TestCase):
         mock_query.filter.return_value = mock_filter
         self.mock_db.query.return_value = mock_query
 
+        # Helper to create mock session for each language test
+        def create_mock_session(lang):
+            mock_session = Mock(spec=InterviewSession)
+            mock_session.id = uuid4()
+            mock_session.to_dict.return_value = {
+                'id': str(mock_session.id),
+                'user_id': f'user-{lang}',
+                'tax_year': 2024,
+                'language': lang,
+                'status': 'in_progress',
+                'answers': {},
+                'completed_questions': [],
+                'pending_questions': [],
+                'session_context': {}
+            }
+            return mock_session
+
         # Test German
-        result_de = self.service.create_session('user-1', 2024, 'de')
+        with patch('models.interview_session.InterviewSession', return_value=create_mock_session('de')):
+            result_de = self.service.create_session('user-1', 2024, 'de')
         self.assertEqual(result_de['current_question']['question_text'], 'Was ist Ihre AHV-Nummer?')
 
         # Test French
-        result_fr = self.service.create_session('user-2', 2024, 'fr')
+        with patch('models.interview_session.InterviewSession', return_value=create_mock_session('fr')):
+            result_fr = self.service.create_session('user-2', 2024, 'fr')
         self.assertEqual(result_fr['current_question']['question_text'], 'Quel est votre numéro AVS?')
 
         # Test English (default)
-        result_en = self.service.create_session('user-3', 2024, 'en')
+        with patch('models.interview_session.InterviewSession', return_value=create_mock_session('en')):
+            result_en = self.service.create_session('user-3', 2024, 'en')
         self.assertEqual(result_en['current_question']['question_text'], 'What is your AHV number?')
 
     def test_create_session_returns_existing_session(self):
@@ -190,6 +225,22 @@ class TestInterviewServiceCreate(unittest.TestCase):
         current_question.options = []
         current_question.validation = {}
         current_question.fields = None
+        current_question.category = 'personal'
+
+        # Add to_dict method to return proper dictionary
+        mock_existing_session.to_dict.return_value = {
+            'id': str(existing_session_id),
+            'user_id': 'user-123',
+            'tax_year': 2024,
+            'language': 'en',
+            'status': 'in_progress',
+            'current_question_id': 'Q02',
+            'progress': 15,
+            'answers': {'Q00': 'encrypted_ahv', 'Q01': 'single'},
+            'completed_questions': ['Q00', 'Q01'],
+            'pending_questions': [],
+            'session_context': {}
+        }
 
         self.mock_question_loader.get_question.return_value = current_question
 

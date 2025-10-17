@@ -3,16 +3,21 @@ Documents API Router
 Handles tax document upload and processing endpoints
 """
 
+import asyncio
+import json
 import logging
+import os
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from db.session import get_db
 from services.document_service import DocumentService
+from services.ai_document_intelligence_service import AIDocumentIntelligenceService
 from core.security import get_current_user
+from database.connection import execute_query
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +25,150 @@ router = APIRouter()
 
 # Initialize document service
 doc_service = DocumentService()
+
+# Supported file extensions for AI processing
+SUPPORTED_EXTENSIONS = ('.pdf', '.jpg', '.jpeg', '.png', '.webp')
+MAX_PROCESSING_SIZE_MB = 10
+
+
+async def process_document_background(document_id: str, s3_key: str, file_name: str, user_id: str):
+    """
+    Background task to process document with AI Intelligence.
+
+    This runs asynchronously without blocking the HTTP response.
+    """
+    try:
+        # Validate file type
+        if not file_name.lower().endswith(SUPPORTED_EXTENSIONS):
+            logger.warning(f"Skipping auto-processing for unsupported file type: {file_name}")
+            execute_query(
+                "UPDATE swisstax.documents SET ocr_status = 'skipped' WHERE id = %s",
+                (document_id,),
+                fetch=False
+            )
+            return
+
+        # Get AI API key
+        api_key = os.getenv('ANTHROPIC_API_KEY')
+        if not api_key:
+            logger.warning("ANTHROPIC_API_KEY not set, marking document as pending")
+            execute_query(
+                "UPDATE swisstax.documents SET ocr_status = 'pending' WHERE id = %s",
+                (document_id,),
+                fetch=False
+            )
+            return
+
+        # Get S3 configuration
+        from services.document_service import S3_BUCKET, s3_client
+
+        # Update status to processing
+        execute_query(
+            "UPDATE swisstax.documents SET ocr_status = 'processing' WHERE id = %s",
+            (document_id,),
+            fetch=False
+        )
+
+        # Download document from S3 with timeout
+        logger.info(f"Downloading document {document_id} from S3: {s3_key}")
+
+        try:
+            async with asyncio.timeout(10):  # 10 second download timeout
+                loop = asyncio.get_event_loop()
+                s3_response = await loop.run_in_executor(
+                    None,
+                    lambda: s3_client.get_object(Bucket=S3_BUCKET, Key=s3_key)
+                )
+                image_bytes = s3_response['Body'].read()
+        except asyncio.TimeoutError:
+            raise Exception("S3 download timeout after 10 seconds")
+
+        # Check file size
+        file_size_mb = len(image_bytes) / (1024 * 1024)
+        if file_size_mb > MAX_PROCESSING_SIZE_MB:
+            raise Exception(f"File too large for processing: {file_size_mb:.2f}MB (max {MAX_PROCESSING_SIZE_MB}MB)")
+
+        # Handle PDF files - convert first page to image
+        if file_name.lower().endswith('.pdf'):
+            try:
+                import pdf2image
+                import io
+                from PIL import Image
+
+                logger.info(f"Converting PDF to image for document {document_id}")
+                images = pdf2image.convert_from_bytes(image_bytes, first_page=1, last_page=1)
+
+                if not images:
+                    raise Exception("PDF conversion failed - no pages extracted")
+
+                # Convert PIL Image to bytes
+                img_byte_arr = io.BytesIO()
+                images[0].save(img_byte_arr, format='PNG')
+                image_bytes = img_byte_arr.getvalue()
+
+            except ImportError:
+                raise Exception("pdf2image library not installed. Run: pip install pdf2image")
+            except Exception as e:
+                raise Exception(f"PDF conversion failed: {str(e)}")
+
+        # Initialize AI service
+        ai_service = AIDocumentIntelligenceService(
+            ai_provider='anthropic',
+            api_key=api_key
+        )
+
+        # Analyze document with timeout
+        logger.info(f"Starting AI analysis for document {document_id}")
+
+        try:
+            async with asyncio.timeout(30):  # 30 second AI processing timeout
+                loop = asyncio.get_event_loop()
+                analysis_result = await loop.run_in_executor(
+                    None,
+                    lambda: ai_service.analyze_document(
+                        image_bytes=image_bytes,
+                        document_type=None  # Auto-detect
+                    )
+                )
+        except asyncio.TimeoutError:
+            raise Exception("AI processing timeout after 30 seconds")
+
+        # Update database with results
+        update_query = """
+            UPDATE swisstax.documents
+            SET ocr_status = 'completed',
+                ocr_result = %s,
+                processed_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+        """
+        execute_query(update_query, (
+            json.dumps(analysis_result),
+            document_id
+        ), fetch=False)
+
+        logger.info(
+            f"Document {document_id} processed successfully: "
+            f"{analysis_result['document_type']} (confidence: {analysis_result['confidence']:.2f})"
+        )
+
+    except Exception as processing_error:
+        logger.error(f"Background processing failed for document {document_id}: {processing_error}", exc_info=True)
+
+        # Update status to failed with error message
+        update_query = """
+            UPDATE swisstax.documents
+            SET ocr_status = 'failed',
+                ocr_result = %s
+            WHERE id = %s
+        """
+        error_data = {
+            'error': str(processing_error),
+            'timestamp': asyncio.get_event_loop().time()
+        }
+        execute_query(update_query, (
+            json.dumps(error_data),
+            document_id
+        ), fetch=False)
 
 
 # Pydantic models
@@ -75,28 +224,75 @@ async def get_upload_url(
 @router.post("/metadata", response_model=dict)
 async def save_document(
     request: SaveDocumentRequest,
+    background_tasks: BackgroundTasks,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Save document metadata after successful S3 upload
+    Save document metadata after successful S3 upload and trigger AI processing
 
     - Records document details in database
-    - Returns document ID and status
+    - Triggers background AI intelligence processing (non-blocking)
+    - Returns document ID immediately with status 'pending'
     """
     try:
-        result = doc_service.save_document_metadata(
-            session_id=request.session_id,
-            document_type_id=request.document_type_id,
-            file_name=request.file_name,
+        user_id = str(current_user.id)
+
+        # Save metadata with user_id and initial status
+        # Note: We need to update document_service to accept user_id
+        # For now, we'll do a direct database insert with all fields
+        insert_query = """
+            INSERT INTO swisstax.documents (
+                session_id, user_id, document_type_id, file_name, file_size,
+                mime_type, s3_key, s3_bucket, ocr_status
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'pending')
+            RETURNING id::text, session_id, document_type_id, file_name, s3_key, ocr_status as status
+        """
+
+        from services.document_service import S3_BUCKET
+
+        file_extension = request.file_name.split('.')[-1] if '.' in request.file_name else ''
+        mime_types = {
+            'pdf': 'application/pdf',
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'webp': 'image/webp'
+        }
+        mime_type = mime_types.get(file_extension.lower(), 'application/octet-stream')
+
+        result = execute_query(insert_query, (
+            request.session_id,
+            user_id,
+            request.document_type_id,
+            request.file_name,
+            request.file_size,
+            mime_type,
+            request.s3_key,
+            S3_BUCKET
+        ), fetch=True)[0]
+
+        document_id = result['id']
+
+        # Schedule background processing (non-blocking)
+        background_tasks.add_task(
+            process_document_background,
+            document_id=document_id,
             s3_key=request.s3_key,
-            file_size=request.file_size
+            file_name=request.file_name,
+            user_id=user_id
         )
+
+        logger.info(f"Document {document_id} saved, background processing scheduled for user {user_id}")
+
+        # Return immediately with pending status
+        result['processing_status'] = 'pending'
+        result['message'] = 'Document uploaded successfully. AI processing started in background.'
 
         return result
 
     except Exception as e:
-        logger.error(f"Error saving document metadata: {e}")
+        logger.error(f"Error saving document metadata: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to save document: {str(e)}"
@@ -164,50 +360,73 @@ async def get_document_url(
         )
 
 
-@router.post("/{document_id}/extract", response_model=dict)
-async def extract_document_data(
+@router.get("/{document_id}/status", response_model=dict)
+async def get_document_processing_status(
     document_id: str,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Extract data from document using AWS Textract
+    Get AI processing status for a document
 
-    - Processes document with OCR
-    - Returns extracted text and structured data
+    - Returns processing status and extracted data if available
+    - Statuses: pending, processing, completed, failed, skipped
     """
     try:
-        result = doc_service.process_document_with_textract(document_id)
-        return result
+        query = """
+            SELECT
+                id::text,
+                file_name,
+                ocr_status as status,
+                ocr_result,
+                processed_at,
+                created_at
+            FROM swisstax.documents
+            WHERE id = %s::uuid
+        """
+        document = execute_query(query, (document_id,), fetch=True)
 
+        if not document or len(document) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Document {document_id} not found"
+            )
+
+        doc = document[0]
+        response = {
+            'document_id': doc['id'],
+            'file_name': doc['file_name'],
+            'status': doc['status'],
+            'created_at': doc['created_at'].isoformat() if doc['created_at'] else None,
+            'processed_at': doc['processed_at'].isoformat() if doc['processed_at'] else None
+        }
+
+        # Parse OCR result if available
+        if doc['ocr_result']:
+            try:
+                ocr_data = json.loads(doc['ocr_result']) if isinstance(doc['ocr_result'], str) else doc['ocr_result']
+
+                if doc['status'] == 'completed':
+                    response['document_type'] = ocr_data.get('document_type')
+                    response['document_type_name'] = ocr_data.get('document_type_name')
+                    response['extracted_data'] = ocr_data.get('extracted_data', {})
+                    response['confidence'] = ocr_data.get('confidence', 0.0)
+                    response['ai_provider'] = ocr_data.get('ai_provider', 'anthropic')
+                elif doc['status'] == 'failed':
+                    response['error'] = ocr_data.get('error', 'Unknown error')
+
+            except json.JSONDecodeError:
+                logger.warning(f"Failed to parse ocr_result for document {document_id}")
+
+        return response
+
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error extracting document data: {e}")
+        logger.error(f"Error getting document status: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to extract document data: {str(e)}"
-        )
-
-
-@router.get("/{document_id}/extraction-status", response_model=dict)
-async def check_extraction_status(
-    document_id: str,
-    current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """
-    Check OCR extraction status for a document
-
-    - Returns extraction progress and results if complete
-    """
-    try:
-        result = doc_service.check_textract_job(document_id)
-        return result
-
-    except Exception as e:
-        logger.error(f"Error checking extraction status: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to check extraction status: {str(e)}"
+            detail=f"Failed to get document status: {str(e)}"
         )
 
 

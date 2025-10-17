@@ -135,6 +135,7 @@
         "createNew": "Create New Tax Filing",
         "taxYear": "Tax Year",
         "postalCode": "Postal Code (ZIP)",
+        "postalCodeAsOf31Dec": "Postal Code (as of 31 December)",
         "postalCodePlaceholder": "e.g., 8001",
         "lookingUpPostalCode": "Looking up postal code...",
         "enterPostalCode": "Enter your 4-digit postal code",

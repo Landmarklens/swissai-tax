@@ -12,8 +12,8 @@ import { useWebVitals } from './hooks/useWebVitals';
 import CookieConsent from './components/CookieConsent';
 
 function App() {
-  // Monitor Core Web Vitals in development
-  useWebVitals(null, process.env.NODE_ENV === 'development');
+  // Monitor Core Web Vitals - disabled to reduce console noise
+  useWebVitals(null, false);
   return (
     <ErrorBoundary showDetails={process.env.NODE_ENV === 'development'}>
       <ThemeProvider theme={theme}>

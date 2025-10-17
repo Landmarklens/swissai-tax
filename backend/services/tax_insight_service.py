@@ -11,7 +11,9 @@ from sqlalchemy.orm import Session
 
 from models.tax_answer import TaxAnswer
 from models.tax_filing_session import TaxFilingSession
-from models.tax_insight import InsightPriority, InsightType, TaxInsight
+from models.tax_insight import InsightPriority, InsightType, TaxInsight, InsightCategory, InsightSubcategory
+from models.interview_session import InterviewSession
+from models.pending_document import PendingDocument, DocumentStatus
 
 logger = logging.getLogger(__name__)
 
@@ -148,10 +150,27 @@ class TaxInsightService:
         if isinstance(value, str) and (value.startswith('{') or value.startswith('[')):
             try:
                 return json.loads(value)
-            except:
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.warning(f"Failed to parse JSON for question {question_id}: {e}")
                 pass
 
         return value
+
+    @staticmethod
+    def _is_truthy(value) -> bool:
+        """
+        Convert various truthy values to boolean.
+        Handles common answer formats from the interview.
+
+        Accepts:
+        - String: 'yes', 'true', 'True' (Python's str(True))
+        - Boolean: True
+        - Integer: 1
+        - String number: '1'
+        """
+        if value is None:
+            return False
+        return value in ['yes', 'true', 'True', True, 1, '1']
 
     @staticmethod
     def _check_pillar_3a_opportunity(
@@ -174,7 +193,8 @@ class TaxInsightService:
         if pillar_3a_amount:
             try:
                 pillar_3a_amount = int(pillar_3a_amount)
-            except:
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Failed to parse Pillar 3a amount: {e}")
                 pillar_3a_amount = 0
         else:
             pillar_3a_amount = 0
@@ -227,7 +247,8 @@ class TaxInsightService:
 
         try:
             num_employers = int(num_employers)
-        except:
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Failed to parse number of employers: {e}")
             return None
 
         if num_employers > 1:
@@ -277,7 +298,8 @@ class TaxInsightService:
 
         try:
             num_children = int(num_children) if num_children else 1
-        except:
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Failed to parse number of children in child tax credits: {e}")
             num_children = 1
 
         total_credit = num_children * TaxInsightService.CHILD_TAX_CREDIT
@@ -325,7 +347,8 @@ class TaxInsightService:
 
         try:
             donation_amount = int(donation_amount) if donation_amount else 0
-        except:
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Failed to parse donation amount: {e}")
             donation_amount = 0
 
         if donation_amount == 0:
@@ -434,7 +457,8 @@ class TaxInsightService:
 
         try:
             medical_amount = int(medical_amount) if medical_amount else 0
-        except:
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Failed to parse medical amount: {e}")
             medical_amount = 0
 
         # Medical expenses are only deductible above 5% of net income threshold
@@ -493,11 +517,21 @@ class TaxInsightService:
         if not filing:
             raise ValueError("Filing not found or access denied")
 
-        # Get insights
+        # Get insights with explicit priority ordering
+        from sqlalchemy import case
+
+        # Create explicit priority order: HIGH=3, MEDIUM=2, LOW=1
+        priority_order = case(
+            (TaxInsight.priority == InsightPriority.HIGH, 3),
+            (TaxInsight.priority == InsightPriority.MEDIUM, 2),
+            (TaxInsight.priority == InsightPriority.LOW, 1),
+            else_=0
+        )
+
         insights = db.query(TaxInsight).filter(
             TaxInsight.filing_session_id == filing_session_id
         ).order_by(
-            TaxInsight.priority.desc(),
+            priority_order.desc(),
             TaxInsight.created_at.desc()
         ).all()
 
@@ -571,3 +605,764 @@ class TaxInsightService:
 
         logger.info(f"User {user_id} marked insight {insight_id} as applied")
         return insight
+
+    @staticmethod
+    def generate_progressive_insights(
+        db: Session,
+        filing_session_id: str,
+        interview_session_id: str
+    ) -> List[TaxInsight]:
+        """
+        Generate insights progressively after each answer.
+        
+        This method:
+        1. Checks all 6 insight rules
+        2. Determines if insights should be "completed" or "action_required"
+        3. Updates existing insights if they change category
+        4. Creates new insights for pending documents
+        
+        Args:
+            db: Database session
+            filing_session_id: Filing session ID
+            interview_session_id: Interview session ID (to get viewed questions)
+        
+        Returns:
+            List of generated/updated TaxInsight objects
+        """
+        # Get filing session
+        filing = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_session_id
+        ).first()
+        
+        if not filing:
+            raise ValueError("Filing session not found")
+        
+        # Get interview session to find viewed questions
+        interview = db.query(InterviewSession).filter(
+            InterviewSession.id == interview_session_id
+        ).first()
+        
+        viewed_questions = set(interview.completed_questions or []) if interview else set()
+        
+        # Get all answers for this filing
+        answers = db.query(TaxAnswer).filter(
+            TaxAnswer.filing_session_id == filing_session_id
+        ).all()
+        
+        answer_dict = {answer.question_id: answer for answer in answers}
+        answered_questions = set(answer_dict.keys())
+        
+        # Delete existing insights - we'll regenerate fresh each time
+        db.query(TaxInsight).filter(
+            TaxInsight.filing_session_id == filing_session_id
+        ).delete()
+        db.commit()
+        
+        insights = []
+
+        # Generate DATA INSIGHTS from answered questions (completed category)
+        data_insights = TaxInsightService._generate_data_insights(
+            db, answer_dict, filing_session_id
+        )
+        insights.extend(data_insights)
+
+        # Generate ACTION REQUIRED insights for viewed-but-unanswered questions
+        # These show tax-saving tips for questions they saw but skipped
+        insights.extend(TaxInsightService._generate_pillar_3a_insights(
+            answer_dict, viewed_questions, answered_questions, filing_session_id
+        ))
+
+        insights.extend(TaxInsightService._generate_multiple_employer_insights(
+            answer_dict, viewed_questions, answered_questions, filing_session_id
+        ))
+
+        insights.extend(TaxInsightService._generate_children_insights(
+            answer_dict, viewed_questions, answered_questions, filing_session_id
+        ))
+
+        insights.extend(TaxInsightService._generate_donation_insights(
+            answer_dict, viewed_questions, answered_questions, filing_session_id
+        ))
+
+        insights.extend(TaxInsightService._generate_property_insights(
+            answer_dict, viewed_questions, answered_questions, filing_session_id
+        ))
+
+        insights.extend(TaxInsightService._generate_medical_insights(
+            answer_dict, viewed_questions, answered_questions, filing_session_id
+        ))
+
+        # Generate PENDING DOCUMENT insights
+        insights.extend(TaxInsightService._generate_pending_document_insights(
+            db, filing_session_id
+        ))
+        
+        # Save all insights
+        for insight in insights:
+            db.add(insight)
+        
+        db.commit()
+        
+        logger.info(f"Generated {len(insights)} progressive insights for filing {filing_session_id}")
+        return insights
+    
+    @staticmethod
+    def _generate_pillar_3a_insights(
+        answer_dict, viewed_questions, answered_questions, filing_session_id
+    ) -> List[TaxInsight]:
+        """Generate Pillar 3a ACTION REQUIRED insights only (for skipped questions)"""
+        insights = []
+
+        q08_answered = TaxInsightService.PILLAR_3A_QUESTION in answered_questions
+
+        # ONLY generate if Q08 viewed but not answered - action required
+        if TaxInsightService.PILLAR_3A_QUESTION in viewed_questions and not q08_answered:
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.DEDUCTION_OPPORTUNITY,
+                priority=InsightPriority.HIGH,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.RETIREMENT_SAVINGS,
+                title="Complete Pillar 3a Question",
+                description="Answer the retirement savings question to see potential tax savings. Pillar 3a contributions can save up to CHF 1,764 in taxes annually.",
+                estimated_savings_chf=1764,
+                related_questions=json.dumps([TaxInsightService.PILLAR_3A_QUESTION]),
+                action_items=json.dumps(["Complete the Pillar 3a question in the interview"])
+            ))
+
+        return insights
+    
+    @staticmethod
+    def _generate_multiple_employer_insights(
+        answer_dict, viewed_questions, answered_questions, filing_session_id
+    ) -> List[TaxInsight]:
+        """Generate multiple employer ACTION REQUIRED insights only"""
+        insights = []
+
+        q04_answered = TaxInsightService.MULTIPLE_EMPLOYERS_QUESTION in answered_questions
+
+        # ONLY generate if viewed but not answered
+        if TaxInsightService.MULTIPLE_EMPLOYERS_QUESTION in viewed_questions and not q04_answered:
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.TAX_SAVING_TIP,
+                priority=InsightPriority.MEDIUM,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.EMPLOYMENT,
+                title="Complete Employment Question",
+                description="Answer the employment question to see if you qualify for multiple employer deductions.",
+                estimated_savings_chf=520,
+                related_questions=json.dumps([TaxInsightService.MULTIPLE_EMPLOYERS_QUESTION]),
+                action_items=json.dumps(["Complete the number of employers question"])
+            ))
+
+        return insights
+    
+    @staticmethod
+    def _generate_children_insights(
+        answer_dict, viewed_questions, answered_questions, filing_session_id
+    ) -> List[TaxInsight]:
+        """Generate children ACTION REQUIRED insights only"""
+        insights = []
+
+        q03_answered = TaxInsightService.CHILDREN_QUESTION in answered_questions
+
+        # ONLY generate if viewed but not answered
+        if TaxInsightService.CHILDREN_QUESTION in viewed_questions and not q03_answered:
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.DEDUCTION_OPPORTUNITY,
+                priority=InsightPriority.HIGH,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.KIDS,
+                title="Complete Children Question",
+                description="Answer the children question to unlock child tax credits worth up to CHF 1,675 per child.",
+                estimated_savings_chf=1675,
+                related_questions=json.dumps([TaxInsightService.CHILDREN_QUESTION]),
+                action_items=json.dumps(["Complete the children question in the interview"])
+            ))
+
+        return insights
+    
+    @staticmethod
+    def _generate_donation_insights(
+        answer_dict, viewed_questions, answered_questions, filing_session_id
+    ) -> List[TaxInsight]:
+        """Generate donation ACTION REQUIRED insights only"""
+        insights = []
+
+        q11_answered = TaxInsightService.DONATIONS_QUESTION in answered_questions
+
+        # ONLY generate if viewed but not answered
+        if TaxInsightService.DONATIONS_QUESTION in viewed_questions and not q11_answered:
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.TAX_SAVING_TIP,
+                priority=InsightPriority.MEDIUM,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.DEDUCTIONS,
+                title="Complete Donation Question",
+                description="Answer the charitable donations question to see potential tax deductions.",
+                estimated_savings_chf=None,
+                related_questions=json.dumps([TaxInsightService.DONATIONS_QUESTION]),
+                action_items=json.dumps(["Complete the donations question"])
+            ))
+
+        return insights
+    
+    @staticmethod
+    def _generate_property_insights(
+        answer_dict, viewed_questions, answered_questions, filing_session_id
+    ) -> List[TaxInsight]:
+        """Generate property ACTION REQUIRED insights only"""
+        insights = []
+
+        q09_answered = TaxInsightService.PROPERTY_QUESTION in answered_questions
+
+        # ONLY generate if viewed but not answered
+        if TaxInsightService.PROPERTY_QUESTION in viewed_questions and not q09_answered:
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.DEDUCTION_OPPORTUNITY,
+                priority=InsightPriority.HIGH,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.PROPERTY_ASSETS,
+                title="Complete Property Question",
+                description="Answer the property ownership question to see deductions worth CHF 3,000+ annually.",
+                estimated_savings_chf=3000,
+                related_questions=json.dumps([TaxInsightService.PROPERTY_QUESTION]),
+                action_items=json.dumps(["Complete the property ownership question"])
+            ))
+
+        return insights
+    
+    @staticmethod
+    def _generate_medical_insights(
+        answer_dict, viewed_questions, answered_questions, filing_session_id
+    ) -> List[TaxInsight]:
+        """Generate medical ACTION REQUIRED insights only"""
+        insights = []
+
+        q13_answered = TaxInsightService.MEDICAL_QUESTION in answered_questions
+
+        # ONLY generate if viewed but not answered
+        if TaxInsightService.MEDICAL_QUESTION in viewed_questions and not q13_answered:
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.DEDUCTION_OPPORTUNITY,
+                priority=InsightPriority.MEDIUM,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.DEDUCTIONS,
+                title="Complete Medical Expenses Question",
+                description="Answer the medical expenses question to see potential deductions.",
+                estimated_savings_chf=None,
+                related_questions=json.dumps([TaxInsightService.MEDICAL_QUESTION]),
+                action_items=json.dumps(["Complete the medical expenses question"])
+            ))
+
+        return insights
+    
+    @staticmethod
+    def _generate_pending_document_insights(
+        db: Session,
+        filing_session_id: str
+    ) -> List[TaxInsight]:
+        """Generate insights for pending documents"""
+        insights = []
+        
+        # Get pending documents
+        pending_docs = db.query(PendingDocument).filter(
+            PendingDocument.filing_session_id == filing_session_id,
+            PendingDocument.status == DocumentStatus.PENDING
+        ).all()
+        
+        for doc in pending_docs:
+            # Safely handle document_type - add null check
+            doc_type_display = (doc.document_type or 'Document').replace('_', ' ').title()
+            doc_label = doc.document_label or doc.document_type or 'document'
+
+            insights.append(TaxInsight(
+                filing_session_id=filing_session_id,
+                insight_type=InsightType.MISSING_DOCUMENT,
+                priority=InsightPriority.HIGH,
+                category=InsightCategory.ACTION_REQUIRED,
+                subcategory=InsightSubcategory.GENERAL,
+                title=f"Upload {doc_type_display}",
+                description=f"You marked this document as 'bring later'. Upload {doc_label} to complete your filing.",
+                estimated_savings_chf=None,
+                related_questions=json.dumps([]),
+                action_items=json.dumps([
+                    f"Upload {doc_label}",
+                    "Or remove from checklist if no longer needed"
+                ])
+            ))
+        
+        return insights
+
+    # ==================== DATA EXTRACTION METHODS ====================
+    # These methods extract actual user data from answers to display as insights
+    
+    @staticmethod
+    def _generate_data_insights(
+        db: Session,
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> List[TaxInsight]:
+        """
+        Generate insights showing actual user data from answers.
+        This is the main method that calls all data extraction helpers.
+        """
+        insights = []
+
+        # Extract personal information
+        personal_insight = TaxInsightService._extract_personal_info(answer_dict, filing_session_id)
+        if personal_insight:
+            insights.append(personal_insight)
+
+        # Extract partner information (separate from personal)
+        partner_insight = TaxInsightService._extract_partner_info(answer_dict, filing_session_id)
+        if partner_insight:
+            insights.append(partner_insight)
+
+        # Extract location information
+        location_insight = TaxInsightService._extract_location_info(db, answer_dict, filing_session_id)
+        if location_insight:
+            insights.append(location_insight)
+
+        # Extract family information
+        family_insight = TaxInsightService._extract_family_info(answer_dict, filing_session_id)
+        if family_insight:
+            insights.append(family_insight)
+
+        # Extract employment information
+        employment_insight = TaxInsightService._extract_employment_info(answer_dict, filing_session_id)
+        if employment_insight:
+            insights.append(employment_insight)
+
+        # Extract retirement & savings information
+        retirement_insight = TaxInsightService._extract_retirement_info(answer_dict, filing_session_id)
+        if retirement_insight:
+            insights.append(retirement_insight)
+
+        # Extract property & assets information
+        property_insight = TaxInsightService._extract_property_info(answer_dict, filing_session_id)
+        if property_insight:
+            insights.append(property_insight)
+
+        # Extract deductions information
+        deductions_insight = TaxInsightService._extract_deductions_info(answer_dict, filing_session_id)
+        if deductions_insight:
+            insights.append(deductions_insight)
+
+        return insights
+    
+    @staticmethod
+    def _extract_personal_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract personal information: name, AHV, marital status (user only, not spouse)"""
+        data_parts = []
+        
+        # Name
+        name = TaxInsightService._get_answer_value(answer_dict, "Q00_name")
+        if name:
+            data_parts.append(f"👤 Name: {name}")
+        
+        # AHV Number
+        ahv = TaxInsightService._get_answer_value(answer_dict, "Q00")
+        if ahv:
+            data_parts.append(f"🆔 AHV: {ahv}")
+        
+        # Marital Status
+        marital_status = TaxInsightService._get_answer_value(answer_dict, "Q01")
+        if marital_status:
+            status_text = {
+                'single': 'Single',
+                'married': 'Married',
+                'divorced': 'Divorced',
+                'widowed': 'Widowed',
+                'registered_partnership': 'Registered Partnership'
+            }.get(marital_status, marital_status.capitalize())
+            data_parts.append(f"💑 Status: {status_text}")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.PERSONAL,
+            title="Personal Information",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q00_name", "Q00", "Q01"]),
+            action_items=json.dumps([])
+        )
+
+    @staticmethod
+    def _extract_partner_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract partner/spouse information: name, AHV, employment status"""
+        # Only show partner info if user is married
+        marital_status = TaxInsightService._get_answer_value(answer_dict, "Q01")
+        if marital_status != 'married':
+            return None
+
+        data_parts = []
+
+        # Spouse name
+        spouse_name = TaxInsightService._get_answer_value(answer_dict, "Q01a_name")
+        if spouse_name:
+            data_parts.append(f"👤 Name: {spouse_name}")
+
+        # Spouse AHV
+        spouse_ahv = TaxInsightService._get_answer_value(answer_dict, "Q01a")
+        if spouse_ahv:
+            data_parts.append(f"🆔 AHV: {spouse_ahv}")
+
+        # Spouse employment status
+        spouse_employed = TaxInsightService._get_answer_value(answer_dict, "Q01d")
+        if spouse_employed is not None:
+            employed_text = "Employed" if TaxInsightService._is_truthy(spouse_employed) else "Not employed"
+            data_parts.append(f"💼 Employment: {employed_text}")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.PARTNER,
+            title="Partner Information",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q01a_name", "Q01a", "Q01d"]),
+            action_items=json.dumps([])
+        )
+
+    @staticmethod
+    def _extract_location_info(
+        db: Session,
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract location information: canton, municipality from filing session"""
+        data_parts = []
+
+        # Get primary location from filing_sessions table (NOT from Q02a which is yes/no)
+        try:
+            filing = db.query(TaxFilingSession).filter(
+                TaxFilingSession.id == filing_session_id
+            ).first()
+
+            if filing:
+                location_str = ""
+                if filing.municipality:
+                    location_str = filing.municipality
+                if filing.canton:
+                    location_str += f", {filing.canton}" if location_str else filing.canton
+
+                if location_str:
+                    data_parts.append(f"📍 Primary: {location_str}")
+        except Exception as e:
+            logger.error(f"Failed to extract location from filing session: {e}")
+
+        # Secondary location (if multi-canton) - Q02b is multi_canton type
+        has_multi_canton = TaxInsightService._get_answer_value(answer_dict, "Q02a")
+        if TaxInsightService._is_truthy(has_multi_canton):
+            secondary_cantons = TaxInsightService._get_answer_value(answer_dict, "Q02b")
+            if secondary_cantons and isinstance(secondary_cantons, list):
+                for canton_data in secondary_cantons:
+                    if isinstance(canton_data, dict):
+                        municipality = canton_data.get('municipality', '')
+                        canton = canton_data.get('canton', '')
+                        if municipality or canton:
+                            location_str = municipality if municipality else ""
+                            if canton:
+                                location_str += f", {canton}" if location_str else canton
+                            data_parts.append(f"📍 Secondary: {location_str}")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.LOCATION,
+            title="Location",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q02a", "Q02b"]),
+            action_items=json.dumps([])
+        )
+    
+    @staticmethod
+    def _extract_family_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract family information: children, ages, childcare costs"""
+        data_parts = []
+
+        has_children = TaxInsightService._get_answer_value(answer_dict, "Q03")
+        if not TaxInsightService._is_truthy(has_children):
+            return None
+
+        # Number of children
+        num_children = TaxInsightService._get_answer_value(answer_dict, "Q03a")
+        if num_children:
+            try:
+                num_children = int(num_children)
+                child_text = "child" if num_children == 1 else "children"
+                data_parts.append(f"👶 Children: {num_children} {child_text}")
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Failed to parse number of children: {e}")
+                data_parts.append("👶 Children: Yes")
+        else:
+            data_parts.append("👶 Children: Yes")
+
+        # Ages - Q03b is a group array with fields: child_name, child_dob, child_in_education
+        children_data = TaxInsightService._get_answer_value(answer_dict, "Q03b")
+        if children_data and isinstance(children_data, list):
+            try:
+                from datetime import datetime
+                ages = []
+                for child in children_data:
+                    if isinstance(child, dict) and 'child_dob' in child:
+                        dob = datetime.strptime(child['child_dob'], '%Y-%m-%d')
+                        age = (datetime.now() - dob).days // 365
+                        ages.append(str(age))
+                if ages:
+                    data_parts.append(f"📅 Ages: {', '.join(ages)}")
+            except (ValueError, KeyError, TypeError) as e:
+                logger.warning(f"Failed to parse children ages from Q03b: {e}")
+
+        # Childcare costs - Q03c is yes/no, NOT an amount
+        # The actual amount is only available through uploaded documents
+        has_childcare = TaxInsightService._get_answer_value(answer_dict, "Q03c")
+        if TaxInsightService._is_truthy(has_childcare):
+            data_parts.append("💰 Childcare costs: Documented")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.KIDS,
+            title="Family",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q03", "Q03a", "Q03b", "Q03c"]),
+            action_items=json.dumps([])
+        )
+    
+    @staticmethod
+    def _extract_employment_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract employment information: employers, company, salary"""
+        data_parts = []
+
+        num_employers = TaxInsightService._get_answer_value(answer_dict, "Q04")
+        if num_employers:
+            try:
+                num_employers = int(num_employers)
+                employer_text = "employer" if num_employers == 1 else "employers"
+                data_parts.append(f"💼 Employment: {num_employers} {employer_text}")
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Failed to parse number of employers: {e}")
+
+        # Company name(s)
+        company = TaxInsightService._get_answer_value(answer_dict, "Q04a")
+        if company:
+            data_parts.append(f"🏢 Company: {company}")
+
+        # Gross salary
+        salary = TaxInsightService._get_answer_value(answer_dict, "Q04b")
+        if salary:
+            try:
+                salary_val = float(salary)
+                data_parts.append(f"💰 Gross Salary: CHF {salary_val:,.0f}/year")
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Failed to parse salary: {e}")
+
+        # Employment percentage
+        percentage = TaxInsightService._get_answer_value(answer_dict, "Q04c")
+        if percentage:
+            try:
+                pct = float(percentage)
+                data_parts.append(f"📊 Employment: {pct}%")
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Failed to parse employment percentage: {e}")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.EMPLOYMENT,
+            title="Employment",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q04", "Q04a", "Q04b", "Q04c"]),
+            action_items=json.dumps([])
+        )
+    
+    @staticmethod
+    def _extract_retirement_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract retirement & savings: Pillar 3a, 2nd pillar buyback"""
+        data_parts = []
+
+        # Pillar 3a
+        has_pillar_3a = TaxInsightService._get_answer_value(answer_dict, "Q08")
+        if TaxInsightService._is_truthy(has_pillar_3a):
+            amount = TaxInsightService._get_answer_value(answer_dict, "Q08a")
+            if amount:
+                try:
+                    amount_val = float(amount)
+                    data_parts.append(f"🏦 Pillar 3a: CHF {amount_val:,.0f} contributed")
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Failed to parse Pillar 3a amount: {e}")
+                    data_parts.append("🏦 Pillar 3a: Yes")
+            else:
+                data_parts.append("🏦 Pillar 3a: Yes")
+
+        # 2nd Pillar Buyback
+        buyback = TaxInsightService._get_answer_value(answer_dict, "Q07")
+        if buyback:
+            try:
+                buyback_val = float(buyback)
+                if buyback_val > 0:
+                    data_parts.append(f"💰 2nd Pillar Buyback: CHF {buyback_val:,.0f}")
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Failed to parse 2nd pillar buyback amount: {e}")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.RETIREMENT_SAVINGS,
+            title="Retirement & Savings",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q08", "Q08a", "Q07"]),
+            action_items=json.dumps([])
+        )
+    
+    @staticmethod
+    def _extract_property_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract property & assets: property ownership, securities"""
+        data_parts = []
+
+        # Property ownership
+        owns_property = TaxInsightService._get_answer_value(answer_dict, "Q09")
+        if TaxInsightService._is_truthy(owns_property):
+            data_parts.append("🏠 Property: Owner")
+
+        # Securities/Investments
+        has_securities = TaxInsightService._get_answer_value(answer_dict, "Q10")
+        if TaxInsightService._is_truthy(has_securities):
+            amount = TaxInsightService._get_answer_value(answer_dict, "Q10a_amount")
+            if amount:
+                try:
+                    amount_val = float(amount)
+                    data_parts.append(f"📈 Securities: CHF {amount_val:,.0f}")
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Failed to parse securities amount: {e}")
+                    data_parts.append("📈 Securities: Yes")
+            else:
+                data_parts.append("📈 Securities: Yes")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.PROPERTY_ASSETS,
+            title="Property & Assets",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q09", "Q10", "Q10a_amount"]),
+            action_items=json.dumps([])
+        )
+    
+    @staticmethod
+    def _extract_deductions_info(
+        answer_dict: Dict[str, TaxAnswer],
+        filing_session_id: str
+    ) -> Optional[TaxInsight]:
+        """Extract deductions: donations, medical expenses"""
+        data_parts = []
+
+        # Charitable donations
+        has_donations = TaxInsightService._get_answer_value(answer_dict, "Q11")
+        if TaxInsightService._is_truthy(has_donations):
+            amount = TaxInsightService._get_answer_value(answer_dict, "Q11a")
+            if amount:
+                try:
+                    amount_val = float(amount)
+                    data_parts.append(f"💝 Donations: CHF {amount_val:,.0f}")
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Failed to parse donation amount: {e}")
+                    data_parts.append("💝 Donations: Yes")
+            else:
+                data_parts.append("💝 Donations: Yes")
+
+        # Medical expenses
+        has_medical = TaxInsightService._get_answer_value(answer_dict, "Q13")
+        if TaxInsightService._is_truthy(has_medical):
+            amount = TaxInsightService._get_answer_value(answer_dict, "Q13a")
+            if amount:
+                try:
+                    amount_val = float(amount)
+                    data_parts.append(f"🏥 Medical: CHF {amount_val:,.0f}")
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Failed to parse medical amount: {e}")
+                    data_parts.append("🏥 Medical: Yes")
+            else:
+                data_parts.append("🏥 Medical: Yes")
+
+        if not data_parts:
+            return None
+
+        return TaxInsight(
+            filing_session_id=filing_session_id,
+            insight_type=InsightType.DATA_SUMMARY,
+            priority=InsightPriority.LOW,
+            category=InsightCategory.COMPLETED,
+            subcategory=InsightSubcategory.DEDUCTIONS,
+            title="Deductions",
+            description="\n".join(data_parts),
+            estimated_savings_chf=None,
+            related_questions=json.dumps(["Q11", "Q11a", "Q13", "Q13a"]),
+            action_items=json.dumps([])
+        )

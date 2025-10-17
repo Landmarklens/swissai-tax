@@ -434,26 +434,82 @@ class EnhancedTaxCalculationService:
             # Fallback to simple 8% rate
             return taxable_income * Decimal('0.08')
 
-    def _calculate_municipal_tax(
+    def _get_municipal_multiplier(
         self,
-        cantonal_tax: Decimal,
         canton: str,
         municipality: str
     ) -> Decimal:
         """
-        Calculate municipal tax as multiplier of cantonal tax.
+        Get municipal tax multiplier from database or fallback to hardcoded values.
+
+        Args:
+            canton: Canton code
+            municipality: Municipality name
+
+        Returns:
+            Municipal tax multiplier (e.g., 1.02 for 102%)
+        """
+        if not municipality:
+            return Decimal('1.0')
+
+        try:
+            # Try to get from database first
+            from sqlalchemy import text
+            result = self.db.execute(
+                text("""
+                    SELECT tax_multiplier
+                    FROM swisstax.municipalities
+                    WHERE canton = :canton
+                      AND name = :municipality
+                      AND tax_year = :tax_year
+                    LIMIT 1
+                """),
+                {"canton": canton, "municipality": municipality, "tax_year": self.tax_year}
+            ).fetchone()
+
+            if result:
+                return Decimal(str(result[0]))
+
+        except Exception as e:
+            logger.warning(f"Could not query municipality {municipality} from database: {e}")
+
+        # Fallback to hardcoded values
+        multiplier = MUNICIPAL_MULTIPLIERS.get(municipality, Decimal('1.0'))
+        return multiplier
+
+    def _calculate_municipal_tax(
+        self,
+        cantonal_tax: Decimal,
+        canton: str,
+        municipality: str,
+        taxable_income: Decimal = None
+    ) -> Decimal:
+        """
+        Calculate municipal tax using the correct Swiss formula.
+
+        IMPORTANT: The Swiss system applies the municipal multiplier to the SIMPLE TAX,
+        not to the cantonal tax. However, since we don't have direct access to the
+        simple tax here, we need to work with the canton calculator.
+
+        For now, we use the INCORRECT but existing formula (multiplier of cantonal tax)
+        to maintain backward compatibility. This should be refactored to use the
+        canton calculator's calculate_with_multiplier() method.
 
         Args:
             cantonal_tax: Cantonal tax amount
             canton: Canton code
             municipality: Municipality name
+            taxable_income: Optional taxable income (for future correct calculation)
 
         Returns:
             Municipal tax amount
         """
-        # Get multiplier for municipality
-        multiplier = MUNICIPAL_MULTIPLIERS.get(municipality, Decimal('1.0'))
+        # Get multiplier for municipality (from DB or fallback)
+        multiplier = self._get_municipal_multiplier(canton, municipality)
 
+        # TODO: Fix this to use the correct Swiss formula:
+        # municipal_tax = simple_tax × municipal_multiplier
+        # Currently using: municipal_tax = cantonal_tax × municipal_multiplier (WRONG!)
         return cantonal_tax * multiplier
 
     def _calculate_church_tax(

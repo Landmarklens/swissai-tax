@@ -224,23 +224,21 @@ async def get_upload_url(
 @router.post("/metadata", response_model=dict)
 async def save_document(
     request: SaveDocumentRequest,
-    background_tasks: BackgroundTasks,
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Save document metadata after successful S3 upload and trigger AI processing
+    Save document metadata after successful S3 upload (NO automatic processing)
 
     - Records document details in database
-    - Triggers background AI intelligence processing (non-blocking)
-    - Returns document ID immediately with status 'pending'
+    - Sets status to 'pending' (awaiting manual trigger)
+    - Returns document ID immediately
+    - Use POST /{document_id}/process to trigger AI processing
     """
     try:
         user_id = str(current_user.id)
 
         # Save metadata with user_id and initial status
-        # Note: We need to update document_service to accept user_id
-        # For now, we'll do a direct database insert with all fields
         insert_query = """
             INSERT INTO swisstax.documents (
                 session_id, user_id, document_type_id, file_name, file_size,
@@ -274,20 +272,11 @@ async def save_document(
 
         document_id = result['id']
 
-        # Schedule background processing (non-blocking)
-        background_tasks.add_task(
-            process_document_background,
-            document_id=document_id,
-            s3_key=request.s3_key,
-            file_name=request.file_name,
-            user_id=user_id
-        )
-
-        logger.info(f"Document {document_id} saved, background processing scheduled for user {user_id}")
+        logger.info(f"Document {document_id} saved for user {user_id}, awaiting manual processing trigger")
 
         # Return immediately with pending status
         result['processing_status'] = 'pending'
-        result['message'] = 'Document uploaded successfully. AI processing started in background.'
+        result['message'] = 'Document uploaded successfully. Use /process endpoint to start AI processing.'
 
         return result
 
@@ -296,6 +285,87 @@ async def save_document(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to save document: {str(e)}"
+        )
+
+
+@router.post("/{document_id}/process", response_model=dict)
+async def trigger_document_processing(
+    document_id: str,
+    background_tasks: BackgroundTasks,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Manually trigger AI processing for a document
+
+    - Starts background AI intelligence processing
+    - Document must be in 'pending' status
+    - Returns immediately with status 'processing'
+    - Poll /{document_id}/status for results
+    """
+    try:
+        user_id = str(current_user.id)
+
+        # Get document details
+        query = """
+            SELECT
+                id::text,
+                s3_key,
+                file_name,
+                ocr_status,
+                user_id
+            FROM swisstax.documents
+            WHERE id = %s::uuid
+        """
+        documents = execute_query(query, (document_id,), fetch=True)
+
+        if not documents or len(documents) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Document {document_id} not found"
+            )
+
+        doc = documents[0]
+
+        # Verify ownership
+        if doc['user_id'] != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You don't have permission to process this document"
+            )
+
+        # Check if already processing or completed
+        if doc['ocr_status'] in ['processing', 'completed']:
+            return {
+                'document_id': document_id,
+                'status': doc['ocr_status'],
+                'message': f"Document is already {doc['ocr_status']}"
+            }
+
+        # Schedule background processing
+        background_tasks.add_task(
+            process_document_background,
+            document_id=document_id,
+            s3_key=doc['s3_key'],
+            file_name=doc['file_name'],
+            user_id=user_id
+        )
+
+        logger.info(f"Manual processing triggered for document {document_id} by user {user_id}")
+
+        return {
+            'document_id': document_id,
+            'status': 'processing',
+            'message': 'AI processing started. Poll /status endpoint for results.'
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error triggering document processing: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to trigger processing: {str(e)}"
         )
 
 

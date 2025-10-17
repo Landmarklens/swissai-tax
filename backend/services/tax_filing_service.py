@@ -11,6 +11,7 @@ from uuid import uuid4
 from sqlalchemy import and_, desc, or_
 from sqlalchemy.orm import Session
 
+from models.pending_document import PendingDocument
 from models.tax_answer import TaxAnswer
 from models.tax_calculation import TaxCalculation
 from models.tax_filing_session import FilingStatus, TaxFilingSession
@@ -370,8 +371,9 @@ class TaxFilingService:
         answers_deleted = db.query(TaxAnswer).filter(TaxAnswer.filing_session_id == filing_id).delete()
         insights_deleted = db.query(TaxInsight).filter(TaxInsight.filing_session_id == filing_id).delete()
         calculations_deleted = db.query(TaxCalculation).filter(TaxCalculation.filing_session_id == filing_id).delete()
+        pending_docs_deleted = db.query(PendingDocument).filter(PendingDocument.filing_session_id == filing_id).delete()
 
-        logger.info(f"Deleted {answers_deleted} answers, {insights_deleted} insights, {calculations_deleted} calculations for filing {filing_id}")
+        logger.info(f"Deleted {answers_deleted} answers, {insights_deleted} insights, {calculations_deleted} calculations, {pending_docs_deleted} pending documents for filing {filing_id}")
 
         # Delete the filing itself
         db.delete(filing)

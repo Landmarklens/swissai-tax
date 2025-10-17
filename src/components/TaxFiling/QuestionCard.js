@@ -215,12 +215,14 @@ const QuestionCard = ({
                     help_text: question.inline_document_upload.help_text?.en ||
                                question.inline_document_upload.help_text
                   }}
+                  sessionId={sessionId}
                   onUploadComplete={(uploadData) => {
                     // Store upload data with the answer
                   }}
                   onBringLater={() => {
                     // Mark as bring later
                   }}
+                  onUpload={onUpload}
                 />
               </Box>
             )}
@@ -365,6 +367,7 @@ const QuestionCard = ({
         return (
           <DocumentUploadQuestion
             question={question}
+            sessionId={sessionId}
             onUploadComplete={(uploadData) => {
               // Store the uploaded document data
               setAnswer(uploadData);
@@ -373,6 +376,7 @@ const QuestionCard = ({
               // Mark as "bring later"
               setAnswer({ bring_later: true });
             }}
+            onUpload={onUpload}
           />
         );
 

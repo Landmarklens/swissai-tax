@@ -12,7 +12,9 @@ import {
   Radio,
   Divider,
   Alert,
-  IconButton
+  IconButton,
+  Select,
+  MenuItem
 } from '@mui/material';
 import {
   Add,
@@ -21,6 +23,7 @@ import {
   CheckCircle,
   ArrowBack
 } from '@mui/icons-material';
+import PostalCodeInput from './PostalCodeInput';
 import DocumentUploadQuestion from './DocumentUploadQuestion';
 
 /**
@@ -236,11 +239,11 @@ const GroupQuestionInput = ({
               {field.validation?.required && ' *'}
             </Typography>
             <RadioGroup
-              value={value.toString()}
-              onChange={(e) => handleChange(e.target.value === 'true')}
+              value={value ? (value === true || value === 'yes' ? 'yes' : 'no') : ''}
+              onChange={(e) => handleChange(e.target.value)}
             >
-              <FormControlLabel value="true" control={<Radio />} label="Yes" />
-              <FormControlLabel value="false" control={<Radio />} label="No" />
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
         );
@@ -263,6 +266,42 @@ const GroupQuestionInput = ({
             }}
             sx={{ mb: 2 }}
           />
+        );
+
+      case 'dropdown':
+        return (
+          <FormControl key={field.id} fullWidth sx={{ mb: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              {fieldLabel}
+              {field.validation?.required && ' *'}
+            </Typography>
+            <Select
+              value={value}
+              onChange={(e) => handleChange(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                <em>Select an option</em>
+              </MenuItem>
+              {field.options?.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        );
+
+      case 'postal_code':
+        return (
+          <Box key={field.id} sx={{ mb: 2 }}>
+            <PostalCodeInput
+              value={value}
+              onChange={(newValue) => handleChange(newValue)}
+              label={fieldLabel}
+              required={field.validation?.required || field.required}
+            />
+          </Box>
         );
 
       case 'document_upload':
@@ -345,14 +384,27 @@ const GroupQuestionInput = ({
               variant="outlined"
             />
           </Box>
-          {fields.map(field => {
+          {fields.filter(field => {
+            // Filter out conditional fields that shouldn't be displayed
+            if (!field.conditional) return true;
+
+            const conditionalFieldId = field.conditional.field;
+            const requiredValue = field.conditional.value;
+            const currentValue = entry[conditionalFieldId];
+
+            if (typeof requiredValue === 'boolean') {
+              return currentValue === requiredValue || currentValue === requiredValue.toString();
+            }
+
+            return currentValue === requiredValue;
+          }).map(field => {
             const fieldLabel = field.text?.[language] || field.text?.en || field.id;
             const fieldValue = entry[field.id];
 
             // Format value based on type
             let displayValue = fieldValue;
             if (field.type === 'yes_no' || field.type === 'boolean') {
-              displayValue = fieldValue ? 'Yes' : 'No';
+              displayValue = (fieldValue === 'yes' || fieldValue === true) ? 'Yes' : 'No';
             } else if (field.type === 'date' && fieldValue) {
               displayValue = new Date(fieldValue).toLocaleDateString();
             } else if (field.type === 'document_upload' && fieldValue) {
@@ -396,13 +448,28 @@ const GroupQuestionInput = ({
     );
   };
 
+  const expectedCount = question.expected_count || null;
+  const remainingCount = expectedCount ? Math.max(0, expectedCount - entries.length) : null;
+
   return (
     <Box sx={{ width: '100%' }}>
+      {/* Progress indicator if expected count is known */}
+      {expectedCount && (
+        <Alert
+          severity={entries.length >= expectedCount ? "success" : "info"}
+          sx={{ mb: 2 }}
+        >
+          {entries.length >= expectedCount
+            ? `All ${expectedCount} entries completed!`
+            : `Progress: ${entries.length} of ${expectedCount} entries completed. ${remainingCount} remaining.`}
+        </Alert>
+      )}
+
       {/* Existing Entries */}
       {entries.length > 0 && (
         <Box sx={{ mb: 3 }}>
           <Typography variant="body2" fontWeight={600} sx={{ mb: 2 }}>
-            Added Entries ({entries.length}):
+            Added Entries ({entries.length}{expectedCount ? ` of ${expectedCount}` : ''}):
           </Typography>
           {entries.map((entry, index) => renderEntrySummary(entry, index))}
         </Box>
@@ -422,8 +489,23 @@ const GroupQuestionInput = ({
 
           <Divider sx={{ mb: 3 }} />
 
-          {/* Render all fields */}
-          {question.fields?.map(field => renderField(field))}
+          {/* Render all fields (conditionally based on field dependencies) */}
+          {question.fields?.filter(field => {
+            // If field has no conditional, always show it
+            if (!field.conditional) return true;
+
+            // Check if conditional field has the required value
+            const conditionalFieldId = field.conditional.field;
+            const requiredValue = field.conditional.value;
+            const currentValue = currentEntry[conditionalFieldId];
+
+            // Handle boolean comparisons (true/false vs 'true'/'false' string)
+            if (typeof requiredValue === 'boolean') {
+              return currentValue === requiredValue || currentValue === requiredValue.toString();
+            }
+
+            return currentValue === requiredValue;
+          }).map(field => renderField(field))}
 
           {/* Action Buttons */}
           <Box display="flex" gap={2} justifyContent="space-between" mt={3}>

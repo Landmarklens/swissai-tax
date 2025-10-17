@@ -9,7 +9,7 @@ const AppRoutes = () => {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title={t("filing.homeai")};
+    document.title = "SwissAI Tax";
   }, [pathname]);
   return (
     <Routes>

@@ -4,6 +4,12 @@ Zurich Canton Tax Calculator
 Tax calculation for Canton Zurich (ZH).
 Based on 2024 tax rates.
 
+Key Information:
+- Canton tax multiplier (Steuerfuss): 98% for 2024 (reduced from 99% in 2023)
+- Municipal multipliers: Vary by municipality (72% to 141%)
+- Progressive tax system based on "einfache Steuer" (simple tax)
+- Family reduction: 2% per child (max 10%)
+
 Reference: https://www.zh.ch/de/steuern-finanzen/steuern/steuerrechner.html
 """
 
@@ -15,6 +21,9 @@ from .base import CantonTaxCalculator, TaxBracket
 
 class ZurichTaxCalculator(CantonTaxCalculator):
     """Tax calculator for Canton Zurich"""
+
+    # Canton tax multiplier for 2024 (Steuerfuss Kanton)
+    CANTON_MULTIPLIER = Decimal('0.98')  # 98% (reduced from 99% in 2023)
 
     def _load_tax_brackets(self) -> Dict[str, List[TaxBracket]]:
         """
@@ -149,6 +158,48 @@ class ZurichTaxCalculator(CantonTaxCalculator):
             'married': married_brackets
         }
 
+    def calculate(
+        self,
+        taxable_income: Decimal,
+        marital_status: str = 'single',
+        num_children: int = 0,
+        **kwargs
+    ) -> Decimal:
+        """
+        Calculate Zurich cantonal tax for given taxable income.
+
+        The calculation follows these steps:
+        1. Calculate "einfache Steuer" (simple tax) using progressive brackets
+        2. Apply canton multiplier (98% for 2024)
+        3. Apply family adjustments (2% per child, max 10%)
+
+        Args:
+            taxable_income: Taxable income after all deductions
+            marital_status: 'single' or 'married'
+            num_children: Number of children
+            **kwargs: Additional parameters
+
+        Returns:
+            Calculated cantonal tax amount
+        """
+        if taxable_income <= 0:
+            return Decimal('0')
+
+        # Get appropriate brackets
+        brackets = self.tax_brackets.get(marital_status, self.tax_brackets['single'])
+
+        # Calculate simple tax (einfache Steuer)
+        simple_tax = self._apply_progressive_rates(taxable_income, brackets)
+
+        # Apply canton multiplier (Steuerfuss)
+        cantonal_tax = simple_tax * self.CANTON_MULTIPLIER
+
+        # Apply family adjustments (2% per child, max 10%)
+        cantonal_tax = self._apply_family_adjustments(cantonal_tax, num_children)
+
+        # Ensure non-negative
+        return max(cantonal_tax, Decimal('0'))
+
     def _apply_family_adjustments(self, base_tax: Decimal, num_children: int) -> Decimal:
         """
         Zurich applies a 2% tax reduction per child.
@@ -166,3 +217,78 @@ class ZurichTaxCalculator(CantonTaxCalculator):
             return base_tax - reduction
 
         return base_tax
+
+    def get_simple_tax(
+        self,
+        taxable_income: Decimal,
+        marital_status: str = 'single'
+    ) -> Decimal:
+        """
+        Get the "einfache Steuer" (simple tax) before canton multiplier.
+
+        This is useful for debugging and understanding the tax calculation.
+
+        Args:
+            taxable_income: Taxable income
+            marital_status: 'single' or 'married'
+
+        Returns:
+            Simple tax amount (before multiplier)
+        """
+        brackets = self.tax_brackets.get(marital_status, self.tax_brackets['single'])
+        return self._apply_progressive_rates(taxable_income, brackets)
+
+    def calculate_with_multiplier(
+        self,
+        taxable_income: Decimal,
+        marital_status: str = 'single',
+        num_children: int = 0,
+        canton_multiplier: Decimal = None,
+        municipal_multiplier: Decimal = Decimal('1.19')  # City of Zürich
+    ) -> Dict[str, Decimal]:
+        """
+        Calculate tax with detailed breakdown including multipliers.
+
+        IMPORTANT: Swiss tax system applies BOTH multipliers to the SAME simple tax:
+        - Cantonal tax = simple_tax × canton_multiplier
+        - Municipal tax = simple_tax × municipal_multiplier  (NOT cantonal_tax!)
+        - Total = cantonal_tax + municipal_tax
+
+        Args:
+            taxable_income: Taxable income
+            marital_status: 'single' or 'married'
+            num_children: Number of children
+            canton_multiplier: Canton multiplier (defaults to 0.98 for 2024)
+            municipal_multiplier: Municipal multiplier (defaults to 1.19 for City of Zürich)
+
+        Returns:
+            Dict with breakdown: simple_tax, cantonal_tax, municipal_tax, total_tax
+        """
+        if canton_multiplier is None:
+            canton_multiplier = self.CANTON_MULTIPLIER
+
+        # Calculate simple tax
+        brackets = self.tax_brackets.get(marital_status, self.tax_brackets['single'])
+        simple_tax = self._apply_progressive_rates(taxable_income, brackets)
+
+        # Apply canton multiplier to simple tax
+        cantonal_tax = simple_tax * canton_multiplier
+
+        # Apply family adjustments to cantonal portion
+        cantonal_tax = self._apply_family_adjustments(cantonal_tax, num_children)
+
+        # CORRECT: Municipal tax also multiplies the simple tax (not cantonal tax!)
+        # This is the Swiss system: both canton and municipality tax the same base
+        municipal_tax = simple_tax * municipal_multiplier
+
+        # Total
+        total_tax = cantonal_tax + municipal_tax
+
+        return {
+            'simple_tax': simple_tax,
+            'cantonal_tax': cantonal_tax,
+            'municipal_tax': municipal_tax,
+            'total_cantonal_and_municipal': total_tax,
+            'canton_multiplier': canton_multiplier,
+            'municipal_multiplier': municipal_multiplier
+        }

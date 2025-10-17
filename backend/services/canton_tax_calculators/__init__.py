@@ -5,6 +5,7 @@ This package contains tax calculation engines for all 26 Swiss cantons.
 Each canton has its own progressive tax rate system and deduction rules.
 """
 
+from .aargau import AargauTaxCalculator
 from .base import CantonTaxCalculator
 from .basel_stadt import BaselStadtTaxCalculator
 from .bern import BernTaxCalculator
@@ -32,7 +33,7 @@ CANTON_CALCULATORS = {
     'AI': ZurichTaxCalculator,
     'SG': ZurichTaxCalculator,
     'GR': ZurichTaxCalculator,
-    'AG': ZurichTaxCalculator,
+    'AG': AargauTaxCalculator,
     'TG': ZurichTaxCalculator,
     'TI': ZurichTaxCalculator,
     'VD': VaudTaxCalculator,

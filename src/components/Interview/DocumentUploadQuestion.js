@@ -46,6 +46,15 @@ const DocumentUploadQuestion = ({
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
+  // DEBUG: Log props on component mount
+  console.log('[DocumentUploadQuestion] Component mounted with props:', {
+    questionId: question?.id,
+    sessionId,
+    onUploadType: typeof onUpload,
+    onUploadExists: !!onUpload,
+    allProps: { question, sessionId, onUploadComplete, onBringLater, onUpload }
+  });
+
   /**
    * Validate file before upload
    * @param {File} file - File to validate
@@ -98,7 +107,19 @@ const DocumentUploadQuestion = ({
       const formData = new FormData();
       formData.append('file', file);
       formData.append('question_id', question.id);
-      formData.append('document_type', question.document_type);
+      formData.append('document_type', question.document_type || 'general');
+
+      // DEBUG: Log what we're sending
+      console.log('[DocumentUploadQuestion] Preparing upload:', {
+        fileName: file.name,
+        fileSize: file.size,
+        questionId: question.id,
+        documentType: question.document_type || 'general',
+        formDataKeys: Array.from(formData.keys()),
+        formDataValues: Array.from(formData.entries()).map(([key, value]) =>
+          key === 'file' ? `${key}: [File: ${value.name}]` : `${key}: ${value}`
+        )
+      });
 
       // Call upload function with progress tracking
       const response = await onUpload(formData, {

@@ -7,7 +7,7 @@ import json
 import logging
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -530,6 +530,150 @@ async def save_session(
         )
 
 
+@router.post("/sessions/{session_id}/upload", response_model=dict)
+async def upload_document_for_session(
+    session_id: str,
+    file: UploadFile = File(...),
+    question_id: str = Form(...),
+    document_type: str = Form("general"),
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Upload a document during the interview (simplified single-endpoint upload)
+
+    - Handles file upload directly to S3
+    - Saves metadata to documents table
+    - Returns upload confirmation
+    """
+    # DEBUG: Log incoming request with all parameters
+    logger.info("=" * 80)
+    logger.info("[upload_document_for_session] ENDPOINT HIT!")
+    logger.info(f"[upload_document_for_session] session_id={session_id} (type: {type(session_id)})")
+    logger.info(f"[upload_document_for_session] question_id={question_id} (type: {type(question_id)})")
+    logger.info(f"[upload_document_for_session] document_type={document_type} (type: {type(document_type)})")
+    logger.info(f"[upload_document_for_session] file.filename={file.filename}")
+    logger.info(f"[upload_document_for_session] file.content_type={file.content_type}")
+    logger.info(f"[upload_document_for_session] file.size={file.size if hasattr(file, 'size') else 'unknown'}")
+    logger.info(f"[upload_document_for_session] current_user.id={current_user.id}")
+    logger.info("=" * 80)
+
+    try:
+        # Get interview session to find filing_id
+        interview_service = InterviewService(db=db)
+        session_data = interview_service.get_session(session_id)
+
+        logger.info(f"[upload_document_for_session] session_data: {session_data}")
+        logger.info(f"[upload_document_for_session] session_data keys: {list(session_data.keys()) if session_data else 'None'}")
+
+        if not session_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Session {session_id} not found"
+            )
+
+        # NOTE: InterviewSession stores it as 'filing_id', not 'filing_session_id'
+        filing_session_id = session_data.get("filing_id") or session_data.get("filing_session_id")
+        logger.info(f"[upload_document_for_session] filing_session_id from session_data: {filing_session_id}")
+
+        if not filing_session_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No filing session associated with this interview"
+            )
+
+        # Verify filing session belongs to user
+        filing_session = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_session_id,
+            TaxFilingSession.user_id == current_user.id
+        ).first()
+
+        if not filing_session:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Filing session not found or access denied"
+            )
+
+        # Import document service
+        from services.document_service import DocumentService, S3_BUCKET, s3_client
+        import uuid
+
+        doc_service = DocumentService()
+
+        # Read file content
+        file_content = await file.read()
+
+        # Validate file size (10MB max)
+        if len(file_content) > 10 * 1024 * 1024:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="File too large. Maximum size is 10MB."
+            )
+
+        # Generate S3 key
+        file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'pdf'
+        s3_key = f"documents/{filing_session_id}/{document_type}/{uuid.uuid4()}.{file_extension}"
+
+        # Upload to S3
+        try:
+            s3_client.put_object(
+                Bucket=S3_BUCKET,
+                Key=s3_key,
+                Body=file_content,
+                ContentType=file.content_type or 'application/octet-stream',
+                ServerSideEncryption='AES256'
+            )
+        except Exception as e:
+            logger.error(f"S3 upload failed: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to upload to S3: {str(e)}"
+            )
+
+        # Save metadata to database
+        from database.connection import execute_query
+
+        insert_query = """
+            INSERT INTO swisstax.documents (
+                session_id, user_id, file_name, file_size,
+                mime_type, s3_key, s3_bucket, ocr_status, document_type
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, 'pending', %s)
+            RETURNING id::text, file_name, s3_key, ocr_status as status
+        """
+
+        result = execute_query(insert_query, (
+            session_id,
+            str(current_user.id),
+            file.filename,
+            len(file_content),
+            file.content_type or 'application/octet-stream',
+            s3_key,
+            S3_BUCKET,
+            document_type
+        ), fetch=True)[0]
+
+        logger.info(f"Document uploaded for session {session_id}, question {question_id}: {result['id']}")
+
+        return {
+            "success": True,
+            "data": {
+                "document_id": result['id'],
+                "file_name": result['file_name'],
+                "status": result['status'],
+                "message": "Document uploaded successfully"
+            }
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading document: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to upload document: {str(e)}"
+        )
+
+
 class CalculateTaxRequest(BaseModel):
     filing_session_id: Optional[str] = Field(None, description="ID of the TaxFilingSession to calculate taxes for")
     answers: Optional[dict] = Field(None, description="Current answers (optional)")
@@ -736,16 +880,24 @@ class MarkDocumentUploadedRequest(BaseModel):
 async def upload_pending_document(
     filing_id: str,
     doc_id: str,
-    request: MarkDocumentUploadedRequest,
+    file: UploadFile = File(...),
+    question_id: str = Form(default=None),
+    document_type: str = Form(default="employment_certificate"),
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Mark a previously pending document as uploaded
+    Upload a document for a pending document record
 
-    - Updates status from PENDING to UPLOADED
-    - Links to the uploaded document in documents table
+    - Accepts file upload directly (FormData)
+    - Uploads file to S3
+    - Saves to documents table
+    - Updates pending document status from PENDING to UPLOADED
+    - Completes the pending document insight automatically
     """
+    logger.info(f"[upload_pending_document] Uploading file for pending doc {doc_id}, filing {filing_id}")
+    logger.info(f"[upload_pending_document] File: {file.filename}, Type: {document_type}")
+
     try:
         # Verify filing session belongs to user
         filing_session = db.query(TaxFilingSession).filter(
@@ -760,32 +912,126 @@ async def upload_pending_document(
                 detail="Filing session not found or access denied"
             )
 
-        # Mark as uploaded
-        pending_doc_service = PendingDocumentService(db=db)
-        updated_doc = pending_doc_service.mark_as_uploaded(
-            document_id=doc_id,
-            uploaded_document_id=request.document_id
-        )
+        # Verify pending document exists
+        pending_doc = db.query(PendingDocument).filter(
+            PendingDocument.id == doc_id,
+            PendingDocument.filing_session_id == filing_id
+        ).first()
 
-        if not updated_doc:
+        if not pending_doc:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Pending document not found"
             )
 
+        # Import document service
+        from services.document_service import DocumentService, S3_BUCKET, s3_client
+        import uuid
+
+        # Read file content
+        file_content = await file.read()
+
+        # Validate file size (10MB max)
+        if len(file_content) > 10 * 1024 * 1024:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="File too large. Maximum size is 10MB."
+            )
+
+        # Generate S3 key
+        file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'pdf'
+        s3_key = f"documents/{filing_id}/{document_type}/{uuid.uuid4()}.{file_extension}"
+
+        # Upload to S3
+        try:
+            s3_client.put_object(
+                Bucket=S3_BUCKET,
+                Key=s3_key,
+                Body=file_content,
+                ContentType=file.content_type or 'application/octet-stream',
+                ServerSideEncryption='AES256'
+            )
+            logger.info(f"[upload_pending_document] Successfully uploaded to S3: {s3_key}")
+        except Exception as e:
+            logger.error(f"S3 upload failed: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to upload to S3: {str(e)}"
+            )
+
+        # Save metadata to documents table
+        from database.connection import execute_query
+
+        insert_query = """
+            INSERT INTO swisstax.documents (
+                session_id, user_id, file_name, file_size,
+                mime_type, s3_key, s3_bucket, ocr_status, document_type
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, 'pending', %s)
+            RETURNING id::text, file_name, s3_key, ocr_status as status
+        """
+
+        # Use filing_id as session_id (for consistency with other uploads)
+        result = execute_query(insert_query, (
+            filing_id,
+            str(current_user.id),
+            file.filename,
+            len(file_content),
+            file.content_type or 'application/octet-stream',
+            s3_key,
+            S3_BUCKET,
+            document_type
+        ), fetch=True)[0]
+
+        uploaded_document_id = result['id']
+        logger.info(f"[upload_pending_document] Document saved to database with ID: {uploaded_document_id}")
+
+        # Mark pending document as uploaded
+        pending_doc_service = PendingDocumentService(db=db)
+        updated_doc = pending_doc_service.mark_as_uploaded(
+            document_id=doc_id,
+            uploaded_document_id=uploaded_document_id
+        )
+
+        if not updated_doc:
+            logger.error(f"Failed to mark pending document {doc_id} as uploaded")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to update pending document status"
+            )
+
+        logger.info(f"[upload_pending_document] Marked pending doc {doc_id} as uploaded")
+
+        # Complete the pending document insight (move to completed)
+        try:
+            TaxInsightService.complete_pending_document_insight(
+                db=db,
+                pending_document_id=doc_id,
+                filing_session_id=filing_id,
+                user_id=current_user.id
+            )
+            logger.info(f"Completed insight for pending document {doc_id}")
+        except Exception as e:
+            logger.warning(f"Failed to complete pending document insight: {e}")
+            # Don't fail the request if insight update fails
+
         return {
             "success": True,
-            "message": "Document marked as uploaded",
-            "document": updated_doc.to_dict()
+            "message": "Document uploaded successfully",
+            "data": {
+                "document_id": uploaded_document_id,
+                "file_name": result['file_name'],
+                "status": result['status'],
+                "pending_document": updated_doc.to_dict()
+            }
         }
 
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error marking document as uploaded: {e}")
+        logger.error(f"Error uploading pending document: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to mark document as uploaded: {str(e)}"
+            detail=f"Failed to upload document: {str(e)}"
         )
 
 

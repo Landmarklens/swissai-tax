@@ -22,10 +22,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useTranslation } from 'react-i18next';
 import AHVNumberInput from './AHVNumberInput';
+import PostalCodeInput from './PostalCodeInput';
 import DocumentUploadQuestion from './DocumentUploadQuestion';
 import DocumentExtractionPreview from './DocumentExtractionPreview';
+import GroupQuestionInput from './GroupQuestionInput';
 
-const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, sessionId, onUpload }) => {
+const QuestionCard = ({ question, onAnswer, onBack, canGoBack = true, loading, previousAnswer, sessionId, onUpload }) => {
   const { t } = useTranslation();
   const [answer, setAnswer] = useState('');
   const [groupAnswers, setGroupAnswers] = useState({});
@@ -33,23 +35,59 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
   const [extractedData, setExtractedData] = useState(null);
   const [showExtraction, setShowExtraction] = useState(false);
 
+  // DEBUG: Log props on component mount/update
+  console.log('[QuestionCard] Rendered with props:', {
+    questionId: question?.id,
+    questionType: question?.type,
+    sessionId,
+    onUploadType: typeof onUpload,
+    onUploadExists: !!onUpload
+  });
+
   useEffect(() => {
     // Set previous answer if exists
     if (previousAnswer !== undefined) {
       setAnswer(previousAnswer);
     } else {
       // Reset answer when question changes
-      setAnswer('');
+      // For loop questions, initialize as empty array
+      if (question.type === 'group' && question.loop) {
+        setAnswer([]);
+      } else {
+        setAnswer('');
+      }
       setGroupAnswers({});
     }
     setError('');
   }, [question, previousAnswer]);
 
   const handleSubmit = () => {
+    console.log('=== QuestionCard handleSubmit ===');
+    console.log('Question:', question);
+    console.log('Answer:', answer);
+    console.log('Answer type:', typeof answer, 'Is array:', Array.isArray(answer));
+    console.log('GroupAnswers:', groupAnswers);
+
     // Validate required fields
-    if (question.required && !answer && Object.keys(groupAnswers).length === 0) {
+    const answerIsEmpty = Array.isArray(answer) ? answer.length === 0 : !answer;
+    if (question.required && answerIsEmpty && Object.keys(groupAnswers).length === 0) {
+      console.log('❌ Required field validation failed');
       setError(t('interview.question.field_required'));
       return;
+    }
+
+    // Validate loop/group questions - check if expected number of entries are provided
+    if (question.type === 'group' && question.loop && question.expected_count) {
+      const entriesCount = Array.isArray(answer) ? answer.length : 0;
+      console.log(`Loop validation: ${entriesCount} of ${question.expected_count} entries`);
+      if (entriesCount < question.expected_count) {
+        console.log('❌ Loop validation failed - incomplete entries');
+        setError(t('interview.question.incomplete_entries', {
+          current: entriesCount,
+          expected: question.expected_count
+        }) || `Please complete all ${question.expected_count} entries. You have only filled ${entriesCount}.`);
+        return;
+      }
     }
 
     // Additional validation based on type
@@ -83,8 +121,12 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
     }
 
     // Submit answer based on question type
-    if (question.type === 'group' && question.fields) {
-      // For group questions, validate all fields
+    if (question.type === 'group' && question.loop) {
+      // For loop group questions, submit the array of entries directly
+      console.log('✅ Submitting loop group answer:', answer);
+      onAnswer(answer);
+    } else if (question.type === 'group' && question.fields) {
+      // For simple group questions (non-loop), validate all fields
       const allFieldsValid = question.fields.every(field => {
         if (field.required) {
           return groupAnswers[field.id] && groupAnswers[field.id] !== '';
@@ -280,6 +322,28 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
         );
 
       case 'group':
+        // For loop questions, use GroupQuestionInput component
+        if (question.loop) {
+          return (
+            <>
+              <GroupQuestionInput
+                question={question}
+                value={Array.isArray(answer) ? answer : []}
+                onChange={(entries) => setAnswer(entries)}
+                disabled={loading}
+                sessionId={sessionId}
+                onUpload={onUpload}
+              />
+              {error && (
+                <Typography color="error" variant="body2" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
+            </>
+          );
+        }
+
+        // For simple group questions (non-loop), render fields individually
         return (
           <Stack spacing={2}>
             {question.fields?.map((field) => (
@@ -306,6 +370,17 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
             onChange={(value) => setAnswer(value)}
             error={error}
             label={t('interview.ahv_number')}
+            required={question.required}
+          />
+        );
+
+      case 'postal_code':
+        return (
+          <PostalCodeInput
+            value={answer}
+            onChange={(value) => setAnswer(value)}
+            error={error}
+            label={question.text}
             required={question.required}
           />
         );
@@ -499,7 +574,7 @@ const QuestionCard = ({ question, onAnswer, onBack, loading, previousAnswer, ses
         <Button
           variant="outlined"
           onClick={onBack}
-          disabled={loading}
+          disabled={loading || !canGoBack}
         >
           {t('interview.question.back')}
         </Button>

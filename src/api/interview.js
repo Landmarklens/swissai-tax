@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || process.env.REACT_APP_API_URL || 'http://localhost:8001';
+console.log('[interview.js] API_BASE_URL:', API_BASE_URL);
 
 /**
  * Interview API Client
@@ -99,8 +100,31 @@ export const submitAnswer = async (sessionId, questionId, answer, additionalData
  */
 export const uploadDocument = async (sessionId, questionId, formData, options = {}) => {
   try {
+    const uploadUrl = `${API_BASE_URL}/api/interview/sessions/${sessionId}/upload`;
+
+    console.log('[uploadDocument] DEBUG - Basic Info:', {
+      sessionId,
+      questionId,
+      uploadUrl,
+      API_BASE_URL
+    });
+
+    // Log all FormData entries in detail
+    console.log('[uploadDocument] DEBUG - FormData entries:');
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`  ${key}:`, {
+          name: value.name,
+          size: value.size,
+          type: value.type
+        });
+      } else {
+        console.log(`  ${key}:`, value);
+      }
+    }
+
     const response = await axios.post(
-      `${API_BASE_URL}/api/interview/sessions/${sessionId}/upload`,
+      uploadUrl,
       formData,
       {
         headers: {
@@ -110,9 +134,21 @@ export const uploadDocument = async (sessionId, questionId, formData, options = 
         timeout: 60000 // 60 second timeout for large files
       }
     );
+    console.log('[uploadDocument] Success:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error uploading document:', error);
+    console.error('[uploadDocument] Error:', {
+      message: error.message,
+      url: error.config?.url,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      fullResponse: error.response
+    });
+    console.error('[uploadDocument] Full error object:', error);
+    if (error.response?.data) {
+      console.error('[uploadDocument] Response data detail:', JSON.stringify(error.response.data, null, 2));
+    }
     throw error;
   }
 };

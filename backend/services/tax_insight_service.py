@@ -607,6 +607,69 @@ class TaxInsightService:
         return insight
 
     @staticmethod
+    def complete_pending_document_insight(
+        db: Session,
+        pending_document_id: str,
+        filing_session_id: str,
+        user_id: str
+    ) -> bool:
+        """
+        Mark pending document insight as completed when document is uploaded
+
+        Args:
+            db: Database session
+            pending_document_id: ID of the pending document
+            filing_session_id: Filing session ID
+            user_id: User ID (for security)
+
+        Returns:
+            True if insight was updated
+        """
+        # Verify user owns the filing session
+        filing = db.query(TaxFilingSession).filter(
+            TaxFilingSession.id == filing_session_id,
+            TaxFilingSession.user_id == user_id
+        ).first()
+
+        if not filing:
+            raise ValueError("Filing not found or access denied")
+
+        # Find the insight related to this pending document
+        # The pending_doc_id is stored in related_questions as "pending_doc:{id}"
+        insights = db.query(TaxInsight).filter(
+            TaxInsight.filing_session_id == filing_session_id,
+            TaxInsight.insight_type == InsightType.MISSING_DOCUMENT,
+            TaxInsight.category == InsightCategory.ACTION_REQUIRED
+        ).all()
+
+        for insight in insights:
+            # Check if this insight is for the uploaded document
+            if insight.related_questions:
+                try:
+                    related = json.loads(insight.related_questions)
+                    if f"pending_doc:{pending_document_id}" in related:
+                        # Move insight to completed
+                        insight.category = InsightCategory.COMPLETED
+                        insight.is_applied = 1
+                        insight.priority = InsightPriority.LOW
+
+                        # Update description to show it's completed
+                        doc_type = insight.title.replace("Upload ", "")
+                        insight.title = f"{doc_type} Uploaded"
+                        insight.description = f"You have successfully uploaded {doc_type}."
+                        insight.action_items = json.dumps([])  # Clear action items
+
+                        db.commit()
+                        logger.info(f"Completed pending document insight for document {pending_document_id}")
+                        return True
+                except (json.JSONDecodeError, ValueError) as e:
+                    logger.warning(f"Failed to parse related_questions for insight {insight.id}: {e}")
+                    continue
+
+        logger.warning(f"No insight found for pending document {pending_document_id}")
+        return False
+
+    @staticmethod
     def generate_progressive_insights(
         db: Session,
         filing_session_id: str,
@@ -651,13 +714,18 @@ class TaxInsightService:
         
         answer_dict = {answer.question_id: answer for answer in answers}
         answered_questions = set(answer_dict.keys())
-        
-        # Delete existing insights - we'll regenerate fresh each time
-        db.query(TaxInsight).filter(
+
+        # Instead of deleting all insights, we'll track which ones to keep/update
+        # Get existing insights to avoid duplicates
+        existing_insights = db.query(TaxInsight).filter(
             TaxInsight.filing_session_id == filing_session_id
-        ).delete()
-        db.commit()
-        
+        ).all()
+
+        # Create a map of existing insights by subcategory for easy lookup
+        existing_by_subcategory = {
+            insight.subcategory: insight for insight in existing_insights
+        }
+
         insights = []
 
         # Generate DATA INSIGHTS from answered questions (completed category)
@@ -696,14 +764,58 @@ class TaxInsightService:
         insights.extend(TaxInsightService._generate_pending_document_insights(
             db, filing_session_id
         ))
-        
-        # Save all insights
+
+        # Instead of always adding new insights, update existing ones or add new
+        # Track which subcategories we've seen in new insights
+        new_insights_by_subcategory = {}
         for insight in insights:
-            db.add(insight)
-        
+            # Use subcategory as key, but for pending documents use title too (multiple can exist)
+            if insight.subcategory == InsightSubcategory.GENERAL and insight.insight_type == InsightType.MISSING_DOCUMENT:
+                # For pending documents, use a combination of subcategory and title
+                key = f"{insight.subcategory}_{insight.title}"
+            else:
+                key = insight.subcategory
+            new_insights_by_subcategory[key] = insight
+
+        # Track which existing insights to delete (ones that no longer apply)
+        insights_to_delete = []
+
+        for existing_insight in existing_insights:
+            # Create same key structure
+            if existing_insight.subcategory == InsightSubcategory.GENERAL and existing_insight.insight_type == InsightType.MISSING_DOCUMENT:
+                key = f"{existing_insight.subcategory}_{existing_insight.title}"
+            else:
+                key = existing_insight.subcategory
+
+            if key in new_insights_by_subcategory:
+                # Update existing insight with new data
+                new_insight = new_insights_by_subcategory[key]
+                existing_insight.title = new_insight.title
+                existing_insight.description = new_insight.description
+                existing_insight.estimated_savings_chf = new_insight.estimated_savings_chf
+                existing_insight.priority = new_insight.priority
+                existing_insight.category = new_insight.category
+                existing_insight.related_questions = new_insight.related_questions
+                existing_insight.action_items = new_insight.action_items
+                # Remove from new insights dict since we updated the existing one
+                del new_insights_by_subcategory[key]
+            else:
+                # This insight no longer applies, mark for deletion
+                insights_to_delete.append(existing_insight)
+
+        # Delete insights that no longer apply
+        for insight in insights_to_delete:
+            db.delete(insight)
+
+        # Add only the truly new insights (ones that didn't exist before)
+        for new_insight in new_insights_by_subcategory.values():
+            db.add(new_insight)
+
         db.commit()
-        
-        logger.info(f"Generated {len(insights)} progressive insights for filing {filing_session_id}")
+
+        logger.info(f"Updated/added {len(insights)} progressive insights for filing {filing_session_id} "
+                    f"({len(new_insights_by_subcategory)} new, {len(insights) - len(new_insights_by_subcategory)} updated, "
+                    f"{len(insights_to_delete)} removed)")
         return insights
     
     @staticmethod
@@ -869,19 +981,27 @@ class TaxInsightService:
     ) -> List[TaxInsight]:
         """Generate insights for pending documents"""
         insights = []
-        
+
         # Get pending documents
         pending_docs = db.query(PendingDocument).filter(
             PendingDocument.filing_session_id == filing_session_id,
             PendingDocument.status == DocumentStatus.PENDING
         ).all()
-        
+
+        logger.info(f"[PENDING DOCS] Found {len(pending_docs)} pending documents for filing {filing_session_id}")
+
         for doc in pending_docs:
             # Safely handle document_type - add null check
             doc_type_display = (doc.document_type or 'Document').replace('_', ' ').title()
             doc_label = doc.document_label or doc.document_type or 'document'
 
-            insights.append(TaxInsight(
+            logger.info(f"[PENDING DOCS] Creating insight for: {doc_type_display} (label: {doc_label}, question: {doc.question_id})")
+
+            # Store pending document ID in related_questions as metadata
+            # Format: ["pending_doc:{document_id}", "question_id"]
+            related_data = json.dumps([f"pending_doc:{doc.id}", doc.question_id])
+
+            insight = TaxInsight(
                 filing_session_id=filing_session_id,
                 insight_type=InsightType.MISSING_DOCUMENT,
                 priority=InsightPriority.HIGH,
@@ -890,13 +1010,20 @@ class TaxInsightService:
                 title=f"Upload {doc_type_display}",
                 description=f"You marked this document as 'bring later'. Upload {doc_label} to complete your filing.",
                 estimated_savings_chf=None,
-                related_questions=json.dumps([]),
+                related_questions=related_data,
                 action_items=json.dumps([
-                    f"Upload {doc_label}",
-                    "Or remove from checklist if no longer needed"
+                    {
+                        "text": f"Upload {doc_label}",
+                        "action_type": "upload_document",
+                        "pending_document_id": str(doc.id),
+                        "question_id": doc.question_id
+                    }
                 ])
-            ))
-        
+            )
+            insights.append(insight)
+            logger.info(f"[PENDING DOCS] Added insight: '{insight.title}'")
+
+        logger.info(f"[PENDING DOCS] Returning {len(insights)} pending document insights")
         return insights
 
     # ==================== DATA EXTRACTION METHODS ====================
@@ -1080,7 +1207,11 @@ class TaxInsightService:
             secondary_cantons = TaxInsightService._get_answer_value(answer_dict, "Q02b")
             if secondary_cantons and isinstance(secondary_cantons, list):
                 for canton_data in secondary_cantons:
+                    # Handle both formats:
+                    # 1. String format: ['ZH', 'BE'] (current frontend)
+                    # 2. Object format: [{canton: 'ZH', municipality: 'Zurich'}, ...]
                     if isinstance(canton_data, dict):
+                        # Object format
                         municipality = canton_data.get('municipality', '')
                         canton = canton_data.get('canton', '')
                         if municipality or canton:
@@ -1088,6 +1219,11 @@ class TaxInsightService:
                             if canton:
                                 location_str += f", {canton}" if location_str else canton
                             data_parts.append(f"📍 Secondary: {location_str}")
+                    elif isinstance(canton_data, str):
+                        # String format (just canton code)
+                        canton = canton_data.strip()
+                        if canton:
+                            data_parts.append(f"📍 Secondary: {canton}")
 
         if not data_parts:
             return None

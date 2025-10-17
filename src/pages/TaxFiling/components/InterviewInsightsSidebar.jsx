@@ -10,7 +10,12 @@ import {
   Divider,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button
 } from '@mui/material';
 import {
   Lightbulb as LightbulbIcon,
@@ -19,12 +24,15 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../../services/api';
+import DocumentUploadQuestion from '../../../components/Interview/DocumentUploadQuestion';
 
 const InterviewInsightsSidebar = ({ filingSessionId, triggerRefetch }) => {
   const { t } = useTranslation();
   const [insights, setInsights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
   useEffect(() => {
     if (filingSessionId) {
@@ -169,17 +177,66 @@ const InterviewInsightsSidebar = ({ filingSessionId, triggerRefetch }) => {
               {t('Action items')}:
             </Typography>
             <Box component="ul" sx={{ m: 0, pl: 2 }}>
-              {insight.action_items.map((action, idx) => (
-                <Typography
-                  key={idx}
-                  component="li"
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ mt: 0.5 }}
-                >
-                  {action}
-                </Typography>
-              ))}
+              {insight.action_items.map((action, idx) => {
+                // Handle both string and object action items
+                if (typeof action === 'string') {
+                  return (
+                    <Typography
+                      key={idx}
+                      component="li"
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ mt: 0.5 }}
+                    >
+                      {action}
+                    </Typography>
+                  );
+                } else if (typeof action === 'object' && action.text) {
+                  // Handle object-based action items (e.g., upload document)
+                  if (action.action_type === 'upload_document') {
+                    return (
+                      <Typography
+                        key={idx}
+                        component="li"
+                        variant="caption"
+                        sx={{ mt: 0.5 }}
+                      >
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          sx={{
+                            color: 'primary.main',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            '&:hover': {
+                              color: 'primary.dark'
+                            }
+                          }}
+                          onClick={() => {
+                            setSelectedDocument(action);
+                            setUploadDialogOpen(true);
+                          }}
+                        >
+                          {action.text}
+                        </Typography>
+                      </Typography>
+                    );
+                  } else {
+                    return (
+                      <Typography
+                        key={idx}
+                        component="li"
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ mt: 0.5 }}
+                      >
+                        {action.text}
+                      </Typography>
+                    );
+                  }
+                }
+                return null;
+              })}
             </Box>
           </Box>
         )}
@@ -252,6 +309,7 @@ const InterviewInsightsSidebar = ({ filingSessionId, triggerRefetch }) => {
   const hasPending = Object.keys(groupedInsights.action_required).length > 0;
 
   return (
+    <>
     <Card sx={{ position: 'sticky', top: 24, height: 'fit-content', maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
       <CardContent>
         <Box display="flex" alignItems="center" gap={1} mb={3}>
@@ -326,6 +384,65 @@ const InterviewInsightsSidebar = ({ filingSessionId, triggerRefetch }) => {
         )}
       </CardContent>
     </Card>
+
+    {/* Upload Dialog */}
+    <Dialog
+      open={uploadDialogOpen}
+      onClose={() => setUploadDialogOpen(false)}
+      maxWidth="md"
+      fullWidth
+    >
+      <DialogTitle>
+        {selectedDocument?.text || 'Upload Document'}
+      </DialogTitle>
+      <DialogContent>
+        {selectedDocument && (
+          <DocumentUploadQuestion
+            question={{
+              id: selectedDocument.question_id,
+              type: 'DOCUMENT_UPLOAD',
+              text: selectedDocument.text,
+              help_text: 'Upload your document',
+              document_type: 'employment_certificate',
+              accepted_formats: ['pdf', 'jpg', 'jpeg', 'png'],
+              max_size_mb: 10,
+              bring_later: false
+            }}
+            sessionId={filingSessionId}
+            onUploadComplete={(response) => {
+              setUploadDialogOpen(false);
+              setSelectedDocument(null);
+              // Refresh insights to show the updated status
+              fetchInsights();
+            }}
+            onBringLater={() => {}}
+            onUpload={async (file, questionId) => {
+              // Upload the document using the pending document ID
+              const formData = new FormData();
+              formData.append('file', file);
+
+              const response = await api.post(
+                `/api/interview/filings/${filingSessionId}/pending-documents/${selectedDocument.pending_document_id}/upload`,
+                formData,
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                }
+              );
+
+              return response.data;
+            }}
+          />
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setUploadDialogOpen(false)}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </>
   );
 };
 

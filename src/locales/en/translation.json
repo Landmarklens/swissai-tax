@@ -1745,6 +1745,7 @@
   "interview.question.minimum_length": "Minimum length is {{length}} characters",
   "interview.question.maximum_length": "Maximum length is {{length}} characters",
   "interview.question.all_fields_required": "Please fill in all required fields",
+  "interview.question.incomplete_entries": "Please complete all {{expected}} entries. You have only filled {{current}}.",
   "interview.question.back": "Back",
   "interview.question.next": "Next",
   "interview.question.submitting": "Submitting...",

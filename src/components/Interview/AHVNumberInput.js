@@ -150,9 +150,10 @@ const AHVNumberInput = ({
 
   /**
    * Determine if should show error
+   * Convert error string to boolean for Material-UI
    */
   const showError = isTouched && rawValue && !validationResult.isValid;
-  const hasError = !!error || showError;
+  const hasError = Boolean(error) || showError;
 
   /**
    * Get specific error message based on validation result

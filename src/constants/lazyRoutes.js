@@ -175,15 +175,7 @@ export const LAZY_NAVIGATION_ROUTE = [
     )
   },
   {
-    path: '/tax-filing/interview/:filingId',
-    element: (
-      <ProtectedRoute>
-        <TaxInterviewPage />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/tax-filing/interview',
+    path: '/tax-filing/interview/:filingId?',
     element: (
       <ProtectedRoute>
         <TaxInterviewPage />

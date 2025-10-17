@@ -286,27 +286,89 @@ class InterviewService:
             session['pending_questions'].append('Q03a')
             next_question_id = 'Q03a'
         elif question_id == 'Q03a':
-            # Store number of children and prepare for child details
+            # Store number of children for later use (e.g., deduction calculations)
             try:
                 num_children = int(answer)
             except (ValueError, TypeError):
                 return {'error': 'Invalid number provided. Please enter a valid number.'}
             session_context['num_children'] = num_children
-            session_context['child_index'] = 0
-            next_question_id = 'Q03b' if num_children > 0 else 'Q04'
-        elif question_id == 'Q03b':
-            # Handle child loop
-            if 'child_index' not in session:
-                session_context['child_index'] = 0
-
-            session_context['child_index'] += 1
-
-            if session_context['child_index'] < session_context.get('num_children', 0):
-                # More children to process
-                next_question_id = 'Q03b'
+            # Q03b (child details) was removed - proceed to Q01d (spouse employed) if married, else Q02a
+            if session['answers'].get('Q01') == 'married':
+                next_question_id = 'Q01d'
             else:
-                # Move to next main question
-                next_question_id = 'Q04'
+                next_question_id = 'Q02a'
+        elif question_id == 'Q03b':
+            # Handle child information
+            # NEW: Check if answer is an array (all children submitted at once via GroupQuestionInput)
+            if isinstance(answer, list):
+                # All child entries submitted at once - validate count and proceed
+                num_children = session_context.get('num_children', 0)
+                if len(answer) >= num_children:
+                    # All children provided, move to next question
+                    logger.info(f"Received {len(answer)} child entries (expected {num_children}), advancing to Q04")
+                    next_question_id = 'Q04'
+                else:
+                    # Not enough entries - should not happen if frontend validation works
+                    logger.warning(f"Received {len(answer)} child entries but expected {num_children}")
+                    next_question_id = 'Q03b'  # Stay on Q03b to collect more
+            else:
+                # OLD: Traditional loop logic (one child at a time) - kept for backwards compatibility
+                if 'child_index' not in session_context:
+                    session_context['child_index'] = 0
+
+                session_context['child_index'] += 1
+
+                if session_context['child_index'] < session_context.get('num_children', 0):
+                    # More children to process
+                    next_question_id = 'Q03b'
+                else:
+                    # Move to next main question
+                    next_question_id = 'Q04'
+
+        # Handle employer information
+        elif question_id == 'Q04':
+            # Store number of employers and prepare for employer details
+            try:
+                # Handle both string values like '1', '2', '3', '4+' and integer values
+                answer_str = str(answer)
+                if answer_str == '4+':
+                    num_employers = 4
+                elif answer_str == '0':
+                    num_employers = 0
+                else:
+                    num_employers = int(answer_str)
+            except (ValueError, TypeError):
+                return {'error': 'Invalid number provided. Please enter a valid number.'}
+            session_context['num_employers'] = num_employers
+            session_context['employer_index'] = 0
+            next_question_id = 'Q04b' if num_employers > 0 else 'Q05'
+        elif question_id == 'Q04b':
+            # Handle employer information loop
+            # NEW: Check if answer is an array (all employers submitted at once via GroupQuestionInput)
+            if isinstance(answer, list):
+                # All employer entries submitted at once - validate count and proceed
+                num_employers = session_context.get('num_employers', 0)
+                if len(answer) >= num_employers:
+                    # All employers provided, move to next question
+                    logger.info(f"Received {len(answer)} employer entries (expected {num_employers}), advancing to Q05")
+                    next_question_id = 'Q05'
+                else:
+                    # Not enough entries - should not happen if frontend validation works
+                    logger.warning(f"Received {len(answer)} employer entries but expected {num_employers}")
+                    next_question_id = 'Q04b'  # Stay on Q04b to collect more
+            else:
+                # OLD: Traditional loop logic (one employer at a time) - kept for backwards compatibility
+                if 'employer_index' not in session_context:
+                    session_context['employer_index'] = 0
+
+                session_context['employer_index'] += 1
+
+                if session_context['employer_index'] < session_context.get('num_employers', 0):
+                    # More employers to process
+                    next_question_id = 'Q04b'
+                else:
+                    # Move to next main question
+                    next_question_id = 'Q05'
 
         # NEW: Handle property ownership and multi-canton filing
         elif question_id == 'Q06' and answer == True:
@@ -479,8 +541,19 @@ class InterviewService:
         # Commit changes to database
         self.db.commit()
 
+        # Format the question
+        formatted_question = self._format_question(next_question, session['language'])
+
+        # Add expected_count for loop questions (like Q03b - child information)
+        if next_question_id == 'Q03b' and 'num_children' in session_context:
+            formatted_question['expected_count'] = session_context['num_children']
+
+        # Add expected_count for Q04b - employer information
+        if next_question_id == 'Q04b' and 'num_employers' in session_context:
+            formatted_question['expected_count'] = session_context['num_employers']
+
         response = {
-            'current_question': self._format_question(next_question, session['language']),
+            'current_question': formatted_question,
             'progress': progress,
             'total_questions': total_questions,
             'completed_questions': completed,
@@ -629,6 +702,10 @@ class InterviewService:
                 'help_text': upload_config.get('help_text', {}).get(language, upload_config.get('help_text', {}).get('en'))
             }
 
+        # Add loop property for group questions
+        if hasattr(question, 'loop') and question.loop:
+            formatted['loop'] = question.loop
+
         # Add fields for group questions
         if question.fields:
             formatted['fields'] = []
@@ -642,6 +719,41 @@ class InterviewService:
                 # Add widget for date fields in groups
                 if field.get('widget'):
                     field_data['widget'] = field['widget']
+
+                # Add conditional field logic
+                if field.get('conditional'):
+                    field_data['conditional'] = field['conditional']
+
+                # Add options for dropdown/single_choice fields in groups
+                if field.get('options'):
+                    field_data['options'] = []
+                    for opt in field['options']:
+                        field_data['options'].append({
+                            'value': opt['value'],
+                            'label': opt['label'].get(language, opt['label'].get('en'))
+                        })
+
+                # Add document upload specific attributes for document_upload fields in groups
+                if field['type'] == 'document_upload':
+                    if field.get('document_type'):
+                        field_data['document_type'] = field['document_type']
+                    if field.get('accepted_formats'):
+                        field_data['accepted_formats'] = field['accepted_formats']
+                    if field.get('max_size_mb'):
+                        field_data['max_size_mb'] = field['max_size_mb']
+                    if field.get('bring_later') is not None:
+                        field_data['bring_later'] = field['bring_later']
+                    if field.get('help_text'):
+                        field_data['help_text'] = field['help_text'].get(language, field['help_text'].get('en'))
+
+                # Add validation if present
+                if field.get('validation'):
+                    field_data['validation'] = field['validation']
+
+                # Add placeholder if present
+                if field.get('placeholder'):
+                    field_data['placeholder'] = field['placeholder']
+
                 formatted['fields'].append(field_data)
 
         # Note: Context for loops (like Q03b) is now passed separately when needed

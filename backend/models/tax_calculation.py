@@ -35,14 +35,13 @@ class TaxCalculation(Base):
     # Note: In database this is 'session_id', but we map it to filing_session_id for clarity
     filing_session_id = Column('session_id', String(36), ForeignKey('swisstax.tax_filing_sessions.id'), nullable=False, index=True)
 
-    # Calculation Type & Version
+    # Calculation Type
     calculation_type = Column(
         SQLEnum(CalculationType),
         default=CalculationType.ESTIMATE,
         nullable=False,
         index=True
     )
-    version = Column(Integer, default=1, nullable=False)  # Increments with each recalculation
 
     # Tax Year & Jurisdiction
     tax_year = Column(Integer, nullable=False, index=True)
@@ -135,7 +134,6 @@ class TaxCalculation(Base):
             'id': self.id,
             'filing_session_id': self.filing_session_id,
             'calculation_type': self.calculation_type.value if isinstance(self.calculation_type, CalculationType) else self.calculation_type,
-            'version': self.version,
             'tax_year': self.tax_year,
             'canton': self.canton,
             'municipality': self.municipality,

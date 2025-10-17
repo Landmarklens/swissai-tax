@@ -49,6 +49,7 @@ const InterviewPage = () => {
   const [insightRefetchTrigger, setInsightRefetchTrigger] = useState(0); // Trigger insights refetch after each answer
 
   const autoSaveTimer = useRef(null);
+  const interviewStarted = useRef(false); // Track if interview has been started
 
   // Interview categories for stepper - mapped from backend categories
   const categoryToStepIndex = {
@@ -64,7 +65,10 @@ const InterviewPage = () => {
     return categoryToStepIndex[question.category] || 0;
   };
 
+
   useEffect(() => {
+    // Only start interview once - prevent multiple API calls mid-interview
+    // DON'T add filingId or startInterview to dependencies to prevent re-runs
     startInterview();
 
     // Cleanup on unmount
@@ -73,7 +77,8 @@ const InterviewPage = () => {
         clearTimeout(autoSaveTimer.current);
       }
     };
-  }, [filingId]); // Re-run when filingId changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array - only run once on mount
 
   const autoSave = useCallback(async () => {
     if (!session) return;
@@ -260,13 +265,6 @@ const InterviewPage = () => {
         [currentQuestion.id]: answer
       };
 
-      // DEBUG: Log answer updates to trace Q01a_name -> Q01a issue
-      console.log('[InterviewPage] Answer saved:', {
-        questionId: currentQuestion.id,
-        answer: answer,
-        updatedAnswers: updatedAnswers
-      });
-
       setAnswers(updatedAnswers);
       setHasUnsavedChanges(true);
 
@@ -337,15 +335,6 @@ const InterviewPage = () => {
             };
           }) || []
         } : null;
-
-
-        // DEBUG: Log next question transition
-        console.log('[InterviewPage] Moving to next question:', {
-          previousQuestionId: currentQuestion.id,
-          nextQuestionId: transformedNextQuestion?.id,
-          answersState: updatedAnswers,
-          previousAnswerForNextQuestion: updatedAnswers[transformedNextQuestion?.id]
-        });
 
         setCurrentQuestion(transformedNextQuestion);
         setCurrentQuestionNumber(prev => prev + 1);
@@ -453,11 +442,11 @@ const InterviewPage = () => {
                 question={currentQuestion}
                 onAnswer={handleAnswer}
                 onBack={handleBack}
-                isSubmitting={submitting}
-                previousAnswer={answers[currentQuestion.id]}
                 canGoBack={questionHistory.length > 0}
+                loading={submitting}
+                previousAnswer={answers[currentQuestion.id]}
                 sessionId={session}
-                onUpload={uploadDocument}
+                onUpload={(formData, options) => uploadDocument(session, currentQuestion.id, formData, options)}
               />
             </Paper>
           )}

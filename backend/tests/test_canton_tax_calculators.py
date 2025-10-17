@@ -23,6 +23,7 @@ from unittest.mock import MagicMock, Mock, patch
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from services.canton_tax_calculators.aargau import AargauTaxCalculator
 from services.canton_tax_calculators.base import TaxBracket, CantonTaxCalculator
 from services.canton_tax_calculators.zurich import ZurichTaxCalculator
 from services.canton_tax_calculators.geneva import GenevaTaxCalculator
@@ -683,8 +684,223 @@ class TestBaselStadtTaxCalculator(unittest.TestCase):
         self.assertEqual(rate, Decimal('0.11'))
 
 
+class TestAargauTaxCalculator(unittest.TestCase):
+    """Test suite for Aargau canton tax calculator"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        self.calculator = AargauTaxCalculator('AG', 2024)
+
+    def test_initialization(self):
+        """Test Aargau calculator initialization"""
+        self.assertEqual(self.calculator.canton, 'AG')
+        self.assertEqual(self.calculator.tax_year, 2024)
+        self.assertEqual(self.calculator.CANTON_MULTIPLIER, Decimal('1.12'))
+
+    def test_tax_brackets_loaded(self):
+        """Test that tax brackets are properly loaded"""
+        self.assertIn('single', self.calculator.tax_brackets)
+        self.assertIn('married', self.calculator.tax_brackets)
+        self.assertGreater(len(self.calculator.tax_brackets['single']), 0)
+        self.assertGreater(len(self.calculator.tax_brackets['married']), 0)
+
+    def test_zero_income(self):
+        """Test Aargau calculation with zero income"""
+        tax = self.calculator.calculate(Decimal('0'), 'single')
+        self.assertEqual(tax, Decimal('0'))
+
+    def test_negative_income(self):
+        """Test Aargau calculation with negative income"""
+        tax = self.calculator.calculate(Decimal('-5000'), 'single')
+        self.assertEqual(tax, Decimal('0'))
+
+    def test_low_income_single_tax_free(self):
+        """Test low income in tax-free bracket for single"""
+        # Below 6700 is tax-free
+        tax = self.calculator.calculate(Decimal('6000'), 'single')
+        self.assertEqual(tax, Decimal('0'))
+
+    def test_moderate_income_single(self):
+        """Test moderate income for single taxpayer"""
+        # Income 50000 should be taxed progressively
+        tax = self.calculator.calculate(Decimal('50000'), 'single')
+        self.assertGreater(tax, Decimal('0'))
+        self.assertLess(tax, Decimal('50000'))
+        # Should be approximately CHF 1,902 based on online calculator
+        self.assertGreater(tax, Decimal('1500'))
+        self.assertLess(tax, Decimal('2500'))
+
+    def test_high_income_single(self):
+        """Test high income for single taxpayer"""
+        # Income 100000 should produce approximately CHF 6,217 based on research
+        tax = self.calculator.calculate(Decimal('100000'), 'single')
+        self.assertGreater(tax, Decimal('5000'))
+        self.assertLess(tax, Decimal('8000'))
+
+    def test_very_high_income_single(self):
+        """Test very high income in top bracket"""
+        tax = self.calculator.calculate(Decimal('500000'), 'single')
+        self.assertGreater(tax, Decimal('50000'))
+
+    def test_married_status(self):
+        """Test calculation for married status"""
+        # Married brackets are more favorable
+        tax_single = self.calculator.calculate(Decimal('50000'), 'single')
+        tax_married = self.calculator.calculate(Decimal('50000'), 'married')
+        self.assertLess(tax_married, tax_single)
+
+    def test_married_low_income(self):
+        """Test married status with low income"""
+        # Below 13400 is tax-free for married
+        tax = self.calculator.calculate(Decimal('12000'), 'married')
+        self.assertEqual(tax, Decimal('0'))
+
+    def test_get_simple_tax(self):
+        """Test getting simple tax before canton multiplier"""
+        simple_tax = self.calculator.get_simple_tax(Decimal('50000'), 'single')
+
+        # Simple tax should be less than the final tax
+        final_tax = self.calculator.calculate(Decimal('50000'), 'single')
+        self.assertLess(simple_tax, final_tax)
+
+        # Final tax should be simple_tax * 1.12
+        expected_final = simple_tax * Decimal('1.12')
+        self.assertAlmostEqual(
+            float(final_tax),
+            float(expected_final),
+            places=2
+        )
+
+    def test_calculate_with_multiplier_default(self):
+        """Test calculation with multiplier using default values"""
+        result = self.calculator.calculate_with_multiplier(
+            Decimal('50000'),
+            'single',
+            0
+        )
+
+        self.assertIn('simple_tax', result)
+        self.assertIn('cantonal_tax', result)
+        self.assertIn('municipal_tax', result)
+        self.assertIn('total_cantonal_and_municipal', result)
+        self.assertIn('canton_multiplier', result)
+        self.assertIn('municipal_multiplier', result)
+
+        # Canton multiplier should be 1.12
+        self.assertEqual(result['canton_multiplier'], Decimal('1.12'))
+
+        # Municipal multiplier should be default 1.02
+        self.assertEqual(result['municipal_multiplier'], Decimal('1.02'))
+
+        # Cantonal tax should be simple tax * 1.12
+        expected_cantonal = result['simple_tax'] * Decimal('1.12')
+        self.assertAlmostEqual(
+            float(result['cantonal_tax']),
+            float(expected_cantonal),
+            places=2
+        )
+
+    def test_calculate_with_custom_multipliers(self):
+        """Test calculation with custom canton and municipal multipliers"""
+        result = self.calculator.calculate_with_multiplier(
+            Decimal('50000'),
+            'single',
+            0,
+            canton_multiplier=Decimal('1.15'),
+            municipal_multiplier=Decimal('1.10')
+        )
+
+        self.assertEqual(result['canton_multiplier'], Decimal('1.15'))
+        self.assertEqual(result['municipal_multiplier'], Decimal('1.10'))
+
+        # Cantonal tax should be simple tax * 1.15
+        expected_cantonal = result['simple_tax'] * Decimal('1.15')
+        self.assertAlmostEqual(
+            float(result['cantonal_tax']),
+            float(expected_cantonal),
+            places=2
+        )
+
+        # CORRECTED: Municipal tax should be SIMPLE tax * 1.10 (not cantonal tax!)
+        # This is the correct Swiss formula
+        expected_municipal = result['simple_tax'] * Decimal('1.10')
+        self.assertAlmostEqual(
+            float(result['municipal_tax']),
+            float(expected_municipal),
+            places=2
+        )
+
+    def test_family_adjustment_no_change(self):
+        """Test that Aargau doesn't apply additional family tax adjustments"""
+        # In Aargau, family relief is through deductions, not tax credits
+        base_tax = self.calculator.calculate(Decimal('100000'), 'single', 0)
+        tax_with_children = self.calculator.calculate(Decimal('100000'), 'single', 3)
+
+        # Tax should be the same (relief is through deductions on income)
+        self.assertEqual(base_tax, tax_with_children)
+
+    def test_marginal_rate_progression(self):
+        """Test marginal rate increases with income"""
+        rate_low = self.calculator.get_marginal_rate(Decimal('10000'), 'single')
+        rate_mid = self.calculator.get_marginal_rate(Decimal('50000'), 'single')
+        rate_high = self.calculator.get_marginal_rate(Decimal('200000'), 'single')
+
+        self.assertLessEqual(rate_low, rate_mid)
+        self.assertLess(rate_mid, rate_high)
+
+    def test_marginal_rate_top_bracket_single(self):
+        """Test top bracket marginal rate for single"""
+        rate = self.calculator.get_marginal_rate(Decimal('300000'), 'single')
+        self.assertEqual(rate, Decimal('0.125'))
+
+    def test_marginal_rate_top_bracket_married(self):
+        """Test top bracket marginal rate for married"""
+        rate = self.calculator.get_marginal_rate(Decimal('500000'), 'married')
+        self.assertEqual(rate, Decimal('0.115'))
+
+    def test_breakdown_complete(self):
+        """Test complete breakdown calculation"""
+        breakdown = self.calculator.calculate_breakdown(
+            Decimal('80000'),
+            'single',
+            0
+        )
+
+        self.assertEqual(breakdown['canton'], 'AG')
+        self.assertEqual(breakdown['num_children'], 0)
+        self.assertGreater(breakdown['total_tax'], 0)
+        self.assertGreater(breakdown['effective_rate'], 0)
+
+    def test_canton_multiplier_applied(self):
+        """Test that canton multiplier is correctly applied"""
+        simple_tax = self.calculator.get_simple_tax(Decimal('75000'), 'married')
+        final_tax = self.calculator.calculate(Decimal('75000'), 'married')
+
+        # Final tax should be approximately simple_tax * 1.12
+        expected = simple_tax * Decimal('1.12')
+        self.assertAlmostEqual(
+            float(final_tax),
+            float(expected),
+            places=2
+        )
+
+    def test_married_vs_single_same_income(self):
+        """Test that married taxpayers pay less than single for same income"""
+        income = Decimal('60000')
+        tax_single = self.calculator.calculate(income, 'single')
+        tax_married = self.calculator.calculate(income, 'married')
+
+        self.assertLess(tax_married, tax_single)
+
+
 class TestGetCantonCalculator(unittest.TestCase):
     """Test suite for get_canton_calculator factory function"""
+
+    def test_get_aargau_calculator(self):
+        """Test getting Aargau calculator"""
+        calc = get_canton_calculator('AG', 2024)
+        self.assertIsInstance(calc, AargauTaxCalculator)
+        self.assertEqual(calc.canton, 'AG')
 
     def test_get_zurich_calculator(self):
         """Test getting Zurich calculator"""

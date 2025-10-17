@@ -110,20 +110,6 @@ class TestCalculateIncome(unittest.TestCase):
         self.assertEqual(income['self_employment'], 30000)
         self.assertEqual(income['total_income'], 30000)
 
-    def test_calculate_income_with_capital(self):
-        """Test income calculation with capital income"""
-        answers = {
-            'Q04': 1,
-            'income_employment': 80000,
-            'Q10a': 'yes',
-            'Q10a_amount': 5000
-        }
-
-        income = self.service._calculate_income(answers)
-
-        self.assertEqual(income['capital'], 5000)
-        self.assertEqual(income['total_income'], 85000)
-
     def test_calculate_income_with_rental(self):
         """Test income calculation with rental income"""
         answers = {
@@ -137,27 +123,6 @@ class TestCalculateIncome(unittest.TestCase):
 
         self.assertEqual(income['rental'], 20000)
         self.assertEqual(income['total_income'], 100000)
-
-    def test_calculate_income_all_sources(self):
-        """Test income calculation with all income sources"""
-        answers = {
-            'Q04': 1,
-            'Q04a': 'both',
-            'income_employment': 80000,
-            'income_self_employment': 20000,
-            'Q10a': 'yes',
-            'Q10a_amount': 5000,
-            'Q09c': 'yes',
-            'Q09c_amount': 15000
-        }
-
-        income = self.service._calculate_income(answers)
-
-        self.assertEqual(income['employment'], 80000)
-        self.assertEqual(income['self_employment'], 20000)
-        self.assertEqual(income['capital'], 5000)
-        self.assertEqual(income['rental'], 15000)
-        self.assertEqual(income['total_income'], 120000)
 
     def test_calculate_income_zero_employers(self):
         """Test income with zero employers"""

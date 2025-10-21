@@ -216,7 +216,7 @@ const QuestionCard = ({ question, onAnswer, onBack, canGoBack = true, loading, p
                   helperText: error
                 }
               }}
-              format="dd/MM/yyyy"
+              format="DD.MM.YYYY"
             />
           </LocalizationProvider>
         );
@@ -485,7 +485,7 @@ const QuestionCard = ({ question, onAnswer, onBack, canGoBack = true, loading, p
                   size: 'small'
                 }
               }}
-              format="dd/MM/yyyy"
+              format="DD.MM.YYYY"
             />
           </LocalizationProvider>
         );

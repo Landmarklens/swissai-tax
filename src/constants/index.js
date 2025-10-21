@@ -8,8 +8,6 @@ import FeatureBox from '../pages/Features/Features';
 import About from '../pages/About/About';
 import Contact from '../pages/Contact/Contact';
 import FAQ from '../pages/FAQ/FAQ';
-import BlogList from '../pages/BlogList/BlogList';
-import BlogItemPage from '../pages/BlogList/BlogItemPage';
 import Tenants from '../pages/Tenants/Tenants';
 import Owners from '../pages/Owners/Owners';
 import PaymentSuccessful from '../pages/PaymentSuccess/Payment';
@@ -65,8 +63,6 @@ export const NAVIGATION_ROUTE = [
   { path: '/about-us', element: <About /> },
   { path: '/contact-us', element: <Contact /> },
   { path: '/faq', element: <FAQ /> },
-  { path: '/blog-list', element: <BlogList /> },
-  { path: '/blog', element: <BlogItemPage /> },
   { path: '/plan', element: <Plan /> },
   {
     path: '/forgot-password',

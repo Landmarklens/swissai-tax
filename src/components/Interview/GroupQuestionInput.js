@@ -23,6 +23,10 @@ import {
   CheckCircle,
   ArrowBack
 } from '@mui/icons-material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import PostalCodeInput from './PostalCodeInput';
 import DocumentUploadQuestion from './DocumentUploadQuestion';
 
@@ -215,19 +219,21 @@ const GroupQuestionInput = ({
 
       case 'date':
         return (
-          <TextField
-            key={field.id}
-            type="date"
-            fullWidth
-            label={fieldLabel}
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            required={field.validation?.required}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={{ mb: 2 }}
-          />
+          <LocalizationProvider key={field.id} dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label={fieldLabel}
+              value={value ? dayjs(value) : null}
+              onChange={(newValue) => handleChange(newValue ? newValue.format('YYYY-MM-DD') : '')}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  required: field.validation?.required,
+                  sx: { mb: 2 }
+                }
+              }}
+              format="DD.MM.YYYY"
+            />
+          </LocalizationProvider>
         );
 
       case 'yes_no':

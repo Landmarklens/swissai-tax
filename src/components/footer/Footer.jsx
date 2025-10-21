@@ -145,7 +145,6 @@ const Footer = () => {
                       <StyledLink to={`/${currentLang}/security`}>{t('Security')}</StyledLink>
                       <StyledLink to={`/${currentLang}/contact-us`}>{t('Contact Us')}</StyledLink>
                       <StyledLink to={`/${currentLang}/plan`}>{t('Pricing')}</StyledLink>
-                      <StyledLink to={`/${currentLang}/blog-list`}>{t('Blog')}</StyledLink>
                       <StyledLink to={`/${currentLang}/faq`}>{t('FAQ')}</StyledLink>
                       <StyledLink to={`/${currentLang}/status`}>{t('Status')}</StyledLink>
                     </Box>

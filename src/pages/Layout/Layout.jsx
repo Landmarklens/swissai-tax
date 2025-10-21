@@ -14,7 +14,7 @@ import BreadcrumbSchema from '../../components/StructuredData/BreadcrumbSchema';
 const Layout = ({ children, backgroundColor, heading, text, isTenants, isOwners, isAbout, id }) => {
   const location = useLocation();
   const { t } = useTranslation();
-  const paths = ['/plan', '/contact-us', '/faq', '/blog-list', '/blog'];
+  const paths = ['/plan', '/contact-us', '/faq'];
   const [isFullScreen, setIsFullScreen] = useState(false);
   const videoRef = useRef(null);
 

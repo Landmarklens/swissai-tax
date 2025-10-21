@@ -28,8 +28,6 @@ const About = withSuspense(lazy(() => import('../pages/About/About')));
 const Contact = withSuspense(lazy(() => import('../pages/Contact/Contact')));
 const FAQ = withSuspense(lazy(() => import('../pages/FAQ/FAQ')));
 const Plan = withSuspense(lazy(() => import('../pages/Plan/Plan')));
-const BlogList = withSuspense(lazy(() => import('../pages/BlogList/BlogList')));
-const BlogItemPage = withSuspense(lazy(() => import('../pages/BlogList/BlogItemPage')));
 const ForgotPassword = withSuspense(lazy(() => import('../pages/ForgotPassword/ForgotPassword')));
 const ResetPassword = withSuspense(lazy(() => import('../pages/ResetPassword/ResetPassword')));
 const Terms = withSuspense(lazy(() => import('../pages/Terms/Terms')));
@@ -258,16 +256,6 @@ export const LAZY_NAVIGATION_ROUTE = [
   { path: '/zurich', element: <ZurichPage /> },
   { path: '/aargau', element: <AargauPage /> },
   { path: '/bern', element: <BernPage /> },
-
-  // Blog - List page
-  { path: '/blog-list', element: <BlogList /> },
-
-  // Blog - New SEO-friendly routes (must be before old routes for priority)
-  { path: '/blog/:category/:slug', element: <BlogItemPage /> },
-
-  // Blog - Old routes (kept for backward compatibility with redirects)
-  { path: '/blog', element: <BlogItemPage /> },
-  { path: '/blog/:id', element: <BlogItemPage /> },
 
   // Auth routes
   { path: '/forgot-password', element: <ForgotPassword /> },

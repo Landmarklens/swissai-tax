@@ -30,6 +30,10 @@ import {
   ArrowForward,
   CheckCircle
 } from '@mui/icons-material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import AHVNumberInput from '../Interview/AHVNumberInput';
 import PostalCodeInput from '../Interview/PostalCodeInput';
 import MultiCantonSelector from '../Interview/MultiCantonSelector';
@@ -403,15 +407,18 @@ const QuestionCard = ({
 
       case 'date':
         return (
-          <TextField
-            type="date"
-            fullWidth
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={answer ? dayjs(answer) : null}
+              onChange={(newValue) => setAnswer(newValue ? newValue.format('YYYY-MM-DD') : '')}
+              slotProps={{
+                textField: {
+                  fullWidth: true
+                }
+              }}
+              format="DD.MM.YYYY"
+            />
+          </LocalizationProvider>
         );
 
       default:

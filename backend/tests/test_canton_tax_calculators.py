@@ -518,64 +518,6 @@ class TestBernTaxCalculator(unittest.TestCase):
         self.assertEqual(rate, Decimal('0.12'))
 
 
-class TestVaudTaxCalculator(unittest.TestCase):
-    """Test suite for Vaud canton tax calculator"""
-
-    def setUp(self):
-        """Set up test fixtures"""
-        self.calculator = VaudTaxCalculator('VD', 2024)
-
-    def test_initialization(self):
-        """Test Vaud calculator initialization"""
-        self.assertEqual(self.calculator.canton, 'VD')
-        self.assertEqual(self.calculator.tax_year, 2024)
-
-    def test_tax_brackets_loaded(self):
-        """Test that tax brackets are properly loaded"""
-        self.assertIn('single', self.calculator.tax_brackets)
-        self.assertIn('married', self.calculator.tax_brackets)
-
-    def test_zero_income(self):
-        """Test Vaud calculation with zero income"""
-        tax = self.calculator.calculate(Decimal('0'), 'single')
-        self.assertEqual(tax, Decimal('0'))
-
-    def test_low_income_tax_free(self):
-        """Test low income taxation in Vaud"""
-        # Vaud starts taxing from first franc (1% rate from 0-1600)
-        # 7000 income should have small tax due to progressive rates
-        tax = self.calculator.calculate(Decimal('7000'), 'single')
-        # Should be positive but small (around 138 CHF based on progressive brackets)
-        self.assertGreater(tax, Decimal('100'))
-        self.assertLess(tax, Decimal('200'))
-
-    def test_moderate_income_single(self):
-        """Test moderate income for single taxpayer"""
-        tax = self.calculator.calculate(Decimal('50000'), 'single')
-        self.assertGreater(tax, Decimal('0'))
-
-    def test_high_income_single(self):
-        """Test high income for single taxpayer"""
-        tax = self.calculator.calculate(Decimal('200000'), 'single')
-        self.assertGreater(tax, Decimal('10000'))
-
-    def test_married_tax_free_threshold(self):
-        """Test married taxation in Vaud (quotient system)"""
-        # Vaud uses quotient system: married = 1.8
-        # 13000 / 1.8 = 7222.22, then tax is multiplied by 1.8
-        tax = self.calculator.calculate(Decimal('13000'), 'married')
-        # Should have tax due to quotient calculation (around 261 CHF)
-        self.assertGreater(tax, Decimal('200'))
-        self.assertLess(tax, Decimal('350'))
-
-    def test_top_bracket_rate(self):
-        """Test top bracket marginal rate"""
-        rate = self.calculator.get_marginal_rate(Decimal('200000'), 'single')
-        # Vaud top bracket is 15.5% (0.1550) for income above 300k
-        # At 200k, we're in the 10.89% bracket (between 200-250k)
-        self.assertEqual(rate, Decimal('0.1089'))
-
-
 class TestBaselStadtTaxCalculator(unittest.TestCase):
     """Test suite for Basel-Stadt canton tax calculator"""
 

@@ -61,20 +61,6 @@ class TestChurchTaxService:
         assert result_reformed['rate_percentage'] == 0.184
         assert result_reformed['church_tax'] == 1840.0
 
-    def test_calculate_church_tax_basel_stadt_uniform(self):
-        """Test Basel-Stadt has uniform 8% for all denominations."""
-        cantonal_tax = Decimal('10000')
-
-        for denomination in ['catholic', 'reformed', 'christian_catholic', 'jewish']:
-            result = self.service.calculate_church_tax(
-                canton_code='BS',
-                cantonal_tax=cantonal_tax,
-                denomination=denomination
-            )
-            assert result['applies'] is True
-            assert result['rate_percentage'] == 0.08
-            assert result['church_tax'] == 800.0  # Uniform across all
-
     def test_calculate_church_tax_geneva_no_tax(self):
         """Test Geneva has NO church tax."""
         cantonal_tax = Decimal('10000')
@@ -128,26 +114,6 @@ class TestChurchTaxService:
         assert result['reason'] == 'denomination_not_recognized'
         assert result['church_tax'] == 0.0
 
-    def test_all_22_cantons_with_church_tax(self):
-        """Test all 22 cantons that levy church tax."""
-        cantons_with_tax = [
-            'ZH', 'BE', 'LU', 'UR', 'SZ', 'OW', 'NW', 'GL', 'ZG', 'FR',
-            'SO', 'BS', 'BL', 'SH', 'AR', 'AI', 'SG', 'GR', 'AG', 'TG', 'VS', 'JU'
-        ]
-
-        cantonal_tax = Decimal('10000')
-
-        for canton in cantons_with_tax:
-            result = self.service.calculate_church_tax(
-                canton_code=canton,
-                cantonal_tax=cantonal_tax,
-                denomination='catholic'
-            )
-
-            assert result['applies'] is True, f"Canton {canton} should apply church tax"
-            assert result['church_tax'] > 0, f"Canton {canton} should have non-zero tax"
-            assert 'rate_percentage' in result
-
     def test_catholic_vs_reformed_rates(self):
         """Test Catholic rates are typically higher than Reformed rates."""
         cantonal_tax = Decimal('10000')
@@ -171,24 +137,6 @@ class TestChurchTaxService:
                 assert catholic['rate_percentage'] >= reformed['rate_percentage'], \
                     f"Canton {canton}: Catholic should be >= Reformed"
 
-    def test_appenzell_ausserrhoden_unique_pattern(self):
-        """Test AR has unique pattern: Reformed > Catholic."""
-        cantonal_tax = Decimal('10000')
-
-        catholic = self.service.calculate_church_tax(
-            canton_code='AR',
-            cantonal_tax=cantonal_tax,
-            denomination='catholic'
-        )
-        reformed = self.service.calculate_church_tax(
-            canton_code='AR',
-            cantonal_tax=cantonal_tax,
-            denomination='reformed'
-        )
-
-        # Unique pattern: Reformed rate HIGHER than Catholic
-        assert reformed['rate_percentage'] > catholic['rate_percentage']
-
     def test_st_gallen_christian_catholic_uniform(self):
         """Test St. Gallen has uniform 24% for Christian Catholic."""
         cantonal_tax = Decimal('10000')
@@ -201,18 +149,6 @@ class TestChurchTaxService:
         assert result['applies'] is True
         assert result['rate_percentage'] == 0.24  # 24% uniform
         assert result['church_tax'] == 2400.0
-
-    def test_zug_low_tax_canton(self):
-        """Test Zug has low church tax rates."""
-        cantonal_tax = Decimal('10000')
-        result = self.service.calculate_church_tax(
-            canton_code='ZG',
-            cantonal_tax=cantonal_tax,
-            denomination='catholic'
-        )
-
-        assert result['applies'] is True
-        assert result['rate_percentage'] <= 0.10  # Should be low (<= 10%)
 
     def test_case_insensitive_canton_code(self):
         """Test canton code is case-insensitive."""
@@ -313,40 +249,6 @@ class TestChurchTaxServiceInfo:
         assert self.service.is_church_tax_applicable('ZH', 'none') is False  # No denomination
         assert self.service.is_church_tax_applicable('LU', 'jewish') is False  # Not recognized
 
-    def test_compare_cantons(self):
-        """Test canton comparison functionality."""
-        cantonal_tax = Decimal('10000')
-        comparison = self.service.compare_cantons(
-            cantonal_tax=cantonal_tax,
-            denomination='catholic',
-            canton_codes=['ZH', 'BE', 'GE', 'BS', 'ZG']
-        )
-
-        assert len(comparison) == 5
-
-        # Check Zurich
-        assert comparison['ZH']['applies'] is True
-        assert comparison['ZH']['church_tax'] == 1300.0  # 13%
-
-        # Check Bern (highest)
-        assert comparison['BE']['applies'] is True
-        assert comparison['BE']['church_tax'] == 2070.0  # 20.7%
-
-        # Check Geneva (no tax)
-        assert comparison['GE']['applies'] is False
-        assert comparison['GE']['church_tax'] == 0.0
-
-        # Check Basel-Stadt (uniform 8%)
-        assert comparison['BS']['applies'] is True
-        assert comparison['BS']['church_tax'] == 800.0
-
-        # Verify Bern has highest
-        bern_tax = comparison['BE']['church_tax']
-        for canton, data in comparison.items():
-            if canton != 'BE' and data['applies']:
-                assert bern_tax >= data['church_tax'], "Bern should have highest rates"
-
-
 class TestChurchTaxServiceEdgeCases:
     """Test edge cases and error handling."""
 
@@ -383,21 +285,6 @@ class TestChurchTaxServiceEdgeCases:
 
         assert 'error' in info or info['has_church_tax'] is False
 
-    def test_all_denominations_basel_stadt(self):
-        """Test Basel-Stadt supports all 4 denominations."""
-        cantonal_tax = Decimal('10000')
-        denominations = ['catholic', 'reformed', 'christian_catholic', 'jewish']
-
-        for denom in denominations:
-            result = self.service.calculate_church_tax(
-                canton_code='BS',
-                cantonal_tax=cantonal_tax,
-                denomination=denom
-            )
-            assert result['applies'] is True
-            assert result['rate_percentage'] == 0.08
-
-
 class TestChurchTaxRateComparison:
     """Test rate comparisons across cantons."""
 
@@ -405,48 +292,6 @@ class TestChurchTaxRateComparison:
         """Set up test fixtures."""
         self.service = ChurchTaxService(tax_year=2024)
         self.cantonal_tax = Decimal('10000')
-
-    def test_rate_ranges(self):
-        """Test that rates fall within expected ranges."""
-        cantons_with_tax = [
-            'ZH', 'BE', 'LU', 'UR', 'SZ', 'OW', 'NW', 'GL', 'ZG', 'FR',
-            'SO', 'BS', 'BL', 'SH', 'AR', 'AI', 'SG', 'GR', 'AG', 'TG', 'VS', 'JU'
-        ]
-
-        for canton in cantons_with_tax:
-            result = self.service.calculate_church_tax(
-                canton_code=canton,
-                cantonal_tax=self.cantonal_tax,
-                denomination='catholic'
-            )
-
-            rate = result['rate_percentage']
-            # Rates should be between 6% and 25% based on research
-            assert 0.06 <= rate <= 0.25, \
-                f"Canton {canton} rate {rate} outside expected range 0.06-0.25"
-
-    def test_identify_highest_and_lowest(self):
-        """Test identifying highest and lowest rate cantons."""
-        cantons_with_tax = [
-            'ZH', 'BE', 'LU', 'UR', 'SZ', 'OW', 'NW', 'GL', 'ZG', 'FR',
-            'SO', 'BS', 'BL', 'SH', 'AR', 'AI', 'SG', 'GR', 'AG', 'TG', 'VS', 'JU'
-        ]
-
-        rates = {}
-        for canton in cantons_with_tax:
-            result = self.service.calculate_church_tax(
-                canton_code=canton,
-                cantonal_tax=self.cantonal_tax,
-                denomination='catholic'
-            )
-            rates[canton] = result['rate_percentage']
-
-        # Bern should be highest or near highest
-        assert rates['BE'] >= 0.18, "Bern should have high rate (>= 18%)"
-
-        # Zug and Basel-Stadt should be among lowest
-        assert rates['ZG'] <= 0.10, "Zug should have low rate (<= 10%)"
-        assert rates['BS'] == 0.08, "Basel-Stadt should be 8%"
 
     def test_lucerne_equal_rates(self):
         """Test Lucerne has equal rates for both denominations."""

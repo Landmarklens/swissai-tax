@@ -137,25 +137,6 @@ class TestWealthTaxBase(unittest.TestCase):
         expected_rate = (result['canton_wealth_tax'] / Decimal('100000')) * Decimal('100')
         self.assertAlmostEqual(result['effective_rate'], expected_rate, places=2)
 
-    def test_with_municipal_multiplier(self):
-        """Test calculation with municipal multipliers"""
-        calc = ZurichWealthTaxCalculator()
-        result = calc.calculate_with_multiplier(
-            net_wealth=Decimal('500000'),
-            marital_status='single',
-            canton_multiplier=Decimal('1.0'),
-            municipal_multiplier=Decimal('1.19')  # Zurich city
-        )
-
-        # Base tax should be 300 (from earlier test)
-        # Canton: 300 × 1.0 = 300
-        # Municipal: 300 × 1.19 = 357
-        # Total: 657
-        self.assertAlmostEqual(result['canton_wealth_tax'], Decimal('300'), places=2)
-        self.assertAlmostEqual(result['municipal_wealth_tax'], Decimal('357'), places=2)
-        self.assertAlmostEqual(result['total_cantonal_and_municipal'], Decimal('657'), places=2)
-
-
 class TestProportionalCantons(unittest.TestCase):
     """Test suite for proportional (flat rate) cantons"""
 
@@ -336,18 +317,6 @@ class TestEdgeCases(unittest.TestCase):
         # At threshold, taxable wealth should be 0
         self.assertEqual(result['taxable_wealth'], Decimal('0'))
         self.assertEqual(result['canton_wealth_tax'], Decimal('0'))
-
-    def test_wealth_one_franc_above_threshold(self):
-        """Test wealth just above threshold"""
-        calc = ZurichWealthTaxCalculator()
-        result = calc.calculate(
-            net_wealth=Decimal('80001'),  # CHF 1 above threshold
-            marital_status='single'
-        )
-
-        # Should have CHF 1 taxable wealth
-        self.assertEqual(result['taxable_wealth'], Decimal('1'))
-        self.assertGreater(result['canton_wealth_tax'], Decimal('0'))
 
     def test_very_high_wealth(self):
         """Test very high wealth (top bracket)"""

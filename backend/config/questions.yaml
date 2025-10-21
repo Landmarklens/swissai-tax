@@ -44,6 +44,31 @@ questions:
       it: Abbiamo bisogno del suo numero AVS per presentare la sua dichiarazione fiscale. Questo è il suo numero di identificazione
         unico in Svizzera.
     placeholder: 756.1234.5678.97
+    next: Q00b
+    required: true
+    category: personal_info
+  Q00b:
+    id: Q00b
+    text:
+      en: What is your date of birth?
+      de: Was ist Ihr Geburtsdatum?
+      fr: Quelle est votre date de naissance?
+      it: Qual è la sua data di nascita?
+    type: date
+    widget: calendar
+    validation:
+      min_age: 18
+      max_age: 120
+    help_text:
+      en: Enter your date of birth (DD.MM.YYYY)
+      de: Geben Sie Ihr Geburtsdatum ein (TT.MM.JJJJ)
+      fr: Entrez votre date de naissance (JJ.MM.AAAA)
+      it: Inserisca la sua data di nascita (GG.MM.AAAA)
+    explanation:
+      en: Your age determines social security rates and eligibility for certain deductions. This information is required for accurate tax calculations.
+      de: Ihr Alter bestimmt die Sozialversicherungssätze und die Berechtigung für bestimmte Abzüge. Diese Information ist für genaue Steuerberechnungen erforderlich.
+      fr: Votre âge détermine les taux de sécurité sociale et l'admissibilité à certaines déductions. Cette information est requise pour des calculs fiscaux précis.
+      it: La sua età determina i tassi di previdenza sociale e l'ammissibilità a determinate deduzioni. Questa informazione è necessaria per calcoli fiscali accurati.
     next: Q01
     required: true
     category: personal_info
@@ -91,7 +116,7 @@ questions:
       married:
       - Q01a_name
       - Q01a
-      default: Q03
+      default: Q01b
     required: true
     category: personal_info
   Q01a_name:
@@ -130,9 +155,36 @@ questions:
       de: 'Format: 756.XXXX.XXXX.XX (13 Ziffern mit Punkten)'
       fr: 'Format: 756.XXXX.XXXX.XX (13 chiffres avec points)'
     placeholder: 756.1234.5678.97
-    next: Q03
+    next: Q01b
     required: true
     parent: Q01
+    category: personal_info
+  Q01b:
+    id: Q01b
+    text:
+      en: What is your residence postal code?
+      de: Was ist Ihre Wohn-Postleitzahl?
+      fr: Quel est votre code postal de résidence?
+      it: Qual è il suo codice postale di residenza?
+    type: postal_code
+    validation:
+      pattern: ^\d{4}$
+      min: 1000
+      max: 9999
+    placeholder: '8001'
+    auto_lookup: true
+    help_text:
+      en: Enter your 4-digit Swiss postal code. We'll automatically detect your canton and municipality.
+      de: Geben Sie Ihre 4-stellige Schweizer Postleitzahl ein. Wir erkennen automatisch Ihren Kanton und Ihre Gemeinde.
+      fr: Entrez votre code postal suisse à 4 chiffres. Nous détecterons automatiquement votre canton et votre commune.
+      it: Inserisca il suo codice postale svizzero a 4 cifre. Rileveremo automaticamente il suo cantone e il suo comune.
+    explanation:
+      en: Your residence on December 31st determines which canton and municipal taxes apply. This is the most important factor in your tax calculation.
+      de: Ihr Wohnsitz am 31. Dezember bestimmt, welche Kantons- und Gemeindesteuern anfallen. Dies ist der wichtigste Faktor für Ihre Steuerberechnung.
+      fr: Votre résidence au 31 décembre détermine quels impôts cantonaux et communaux s'appliquent. C'est le facteur le plus important dans votre calcul fiscal.
+      it: La sua residenza al 31 dicembre determina quali tasse cantonali e comunali si applicano. Questo è il fattore più importante nel suo calcolo fiscale.
+    next: Q03
+    required: true
     category: personal_info
   Q01d:
     id: Q01d
@@ -273,7 +325,7 @@ questions:
         de: 6 oder mehr Kinder
         fr: 6 enfants ou plus
     triggers_loop: Q03b
-    next: Q02a
+    next: Q03c
     required: true
     parent: Q03
     category: personal_info
@@ -317,8 +369,8 @@ questions:
         de: Laden Sie Rechnungen, Quittungen oder Verträge Ihres Kinderbetreuungsanbieters hoch
         fr: Téléchargez les factures, reçus ou contrats de votre fournisseur de garde d'enfants
     branching:
-      true: Q03d
-      false: Q03d
+      true: Q17
+      false: Q17
     required: true
     parent: Q03a
     category: personal_info
@@ -399,9 +451,35 @@ questions:
         falls sie jetzt nicht verfügbar sind.
       fr: Vous avez besoin d'un certificat de salaire pour chaque employeur listé. Vous pouvez apporter ces documents plus
         tard s'ils ne sont pas disponibles maintenant.
-    next: Q04c
+    next: Q04b_amount
     required: true
     parent: Q04
+    category: income_sources
+  Q04b_amount:
+    id: Q04b_amount
+    text:
+      en: What was your total gross employment income in 2024?
+      de: Was war Ihr gesamtes Bruttoeinkommen aus Anstellung in 2024?
+      fr: Quel était votre revenu brut total d'emploi en 2024?
+      it: Qual era il suo reddito lordo totale da lavoro dipendente nel 2024?
+    type: currency
+    validation:
+      min: 0
+      max: 10000000
+    placeholder: '80000'
+    help_text:
+      en: Add up gross salaries from all employers (before taxes and deductions). This should match the total on your Lohnausweis documents.
+      de: Addieren Sie die Bruttolöhne aller Arbeitgeber (vor Steuern und Abzügen). Dies sollte mit dem Gesamtbetrag auf Ihren Lohnausweisen übereinstimmen.
+      fr: Additionnez les salaires bruts de tous les employeurs (avant impôts et déductions). Cela devrait correspondre au total sur vos certificats de salaire.
+      it: Sommi gli stipendi lordi di tutti i datori di lavoro (prima di tasse e deduzioni). Questo dovrebbe corrispondere al totale sui suoi certificati di stipendio.
+    explanation:
+      en: Our AI will extract this from your Lohnausweis, but please provide it now so we can show you an estimated tax calculation immediately.
+      de: Unsere KI wird dies aus Ihrem Lohnausweis extrahieren, aber bitte geben Sie es jetzt an, damit wir Ihnen sofort eine geschätzte Steuerberechnung zeigen können.
+      fr: Notre IA l'extraira de votre certificat de salaire, mais veuillez le fournir maintenant pour que nous puissions vous montrer immédiatement un calcul fiscal estimé.
+      it: La nostra IA lo estrarrà dal suo certificato di stipendio, ma la preghiamo di fornirlo ora in modo da poter mostrarle immediatamente un calcolo fiscale stimato.
+    next: Q04c
+    required: true
+    parent: Q04b
     category: income_sources
   Q04a:
     id: Q04a
@@ -528,6 +606,10 @@ questions:
         min: 1
         max: 100
       required: true
+      help_text:
+        en: Enter your employment percentage (e.g., 100 for full-time, 80 for 80%, 50 for part-time)
+        de: Geben Sie Ihren Beschäftigungsgrad ein (z.B. 100 für Vollzeit, 80 für 80%, 50 für Teilzeit)
+        fr: Entrez votre pourcentage d'emploi (p.ex. 100 pour temps plein, 80 pour 80%, 50 pour temps partiel)
     - id: transport_documents
       text:
         en: Upload your public transport passes, tickets, or receipts
@@ -845,7 +927,7 @@ questions:
       de: Säule 3a Einzahlungen bis CHF 7'056 sind für Arbeitnehmende vollständig abzugsfähig (2024 Grenze)
       fr: Les cotisations au pilier 3a jusqu'à CHF 7'056 sont entièrement déductibles pour les salariés (limite 2024)
     branching:
-      true: Q14
+      true: Q08_amount
       false: Q14
     required: true
     inline_document_upload:
@@ -866,6 +948,32 @@ questions:
         de: Laden Sie Ihre Säule 3a Einzahlungsbescheinigung von Ihrer Bank oder Versicherung hoch
         fr: Téléchargez votre certificat de cotisation pilier 3a de votre banque ou assurance
     category: income_sources
+  Q08_amount:
+    id: Q08_amount
+    text:
+      en: How much did you contribute to Pillar 3a in 2024?
+      de: Wie viel haben Sie 2024 in die Säule 3a eingezahlt?
+      fr: Combien avez-vous cotisé au pilier 3a en 2024?
+      it: Quanto ha contribuito al pilastro 3a nel 2024?
+    type: currency
+    validation:
+      min: 0
+      max: 7056
+    placeholder: '7056'
+    help_text:
+      en: Maximum deductible for employed persons with pension fund is CHF 7,056 (2024). Enter the exact amount you contributed.
+      de: Maximal abzugsfähig für Arbeitnehmende mit Pensionskasse sind CHF 7'056 (2024). Geben Sie den genauen Betrag ein, den Sie eingezahlt haben.
+      fr: Montant maximum déductible pour les salariés avec caisse de pension est CHF 7'056 (2024). Entrez le montant exact que vous avez cotisé.
+      it: Importo massimo deducibile per i dipendenti con cassa pensioni è CHF 7'056 (2024). Inserisca l'importo esatto che ha contribuito.
+    explanation:
+      en: Pillar 3a contributions are one of the most valuable tax deductions in Switzerland. Every CHF 1,000 contributed can save you CHF 200-400 in taxes depending on your canton.
+      de: Säule-3a-Beiträge sind einer der wertvollsten Steuerabzüge in der Schweiz. Jede eingezahlte CHF 1'000 kann Ihnen je nach Kanton CHF 200-400 an Steuern sparen.
+      fr: Les cotisations au pilier 3a sont l'une des déductions fiscales les plus précieuses en Suisse. Chaque CHF 1'000 cotisé peut vous faire économiser CHF 200-400 d'impôts selon votre canton.
+      it: I contributi al pilastro 3a sono una delle deduzioni fiscali più preziose in Svizzera. Ogni CHF 1'000 contribuito può farle risparmiare CHF 200-400 di tasse a seconda del suo cantone.
+    next: Q14
+    required: true
+    parent: Q08
+    category: deductions
   Q09:
     id: Q09
     text:
@@ -1345,7 +1453,7 @@ questions:
       de: Dies umfasst Schweizer AHV/IV-Renten, ausländische Renten, Arbeitgeberrenten (BVG) und Leibrenten
       fr: Cela inclut les pensions AVS/AI suisses, les pensions étrangères, les pensions d'employeur (LPP) et les rentes
     branching:
-      true: Q09
+      true: Q14_amount
       false: Q09
     required: true
     inline_document_upload:
@@ -1366,6 +1474,32 @@ questions:
         de: Laden Sie Bescheinigungen von AHV, Pensionskassen oder Leibrentenanbietern hoch
         fr: Téléchargez les attestations de l'AVS, caisses de pension ou fournisseurs de rentes
     category: deductions
+  Q14_amount:
+    id: Q14_amount
+    text:
+      en: What was your total pension/annuity income in 2024?
+      de: Wie hoch war Ihr gesamtes Renten-/Leibrenteneinkommen in 2024?
+      fr: Quel était votre revenu total de pension/rente en 2024?
+      it: Qual era il suo reddito totale da pensione/rendita nel 2024?
+    type: currency
+    validation:
+      min: 0
+      max: 10000000
+    placeholder: '30000'
+    help_text:
+      en: Include all pension income - AHV/IV, employer pension (BVG), foreign pensions, annuities
+      de: Einschließlich aller Renteneinkommen - AHV/IV, Arbeitgeberrente (BVG), ausländische Renten, Leibrenten
+      fr: Incluez tous les revenus de pension - AVS/AI, pension d'employeur (LPP), pensions étrangères, rentes
+      it: Includa tutti i redditi da pensione - AVS/AI, pensione del datore di lavoro (LPP), pensioni estere, rendite
+    explanation:
+      en: Pension income is taxed at preferential rates in Switzerland (typically 30-60% lower than employment income). Our AI will verify this against your uploaded documents.
+      de: Renteneinkommen wird in der Schweiz zu Vorzugssätzen besteuert (typischerweise 30-60% niedriger als Erwerbseinkommen). Unsere KI wird dies anhand Ihrer hochgeladenen Dokumente überprüfen.
+      fr: Les revenus de pension sont imposés à des taux préférentiels en Suisse (généralement 30-60% inférieurs aux revenus d'emploi). Notre IA vérifiera cela par rapport à vos documents téléchargés.
+      it: Il reddito da pensione è tassato con aliquote preferenziali in Svizzera (tipicamente 30-60% inferiori al reddito da lavoro). La nostra IA verificherà questo rispetto ai suoi documenti caricati.
+    next: Q09
+    required: true
+    parent: Q14
+    category: income_sources
   Q15:
     id: Q15
     text:
@@ -1450,6 +1584,20 @@ questions:
         fr: Pays
       type: text
       required: true
+    - id: foreign_income_amount
+      text:
+        en: Annual foreign income amount (CHF)
+        de: Jährliches ausländisches Einkommen (CHF)
+        fr: Montant annuel des revenus étrangers (CHF)
+      type: currency
+      validation:
+        min: 0
+      placeholder: '50000'
+      help_text:
+        en: Enter the total foreign income converted to CHF (use average exchange rate for the year)
+        de: Geben Sie das gesamte ausländische Einkommen umgerechnet in CHF ein (verwenden Sie den durchschnittlichen Wechselkurs des Jahres)
+        fr: Entrez le revenu étranger total converti en CHF (utilisez le taux de change moyen de l'année)
+      required: true
     next: Q17
     parent: Q15
     category: special_situations
@@ -1499,100 +1647,6 @@ questions:
         en: Upload statements from exchanges or wallets showing your holdings as of December 31
         de: Laden Sie Auszüge von Börsen oder Wallets hoch, die Ihre Bestände zum 31. Dezember zeigen
         fr: Téléchargez les relevés des bourses ou portefeuilles montrant vos avoirs au 31 décembre
-    category: special_situations
-  Q17:
-    id: Q17
-    text:
-      en: Are you a member of a state-recognized church?
-      de: Sind Sie Mitglied einer staatlich anerkannten Kirche?
-      fr: Êtes-vous membre d'une église reconnue par l'État?
-    type: yes_no
-    explanation:
-      en: Church tax is automatically deducted for members of recognized churches (Protestant, Catholic, Christian Catholic)
-      de: Kirchensteuer wird automatisch für Mitglieder anerkannter Kirchen (Evangelisch, Katholisch, Christkatholisch) abgezogen
-      fr: L'impôt ecclésiastique est automatiquement déduit pour les membres des églises reconnues (Protestant, Catholique,
-        Catholique-Chrétien)
-    branching:
-      true: Q17a
-      false: Q17b
-    required: true
-    category: special_situations
-  Q17a:
-    id: Q17a
-    text:
-      en: Which church?
-      de: Welche Kirche?
-      fr: Quelle église?
-    type: single_choice
-    options:
-    - value: protestant
-      label:
-        en: Protestant (Reformed)
-        de: Evangelisch (Reformiert)
-        fr: Protestant (Réformé)
-    - value: catholic
-      label:
-        en: Roman Catholic
-        de: Römisch-Katholisch
-        fr: Catholique Romain
-    - value: christian_catholic
-      label:
-        en: Christian Catholic
-        de: Christkatholisch
-        fr: Catholique-Chrétien
-    - value: other
-      label:
-        en: Other recognized church
-        de: Andere anerkannte Kirche
-        fr: Autre église reconnue
-    next: Q17c
-    required: true
-    parent: Q17
-    category: special_situations
-    explanation:
-      en: Tax credits directly reduce the amount of tax you owe (unlike deductions which reduce taxable income). Credits may
-        be available for foreign taxes paid, innovation activities, or cantonal-specific programs.
-      de: Steuergutschriften reduzieren direkt den Steuerbetrag, den Sie schulden (im Gegensatz zu Abzügen, die das steuerbare
-        Einkommen reduzieren). Gutschriften können für im Ausland gezahlte Steuern, Innovationsaktivitäten oder kantonsspezifische
-        Programme verfügbar sein.
-      fr: Les crédits d'impôt réduisent directement le montant d'impôt que vous devez (contrairement aux déductions qui réduisent
-        le revenu imposable). Des crédits peuvent être disponibles pour les impôts étrangers payés, les activités d'innovation
-        ou les programmes cantonaux spécifiques.
-      it: I crediti fiscali riducono direttamente l'importo dell'imposta dovuta (a differenza delle deduzioni che riducono
-        il reddito imponibile). I crediti possono essere disponibili per le tasse estere pagate, le attività di innovazione
-        o i programmi specifici cantonali.
-  Q17c:
-    id: Q17c
-    text:
-      en: Are you a member of a political party?
-      de: Sind Sie Mitglied einer politischen Partei?
-      fr: Êtes-vous membre d'un parti politique?
-    type: yes_no
-    explanation:
-      en: Political party membership fees are deductible up to certain limits (varies by canton)
-      de: Mitgliederbeiträge an politische Parteien sind bis zu bestimmten Grenzen abzugsfähig (variiert je nach Kanton)
-      fr: Les cotisations aux partis politiques sont déductibles jusqu'à certaines limites (varie selon le canton)
-    branching:
-      true: Q17b
-      false: Q17b
-    required: true
-    inline_document_upload:
-      document_type: political_party_membership
-      accepted_formats:
-      - pdf
-      - jpg
-      - jpeg
-      - png
-      max_size_mb: 10
-      bring_later: true
-      upload_text:
-        en: Upload political party membership receipt
-        de: Parteimitgliedschaftsbeleg hochladen
-        fr: Télécharger le reçu de cotisation au parti politique
-      help_text:
-        en: Upload your political party membership fee receipt
-        de: Laden Sie Ihren Beleg für Parteimitgliedschaftsbeiträge hoch
-        fr: Téléchargez votre reçu de cotisation au parti politique
     category: special_situations
   Q17b:
     id: Q17b
@@ -1651,9 +1705,34 @@ questions:
       fr: Téléchargez les relevés de fin d'année montrant les soldes au 31.12.2024. Ceci est nécessaire pour l'impôt sur la
         fortune et pour recevoir votre remboursement fiscal via IBAN. Vous pouvez apporter ces documents plus tard s'ils ne
         sont pas disponibles maintenant.
+    next: Q18_wealth_total
+    required: true
+    category: property_assets
+  Q18_wealth_total:
+    id: Q18_wealth_total
+    text:
+      en: What is your total net wealth on December 31, 2024?
+      de: Was ist Ihr gesamtes Nettovermögen am 31. Dezember 2024?
+      fr: Quelle est votre fortune nette totale au 31 décembre 2024?
+      it: Qual è il suo patrimonio netto totale al 31 dicembre 2024?
+    type: currency
+    validation:
+      min: 0
+      max: 100000000
+    placeholder: '250000'
+    help_text:
+      en: "Calculate: Total assets (bank accounts + securities + real estate equity + other assets) MINUS total debts (mortgages + loans)"
+      de: "Berechnung: Gesamtvermögen (Bankkonten + Wertpapiere + Immobilienkapital + andere Vermögenswerte) MINUS Gesamtschulden (Hypotheken + Darlehen)"
+      fr: "Calcul: Actifs totaux (comptes bancaires + titres + capital immobilier + autres actifs) MOINS dettes totales (hypothèques + prêts)"
+      it: "Calcolo: Patrimonio totale (conti bancari + titoli + capitale immobiliare + altri asset) MENO debiti totali (ipoteche + prestiti)"
+    explanation:
+      en: Wealth tax applies to net wealth above tax-free thresholds (varies by canton, typically CHF 70,000-200,000). Our AI will verify your wealth calculation against uploaded bank statements and property documents.
+      de: Vermögenssteuer gilt für Nettovermögen über steuerfreie Schwellen (variiert je nach Kanton, typischerweise CHF 70'000-200'000). Unsere KI wird Ihre Vermögensberechnung anhand hochgeladener Bankauszüge und Immobiliendokumente überprüfen.
+      fr: L'impôt sur la fortune s'applique à la fortune nette au-dessus des seuils d'exonération (varie selon le canton, généralement CHF 70'000-200'000). Notre IA vérifiera votre calcul de fortune par rapport aux relevés bancaires et documents immobiliers téléchargés.
+      it: L'imposta sul patrimonio si applica al patrimonio netto sopra le soglie di esenzione (varia per cantone, tipicamente CHF 70'000-200'000). La nostra IA verificherà il suo calcolo del patrimonio rispetto agli estratti bancari e ai documenti immobiliari caricati.
     next: Q10
     required: true
-    category: special_situations
+    category: property_assets
   Q_complexity_screen:
     id: Q_complexity_screen
     text:
@@ -2688,6 +2767,67 @@ questions:
         en: e.g., roof repair, painting, bathroom renovation
         de: z.B. Dachreparatur, Malerarbeiten, Badezimmerrenovation
         fr: 'ex: réparation toit, peinture, rénovation salle de bain'
+  Q17:
+    id: Q17
+    text:
+      en: Are you a member of a state-recognized church?
+      de: Sind Sie Mitglied einer staatlich anerkannten Kirche?
+      fr: Êtes-vous membre d'une église reconnue par l'État?
+    type: yes_no
+    explanation:
+      en: Church tax is automatically deducted for members of recognized churches (Protestant, Catholic, Christian Catholic)
+      de: Kirchensteuer wird automatisch für Mitglieder anerkannter Kirchen (Evangelisch, Katholisch, Christkatholisch) abgezogen
+      fr: L'impôt ecclésiastique est automatiquement déduit pour les membres des églises reconnues (Protestant, Catholique,
+        Catholique-Chrétien)
+    branching:
+      true: Q17a
+      false: Q02a
+    required: true
+    category: personal_info
+  Q17a:
+    id: Q17a
+    text:
+      en: Which church?
+      de: Welche Kirche?
+      fr: Quelle église?
+    type: single_choice
+    options:
+    - value: protestant
+      label:
+        en: Protestant (Reformed)
+        de: Evangelisch (Reformiert)
+        fr: Protestant (Réformé)
+    - value: catholic
+      label:
+        en: Roman Catholic
+        de: Römisch-Katholisch
+        fr: Catholique Romain
+    - value: christian_catholic
+      label:
+        en: Christian Catholic
+        de: Christkatholisch
+        fr: Catholique-Chrétien
+    - value: other
+      label:
+        en: Other recognized church
+        de: Andere anerkannte Kirche
+        fr: Autre église reconnue
+    next: Q02a
+    required: true
+    parent: Q17
+    category: personal_info
+    explanation:
+      en: Tax credits directly reduce the amount of tax you owe (unlike deductions which reduce taxable income). Credits may
+        be available for foreign taxes paid, innovation activities, or cantonal-specific programs.
+      de: Steuergutschriften reduzieren direkt den Steuerbetrag, den Sie schulden (im Gegensatz zu Abzügen, die das steuerbare
+        Einkommen reduzieren). Gutschriften können für im Ausland gezahlte Steuern, Innovationsaktivitäten oder kantonsspezifische
+        Programme verfügbar sein.
+      fr: Les crédits d'impôt réduisent directement le montant d'impôt que vous devez (contrairement aux déductions qui réduisent
+        le revenu imposable). Des crédits peuvent être disponibles pour les impôts étrangers payés, les activités d'innovation
+        ou les programmes cantonaux spécifiques.
+      it: I crediti fiscali riducono direttamente l'importo dell'imposta dovuta (a differenza delle deduzioni che riducono
+        il reddito imponibile). I crediti possono essere disponibili per le tasse estere pagate, le attività di innovazione
+        o i programmi specifici cantonali.
   Q03d:
     id: Q03d
     text:

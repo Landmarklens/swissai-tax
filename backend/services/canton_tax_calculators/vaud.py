@@ -90,29 +90,33 @@ class VaudTaxCalculator(CantonTaxCalculator):
 
         Marginal rates extracted from official barème.
         """
+        brackets = [
+            (Decimal('0'), Decimal('0.0100')),        # 1.00% from 100
+            (Decimal('1600'), Decimal('0.0110')),     # 1.10% from 1,700
+            (Decimal('2000'), Decimal('0.0120')),     # 1.20%
+            (Decimal('2500'), Decimal('0.0130')),     # 1.30%
+            (Decimal('3000'), Decimal('0.0140')),     # 1.40%
+            (Decimal('3500'), Decimal('0.0170')),     # 1.70%
+            (Decimal('5000'), Decimal('0.0200')),     # 2.00%
+            (Decimal('10000'), Decimal('0.0318')),    # 3.18%
+            (Decimal('20000'), Decimal('0.0476')),    # 4.76%
+            (Decimal('30000'), Decimal('0.0573')),    # 5.73%
+            (Decimal('40000'), Decimal('0.0630')),    # 6.30%
+            (Decimal('50000'), Decimal('0.0684')),    # 6.84%
+            (Decimal('60000'), Decimal('0.0710')),    # 7.10%
+            (Decimal('80000'), Decimal('0.0770')),    # 7.70%
+            (Decimal('100000'), Decimal('0.0810')),   # 8.10%
+            (Decimal('150000'), Decimal('0.0960')),   # 9.60%
+            (Decimal('200000'), Decimal('0.1089')),   # 10.89%
+            (Decimal('250000'), Decimal('0.1157')),   # 11.57%
+            (Decimal('300000'), Decimal('0.1170')),   # 11.70%
+            (Decimal('inf'), Decimal('0.1550')),      # 15.50% flat above 300k
+        ]
+
+        # Return same brackets for both single and married (quotient system handles the difference)
         return {
-            'single': [
-                (Decimal('0'), Decimal('0.0100')),        # 1.00% from 100
-                (Decimal('1600'), Decimal('0.0110')),     # 1.10% from 1,700
-                (Decimal('2000'), Decimal('0.0120')),     # 1.20%
-                (Decimal('2500'), Decimal('0.0130')),     # 1.30%
-                (Decimal('3000'), Decimal('0.0140')),     # 1.40%
-                (Decimal('3500'), Decimal('0.0170')),     # 1.70%
-                (Decimal('5000'), Decimal('0.0200')),     # 2.00%
-                (Decimal('10000'), Decimal('0.0318')),    # 3.18%
-                (Decimal('20000'), Decimal('0.0476')),    # 4.76%
-                (Decimal('30000'), Decimal('0.0573')),    # 5.73%
-                (Decimal('40000'), Decimal('0.0630')),    # 6.30%
-                (Decimal('50000'), Decimal('0.0684')),    # 6.84%
-                (Decimal('60000'), Decimal('0.0710')),    # 7.10%
-                (Decimal('80000'), Decimal('0.0770')),    # 7.70%
-                (Decimal('100000'), Decimal('0.0810')),   # 8.10%
-                (Decimal('150000'), Decimal('0.0960')),   # 9.60%
-                (Decimal('200000'), Decimal('0.1089')),   # 10.89%
-                (Decimal('250000'), Decimal('0.1157')),   # 11.57%
-                (Decimal('300000'), Decimal('0.1170')),   # 11.70%
-                (Decimal('inf'), Decimal('0.1550')),      # 15.50% flat above 300k
-            ]
+            'single': brackets,
+            'married': brackets  # Same brackets, family quotient adjusts the effective calculation
         }
 
     def _apply_progressive_rates(self, taxable_income: Decimal, brackets: list) -> Decimal:
@@ -141,7 +145,7 @@ class VaudTaxCalculator(CantonTaxCalculator):
         return tax.quantize(Decimal('0.01'))
 
     def calculate(self, taxable_income: Decimal, marital_status: str = 'single',
-                  num_children: int = 0) -> Dict[str, Decimal]:
+                  num_children: int = 0) -> Decimal:
         """
         Calculate VD canton tax using official family quotient system.
 
@@ -150,6 +154,8 @@ class VaudTaxCalculator(CantonTaxCalculator):
         2. Divide income by quotient
         3. Apply single brackets to quotient income
         4. Multiply tax by quotient
+
+        Returns: Decimal - The calculated tax amount
         """
         brackets = self.tax_brackets['single']
         quotient = self._get_family_quotient(marital_status, num_children)
@@ -159,12 +165,7 @@ class VaudTaxCalculator(CantonTaxCalculator):
         quotient_tax = self._apply_progressive_rates(quotient_income, brackets)
         base_tax = quotient_tax * quotient
 
-        return {
-            'base_tax': base_tax,
-            'cantonal_tax': base_tax,
-            'canton_coefficient': self.CANTON_COEFFICIENT_2024,
-            'family_quotient': quotient
-        }
+        return base_tax.quantize(Decimal('0.01'))
 
     def calculate_with_multiplier(self, taxable_income: Decimal, marital_status: str = 'single',
                                    num_children: int = 0, canton_multiplier: Decimal = None,
@@ -205,6 +206,22 @@ class VaudTaxCalculator(CantonTaxCalculator):
             'municipal_multiplier': municipal_multiplier,
             'family_quotient': quotient
         }
+
+    def get_marginal_rate(self, taxable_income: Decimal, marital_status: str = 'single') -> Decimal:
+        """Get marginal tax rate for given income level (handles tuple brackets)."""
+        brackets = self.tax_brackets.get(marital_status, self.tax_brackets['single'])
+        quotient = self._get_family_quotient(marital_status, 0)
+        quotient_income = taxable_income / quotient
+
+        for upper_limit, rate in reversed(brackets):
+            if quotient_income >= Decimal('0'):
+                # Find the bracket that this quotient income falls into
+                if upper_limit == Decimal('inf') or quotient_income > upper_limit:
+                    continue
+                return rate
+
+        # Return first bracket rate if nothing found
+        return brackets[0][1]
 
     def get_canton_info(self) -> Dict:
         return {

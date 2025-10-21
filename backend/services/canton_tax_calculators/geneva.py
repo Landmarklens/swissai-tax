@@ -101,8 +101,11 @@ class GenevaTaxCalculator(CantonTaxCalculator):
         return tax
 
     def calculate(self, taxable_income: Decimal, marital_status: str = 'single',
-                  num_children: int = 0) -> Dict[str, Decimal]:
-        """Calculate canton tax using Geneva's system."""
+                  num_children: int = 0) -> Decimal:
+        """Calculate canton tax using Geneva's system.
+
+        Returns: Decimal - The calculated tax amount
+        """
         brackets = self.tax_brackets.get(marital_status, self.tax_brackets['single'])
 
         # For married couples, Geneva uses "splitting" - tax on 50% of income, then doubled
@@ -112,11 +115,7 @@ class GenevaTaxCalculator(CantonTaxCalculator):
         else:
             tax = self._apply_progressive_rates(taxable_income, brackets)
 
-        return {
-            'base_tax': tax,
-            'cantonal_tax': tax,
-            'canton_centimes': self.CANTON_CENTIMES
-        }
+        return tax.quantize(Decimal('0.01'))
 
     def calculate_with_multiplier(self, taxable_income: Decimal, marital_status: str = 'single',
                                    num_children: int = 0, canton_multiplier: Decimal = None,

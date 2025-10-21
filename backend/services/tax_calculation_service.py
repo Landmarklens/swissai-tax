@@ -80,8 +80,10 @@ class TaxCalculationService:
             'federal_tax': float(federal_tax),
             'cantonal_tax': float(cantonal_tax),
             'municipal_tax': float(municipal_tax),
-            'church_tax': church_tax_data,  # Full church tax breakdown
-            'wealth_tax': wealth_tax_data,  # Full wealth tax breakdown
+            'church_tax': float(church_tax),  # Numeric value
+            'church_tax_details': church_tax_data,  # Full breakdown
+            'wealth_tax': float(wealth_tax),  # Numeric value
+            'wealth_tax_details': wealth_tax_data,  # Full breakdown
             'total_tax': float(total_tax),
             'effective_rate': float((total_tax / Decimal(str(max(income_data['total_income'], 1)))) * 100),
             'monthly_tax': float(total_tax / Decimal('12'))
@@ -334,17 +336,17 @@ class TaxCalculationService:
         # Standard deduction
         deductions['standard_deduction'] = 3000
 
-        # Calculate total
+        # Calculate total - convert all to Decimal to avoid type mixing errors
         deductions['total_deductions'] = sum([
-            deductions['professional_expenses'],
-            deductions['pillar_3a'],
-            deductions['pillar_2_buyins'],
-            deductions['insurance_premiums'],
-            deductions['medical_expenses'],
-            deductions['training_expenses'],
-            deductions['child_deduction'],
-            deductions['alimony'],
-            deductions['standard_deduction']
+            Decimal(str(deductions['professional_expenses'])),
+            Decimal(str(deductions['pillar_3a'])),
+            Decimal(str(deductions['pillar_2_buyins'])),
+            Decimal(str(deductions['insurance_premiums'])),
+            Decimal(str(deductions['medical_expenses'])),
+            Decimal(str(deductions['training_expenses'])),
+            Decimal(str(deductions['child_deduction'])),
+            Decimal(str(deductions['alimony'])),
+            Decimal(str(deductions['standard_deduction']))
         ])
 
         # Convert to float for JSON serialization

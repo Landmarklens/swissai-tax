@@ -4,7 +4,7 @@ Document Model - Tax document uploads with AI processing
 
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship
 
@@ -35,6 +35,11 @@ class Document(Base):
     ocr_result = Column(JSONB, nullable=True)  # Extracted data from AI/OCR
     doc_metadata = Column('metadata', JSONB, default=dict)  # Additional metadata (mapped to 'metadata' column)
 
+    # Structured imports (eCH-0196, Swissdec ELM)
+    is_structured_import = Column(Boolean, default=False)  # True if eCH-0196 or Swissdec
+    import_format = Column(String(100), nullable=True)  # e.g., "eCH-0196-2.2", "Swissdec-ELM-5.0"
+    structured_data = Column(JSONB, nullable=True)  # Parsed structured data from barcode/XML
+
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
@@ -59,5 +64,8 @@ class Document(Base):
             'ocr_status': self.ocr_status,
             'ocr_result': self.ocr_result,
             'metadata': self.doc_metadata,
+            'is_structured_import': self.is_structured_import,
+            'import_format': self.import_format,
+            'structured_data': self.structured_data,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }

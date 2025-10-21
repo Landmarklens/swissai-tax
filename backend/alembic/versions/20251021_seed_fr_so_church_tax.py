@@ -43,6 +43,11 @@ def upgrade() -> None:
     backend_dir = Path(__file__).parent.parent.parent
     sql_file = backend_dir / 'fr_so_migration_sql.txt'
 
+    # Skip if file doesn't exist (for development environments)
+    if not sql_file.exists():
+        print(f"Warning: Skipping FR/SO church tax seed - file not found: {sql_file}")
+        return
+
     with open(sql_file, 'r', encoding='utf-8') as f:
         sql_content = f.read()
 

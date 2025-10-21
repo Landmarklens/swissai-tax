@@ -28,6 +28,37 @@
     }
   },
   "subscription": {
+    "manage_title": "Manage Your Subscription",
+    "manage_subtitle": "View your current plan and explore other options",
+    "manage_plan": "Manage Plan",
+    "your_features": "Your Plan Features",
+    "trial_active": "Trial Period Active",
+    "trial_ends_on": "Your trial ends on {{date}}",
+    "renews_on": "Renews on {{date}}",
+    "period_ends_on": "Period ends on {{date}}",
+    "status": {
+      "active": "Active",
+      "trialing": "Trial",
+      "past_due": "Past Due",
+      "canceled": "Canceled",
+      "expired": "Expired"
+    },
+    "upgrade_options": "Upgrade Options",
+    "upgrade_description": "Get more features and unlock the full potential of SwissAI Tax",
+    "downgrade_options": "Other Plans",
+    "downgrade_description": "Switch to a more basic plan if it better fits your needs",
+    "what_youll_gain": "What you'll gain:",
+    "what_youll_lose": "What you'll lose:",
+    "new_features": "new features",
+    "features_removed": "features will be unavailable",
+    "show_details": "Show Details",
+    "hide_details": "Hide Details",
+    "upgrade_to": "Upgrade to {{plan}}",
+    "downgrade_to": "Downgrade to {{plan}}",
+    "change_note": "Changes take effect immediately",
+    "per_year": "per year",
+    "error_loading": "Failed to load subscription information",
+    "error_selecting_plan": "Failed to select plan",
     "checkout": {
       "title": "Complete Your Subscription",
       "step_plan": "Select Plan",
@@ -62,7 +93,8 @@
       "cancel_info": "You can cancel anytime during the trial period without being charged."
     },
     "billing": {
-      "annual": "/ year"
+      "annual": "/ year",
+      "forever": "forever"
     },
     "error": {
       "stripe_not_configured": "Stripe is not configured. Please contact support.",

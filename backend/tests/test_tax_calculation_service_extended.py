@@ -672,29 +672,37 @@ class TestCalculateChurchTax(unittest.TestCase):
         """Test church tax for non-member"""
         answers = {'pays_church_tax': False}
         cantonal_tax = Decimal('5000')
-        tax = self.service._calculate_church_tax(cantonal_tax, 'ZH', answers)
-        self.assertEqual(tax, Decimal('0'))
+        result = self.service._calculate_church_tax(cantonal_tax, 'ZH', answers)
+        # Now returns dict with breakdown
+        self.assertEqual(result['church_tax'], 0.0)
+        self.assertEqual(result['applies'], False)
 
     def test_church_tax_member_zurich(self):
-        """Test church tax for member in Zurich (10%)"""
-        answers = {'pays_church_tax': True}
+        """Test church tax for member in Zurich (13% canton average for Catholic)"""
+        answers = {'pays_church_tax': True, 'religious_denomination': 'catholic'}
         cantonal_tax = Decimal('5000')
-        tax = self.service._calculate_church_tax(cantonal_tax, 'ZH', answers)
-        self.assertEqual(tax, Decimal('500'))  # 5000 * 0.10
+        result = self.service._calculate_church_tax(cantonal_tax, 'ZH', answers)
+        # Now returns dict with breakdown
+        self.assertEqual(result['applies'], True)
+        self.assertEqual(result['church_tax'], 650.0)  # 5000 * 0.13
 
     def test_church_tax_member_bern(self):
-        """Test church tax for member in Bern (12%)"""
-        answers = {'pays_church_tax': True}
+        """Test church tax for member in Bern (20.7% for Catholic)"""
+        answers = {'pays_church_tax': True, 'religious_denomination': 'catholic'}
         cantonal_tax = Decimal('5000')
-        tax = self.service._calculate_church_tax(cantonal_tax, 'BE', answers)
-        self.assertEqual(tax, Decimal('600'))  # 5000 * 0.12
+        result = self.service._calculate_church_tax(cantonal_tax, 'BE', answers)
+        # Now returns dict with breakdown
+        self.assertEqual(result['applies'], True)
+        self.assertEqual(result['church_tax'], 1035.0)  # 5000 * 0.207
 
     def test_church_tax_member_geneva(self):
-        """Test church tax for member in Geneva (voluntary, 0%)"""
-        answers = {'pays_church_tax': True}
+        """Test church tax for member in Geneva (no church tax)"""
+        answers = {'pays_church_tax': True, 'religious_denomination': 'catholic'}
         cantonal_tax = Decimal('5000')
-        tax = self.service._calculate_church_tax(cantonal_tax, 'GE', answers)
-        self.assertEqual(tax, Decimal('0'))  # Geneva has no church tax
+        result = self.service._calculate_church_tax(cantonal_tax, 'GE', answers)
+        # Geneva has no church tax
+        self.assertEqual(result['applies'], False)
+        self.assertEqual(result['church_tax'], 0.0)
 
 
 class TestSaveCalculation(unittest.TestCase):

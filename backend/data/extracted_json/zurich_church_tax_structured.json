@@ -1,0 +1,1122 @@
+[
+  {
+    "municipality": "Aeugst a.A.",
+    "bfs_number": 1,
+    "reformed_rate": 0.1304,
+    "catholic_rate": 0.1413,
+    "christian_catholic_rate": 0.1522
+  },
+  {
+    "municipality": "Affoltern a.A.",
+    "bfs_number": 2,
+    "reformed_rate": 0.0984,
+    "catholic_rate": 0.1066,
+    "christian_catholic_rate": 0.1148
+  },
+  {
+    "municipality": "Bonstetten",
+    "bfs_number": 3,
+    "reformed_rate": 0.1101,
+    "catholic_rate": 0.1009,
+    "christian_catholic_rate": 0.1284
+  },
+  {
+    "municipality": "Hausen a.A.",
+    "bfs_number": 4,
+    "reformed_rate": 0.1071,
+    "catholic_rate": 0.125,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Hedingen",
+    "bfs_number": 5,
+    "reformed_rate": 0.12,
+    "catholic_rate": 0.13,
+    "christian_catholic_rate": 0.14
+  },
+  {
+    "municipality": "Kappel a.A.",
+    "bfs_number": 6,
+    "reformed_rate": 0.1373,
+    "catholic_rate": 0.1373,
+    "christian_catholic_rate": 0.1373
+  },
+  {
+    "municipality": "Knonau",
+    "bfs_number": 7,
+    "reformed_rate": 0.1207,
+    "catholic_rate": 0.1207,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Maschwanden",
+    "bfs_number": 8,
+    "reformed_rate": 0.093,
+    "catholic_rate": 0.1085,
+    "christian_catholic_rate": 0.1085
+  },
+  {
+    "municipality": "Mettmenstetten",
+    "bfs_number": 9,
+    "reformed_rate": 0.1224,
+    "catholic_rate": 0.1429,
+    "christian_catholic_rate": 0.1429
+  },
+  {
+    "municipality": "Obfelden",
+    "bfs_number": 10,
+    "reformed_rate": 0.1008,
+    "catholic_rate": 0.1092,
+    "christian_catholic_rate": 0.1176
+  },
+  {
+    "municipality": "Ottenbach",
+    "bfs_number": 11,
+    "reformed_rate": 0.1043,
+    "catholic_rate": 0.113,
+    "christian_catholic_rate": 0.1217
+  },
+  {
+    "municipality": "Rifferswil",
+    "bfs_number": 12,
+    "reformed_rate": 0.0984,
+    "catholic_rate": 0.1148,
+    "christian_catholic_rate": 0.1148
+  },
+  {
+    "municipality": "Stallikon",
+    "bfs_number": 13,
+    "reformed_rate": 0.1068,
+    "catholic_rate": 0.1068,
+    "christian_catholic_rate": 0.1359
+  },
+  {
+    "municipality": "Wettswil a.A.",
+    "bfs_number": 14,
+    "reformed_rate": 0.1209,
+    "catholic_rate": 0.1209,
+    "christian_catholic_rate": 0.1538
+  },
+  {
+    "municipality": "Benken",
+    "bfs_number": 22,
+    "reformed_rate": 0.1273,
+    "catholic_rate": 0.1273,
+    "christian_catholic_rate": 0.1273
+  },
+  {
+    "municipality": "Berg a.I.",
+    "bfs_number": 23,
+    "reformed_rate": 0.1224,
+    "catholic_rate": 0.1327,
+    "christian_catholic_rate": 0.1429
+  },
+  {
+    "municipality": "Buch a.I.",
+    "bfs_number": 24,
+    "reformed_rate": 0.1132,
+    "catholic_rate": 0.1226,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Dachsen",
+    "bfs_number": 25,
+    "reformed_rate": 0.1081,
+    "catholic_rate": 0.1261,
+    "christian_catholic_rate": 0.1261
+  },
+  {
+    "municipality": "Dorf",
+    "bfs_number": 26,
+    "reformed_rate": 0.1346,
+    "catholic_rate": 0.125,
+    "christian_catholic_rate": 0.1346
+  },
+  {
+    "municipality": "Feuerthalen",
+    "bfs_number": 27,
+    "reformed_rate": 0.1228,
+    "catholic_rate": 0.1228,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Flaach",
+    "bfs_number": 28,
+    "reformed_rate": 0.1121,
+    "catholic_rate": 0.1215,
+    "christian_catholic_rate": 0.1308
+  },
+  {
+    "municipality": "Flurlingen",
+    "bfs_number": 29,
+    "reformed_rate": 0.1081,
+    "catholic_rate": 0.1261,
+    "christian_catholic_rate": 0.1261
+  },
+  {
+    "municipality": "Henggart",
+    "bfs_number": 31,
+    "reformed_rate": 0.1359,
+    "catholic_rate": 0.1262,
+    "christian_catholic_rate": 0.1359
+  },
+  {
+    "municipality": "Kleinandelfingen",
+    "bfs_number": 33,
+    "reformed_rate": 0.1034,
+    "catholic_rate": 0.1207,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Laufen-Uhwiesen",
+    "bfs_number": 34,
+    "reformed_rate": 0.1154,
+    "catholic_rate": 0.1346,
+    "christian_catholic_rate": 0.1346
+  },
+  {
+    "municipality": "Marthalen",
+    "bfs_number": 35,
+    "reformed_rate": 0.1308,
+    "catholic_rate": 0.1308,
+    "christian_catholic_rate": 0.1308
+  },
+  {
+    "municipality": "Ossingen",
+    "bfs_number": 37,
+    "reformed_rate": 0.1414,
+    "catholic_rate": 0.1414,
+    "christian_catholic_rate": 0.1414
+  },
+  {
+    "municipality": "Rheinau",
+    "bfs_number": 38,
+    "reformed_rate": 0.125,
+    "catholic_rate": 0.125,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Thalheim a.d.Th.",
+    "bfs_number": 39,
+    "reformed_rate": 0.1043,
+    "catholic_rate": 0.113,
+    "christian_catholic_rate": 0.1217
+  },
+  {
+    "municipality": "Trüllikon",
+    "bfs_number": 40,
+    "reformed_rate": 0.1273,
+    "catholic_rate": 0.1273,
+    "christian_catholic_rate": 0.1273
+  },
+  {
+    "municipality": "Truttikon",
+    "bfs_number": 41,
+    "reformed_rate": 0.1308,
+    "catholic_rate": 0.1308,
+    "christian_catholic_rate": 0.1308
+  },
+  {
+    "municipality": "Volken",
+    "bfs_number": 43,
+    "reformed_rate": 0.1081,
+    "catholic_rate": 0.1171,
+    "christian_catholic_rate": 0.1261
+  },
+  {
+    "municipality": "Bachenbülach",
+    "bfs_number": 51,
+    "reformed_rate": 0.0943,
+    "catholic_rate": 0.1038,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Bassersdorf",
+    "bfs_number": 52,
+    "reformed_rate": 0.1053,
+    "catholic_rate": 0.0789,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Bülach",
+    "bfs_number": 53,
+    "reformed_rate": 0.0877,
+    "catholic_rate": 0.0965,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Dietlikon",
+    "bfs_number": 54,
+    "reformed_rate": 0.1048,
+    "catholic_rate": 0.0762,
+    "christian_catholic_rate": 0.1333
+  },
+  {
+    "municipality": "Eglisau",
+    "bfs_number": 55,
+    "reformed_rate": 0.115,
+    "catholic_rate": 0.115,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Embrach",
+    "bfs_number": 56,
+    "reformed_rate": 0.1053,
+    "catholic_rate": 0.114,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Freienstein-Teufen",
+    "bfs_number": 57,
+    "reformed_rate": 0.1414,
+    "catholic_rate": 0.1313,
+    "christian_catholic_rate": 0.1414
+  },
+  {
+    "municipality": "Glattfelden",
+    "bfs_number": 58,
+    "reformed_rate": 0.1167,
+    "catholic_rate": 0.1083,
+    "christian_catholic_rate": 0.1167
+  },
+  {
+    "municipality": "Hochfelden",
+    "bfs_number": 59,
+    "reformed_rate": 0.0862,
+    "catholic_rate": 0.0948,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Höri",
+    "bfs_number": 60,
+    "reformed_rate": 0.0909,
+    "catholic_rate": 0.1,
+    "christian_catholic_rate": 0.1273
+  },
+  {
+    "municipality": "Hüntwangen",
+    "bfs_number": 61,
+    "reformed_rate": 0.1296,
+    "catholic_rate": 0.1204,
+    "christian_catholic_rate": 0.1296
+  },
+  {
+    "municipality": "Kloten",
+    "bfs_number": 62,
+    "reformed_rate": 0.09,
+    "catholic_rate": 0.09,
+    "christian_catholic_rate": 0.14
+  },
+  {
+    "municipality": "Lufingen",
+    "bfs_number": 63,
+    "reformed_rate": 0.1304,
+    "catholic_rate": 0.1413,
+    "christian_catholic_rate": 0.1522
+  },
+  {
+    "municipality": "Nürensdorf",
+    "bfs_number": 64,
+    "reformed_rate": 0.1333,
+    "catholic_rate": 0.1,
+    "christian_catholic_rate": 0.1556
+  },
+  {
+    "municipality": "Oberembrach",
+    "bfs_number": 65,
+    "reformed_rate": 0.0984,
+    "catholic_rate": 0.1066,
+    "christian_catholic_rate": 0.1148
+  },
+  {
+    "municipality": "Opfikon",
+    "bfs_number": 66,
+    "reformed_rate": 0.0851,
+    "catholic_rate": 0.0745,
+    "christian_catholic_rate": 0.1489
+  },
+  {
+    "municipality": "Rafz",
+    "bfs_number": 67,
+    "reformed_rate": 0.1239,
+    "catholic_rate": 0.115,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Rorbas",
+    "bfs_number": 68,
+    "reformed_rate": 0.1359,
+    "catholic_rate": 0.1262,
+    "christian_catholic_rate": 0.1359
+  },
+  {
+    "municipality": "Wallisellen",
+    "bfs_number": 69,
+    "reformed_rate": 0.0753,
+    "catholic_rate": 0.086,
+    "christian_catholic_rate": 0.1505
+  },
+  {
+    "municipality": "Wasterkingen",
+    "bfs_number": 70,
+    "reformed_rate": 0.1207,
+    "catholic_rate": 0.1121,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Wil",
+    "bfs_number": 71,
+    "reformed_rate": 0.1414,
+    "catholic_rate": 0.1313,
+    "christian_catholic_rate": 0.1414
+  },
+  {
+    "municipality": "Winkel",
+    "bfs_number": 72,
+    "reformed_rate": 0.1316,
+    "catholic_rate": 0.1447,
+    "christian_catholic_rate": 0.1842
+  },
+  {
+    "municipality": "Bachs",
+    "bfs_number": 81,
+    "reformed_rate": 0.1094,
+    "catholic_rate": 0.0781,
+    "christian_catholic_rate": 0.1094
+  },
+  {
+    "municipality": "Boppelsen",
+    "bfs_number": 82,
+    "reformed_rate": 0.1383,
+    "catholic_rate": 0.1064,
+    "christian_catholic_rate": 0.1489
+  },
+  {
+    "municipality": "Buchs",
+    "bfs_number": 83,
+    "reformed_rate": 0.1048,
+    "catholic_rate": 0.0952,
+    "christian_catholic_rate": 0.1333
+  },
+  {
+    "municipality": "Dällikon",
+    "bfs_number": 84,
+    "reformed_rate": 0.1028,
+    "catholic_rate": 0.0935,
+    "christian_catholic_rate": 0.1308
+  },
+  {
+    "municipality": "Dänikon",
+    "bfs_number": 85,
+    "reformed_rate": 0.0917,
+    "catholic_rate": 0.0833,
+    "christian_catholic_rate": 0.1167
+  },
+  {
+    "municipality": "Dielsdorf",
+    "bfs_number": 86,
+    "reformed_rate": 0.1143,
+    "catholic_rate": 0.0952,
+    "christian_catholic_rate": 0.1333
+  },
+  {
+    "municipality": "Hüttikon",
+    "bfs_number": 87,
+    "reformed_rate": 0.115,
+    "catholic_rate": 0.0885,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Neerach",
+    "bfs_number": 88,
+    "reformed_rate": 0.1558,
+    "catholic_rate": 0.1299,
+    "christian_catholic_rate": 0.1818
+  },
+  {
+    "municipality": "Niederglatt",
+    "bfs_number": 89,
+    "reformed_rate": 0.1226,
+    "catholic_rate": 0.0943,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Niederhasli",
+    "bfs_number": 90,
+    "reformed_rate": 0.1161,
+    "catholic_rate": 0.0893,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Niederweningen",
+    "bfs_number": 91,
+    "reformed_rate": 0.098,
+    "catholic_rate": 0.098,
+    "christian_catholic_rate": 0.1373
+  },
+  {
+    "municipality": "Oberglatt",
+    "bfs_number": 92,
+    "reformed_rate": 0.1111,
+    "catholic_rate": 0.0855,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Oberweningen",
+    "bfs_number": 93,
+    "reformed_rate": 0.1042,
+    "catholic_rate": 0.1042,
+    "christian_catholic_rate": 0.1458
+  },
+  {
+    "municipality": "Otelfingen",
+    "bfs_number": 94,
+    "reformed_rate": 0.1161,
+    "catholic_rate": 0.0893,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Regensberg",
+    "bfs_number": 95,
+    "reformed_rate": 0.1273,
+    "catholic_rate": 0.0909,
+    "christian_catholic_rate": 0.1273
+  },
+  {
+    "municipality": "Regensdorf",
+    "bfs_number": 96,
+    "reformed_rate": 0.094,
+    "catholic_rate": 0.0855,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Rümlang",
+    "bfs_number": 97,
+    "reformed_rate": 0.1284,
+    "catholic_rate": 0.1284,
+    "christian_catholic_rate": 0.1284
+  },
+  {
+    "municipality": "Schleinikon",
+    "bfs_number": 98,
+    "reformed_rate": 0.0926,
+    "catholic_rate": 0.0926,
+    "christian_catholic_rate": 0.1296
+  },
+  {
+    "municipality": "Schöfflisdorf",
+    "bfs_number": 99,
+    "reformed_rate": 0.101,
+    "catholic_rate": 0.101,
+    "christian_catholic_rate": 0.1414
+  },
+  {
+    "municipality": "Stadel",
+    "bfs_number": 100,
+    "reformed_rate": 0.1239,
+    "catholic_rate": 0.115,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Steinmaur",
+    "bfs_number": 101,
+    "reformed_rate": 0.1111,
+    "catholic_rate": 0.0926,
+    "christian_catholic_rate": 0.1296
+  },
+  {
+    "municipality": "Weiach",
+    "bfs_number": 102,
+    "reformed_rate": 0.1146,
+    "catholic_rate": 0.1354,
+    "christian_catholic_rate": 0.1458
+  },
+  {
+    "municipality": "Bäretswil",
+    "bfs_number": 111,
+    "reformed_rate": 0.1321,
+    "catholic_rate": 0.1226,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Bubikon",
+    "bfs_number": 112,
+    "reformed_rate": 0.1186,
+    "catholic_rate": 0.1017,
+    "christian_catholic_rate": 0.1186
+  },
+  {
+    "municipality": "Dürnten",
+    "bfs_number": 113,
+    "reformed_rate": 0.1239,
+    "catholic_rate": 0.1062,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Fischenthal",
+    "bfs_number": 114,
+    "reformed_rate": 0.1148,
+    "catholic_rate": 0.1066,
+    "christian_catholic_rate": 0.1148
+  },
+  {
+    "municipality": "Gossau",
+    "bfs_number": 115,
+    "reformed_rate": 0.1197,
+    "catholic_rate": 0.1197,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Grüningen",
+    "bfs_number": 116,
+    "reformed_rate": 0.1034,
+    "catholic_rate": 0.1121,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Hinwil",
+    "bfs_number": 117,
+    "reformed_rate": 0.1008,
+    "catholic_rate": 0.1345,
+    "christian_catholic_rate": 0.1176
+  },
+  {
+    "municipality": "Rüti",
+    "bfs_number": 118,
+    "reformed_rate": 0.1176,
+    "catholic_rate": 0.1008,
+    "christian_catholic_rate": 0.1176
+  },
+  {
+    "municipality": "Seegräben",
+    "bfs_number": 119,
+    "reformed_rate": 0.1081,
+    "catholic_rate": 0.1261,
+    "christian_catholic_rate": 0.1261
+  },
+  {
+    "municipality": "Wald",
+    "bfs_number": 120,
+    "reformed_rate": 0.1148,
+    "catholic_rate": 0.0984,
+    "christian_catholic_rate": 0.1148
+  },
+  {
+    "municipality": "Wetzikon",
+    "bfs_number": 121,
+    "reformed_rate": 0.1176,
+    "catholic_rate": 0.1176,
+    "christian_catholic_rate": 0.1176
+  },
+  {
+    "municipality": "Adliswil",
+    "bfs_number": 131,
+    "reformed_rate": 0.098,
+    "catholic_rate": 0.098,
+    "christian_catholic_rate": 0.1373
+  },
+  {
+    "municipality": "Kilchberg",
+    "bfs_number": 135,
+    "reformed_rate": 0.1111,
+    "catholic_rate": 0.0833,
+    "christian_catholic_rate": 0.1944
+  },
+  {
+    "municipality": "Langnau a.A.",
+    "bfs_number": 136,
+    "reformed_rate": 0.0943,
+    "catholic_rate": 0.1226,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Oberrieden",
+    "bfs_number": 137,
+    "reformed_rate": 0.1429,
+    "catholic_rate": 0.131,
+    "christian_catholic_rate": 0.1667
+  },
+  {
+    "municipality": "Richterswil",
+    "bfs_number": 138,
+    "reformed_rate": 0.1212,
+    "catholic_rate": 0.1414,
+    "christian_catholic_rate": 0.1414
+  },
+  {
+    "municipality": "Rüschlikon",
+    "bfs_number": 139,
+    "reformed_rate": 0.1333,
+    "catholic_rate": 0.1333,
+    "christian_catholic_rate": 0.1867
+  },
+  {
+    "municipality": "Thalwil",
+    "bfs_number": 141,
+    "reformed_rate": 0.141,
+    "catholic_rate": 0.1282,
+    "christian_catholic_rate": 0.1795
+  },
+  {
+    "municipality": "Erlenbach",
+    "bfs_number": 151,
+    "reformed_rate": 0.1053,
+    "catholic_rate": 0.0921,
+    "christian_catholic_rate": 0.1842
+  },
+  {
+    "municipality": "Herrliberg",
+    "bfs_number": 152,
+    "reformed_rate": 0.12,
+    "catholic_rate": 0.1067,
+    "christian_catholic_rate": 0.1867
+  },
+  {
+    "municipality": "Hombrechtikon",
+    "bfs_number": 153,
+    "reformed_rate": 0.0973,
+    "catholic_rate": 0.115,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Küsnacht",
+    "bfs_number": 154,
+    "reformed_rate": 0.0959,
+    "catholic_rate": 0.0959,
+    "christian_catholic_rate": 0.1918
+  },
+  {
+    "municipality": "Männedorf",
+    "bfs_number": 155,
+    "reformed_rate": 0.1209,
+    "catholic_rate": 0.1209,
+    "christian_catholic_rate": 0.1538
+  },
+  {
+    "municipality": "Meilen",
+    "bfs_number": 156,
+    "reformed_rate": 0.1139,
+    "catholic_rate": 0.0886,
+    "christian_catholic_rate": 0.1772
+  },
+  {
+    "municipality": "Oetwil a.S.",
+    "bfs_number": 157,
+    "reformed_rate": 0.1207,
+    "catholic_rate": 0.0776,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Stäfa",
+    "bfs_number": 158,
+    "reformed_rate": 0.141,
+    "catholic_rate": 0.141,
+    "christian_catholic_rate": 0.1795
+  },
+  {
+    "municipality": "Uetikon a.S.",
+    "bfs_number": 159,
+    "reformed_rate": 0.131,
+    "catholic_rate": 0.131,
+    "christian_catholic_rate": 0.1667
+  },
+  {
+    "municipality": "Zumikon",
+    "bfs_number": 160,
+    "reformed_rate": 0.1067,
+    "catholic_rate": 0.1067,
+    "christian_catholic_rate": 0.1867
+  },
+  {
+    "municipality": "Zollikon",
+    "bfs_number": 161,
+    "reformed_rate": 0.1053,
+    "catholic_rate": 0.1053,
+    "christian_catholic_rate": 0.1842
+  },
+  {
+    "municipality": "Fehraltorf",
+    "bfs_number": 172,
+    "reformed_rate": 0.1171,
+    "catholic_rate": 0.0991,
+    "christian_catholic_rate": 0.1261
+  },
+  {
+    "municipality": "Hittnau",
+    "bfs_number": 173,
+    "reformed_rate": 0.1239,
+    "catholic_rate": 0.0973,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Lindau",
+    "bfs_number": 176,
+    "reformed_rate": 0.1132,
+    "catholic_rate": 0.1226,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Pfäffikon",
+    "bfs_number": 177,
+    "reformed_rate": 0.1091,
+    "catholic_rate": 0.1,
+    "christian_catholic_rate": 0.1273
+  },
+  {
+    "municipality": "Russikon",
+    "bfs_number": 178,
+    "reformed_rate": 0.1062,
+    "catholic_rate": 0.0973,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Weisslingen",
+    "bfs_number": 180,
+    "reformed_rate": 0.1121,
+    "catholic_rate": 0.1121,
+    "christian_catholic_rate": 0.1207
+  },
+  {
+    "municipality": "Wila",
+    "bfs_number": 181,
+    "reformed_rate": 0.112,
+    "catholic_rate": 0.104,
+    "christian_catholic_rate": 0.112
+  },
+  {
+    "municipality": "Wildberg",
+    "bfs_number": 182,
+    "reformed_rate": 0.1102,
+    "catholic_rate": 0.1024,
+    "christian_catholic_rate": 0.1102
+  },
+  {
+    "municipality": "Dübendorf",
+    "bfs_number": 191,
+    "reformed_rate": 0.1146,
+    "catholic_rate": 0.1146,
+    "christian_catholic_rate": 0.1458
+  },
+  {
+    "municipality": "Egg",
+    "bfs_number": 192,
+    "reformed_rate": 0.1188,
+    "catholic_rate": 0.0891,
+    "christian_catholic_rate": 0.1386
+  },
+  {
+    "municipality": "Fällanden",
+    "bfs_number": 193,
+    "reformed_rate": 0.1111,
+    "catholic_rate": 0.1111,
+    "christian_catholic_rate": 0.1414
+  },
+  {
+    "municipality": "Greifensee",
+    "bfs_number": 194,
+    "reformed_rate": 0.1146,
+    "catholic_rate": 0.1042,
+    "christian_catholic_rate": 0.1458
+  },
+  {
+    "municipality": "Maur",
+    "bfs_number": 195,
+    "reformed_rate": 0.1059,
+    "catholic_rate": 0.1059,
+    "christian_catholic_rate": 0.1647
+  },
+  {
+    "municipality": "Mönchaltorf",
+    "bfs_number": 196,
+    "reformed_rate": 0.1204,
+    "catholic_rate": 0.0833,
+    "christian_catholic_rate": 0.1296
+  },
+  {
+    "municipality": "Schwerzenbach",
+    "bfs_number": 197,
+    "reformed_rate": 0.1058,
+    "catholic_rate": 0.1058,
+    "christian_catholic_rate": 0.1346
+  },
+  {
+    "municipality": "Uster",
+    "bfs_number": 198,
+    "reformed_rate": 0.0982,
+    "catholic_rate": 0.0893,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Volketswil",
+    "bfs_number": 199,
+    "reformed_rate": 0.099,
+    "catholic_rate": 0.099,
+    "christian_catholic_rate": 0.1386
+  },
+  {
+    "municipality": "Wangen-Brüttisellen",
+    "bfs_number": 200,
+    "reformed_rate": 0.1089,
+    "catholic_rate": 0.0792,
+    "christian_catholic_rate": 0.1386
+  },
+  {
+    "municipality": "Altikon",
+    "bfs_number": 211,
+    "reformed_rate": 0.1053,
+    "catholic_rate": 0.114,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Brütten",
+    "bfs_number": 213,
+    "reformed_rate": 0.1412,
+    "catholic_rate": 0.1529,
+    "christian_catholic_rate": 0.1647
+  },
+  {
+    "municipality": "Dägerlen",
+    "bfs_number": 214,
+    "reformed_rate": 0.1321,
+    "catholic_rate": 0.1226,
+    "christian_catholic_rate": 0.1321
+  },
+  {
+    "municipality": "Dättlikon",
+    "bfs_number": 215,
+    "reformed_rate": 0.1053,
+    "catholic_rate": 0.114,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Dinhard",
+    "bfs_number": 216,
+    "reformed_rate": 0.1333,
+    "catholic_rate": 0.1444,
+    "christian_catholic_rate": 0.1556
+  },
+  {
+    "municipality": "Ellikon a.d.Th.",
+    "bfs_number": 218,
+    "reformed_rate": 0.1026,
+    "catholic_rate": 0.1111,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Elsau",
+    "bfs_number": 219,
+    "reformed_rate": 0.1197,
+    "catholic_rate": 0.1111,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Hagenbuch",
+    "bfs_number": 220,
+    "reformed_rate": 0.1138,
+    "catholic_rate": 0.1138,
+    "christian_catholic_rate": 0.1138
+  },
+  {
+    "municipality": "Hettlingen",
+    "bfs_number": 221,
+    "reformed_rate": 0.134,
+    "catholic_rate": 0.134,
+    "christian_catholic_rate": 0.1443
+  },
+  {
+    "municipality": "Neftenbach",
+    "bfs_number": 223,
+    "reformed_rate": 0.098,
+    "catholic_rate": 0.1275,
+    "christian_catholic_rate": 0.1373
+  },
+  {
+    "municipality": "Pfungen",
+    "bfs_number": 224,
+    "reformed_rate": 0.1026,
+    "catholic_rate": 0.1111,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Rickenbach",
+    "bfs_number": 225,
+    "reformed_rate": 0.1111,
+    "catholic_rate": 0.1204,
+    "christian_catholic_rate": 0.1296
+  },
+  {
+    "municipality": "Schlatt",
+    "bfs_number": 226,
+    "reformed_rate": 0.112,
+    "catholic_rate": 0.096,
+    "christian_catholic_rate": 0.112
+  },
+  {
+    "municipality": "Seuzach",
+    "bfs_number": 227,
+    "reformed_rate": 0.12,
+    "catholic_rate": 0.13,
+    "christian_catholic_rate": 0.14
+  },
+  {
+    "municipality": "Turbenthal",
+    "bfs_number": 228,
+    "reformed_rate": 0.1148,
+    "catholic_rate": 0.1066,
+    "christian_catholic_rate": 0.1148
+  },
+  {
+    "municipality": "Winterthur",
+    "bfs_number": 230,
+    "reformed_rate": 0.104,
+    "catholic_rate": 0.136,
+    "christian_catholic_rate": 0.112
+  },
+  {
+    "municipality": "Zell",
+    "bfs_number": 231,
+    "reformed_rate": 0.1186,
+    "catholic_rate": 0.1017,
+    "christian_catholic_rate": 0.1186
+  },
+  {
+    "municipality": "Aesch",
+    "bfs_number": 241,
+    "reformed_rate": 0.1209,
+    "catholic_rate": 0.1099,
+    "christian_catholic_rate": 0.1538
+  },
+  {
+    "municipality": "Birmensdorf",
+    "bfs_number": 242,
+    "reformed_rate": 0.0982,
+    "catholic_rate": 0.0893,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Dietikon",
+    "bfs_number": 243,
+    "reformed_rate": 0.0992,
+    "catholic_rate": 0.1074,
+    "christian_catholic_rate": 0.1157
+  },
+  {
+    "municipality": "Geroldswil",
+    "bfs_number": 244,
+    "reformed_rate": 0.0982,
+    "catholic_rate": 0.0804,
+    "christian_catholic_rate": 0.125
+  },
+  {
+    "municipality": "Oberengstringen",
+    "bfs_number": 245,
+    "reformed_rate": 0.0917,
+    "catholic_rate": 0.1193,
+    "christian_catholic_rate": 0.1284
+  },
+  {
+    "municipality": "Oetwil a.d.L.",
+    "bfs_number": 246,
+    "reformed_rate": 0.1028,
+    "catholic_rate": 0.0841,
+    "christian_catholic_rate": 0.1308
+  },
+  {
+    "municipality": "Schlieren",
+    "bfs_number": 247,
+    "reformed_rate": 0.0991,
+    "catholic_rate": 0.0901,
+    "christian_catholic_rate": 0.1261
+  },
+  {
+    "municipality": "Uitikon",
+    "bfs_number": 248,
+    "reformed_rate": 0.1282,
+    "catholic_rate": 0.1282,
+    "christian_catholic_rate": 0.1795
+  },
+  {
+    "municipality": "Unterengstringen",
+    "bfs_number": 249,
+    "reformed_rate": 0.1078,
+    "catholic_rate": 0.1275,
+    "christian_catholic_rate": 0.1373
+  },
+  {
+    "municipality": "Urdorf",
+    "bfs_number": 250,
+    "reformed_rate": 0.087,
+    "catholic_rate": 0.0957,
+    "christian_catholic_rate": 0.1217
+  },
+  {
+    "municipality": "Weiningen",
+    "bfs_number": 251,
+    "reformed_rate": 0.1028,
+    "catholic_rate": 0.0841,
+    "christian_catholic_rate": 0.1308
+  },
+  {
+    "municipality": "Zürich",
+    "bfs_number": 261,
+    "reformed_rate": 0.084,
+    "catholic_rate": 0.084,
+    "christian_catholic_rate": 0.1176
+  },
+  {
+    "municipality": "Andelfingen",
+    "bfs_number": 291,
+    "reformed_rate": 0.1026,
+    "catholic_rate": 0.1197,
+    "christian_catholic_rate": 0.1197
+  },
+  {
+    "municipality": "Stammheim",
+    "bfs_number": 292,
+    "reformed_rate": 0.1228,
+    "catholic_rate": 0.1228,
+    "christian_catholic_rate": 0.1228
+  },
+  {
+    "municipality": "Wädenswil",
+    "bfs_number": 293,
+    "reformed_rate": 0.1068,
+    "catholic_rate": 0.1262,
+    "christian_catholic_rate": 0.1359
+  },
+  {
+    "municipality": "Elgg",
+    "bfs_number": 294,
+    "reformed_rate": 0.1157,
+    "catholic_rate": 0.1157,
+    "christian_catholic_rate": 0.1157
+  },
+  {
+    "municipality": "Horgen",
+    "bfs_number": 295,
+    "reformed_rate": 0.1111,
+    "catholic_rate": 0.0778,
+    "christian_catholic_rate": 0.1556
+  },
+  {
+    "municipality": "Illnau-Effretikon",
+    "bfs_number": 296,
+    "reformed_rate": 0.115,
+    "catholic_rate": 0.115,
+    "christian_catholic_rate": 0.1239
+  },
+  {
+    "municipality": "Bauma",
+    "bfs_number": 297,
+    "reformed_rate": 0.1167,
+    "catholic_rate": 0.1083,
+    "christian_catholic_rate": 0.1167
+  },
+  {
+    "municipality": "Wiesendangen",
+    "bfs_number": 298,
+    "reformed_rate": 0.1591,
+    "catholic_rate": 0.1477,
+    "christian_catholic_rate": 0.1591
+  }
+]

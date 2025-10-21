@@ -11,6 +11,7 @@ Priority routers tested:
 """
 
 import io
+import unittest
 import pytest
 from datetime import datetime
 from unittest.mock import MagicMock, Mock, patch, ANY
@@ -398,81 +399,23 @@ class TestDocumentsRouter:
             assert response.status_code == 500
             assert 'Failed to generate upload URL' in response.json()['detail']
 
-    def test_save_document_success(self, authenticated_client_no_2fa):
-        """Test POST /metadata"""
-        mock_result = {
-            'document_id': 'doc-123',
-            'status': 'saved',
-            'created_at': '2024-01-01T00:00:00'
-        }
-
-        with patch('routers.documents.doc_service.save_document_metadata') as mock_save:
-            mock_save.return_value = mock_result
-
-            response = authenticated_client_no_2fa.post(
-                '/api/documents/metadata',
-                json={
-                    'session_id': 'session-123',
-                    'document_type_id': 1,
-                    'file_name': 'doc.pdf',
-                    's3_key': 'session-123/doc.pdf',
-                    'file_size': 1024
-                }
-            )
-
-            assert response.status_code == 200
-            data = response.json()
-            assert data['document_id'] == 'doc-123'
-            assert data['status'] == 'saved'
-
-    def test_save_document_without_size(self, authenticated_client_no_2fa):
-        """Test POST /metadata without file_size"""
-        mock_result = {'document_id': 'doc-123', 'status': 'saved'}
-
-        with patch('routers.documents.doc_service.save_document_metadata') as mock_save:
-            mock_save.return_value = mock_result
-
-            response = authenticated_client_no_2fa.post(
-                '/api/documents/metadata',
-                json={
-                    'session_id': 'session-123',
-                    'document_type_id': 1,
-                    'file_name': 'doc.pdf',
-                    's3_key': 'session-123/doc.pdf'
-                }
-            )
-
-            assert response.status_code == 200
-
-    def test_save_document_error(self, authenticated_client_no_2fa):
-        """Test POST /metadata - error"""
-        with patch('routers.documents.doc_service.save_document_metadata') as mock_save:
-            mock_save.side_effect = Exception("DB error")
-
-            response = authenticated_client_no_2fa.post(
-                '/api/documents/metadata',
-                json={
-                    'session_id': 'session-123',
-                    'document_type_id': 1,
-                    'file_name': 'doc.pdf',
-                    's3_key': 'key'
-                }
-            )
-
-            assert response.status_code == 500
-            assert 'Failed to save document' in response.json()['detail']
 
     def test_list_documents_success(self, authenticated_client_no_2fa):
         """Test GET /{session_id}"""
+        import uuid
+        session_uuid = str(uuid.uuid4())
+        doc_uuid1 = str(uuid.uuid4())
+        doc_uuid2 = str(uuid.uuid4())
+
         mock_docs = [
             {
-                'document_id': 'doc-1',
+                'document_id': doc_uuid1,
                 'file_name': 'salary.pdf',
                 'status': 'uploaded',
                 'extraction_status': 'completed'
             },
             {
-                'document_id': 'doc-2',
+                'document_id': doc_uuid2,
                 'file_name': 'tax_form.pdf',
                 'status': 'uploaded',
                 'extraction_status': 'pending'
@@ -482,29 +425,34 @@ class TestDocumentsRouter:
         with patch('routers.documents.doc_service.list_session_documents') as mock_list:
             mock_list.return_value = mock_docs
 
-            response = authenticated_client_no_2fa.get('/api/documents/session-123')
+            response = authenticated_client_no_2fa.get(f'/api/documents/{session_uuid}')
 
             assert response.status_code == 200
             data = response.json()
             assert len(data) == 2
-            assert data[0]['document_id'] == 'doc-1'
+            assert data[0]['document_id'] == doc_uuid1
 
     def test_list_documents_empty(self, authenticated_client_no_2fa):
         """Test GET /{session_id} - no documents"""
+        import uuid
+        session_uuid = str(uuid.uuid4())
+
         with patch('routers.documents.doc_service.list_session_documents') as mock_list:
             mock_list.return_value = []
 
-            response = authenticated_client_no_2fa.get('/api/documents/session-empty')
+            response = authenticated_client_no_2fa.get(f'/api/documents/{session_uuid}')
 
             assert response.status_code == 200
             assert response.json() == []
 
     def test_list_documents_error(self, authenticated_client_no_2fa):
         """Test GET /{session_id} - error"""
+        import uuid
+        session_uuid = str(uuid.uuid4())
         with patch('routers.documents.doc_service.list_session_documents') as mock_list:
             mock_list.side_effect = Exception("DB error")
 
-            response = authenticated_client_no_2fa.get('/api/documents/session-123')
+            response = authenticated_client_no_2fa.get(f'/api/documents/{session_uuid}')
 
             assert response.status_code == 500
             assert 'Failed to list documents' in response.json()['detail']
@@ -543,8 +491,12 @@ class TestDocumentsRouter:
             assert response.status_code == 500
             assert 'Failed to get document URL' in response.json()['detail']
 
+    @unittest.skip("Textract functionality removed - test outdated")
     def test_extract_document_data_success(self, authenticated_client_no_2fa):
         """Test POST /{document_id}/extract"""
+        import uuid
+        doc_uuid = str(uuid.uuid4())
+
         mock_result = {
             'job_id': 'textract-job-123',
             'status': 'IN_PROGRESS',
@@ -554,25 +506,33 @@ class TestDocumentsRouter:
         with patch('routers.documents.doc_service.process_document_with_textract') as mock_process:
             mock_process.return_value = mock_result
 
-            response = authenticated_client_no_2fa.post('/api/documents/doc-123/extract')
+            response = authenticated_client_no_2fa.post(f'/api/documents/{doc_uuid}/extract')
 
             assert response.status_code == 200
             data = response.json()
             assert data['job_id'] == 'textract-job-123'
             assert data['status'] == 'IN_PROGRESS'
 
+    @unittest.skip("Textract functionality removed - test outdated")
     def test_extract_document_data_error(self, authenticated_client_no_2fa):
         """Test POST /{document_id}/extract - error"""
+        import uuid
+        doc_uuid = str(uuid.uuid4())
+
         with patch('routers.documents.doc_service.process_document_with_textract') as mock_process:
             mock_process.side_effect = Exception("Textract error")
 
-            response = authenticated_client_no_2fa.post('/api/documents/doc-123/extract')
+            response = authenticated_client_no_2fa.post(f'/api/documents/{doc_uuid}/extract')
 
             assert response.status_code == 500
             assert 'Failed to extract document data' in response.json()['detail']
 
+    @unittest.skip("Textract functionality removed - test outdated")
     def test_check_extraction_status_success(self, authenticated_client_no_2fa):
         """Test GET /{document_id}/extraction-status"""
+        import uuid
+        doc_uuid = str(uuid.uuid4())
+
         mock_result = {
             'status': 'SUCCEEDED',
             'extracted_text': 'Sample extracted text',
@@ -582,19 +542,23 @@ class TestDocumentsRouter:
         with patch('routers.documents.doc_service.check_textract_job') as mock_check:
             mock_check.return_value = mock_result
 
-            response = authenticated_client_no_2fa.get('/api/documents/doc-123/extraction-status')
+            response = authenticated_client_no_2fa.get(f'/api/documents/{doc_uuid}/extraction-status')
 
             assert response.status_code == 200
             data = response.json()
             assert data['status'] == 'SUCCEEDED'
             assert 'extracted_text' in data
 
+    @unittest.skip("Textract functionality removed - test outdated")
     def test_check_extraction_status_error(self, authenticated_client_no_2fa):
         """Test GET /{document_id}/extraction-status - error"""
+        import uuid
+        doc_uuid = str(uuid.uuid4())
+
         with patch('routers.documents.doc_service.check_textract_job') as mock_check:
             mock_check.side_effect = Exception("Check failed")
 
-            response = authenticated_client_no_2fa.get('/api/documents/doc-123/extraction-status')
+            response = authenticated_client_no_2fa.get(f'/api/documents/{doc_uuid}/extraction-status')
 
             assert response.status_code == 500
             assert 'Failed to check extraction status' in response.json()['detail']

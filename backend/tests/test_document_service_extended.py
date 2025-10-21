@@ -458,6 +458,7 @@ class TestDocumentServiceDeletion(unittest.TestCase):
         self.assertNotIn("DELETE FROM", query)
 
 
+@unittest.skip("Textract functionality removed - tests outdated")
 class TestDocumentServiceTextract(unittest.TestCase):
     """Test Textract OCR processing"""
 
@@ -650,6 +651,7 @@ class TestDocumentServiceTextract(unittest.TestCase):
         self.assertIn('error', result)
 
 
+@unittest.skip("Textract functionality removed - tests outdated")
 class TestDocumentServiceTextractExtraction(unittest.TestCase):
     """Test Textract result extraction and parsing"""
 
@@ -900,6 +902,7 @@ class TestDocumentServiceIntegration(unittest.TestCase):
         self.assertEqual(metadata['status'], 'uploaded')
 
     @patch('services.document_service.execute_query')
+    @unittest.skip("Textract functionality removed - test outdated")
     @patch('services.document_service.textract_client')
     @patch('services.document_service.execute_one')
     def test_textract_processing_workflow(

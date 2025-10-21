@@ -1,0 +1,896 @@
+{
+  "canton": "FR",
+  "canton_name": "Fribourg/Freiburg",
+  "denomination": "reformed",
+  "tax_year": 2025,
+  "source": "https://www.fr.ch/document/570381",
+  "source_document": "Coefficients d'impôt des paroisses réformées, par commune, état au 1er août 2025",
+  "data_quality": "OFFICIAL",
+  "extraction_date": "2025-10-21",
+  "note": "Tax rates are expressed as percentage of basic cantonal tax (impôt cantonal de base). Reformed parishes have varying rates unlike the uniform Catholic structure.",
+  "municipalities": [
+    {
+      "municipality_name": "Attalens",
+      "bfs_number": 2321,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Autigny",
+      "bfs_number": 2168,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Avry",
+      "bfs_number": 2141,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Bas-Intyamon",
+      "bfs_number": 2121,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Belfaux",
+      "bfs_number": 2162,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Belmont-Broye",
+      "bfs_number": 2163,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Billens-Hennens",
+      "bfs_number": 2183,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Bois-d'Amont",
+      "bfs_number": 2164,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Bossonnens",
+      "bfs_number": 2322,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Botterens",
+      "bfs_number": 2123,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Broc",
+      "bfs_number": 2124,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Brünisried",
+      "bfs_number": 2285,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Bulle",
+      "bfs_number": 2125,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Bösingen",
+      "bfs_number": 2286,
+      "parish": "Bösingen",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Cheyres-Châbles",
+      "bfs_number": 2012,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Châtel-Saint-Denis",
+      "bfs_number": 2325,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Châtel-sur-Montsalvens",
+      "bfs_number": 2130,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Châtillon (FR)",
+      "bfs_number": 2013,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Châtonnaye",
+      "bfs_number": 2173,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Chénens",
+      "bfs_number": 2175,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Corbières",
+      "bfs_number": 2132,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Corminboeuf",
+      "bfs_number": 2179,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Cottens (FR)",
+      "bfs_number": 2180,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Courgevaux",
+      "bfs_number": 2183,
+      "parish": "Meyriez",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Courtepin",
+      "bfs_number": 2182,
+      "parish": "Cordast",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 11.5
+    },
+    {
+      "municipality_name": "Cressier (FR)",
+      "bfs_number": 2184,
+      "parish": "Cordast",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 11.5
+    },
+    {
+      "municipality_name": "Crésuz",
+      "bfs_number": 2133,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Cugy (FR)",
+      "bfs_number": 2016,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Delley-Portalban",
+      "bfs_number": 2017,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Düdingen (partial)",
+      "bfs_number": 2293,
+      "parish": "Düdingen",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 15.0,
+      "note": "Municipality partially covered by Düdingen parish"
+    },
+    {
+      "municipality_name": "Düdingen (partial)",
+      "bfs_number": 2293,
+      "parish": "St. Antoni",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0,
+      "note": "Municipality partially covered by St. Antoni parish"
+    },
+    {
+      "municipality_name": "Echarlens",
+      "bfs_number": 2134,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Estavayer",
+      "bfs_number": 2015,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Ferpicloz",
+      "bfs_number": 2197,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Fribourg / Freiburg",
+      "bfs_number": 2196,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Fräschels",
+      "bfs_number": 2261,
+      "parish": "Kerzers",
+      "reformed_income_tax": 9.5,
+      "reformed_wealth_tax": 9.5
+    },
+    {
+      "municipality_name": "Fétigny",
+      "bfs_number": 2019,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Gibloux",
+      "bfs_number": 2204,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Giffers",
+      "bfs_number": 2288,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Givisiez",
+      "bfs_number": 2196,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Gletterens",
+      "bfs_number": 2022,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Grandvillard",
+      "bfs_number": 2136,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Granges (Veveyse)",
+      "bfs_number": 2327,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Granges-Paccot",
+      "bfs_number": 2208,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Grangettes",
+      "bfs_number": 2209,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Greng",
+      "bfs_number": 2262,
+      "parish": "Meyriez",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Grolley-Ponthaux",
+      "bfs_number": 2211,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Gruyères",
+      "bfs_number": 2135,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Gurmels",
+      "bfs_number": 2265,
+      "parish": "Cordast",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 11.5
+    },
+    {
+      "municipality_name": "Haut-Intyamon",
+      "bfs_number": 2138,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Hauterive (FR)",
+      "bfs_number": 2215,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Hauteville",
+      "bfs_number": 2137,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Heitenried",
+      "bfs_number": 2287,
+      "parish": "St. Antoni",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Jaun",
+      "bfs_number": 2147,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Kerzers",
+      "bfs_number": 2271,
+      "parish": "Kerzers",
+      "reformed_income_tax": 9.5,
+      "reformed_wealth_tax": 9.5
+    },
+    {
+      "municipality_name": "Kleinbösingen",
+      "bfs_number": 2269,
+      "parish": "Cordast",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 11.5
+    },
+    {
+      "municipality_name": "La Brillaz",
+      "bfs_number": 2166,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "La Roche",
+      "bfs_number": 2155,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "La Sonnaz",
+      "bfs_number": 2233,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "La Verrerie",
+      "bfs_number": 2331,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Le Châtelard",
+      "bfs_number": 2172,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Le Flon",
+      "bfs_number": 2326,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Le Mouret",
+      "bfs_number": 2225,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Le Pâquier (FR)",
+      "bfs_number": 2150,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Les Montets",
+      "bfs_number": 2030,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Lully (FR)",
+      "bfs_number": 2026,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Marly",
+      "bfs_number": 2227,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Marsens",
+      "bfs_number": 2148,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Massonnens",
+      "bfs_number": 2188,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Matran",
+      "bfs_number": 2230,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Meyriez",
+      "bfs_number": 2277,
+      "parish": "Meyriez",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Misery-Courtion",
+      "bfs_number": 2278,
+      "parish": "Cordast",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 11.5
+    },
+    {
+      "municipality_name": "Mont-Vully",
+      "bfs_number": 2279,
+      "parish": "Môtier – Vully",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Montagny (FR)",
+      "bfs_number": 2029,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Morlon",
+      "bfs_number": 2149,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Muntelier",
+      "bfs_number": 2280,
+      "parish": "Ferenbalm",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 9.0
+    },
+    {
+      "municipality_name": "Murten / Morat (partial)",
+      "bfs_number": 2281,
+      "parish": "Ferenbalm",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 9.0,
+      "note": "Municipality partially covered by Ferenbalm parish"
+    },
+    {
+      "municipality_name": "Murten / Morat (partial)",
+      "bfs_number": 2281,
+      "parish": "Murten",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 9.0,
+      "note": "Municipality partially covered by Murten parish"
+    },
+    {
+      "municipality_name": "Ménières",
+      "bfs_number": 2028,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Mézières (FR)",
+      "bfs_number": 2187,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Neyruz (FR)",
+      "bfs_number": 2236,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Nuvilly",
+      "bfs_number": 2032,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Pierrafortscha",
+      "bfs_number": 2243,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Plaffeien",
+      "bfs_number": 2294,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Plasselb",
+      "bfs_number": 2295,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Pont-en-Ogoz",
+      "bfs_number": 2151,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Pont-la-Ville",
+      "bfs_number": 2152,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Prez",
+      "bfs_number": 2251,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Prévondavaux",
+      "bfs_number": 2034,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Rechthalten",
+      "bfs_number": 2296,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Remaufens",
+      "bfs_number": 2328,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Riaz",
+      "bfs_number": 2154,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Ried bei Kerzers",
+      "bfs_number": 2274,
+      "parish": "Ferenbalm",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 9.0
+    },
+    {
+      "municipality_name": "Romont (FR)",
+      "bfs_number": 2189,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Rue",
+      "bfs_number": 2190,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Saint-Aubin (FR)",
+      "bfs_number": 2036,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Saint-Martin (FR)",
+      "bfs_number": 2330,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Schmitten (FR)",
+      "bfs_number": 2300,
+      "parish": "St. Antoni",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Semsales",
+      "bfs_number": 2329,
+      "parish": "Châtel-St-Denis - La Veveyse",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Siviriez",
+      "bfs_number": 2192,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Sorens",
+      "bfs_number": 2159,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "St. Silvester",
+      "bfs_number": 2304,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "St. Ursen",
+      "bfs_number": 2305,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Surpierre",
+      "bfs_number": 2039,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Sâles",
+      "bfs_number": 2157,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Sévaz",
+      "bfs_number": 2038,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Tafers",
+      "bfs_number": 2306,
+      "parish": "St. Antoni",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Tentlingen",
+      "bfs_number": 2307,
+      "parish": "Weissenstein/Rechthalten",
+      "reformed_income_tax": 11.5,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Torny",
+      "bfs_number": null,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0,
+      "bfs_status": "NOT_FOUND"
+    },
+    {
+      "municipality_name": "Treyvaux",
+      "bfs_number": 2313,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Ueberstorf",
+      "bfs_number": 2316,
+      "parish": "Wünnewil – Flamatt – Ueberstorf",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 15.0
+    },
+    {
+      "municipality_name": "Ulmiz",
+      "bfs_number": 2284,
+      "parish": "Ferenbalm",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 9.0
+    },
+    {
+      "municipality_name": "Ursy",
+      "bfs_number": 2194,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Val-de-Charmey",
+      "bfs_number": 2161,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Vallon",
+      "bfs_number": 2040,
+      "parish": "Estavayer-le-Lac",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Vaulruz",
+      "bfs_number": 2162,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Villars-sur-Glâne",
+      "bfs_number": 2298,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Villarsel-sur-Marly",
+      "bfs_number": 2299,
+      "parish": "Fribourg",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 10.0
+    },
+    {
+      "municipality_name": "Villaz",
+      "bfs_number": 2193,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Villorsonnens",
+      "bfs_number": 2195,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Vuadens",
+      "bfs_number": 2163,
+      "parish": "Bulle - La Gruyère",
+      "reformed_income_tax": 9.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Vuisternens-devant-Romont",
+      "bfs_number": 2196,
+      "parish": "La Glâne - Romont",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 20.0
+    },
+    {
+      "municipality_name": "Wünnewil-Flamatt",
+      "bfs_number": 2317,
+      "parish": "Wünnewil – Flamatt – Ueberstorf",
+      "reformed_income_tax": 10.0,
+      "reformed_wealth_tax": 15.0
+    }
+  ],
+  "summary": {
+    "total_municipalities": 123,
+    "parishes_count": 16,
+    "municipalities_with_bfs": 122,
+    "unique_rate_combinations": 9,
+    "rate_distribution": {
+      "10.0% income, 20.0% wealth": 23,
+      "9.0% income, 10.0% wealth": 25,
+      "9.0% income, 20.0% wealth": 43,
+      "11.5% income, 20.0% wealth": 9,
+      "10.0% income, 10.0% wealth": 8,
+      "11.5% income, 11.5% wealth": 5,
+      "10.0% income, 15.0% wealth": 3,
+      "9.5% income, 9.5% wealth": 2,
+      "9.0% income, 9.0% wealth": 5
+    }
+  }
+}

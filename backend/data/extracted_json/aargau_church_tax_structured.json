@@ -1,0 +1,2760 @@
+[
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4001,
+    "municipality_name": "Aarau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.15,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4002,
+    "municipality_name": "Aarburg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.25,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4021,
+    "municipality_name": "Abtwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4022,
+    "municipality_name": "Ammerswil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4271,
+    "municipality_name": "Aristau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.23,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4023,
+    "municipality_name": "Arni (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.14,
+      "catholic": 0.13,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4024,
+    "municipality_name": "Auenstein",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.23
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4272,
+    "municipality_name": "Auw",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4025,
+    "municipality_name": "Baden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4273,
+    "municipality_name": "Beinwil (Freiamt)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.26,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4281,
+    "municipality_name": "Beinwil am See",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4041,
+    "municipality_name": "Bellikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4042,
+    "municipality_name": "Bergdietikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.17,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4043,
+    "municipality_name": "Berikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.17,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4274,
+    "municipality_name": "Besenbüren",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.27,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4282,
+    "municipality_name": "Bettwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.22,
+      "christian_catholic": 0.23
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4003,
+    "municipality_name": "Biberstein",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.15,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4026,
+    "municipality_name": "Birmenstorf (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4027,
+    "municipality_name": "Birr",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4121,
+    "municipality_name": "Birrhard",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4283,
+    "municipality_name": "Birrwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4284,
+    "municipality_name": "Boniswil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4275,
+    "municipality_name": "Boswil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4061,
+    "municipality_name": "Bottenwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4122,
+    "municipality_name": "Böttstein",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.24,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4123,
+    "municipality_name": "Bözberg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4063,
+    "municipality_name": "Böztal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.25,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4251,
+    "municipality_name": "Bremgarten (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.23,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4062,
+    "municipality_name": "Brittnau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4028,
+    "municipality_name": "Brugg (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4029,
+    "municipality_name": "Brunegg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4004,
+    "municipality_name": "Buchs (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4277,
+    "municipality_name": "Bünzen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.27,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4278,
+    "municipality_name": "Büttikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4276,
+    "municipality_name": "Buttwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.21,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4005,
+    "municipality_name": "Densbüren",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4279,
+    "municipality_name": "Dietwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.23,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4044,
+    "municipality_name": "Dintikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.23
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4280,
+    "municipality_name": "Dottikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4124,
+    "municipality_name": "Döttingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.24,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4064,
+    "municipality_name": "Dürrenäsch",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4252,
+    "municipality_name": "Eggenwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4065,
+    "municipality_name": "Egliswil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4125,
+    "municipality_name": "Ehrendingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4181,
+    "municipality_name": "Eiken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.15,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4126,
+    "municipality_name": "Endingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.24,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4030,
+    "municipality_name": "Ennetbaden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4006,
+    "municipality_name": "Erlinsbach (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4066,
+    "municipality_name": "Fahrwangen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.15,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4045,
+    "municipality_name": "Fischbach-Göslikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.23,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4127,
+    "municipality_name": "Fisibach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.22,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4031,
+    "municipality_name": "Fislisbach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4128,
+    "municipality_name": "Freienwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4182,
+    "municipality_name": "Frick",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.22,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4129,
+    "municipality_name": "Full-Reuenthal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4183,
+    "municipality_name": "Gansingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4032,
+    "municipality_name": "Gebenstorf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4253,
+    "municipality_name": "Geltwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.21,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4184,
+    "municipality_name": "Gipf-Oberfrick",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.22,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4067,
+    "municipality_name": "Gontenschwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4068,
+    "municipality_name": "Gränichen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4033,
+    "municipality_name": "Habsburg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4046,
+    "municipality_name": "Hägglingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4285,
+    "municipality_name": "Hallwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4130,
+    "municipality_name": "Hausen (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4185,
+    "municipality_name": "Hellikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.22,
+      "christian_catholic": 0.28
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4286,
+    "municipality_name": "Hendschiken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4186,
+    "municipality_name": "Herznach-Ueken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.2,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4069,
+    "municipality_name": "Hirschthal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4070,
+    "municipality_name": "Holderbank (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4071,
+    "municipality_name": "Holziken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4072,
+    "municipality_name": "Hunzenschwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4047,
+    "municipality_name": "Islisberg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.14,
+      "catholic": 0.13,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4048,
+    "municipality_name": "Jonen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.14,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4133,
+    "municipality_name": "Kaiseraugst",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4187,
+    "municipality_name": "Kaisten",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4049,
+    "municipality_name": "Kallern",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4050,
+    "municipality_name": "Killwangen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4073,
+    "municipality_name": "Kirchleerau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4131,
+    "municipality_name": "Klingnau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.24,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4132,
+    "municipality_name": "Koblenz",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.25,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4074,
+    "municipality_name": "Kölliken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4034,
+    "municipality_name": "Künten",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4007,
+    "municipality_name": "Küttigen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.15,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4188,
+    "municipality_name": "Laufenburg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4134,
+    "municipality_name": "Leibstadt",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4075,
+    "municipality_name": "Leimbach (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.17,
+      "christian_catholic": 0.23
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4135,
+    "municipality_name": "Lengnau (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4201,
+    "municipality_name": "Lenzburg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4136,
+    "municipality_name": "Leuggern",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4076,
+    "municipality_name": "Leutwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4035,
+    "municipality_name": "Lupfig",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4189,
+    "municipality_name": "Magden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4037,
+    "municipality_name": "Mägenwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.22,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4137,
+    "municipality_name": "Mandach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.21,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4287,
+    "municipality_name": "Meisterschwanden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.15,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4138,
+    "municipality_name": "Mellikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.25,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4036,
+    "municipality_name": "Mellingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.21,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4077,
+    "municipality_name": "Menziken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4288,
+    "municipality_name": "Merenschwand",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4190,
+    "municipality_name": "Mettauertal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4192,
+    "municipality_name": "Möhlin",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4193,
+    "municipality_name": "Mönthal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4078,
+    "municipality_name": "Moosleerau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4202,
+    "municipality_name": "Möriken-Wildegg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4079,
+    "municipality_name": "Muhen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4038,
+    "municipality_name": "Mühlau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.22,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4139,
+    "municipality_name": "Mülligen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4191,
+    "municipality_name": "Mumpf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.22,
+      "christian_catholic": 0.26
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4290,
+    "municipality_name": "Münchwilen (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.15,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4080,
+    "municipality_name": "Murgenthal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4289,
+    "municipality_name": "Muri (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.21,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4039,
+    "municipality_name": "Neuenhof",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4203,
+    "municipality_name": "Niederlenz",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4051,
+    "municipality_name": "Niederrohrdorf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4291,
+    "municipality_name": "Niederwil (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4081,
+    "municipality_name": "Oberentfelden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4292,
+    "municipality_name": "Oberhof",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4082,
+    "municipality_name": "Oberkulm",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4052,
+    "municipality_name": "Oberlunkhofen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.14,
+      "catholic": 0.13,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4194,
+    "municipality_name": "Obermumpf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.24,
+      "christian_catholic": 0.26
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4053,
+    "municipality_name": "Oberrohrdorf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4083,
+    "municipality_name": "Oberrüti",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.21,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4040,
+    "municipality_name": "Obersiggenthal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4054,
+    "municipality_name": "Oberwil-Lieli",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.14,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4195,
+    "municipality_name": "Oeschgen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.25,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4084,
+    "municipality_name": "Oftringen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4140,
+    "municipality_name": "Olsberg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4204,
+    "municipality_name": "Othmarsingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.18,
+      "christian_catholic": 0.23
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4085,
+    "municipality_name": "Reinach (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4086,
+    "municipality_name": "Reitnau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4055,
+    "municipality_name": "Remetschwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4141,
+    "municipality_name": "Remigen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4196,
+    "municipality_name": "Rheinfelden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4142,
+    "municipality_name": "Riniken",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4087,
+    "municipality_name": "Rothrist",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4293,
+    "municipality_name": "Rottenschwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.14,
+      "catholic": 0.13,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4056,
+    "municipality_name": "Rudolfstetten-Friedlisberg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.17,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4143,
+    "municipality_name": "Rüfenach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4205,
+    "municipality_name": "Rupperswil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4088,
+    "municipality_name": "Safenwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4294,
+    "municipality_name": "Sarmenstorf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4206,
+    "municipality_name": "Schafisheim",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4145,
+    "municipality_name": "Schinznach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4089,
+    "municipality_name": "Schlossrued",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.25,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4090,
+    "municipality_name": "Schmiedrued",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.25,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4146,
+    "municipality_name": "Schneisingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.09,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4091,
+    "municipality_name": "Schöftland",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4197,
+    "municipality_name": "Schupfart",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.22,
+      "christian_catholic": 0.26
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4147,
+    "municipality_name": "Schwaderloch",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.25,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4295,
+    "municipality_name": "Seengen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.15,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4207,
+    "municipality_name": "Seon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4148,
+    "municipality_name": "Siglistorf",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.09,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4057,
+    "municipality_name": "Sins",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4149,
+    "municipality_name": "Sisseln",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.15,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4058,
+    "municipality_name": "Spreitenbach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4092,
+    "municipality_name": "Staffelbach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4208,
+    "municipality_name": "Staufen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4150,
+    "municipality_name": "Stein (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.16,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4209,
+    "municipality_name": "Stetten (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4093,
+    "municipality_name": "Strengelbach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4008,
+    "municipality_name": "Suhr",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.19,
+      "christian_catholic": 0.23
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4059,
+    "municipality_name": "Tägerig",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.23,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4151,
+    "municipality_name": "Tegerfelden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.24,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4094,
+    "municipality_name": "Teufenthal (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4009,
+    "municipality_name": "Thalheim (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.24,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4095,
+    "municipality_name": "Uerkheim",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4096,
+    "municipality_name": "Uezwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4010,
+    "municipality_name": "Unterentfelden",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4097,
+    "municipality_name": "Unterkulm",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4060,
+    "municipality_name": "Unterlunkhofen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.14,
+      "catholic": 0.13,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4152,
+    "municipality_name": "Untersiggenthal",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4153,
+    "municipality_name": "Veltheim (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4154,
+    "municipality_name": "Villigen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4296,
+    "municipality_name": "Villmergen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4155,
+    "municipality_name": "Villnachern",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.19,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4098,
+    "municipality_name": "Vordemwald",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4198,
+    "municipality_name": "Wallbach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.21,
+      "christian_catholic": 0.26
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4297,
+    "municipality_name": "Waltenschwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4199,
+    "municipality_name": "Wegenstetten",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.22,
+      "christian_catholic": 0.28
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4101,
+    "municipality_name": "Wettingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.19,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4102,
+    "municipality_name": "Widen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.18,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4103,
+    "municipality_name": "Wiliberg",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.19,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4104,
+    "municipality_name": "Windisch",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4200,
+    "municipality_name": "Wittnau",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4298,
+    "municipality_name": "Wohlen (AG)",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4299,
+    "municipality_name": "Wohlenschwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.22,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4105,
+    "municipality_name": "Wölflinswil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.24,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4106,
+    "municipality_name": "Würenlingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.16,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4107,
+    "municipality_name": "Würenlos",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.17,
+      "catholic": 0.16,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4156,
+    "municipality_name": "Zeihen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.25,
+      "christian_catholic": 0.22
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4157,
+    "municipality_name": "Zeiningen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.19,
+      "christian_catholic": 0.28
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4108,
+    "municipality_name": "Zetzwil",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.21,
+      "catholic": 0.17,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4109,
+    "municipality_name": "Zofingen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.18,
+      "catholic": 0.18,
+      "christian_catholic": 0.25
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4110,
+    "municipality_name": "Zufikon",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.2,
+      "catholic": 0.2,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4158,
+    "municipality_name": "Zurzach",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.23,
+      "catholic": 0.25,
+      "christian_catholic": 0.2
+    }
+  },
+  {
+    "canton": "AG",
+    "canton_name": "Aargau",
+    "municipality_id": 4159,
+    "municipality_name": "Zuzgen",
+    "tax_year": 2025,
+    "source": "official_canton",
+    "official_source": "https://www.ag.ch/media/kanton-aargau/dfr/dokumente/steuern/natuerliche-personen/steuerberechnung-tarife-natuerliche-personen/gemeinde-und-kirchensteuerf-sse-2025.pdf",
+    "rates": {
+      "reformed": 0.22,
+      "catholic": 0.25,
+      "christian_catholic": 0.28
+    }
+  }
+]

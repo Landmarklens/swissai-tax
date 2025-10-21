@@ -6,6 +6,10 @@ import decimal
 from typing import Any, Dict, List, Optional
 
 from database.connection import execute_insert, execute_one, execute_query
+from services.social_security_calculators import SocialSecurityCalculator
+from services.wealth_tax_service import WealthTaxService
+from services.church_tax_service import ChurchTaxService
+from services.canton_tax_calculators import get_canton_calculator
 
 
 class TaxCalculationService:
@@ -13,6 +17,9 @@ class TaxCalculationService:
 
     def __init__(self):
         self.tax_year = 2024  # Default tax year
+        self.social_security_calculator = SocialSecurityCalculator(tax_year=self.tax_year)
+        self.wealth_tax_service = WealthTaxService(tax_year=self.tax_year)
+        self.church_tax_service = ChurchTaxService(tax_year=self.tax_year)
 
     def calculate_taxes(self, session_id: str) -> Dict[str, Any]:
         """Calculate all taxes based on session data"""
@@ -26,8 +33,11 @@ class TaxCalculationService:
         # Calculate income components
         income_data = self._calculate_income(answers)
 
-        # Calculate deductions
-        deductions_data = self._calculate_deductions(answers)
+        # Calculate social security contributions (BEFORE deductions)
+        social_security_data = self._calculate_social_security(answers, income_data)
+
+        # Calculate deductions (including social security deductions)
+        deductions_data = self._calculate_deductions(answers, social_security_data)
 
         # Calculate taxable income
         taxable_income = Decimal(str(max(0, income_data['total_income'] - deductions_data['total_deductions'])))
@@ -41,16 +51,21 @@ class TaxCalculationService:
         # Calculate municipal tax
         municipal_tax = self._calculate_municipal_tax(cantonal_tax, canton, municipality)
 
-        # Calculate church tax (optional)
-        church_tax = self._calculate_church_tax(cantonal_tax, canton, answers)
+        # Calculate church tax (optional) - returns full breakdown
+        church_tax_data = self._calculate_church_tax(cantonal_tax, canton, answers)
+        church_tax = Decimal(str(church_tax_data.get('church_tax', 0)))
 
-        # Total tax
-        total_tax = federal_tax + cantonal_tax + municipal_tax + church_tax
+        # Calculate wealth tax (if applicable)
+        wealth_tax_data = self._calculate_wealth_tax(answers, canton, municipality)
+        wealth_tax = Decimal(str(wealth_tax_data.get('total_wealth_tax', 0)))
+
+        # Total tax (including church tax and wealth tax)
+        total_tax = federal_tax + cantonal_tax + municipal_tax + church_tax + wealth_tax
 
         # Save calculation to database
         calculation_id = self._save_calculation(
             session_id, income_data, deductions_data, taxable_income,
-            federal_tax, cantonal_tax, municipal_tax, church_tax, total_tax
+            federal_tax, cantonal_tax, municipal_tax, church_tax, wealth_tax, total_tax
         )
 
         return {
@@ -59,12 +74,14 @@ class TaxCalculationService:
             'canton': canton,
             'municipality': municipality,
             'income': income_data,
+            'social_security': social_security_data,
             'deductions': deductions_data,
             'taxable_income': float(taxable_income),
             'federal_tax': float(federal_tax),
             'cantonal_tax': float(cantonal_tax),
             'municipal_tax': float(municipal_tax),
-            'church_tax': float(church_tax),
+            'church_tax': church_tax_data,  # Full church tax breakdown
+            'wealth_tax': wealth_tax_data,  # Full wealth tax breakdown
             'total_tax': float(total_tax),
             'effective_rate': float((total_tax / Decimal(str(max(income_data['total_income'], 1)))) * 100),
             'monthly_tax': float(total_tax / Decimal('12'))
@@ -169,7 +186,64 @@ class TaxCalculationService:
         # Convert to float for JSON serialization
         return {k: float(v) for k, v in income.items()}
 
-    def _calculate_deductions(self, answers: Dict[str, Any]) -> Dict[str, Any]:
+    def _calculate_social_security(self, answers: Dict[str, Any], income_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate social security contributions"""
+        # Determine employment type
+        employment_type = answers.get('Q04a', 'employed')
+
+        # Get necessary data for calculation
+        gross_salary = Decimal(str(income_data.get('employment', 0)))
+        net_self_employment = Decimal(str(income_data.get('self_employment', 0)))
+        age = int(answers.get('age', 35))  # Default age if not provided
+        work_percentage = Decimal(str(answers.get('work_percentage', 100)))
+
+        social_security_result = {}
+
+        if employment_type in ['employed', 'both'] and gross_salary > 0:
+            # Calculate for employed persons
+            result = self.social_security_calculator.calculate_employed(
+                gross_salary=gross_salary,
+                age=age,
+                work_percentage=work_percentage
+            )
+            social_security_result['employed'] = result
+
+        if employment_type in ['self_employed', 'both'] and net_self_employment > 0:
+            # Calculate for self-employed persons
+            result = self.social_security_calculator.calculate_self_employed(
+                net_income=net_self_employment,
+                age=age
+            )
+            social_security_result['self_employed'] = result
+
+        # If no contributions calculated, return empty result
+        if not social_security_result:
+            social_security_result['employed'] = {
+                'total_employee_contributions': 0,
+                'total_employer_contributions': 0,
+                'tax_deductible_employee': 0
+            }
+
+        # Extract key values for easy access
+        if 'employed' in social_security_result:
+            emp = social_security_result['employed']
+            social_security_result['summary'] = {
+                'total_employee_contributions': float(emp.get('total_employee_contributions', 0)),
+                'total_employer_contributions': float(emp.get('total_employer_contributions', 0)),
+                'tax_deductible': float(emp.get('tax_deductible_employee', 0)),
+                'employment_type': 'employed'
+            }
+        elif 'self_employed' in social_security_result:
+            self_emp = social_security_result['self_employed']
+            social_security_result['summary'] = {
+                'total_contributions': float(self_emp.get('total_contributions', 0)),
+                'tax_deductible': float(self_emp.get('tax_deductible', 0)),
+                'employment_type': 'self_employed'
+            }
+
+        return social_security_result
+
+    def _calculate_deductions(self, answers: Dict[str, Any], social_security_data: Dict[str, Any] = None) -> Dict[str, Any]:
         """Calculate total deductions"""
         deductions = {
             'professional_expenses': 0,
@@ -187,6 +261,11 @@ class TaxCalculationService:
         # Standard professional expense deduction (3% of income, max 4000)
         employment_income = Decimal(str(answers.get('income_employment', 0)))
         deductions['professional_expenses'] = min(employment_income * Decimal('0.03'), 4000)
+
+        # BVG/Pillar 2 employee contributions (tax deductible from social security)
+        if social_security_data and 'summary' in social_security_data:
+            tax_deductible_ss = social_security_data['summary'].get('tax_deductible', 0)
+            deductions['pillar_2_buyins'] = float(tax_deductible_ss)
 
         # Pillar 3a contributions (Q07)
         if answers.get('Q07') == True:
@@ -336,99 +415,170 @@ class TaxCalculationService:
 
     def _calculate_cantonal_tax(self, taxable_income: Decimal, canton: str,
                                 answers: Dict[str, Any]) -> Decimal:
-        """Calculate cantonal tax (simplified - using ZH rates as example)"""
-        marital_status = answers.get('Q01', 'single')
+        """Calculate cantonal tax using canton-specific calculator"""
+        try:
+            # Get canton-specific calculator
+            calculator = get_canton_calculator(canton, self.tax_year)
 
-        # Simplified Zurich canton tax calculation
-        # These are example rates - actual calculation is more complex
-        if canton == 'ZH':
-            if marital_status == 'married':
-                if taxable_income <= 13500:
-                    tax = 0
-                elif taxable_income <= 25000:
-                    tax = (taxable_income - 13500) * Decimal('0.02')
-                elif taxable_income <= 40000:
-                    tax = 230 + (taxable_income - 25000) * Decimal('0.03')
-                elif taxable_income <= 60000:
-                    tax = 680 + (taxable_income - 40000) * Decimal('0.04')
-                elif taxable_income <= 80000:
-                    tax = 1480 + (taxable_income - 60000) * Decimal('0.05')
-                elif taxable_income <= 100000:
-                    tax = 2480 + (taxable_income - 80000) * Decimal('0.06')
-                elif taxable_income <= 150000:
-                    tax = 3680 + (taxable_income - 100000) * Decimal('0.07')
-                elif taxable_income <= 250000:
-                    tax = 7180 + (taxable_income - 150000) * Decimal('0.08')
-                else:
-                    tax = 15180 + (taxable_income - 250000) * Decimal('0.10')
-            else:
-                # Single rates
-                if taxable_income <= 7000:
-                    tax = 0
-                elif taxable_income <= 15000:
-                    tax = (taxable_income - 7000) * Decimal('0.02')
-                elif taxable_income <= 25000:
-                    tax = 160 + (taxable_income - 15000) * Decimal('0.03')
-                elif taxable_income <= 40000:
-                    tax = 460 + (taxable_income - 25000) * Decimal('0.04')
-                elif taxable_income <= 60000:
-                    tax = 1060 + (taxable_income - 40000) * Decimal('0.05')
-                elif taxable_income <= 80000:
-                    tax = 2060 + (taxable_income - 60000) * Decimal('0.06')
-                elif taxable_income <= 100000:
-                    tax = 3260 + (taxable_income - 80000) * Decimal('0.07')
-                elif taxable_income <= 150000:
-                    tax = 4660 + (taxable_income - 100000) * Decimal('0.08')
-                elif taxable_income <= 250000:
-                    tax = 8660 + (taxable_income - 150000) * Decimal('0.09')
-                else:
-                    tax = 17660 + (taxable_income - 250000) * Decimal('0.11')
-        else:
-            # Default calculation for other cantons (simplified)
-            tax = taxable_income * Decimal('0.08')
+            # Extract parameters needed for calculation
+            marital_status = answers.get('Q01', 'single')
+            num_children = int(answers.get('Q03a', 0)) if answers.get('Q03') == 'yes' else 0
 
-        return tax
+            # Calculate canton tax
+            canton_tax = calculator.calculate(
+                taxable_income=taxable_income,
+                marital_status=marital_status,
+                num_children=num_children
+            )
+
+            return Decimal(str(canton_tax))
+
+        except Exception as e:
+            # Fallback to simple calculation if calculator fails
+            print(f"Warning: Canton calculator failed for {canton}, using fallback: {str(e)}")
+            return taxable_income * Decimal('0.08')  # 8% fallback rate
 
     def _calculate_municipal_tax(self, cantonal_tax: Decimal, canton: str,
                                  municipality: str) -> Decimal:
         """Calculate municipal tax as percentage of cantonal tax"""
-        # Municipal tax multiplier (simplified - actual rates vary)
-        multipliers = {
-            'Zurich': Decimal('1.19'),
-            'Geneva': Decimal('0.45'),
-            'Basel': Decimal('0.82'),
-            'Bern': Decimal('1.54'),
-            'Lucerne': Decimal('1.75'),
-            'Zug': Decimal('0.60'),
-        }
+        try:
+            # Query database for municipality tax multiplier
+            query = """
+                SELECT tax_multiplier
+                FROM swisstax.municipalities
+                WHERE canton = %s AND name = %s AND tax_year = %s
+                LIMIT 1
+            """
+            result = execute_one(query, (canton, municipality, self.tax_year))
 
-        multiplier = multipliers.get(municipality, Decimal('1.0'))
-        return cantonal_tax * multiplier
+            if result and 'tax_multiplier' in result:
+                multiplier = Decimal(str(result['tax_multiplier']))
+                return cantonal_tax * multiplier
+            else:
+                # Fallback: try case-insensitive search
+                query_fuzzy = """
+                    SELECT tax_multiplier
+                    FROM swisstax.municipalities
+                    WHERE canton = %s AND LOWER(name) = LOWER(%s) AND tax_year = %s
+                    LIMIT 1
+                """
+                result = execute_one(query_fuzzy, (canton, municipality, self.tax_year))
+
+                if result and 'tax_multiplier' in result:
+                    multiplier = Decimal(str(result['tax_multiplier']))
+                    return cantonal_tax * multiplier
+                else:
+                    # No multiplier found - use default 1.0 (100%)
+                    print(f"Warning: No tax multiplier found for {municipality}, {canton}. Using 1.0")
+                    return cantonal_tax * Decimal('1.0')
+
+        except Exception as e:
+            # Fallback to 1.0 multiplier if query fails
+            print(f"Warning: Municipal tax query failed for {municipality}, {canton}: {str(e)}")
+            return cantonal_tax * Decimal('1.0')
 
     def _calculate_church_tax(self, cantonal_tax: Decimal, canton: str,
-                              answers: Dict[str, Any]) -> Decimal:
-        """Calculate church tax (optional)"""
+                              answers: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate church tax (optional) using ChurchTaxService"""
         # Check if person pays church tax
         pays_church_tax = answers.get('pays_church_tax', False)
 
         if not pays_church_tax:
-            return Decimal('0')
+            return {
+                'applies': False,
+                'reason': 'user_not_member',
+                'church_tax': 0.0,
+                'canton': canton,
+                'denomination': 'none'
+            }
 
-        # Church tax as percentage of cantonal tax (simplified)
-        church_tax_rates = {
-            'ZH': Decimal('0.10'),
-            'BE': Decimal('0.12'),
-            'LU': Decimal('0.15'),
-            'BS': Decimal('0.08'),
-            'GE': Decimal('0.00'),  # Geneva has voluntary church tax
-        }
+        # Get denomination from answers (default to 'none' if not specified)
+        denomination = answers.get('religious_denomination', 'none')
 
-        rate = church_tax_rates.get(canton, Decimal('0.10'))
-        return cantonal_tax * rate
+        if denomination == 'none':
+            return {
+                'applies': False,
+                'reason': 'no_denomination_specified',
+                'church_tax': 0.0,
+                'canton': canton,
+                'denomination': 'none'
+            }
+
+        # Get municipality info for more accurate rates
+        municipality_id = answers.get('municipality_id')
+        municipality_name = answers.get('municipality')
+
+        # Calculate church tax using the service
+        result = self.church_tax_service.calculate_church_tax(
+            canton_code=canton,
+            cantonal_tax=cantonal_tax,
+            denomination=denomination,
+            municipality_id=municipality_id,
+            municipality_name=municipality_name
+        )
+
+        return result
+
+    def _calculate_wealth_tax(self, answers: Dict[str, Any], canton: str,
+                             municipality: str) -> Dict[str, Any]:
+        """Calculate wealth tax (Vermögenssteuer) for canton and municipality"""
+        # Check if user has wealth that might be taxable
+        has_wealth = answers.get('has_wealth', 'no') == 'yes'
+        if not has_wealth:
+            return {
+                'total_wealth_tax': 0,
+                'canton_wealth_tax': 0,
+                'municipal_wealth_tax': 0,
+                'net_wealth': 0,
+                'taxable_wealth': 0,
+                'applicable': False
+            }
+
+        # Get net wealth from answers
+        try:
+            net_wealth = Decimal(str(answers.get('net_wealth', 0)))
+        except (ValueError, TypeError, InvalidOperation):
+            net_wealth = Decimal('0')
+
+        if net_wealth <= 0:
+            return {
+                'total_wealth_tax': 0,
+                'canton_wealth_tax': 0,
+                'municipal_wealth_tax': 0,
+                'net_wealth': 0,
+                'taxable_wealth': 0,
+                'applicable': False
+            }
+
+        # Get marital status
+        marital_status = answers.get('marital_status', 'single')
+
+        # Calculate wealth tax using the wealth tax service
+        try:
+            result = self.wealth_tax_service.calculate_wealth_tax(
+                canton_code=canton,
+                net_wealth=net_wealth,
+                marital_status=marital_status,
+                municipality_name=municipality
+            )
+            result['applicable'] = True
+            return result
+        except Exception as e:
+            # If calculation fails, return zero wealth tax
+            return {
+                'total_wealth_tax': 0,
+                'canton_wealth_tax': 0,
+                'municipal_wealth_tax': 0,
+                'net_wealth': float(net_wealth),
+                'taxable_wealth': 0,
+                'applicable': False,
+                'error': str(e)
+            }
 
     def _save_calculation(self, session_id: str, income_data: Dict, deductions_data: Dict,
                          taxable_income: Decimal, federal_tax: Decimal, cantonal_tax: Decimal,
-                         municipal_tax: Decimal, church_tax: Decimal, total_tax: Decimal) -> str:
+                         municipal_tax: Decimal, church_tax: Decimal, wealth_tax: Decimal,
+                         total_tax: Decimal) -> str:
         """Save calculation to database"""
         query = """
             INSERT INTO swisstax.tax_calculations (
@@ -442,6 +592,7 @@ class TaxCalculationService:
         calculation_details = {
             'income_breakdown': income_data,
             'deductions_breakdown': deductions_data,
+            'wealth_tax': float(wealth_tax),
             'tax_year': self.tax_year
         }
 

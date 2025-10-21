@@ -27,7 +27,7 @@ import authService from '../../services/authService';
 import { toast } from 'react-toastify';
 
 const Header = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -37,6 +37,9 @@ const Header = () => {
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // Get current language for logo link
+  const currentLanguage = i18n.language || 'en';
 
   const isLoginInQuery = searchParams.has('login');
 
@@ -179,7 +182,7 @@ const Header = () => {
             {isMobile ? (
               <>
                 <Box>
-                  <Link to="/" style={{ textDecoration: 'none' }}>
+                  <Link to={`/${currentLanguage}`} style={{ textDecoration: 'none' }}>
                     <Typography
                       variant="h6"
                       sx={{
@@ -209,7 +212,7 @@ const Header = () => {
             ) : (
               <Box className={styles.desktopNav}>
                 <Box>
-                  <Link to="/" style={{ textDecoration: 'none' }}>
+                  <Link to={`/${currentLanguage}`} style={{ textDecoration: 'none' }}>
                     <Typography
                       variant="h6"
                       sx={{

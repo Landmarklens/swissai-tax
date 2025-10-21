@@ -1,0 +1,527 @@
+[
+  {
+    "bfs_number": 3201,
+    "municipality_name": "Häggenschwil",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.15,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3202,
+    "municipality_name": "Muolen",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.16,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3203,
+    "municipality_name": "St. Gallen",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.38,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3204,
+    "municipality_name": "Wittenbach",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.23,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3211,
+    "municipality_name": "Berg (SG)",
+    "roman_catholic_rate": 0.003,
+    "protestant_rate": 1.23,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3212,
+    "municipality_name": "Eggersriet",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.2,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3213,
+    "municipality_name": "Goldach",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 0.95,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3214,
+    "municipality_name": "Mörschwil",
+    "roman_catholic_rate": 0.002,
+    "protestant_rate": 0.7,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3215,
+    "municipality_name": "Rorschach",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.29,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3216,
+    "municipality_name": "Rorschacherberg",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.0,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3217,
+    "municipality_name": "Steinach",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 1.22,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3218,
+    "municipality_name": "Tübach",
+    "roman_catholic_rate": 0.002,
+    "protestant_rate": 0.79,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3219,
+    "municipality_name": "Untereggen",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.19,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3231,
+    "municipality_name": "Au (SG)",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 0.93,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3232,
+    "municipality_name": "Balgach",
+    "roman_catholic_rate": 0.005,
+    "protestant_rate": 0.61,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3233,
+    "municipality_name": "Berneck",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 0.92,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3234,
+    "municipality_name": "Diepoldsau",
+    "roman_catholic_rate": 0.005,
+    "protestant_rate": 0.85,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3235,
+    "municipality_name": "Rheineck",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.13,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3236,
+    "municipality_name": "St. Margrethen",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.09,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3237,
+    "municipality_name": "Thal",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 0.89,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3238,
+    "municipality_name": "Widnau",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 0.76,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3251,
+    "municipality_name": "Altstätten",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.07,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3252,
+    "municipality_name": "Eichberg",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.04,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3253,
+    "municipality_name": "Marbach (SG)",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.02,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3254,
+    "municipality_name": "Oberriet (SG)",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 0.95,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3255,
+    "municipality_name": "Rebstein",
+    "roman_catholic_rate": 0.006999999999999999,
+    "protestant_rate": 1.08,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3256,
+    "municipality_name": "Rüthi (SG)",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.09,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3271,
+    "municipality_name": "Buchs (SG)",
+    "roman_catholic_rate": 0.006999999999999999,
+    "protestant_rate": 1.18,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3272,
+    "municipality_name": "Gams",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.15,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3273,
+    "municipality_name": "Grabs",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.0,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3274,
+    "municipality_name": "Sennwald",
+    "roman_catholic_rate": 0.005,
+    "protestant_rate": 0.7,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3275,
+    "municipality_name": "Sevelen",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.18,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3276,
+    "municipality_name": "Wartau",
+    "roman_catholic_rate": 0.006999999999999999,
+    "protestant_rate": 1.45,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3291,
+    "municipality_name": "Bad Ragaz",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 0.92,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3292,
+    "municipality_name": "Flums",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.25,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3293,
+    "municipality_name": "Mels",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.25,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3294,
+    "municipality_name": "Pfäfers",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.39,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3295,
+    "municipality_name": "Quarten",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.02,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3296,
+    "municipality_name": "Sargans",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.29,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3297,
+    "municipality_name": "Vilters-Wangs",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.2,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3298,
+    "municipality_name": "Walenstadt",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.1,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3311,
+    "municipality_name": "Amden",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.03,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3312,
+    "municipality_name": "Benken (SG)",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.17,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3313,
+    "municipality_name": "Kaltbrunn",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.06,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3315,
+    "municipality_name": "Schänis",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.25,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3316,
+    "municipality_name": "Weesen",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.15,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3338,
+    "municipality_name": "Schmerikon",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.13,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3339,
+    "municipality_name": "Uznach",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.1,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3340,
+    "municipality_name": "Rapperswil-Jona",
+    "roman_catholic_rate": 0.003,
+    "protestant_rate": 0.74,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3341,
+    "municipality_name": "Gommiswald",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.03,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3342,
+    "municipality_name": "Eschenbach (SG)",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.17,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3352,
+    "municipality_name": "Ebnat-Kappel",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.39,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3359,
+    "municipality_name": "Wildhaus-Alt St. Johann",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.18,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3360,
+    "municipality_name": "Nesslau",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.14,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3374,
+    "municipality_name": "Lichtensteig",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.29,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3379,
+    "municipality_name": "Wattwil",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.29,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3392,
+    "municipality_name": "Kirchberg (SG)",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.2,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3393,
+    "municipality_name": "Lütisburg",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.45,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3394,
+    "municipality_name": "Mosnang",
+    "roman_catholic_rate": 0.005,
+    "protestant_rate": 1.29,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3395,
+    "municipality_name": "Bütschwil-Ganterschwil",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 1.19,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3396,
+    "municipality_name": "Neckertal",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.2,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3401,
+    "municipality_name": "Degersheim",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.41,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3402,
+    "municipality_name": "Flawil",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.24,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3405,
+    "municipality_name": "Jonschwil",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.22,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3407,
+    "municipality_name": "Oberuzwil",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.17,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3408,
+    "municipality_name": "Uzwil",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 1.22,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3422,
+    "municipality_name": "Niederbüren",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.16,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3423,
+    "municipality_name": "Niederhelfenschwil",
+    "roman_catholic_rate": 0.004,
+    "protestant_rate": 1.04,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3424,
+    "municipality_name": "Oberbüren",
+    "roman_catholic_rate": 0.003,
+    "protestant_rate": 1.0,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3426,
+    "municipality_name": "Zuzwil (SG)",
+    "roman_catholic_rate": 0.004,
+    "protestant_rate": 0.77,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3427,
+    "municipality_name": "Wil (SG)",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 1.15,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3441,
+    "municipality_name": "Andwil (SG)",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 1.13,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3442,
+    "municipality_name": "Gaiserwald",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.03,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3443,
+    "municipality_name": "Gossau (SG)",
+    "roman_catholic_rate": 0.006,
+    "protestant_rate": 1.16,
+    "christian_catholic_rate": 0.24
+  },
+  {
+    "bfs_number": 3444,
+    "municipality_name": "Waldkirch",
+    "roman_catholic_rate": 0.008,
+    "protestant_rate": 1.22,
+    "christian_catholic_rate": 0.24
+  }
+]

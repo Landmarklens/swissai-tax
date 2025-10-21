@@ -82,9 +82,8 @@ class WealthTaxService:
                 municipality_name
             )
             if municipality_data:
-                # Use wealth_tax_multiplier if available, otherwise use general tax_multiplier
-                municipal_multiplier = municipality_data.get('wealth_tax_multiplier') or \
-                                     municipality_data.get('tax_multiplier')
+                # Use general tax_multiplier (wealth_tax_multiplier column doesn't exist)
+                municipal_multiplier = municipality_data.get('tax_multiplier')
                 municipality_info = {
                     'id': municipality_data.get('id'),
                     'name': municipality_data.get('name'),
@@ -252,14 +251,14 @@ class WealthTaxService:
         """
         if municipality_id:
             query = """
-                SELECT id, name, canton, tax_multiplier, wealth_tax_multiplier
+                SELECT id, name, canton, tax_multiplier
                 FROM swisstax.municipalities
                 WHERE id = %s AND canton = %s
             """
             result = execute_one(query, (municipality_id, canton_code))
         elif municipality_name:
             query = """
-                SELECT id, name, canton, tax_multiplier, wealth_tax_multiplier
+                SELECT id, name, canton, tax_multiplier
                 FROM swisstax.municipalities
                 WHERE LOWER(name) = LOWER(%s) AND canton = %s
             """

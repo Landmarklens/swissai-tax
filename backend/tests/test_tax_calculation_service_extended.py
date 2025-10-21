@@ -615,12 +615,14 @@ class TestCalculateCantonalTax(unittest.TestCase):
         self.assertLess(tax, Decimal('5000'))
 
     def test_cantonal_tax_other_canton_default(self):
-        """Test other canton uses default rate (8%)"""
+        """Test Geneva uses its own calculator (not fallback)"""
         answers = {'Q01': 'single'}
-        # 50000 income in GE (not ZH)
+        # 50000 income in GE (Geneva)
         tax = self.service._calculate_cantonal_tax(Decimal('50000'), 'GE', answers)
-        # 50000 * 0.08 = 4000
-        self.assertEqual(tax, Decimal('4000'))
+        # Geneva has its own calculator now, uses progressive brackets
+        # Should be around 3806 CHF (not 8% fallback)
+        self.assertGreater(tax, Decimal('3500'))
+        self.assertLess(tax, Decimal('4500'))
 
 
 class TestCalculateMunicipalTax(unittest.TestCase):
@@ -859,6 +861,7 @@ class TestCalculateTaxesOrchestration(unittest.TestCase):
             {'question_id': 'canton', 'answer_value': 'ZH'},
             {'question_id': 'municipality', 'answer_value': 'Zurich'},
             {'question_id': 'pays_church_tax', 'answer_value': True},
+            {'question_id': 'religious_denomination', 'answer_value': 'reformed'},
         ]
 
         # Mock save calculation

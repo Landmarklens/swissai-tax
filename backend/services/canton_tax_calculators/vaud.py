@@ -41,8 +41,8 @@ class VaudTaxCalculator(CantonTaxCalculator):
     QUOTIENT_SINGLE_PARENT_2CHILD = Decimal('1.6')
     QUOTIENT_CHILD_INCREMENT = Decimal('0.5')  # Per additional child
 
-    def __init__(self, canton_code: str = "VD", tax_year: int = 2024):
-        super().__init__(canton_code=canton_code, tax_year=tax_year)
+    def __init__(self, tax_year: int = 2024):
+        super().__init__(canton_code="VD", tax_year=tax_year)
 
     def _get_family_quotient(self, marital_status: str, num_children: int) -> Decimal:
         """
@@ -213,15 +213,19 @@ class VaudTaxCalculator(CantonTaxCalculator):
         quotient = self._get_family_quotient(marital_status, 0)
         quotient_income = taxable_income / quotient
 
-        for upper_limit, rate in reversed(brackets):
-            if quotient_income >= Decimal('0'):
-                # Find the bracket that this quotient income falls into
-                if upper_limit == Decimal('inf') or quotient_income > upper_limit:
-                    continue
+        # Find the bracket where quotient_income falls
+        previous_limit = Decimal('0')
+        for upper_limit, rate in brackets:
+            if upper_limit == Decimal('inf'):
+                # In the top bracket
                 return rate
+            if quotient_income <= upper_limit:
+                # In this bracket
+                return rate
+            previous_limit = upper_limit
 
-        # Return first bracket rate if nothing found
-        return brackets[0][1]
+        # Should not reach here, but return top bracket rate
+        return brackets[-1][1]
 
     def get_canton_info(self) -> Dict:
         return {

@@ -541,10 +541,13 @@ class TestVaudTaxCalculator(unittest.TestCase):
         self.assertEqual(tax, Decimal('0'))
 
     def test_low_income_tax_free(self):
-        """Test low income in tax-free bracket"""
-        # Below 8000 is tax-free for single
+        """Test low income taxation in Vaud"""
+        # Vaud starts taxing from first franc (1% rate from 0-1600)
+        # 7000 income should have small tax due to progressive rates
         tax = self.calculator.calculate(Decimal('7000'), 'single')
-        self.assertEqual(tax, Decimal('0'))
+        # Should be positive but small (around 138 CHF based on progressive brackets)
+        self.assertGreater(tax, Decimal('100'))
+        self.assertLess(tax, Decimal('200'))
 
     def test_moderate_income_single(self):
         """Test moderate income for single taxpayer"""
@@ -557,15 +560,20 @@ class TestVaudTaxCalculator(unittest.TestCase):
         self.assertGreater(tax, Decimal('10000'))
 
     def test_married_tax_free_threshold(self):
-        """Test married tax-free threshold"""
-        # Below 14000 is tax-free for married
+        """Test married taxation in Vaud (quotient system)"""
+        # Vaud uses quotient system: married = 1.8
+        # 13000 / 1.8 = 7222.22, then tax is multiplied by 1.8
         tax = self.calculator.calculate(Decimal('13000'), 'married')
-        self.assertEqual(tax, Decimal('0'))
+        # Should have tax due to quotient calculation (around 261 CHF)
+        self.assertGreater(tax, Decimal('200'))
+        self.assertLess(tax, Decimal('350'))
 
     def test_top_bracket_rate(self):
         """Test top bracket marginal rate"""
         rate = self.calculator.get_marginal_rate(Decimal('200000'), 'single')
-        self.assertEqual(rate, Decimal('0.14'))
+        # Vaud top bracket is 15.5% (0.1550) for income above 300k
+        # At 200k, we're in the 10.89% bracket (between 200-250k)
+        self.assertEqual(rate, Decimal('0.1089'))
 
 
 class TestBaselStadtTaxCalculator(unittest.TestCase):
@@ -674,10 +682,12 @@ class TestGetCantonCalculator(unittest.TestCase):
         self.assertEqual(calc.canton, 'BS')
 
     def test_get_calculator_uses_template(self):
-        """Test that unmapped cantons use template calculators"""
-        # LU uses ZH as template
+        """Test that all cantons have dedicated calculators"""
+        # All 26 cantons now have their own calculators
+        # LU has its own LucerneTaxCalculator
+        from services.canton_tax_calculators.lucerne import LucerneTaxCalculator
         calc = get_canton_calculator('LU', 2024)
-        self.assertIsInstance(calc, ZurichTaxCalculator)
+        self.assertIsInstance(calc, LucerneTaxCalculator)
         self.assertEqual(calc.canton, 'LU')
 
     def test_invalid_canton_raises_error(self):

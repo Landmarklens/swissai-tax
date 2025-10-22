@@ -249,52 +249,82 @@ const Homepage = () => {
       </Box>
 
       {/* Swiss Trust Badges */}
-      <Box sx={{ py: 4, bgcolor: 'grey.50', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'grey.200' }}>
+      <Box sx={{ py: 6, bgcolor: 'grey.50', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'grey.200' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={3} justifyContent="center" alignItems="center">
+          <Typography
+            variant="h5"
+            align="center"
+            gutterBottom
+            sx={{ mb: 4, fontWeight: 600, color: 'text.primary' }}
+          >
+            Trusted Swiss Standards & Security
+          </Typography>
+          <Grid container spacing={4} justifyContent="center" alignItems="stretch">
             <Grid item xs={12} sm={6} md={2.4}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
+                style={{ height: '100%' }}
               >
-                <Box sx={{ textAlign: 'center', p: 2 }}>
+                <Box sx={{
+                  textAlign: 'center',
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: 'white',
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-4px)'
+                  }
+                }}>
                   <Box sx={{
-                    width: 60,
-                    height: 60,
-                    bgcolor: '#DC0018',
-                    borderRadius: '50%',
+                    height: 80,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    margin: '0 auto 12px',
-                    position: 'relative'
+                    mb: 2
                   }}>
                     <Box sx={{
-                      width: 20,
-                      height: 20,
-                      bgcolor: 'white',
-                      position: 'absolute'
-                    }} />
-                    <Box sx={{
-                      width: 20,
-                      height: 4,
+                      width: 70,
+                      height: 70,
                       bgcolor: '#DC0018',
-                      position: 'absolute',
-                      zIndex: 1
-                    }} />
-                    <Box sx={{
-                      width: 4,
-                      height: 20,
-                      bgcolor: '#DC0018',
-                      position: 'absolute',
-                      zIndex: 1
-                    }} />
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative'
+                    }}>
+                      <Box sx={{
+                        width: 24,
+                        height: 24,
+                        bgcolor: 'white',
+                        position: 'absolute'
+                      }} />
+                      <Box sx={{
+                        width: 24,
+                        height: 5,
+                        bgcolor: '#DC0018',
+                        position: 'absolute',
+                        zIndex: 1
+                      }} />
+                      <Box sx={{
+                        width: 5,
+                        height: 24,
+                        bgcolor: '#DC0018',
+                        position: 'absolute',
+                        zIndex: 1
+                      }} />
+                    </Box>
                   </Box>
-                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ fontSize: '0.95rem' }}>
                     {t('homepage.badges.made_in_switzerland')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.4 }}>
                     {t('homepage.badges.swiss_quality')}
                   </Typography>
                 </Box>
@@ -305,13 +335,36 @@ const Homepage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
+                style={{ height: '100%' }}
               >
-                <Box sx={{ textAlign: 'center', p: 2 }}>
-                  <SecurityIcon sx={{ fontSize: 60, color: 'primary.main', mb: 1.5 }} />
-                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                <Box sx={{
+                  textAlign: 'center',
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: 'white',
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-4px)'
+                  }
+                }}>
+                  <Box sx={{
+                    height: 80,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2
+                  }}>
+                    <SecurityIcon sx={{ fontSize: 70, color: 'primary.main' }} />
+                  </Box>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ fontSize: '0.95rem' }}>
                     {t('homepage.badges.swiss_data_protection')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.4 }}>
                     {t('homepage.badges.gdpr_compliant')}
                   </Typography>
                 </Box>
@@ -322,13 +375,36 @@ const Homepage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
+                style={{ height: '100%' }}
               >
-                <Box sx={{ textAlign: 'center', p: 2 }}>
-                  <Box sx={{ fontSize: 60, color: 'success.main', mb: 1.5 }}>🔐</Box>
-                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                <Box sx={{
+                  textAlign: 'center',
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: 'white',
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-4px)'
+                  }
+                }}>
+                  <Box sx={{
+                    height: 80,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2
+                  }}>
+                    <Box sx={{ fontSize: 70 }}>🔐</Box>
+                  </Box>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ fontSize: '0.95rem' }}>
                     {t('homepage.badges.bank_level_encryption')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.4 }}>
                     {t('homepage.badges.aes_256')}
                   </Typography>
                 </Box>
@@ -339,25 +415,40 @@ const Homepage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
+                style={{ height: '100%' }}
               >
-                <Box sx={{ textAlign: 'center', p: 2 }}>
+                <Box sx={{
+                  textAlign: 'center',
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: 'white',
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-4px)'
+                  }
+                }}>
                   <Box sx={{
-                    height: 60,
+                    height: 80,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    mb: 1.5
+                    mb: 2
                   }}>
                     <img
                       src="/images/logos/ech-logo.svg"
                       alt="eCH Logo"
-                      style={{ height: '50px', width: 'auto' }}
+                      style={{ height: '60px', width: 'auto', maxWidth: '100%' }}
                     />
                   </Box>
-                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ fontSize: '0.95rem' }}>
                     eCH-0196 Certified
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.4 }}>
                     Swiss E-Government Standard
                   </Typography>
                 </Box>
@@ -368,25 +459,40 @@ const Homepage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
+                style={{ height: '100%' }}
               >
-                <Box sx={{ textAlign: 'center', p: 2 }}>
+                <Box sx={{
+                  textAlign: 'center',
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: 'white',
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-4px)'
+                  }
+                }}>
                   <Box sx={{
-                    height: 60,
+                    height: 80,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    mb: 1.5
+                    mb: 2
                   }}>
                     <img
                       src="/images/logos/swissdec-logo.png"
                       alt="Swissdec Logo"
-                      style={{ height: '50px', width: 'auto' }}
+                      style={{ height: '60px', width: 'auto', maxWidth: '100%' }}
                     />
                   </Box>
-                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ fontSize: '0.95rem' }}>
                     Swissdec ELM
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.4 }}>
                     Salary Certificate Standard
                   </Typography>
                 </Box>

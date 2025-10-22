@@ -48,7 +48,9 @@ const QuestionCard = ({
   previousAnswer,
   canGoBack = false,
   sessionId,
-  onUpload
+  onUpload,
+  autoFilled = false,
+  importSource = null
 }) => {
   const { t } = useTranslation();
   const [answer, setAnswer] = useState(previousAnswer || '');
@@ -447,8 +449,22 @@ const QuestionCard = ({
             <Chip
               label={question.category}
               size="small"
-              variant="outlined"
             />
+            {autoFilled && (
+              <Chip
+                label={`Auto-filled from ${importSource || 'imported document'}`}
+                size="small"
+                color="success"
+                icon={<CheckCircle />}
+                variant="outlined"
+                sx={{
+                  fontWeight: 600,
+                  '& .MuiChip-icon': {
+                    color: 'success.main'
+                  }
+                }}
+              />
+            )}
           </Box>
           <Typography variant="h5" component="h2" gutterBottom>
             {question.question_text}

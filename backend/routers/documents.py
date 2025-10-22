@@ -711,6 +711,30 @@ async def upload_structured_import(
             ContentType=mime_type
         )
 
+        # Validate session_id if provided
+        if session_id:
+            try:
+                import uuid
+                uuid.UUID(session_id)
+            except (ValueError, AttributeError):
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid session_id format. Must be a valid UUID."
+                )
+
+        # Serialize JSON data with error handling
+        try:
+            ocr_result_json = json.dumps(result.get('data', {}))
+        except (TypeError, ValueError) as e:
+            logger.warning(f"Could not serialize extracted data: {e}")
+            ocr_result_json = json.dumps({})
+
+        try:
+            structured_data_json = json.dumps(result.get('structured_data')) if result.get('structured_data') else None
+        except (TypeError, ValueError) as e:
+            logger.warning(f"Could not serialize structured_data: {e}")
+            structured_data_json = None
+
         # Save to database
         execute_query(
             """
@@ -729,10 +753,10 @@ async def upload_structured_import(
                 mime_type,
                 result.get('document_type', 'unknown'),
                 'completed',  # Structured imports are immediately processed
-                json.dumps(result.get('data', {})),
+                ocr_result_json,
                 result.get('is_structured_import', False),
                 result.get('format'),
-                json.dumps(result.get('structured_data', {})) if result.get('structured_data') else None
+                structured_data_json
             ),
             fetch=False
         )

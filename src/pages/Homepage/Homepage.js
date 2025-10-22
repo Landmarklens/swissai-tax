@@ -252,7 +252,7 @@ const Homepage = () => {
       <Box sx={{ py: 4, bgcolor: 'grey.50', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'grey.200' }}>
         <Container maxWidth="lg">
           <Grid container spacing={3} justifyContent="center" alignItems="center">
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6} md={2.4}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -300,7 +300,7 @@ const Homepage = () => {
                 </Box>
               </motion.div>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6} md={2.4}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -317,7 +317,7 @@ const Homepage = () => {
                 </Box>
               </motion.div>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6} md={2.4}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -330,6 +330,40 @@ const Homepage = () => {
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {t('homepage.badges.aes_256')}
+                  </Typography>
+                </Box>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={2.4}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <Box sx={{ fontSize: 60, color: 'primary.main', mb: 1.5 }}>📋</Box>
+                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                    eCH-0196 Certified
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Swiss E-Government Standard
+                  </Typography>
+                </Box>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={2.4}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <Box sx={{ fontSize: 60, color: 'primary.main', mb: 1.5 }}>💼</Box>
+                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                    Swissdec ELM
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Salary Certificate Standard
                   </Typography>
                 </Box>
               </motion.div>

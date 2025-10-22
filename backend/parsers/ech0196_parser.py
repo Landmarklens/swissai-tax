@@ -244,19 +244,27 @@ class ECH0196Parser:
         # Address
         address_elem = elem.find('address') or elem.find('ech:address', ns)
         if address_elem is not None:
+            street_elem = address_elem.find('street') or address_elem.find('ech:street', ns)
+            postal_elem = address_elem.find('postalCode') or address_elem.find('ech:postalCode', ns)
+            city_elem = address_elem.find('city') or address_elem.find('ech:city', ns)
+
             data['address'] = {
-                'street': (address_elem.find('street') or address_elem.find('ech:street', ns) or {}).text,
-                'postal_code': (address_elem.find('postalCode') or address_elem.find('ech:postalCode', ns) or {}).text,
-                'city': (address_elem.find('city') or address_elem.find('ech:city', ns) or {}).text,
+                'street': street_elem.text if street_elem is not None else None,
+                'postal_code': postal_elem.text if postal_elem is not None else None,
+                'city': city_elem.text if city_elem is not None else None,
             }
 
         # Spouse (if married)
         spouse_elem = elem.find('spouse') or elem.find('ech:spouse', ns)
         if spouse_elem is not None:
+            spouse_last_elem = spouse_elem.find('lastName') or spouse_elem.find('ech:lastName', ns)
+            spouse_first_elem = spouse_elem.find('firstName') or spouse_elem.find('ech:firstName', ns)
+            spouse_ssn_elem = spouse_elem.find('ssn') or spouse_elem.find('ech:ssn', ns)
+
             data['spouse'] = {
-                'last_name': (spouse_elem.find('lastName') or spouse_elem.find('ech:lastName', ns) or {}).text,
-                'first_name': (spouse_elem.find('firstName') or spouse_elem.find('ech:firstName', ns) or {}).text,
-                'ssn': (spouse_elem.find('ssn') or spouse_elem.find('ech:ssn', ns) or {}).text,
+                'last_name': spouse_last_elem.text if spouse_last_elem is not None else None,
+                'first_name': spouse_first_elem.text if spouse_first_elem is not None else None,
+                'ssn': spouse_ssn_elem.text if spouse_ssn_elem is not None else None,
             }
 
         return data

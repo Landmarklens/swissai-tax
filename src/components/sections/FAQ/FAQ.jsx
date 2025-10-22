@@ -14,9 +14,9 @@ import { useTranslation } from 'react-i18next';
 import { FAQ } from '../../../constants/FAQ';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SecurityIcon from '@mui/icons-material/Security';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import LockIcon from '@mui/icons-material/Lock';
 
 const FAQSection = () => {
   const { t } = useTranslation();
@@ -27,39 +27,20 @@ const FAQSection = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  // Define categories with icons
-  const categories = [
-    {
-      title: FAQ[0]?.title || 'Getting Started',
-      icon: <SecurityIcon />,
-      color: '#DC0018'
-    },
-    {
-      title: FAQ[1]?.title || 'Tax Filing Process',
-      icon: <MonetizationOnIcon />,
-      color: '#00A651'
-    },
-    {
-      title: FAQ[2]?.title || 'Deductions & Savings',
-      icon: <IntegrationInstructionsIcon />,
-      color: '#003DA5'
-    },
-    {
-      title: FAQ[3]?.title || 'Security & Privacy',
-      icon: <TrendingUpIcon />,
-      color: '#FFB81C'
-    },
-    {
-      title: FAQ[4]?.title || 'Technical Support',
-      icon: <SecurityIcon />,
-      color: '#6B46C1'
-    },
-    {
-      title: FAQ[5]?.title || 'Pricing & Payment',
-      icon: <MonetizationOnIcon />,
-      color: '#DC0018'
-    }
-  ];
+  // Define categories with icons - matching FAQ data
+  const categories = FAQ.map((category, index) => {
+    const iconMap = [
+      { icon: <SecurityIcon />, color: '#DC0018' },      // About SwissAI Tax
+      { icon: <AccountBalanceIcon />, color: '#00A651' }, // Getting Started
+      { icon: <AutoAwesomeIcon />, color: '#2196F3' },   // Smart Features
+      { icon: <LockIcon />, color: '#6B46C1' }           // Security & Privacy
+    ];
+    return {
+      title: category.title,
+      icon: iconMap[index]?.icon || <SecurityIcon />,
+      color: iconMap[index]?.color || '#DC0018'
+    };
+  });
 
   const renderContent = (question) => {
     return (
@@ -230,12 +211,15 @@ const FAQSection = () => {
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
-            {t('Frequently Asked Questions')}
+            Frequently Asked Questions
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Everything you need to know about filing your Swiss taxes
           </Typography>
         </Box>
 
         {/* Category Selector */}
-        <Grid container spacing={2} sx={{ mb: 4 }}>
+        <Grid container spacing={2} sx={{ mb: 4 }} justifyContent="center">
           {categories.map((category, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Paper

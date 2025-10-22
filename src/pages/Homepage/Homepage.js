@@ -50,6 +50,7 @@ import authService from '../../services/authService';
 import TrustBadges from '../../components/TrustBadges/TrustBadges';
 import SwissDataBanner from '../../components/sections/SwissDataBanner/SwissDataBanner';
 import SubscriptionPlans from '../SubscriptionPlans/SubscriptionPlans';
+import FAQSection from '../../components/sections/FAQ/FAQ';
 
 const Homepage = () => {
   const { t, i18n } = useTranslation();
@@ -741,6 +742,9 @@ const Homepage = () => {
           }}
         />
       </Box>
+
+      {/* FAQ Section */}
+      <FAQSection />
 
       {/* Footer */}
       <Footer />

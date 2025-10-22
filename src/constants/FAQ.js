@@ -3,6 +3,7 @@
  * Frequently Asked Questions for Swiss tax filing platform
  */
 
+// Static FAQ data
 export const FAQ = [
   {
     title: 'About SwissAI Tax',
@@ -114,3 +115,13 @@ export const FAQ = [
     ]
   }
 ];
+
+// Function to get FAQ with translation support (for backward compatibility)
+export const getFAQ = (t) => {
+  // If t is a function, use it for translations; otherwise return static data
+  if (typeof t === 'function') {
+    // For now, return static data - translations can be added later
+    return FAQ;
+  }
+  return FAQ;
+};

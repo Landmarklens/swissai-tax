@@ -384,12 +384,6 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
 
         {/* Additional Info */}
         <Box sx={{ mt: 6, textAlign: 'center' }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            {t(
-              'subscription.footer_note',
-              'All prices include Swiss VAT. Payment processed securely through Stripe.'
-            )}
-          </Typography>
           <Typography variant="body2" color="text.secondary">
             {t(
               'subscription.questions',

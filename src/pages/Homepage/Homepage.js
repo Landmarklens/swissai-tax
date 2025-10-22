@@ -341,7 +341,19 @@ const Homepage = () => {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 <Box sx={{ textAlign: 'center', p: 2 }}>
-                  <Box sx={{ fontSize: 60, color: 'primary.main', mb: 1.5 }}>📋</Box>
+                  <Box sx={{
+                    height: 60,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 1.5
+                  }}>
+                    <img
+                      src="/images/logos/ech-logo.svg"
+                      alt="eCH Logo"
+                      style={{ height: '50px', width: 'auto' }}
+                    />
+                  </Box>
                   <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                     eCH-0196 Certified
                   </Typography>
@@ -358,7 +370,19 @@ const Homepage = () => {
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <Box sx={{ textAlign: 'center', p: 2 }}>
-                  <Box sx={{ fontSize: 60, color: 'primary.main', mb: 1.5 }}>💼</Box>
+                  <Box sx={{
+                    height: 60,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 1.5
+                  }}>
+                    <img
+                      src="/images/logos/swissdec-logo.png"
+                      alt="Swissdec Logo"
+                      style={{ height: '50px', width: 'auto' }}
+                    />
+                  </Box>
                   <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                     Swissdec ELM
                   </Typography>

@@ -202,8 +202,8 @@ const FilingsListPage = () => {
       setCreateDialogOpen(false);
       loadFilings();
 
-      // Navigate to interview page
-      navigate(`/${i18n.language}/tax-filing/interview/${response.data.id}`);
+      // Navigate to pre-interview document screen
+      navigate(`/${i18n.language}/tax-filing/pre-interview/${response.data.id}`);
     } catch (err) {
       console.error('Error creating filing:', err);
       alert(err.response?.data?.detail || 'Failed to create filing');

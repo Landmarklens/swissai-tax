@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Background -->
+  <rect width="400" height="500" fill="#f8f9fa"/>
+
+  <!-- Header -->
+  <rect width="400" height="60" fill="#dc3545"/>
+  <text x="200" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">
+    eCH-0196 E-Steuerauszug
+  </text>
+
+  <!-- Bank Logo Area -->
+  <rect x="20" y="80" width="360" height="40" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="200" y="105" font-family="Arial, sans-serif" font-size="14" fill="#495057" text-anchor="middle">
+    [Bank Logo / Name]
+  </text>
+
+  <!-- Customer Info Section -->
+  <rect x="20" y="140" width="360" height="80" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="30" y="160" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#212529">
+    Kundeninformationen / Customer Information
+  </text>
+  <text x="30" y="180" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Name: Max Mustermann
+  </text>
+  <text x="30" y="195" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Adresse: Musterstrasse 123, 8000 Zürich
+  </text>
+  <text x="30" y="210" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Steuerjahr / Tax Year: 2024
+  </text>
+
+  <!-- Account Details Section -->
+  <rect x="20" y="240" width="360" height="120" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="30" y="260" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#212529">
+    Kontoübersicht / Account Overview
+  </text>
+  <text x="30" y="280" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Sparkonto / Savings: CHF 25,000.00
+  </text>
+  <text x="30" y="295" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Zinserträge / Interest: CHF 150.00
+  </text>
+  <text x="30" y="310" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Wertschriften / Securities: CHF 50,000.00
+  </text>
+  <text x="30" y="325" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Dividenden / Dividends: CHF 1,200.00
+  </text>
+  <text x="30" y="340" font-family="Arial, sans-serif" font-size="10" fill="#495057">
+    Verrechnungssteuer / Withholding Tax: CHF 420.00
+  </text>
+
+  <!-- Barcode Section -->
+  <rect x="20" y="380" width="360" height="80" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="200" y="400" font-family="Arial, sans-serif" font-size="9" fill="#6c757d" text-anchor="middle">
+    PDF417 Barcode (eCH-0196 XML Data)
+  </text>
+  <!-- Simplified barcode representation -->
+  <g transform="translate(60, 410)">
+    <rect width="280" height="40" fill="#000000"/>
+    <rect x="5" width="3" height="40" fill="#ffffff"/>
+    <rect x="12" width="2" height="40" fill="#ffffff"/>
+    <rect x="18" width="4" height="40" fill="#ffffff"/>
+    <rect x="28" width="3" height="40" fill="#ffffff"/>
+    <rect x="36" width="2" height="40" fill="#ffffff"/>
+    <rect x="42" width="5" height="40" fill="#ffffff"/>
+    <rect x="52" width="3" height="40" fill="#ffffff"/>
+    <rect x="60" width="2" height="40" fill="#ffffff"/>
+    <rect x="67" width="4" height="40" fill="#ffffff"/>
+    <rect x="76" width="3" height="40" fill="#ffffff"/>
+    <rect x="84" width="2" height="40" fill="#ffffff"/>
+    <rect x="90" width="5" height="40" fill="#ffffff"/>
+    <rect x="100" width="3" height="40" fill="#ffffff"/>
+    <rect x="108" width="2" height="40" fill="#ffffff"/>
+    <rect x="115" width="4" height="40" fill="#ffffff"/>
+    <rect x="124" width="3" height="40" fill="#ffffff"/>
+    <rect x="132" width="2" height="40" fill="#ffffff"/>
+    <rect x="138" width="5" height="40" fill="#ffffff"/>
+    <rect x="148" width="3" height="40" fill="#ffffff"/>
+    <rect x="156" width="2" height="40" fill="#ffffff"/>
+    <rect x="162" width="4" height="40" fill="#ffffff"/>
+    <rect x="171" width="3" height="40" fill="#ffffff"/>
+    <rect x="179" width="2" height="40" fill="#ffffff"/>
+    <rect x="185" width="5" height="40" fill="#ffffff"/>
+    <rect x="195" width="3" height="40" fill="#ffffff"/>
+    <rect x="203" width="2" height="40" fill="#ffffff"/>
+    <rect x="209" width="4" height="40" fill="#ffffff"/>
+    <rect x="218" width="3" height="40" fill="#ffffff"/>
+    <rect x="226" width="2" height="40" fill="#ffffff"/>
+    <rect x="232" width="5" height="40" fill="#ffffff"/>
+    <rect x="242" width="3" height="40" fill="#ffffff"/>
+    <rect x="250" width="2" height="40" fill="#ffffff"/>
+    <rect x="257" width="4" height="40" fill="#ffffff"/>
+    <rect x="266" width="3" height="40" fill="#ffffff"/>
+  </g>
+
+  <!-- Footer -->
+  <text x="200" y="480" font-family="Arial, sans-serif" font-size="9" fill="#6c757d" text-anchor="middle">
+    eCH-0196 Standard v2.1 | Elektronischer Steuerauszug
+  </text>
+</svg>

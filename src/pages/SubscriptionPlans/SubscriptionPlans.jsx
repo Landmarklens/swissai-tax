@@ -381,16 +381,6 @@ const SubscriptionPlans = ({ referralCode = '', onRequestAuth = null }) => {
             );
           })}
         </Grid>
-
-        {/* Additional Info */}
-        <Box sx={{ mt: 6, textAlign: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            {t(
-              'subscription.questions',
-              'Questions? Contact us at support@swissai.tax'
-            )}
-          </Typography>
-        </Box>
       </Box>
     </Container>
   );

@@ -51,6 +51,7 @@ const Billing = withSuspense(lazy(() => import('../pages/Billing/Billing')));
 
 // Tax filing pages
 const FilingsListPage = withSuspense(lazy(() => import('../pages/TaxFiling/FilingsListPage')));
+const PreInterviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/PreInterviewPage')));
 const TaxInterviewPage = withSuspense(lazy(() => import('../pages/TaxFiling/InterviewPage')));
 const DocumentChecklistPage = withSuspense(lazy(() => import('../pages/TaxFiling/DocumentChecklistPage')));
 const TaxResultsPage = withSuspense(lazy(() => import('../pages/TaxFiling/TaxResults')));
@@ -169,6 +170,14 @@ export const LAZY_NAVIGATION_ROUTE = [
     element: (
       <ProtectedRoute>
         <FilingsListPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/tax-filing/pre-interview/:filingId',
+    element: (
+      <ProtectedRoute>
+        <PreInterviewPage />
       </ProtectedRoute>
     )
   },

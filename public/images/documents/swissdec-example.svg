@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Background -->
+  <rect width="400" height="500" fill="#f8f9fa"/>
+
+  <!-- Swiss Cross Header -->
+  <rect width="400" height="60" fill="#ffffff" stroke="#dc3545" stroke-width="2"/>
+  <rect x="25" y="15" width="30" height="30" fill="#dc3545"/>
+  <rect x="32" y="20" width="16" height="20" fill="#ffffff"/>
+  <rect x="28" y="26" width="24" height="8" fill="#ffffff"/>
+
+  <text x="200" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#212529" text-anchor="middle">
+    Lohnausweis / Certificat de salaire
+  </text>
+
+  <!-- Form Number -->
+  <text x="370" y="25" font-family="Arial, sans-serif" font-size="10" fill="#6c757d" text-anchor="end">
+    Formular 11
+  </text>
+  <text x="370" y="40" font-family="Arial, sans-serif" font-size="9" fill="#6c757d" text-anchor="end">
+    Swissdec ELM 5.0
+  </text>
+
+  <!-- Section A: Employer -->
+  <rect x="20" y="75" width="360" height="70" fill="#e9ecef" stroke="#495057" stroke-width="1"/>
+  <text x="25" y="90" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#212529">
+    A. Arbeitgeber / Employer
+  </text>
+  <text x="25" y="105" font-family="Arial, sans-serif" font-size="9" fill="#495057">
+    Name: Muster AG
+  </text>
+  <text x="25" y="120" font-family="Arial, sans-serif" font-size="9" fill="#495057">
+    Adresse: Industriestrasse 45, 8050 Zürich
+  </text>
+  <text x="25" y="135" font-family="Arial, sans-serif" font-size="9" fill="#495057">
+    AHV-Nr. / UID: CHE-123.456.789
+  </text>
+
+  <!-- Section B: Employee -->
+  <rect x="20" y="155" width="360" height="70" fill="#ffffff" stroke="#495057" stroke-width="1"/>
+  <text x="25" y="170" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#212529">
+    B. Arbeitnehmer / Employee
+  </text>
+  <text x="25" y="185" font-family="Arial, sans-serif" font-size="9" fill="#495057">
+    Name: Mustermann, Max
+  </text>
+  <text x="25" y="200" font-family="Arial, sans-serif" font-size="9" fill="#495057">
+    AHV-Nr. / AVS: 756.1234.5678.90
+  </text>
+  <text x="25" y="215" font-family="Arial, sans-serif" font-size="9" fill="#495057">
+    Wohnort / Residence: 8000 Zürich
+  </text>
+
+  <!-- Salary Details Section -->
+  <rect x="20" y="235" width="360" height="150" fill="#ffffff" stroke="#495057" stroke-width="1"/>
+  <text x="25" y="250" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#212529">
+    Lohnangaben / Salary Information (Steuerjahr 2024)
+  </text>
+
+  <!-- Table Headers -->
+  <line x1="25" y1="260" x2="375" y2="260" stroke="#495057" stroke-width="0.5"/>
+  <text x="30" y="272" font-family="Arial, sans-serif" font-size="8" fill="#495057">Nr.</text>
+  <text x="60" y="272" font-family="Arial, sans-serif" font-size="8" fill="#495057">Bezeichnung</text>
+  <text x="320" y="272" font-family="Arial, sans-serif" font-size="8" fill="#495057" text-anchor="end">Betrag CHF</text>
+  <line x1="25" y1="275" x2="375" y2="275" stroke="#495057" stroke-width="0.5"/>
+
+  <!-- Salary Lines -->
+  <text x="30" y="290" font-family="Arial, sans-serif" font-size="9" fill="#212529">1</text>
+  <text x="60" y="290" font-family="Arial, sans-serif" font-size="9" fill="#212529">Bruttolohn / Gross salary</text>
+  <text x="370" y="290" font-family="Arial, sans-serif" font-size="9" fill="#212529" text-anchor="end">85,000.00</text>
+
+  <text x="30" y="305" font-family="Arial, sans-serif" font-size="9" fill="#212529">2</text>
+  <text x="60" y="305" font-family="Arial, sans-serif" font-size="9" fill="#212529">Berufliche Vorsorge / Pension</text>
+  <text x="370" y="305" font-family="Arial, sans-serif" font-size="9" fill="#212529" text-anchor="end">5,100.00</text>
+
+  <text x="30" y="320" font-family="Arial, sans-serif" font-size="9" fill="#212529">3</text>
+  <text x="60" y="320" font-family="Arial, sans-serif" font-size="9" fill="#212529">AHV/IV/EO/ALV Beiträge</text>
+  <text x="370" y="320" font-family="Arial, sans-serif" font-size="9" fill="#212529" text-anchor="end">5,525.00</text>
+
+  <text x="30" y="335" font-family="Arial, sans-serif" font-size="9" fill="#212529">7</text>
+  <text x="60" y="335" font-family="Arial, sans-serif" font-size="9" fill="#212529">Naturalleistungen / Benefits in kind</text>
+  <text x="370" y="335" font-family="Arial, sans-serif" font-size="9" fill="#212529" text-anchor="end">1,200.00</text>
+
+  <text x="30" y="350" font-family="Arial, sans-serif" font-size="9" fill="#212529">13</text>
+  <text x="60" y="350" font-family="Arial, sans-serif" font-size="9" fill="#212529">Quellensteuer / Withholding tax</text>
+  <text x="370" y="350" font-family="Arial, sans-serif" font-size="9" fill="#212529" text-anchor="end">0.00</text>
+
+  <line x1="300" y1="358" x2="375" y2="358" stroke="#212529" stroke-width="1"/>
+  <text x="60" y="375" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#212529">Nettolohn / Net salary</text>
+  <text x="370" y="375" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#212529" text-anchor="end">75,575.00</text>
+
+  <!-- Swissdec Logo/Mark -->
+  <rect x="20" y="400" width="360" height="50" fill="#e9ecef" stroke="#495057" stroke-width="1"/>
+  <text x="200" y="420" font-family="Arial, sans-serif" font-size="10" fill="#495057" text-anchor="middle" font-weight="bold">
+    SWISSDEC
+  </text>
+  <text x="200" y="435" font-family="Arial, sans-serif" font-size="8" fill="#6c757d" text-anchor="middle">
+    Elektronischer Lohnausweis (ELM) | Format 5.0
+  </text>
+
+  <!-- Footer -->
+  <text x="200" y="470" font-family="Arial, sans-serif" font-size="8" fill="#6c757d" text-anchor="middle">
+    Formular gemäss Art. 88 Abs. 1 DBG und Art. 125 Abs. 2 StG
+  </text>
+  <text x="200" y="485" font-family="Arial, sans-serif" font-size="8" fill="#6c757d" text-anchor="middle">
+    ESTV / AFC | www.swissdec.ch
+  </text>
+</svg>

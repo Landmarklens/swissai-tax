@@ -12,8 +12,7 @@ import {
 } from '@mui/material';
 import {
   Save as SaveIcon,
-  CheckCircle as CheckCircleIcon,
-  Upload as UploadIcon
+  CheckCircle as CheckCircleIcon
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import QuestionCard from '../../components/TaxFiling/QuestionCard';
 import ProgressBar from './components/ProgressBar';
 import InterviewInsightsSidebar from './components/InterviewInsightsSidebar';
-import ImportDialog from '../../components/TaxFiling/ImportDialog';
+// ImportDialog removed - now shown in PreInterviewPage
 import { api } from '../../services/api';
 import { uploadDocument } from '../../api/interview';
 import Header from '../../components/header/Header';
@@ -49,7 +48,7 @@ const InterviewPage = () => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [questionHistory, setQuestionHistory] = useState([]); // Track question history for back button
   const [insightRefetchTrigger, setInsightRefetchTrigger] = useState(0); // Trigger insights refetch after each answer
-  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  // importDialogOpen state removed - import now happens in PreInterviewPage
 
   const autoSaveTimer = useRef(null);
   const interviewStarted = useRef(false); // Track if interview has been started
@@ -375,10 +374,9 @@ const InterviewPage = () => {
     setProgress(prev => Math.max(0, prev - (100 / totalQuestions)));
   };
 
+  // handleImportSuccess removed - import now happens in PreInterviewPage
+  // Keeping this as a placeholder in case we need it for backward compatibility
   const handleImportSuccess = (importedData) => {
-    // Close the dialog
-    setImportDialogOpen(false);
-
     // Update answers with imported data
     if (importedData) {
       setAnswers(prev => ({ ...prev, ...importedData }));
@@ -440,28 +438,7 @@ const InterviewPage = () => {
       <Grid container spacing={4}>
         {/* Main Content */}
         <Grid item xs={12} lg={8}>
-          {/* Import Button */}
-          <Box mb={3} display="flex" justifyContent="center">
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<UploadIcon />}
-              onClick={() => setImportDialogOpen(true)}
-              sx={{
-                px: 4,
-                py: 1.5,
-                fontSize: '1rem',
-                fontWeight: 600,
-                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
-                '&:hover': {
-                  background: 'linear-gradient(45deg, #1976D2 30%, #1E88E5 90%)',
-                }
-              }}
-            >
-              {t('interview.import_documents') || 'Import Bank/Salary Documents'}
-            </Button>
-          </Box>
+          {/* Import Button removed - now shown in PreInterviewPage before starting interview */}
 
           {/* Progress Bar */}
           <ProgressBar
@@ -504,13 +481,7 @@ const InterviewPage = () => {
         </Grid>
       </Grid>
 
-      {/* Import Dialog */}
-      <ImportDialog
-        open={importDialogOpen}
-        onClose={() => setImportDialogOpen(false)}
-        onImportSuccess={handleImportSuccess}
-        sessionId={session}
-      />
+      {/* ImportDialog removed - now shown in PreInterviewPage before starting interview */}
     </Container>
     <Footer />
     </>

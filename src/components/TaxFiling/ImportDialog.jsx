@@ -1,22 +1,55 @@
 /**
  * ImportDialog Component
  *
- * Modal dialog for uploading structured import documents (eCH-0196, Swissdec ELM).
+ * Modern, polished modal dialog for uploading structured import documents (eCH-0196, Swissdec ELM).
  * Provides 4-step flow: Choose → Upload → Review → Confirm
  */
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Box,
+  Typography,
+  LinearProgress,
+  Alert,
+  IconButton,
+  Card,
+  CardContent,
+  CardActionArea,
+  Stepper,
+  Step,
+  StepLabel,
+  Chip,
+  Divider,
+  Paper,
+  Stack,
+  CircularProgress,
+} from '@mui/material';
+import {
+  Close as CloseIcon,
+  AccountBalance as BankIcon,
+  Work as WorkIcon,
+  CloudUpload as UploadIcon,
+  CheckCircle as CheckCircleIcon,
+  Description as DocumentIcon,
+  TimerOutlined as TimerIcon,
+} from '@mui/icons-material';
 
 const ImportDialog = ({ isOpen, onClose, onImportComplete, sessionId }) => {
-  const [step, setStep] = useState(1); // 1=Choose, 2=Upload, 3=Review, 4=Confirm
+  const [step, setStep] = useState(1); // 1=Choose, 2=Upload, 3=Review
   const [selectedType, setSelectedType] = useState(null); // 'bank' or 'salary'
   const [file, setFile] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [previewData, setPreviewData] = useState(null);
   const [error, setError] = useState(null);
+  const [uploadedDocuments, setUploadedDocuments] = useState([]); // Track uploaded docs
 
-  if (!isOpen) return null;
+  const steps = ['Choose Type', 'Upload', 'Review'];
 
   const handleFileSelect = (event) => {
     const selectedFile = event.target.files[0];
@@ -81,9 +114,18 @@ const ImportDialog = ({ isOpen, onClose, onImportComplete, sessionId }) => {
         }
       );
 
-      // Success! Close dialog and notify parent
+      // Track this uploaded document
+      setUploadedDocuments(prev => [...prev, { type: selectedType, data: response.data }]);
+
+      // Success! Notify parent
       onImportComplete(response.data);
-      handleClose();
+
+      // Reset for potential next upload
+      setFile(null);
+      setPreviewData(null);
+      setSelectedType(null);
+      setStep(1);
+      setError(null);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to import document');
     } finally {
@@ -97,204 +139,417 @@ const ImportDialog = ({ isOpen, onClose, onImportComplete, sessionId }) => {
     setFile(null);
     setPreviewData(null);
     setError(null);
+    setUploadedDocuments([]);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full m-4 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="border-b px-6 py-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">
-            {step === 1 && 'Choose Document Type'}
-            {step === 2 && 'Upload Document'}
-            {step === 3 && 'Review Extracted Data'}
-            {step === 4 && 'Import Complete'}
-          </h2>
-          <button onClick={handleClose} className="text-gray-500 hover:text-gray-700">
-            ✕
-          </button>
-        </div>
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 3,
+          maxHeight: '90vh',
+        }
+      }}
+    >
+      {/* Header */}
+      <DialogTitle sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        pb: 2,
+        borderBottom: '1px solid',
+        borderColor: 'divider'
+      }}>
+        <Box>
+          <Typography variant="h5" component="div" fontWeight="bold" gutterBottom>
+            Import Tax Documents
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Auto-fill your tax data in seconds
+          </Typography>
+        </Box>
+        <IconButton onClick={handleClose} size="small" sx={{ ml: 2 }}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
 
-        {/* Content */}
-        <div className="p-6">
-          {/* Step 1: Choose Type */}
-          {step === 1 && (
-            <div className="space-y-4">
-              <p className="text-gray-600 mb-6">
-                Select the type of document you want to import. Structured imports save up to 35 minutes by auto-filling your tax data.
-              </p>
+      {/* Stepper */}
+      <Box sx={{ px: 3, pt: 3 }}>
+        <Stepper activeStep={step - 1} alternativeLabel>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
 
-              <div className="grid grid-cols-2 gap-4">
-                {/* Bank Statement */}
-                <button
+      {/* Content */}
+      <DialogContent sx={{ px: 3, py: 3 }}>
+        {/* Step 1: Choose Type */}
+        {step === 1 && (
+          <Box>
+            <Typography variant="body1" color="text.secondary" mb={3} textAlign="center">
+              Select the type of document you want to import
+            </Typography>
+
+            {uploadedDocuments.length > 0 && (
+              <Alert severity="success" sx={{ mb: 3 }}>
+                <Typography variant="body2">
+                  <strong>{uploadedDocuments.length} document(s) uploaded!</strong> You can upload another document or finish.
+                </Typography>
+              </Alert>
+            )}
+
+            <Stack spacing={2}>
+              {/* Bank Statement Card */}
+              <Card
+                variant="outlined"
+                sx={{
+                  transition: 'all 0.2s',
+                  opacity: uploadedDocuments.some(doc => doc.type === 'bank') ? 0.5 : 1,
+                  '&:hover': uploadedDocuments.some(doc => doc.type === 'bank') ? {} : {
+                    borderColor: 'primary.main',
+                    boxShadow: 2,
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                <CardActionArea
                   onClick={() => {
                     setSelectedType('bank');
                     setStep(2);
                   }}
-                  className="border-2 border-gray-300 rounded-lg p-6 hover:border-blue-500 hover:bg-blue-50 transition text-left"
+                  disabled={uploadedDocuments.some(doc => doc.type === 'bank')}
+                  sx={{ p: 3 }}
                 >
-                  <div className="text-3xl mb-2">🏦</div>
-                  <h3 className="font-bold text-lg mb-2">Bank Statement</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    eCH-0196 electronic tax statement from your bank
-                  </p>
-                  <div className="text-xs text-gray-500">
-                    <div>✓ Auto-fills 17 questions</div>
-                    <div>✓ 99% accuracy</div>
-                    <div>✓ Saves ~20 minutes</div>
-                  </div>
-                </button>
+                  <Box display="flex" alignItems="flex-start" gap={2}>
+                    <Box
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 2,
+                        bgcolor: uploadedDocuments.some(doc => doc.type === 'bank') ? 'success.light' : 'primary.light',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        position: 'relative',
+                      }}
+                    >
+                      {uploadedDocuments.some(doc => doc.type === 'bank') ? (
+                        <CheckCircleIcon sx={{ fontSize: 32, color: 'success.main' }} />
+                      ) : (
+                        <BankIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+                      )}
+                    </Box>
+                    <Box flex={1}>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="h6" fontWeight="bold">
+                          Bank Statement (eCH-0196)
+                        </Typography>
+                        {uploadedDocuments.some(doc => doc.type === 'bank') && (
+                          <Chip label="Uploaded" size="small" color="success" />
+                        )}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" mb={2}>
+                        Electronic tax statement from your bank with account balances, interest, securities, and dividends
+                      </Typography>
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        <Chip label="17 fields" size="small" color="primary" variant="outlined" />
+                        <Chip label="99% accuracy" size="small" color="success" variant="outlined" />
+                        <Chip label="~20 min saved" size="small" icon={<TimerIcon />} />
+                      </Stack>
+                    </Box>
+                  </Box>
+                </CardActionArea>
+              </Card>
 
-                {/* Salary Certificate */}
-                <button
+              {/* Salary Certificate Card */}
+              <Card
+                variant="outlined"
+                sx={{
+                  transition: 'all 0.2s',
+                  opacity: uploadedDocuments.some(doc => doc.type === 'salary') ? 0.5 : 1,
+                  '&:hover': uploadedDocuments.some(doc => doc.type === 'salary') ? {} : {
+                    borderColor: 'primary.main',
+                    boxShadow: 2,
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                <CardActionArea
                   onClick={() => {
                     setSelectedType('salary');
                     setStep(2);
                   }}
-                  className="border-2 border-gray-300 rounded-lg p-6 hover:border-blue-500 hover:bg-blue-50 transition text-left"
+                  disabled={uploadedDocuments.some(doc => doc.type === 'salary')}
+                  sx={{ p: 3 }}
                 >
-                  <div className="text-3xl mb-2">💼</div>
-                  <h3 className="font-bold text-lg mb-2">Salary Certificate</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Swissdec ELM electronic salary certificate (Lohnausweis)
-                  </p>
-                  <div className="text-xs text-gray-500">
-                    <div>✓ Auto-fills 15 questions</div>
-                    <div>✓ 99% accuracy</div>
-                    <div>✓ Saves ~15 minutes</div>
-                  </div>
-                </button>
-              </div>
+                  <Box display="flex" alignItems="flex-start" gap={2}>
+                    <Box
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 2,
+                        bgcolor: uploadedDocuments.some(doc => doc.type === 'salary') ? 'success.light' : 'secondary.light',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        position: 'relative',
+                      }}
+                    >
+                      {uploadedDocuments.some(doc => doc.type === 'salary') ? (
+                        <CheckCircleIcon sx={{ fontSize: 32, color: 'success.main' }} />
+                      ) : (
+                        <WorkIcon sx={{ fontSize: 32, color: 'secondary.main' }} />
+                      )}
+                    </Box>
+                    <Box flex={1}>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="h6" fontWeight="bold">
+                          Salary Certificate (Swissdec ELM)
+                        </Typography>
+                        {uploadedDocuments.some(doc => doc.type === 'salary') && (
+                          <Chip label="Uploaded" size="small" color="success" />
+                        )}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" mb={2}>
+                        Electronic salary certificate (Lohnausweis) from your employer with salary, deductions, and benefits
+                      </Typography>
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        <Chip label="15 fields" size="small" color="primary" variant="outlined" />
+                        <Chip label="99% accuracy" size="small" color="success" variant="outlined" />
+                        <Chip label="~15 min saved" size="small" icon={<TimerIcon />} />
+                      </Stack>
+                    </Box>
+                  </Box>
+                </CardActionArea>
+              </Card>
+            </Stack>
 
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  <strong>💡 Tip:</strong> Don't have these documents? You can still use regular PDF uploads with AI extraction (85% accuracy).
-                </p>
-              </div>
-            </div>
-          )}
+            <Alert severity="info" icon={<DocumentIcon />} sx={{ mt: 3 }}>
+              <Typography variant="body2">
+                <strong>Tip:</strong> You can upload both documents to maximize the information extracted from your records.
+              </Typography>
+            </Alert>
+          </Box>
+        )}
 
-          {/* Step 2: Upload */}
-          {step === 2 && (
-            <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2">
-                  {selectedType === 'bank' ? '🏦 Bank Statement' : '💼 Salary Certificate'}
-                </h4>
-                <p className="text-sm text-gray-600">
-                  {selectedType === 'bank'
-                    ? 'Upload your eCH-0196 bank statement (PDF with barcode or XML)'
-                    : 'Upload your Swissdec salary certificate (PDF or XML)'}
-                </p>
-              </div>
+        {/* Step 2: Upload */}
+        {step === 2 && (
+          <Box>
+            <Alert
+              severity="info"
+              icon={selectedType === 'bank' ? <BankIcon /> : <WorkIcon />}
+              sx={{ mb: 3 }}
+            >
+              <Typography variant="body2">
+                <strong>
+                  {selectedType === 'bank' ? 'eCH-0196 Bank Statement' : 'Swissdec Salary Certificate'}
+                </strong>
+                <br />
+                {selectedType === 'bank'
+                  ? 'Upload your eCH-0196 bank statement (PDF with barcode or XML)'
+                  : 'Upload your Swissdec ELM salary certificate (PDF or XML)'}
+              </Typography>
+            </Alert>
 
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <input
-                  type="file"
-                  accept={selectedType === 'bank' ? '.pdf,.xml' : '.pdf,.xml'}
-                  onChange={handleFileSelect}
-                  className="hidden"
-                  id="file-upload"
-                />
-                <label
-                  htmlFor="file-upload"
-                  className="cursor-pointer inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
-                >
-                  Choose File
-                </label>
-                {file && (
-                  <div className="mt-4 text-sm text-gray-600">
-                    Selected: <strong>{file.name}</strong> ({(file.size / 1024).toFixed(1)} KB)
-                  </div>
-                )}
-              </div>
+            <Paper
+              variant="outlined"
+              sx={{
+                p: 4,
+                textAlign: 'center',
+                borderStyle: 'dashed',
+                borderWidth: 2,
+                borderColor: file ? 'success.main' : 'divider',
+                bgcolor: file ? 'success.lighter' : 'background.default',
+                transition: 'all 0.2s',
+              }}
+            >
+              <input
+                type="file"
+                accept=".pdf,.xml"
+                onChange={handleFileSelect}
+                style={{ display: 'none' }}
+                id="file-upload-input"
+              />
 
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {error}
-                </div>
+              {!file ? (
+                <>
+                  <UploadIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h6" gutterBottom>
+                    Drop your file here or click to browse
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mb={3}>
+                    Supported formats: PDF, XML (max 10MB)
+                  </Typography>
+                  <label htmlFor="file-upload-input">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      size="large"
+                      startIcon={<UploadIcon />}
+                    >
+                      Choose File
+                    </Button>
+                  </label>
+                </>
+              ) : (
+                <>
+                  <CheckCircleIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
+                  <Typography variant="h6" gutterBottom>
+                    File Selected
+                  </Typography>
+                  <Typography variant="body1" fontWeight="medium" gutterBottom>
+                    {file.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mb={2}>
+                    {(file.size / 1024).toFixed(1)} KB
+                  </Typography>
+                  <label htmlFor="file-upload-input">
+                    <Button
+                      variant="outlined"
+                      component="span"
+                      size="small"
+                    >
+                      Change File
+                    </Button>
+                  </label>
+                </>
               )}
+            </Paper>
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(1)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                >
-                  Back
-                </button>
-                <button
-                  onClick={handleUploadAndPreview}
-                  disabled={!file || processing}
-                  className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {processing ? 'Processing...' : 'Next'}
-                </button>
-              </div>
-            </div>
-          )}
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            )}
 
-          {/* Step 3: Review */}
-          {step === 3 && previewData && (
-            <div className="space-y-4">
-              <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">✓</span>
-                  <div>
-                    <h4 className="font-semibold text-green-800">
-                      Successfully extracted {previewData.fields_count} fields
-                    </h4>
-                    <p className="text-sm text-green-700">
-                      Format: {previewData.format} | Confidence: {(previewData.confidence * 100).toFixed(0)}%
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {processing && (
+              <Box sx={{ mt: 3 }}>
+                <LinearProgress />
+                <Typography variant="body2" color="text.secondary" textAlign="center" mt={1}>
+                  Processing document...
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        )}
 
-              <div className="border rounded-lg p-4 max-h-96 overflow-y-auto">
-                <h4 className="font-semibold mb-3">Extracted Data:</h4>
-                <div className="space-y-2 text-sm">
-                  {Object.entries(previewData.tax_profile_mappings || {}).map(([key, value]) => (
-                    <div key={key} className="flex justify-between border-b pb-2">
-                      <span className="text-gray-600">{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}:</span>
-                      <span className="font-medium">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {/* Step 3: Review */}
+        {step === 3 && previewData && (
+          <Box>
+            <Alert severity="success" icon={<CheckCircleIcon />} sx={{ mb: 3 }}>
+              <Typography variant="body2">
+                <strong>Successfully extracted {previewData.fields_count} fields</strong>
+                <br />
+                Format: {previewData.format} | Confidence: {(previewData.confidence * 100).toFixed(0)}%
+              </Typography>
+            </Alert>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  ⏱️ Estimated time saved: <strong>{previewData.estimated_time_saved}</strong>
-                </p>
-              </div>
+            <Paper variant="outlined" sx={{ p: 2, maxHeight: 400, overflow: 'auto' }}>
+              <Typography variant="h6" gutterBottom>
+                Extracted Data
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+              <Stack spacing={1.5}>
+                {Object.entries(previewData.tax_profile_mappings || {}).map(([key, value]) => (
+                  <Box
+                    key={key}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      py: 1,
+                      borderBottom: '1px solid',
+                      borderColor: 'divider',
+                      '&:last-child': { borderBottom: 'none' }
+                    }}
+                  >
+                    <Typography variant="body2" color="text.secondary">
+                      {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium">
+                      {value}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Paper>
 
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {error}
-                </div>
-              )}
+            <Alert severity="info" icon={<TimerIcon />} sx={{ mt: 3 }}>
+              <Typography variant="body2">
+                <strong>Estimated time saved:</strong> {previewData.estimated_time_saved}
+              </Typography>
+            </Alert>
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(2)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                >
-                  Upload Different File
-                </button>
-                <button
-                  onClick={handleConfirmImport}
-                  disabled={processing}
-                  className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50"
-                >
-                  {processing ? 'Importing...' : 'Confirm Import'}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            )}
+          </Box>
+        )}
+      </DialogContent>
+
+      {/* Actions */}
+      <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid', borderColor: 'divider' }}>
+        {step === 1 && (
+          <>
+            <Button onClick={handleClose} size="large">
+              {uploadedDocuments.length > 0 ? 'Finish' : 'Cancel'}
+            </Button>
+            {uploadedDocuments.length > 0 && uploadedDocuments.length < 2 && (
+              <Typography variant="caption" color="text.secondary" sx={{ flex: 1, ml: 2 }}>
+                Upload another document or click Finish to continue
+              </Typography>
+            )}
+          </>
+        )}
+
+        {step === 2 && (
+          <>
+            <Button onClick={() => setStep(1)} size="large">
+              Back
+            </Button>
+            <Button
+              onClick={handleUploadAndPreview}
+              variant="contained"
+              size="large"
+              disabled={!file || processing}
+              startIcon={processing ? <CircularProgress size={20} /> : <UploadIcon />}
+            >
+              {processing ? 'Processing...' : 'Continue'}
+            </Button>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <Button onClick={() => setStep(2)} size="large">
+              Change File
+            </Button>
+            <Button
+              onClick={handleConfirmImport}
+              variant="contained"
+              color="success"
+              size="large"
+              disabled={processing}
+              startIcon={processing ? <CircularProgress size={20} /> : <CheckCircleIcon />}
+            >
+              {processing ? 'Importing...' : (uploadedDocuments.length > 0 ? 'Import & Continue' : 'Confirm Import')}
+            </Button>
+          </>
+        )}
+      </DialogActions>
+    </Dialog>
   );
 };
 

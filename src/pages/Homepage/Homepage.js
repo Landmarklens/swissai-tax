@@ -15,7 +15,11 @@ import {
   useTheme,
   useMediaQuery,
   Avatar,
-  Stack
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import {
   Check as CheckIcon,
@@ -57,6 +61,8 @@ const Homepage = () => {
   const userCount = useUserCounter();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [badgeModalOpen, setBadgeModalOpen] = useState(false);
+  const [selectedBadge, setSelectedBadge] = useState(null);
 
   const features = [
     {
@@ -117,6 +123,72 @@ const Homepage = () => {
     { value: "26", label: t('homepage.stats.cantons') },
     { value: "20 Min", label: t('homepage.stats.time') }
   ];
+
+  const badgeExplanations = {
+    swiss: {
+      title: "Made in Switzerland",
+      description: "SwissAI Tax is proudly developed in Switzerland, adhering to the highest standards of Swiss quality, precision, and reliability. Our platform is built by Swiss experts who understand the complexities of the Swiss tax system.",
+      benefits: [
+        "Local expertise in Swiss tax regulations",
+        "Swiss precision and attention to detail",
+        "Understanding of cantonal differences",
+        "Compliance with Swiss data protection standards"
+      ]
+    },
+    dataProtection: {
+      title: "Swiss Data Protection",
+      description: "Your data is stored exclusively on Swiss servers and protected under strict Swiss data protection laws, which are among the most stringent in the world. We are fully GDPR compliant and go beyond EU requirements.",
+      benefits: [
+        "Data stored only in Switzerland",
+        "GDPR compliant and certified",
+        "Swiss Federal Data Protection Act compliance",
+        "No data transfer outside Switzerland",
+        "Regular security audits"
+      ]
+    },
+    encryption: {
+      title: "Bank-Level Encryption",
+      description: "We use AES-128 encryption, the same standard used by Swiss banks to protect your sensitive financial information. All data is encrypted both in transit and at rest.",
+      benefits: [
+        "AES-128 encryption (military-grade)",
+        "End-to-end encryption",
+        "Encrypted data storage",
+        "Secure HTTPS connections",
+        "Regular security updates"
+      ]
+    },
+    ech: {
+      title: "eCH-0196 Certified",
+      description: "eCH-0196 is the official Swiss e-government standard for electronic bank tax statements. Our platform can automatically import and process bank statements that comply with this standard, ensuring 99% accuracy in data extraction.",
+      benefits: [
+        "Automatic bank statement import",
+        "99% accuracy in data extraction",
+        "Official Swiss government standard",
+        "Supports Data Matrix and PDF417 barcodes",
+        "Reduces filing time from 45 to 10 minutes",
+        "No manual data entry required"
+      ],
+      link: "https://www.ech.ch/"
+    },
+    swissdec: {
+      title: "Swissdec ELM Certified",
+      description: "Swissdec ELM (Electronic Lohnausweis Meldung) is the official Swiss standard for electronic salary certificates. Our platform automatically processes Swissdec XML files, eliminating manual data entry and ensuring accurate tax calculations.",
+      benefits: [
+        "Automatic salary certificate import",
+        "Supports all Swissdec versions (5.0, 5.4, 5.5)",
+        "Official Swiss payroll standard",
+        "Instant data extraction from XML files",
+        "Compatible with all Swiss payroll systems",
+        "Zero data entry errors"
+      ],
+      link: "https://www.swissdec.ch/"
+    }
+  };
+
+  const handleBadgeClick = (badgeKey) => {
+    setSelectedBadge(badgeExplanations[badgeKey]);
+    setBadgeModalOpen(true);
+  };
 
 
   // Handle plan selection from location state (when user clicks plan while unauthenticated)
@@ -267,21 +339,25 @@ const Homepage = () => {
                 transition={{ duration: 0.5 }}
                 style={{ height: '100%' }}
               >
-                <Box sx={{
-                  textAlign: 'center',
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  bgcolor: 'white',
-                  borderRadius: 2,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    transform: 'translateY(-4px)'
-                  }
-                }}>
+                <Box
+                  onClick={() => handleBadgeClick('swiss')}
+                  sx={{
+                    textAlign: 'center',
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    bgcolor: 'white',
+                    borderRadius: 2,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      transform: 'translateY(-4px)'
+                    }
+                  }}
+                >
                   <Box sx={{
                     height: 80,
                     display: 'flex',
@@ -337,21 +413,25 @@ const Homepage = () => {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 style={{ height: '100%' }}
               >
-                <Box sx={{
-                  textAlign: 'center',
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  bgcolor: 'white',
-                  borderRadius: 2,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    transform: 'translateY(-4px)'
-                  }
-                }}>
+                <Box
+                  onClick={() => handleBadgeClick('dataProtection')}
+                  sx={{
+                    textAlign: 'center',
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    bgcolor: 'white',
+                    borderRadius: 2,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      transform: 'translateY(-4px)'
+                    }
+                  }}
+                >
                   <Box sx={{
                     height: 80,
                     display: 'flex',
@@ -377,21 +457,25 @@ const Homepage = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 style={{ height: '100%' }}
               >
-                <Box sx={{
-                  textAlign: 'center',
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  bgcolor: 'white',
-                  borderRadius: 2,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    transform: 'translateY(-4px)'
-                  }
-                }}>
+                <Box
+                  onClick={() => handleBadgeClick('encryption')}
+                  sx={{
+                    textAlign: 'center',
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    bgcolor: 'white',
+                    borderRadius: 2,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      transform: 'translateY(-4px)'
+                    }
+                  }}
+                >
                   <Box sx={{
                     height: 80,
                     display: 'flex',
@@ -417,21 +501,25 @@ const Homepage = () => {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 style={{ height: '100%' }}
               >
-                <Box sx={{
-                  textAlign: 'center',
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  bgcolor: 'white',
-                  borderRadius: 2,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    transform: 'translateY(-4px)'
-                  }
-                }}>
+                <Box
+                  onClick={() => handleBadgeClick('ech')}
+                  sx={{
+                    textAlign: 'center',
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    bgcolor: 'white',
+                    borderRadius: 2,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      transform: 'translateY(-4px)'
+                    }
+                  }}
+                >
                   <Box sx={{
                     height: 80,
                     display: 'flex',
@@ -461,21 +549,25 @@ const Homepage = () => {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 style={{ height: '100%' }}
               >
-                <Box sx={{
-                  textAlign: 'center',
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  bgcolor: 'white',
-                  borderRadius: 2,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    transform: 'translateY(-4px)'
-                  }
-                }}>
+                <Box
+                  onClick={() => handleBadgeClick('swissdec')}
+                  sx={{
+                    textAlign: 'center',
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    bgcolor: 'white',
+                    borderRadius: 2,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      transform: 'translateY(-4px)'
+                    }
+                  }}
+                >
                   <Box sx={{
                     height: 80,
                     display: 'flex',
@@ -659,6 +751,65 @@ const Homepage = () => {
         onClose={() => setLoginModalOpen(false)}
         onAuthSuccess={handleAuthSuccess}
       />
+
+      {/* Badge Explanation Modal */}
+      <Dialog
+        open={badgeModalOpen}
+        onClose={() => setBadgeModalOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        {selectedBadge && (
+          <>
+            <DialogTitle sx={{ fontWeight: 700, fontSize: '1.5rem', pb: 1 }}>
+              {selectedBadge.title}
+            </DialogTitle>
+            <DialogContent>
+              <Typography variant="body1" paragraph sx={{ color: 'text.primary', lineHeight: 1.7 }}>
+                {selectedBadge.description}
+              </Typography>
+
+              {selectedBadge.benefits && (
+                <>
+                  <Typography variant="h6" sx={{ mt: 3, mb: 2, fontWeight: 600 }}>
+                    Key Benefits:
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 3, '& li': { mb: 1 } }}>
+                    {selectedBadge.benefits.map((benefit, index) => (
+                      <li key={index}>
+                        <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
+                          {benefit}
+                        </Typography>
+                      </li>
+                    ))}
+                  </Box>
+                </>
+              )}
+
+              {selectedBadge.link && (
+                <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Learn more at:{' '}
+                    <a
+                      href={selectedBadge.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 600 }}
+                    >
+                      {selectedBadge.link}
+                    </a>
+                  </Typography>
+                </Box>
+              )}
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 3 }}>
+              <Button onClick={() => setBadgeModalOpen(false)} variant="contained" color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
     </Box>
   );
 };
